@@ -14,6 +14,7 @@ import devlog/lanes_and_handoffs
 import devlog/layered_layout_and_flowchart
 import devlog/pele_origins
 import devlog/pomice
+import devlog/radar_treemap_treeview
 import devlog/the_diagram_family
 import devlog/the_referee
 import devlog/three_small_diagrams

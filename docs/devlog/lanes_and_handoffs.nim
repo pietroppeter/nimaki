@@ -1,4 +1,4 @@
-## devlog: 12 Nov 2026 P | Lanes and handoffs: swimlane | nimaki draws Pele's swimlane diagrams byte for byte: a flowchart whose groups become lanes, on a port of the layout that shares one set of ranks across them and routes each handoff with a single corner where it can.
+## devlog: 12 Nov 2026 Q | Lanes and handoffs: swimlane | nimaki draws Pele's swimlane diagrams byte for byte: a flowchart whose groups become lanes, on a port of the layout that shares one set of ranks across them and routes each handoff with a single corner where it can.
 ## kind: port
 import std/[strformat, strutils, json, tables]
 import nimib

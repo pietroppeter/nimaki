@@ -68,7 +68,7 @@
       "status": "started",
       "nim": "src/nimaki/diagrams/common/",
       "post": "first-light",
-      "notes": "tokens.ts (the Langium-style tokenizer), fit-width.ts, scan.ts (the Jison-style lexer rules journey and timeline share), fit.ts (plain labels, cut words), fit-text.ts (shrink, then cut with an ellipsis) and literal-label.ts are ported."
+      "notes": "tokens.ts (the Langium-style tokenizer), fit-width.ts, scan.ts (the Jison-style lexer rules journey and timeline share), fit.ts (plain labels, cut words), fit-text.ts (shrink, then cut with an ellipsis), literal-label.ts and accDescr.ts (the accDescr terminal for grammars that keep lexing after an unclosed brace) are ported."
     },
     {
       "id": "api",
@@ -286,19 +286,19 @@
       "corpus": 3,
       "parse": {
         "code": 342,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 0,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 158,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/radar/",
+      "post": "radar-treemap-treeview",
+      "notes": "Identical to Pele on the 14 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim radar); 25,000 more across seeds before merging."
     },
     {
       "id": "treemap",
@@ -307,19 +307,19 @@
       "corpus": 8,
       "parse": {
         "code": 235,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 119,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 150,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/treemap/",
+      "post": "radar-treemap-treeview",
+      "notes": "Identical to Pele on the 8 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim treemap); 25,000 more across seeds before merging."
     },
     {
       "id": "cynefin",
@@ -349,19 +349,19 @@
       "corpus": 13,
       "parse": {
         "code": 241,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 0,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 341,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/treeview/",
+      "post": "radar-treemap-treeview",
+      "notes": "Identical to Pele on the 24 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim treeView); 23,000 more across seeds before merging. Box-drawing input included."
     },
     {
       "id": "eventmodeling",
