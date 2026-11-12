@@ -169,7 +169,7 @@
           "owner": "Port Pele core and pie",
           "status": "done",
           "post": "first-light",
-          "pr": "PRNUM"
+          "pr": "10"
         },
         {
           "id": "text",
@@ -180,7 +180,7 @@
           "owner": "Port Pele core and pie",
           "status": "done",
           "post": "first-light",
-          "pr": "PRNUM"
+          "pr": "10"
         },
         {
           "id": "svg",
@@ -191,7 +191,7 @@
           "owner": "Port Pele core and pie",
           "status": "done",
           "post": "first-light",
-          "pr": "PRNUM"
+          "pr": "10"
         },
         {
           "id": "api",
@@ -202,7 +202,7 @@
           "owner": "Port Pele core and pie",
           "status": "done",
           "post": "first-light",
-          "pr": "PRNUM"
+          "pr": "10"
         },
         {
           "id": "pie",
@@ -213,7 +213,7 @@
           "owner": "Port Pele core and pie",
           "status": "done",
           "post": "first-light",
-          "pr": "PRNUM"
+          "pr": "10"
         },
         {
           "id": "timeline",
