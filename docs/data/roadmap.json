@@ -239,8 +239,8 @@
           "title": "The layered layout: src/layout",
           "what": "layered.ts, compound.ts, lanes.ts, components.ts, explained as they are ported.",
           "done_when": "Exercised through flowchart; Pele's layout invariants replayed.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port layered layout and flowchart",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -250,8 +250,8 @@
           "title": "Flowchart",
           "what": "src/diagrams/flowchart, with the shared shapes and edges.",
           "done_when": "difftest: every flowchart case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port layered layout and flowchart",
+          "status": "started",
           "post": "",
           "pr": ""
         },
