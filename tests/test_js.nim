@@ -104,3 +104,45 @@ fs.writeFileSync(process.argv[3], JSON.stringify({ nums, names }));
       var want: seq[string]
       for n in parseJson(readFile(dir / "out2.txt"))["names"]: want.add n.getStr
       check got == want
+
+suite "toPrecision, toExponential and parseFloat, against Node":
+  let xs = sample()
+  let floats = @["1_000", "12,5", "3.5.1", "..", "1e5x", " 7 ", "-.5e-2", "Infinityx", "+Infinity", "x1", "", ".",
+                 "0x10", "1.e3", "00012", "-0"]
+  let dir = getTempDir() / "nimaki-test-js"
+  createDir dir
+  var input = ""
+  for x in xs: input.add jsString(x) & "\n"
+  input.add "--\n"
+  for f in floats: input.add f.escapeJson & "\n"
+  writeFile dir / "in3.txt", input
+  writeFile dir / "check3.js", """
+const fs = require('fs');
+const lines = fs.readFileSync(process.argv[2], 'utf8').trim().split('\n');
+const cut = lines.indexOf('--');
+const nums = lines.slice(0, cut).map(Number).map((x) =>
+  [x.toPrecision(1), x.toPrecision(6), x.toPrecision(12), x.toPrecision(21), x.toExponential(0), x.toExponential(3), x.toExponential(6)].join(' '));
+const floats = lines.slice(cut + 1).map((l) => String(parseFloat(JSON.parse(l))));
+fs.writeFileSync(process.argv[3], JSON.stringify({ nums, floats }));
+"""
+  let ran = execCmd("node " & quoteShell(dir / "check3.js") & " " & quoteShell(dir / "in3.txt") & " " &
+                    quoteShell(dir / "out3.txt")) == 0
+
+  test "toPrecision, toExponential":
+    check ran
+    if ran:
+      let want = parseJson(readFile(dir / "out3.txt"))["nums"]
+      var bad = 0
+      for i, x in xs:
+        let got = [toPrecision(x, 1), toPrecision(x, 6), toPrecision(x, 12), toPrecision(x, 21), toExponential(x, 0),
+                   toExponential(x, 3), toExponential(x, 6)].join(" ")
+        if got != want[i].getStr:
+          inc bad
+          if bad <= 5: echo "ERROR ", jsString(x), ": Node ", want[i].getStr, ", nimaki ", got
+      check bad == 0
+
+  test "parseFloat":
+    if ran:
+      let want = parseJson(readFile(dir / "out3.txt"))["floats"]
+      for i, f in floats:
+        check jsString(jsParseFloat(f)) == want[i].getStr

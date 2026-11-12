@@ -142,7 +142,89 @@ func jsNumber*(s: string): float =
   ## `Number(s)` for the decimal numbers the lexers accept (`-?digits(.digits)?`).
   parseFloat(s)
 
+func significant(x: float, p: int): tuple[digits: string, e: int] =
+  ## The exact decimal value of x > 0 (finite) rounded to p significant digits, a tie up, as
+  ## toPrecision and toExponential round it: x ≈ d.ddd × 10^e.
+  let exact = exactDecimal(x)
+  let dot = exact.find('.')
+  let all = exact[0 ..< dot] & exact[dot + 1 .. ^1]
+  var first = 0
+  while first < all.len and all[first] == '0': inc first
+  var e = dot - 1 - first
+  var kept = all[first ..< min(all.len, first + p)]
+  while kept.len < p: kept.add '0'
+  let next = if first + p < all.len: all[first + p] else: '0'
+  if next >= '5':
+    var i = kept.high
+    while i >= 0:
+      if kept[i] == '9':
+        kept[i] = '0'
+        dec i
+      else:
+        kept[i] = char(ord(kept[i]) + 1)
+        break
+    if i < 0:
+      kept = "1" & kept[0 ..< kept.high]
+      inc e
+  (kept, e)
+
+func expForm(digits: string, e: int): string =
+  result = digits[0 .. 0]
+  if digits.len > 1: result.add "." & digits[1 .. ^1]
+  result.add "e" & (if e >= 0: "+" else: "-") & $abs(e)
+
+func toExponential*(x: float, fractionDigits: int): string =
+  ## `x.toExponential(f)`.
+  if x.isNaN: return "NaN"
+  if x == Inf: return "Infinity"
+  if x == -Inf: return "-Infinity"
+  if x < 0: return "-" & toExponential(-x, fractionDigits)
+  if x == 0: return expForm(repeat('0', fractionDigits + 1), 0)
+  let (digits, e) = significant(x, fractionDigits + 1)
+  expForm(digits, e)
+
+func toPrecision*(x: float, precision: int): string =
+  ## `x.toPrecision(p)`.
+  if x.isNaN: return "NaN"
+  if x == Inf: return "Infinity"
+  if x == -Inf: return "-Infinity"
+  if x < 0: return "-" & toPrecision(-x, precision)
+  var digits = repeat('0', precision)
+  var e = 0
+  if x != 0: (digits, e) = significant(x, precision)
+  if e < -6 or e >= precision: return expForm(digits, e)
+  if e == precision - 1: return digits
+  if e >= 0: return digits[0 .. e] & "." & digits[e + 1 .. ^1]
+  "0." & repeat('0', -(e + 1)) & digits
+
 func jsTrim*(s: string): string
+func jsTrimStart*(s: string): string
+
+func jsParseFloat*(raw: string): float =
+  ## `parseFloat(s)`: the longest prefix, after JavaScript's whitespace, that is a decimal number
+  ## or `Infinity` with a sign; NaN when there is none.
+  let s = jsTrimStart(raw)
+  var i = 0
+  if i < s.len and s[i] in {'+', '-'}: inc i
+  if s.continuesWith("Infinity", i): return (if s.len > 0 and s[0] == '-': -Inf else: Inf)
+  let digits0 = i
+  while i < s.len and s[i] in Digits: inc i
+  if i < s.len and s[i] == '.':
+    inc i
+    while i < s.len and s[i] in Digits: inc i
+  if i == digits0 or (i == digits0 + 1 and s[digits0] == '.'): return NaN
+  if i < s.len and s[i] in {'e', 'E'}:
+    var j = i + 1
+    if j < s.len and s[j] in {'+', '-'}: inc j
+    if j < s.len and s[j] in Digits:
+      while j < s.len and s[j] in Digits: inc j
+      i = j
+  var t = s[0 ..< i]
+  t = t.replace(".e", ".0e").replace(".E", ".0E")
+  if t.endsWith("."): t.add "0"
+  if t.startsWith("."): t = "0" & t
+  elif t.startsWith("-.") or t.startsWith("+."): t = t[0] & "0" & t[1 .. ^1]
+  parseFloat(t)
 
 func jsToNumber*(raw: string): float =
   ## `Number(s)` for any string (ECMAScript's StringToNumber): JavaScript's whitespace around it

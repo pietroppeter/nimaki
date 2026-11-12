@@ -48,6 +48,14 @@
       "different": 0,
       "rendered": 4033,
       "errors": 967
+    },
+    "treemap": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 3251,
+      "errors": 1749
     }
   }
 }
