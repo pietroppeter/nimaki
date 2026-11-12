@@ -1,9 +1,0 @@
-name	kind	language	licence	layout	what it gets right	source
-Graphviz (dot)	language and layout programs	C	EPL-2.0	layered, a four-pass algorithm building on Sugiyama et al.	the reference layered layout; dot is the ancestor of dagre	https://graphviz.org/about/
-PlantUML	language and renderer	Java	GPL (LGPL, Apache, EPL and MIT builds too)	Graphviz by default; also Smetana (Graphviz in Java) and ELK	every UML diagram from text; long the default in enterprise docs	https://plantuml.com/faq
-D2	language and renderer	Go	MPL-2.0	dagre, ELK and TALA (TALA released with D2 when Terrastruct wound down in 2026)	a modern syntax designed after Mermaid and PlantUML; three engines to choose from	https://github.com/terrastruct/d2
-Pikchr	language and renderer	C	0BSD	none: the author places things, as in PIC	safe for internet-facing apps; one C file; made for Markdown fences	https://pikchr.org/home/doc/trunk/homepage.md
-ELK	layout library	Java (elkjs in JavaScript)	EPL-2.0	a collection of algorithms, layered among them	positions only, no drawing; Mermaid's default layout since 12.0	https://eclipse.dev/elk/
-dagre	layout library	JavaScript	MIT	layered, after Gansner et al.: network simplex ranks, crossing reduction, Brandes-Koepf coordinates	small and client-side; Mermaid's layout for a decade	https://github.com/dagrejs/dagre/wiki
-Kroki	service	Java and others	MIT	none of its own: it calls the tools	one HTTP API for about thirty diagram languages	https://kroki.io/
-mermaid-ascii	renderer	Go	MIT	grid	Mermaid in the terminal; the base of beautiful-mermaid's ASCII mode	https://github.com/AlexanderGrooff/mermaid-ascii
