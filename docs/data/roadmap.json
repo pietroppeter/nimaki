@@ -521,8 +521,8 @@
           "title": "Requirement",
           "what": "src/diagrams/requirement: 1294 lines of TypeScript, 9 corpus cases.",
           "done_when": "difftest: every requirement case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port the compound-layout diagram types",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -543,8 +543,8 @@
           "title": "Er",
           "what": "src/diagrams/er: 1660 lines of TypeScript, 25 corpus cases.",
           "done_when": "difftest: every er case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port the compound-layout diagram types",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -587,8 +587,8 @@
           "title": "State",
           "what": "src/diagrams/state: 2097 lines of TypeScript, 22 corpus cases.",
           "done_when": "difftest: every state case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port the compound-layout diagram types",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -609,8 +609,8 @@
           "title": "Usecase",
           "what": "src/diagrams/usecase: 2821 lines of TypeScript, 24 corpus cases.",
           "done_when": "difftest: every usecase case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port the compound-layout diagram types",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -620,8 +620,8 @@
           "title": "Agentflow",
           "what": "src/diagrams/agentflow: 3465 lines of TypeScript, 251 corpus cases.",
           "done_when": "difftest: every agentflow case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port the compound-layout diagram types",
+          "status": "started",
           "post": "",
           "pr": ""
         }
