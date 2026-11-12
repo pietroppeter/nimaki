@@ -2,9 +2,9 @@
   "about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand.",
   "pin": "1.13.0",
   "cases": 2118,
-  "identical": 452,
+  "identical": 466,
   "different": 0,
-  "unsupported": 1666,
+  "unsupported": 1652,
   "types": [
     {
       "type": "agentflow",
@@ -210,9 +210,9 @@
       "type": "swimlane",
       "coverage": "swimlane",
       "cases": 14,
-      "identical": 0,
+      "identical": 14,
       "different": 0,
-      "unsupported": 14
+      "unsupported": 0
     },
     {
       "type": "timeline",
