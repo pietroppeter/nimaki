@@ -455,8 +455,8 @@
           "title": "Git",
           "what": "src/diagrams/git: 826 lines of TypeScript, 35 corpus cases.",
           "done_when": "difftest: every git case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port class and swimlane",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -532,8 +532,8 @@
           "title": "Railroad",
           "what": "src/diagrams/railroad: 1491 lines of TypeScript, 14 corpus cases.",
           "done_when": "difftest: every railroad case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port class and swimlane",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -565,8 +565,8 @@
           "title": "Gantt",
           "what": "src/diagrams/gantt: 1928 lines of TypeScript, 11 corpus cases.",
           "done_when": "difftest: every gantt case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port class and swimlane",
+          "status": "started",
           "post": "",
           "pr": ""
         },
