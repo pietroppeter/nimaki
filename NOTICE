@@ -1,0 +1,34 @@
+nimaki
+Copyright (c) 2026 Pietro Peterlongo and the nimaki contributors
+
+This project is a port to Nim of Pele (https://github.com/obsidianmd/pele),
+Copyright (c) 2026 kepano, licensed under the MIT License:
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+
+The Nim files that start with a `port-of` or `port-part-of` line are
+translations of the TypeScript file they name, taken from Pele 1.13.0 (commit
+3a2f075ee0c3d914f0fad3545fc0f193693975ac), and have been changed by being
+rewritten in another language. Tests and test data replayed from the Pele
+repository (including the Mermaid specs and grammars Pele ported, MIT,
+Copyright (c) 2014 - 2022 Knut Sveidqvist) come from
+the same version.
+
+This project is independent: it is not affiliated with Obsidian, with Pele or
+with Mermaid.

@@ -1,0 +1,787 @@
+{
+  "about": "The coverage map. Seeded by tools/coverage_seed.nim from the Pele checkout (lines of TypeScript, tests, corpus cases); status, nim, post and notes are written by the pull request that ports a part. A status is planned, started, blocked or done; done means difftest finds the Nim output identical to Pele's, byte for byte, on that part's corpus.",
+  "pin": {
+    "repo": "https://github.com/obsidianmd/pele",
+    "tag": "1.13.0",
+    "commit": "3a2f075ee0c3d914f0fad3545fc0f193693975ac",
+    "date": "2026-10-30",
+    "mermaid": "12.1.0"
+  },
+  "stages": [
+    {
+      "id": "parse",
+      "name": "Parse",
+      "what": "Mermaid text to a model of the diagram"
+    },
+    {
+      "id": "layout",
+      "name": "Layout",
+      "what": "the model to positions and sizes"
+    },
+    {
+      "id": "render",
+      "name": "Render",
+      "what": "positions to SVG text"
+    }
+  ],
+  "core": [
+    {
+      "id": "text",
+      "what": "measuring text without a browser: font metrics, labels, entities",
+      "code": 675,
+      "status": "planned",
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "svg",
+      "what": "writing SVG: the builder, shapes, edges, clusters, the palette and the theme",
+      "code": 1751,
+      "status": "planned",
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "layout",
+      "what": "the shared layouts: layered (Sugiyama), compound, lanes, components",
+      "code": 3386,
+      "status": "planned",
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "util",
+      "what": "Unicode, URLs, a small YAML reader for front matter",
+      "code": 592,
+      "status": "planned",
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "common",
+      "what": "what several diagram types share: fitting text, scanning, icons",
+      "code": 896,
+      "status": "planned",
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "api",
+      "what": "detecting the type, preprocessing, render(), errors, the registry",
+      "code": 783,
+      "status": "planned",
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "browser",
+      "what": "what only a browser needs: mount, zoom, lazy loading, window, entry points",
+      "code": 884,
+      "status": "planned",
+      "nim": "",
+      "post": "",
+      "notes": ""
+    }
+  ],
+  "diagrams": [
+    {
+      "id": "swimlane",
+      "code": 69,
+      "tests": 334,
+      "corpus": 13,
+      "parse": {
+        "code": 69,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 0,
+        "status": "planned"
+      },
+      "render": {
+        "code": 0,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "info",
+      "code": 108,
+      "tests": 269,
+      "corpus": 2,
+      "parse": {
+        "code": 86,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 0,
+        "status": "planned"
+      },
+      "render": {
+        "code": 22,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "packet",
+      "code": 328,
+      "tests": 647,
+      "corpus": 4,
+      "parse": {
+        "code": 195,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 0,
+        "status": "planned"
+      },
+      "render": {
+        "code": 133,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "pie",
+      "code": 328,
+      "tests": 574,
+      "corpus": 2,
+      "parse": {
+        "code": 165,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 0,
+        "status": "planned"
+      },
+      "render": {
+        "code": 163,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "mindmap",
+      "code": 336,
+      "tests": 1012,
+      "corpus": 13,
+      "parse": {
+        "code": 78,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 0,
+        "status": "planned"
+      },
+      "render": {
+        "code": 258,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "kanban",
+      "code": 366,
+      "tests": 787,
+      "corpus": 3,
+      "parse": {
+        "code": 99,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 0,
+        "status": "planned"
+      },
+      "render": {
+        "code": 267,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "ishikawa",
+      "code": 419,
+      "tests": 492,
+      "corpus": 1,
+      "parse": {
+        "code": 161,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 0,
+        "status": "planned"
+      },
+      "render": {
+        "code": 258,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "journey",
+      "code": 467,
+      "tests": 436,
+      "corpus": 1,
+      "parse": {
+        "code": 219,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 0,
+        "status": "planned"
+      },
+      "render": {
+        "code": 248,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "timeline",
+      "code": 475,
+      "tests": 439,
+      "corpus": 14,
+      "parse": {
+        "code": 244,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 0,
+        "status": "planned"
+      },
+      "render": {
+        "code": 231,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "radar",
+      "code": 500,
+      "tests": 1093,
+      "corpus": 3,
+      "parse": {
+        "code": 342,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 0,
+        "status": "planned"
+      },
+      "render": {
+        "code": 158,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "treemap",
+      "code": 504,
+      "tests": 914,
+      "corpus": 8,
+      "parse": {
+        "code": 235,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 119,
+        "status": "planned"
+      },
+      "render": {
+        "code": 150,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "cynefin",
+      "code": 539,
+      "tests": 686,
+      "corpus": 3,
+      "parse": {
+        "code": 192,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 77,
+        "status": "planned"
+      },
+      "render": {
+        "code": 270,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "treeview",
+      "code": 582,
+      "tests": 1709,
+      "corpus": 13,
+      "parse": {
+        "code": 241,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 0,
+        "status": "planned"
+      },
+      "render": {
+        "code": 341,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "eventmodeling",
+      "code": 720,
+      "tests": 813,
+      "corpus": 12,
+      "parse": {
+        "code": 387,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 0,
+        "status": "planned"
+      },
+      "render": {
+        "code": 333,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "sankey",
+      "code": 786,
+      "tests": 899,
+      "corpus": 8,
+      "parse": {
+        "code": 291,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 266,
+        "status": "planned"
+      },
+      "render": {
+        "code": 229,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "git",
+      "code": 826,
+      "tests": 2006,
+      "corpus": 35,
+      "parse": {
+        "code": 483,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 0,
+        "status": "planned"
+      },
+      "render": {
+        "code": 343,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "quadrant",
+      "code": 876,
+      "tests": 1078,
+      "corpus": 3,
+      "parse": {
+        "code": 688,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 0,
+        "status": "planned"
+      },
+      "render": {
+        "code": 188,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "venn",
+      "code": 909,
+      "tests": 1138,
+      "corpus": 8,
+      "parse": {
+        "code": 414,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 304,
+        "status": "planned"
+      },
+      "render": {
+        "code": 191,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "xychart",
+      "code": 953,
+      "tests": 1101,
+      "corpus": 8,
+      "parse": {
+        "code": 565,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 22,
+        "status": "planned"
+      },
+      "render": {
+        "code": 366,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "wardley",
+      "code": 1092,
+      "tests": 691,
+      "corpus": 19,
+      "parse": {
+        "code": 704,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 0,
+        "status": "planned"
+      },
+      "render": {
+        "code": 388,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "architecture",
+      "code": 1247,
+      "tests": 1150,
+      "corpus": 6,
+      "parse": {
+        "code": 365,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 339,
+        "status": "planned"
+      },
+      "render": {
+        "code": 543,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "requirement",
+      "code": 1294,
+      "tests": 619,
+      "corpus": 9,
+      "parse": {
+        "code": 892,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 51,
+        "status": "planned"
+      },
+      "render": {
+        "code": 351,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "railroad",
+      "code": 1491,
+      "tests": 1928,
+      "corpus": 14,
+      "parse": {
+        "code": 1097,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 0,
+        "status": "planned"
+      },
+      "render": {
+        "code": 394,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "er",
+      "code": 1660,
+      "tests": 694,
+      "corpus": 25,
+      "parse": {
+        "code": 1009,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 98,
+        "status": "planned"
+      },
+      "render": {
+        "code": 553,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "c4",
+      "code": 1888,
+      "tests": 1729,
+      "corpus": 6,
+      "parse": {
+        "code": 910,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 695,
+        "status": "planned"
+      },
+      "render": {
+        "code": 283,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "gantt",
+      "code": 1928,
+      "tests": 1365,
+      "corpus": 11,
+      "parse": {
+        "code": 1284,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 326,
+        "status": "planned"
+      },
+      "render": {
+        "code": 318,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "block",
+      "code": 1957,
+      "tests": 1446,
+      "corpus": 30,
+      "parse": {
+        "code": 991,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 121,
+        "status": "planned"
+      },
+      "render": {
+        "code": 845,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "state",
+      "code": 2097,
+      "tests": 878,
+      "corpus": 22,
+      "parse": {
+        "code": 1247,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 209,
+        "status": "planned"
+      },
+      "render": {
+        "code": 641,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "class",
+      "code": 2122,
+      "tests": 3563,
+      "corpus": 38,
+      "parse": {
+        "code": 1301,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 150,
+        "status": "planned"
+      },
+      "render": {
+        "code": 671,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "sequence",
+      "code": 2611,
+      "tests": 1161,
+      "corpus": 38,
+      "parse": {
+        "code": 1557,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 104,
+        "status": "planned"
+      },
+      "render": {
+        "code": 950,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "usecase",
+      "code": 2821,
+      "tests": 3377,
+      "corpus": 24,
+      "parse": {
+        "code": 1999,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 284,
+        "status": "planned"
+      },
+      "render": {
+        "code": 538,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "flowchart",
+      "code": 2863,
+      "tests": 1091,
+      "corpus": 114,
+      "parse": {
+        "code": 2168,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 251,
+        "status": "planned"
+      },
+      "render": {
+        "code": 444,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    },
+    {
+      "id": "agentflow",
+      "code": 3465,
+      "tests": 4329,
+      "corpus": 251,
+      "parse": {
+        "code": 2730,
+        "status": "planned"
+      },
+      "layout": {
+        "code": 234,
+        "status": "planned"
+      },
+      "render": {
+        "code": 501,
+        "status": "planned"
+      },
+      "nim": "",
+      "post": "",
+      "notes": ""
+    }
+  ]
+}

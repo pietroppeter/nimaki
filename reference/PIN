@@ -1,0 +1,9 @@
+# The snapshot of Pele that this project ports.
+# One fact per line, KEY=VALUE, read by reference/fetch.sh, by the tools and by every page.
+REPO=https://github.com/obsidianmd/pele
+TAG=1.13.0
+COMMIT=3a2f075ee0c3d914f0fad3545fc0f193693975ac
+DATE=2026-10-30
+NPM=pele@1.13.0
+NPM_INTEGRITY=sha512-Ie8UKY9x00MsuR3jO6AzUwzK2Z6MIV3Tf4EDdITiuk8Uaz8K7g0R082WqsqNaSU8DdgkrRvZThzhit83mi/uiw==
+MERMAID=12.1.0
