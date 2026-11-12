@@ -313,8 +313,8 @@
           "what": "src/diagrams/swimlane: 69 lines of TypeScript, 13 corpus cases. With src/layout/lanes.ts, the lane layout it draws on.",
           "done_when": "difftest: every swimlane case identical.",
           "owner": "Port class and swimlane",
-          "status": "started",
-          "post": "",
+          "status": "done",
+          "post": "lanes-and-handoffs",
           "pr": ""
         },
         {

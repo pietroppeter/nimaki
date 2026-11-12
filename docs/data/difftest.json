@@ -2,9 +2,9 @@
   "about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand.",
   "pin": "1.13.0",
   "cases": 2118,
-  "identical": 498,
+  "identical": 608,
   "different": 0,
-  "unsupported": 1620,
+  "unsupported": 1510,
   "types": [
     {
       "type": "agentflow",
@@ -66,9 +66,9 @@
       "type": "eventmodeling",
       "coverage": "eventmodeling",
       "cases": 24,
-      "identical": 0,
+      "identical": 24,
       "different": 0,
-      "unsupported": 24
+      "unsupported": 0
     },
     {
       "type": "flowchart",
@@ -122,17 +122,17 @@
       "type": "kanban",
       "coverage": "kanban",
       "cases": 33,
-      "identical": 0,
+      "identical": 33,
       "different": 0,
-      "unsupported": 33
+      "unsupported": 0
     },
     {
       "type": "mindmap",
       "coverage": "mindmap",
       "cases": 39,
-      "identical": 0,
+      "identical": 39,
       "different": 0,
-      "unsupported": 39
+      "unsupported": 0
     },
     {
       "type": "packet",
@@ -210,9 +210,9 @@
       "type": "swimlane",
       "coverage": "swimlane",
       "cases": 14,
-      "identical": 0,
+      "identical": 14,
       "different": 0,
-      "unsupported": 14
+      "unsupported": 0
     },
     {
       "type": "timeline",

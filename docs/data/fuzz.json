@@ -73,6 +73,14 @@
       "rendered": 4234,
       "errors": 766
     },
+    "swimlane": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 4004,
+      "errors": 996
+    },
     "mindmap": {
       "seed": 1,
       "cases": 5000,
