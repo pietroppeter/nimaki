@@ -41,16 +41,16 @@
       "status": "started",
       "nim": "src/nimaki/svg/",
       "post": "first-light",
-      "notes": "builder.ts, palette.ts, theme.ts, ink.ts and root.ts are ported and checked through pie and timeline; of edges.ts, the arrow marker (timeline). shapes, the rest of edges, cluster and title come with the types that draw them."
+      "notes": "builder.ts, palette.ts, theme.ts, ink.ts and root.ts are ported and checked through pie and timeline; shapes.ts, edges.ts, cluster.ts and title.ts through flowchart (layered-layout-and-flowchart)."
     },
     {
       "id": "layout",
       "what": "the shared layouts: layered (Sugiyama), compound, lanes, components",
       "code": 3386,
-      "status": "planned",
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "status": "started",
+      "nim": "src/nimaki/layout/",
+      "post": "layered-layout-and-flowchart",
+      "notes": "layered.ts and compound.ts are ported and checked through flowchart (383 corpus cases, 5,000 generated in CI) and by Pele's 31 layout tests (tests/test_layout.nim). lanes.ts (swimlane) and components.ts (class) are not ported yet."
     },
     {
       "id": "util",
@@ -59,7 +59,7 @@
       "status": "started",
       "nim": "src/nimaki/util/",
       "post": "first-light",
-      "notes": "yaml.ts (front matter) and chars.ts are ported; unicode.ts and url.ts come with the types that use them."
+      "notes": "yaml.ts, chars.ts, unicode.ts and url.ts are ported; url.ts is checked through flowchart's links and images (international domain names are not converted to Punycode)."
     },
     {
       "id": "common",
@@ -748,19 +748,19 @@
       "corpus": 114,
       "parse": {
         "code": 2168,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 251,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 444,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/flowchart/",
+      "post": "layered-layout-and-flowchart",
+      "notes": "Identical to Pele on the 383 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim flowchart); 7,000 more across seeds before merging."
     },
     {
       "id": "agentflow",

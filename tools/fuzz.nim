@@ -5,6 +5,7 @@
 ##
 ##   nim r tools/fuzz.nim pie                 1000 cases of pie, seed 1
 ##   nim r tools/fuzz.nim timeline            the same for timeline
+##   nim r tools/fuzz.nim flowchart           and for flowchart
 ##   options:
 ##     --cases:N         how many cases (default 1000)
 ##     --seed:S          the seed of the generator (default 1)
@@ -143,6 +144,105 @@ proc timelineSource(g: var Gen): string =
     else: result.add indent & g.pick(timelineWords) & " : " & g.pick(timelineWords) & " : " & g.pick(timelineWords)
     result.add(if g.chance(0.05): "\r\n" else: "\n")
   if g.chance(0.1): result.add "   "
+
+
+const flowIds = ["A", "B", "C", "D", "E", "F", "node1", "n_2", "x", "end1", "Ünï", "日本", "a-b", "v", "o", "1"]
+const flowLabels = [
+  "Start", "End", "Is it?", "a b c", "Ünïcödé", "日本語のラベル", "emoji 🎉", "x&amp;y", "#35; hash",
+  "a<b>bold</b>", "line<br/>break", "\"quoted text\"", "\"`**md** text`\"", "fa:fa-car icon",
+  "very long label that goes on and on and wraps over several lines in the box", "Ω≈ç√", "x",
+  "soft­hyphen", "zero​width", "a  b", "Supercalifragilisticexpialidocious",
+]
+const flowOpens = [("[", "]"), ("(", ")"), ("((", "))"), ("([", "])"), ("[[", "]]"), ("[(", ")]"),
+                   ("{", "}"), ("{{", "}}"), (">", "]"), ("[/", "/]"), ("[\\", "\\]"), ("[/", "\\]"),
+                   ("[\\", "/]"), ("(((", ")))")]
+const flowLinks = ["-->", "---", "-.->", "==>", "--o", "--x", "<-->", "o--o", "x--x", "-.-", "===",
+                   "~~~", "--->", "---->", "==>", "-..->", "<==>", "-->", "-->"]
+const flowColors = ["#ff0000", "red", "#abc", "transparent", "#12345678", "black", "white", "lightgray", "notacolor"]
+const flowShapes = ["rect", "rounded", "stadium", "fr-rect", "cyl", "circle", "diam", "hex", "lean-r",
+                    "lean-l", "trap-b", "trap-t", "dbl-circ", "text", "notch-rect", "lin-rect",
+                    "sm-circ", "fr-circ", "fork", "hourglass", "brace", "brace-r", "braces", "bolt",
+                    "doc", "delay", "h-cyl", "lin-cyl", "curv-trap", "div-rect", "tri", "win-pane",
+                    "f-circ", "notch-pent", "flip-tri", "sl-rect", "docs", "st-rect", "bow-rect",
+                    "cross-circ", "tag-doc", "tag-rect", "flag", "odd", "lin-doc", "cloud", "bang",
+                    "datastore", "folder", "bucket", "console", "browser", "person", "Rect", "nope"]
+
+proc flowNode(g: var Gen): string =
+  result = g.pick(flowIds)
+  let r = g.rng.rand(1.0)
+  if r < 0.5:
+    let (o, c) = g.pick(flowOpens)
+    result.add o & (if g.chance(0.02): "" else: g.pick(flowLabels)) & c
+  elif r < 0.6:
+    result.add "@{ shape: " & g.pick(flowShapes) &
+      (if g.chance(0.6): ", label: \"" & g.pick(flowLabels).replace("\"", "") & "\"" else: "") & " }"
+  elif r < 0.63:
+    result.add "@{ icon: \"fa:user\", form: " & g.pick(["circle", "square", "rounded", "x"]) &
+      ", label: \"" & g.pick(["User", "", "a b"]) & "\", pos: " & g.pick(["t", "b"]) & " }"
+  elif r < 0.65:
+    result.add "@{ img: \"" & g.pick(["https://example.com/a.png", "javascript:alert(1)", "x.png"]) &
+      "\", label: \"Pic\", w: " & g.pick(["60", "100", "0", "5000"]) & ", h: 60, constraint: " & g.pick(["on", "off"]) & " }"
+    if g.chance(0.15): result.add ":::" & g.pick(["hot", "cold", "internal-link"])
+
+proc flowLink(g: var Gen): string =
+  let link = g.pick(flowLinks)
+  let r = g.rng.rand(1.0)
+  if r < 0.2: link & "|" & g.pick(flowLabels).replace("|", "") & "|"
+  elif r < 0.27 and link in ["-->", "==>", "-.->", "---"]:
+    (if link == "==>": "== " elif link == "-.->": "-. " else: "-- ") & g.pick(["text", "a b", "日本"]) & " " & link
+  elif r < 0.3: "e" & $g.rng.rand(0 .. 3) & "@" & link
+  else: link
+
+proc flowStatement(g: var Gen, depth: int, edges: var int): string =
+  let r = g.rng.rand(1.0)
+  if r < 0.55:
+    result = flowNode(g)
+    for k in 0 ..< g.rng.rand(0 .. 3):
+      if g.chance(0.1): result.add " & " & flowNode(g)
+      result.add " " & flowLink(g) & " " & flowNode(g)
+      inc edges
+  elif r < 0.62 and depth < 3:
+    result = "subgraph " & g.pick(["S1", "S2", "one", "two words", "S1[\"Title here\"]", "x[\"" & g.pick(flowLabels).replace("\"", "") & "\"]", ""]) & "\n"
+    if g.chance(0.3): result.add "  direction " & g.pick(["LR", "RL", "TB", "BT"]) & "\n"
+    for k in 0 ..< g.rng.rand(0 .. 4): result.add "  " & flowStatement(g, depth + 1, edges) & "\n"
+    result.add "end"
+  elif r < 0.66: result = "classDef " & g.pick(["hot", "cold", "default"]) & " fill:" & g.pick(flowColors) & ",stroke:" & g.pick(flowColors) & (if g.chance(0.3): ",color:#fff" else: "")
+  elif r < 0.69: result = "class " & g.pick(flowIds) & "," & g.pick(flowIds) & " " & g.pick(["hot", "cold"])
+  elif r < 0.72: result = "style " & g.pick(flowIds) & " fill:" & g.pick(flowColors) & ",stroke-width:" & g.pick(["2px", "4px"]) & (if g.chance(0.3): ",font-weight:bold" else: "")
+  elif r < 0.75 and edges > 0:
+    result = "linkStyle " & (if g.chance(0.2): "default" else: $g.rng.rand(0 .. edges - 1)) &
+      (if g.chance(0.2): " interpolate " & g.pick(["basis", "linear", "step", "stepBefore", "cardinal"]) else: "") &
+      " stroke:" & g.pick(flowColors) & (if g.chance(0.4): ",stroke-width:3px" else: "")
+  elif r < 0.78: result = "click " & g.pick(flowIds) & " " & g.pick(["href \"https://example.com\"", "\"https://example.com\" \"tip\"", "callback", "call cb()", "\"javascript:x\" _blank", "\"[[Note]]\""])
+  elif r < 0.8: result = g.pick(flowIds) & " --> " & g.pick(flowIds) & "\n" & g.pick(flowIds) & " --> " & g.pick(flowIds)
+  elif r < 0.82: result = "%% " & g.pick(flowLabels)
+  elif r < 0.84: result = "accTitle: " & g.pick(flowLabels)
+  elif r < 0.85: result = "accDescr { " & g.pick(flowLabels) & "\n  " & g.pick(flowLabels) & " }"
+  elif r < 0.87: result = g.pick(flowIds) & " --> " & g.pick(flowIds) & "; " & g.pick(flowIds)
+  elif r < 0.88: result = g.pick(["garbage ((", "A -->", "-->", "A[unclosed", "end", "subgraph", "A@{ shape: }", "A --> B --x"])
+  else:
+    let a = g.pick(flowIds)
+    result = a & " --> " & a
+    inc edges
+
+proc flowchartSource(g: var Gen): string =
+  if g.chance(0.15):
+    result.add "---\n"
+    if g.chance(0.4): result.add "title: " & g.pick(flowLabels).replace("\"", "") & "\n"
+    result.add "config:\n  flowchart:\n"
+    if g.chance(0.4): result.add "    curve: " & g.pick(["basis", "linear", "step", "stepAfter", "natural", "monotoneX", "x"]) & "\n"
+    if g.chance(0.3): result.add "    nodeSpacing: " & g.pick(["10", "80", "0", "x"]) & "\n"
+    if g.chance(0.3): result.add "    rankSpacing: " & g.pick(["10", "100", "3000"]) & "\n"
+    if g.chance(0.3): result.add "    wrappingWidth: " & g.pick(["50", "100", "400"]) & "\n"
+    if g.chance(0.2): result.add "    inheritDir: " & g.pick(["true", "false"]) & "\n"
+    result.add "---\n"
+  result.add g.pick(["flowchart", "graph"])
+  result.add(if g.chance(0.1): "" else: " " & g.pick(["TD", "TB", "LR", "RL", "BT", "TD", "LR", ">", "v"]))
+  result.add(if g.chance(0.1): ";\n" else: "\n")
+  var edges = 0
+  for i in 0 ..< g.rng.rand(0 .. 12):
+    result.add g.pick(["", "  ", "    ", "\t"]) & flowStatement(g, 0, edges)
+    result.add(if g.chance(0.03): "\r\n" else: "\n")
 
 const scores = ["5", "1", "3", "4", "2", "0", "7", "-1", "2.5", " 4 ", "", "x", "1e1", "0x3", "Infinity",
                 "3.", ".5", "NaN", "\u30003"]
@@ -460,7 +560,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "radar", "treemap", "treeView"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, radar, treemap, treeView", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "radar", "treemap", "treeView"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, radar, treemap, treeView", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -473,6 +573,7 @@ proc main() =
                                                           of "journey": g.journeySource()
                                                           of "info": g.infoSource()
                                                           of "packet": g.packetSource()
+                                                          of "flowchart": g.flowchartSource()
                                                           of "radar": g.radarSource()
                                                           of "treemap": g.treemapSource()
                                                           else: g.treeViewSource()), "options": opts}
