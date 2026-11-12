@@ -252,3 +252,8 @@ func isJsSpaceBefore*(s: string, i: int): bool =
 func isWordChar*(c: char): bool =
   ## `\w`.
   c in {'a'..'z', 'A'..'Z', '0'..'9', '_'}
+
+func replaceFirst*(s, sub, by: string): string =
+  ## `s.replace(sub, by)` with a string pattern: only the first occurrence.
+  let i = s.find(sub)
+  if i < 0: s else: s[0 ..< i] & by & s[i + sub.len .. ^1]
