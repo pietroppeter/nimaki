@@ -17,6 +17,7 @@ import nimaki/diagrams/radar/index as radarIndex
 import nimaki/diagrams/treemap/index as treemapIndex
 import nimaki/diagrams/treeview/index as treeviewIndex
 import nimaki/diagrams/class/index as classIndex
+import nimaki/diagrams/git/index as gitIndex
 
 export core, errors, types, measurer
 
@@ -31,3 +32,4 @@ register(radarIndex.radar)
 register(treemapIndex.treemap)
 register(treeviewIndex.treeView)
 register(classIndex.classDiagram)
+register(gitIndex.gitGraph)
