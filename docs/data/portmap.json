@@ -3,12 +3,12 @@
   "code": 47594,
   "totals": {
     "todo": {
-      "files": 202,
-      "code": 31906
+      "files": 200,
+      "code": 31277
     },
     "draft": {
-      "files": 89,
-      "code": 15688
+      "files": 91,
+      "code": 16317
     },
     "verified": {
       "files": 0,
@@ -250,8 +250,8 @@
     },
     {
       "component": "diagrams/swimlane",
-      "todo": 69,
-      "draft": 0,
+      "todo": 0,
+      "draft": 69,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -322,8 +322,8 @@
     },
     {
       "component": "layout",
-      "todo": 627,
-      "draft": 2759,
+      "todo": 67,
+      "draft": 3319,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -1895,8 +1895,10 @@
       "component": "diagrams/swimlane",
       "lines": 81,
       "code": 69,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/swimlane/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/timeline/db.ts",
@@ -2597,8 +2599,10 @@
       "component": "layout",
       "lines": 630,
       "code": 560,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/layout/lanes.nim"
+      ]
     },
     {
       "path": "src/layout/layered.ts",

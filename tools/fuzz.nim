@@ -244,6 +244,26 @@ proc flowchartSource(g: var Gen): string =
     result.add g.pick(["", "  ", "    ", "\t"]) & flowStatement(g, 0, edges)
     result.add(if g.chance(0.03): "\r\n" else: "\n")
 
+proc swimlaneSource(g: var Gen): string =
+  ## A flowchart whose top-level subgraphs are lanes: lanes of steps, handoffs between them, a
+  ## few loose steps (they share an unnamed lane) and groups inside lanes.
+  if g.chance(0.1): result.add "---\nconfig:\n  flowchart:\n    rankSpacing: " & g.pick(["10", "100"]) & "\n---\n"
+  result.add(if g.chance(0.03): g.pick(["swimlane", "Swimlane-beta"]) else: "swimlane-beta")
+  result.add(if g.chance(0.2): "" else: " " & g.pick(["TD", "TB", "LR", "RL", "BT", "LR"]))
+  result.add "\n"
+  var edges = 0
+  for lane in 0 ..< g.rng.rand(0 .. 4):
+    result.add "  subgraph " & g.pick(["Customer", "Support", "Ops", "L" & $lane, "x[\"" & g.pick(flowLabels).replace("\"", "") & "\"]"]) & "\n"
+    for k in 0 ..< g.rng.rand(0 .. 4):
+      result.add "    " & (if g.chance(0.6): flowNode(g) else: flowStatement(g, 1, edges)) & "\n"
+    result.add "  end\n"
+  for i in 0 ..< g.rng.rand(0 .. 8):
+    let r = g.rng.rand(1.0)
+    if r < 0.7:
+      result.add "  " & g.pick(flowIds) & " " & flowLink(g) & " " & g.pick(flowIds) & "\n"
+      inc edges
+    else: result.add "  " & flowStatement(g, 1, edges) & "\n"
+
 const scores = ["5", "1", "3", "4", "2", "0", "7", "-1", "2.5", " 4 ", "", "x", "1e1", "0x3", "Infinity",
                 "3.", ".5", "NaN", "\u30003"]
 const actors = ["Me", "Cat", "Dog", "", " Me ", "Ünï", "日本", "Zed", "a b", "Me", "emoji 🎉",
@@ -660,7 +680,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -675,6 +695,7 @@ proc main() =
                                                           of "packet": g.packetSource()
                                                           of "flowchart": g.flowchartSource()
                                                           of "sequence": g.sequenceSource()
+                                                          of "swimlane": g.swimlaneSource()
                                                           of "radar": g.radarSource()
                                                           of "treemap": g.treemapSource()
                                                           else: g.treeViewSource()), "options": opts}
