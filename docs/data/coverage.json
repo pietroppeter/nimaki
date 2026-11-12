@@ -50,7 +50,7 @@
       "status": "started",
       "nim": "src/nimaki/layout/",
       "post": "layered-layout-and-flowchart",
-      "notes": "layered.ts and compound.ts are ported and checked through flowchart (383 corpus cases, 5,000 generated in CI) and by Pele's 31 layout tests (tests/test_layout.nim). lanes.ts (swimlane) and components.ts (class) are not ported yet."
+      "notes": "layered.ts and compound.ts are ported and checked through flowchart (383 corpus cases, 5,000 generated in CI) and by Pele's 31 layout tests (tests/test_layout.nim). lanes.ts is ported and checked through swimlane (14 corpus cases, 5,000 generated in CI). components.ts (class) is not ported yet."
     },
     {
       "id": "util",
@@ -97,19 +97,19 @@
       "corpus": 13,
       "parse": {
         "code": 69,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 0,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 0,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/swimlane/",
+      "post": "lanes-and-handoffs",
+      "notes": "A flowchart whose top-level subgraphs are lanes: parsed by flowchart, laid out by layout/lanes.ts. Identical to Pele on the 14 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim swimlane); 7,000 more across seeds before merging."
     },
     {
       "id": "info",
