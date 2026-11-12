@@ -755,6 +755,28 @@ proc treeViewSource(g: var Gen): string =
     else: result.add g.pick(["├──", "  indented", "\"unterminated", ":::", "icon(", "Section ─ A.txt", "## x"])
     result.add(if g.chance(0.05): "\r\n" else: "\n")
 
+proc ishikawaSource(g: var Gen): string =
+  if g.chance(0.2): result.add "---\ntitle: " & g.pick(labels) & "\n---\n"
+  if g.chance(0.1): result.add g.pick(["\n", "%% comment\n", "  \n\n", "   %% c\n"])
+  result.add(if g.chance(0.03): g.pick(["Ishikawa", "ishikawax", "fishbone"]) elif g.chance(0.3): "ishikawa-beta" else: "ishikawa")
+  result.add(if g.chance(0.05): " " else: "")
+  result.add "\n"
+  var level = 0
+  for i in 0 ..< g.rng.rand(0 .. 22):
+    let r = g.rng.rand(1.0)
+    if i > 0:
+      if r < 0.4: level = min(level + 1, 6)
+      elif r < 0.7: level = max(level - g.rng.rand(1 .. 3), 1)
+    let unit = if g.chance(0.95): g.pick(["  ", "    ", "\t"]) else: g.pick(["\u3000", " ", "\u00a0 "])
+    var indent = ""
+    for k in 0 ..< level: indent.add unit
+    let q = g.rng.rand(1.0)
+    if q < 0.85: result.add indent & g.pick(labels)
+    elif q < 0.9: result.add indent & "%% " & g.pick(labels)
+    elif q < 0.97: result.add ""
+    else: result.add indent & g.pick(["ishikawa", "x %% y", "a\tb"])
+    result.add(if g.chance(0.05): "\r\n" else: "\n")
+
 proc options(g: var Gen): JsonNode =
   result = newJObject()
   if g.chance(0.3): result["fontSize"] = %g.pick([12, 14, 16, 18, 20, 11])
@@ -806,7 +828,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -824,6 +846,7 @@ proc main() =
                                                           of "state": g.stateSource()
                                                           of "swimlane": g.swimlaneSource()
                                                           of "class": g.classSource()
+                                                          of "ishikawa": g.ishikawaSource()
                                                           of "radar": g.radarSource()
                                                           of "treemap": g.treemapSource()
                                                           else: g.treeViewSource()), "options": opts}
