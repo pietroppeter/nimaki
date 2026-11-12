@@ -323,8 +323,8 @@
           "title": "Info",
           "what": "src/diagrams/info: 108 lines of TypeScript, 2 corpus cases.",
           "done_when": "difftest: every info case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port diagrams that need no layered layout",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -334,8 +334,8 @@
           "title": "Packet",
           "what": "src/diagrams/packet: 328 lines of TypeScript, 4 corpus cases.",
           "done_when": "difftest: every packet case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port diagrams that need no layered layout",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -378,8 +378,8 @@
           "title": "Journey",
           "what": "src/diagrams/journey: 467 lines of TypeScript, 1 corpus cases.",
           "done_when": "difftest: every journey case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port diagrams that need no layered layout",
+          "status": "started",
           "post": "",
           "pr": ""
         },
