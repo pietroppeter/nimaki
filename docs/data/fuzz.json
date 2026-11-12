@@ -6,8 +6,16 @@
       "cases": 5000,
       "identical": 5000,
       "different": 0,
-      "rendered": 2965,
-      "errors": 2035
+      "rendered": 2971,
+      "errors": 2029
+    },
+    "timeline": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 2983,
+      "errors": 2017
     }
   }
 }

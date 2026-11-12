@@ -3,12 +3,12 @@
   "code": 47594,
   "totals": {
     "todo": {
-      "files": 267,
-      "code": 44706
+      "files": 259,
+      "code": 43641
     },
     "draft": {
-      "files": 24,
-      "code": 2888
+      "files": 32,
+      "code": 3953
     },
     "verified": {
       "files": 0,
@@ -74,8 +74,8 @@
     },
     {
       "component": "diagrams/common",
-      "todo": 620,
-      "draft": 276,
+      "todo": 505,
+      "draft": 391,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -258,8 +258,8 @@
     },
     {
       "component": "diagrams/timeline",
-      "todo": 475,
-      "draft": 0,
+      "todo": 0,
+      "draft": 475,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -330,8 +330,8 @@
     },
     {
       "component": "svg",
-      "todo": 1214,
-      "draft": 537,
+      "todo": 739,
+      "draft": 1012,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -773,8 +773,10 @@
       "component": "diagrams/common",
       "lines": 53,
       "code": 45,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/common/fit.nim"
+      ]
     },
     {
       "path": "src/diagrams/common/generics.ts",
@@ -813,8 +815,10 @@
       "component": "diagrams/common",
       "lines": 86,
       "code": 70,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/common/scan.nim"
+      ]
     },
     {
       "path": "src/diagrams/common/tokens.ts",
@@ -1823,40 +1827,50 @@
       "component": "diagrams/timeline",
       "lines": 75,
       "code": 58,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/timeline/db.nim"
+      ]
     },
     {
       "path": "src/diagrams/timeline/index.ts",
       "component": "diagrams/timeline",
       "lines": 16,
       "code": 14,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/timeline/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/timeline/lexer.ts",
       "component": "diagrams/timeline",
       "lines": 135,
       "code": 123,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/timeline/lexer.nim"
+      ]
     },
     {
       "path": "src/diagrams/timeline/parser.ts",
       "component": "diagrams/timeline",
       "lines": 55,
       "code": 49,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/timeline/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/timeline/render.ts",
       "component": "diagrams/timeline",
       "lines": 250,
       "code": 231,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/timeline/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/treemap/format.ts",
@@ -2549,8 +2563,10 @@
       "component": "svg",
       "lines": 550,
       "code": 475,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/svg/edges.nim"
+      ]
     },
     {
       "path": "src/svg/ink.ts",

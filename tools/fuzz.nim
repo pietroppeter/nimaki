@@ -4,6 +4,7 @@
 ## padding, maxWidth, config...). The corpus has few cases per type; this finds what it misses.
 ##
 ##   nim r tools/fuzz.nim pie                 1000 cases of pie, seed 1
+##   nim r tools/fuzz.nim timeline            the same for timeline
 ##   options:
 ##     --cases:N         how many cases (default 1000)
 ##     --seed:S          the seed of the generator (default 1)
@@ -85,11 +86,71 @@ proc pieSource(g: var Gen): string =
     result.add(if g.chance(0.05): "\r\n" else: "\n")
   if g.chance(0.1): result.add "   "
 
+const timelineWords = [
+  "2002", "LinkedIn", "Facebook", "Google", "2004", "Industry 4.0", "Web 2.0", "", "a b",
+  "Ünïcödé", "日本語のテキスト", "emoji 🎉🎉", "x&amp;y", "#35; hash", "a<b>bold</b>c", "<br>",
+  "line<br/>break", "a < b", "fa:fa-car icon", ":fa-car", "&lt;tag&gt;", "#quot;q#quot;",
+  "Supercalifragilisticexpialidocious", "aVeryLongWordWithoutAnySpacesThatMustBeCutSomewhere",
+  "very long text that goes on and on and wraps over several lines in the box", "x",
+  "tab\there", "soft­hyphen", "zero​width", "（括弧）", "ideo\u3000space", "nbsp here",
+  "__proto__", "constructor", "Ω≈ç√", "́combining", "WWWWWWWWWWWWWWWWWWWWWWWWW", "<i>it</i>",
+  "*em*", "%% not a comment", "50%", "title", "section", "timeline",
+]
+const timelineOdd = ["1:2", "a: b", ":fa-car", "x:y"]   # a colon that is not followed by a space
+
+proc timelineSource(g: var Gen): string =
+  if g.chance(0.15):
+    result.add "---\n"
+    if g.chance(0.5): result.add "title: " & g.pick(timelineWords) & "\n"
+    result.add "config:\n"
+    if g.chance(0.5): result.add "  timeline:\n    disableMulticolor: " & g.pick(["true", "false", "1", "x"]) & "\n"
+    if g.chance(0.5):
+      result.add "  themeVariables:\n"
+      for i in 0 .. g.rng.rand(0 .. 4):
+        result.add "    cScale" & $i & ": \"" & g.pick(colors) & "\"\n"
+    result.add "---\n"
+  if g.chance(0.05): result.add "%%{init: {\"timeline\": {\"disableMulticolor\": true}}}%%\n"
+  if g.chance(0.05): result.add "%% leading comment\n"
+  result.add(if g.chance(0.03): g.pick(["timelineLR", "timeline x", "timelines", "Timeline", "TIMELINE"])
+             else: g.pick(["timeline", "timeline", "timeline", "timeline LR", "timeline TD",
+                           "timeline  td", "timeline\tLR", "timeline lr"]))
+  result.add "\n"
+  let n = g.rng.rand(0 .. 14)
+  var periods = 0
+  for i in 0 ..< n:
+    let indent = g.pick(["", "  ", "    ", "\t", " "])
+    var r = g.rng.rand(1.0)
+    # an event before any period is an error: rarely
+    if r >= 0.35 and r < 0.55 and periods == 0 and not g.chance(0.05): r = 0.0
+    if r < 0.35:
+      inc periods
+      result.add indent & g.pick(timelineWords)
+      for k in 0 ..< g.rng.rand(0 .. 3):
+        result.add(if g.chance(0.03): g.pick([" :", ":"]) else: g.pick([" : ", ": ", " :\t"]))
+        result.add(if g.chance(0.03): g.pick(timelineOdd) else: g.pick(timelineWords))
+    elif r < 0.55: result.add indent & g.pick([": ", ":  ", ":\t"]) & g.pick(timelineWords)
+    elif r < 0.7: result.add indent & "section " & g.pick(timelineWords)
+    elif r < 0.73: result.add indent & "section"
+    elif r < 0.77: result.add indent & g.pick(["title ", "title", "title  ", "Title\t"]) & g.pick(timelineWords)
+    elif r < 0.8: result.add indent & "accTitle: " & g.pick(timelineWords)
+    elif r < 0.83: result.add indent & "accDescr: " & g.pick(timelineWords)
+    elif r < 0.85: result.add indent & "accDescr {\n    " & g.pick(timelineWords) & "\n  " & g.pick(timelineWords) & "\n}"
+    elif r < 0.88: result.add indent & "%% " & g.pick(timelineWords)
+    elif r < 0.9: result.add indent & "# hash comment"
+    elif r < 0.93: result.add ""
+    elif r < 0.93: result.add indent & g.pick(["title\u3000", "section\u00a0", ":\u3000", "accTitle:\u2003", "title\u2028"]) & g.pick(timelineWords)
+    elif r < 0.935: result.add indent & g.pick(["garbage : : x", ":", "::", ": ", "accDescr {", "accTitle", "section :", "x # y"])
+    else: result.add indent & g.pick(timelineWords) & " : " & g.pick(timelineWords) & " : " & g.pick(timelineWords)
+    result.add(if g.chance(0.05): "\r\n" else: "\n")
+  if g.chance(0.1): result.add "   "
+
 proc options(g: var Gen): JsonNode =
   result = newJObject()
   if g.chance(0.3): result["fontSize"] = %g.pick([12, 14, 16, 18, 20, 11])
   if g.chance(0.2): result["padding"] = %g.pick([0, 4, 8, 16])
-  if g.chance(0.3): result["maxWidth"] = %g.pick([200, 300, 320, 390, 500, 640, 100])
+  if g.chance(0.3): result["maxWidth"] = %g.pick([200, 300, 320, 390, 500, 640, 100, 800, 1200])
+  if g.chance(0.05): result["autoDirection"] = %g.chance(0.5)
+  if g.chance(0.05): result["directionBreakpoint"] = %g.pick([0, 400, 1000])
   if g.chance(0.1): result["idPrefix"] = %g.pick(["x", "my-id", "a\"b"])
   if g.chance(0.1): result["responsive"] = %g.chance(0.5)
   if g.chance(0.05): result["fontFamily"] = %g.pick(["Inter", "\"Fira Sans\", sans-serif", "bad;font", "Times New Roman"])
@@ -101,6 +162,8 @@ proc toOptions(j: JsonNode): RenderOptions =
   if j.hasKey("idPrefix"): result.idPrefix = some(j["idPrefix"].getStr)
   if j.hasKey("responsive"): result.responsive = some(j["responsive"].getBool)
   if j.hasKey("fontFamily"): result.fontFamily = j["fontFamily"].getStr
+  if j.hasKey("autoDirection"): result.autoDirection = some(j["autoDirection"].getBool)
+  if j.hasKey("directionBreakpoint"): result.directionBreakpoint = some(j["directionBreakpoint"].getFloat)
   if j.hasKey("now"): result.now = j["now"].getFloat
 
 proc nimakiAnswer(source: string, options: JsonNode): Answer =
@@ -129,14 +192,14 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind != "pie": quit "ERROR fuzz knows only: pie", 2
+  if kind notin ["pie", "timeline"]: quit "ERROR fuzz knows only: pie, timeline", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
   for i in 0 ..< count:
     let opts = g.options()
     opts["now"] = %1767225600000.0
-    cases.add %*{"id": kind & "/" & $seed & "/" & $i, "source": g.pieSource(), "options": opts}
+    cases.add %*{"id": kind & "/" & $seed & "/" & $i, "source": (if kind == "pie": g.pieSource() else: g.timelineSource()), "options": opts}
   let dir = buildDir / "fuzz"
   createDir dir
   let inPath = dir / (kind & "-" & $seed & "-in.jsonl")

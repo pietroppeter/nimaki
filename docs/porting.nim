@@ -134,6 +134,16 @@ Pele's local helpers often change the arrays of the function around them (`commi
 `label.ts`'s `wrap`): write them as a `template`, which pastes the code in place.
 """, nkWarning, "Local helpers that change their surroundings"
 
+nbNote """
+The older types (timeline, journey, flowchart, sequence...) are read by hand-written loops that
+port Jison's compiled rules: `src.charCodeAt(p)`, then `p++`. With byte offsets, read the
+character with `codeAt(src, p)` of `common/scan.nim` (a code point, -1 past the end) and step
+with `sizeAt(src, p)` wherever the character tested can be outside ASCII (`isSpace`). A loop
+that only looks for ASCII (a colon, `#`, a line break) can step byte by byte: no byte of a longer
+character is ASCII. A `text.substring(n)` that drops a keyword and the `\s` after it drops
+characters, not bytes (`afterUnits` in the timeline parser).
+""", nkNim, "Hand-written lexers"
+
 nbText: """
 ## The idiom map
 
@@ -169,6 +179,10 @@ filled it in; later steps add to it.
 | a `Diagram<Model>` | `Diagram` of `types.nim`, with the model as a `ref object of RootObj` |
 | `Math.sin(x)` | `sin(x)` of `jsmath` (`import ../../jsmath`, and `from std/math import PI, ceil`) |
 | `` `${n}` `` in an attribute | `jsString(n)`; but a coordinate goes through `num(n)` as in Pele |
+| `src.charCodeAt(p)` in a lexer, then `p++` | `codeAt(src, p)`, then `p += sizeAt(src, p)` (`common/scan.nim`) |
+| `text.match(/.../g)` that cuts text into pieces | an iterator or a proc returning `seq[string]`, the pattern in a comment (`units` in `fit.nim`) |
+| a value that is a number or `undefined` (`seriesOf`) | an `int` with a named sentinel (`NO_SERIES = -1`) when no real value can be negative |
+| a local arrow function that reads a `let` changed later (`eventTextW`) | a `template`, so it reads the current value |
 
 ## Names
 
