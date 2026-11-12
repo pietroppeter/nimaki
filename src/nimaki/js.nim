@@ -142,6 +142,56 @@ func jsNumber*(s: string): float =
   ## `Number(s)` for the decimal numbers the lexers accept (`-?digits(.digits)?`).
   parseFloat(s)
 
+func jsTrim*(s: string): string
+
+func jsToNumber*(raw: string): float =
+  ## `Number(s)` for any string (ECMAScript's StringToNumber): JavaScript's whitespace around it
+  ## is dropped, "" is 0, `Infinity` with a sign, `0x`, `0o` and `0b` without one, and a decimal
+  ## number with an optional sign and exponent; anything else is NaN. A prefixed number past
+  ## 2^53 is summed digit by digit, which can round differently from JavaScript.
+  let s = jsTrim(raw)
+  if s == "": return 0
+  case s
+  of "Infinity", "+Infinity": return Inf
+  of "-Infinity": return -Inf
+  else: discard
+  if s.len > 2 and s[0] == '0' and s[1] in {'x', 'X', 'o', 'O', 'b', 'B'}:
+    let (base, digits) = case s[1]
+      of 'x', 'X': (16.0, HexDigits)
+      of 'o', 'O': (8.0, {'0'..'7'})
+      else: (2.0, {'0', '1'})
+    var v = 0.0
+    for c in s[2 .. ^1]:
+      if c notin digits: return NaN
+      v = v * base + float(if c in Digits: ord(c) - ord('0') else: ord(c.toLowerAscii) - ord('a') + 10)
+    return v
+  var i = 0
+  if s[i] in {'+', '-'}: inc i
+  let first = i
+  while i < s.len and s[i] in Digits: inc i
+  let intDigits = i - first
+  var fracDigits = 0
+  if i < s.len and s[i] == '.':
+    inc i
+    let f = i
+    while i < s.len and s[i] in Digits: inc i
+    fracDigits = i - f
+  if intDigits + fracDigits == 0: return NaN
+  if i < s.len and s[i] in {'e', 'E'}:
+    inc i
+    if i < s.len and s[i] in {'+', '-'}: inc i
+    let e = i
+    while i < s.len and s[i] in Digits: inc i
+    if i == e: return NaN
+  if i != s.len: return NaN
+  var t = s
+  if t[0] == '+': t = t[1 .. ^1]
+  t = t.replace(".e", ".0e").replace(".E", ".0E")
+  if t.endsWith("."): t.add '0'
+  if t.startsWith("."): t = "0" & t
+  elif t.startsWith("-."): t = "-0" & t[1 .. ^1]
+  parseFloat(t)
+
 func jsMax*(a, b: float): float =
   ## `Math.max`: NaN when either is NaN.
   if a.isNaN or b.isNaN: NaN else: max(a, b)
@@ -182,6 +232,28 @@ iterator codeUnits*(s: string): int =
     else:
       yield cp
     i += size
+
+func jsCompare*(a, b: string): int =
+  ## How JavaScript orders two strings (`sort()` with no comparator, `<`): by UTF-16 code units,
+  ## which differs from the byte order of UTF-8 for characters from U+E000 against those past
+  ## U+FFFF.
+  var x, y: seq[int]
+  for c in codeUnits(a): x.add c
+  for c in codeUnits(b): y.add c
+  for i in 0 ..< min(x.len, y.len):
+    if x[i] != y[i]: return x[i] - y[i]
+  x.len - y.len
+
+func substringFrom*(s: string, units: int): string =
+  ## `s.substring(units)`: drops `units` UTF-16 code units from the start (a character past
+  ## U+FFFF counts two).
+  var i = 0
+  var k = 0
+  while k < units and i < s.len:
+    let (cp, size) = codePointAt(s, i)
+    k += (if cp >= 0x10000: 2 else: 1)
+    i += size
+  s[i .. ^1]
 
 func utf16Len*(s: string): int =
   ## `s.length`.

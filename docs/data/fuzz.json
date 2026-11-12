@@ -16,6 +16,30 @@
       "different": 0,
       "rendered": 2983,
       "errors": 2017
+    },
+    "journey": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 3042,
+      "errors": 1958
+    },
+    "info": {
+      "seed": 1,
+      "cases": 1000,
+      "identical": 1000,
+      "different": 0,
+      "rendered": 824,
+      "errors": 176
+    },
+    "packet": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 3436,
+      "errors": 1564
     }
   }
 }

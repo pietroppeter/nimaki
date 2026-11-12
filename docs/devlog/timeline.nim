@@ -124,7 +124,7 @@ matters where the loop asks whether the next character is a *space*, because Jav
 `\s` includes spaces outside ASCII, like the ideographic space `　` (three bytes in UTF-8). After
 `title`, `section` or the colon of an event, Pele skips one space character and keeps the rest:
 `text.substring(6)` drops `title` and its space. The port drops the keyword and one whole
-character instead (`afterUnits` in the parser), and the lexer steps with `sizeAt`, which gives
+character instead (`substringFrom` of `js.nim`), and the lexer steps with `sizeAt`, which gives
 the length in bytes of the character at a position:
 """
 

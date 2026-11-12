@@ -2,9 +2,9 @@
   "about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand.",
   "pin": "1.13.0",
   "cases": 2118,
-  "identical": 40,
+  "identical": 69,
   "different": 0,
-  "unsupported": 2078,
+  "unsupported": 2049,
   "types": [
     {
       "type": "agentflow",
@@ -98,9 +98,9 @@
       "type": "info",
       "coverage": "info",
       "cases": 6,
-      "identical": 0,
+      "identical": 6,
       "different": 0,
-      "unsupported": 6
+      "unsupported": 0
     },
     {
       "type": "ishikawa",
@@ -114,9 +114,9 @@
       "type": "journey",
       "coverage": "journey",
       "cases": 4,
-      "identical": 0,
+      "identical": 4,
       "different": 0,
-      "unsupported": 4
+      "unsupported": 0
     },
     {
       "type": "kanban",
@@ -138,9 +138,9 @@
       "type": "packet",
       "coverage": "packet",
       "cases": 19,
-      "identical": 0,
+      "identical": 19,
       "different": 0,
-      "unsupported": 19
+      "unsupported": 0
     },
     {
       "type": "pie",
