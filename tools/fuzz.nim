@@ -244,6 +244,59 @@ proc packetSource(g: var Gen): string =
     else: result.add indent & g.pick(["1.5: \"x\"", "x: \"y\"", "5-3: \"back\"", "+: \"z\"", "0-: \"a\"", "007: \"z\"", $bit & "-" & $bit & " \"no colon\""])
     result.add(if g.chance(0.05): "\r\n" else: "\n")
 
+const radarNames = ["A", "B", "speed", "power", "x1", "my-axis", "titleX", "a_b", "Z9", "Q", "r2d2", "maxi"]
+const radarOdd = ["ü", "axis", "curve", "max", "-x", "x-"]   # names the grammar takes for something else
+const radarNumbers = ["1", "2", "3", "4", "5", "0", "10", "2.5", "100", "0.5", "1.25", "99999", "0.0"]
+
+proc radarNumber(g: var Gen): string =
+  if g.chance(0.02): g.pick(["07", "1.", "1.2.3", "-1"]) else: g.pick(radarNumbers)
+
+proc radarLabel(g: var Gen): string =
+  if g.chance(0.4): "[\"" & g.pick(labels) & "\"]" else: ""
+
+proc radarSource(g: var Gen): string =
+  if g.chance(0.3):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(labels) & "\n"
+    result.add "config:\n  radar:\n"
+    for key in ["width", "height", "marginTop", "marginLeft", "axisScaleFactor", "axisLabelFactor", "curveTension"]:
+      if g.chance(0.2): result.add "    " & key & ": " & g.pick(["0", "0.5", "1", "1.2", "200", "500", "-1", "x", "5000"]) & "\n"
+    result.add "    useMaxWidth: true\n---\n"
+  result.add(if g.chance(0.03): g.pick(["radar", "Radar-beta", "radar-betax"])
+             else: g.pick(["radar-beta", "radar-beta:", "radar-beta :"]))
+  result.add "\n"
+  var axes: seq[string]
+  let nAxes = g.rng.rand(0 .. 7)
+  for i in 0 ..< nAxes:
+    var name = if g.chance(0.02): g.pick(radarOdd) else: g.pick(radarNames)
+    if name in axes: name = name & $i
+    axes.add name
+  if axes.len > 0:
+    result.add "  axis "
+    for i, a in axes:
+      result.add (if i > 0: g.pick([", ", ","]) else: "") & a & g.radarLabel()
+    result.add "\n"
+  for i in 0 ..< g.rng.rand(0 .. 4):
+    let r = g.rng.rand(1.0)
+    if r < 0.6:
+      result.add "  curve c" & $i & g.radarLabel() & "{"
+      let n = if g.chance(0.9): axes.len else: g.rng.rand(1 .. 6)
+      if g.chance(0.3) and axes.len > 0:
+        for k in 0 ..< max(n, 1):
+          result.add (if k > 0: ", " else: "") & axes[k mod axes.len] & g.pick([": ", ":", " "]) & g.radarNumber()
+      else:
+        for k in 0 ..< max(n, 1):
+          result.add (if k > 0: g.pick([", ", ",", ",\n    "]) else: "") & g.radarNumber()
+      result.add "}\n"
+    elif r < 0.7: result.add "  showLegend " & g.pick(["true", "false"]) & "\n"
+    elif r < 0.78: result.add "  " & g.pick(["ticks", "max", "min"]) & " " & g.radarNumber() & "\n"
+    elif r < 0.85: result.add "  graticule " & g.pick(["circle", "polygon"]) & "\n"
+    elif r < 0.9: result.add "  title " & g.pick(labels) & "\n"
+    elif r < 0.93: result.add "  accTitle: " & g.pick(labels) & "\n"
+    elif r < 0.96: result.add "  %% " & g.pick(labels) & "\n"
+    elif r < 0.985: result.add "\n"
+    else: result.add "  " & g.pick(["axis", "curve x{}", "ticks x", "graticule square", "max 3, min 1", "showLegend true, ticks 3", "accDescr {", "curve y{1, 2", "titlex"]) & "\n"
+
 proc options(g: var Gen): JsonNode =
   result = newJObject()
   if g.chance(0.3): result["fontSize"] = %g.pick([12, 14, 16, 18, 20, 11])
@@ -292,7 +345,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "radar"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, radar", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -304,7 +357,8 @@ proc main() =
                                                           of "timeline": g.timelineSource()
                                                           of "journey": g.journeySource()
                                                           of "info": g.infoSource()
-                                                          else: g.packetSource()), "options": opts}
+                                                          of "packet": g.packetSource()
+                                                          else: g.radarSource()), "options": opts}
   let dir = buildDir / "fuzz"
   createDir dir
   let inPath = dir / (kind & "-" & $seed & "-in.jsonl")

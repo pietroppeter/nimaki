@@ -11,6 +11,7 @@ import nimaki/diagrams/timeline/index as timelineIndex
 import nimaki/diagrams/journey/index as journeyIndex
 import nimaki/diagrams/info/index as infoIndex
 import nimaki/diagrams/packet/index as packetIndex
+import nimaki/diagrams/radar/index as radarIndex
 
 export core, errors, types, measurer
 
@@ -19,3 +20,4 @@ register(timelineIndex.timeline)
 register(journeyIndex.journey)
 register(infoIndex.info)
 register(packetIndex.packet)
+register(radarIndex.radar)
