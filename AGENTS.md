@@ -157,8 +157,11 @@ nbSave
   `nkQuestion` for what is open (for Pietro or a later step), `nkInfo`, `nkPlain`.
 - Tables: a Markdown table for a few rows of text; tabelline (`tabella(rows): ...` with
   `optCssTheme()`, then `nbTable t`) for data.
-- The look is in `docs/theme.nim`, in two modes, giorno and notte, from six colour tokens per
-  mode. Check a new block in both modes and at 390px wide.
+- The look is Pomice (`docs/theme.nim`; the post *Pomice, the look of nimaki* explains it), in
+  two modes, giorno and notte, from six colour tokens per mode: paper (pumice), ink (basalt),
+  primary (lava: Pele, and what is being ported now), secondary (the sea: nimaki, Nim, links),
+  warning (sulphur, never text), success (olivine: done). Pele's diagrams read the same tokens
+  through `--pele-*` (`.pele`). Check a new block in both modes and at 390px wide.
 - Every page shows its own notebook, folded in the footer (*Show the nimib source of this
   page*), and the Pele pin: nothing to do in a page, `usePage` does it.
 - No remote assets: fonts, scripts and styles are in `docs/assets/`. `-d:singleFile` inlines

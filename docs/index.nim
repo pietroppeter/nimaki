@@ -22,8 +22,8 @@ step at a time, and explains every step.
 nbText: &"""
 The snapshot is {pin.link}, which draws every diagram type of Mermaid {pin.mermaid}:
 {cov.tsCode.thousands} lines of TypeScript, tests not counted. Ported so far: {cov.portedCode.thousands}.
-Each lamp is a shared part of Pele or a diagram type; it turns yellow when its port starts and
-lights up when the Nim draws, byte for byte, the same SVG as Pele.
+Each island is a shared part of Pele or a diagram type; it glows like lava when its port starts
+and cools to olivine when the Nim draws, byte for byte, the same SVG as Pele.
 """
 
 nbPipeline cov.pipeline

@@ -61,9 +61,9 @@
           "what": "Design nimaki's theme for the pages (docs/theme.nim, fonts in docs/assets/) to replace the placeholder borrowed from gleam-in-nim, in two modes, phone first.",
           "done_when": "Every page builds with the new look in both modes; a phone-width preview is reviewed.",
           "owner": "Design nimaki page theme",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "pomice",
+          "pr": "5"
         },
         {
           "id": "pele-origins",
