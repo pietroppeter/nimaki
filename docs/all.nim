@@ -6,3 +6,7 @@
 import index, roadmap, coverage, agents, decisions, porting
 import devlog/index as devlogIndex
 import devlog/a_stage_for_a_port
+import devlog/diagrams_in_the_wild
+import devlog/pele_origins
+import devlog/the_diagram_family
+import devlog/what_mermaid_is
