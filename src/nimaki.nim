@@ -12,6 +12,9 @@ import nimaki/diagrams/flowchart/index as flowchartIndex
 import nimaki/diagrams/journey/index as journeyIndex
 import nimaki/diagrams/info/index as infoIndex
 import nimaki/diagrams/packet/index as packetIndex
+import nimaki/diagrams/radar/index as radarIndex
+import nimaki/diagrams/treemap/index as treemapIndex
+import nimaki/diagrams/treeview/index as treeviewIndex
 
 export core, errors, types, measurer
 
@@ -21,3 +24,6 @@ register(flowchartIndex.flowchart)
 register(journeyIndex.journey)
 register(infoIndex.info)
 register(packetIndex.packet)
+register(radarIndex.radar)
+register(treemapIndex.treemap)
+register(treeviewIndex.treeView)

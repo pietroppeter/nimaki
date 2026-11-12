@@ -89,6 +89,9 @@ jobs:
           nim r tools/fuzz.nim journey --cases:5000
           nim r tools/fuzz.nim info --cases:1000
           nim r tools/fuzz.nim packet --cases:5000
+          nim r tools/fuzz.nim radar --cases:5000
+          nim r tools/fuzz.nim treemap --cases:5000
+          nim r tools/fuzz.nim treeView --cases:5000
 
       - name: Tests
         run: |

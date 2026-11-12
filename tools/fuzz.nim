@@ -344,6 +344,171 @@ proc packetSource(g: var Gen): string =
     else: result.add indent & g.pick(["1.5: \"x\"", "x: \"y\"", "5-3: \"back\"", "+: \"z\"", "0-: \"a\"", "007: \"z\"", $bit & "-" & $bit & " \"no colon\""])
     result.add(if g.chance(0.05): "\r\n" else: "\n")
 
+const radarNames = ["A", "B", "speed", "power", "x1", "my-axis", "titleX", "a_b", "Z9", "Q", "r2d2", "maxi"]
+const radarOdd = ["ü", "axis", "curve", "max", "-x", "x-"]   # names the grammar takes for something else
+const radarNumbers = ["1", "2", "3", "4", "5", "0", "10", "2.5", "100", "0.5", "1.25", "99999", "0.0"]
+
+proc radarNumber(g: var Gen): string =
+  if g.chance(0.02): g.pick(["07", "1.", "1.2.3", "-1"]) else: g.pick(radarNumbers)
+
+proc radarLabel(g: var Gen): string =
+  if g.chance(0.4): "[\"" & g.pick(labels) & "\"]" else: ""
+
+proc radarSource(g: var Gen): string =
+  if g.chance(0.3):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(labels) & "\n"
+    result.add "config:\n  radar:\n"
+    for key in ["width", "height", "marginTop", "marginLeft", "axisScaleFactor", "axisLabelFactor", "curveTension"]:
+      if g.chance(0.2): result.add "    " & key & ": " & g.pick(["0", "0.5", "1", "1.2", "200", "500", "-1", "x", "5000"]) & "\n"
+    result.add "    useMaxWidth: true\n---\n"
+  result.add(if g.chance(0.03): g.pick(["radar", "Radar-beta", "radar-betax"])
+             else: g.pick(["radar-beta", "radar-beta:", "radar-beta :"]))
+  result.add "\n"
+  var axes: seq[string]
+  let nAxes = g.rng.rand(0 .. 7)
+  for i in 0 ..< nAxes:
+    var name = if g.chance(0.02): g.pick(radarOdd) else: g.pick(radarNames)
+    if name in axes: name = name & $i
+    axes.add name
+  if axes.len > 0:
+    result.add "  axis "
+    for i, a in axes:
+      result.add (if i > 0: g.pick([", ", ","]) else: "") & a & g.radarLabel()
+    result.add "\n"
+  for i in 0 ..< g.rng.rand(0 .. 4):
+    let r = g.rng.rand(1.0)
+    if r < 0.6:
+      result.add "  curve c" & $i & g.radarLabel() & "{"
+      let n = if g.chance(0.9): axes.len else: g.rng.rand(1 .. 6)
+      if g.chance(0.3) and axes.len > 0:
+        for k in 0 ..< max(n, 1):
+          result.add (if k > 0: ", " else: "") & axes[k mod axes.len] & g.pick([": ", ":", " "]) & g.radarNumber()
+      else:
+        for k in 0 ..< max(n, 1):
+          result.add (if k > 0: g.pick([", ", ",", ",\n    "]) else: "") & g.radarNumber()
+      result.add "}\n"
+    elif r < 0.7: result.add "  showLegend " & g.pick(["true", "false"]) & "\n"
+    elif r < 0.78: result.add "  " & g.pick(["ticks", "max", "min"]) & " " & g.radarNumber() & "\n"
+    elif r < 0.85: result.add "  graticule " & g.pick(["circle", "polygon"]) & "\n"
+    elif r < 0.9: result.add "  title " & g.pick(labels) & "\n"
+    elif r < 0.93: result.add "  accTitle: " & g.pick(labels) & "\n"
+    elif r < 0.96: result.add "  %% " & g.pick(labels) & "\n"
+    elif r < 0.985: result.add "\n"
+    else: result.add "  " & g.pick(["axis", "curve x{}", "ticks x", "graticule square", "max 3, min 1", "showLegend true, ticks 3", "accDescr {", "curve y{1, 2", "titlex"]) & "\n"
+
+const treemapValues = ["10", "25", "1", "0", "100", "3.5", "1,000", "2_5", "1000000", "0.01", "7", "42", "12.", "99999999", "1e3"]
+const treemapOdd = ["1.2.3", ".", ",5", "_"]
+
+proc treemapValue(g: var Gen): string =
+  if g.chance(0.03): g.pick(treemapOdd) else: g.pick(treemapValues)
+
+proc treemapLabel(g: var Gen): string =
+  ## A quote ends a name, so labels with one are rare.
+  result = g.pick(labels)
+  while '"' in result and not g.chance(0.05): result = g.pick(labels)
+const treemapFormats = [",", "$0,0", "$,", ".2f", ",.1f", "d", ".1%", "e", ".3e", "+,", "~", ".3~f", ">10,", "*^12.2f", "x", ".0f", "$,.2f", "(,", ",d", ".25f", "s", "%"]
+const treemapStyles = ["fill:#f96", "fill:red,stroke:#333,stroke-width:2px", "color:white", "font-weight:bold",
+                       "font-size:20px", "font-style:italic", "fill:#123456;color:#fff", "fill:rgb(1\\,2\\,3)", "stroke:blue", ""]
+
+proc treemapSource(g: var Gen): string =
+  if g.chance(0.4):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(labels) & "\n"
+    result.add "config:\n  treemap:\n"
+    if g.chance(0.4): result.add "    valueFormat: \"" & g.pick(treemapFormats) & "\"\n"
+    if g.chance(0.2): result.add "    showValues: " & g.pick(["false", "true"]) & "\n"
+    for key in ["nodeWidth", "nodeHeight", "padding", "diagramPadding"]:
+      if g.chance(0.15): result.add "    " & key & ": " & g.pick(["1", "10", "20", "40", "64", "100", "0", "500", "x"]) & "\n"
+    result.add "    useMaxWidth: true\n---\n"
+  result.add(if g.chance(0.03): g.pick(["Treemap", "treemaps", "treemap-alpha"])
+             else: g.pick(["treemap-beta", "treemap"]))
+  result.add "\n"
+  var classes: seq[string]
+  for i in 0 ..< g.rng.rand(0 .. 2):
+    let name = g.pick(["hot", "cold", "big_one", "x1"])
+    classes.add name
+    result.add "classDef " & name & " " & g.pick(treemapStyles) & (if g.chance(0.3): ";" else: "") & "\n"
+  var depth = 0
+  for i in 0 ..< g.rng.rand(0 .. 16):
+    let r = g.rng.rand(1.0)
+    let indent = repeat("    ", depth)
+    let label = (if g.chance(0.9): "\"" & g.treemapLabel() & "\"" else: "'" & g.treemapLabel() & "'")
+    let cls = if classes.len > 0 and g.chance(0.2): ":::" & g.pick(classes) else: ""
+    if r < 0.3:
+      result.add indent & label & cls
+      depth = min(depth + 1, 3)
+    elif r < 0.8:
+      result.add indent & label & g.pick([": ", ":", " : ", ", ", ","]) & g.treemapValue() & cls
+      if g.chance(0.3): depth = max(0, depth - g.rng.rand(1 .. 2))
+    elif r < 0.85: result.add "title " & g.pick(labels)
+    elif r < 0.88: result.add "accTitle: " & g.pick(labels)
+    elif r < 0.91: result.add indent & "%% " & g.pick(labels)
+    elif r < 0.985: result.add ""
+    else: result.add indent & g.pick(["garbage", "\"x\": ", "\"y\" 5", ":::", "classDef", "\"unterminated"])
+    result.add(if g.chance(0.05): "\r\n" else: "\n")
+
+const treeFiles = ["README.md", "index.ts", "main.nim", "Makefile", "package.json", "logo.PNG", ".gitignore",
+                   "a.b.c", "notes.txt", "report final.pdf", "x", "日本語.md", "émoji 🎉.png", "data.csv", "test_x.py"]
+const treeDirs = ["src/", "docs/", "tests/", "node_modules/", "a b/", "日本/", "build/", "/", "deep/"]
+const treeClasses = ["highlight", "dim", "highlight extra", "x-y", "_a"]
+const treeIcons = ["", "file", "folder", "none", "mdi:language-typescript", "logos:nim", "rocket", "a-b:c_d"]
+
+proc treeName(g: var Gen, dir: bool): string =
+  if g.chance(0.15): return g.pick(labels).replace("\\\"", "").replace("\t", " ")
+  if dir: g.pick(treeDirs) else: g.pick(treeFiles)
+
+proc treeEntry(g: var Gen): string =
+  let dir = g.chance(0.35)
+  var name = g.treeName(dir)
+  if name.startsWith("##") or name.startsWith(":::") or name.startsWith("icon(") or name.startsWith("%%"):
+    name = "n" & name
+  if name == "" or g.chance(0.08): name = "\"" & name & "\""
+  elif g.chance(0.02): name = "'" & name & "'"
+  result = name
+  if g.chance(0.15): result.add g.pick([" ", "  ", "\t"]) & ":::" & g.pick([" ", ""]) & g.pick(treeClasses)
+  if g.chance(0.12): result.add " icon(" & g.pick(treeIcons) & ")"
+  if g.chance(0.15): result.add " ## " & g.pick(labels)
+  if g.chance(0.05): result.add g.pick(["  ", " \t"])
+
+proc treeViewSource(g: var Gen): string =
+  if g.chance(0.4):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(labels) & "\n"
+    result.add "config:\n  treeView:\n"
+    if g.chance(0.4): result.add "    showIcons: " & g.pick(["true", "false", "1"]) & "\n"
+    if g.chance(0.2): result.add "    defaultIconPack: " & g.pick(["mdi", "logos", "\"\""]) & "\n"
+    if g.chance(0.2): result.add "    filenameIcons:\n      README.md: mdi:book\n      Makefile: none\n"
+    if g.chance(0.2): result.add "    extensionIcons:\n      .ts: logos:typescript\n      md: mdi:markdown\n      png: \"\"\n"
+    for key in ["paddingX", "paddingY", "rowIndent", "lineThickness"]:
+      if g.chance(0.15): result.add "    " & key & ": " & g.pick(["0", "1", "2", "5", "10", "30", "0.1", "500", "x"]) & "\n"
+    result.add "    useMaxWidth: true\n---\n"
+  result.add(if g.chance(0.03): g.pick(["treeView", "treeview-beta", "treeView-beta extra"]) else: "treeView-beta")
+  result.add "\n"
+  if g.chance(0.2): result.add "title " & g.pick(labels) & "\n"
+  if g.chance(0.1): result.add "accTitle: " & g.pick(labels) & "\n"
+  if g.chance(0.1): result.add(if g.chance(0.5): "accDescr: " & g.pick(labels) & "\n" else: "accDescr {\n  " & g.pick(labels) & "\n}\n")
+  let box = g.chance(0.35)
+  let unit = if box: g.pick([4, 4, 3, 2]) else: g.pick([2, 4, 1])
+  var depth = 0
+  for i in 0 ..< g.rng.rand(0 .. 16):
+    let r = g.rng.rand(1.0)
+    if r < 0.85:
+      if i > 0: depth = max(0, min(depth + g.rng.rand(-2 .. 1), 4))
+      if box and depth > 0:
+        var prefix = ""
+        for d in 1 ..< depth: prefix.add(if g.chance(0.7): "│" & repeat(" ", unit - 1) else: repeat(" ", unit))
+        prefix.add(g.pick(["├", "└", "┣", "┗"]) & repeat(g.pick(["─", "━"]), max(1, unit - 2)) & " ")
+        if g.chance(0.05): prefix = prefix.replace("    ", "\t")
+        result.add prefix & g.treeEntry()
+      else:
+        result.add repeat(" ", depth * unit) & g.treeEntry()
+    elif r < 0.9: result.add repeat(" ", depth * unit) & "%% " & g.pick(labels)
+    elif r < 0.93 and box: result.add "│"
+    elif r < 0.985: result.add ""
+    else: result.add g.pick(["├──", "  indented", "\"unterminated", ":::", "icon(", "Section ─ A.txt", "## x"])
+    result.add(if g.chance(0.05): "\r\n" else: "\n")
+
 proc options(g: var Gen): JsonNode =
   result = newJObject()
   if g.chance(0.3): result["fontSize"] = %g.pick([12, 14, 16, 18, 20, 11])
@@ -353,6 +518,7 @@ proc options(g: var Gen): JsonNode =
   if g.chance(0.05): result["directionBreakpoint"] = %g.pick([0, 400, 1000])
   if g.chance(0.1): result["idPrefix"] = %g.pick(["x", "my-id", "a\"b"])
   if g.chance(0.1): result["responsive"] = %g.chance(0.5)
+  if g.chance(0.05): result["monospace"] = %[g.pick(["files", "members"])]
   if g.chance(0.05): result["fontFamily"] = %g.pick(["Inter", "\"Fira Sans\", sans-serif", "bad;font", "Times New Roman"])
 
 proc toOptions(j: JsonNode): RenderOptions =
@@ -364,6 +530,8 @@ proc toOptions(j: JsonNode): RenderOptions =
   if j.hasKey("fontFamily"): result.fontFamily = j["fontFamily"].getStr
   if j.hasKey("autoDirection"): result.autoDirection = some(j["autoDirection"].getBool)
   if j.hasKey("directionBreakpoint"): result.directionBreakpoint = some(j["directionBreakpoint"].getFloat)
+  if j.hasKey("monospace"):
+    for m in j["monospace"]: result.monospace.add m.getStr
   if j.hasKey("now"): result.now = j["now"].getFloat
 
 proc nimakiAnswer(source: string, options: JsonNode): Answer =
@@ -392,7 +560,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "radar", "treemap", "treeView"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, radar, treemap, treeView", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -404,8 +572,11 @@ proc main() =
                                                           of "timeline": g.timelineSource()
                                                           of "journey": g.journeySource()
                                                           of "info": g.infoSource()
+                                                          of "packet": g.packetSource()
                                                           of "flowchart": g.flowchartSource()
-                                                          else: g.packetSource()), "options": opts}
+                                                          of "radar": g.radarSource()
+                                                          of "treemap": g.treemapSource()
+                                                          else: g.treeViewSource()), "options": opts}
   let dir = buildDir / "fuzz"
   createDir dir
   let inPath = dir / (kind & "-" & $seed & "-in.jsonl")

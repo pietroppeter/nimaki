@@ -6,48 +6,72 @@
       "cases": 5000,
       "identical": 5000,
       "different": 0,
-      "rendered": 2971,
-      "errors": 2029
+      "rendered": 2944,
+      "errors": 2056
     },
     "timeline": {
       "seed": 1,
       "cases": 5000,
       "identical": 5000,
       "different": 0,
-      "rendered": 2983,
-      "errors": 2017
+      "rendered": 3077,
+      "errors": 1923
     },
     "journey": {
       "seed": 1,
       "cases": 5000,
       "identical": 5000,
       "different": 0,
-      "rendered": 3042,
-      "errors": 1958
+      "rendered": 3081,
+      "errors": 1919
     },
     "info": {
       "seed": 1,
       "cases": 1000,
       "identical": 1000,
       "different": 0,
-      "rendered": 824,
-      "errors": 176
+      "rendered": 821,
+      "errors": 179
     },
     "packet": {
       "seed": 1,
       "cases": 5000,
       "identical": 5000,
       "different": 0,
-      "rendered": 3436,
-      "errors": 1564
+      "rendered": 3468,
+      "errors": 1532
     },
     "flowchart": {
       "seed": 1,
       "cases": 5000,
       "identical": 5000,
       "different": 0,
-      "rendered": 3594,
-      "errors": 1406
+      "rendered": 3600,
+      "errors": 1400
+    },
+    "radar": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 4013,
+      "errors": 987
+    },
+    "treemap": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 3158,
+      "errors": 1842
+    },
+    "treeView": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 4234,
+      "errors": 766
     }
   }
 }
