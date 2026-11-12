@@ -777,6 +777,41 @@ proc ishikawaSource(g: var Gen): string =
     else: result.add indent & g.pick(["ishikawa", "x %% y", "a\tb"])
     result.add(if g.chance(0.05): "\r\n" else: "\n")
 
+const cynefinDomains = ["complex", "complicated", "clear", "chaotic", "confusion"]
+
+proc cynefinSource(g: var Gen): string =
+  if g.chance(0.4):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(labels) & "\n"
+    result.add "config:\n  cynefin:\n"
+    if g.chance(0.4): result.add "    seed: " & g.pick(["1", "42", "0", "-7", "1.5", "123456789", "1e16", "x", "99999999999"]) & "\n"
+    if g.chance(0.3): result.add "    boundaryAmplitude: " & g.pick(["0", "4", "8", "20", "50", "60", "2.5"]) & "\n"
+    if g.chance(0.2): result.add "    showDomainDescriptions: " & g.pick(["false", "true", "0"]) & "\n"
+    if g.chance(0.2): result.add "    width: " & g.pick(["100", "300", "640", "1000", "50", "20000"]) & "\n"
+    if g.chance(0.2): result.add "    height: " & g.pick(["100", "300", "440", "900", "50"]) & "\n"
+    result.add "---\n"
+  if g.chance(0.05): result.add "%% comment\n"
+  result.add(if g.chance(0.03): g.pick(["cynefin", "Cynefin-beta", "cynefin-betax"]) elif g.chance(0.2): "cynefin-beta:" else: "cynefin-beta")
+  result.add "\n"
+  for i in 0 ..< g.rng.rand(0 .. 14):
+    let indent = g.pick(["", "  ", "    ", "\t"])
+    let r = g.rng.rand(1.0)
+    let q = if g.chance(0.9): "\"" else: "'"
+    if r < 0.45:
+      result.add indent & g.pick(cynefinDomains) & "\n"
+      for k in 0 ..< g.rng.rand(0 .. 5):
+        result.add indent & "  " & q & g.pick(labels) & q & "\n"
+    elif r < 0.75:
+      result.add indent & g.pick(cynefinDomains) & g.pick([" --> ", "-->", " -->  "]) & g.pick(cynefinDomains)
+      if g.chance(0.6): result.add g.pick([" : ", ": ", ":"]) & q & g.pick(labels) & q
+    elif r < 0.8: result.add indent & "title " & g.pick(labels)
+    elif r < 0.83: result.add indent & "accTitle: " & g.pick(labels)
+    elif r < 0.86: result.add indent & "accDescr: " & g.pick(labels)
+    elif r < 0.9: result.add indent & "%% " & g.pick(labels)
+    elif r < 0.97: result.add ""
+    else: result.add indent & g.pick(["complexity", "clear --> ", "x --> clear", "\"loose\"", "chaotic -> clear"])
+    result.add(if g.chance(0.05): "\r\n" else: "\n")
+
 proc options(g: var Gen): JsonNode =
   result = newJObject()
   if g.chance(0.3): result["fontSize"] = %g.pick([12, 14, 16, 18, 20, 11])
@@ -828,7 +863,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -847,6 +882,7 @@ proc main() =
                                                           of "swimlane": g.swimlaneSource()
                                                           of "class": g.classSource()
                                                           of "ishikawa": g.ishikawaSource()
+                                                          of "cynefin": g.cynefinSource()
                                                           of "radar": g.radarSource()
                                                           of "treemap": g.treemapSource()
                                                           else: g.treeViewSource()), "options": opts}
