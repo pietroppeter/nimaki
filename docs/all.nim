@@ -18,3 +18,4 @@ import devlog/the_referee
 import devlog/three_small_diagrams
 import devlog/timeline
 import devlog/what_mermaid_is
+import devlog/lifelines_and_messages

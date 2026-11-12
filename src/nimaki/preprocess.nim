@@ -223,7 +223,7 @@ proc directives(text: string, config: Config, steps: Steps): string =
       config.fields["wrap"] = ybool(true)
     elif (kind == "init" or kind == "initialize") and match.hasArgs and match.args != "":
       try:
-        let args = fromJson(parseJson(jsTrim(match.args)))
+        let args = fromJson(jsonParse(jsTrim(match.args)))
         if isRecord(args): discard merge(config, args)
       except CatchableError:
         discard # Mermaid ignores an init directive whose body is not valid JSON.

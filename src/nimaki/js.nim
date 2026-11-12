@@ -4,7 +4,7 @@
 ##
 ## Strings stay UTF-8 (decision 0011). Where Pele counts or reads UTF-16 code units
 ## (`length`, `charCodeAt`), these helpers count and read them from the UTF-8 bytes.
-import std/[math, strutils, unicode]
+import std/[math, strutils, unicode, json]
 
 # ---------------------------------------------------------------------------------------------
 # Numbers
@@ -329,3 +329,152 @@ func replaceFirst*(s, sub, by: string): string =
   ## `s.replace(sub, by)` with a string pattern: only the first occurrence.
   let i = s.find(sub)
   if i < 0: s else: s[0 ..< i] & by & s[i + sub.len .. ^1]
+
+# ---------------------------------------------------------------------------------------------
+# JSON.parse
+
+type JsSyntaxError* = object of CatchableError
+  ## What `JSON.parse` throws on text that is not JSON.
+
+proc jsonParse*(text: string): JsonNode =
+  ## `JSON.parse(text)`: strict JSON (ECMA-404), unlike `std/json`'s `parseJson`, which also reads
+  ## comments, trailing commas, leading zeros, `1.` and unknown escapes. Containers are kept on an
+  ## explicit stack, so any depth parses. A lone surrogate (`"\ud800"`) is kept as its three bytes.
+  ## Numbers are floats.
+  let n = text.len
+  var i = 0
+  proc fail() {.noreturn.} =
+    raise newException(JsSyntaxError, "Unexpected token in JSON at position " & $i)
+  proc ws() =
+    while i < n and text[i] in {' ', '\t', '\n', '\r'}: inc i
+  proc hex4(): int =
+    if i + 4 > n: fail()
+    for k in 0 ..< 4:
+      let c = text[i + k]
+      let d = if c in {'0'..'9'}: ord(c) - 48 elif c in {'a'..'f'}: ord(c) - 87
+              elif c in {'A'..'F'}: ord(c) - 55 else: -1
+      if d < 0: fail()
+      result = result * 16 + d
+    i += 4
+  proc str(): string =
+    inc i # the opening quote
+    while true:
+      if i >= n: fail()
+      let c = text[i]
+      if c == '"':
+        inc i
+        return
+      if ord(c) < 0x20: fail()
+      if c != '\\':
+        result.add c
+        inc i
+        continue
+      inc i
+      if i >= n: fail()
+      let e = text[i]
+      inc i
+      case e
+      of '"': result.add '"'
+      of '\\': result.add '\\'
+      of '/': result.add '/'
+      of 'b': result.add '\b'
+      of 'f': result.add '\f'
+      of 'n': result.add '\n'
+      of 'r': result.add '\r'
+      of 't': result.add '\t'
+      of 'u':
+        var cp = hex4()
+        if cp >= 0xD800 and cp <= 0xDBFF and i + 6 <= n and text[i] == '\\' and text[i + 1] == 'u':
+          let save = i
+          i += 2
+          let lo = hex4()
+          if lo >= 0xDC00 and lo <= 0xDFFF: cp = 0x10000 + ((cp - 0xD800) shl 10) + (lo - 0xDC00)
+          else: i = save
+        result.add $Rune(cp)
+      else: fail()
+  proc number(): JsonNode =
+    let start = i
+    if i < n and text[i] == '-': inc i
+    if i < n and text[i] == '0': inc i
+    elif i < n and text[i] in {'1'..'9'}:
+      while i < n and text[i] in {'0'..'9'}: inc i
+    else: fail()
+    if i < n and text[i] == '.':
+      inc i
+      if not (i < n and text[i] in {'0'..'9'}): fail()
+      while i < n and text[i] in {'0'..'9'}: inc i
+    if i < n and text[i] in {'e', 'E'}:
+      inc i
+      if i < n and text[i] in {'+', '-'}: inc i
+      if not (i < n and text[i] in {'0'..'9'}): fail()
+      while i < n and text[i] in {'0'..'9'}: inc i
+    newJFloat(parseFloat(text[start ..< i]))
+  proc literal(word: string, node: JsonNode): JsonNode =
+    if not text.continuesWith(word, i): fail()
+    i += word.len
+    node
+
+  var stack: seq[JsonNode]
+  var keys: seq[string]
+  while true:
+    ws()
+    if i >= n: fail()
+    var value: JsonNode
+    case text[i]
+    of '{':
+      inc i
+      ws()
+      if i < n and text[i] == '}':
+        inc i
+        value = newJObject()
+      else:
+        stack.add newJObject()
+        if not (i < n and text[i] == '"'): fail()
+        keys.add str()
+        ws()
+        if not (i < n and text[i] == ':'): fail()
+        inc i
+        continue
+    of '[':
+      inc i
+      ws()
+      if i < n and text[i] == ']':
+        inc i
+        value = newJArray()
+      else:
+        stack.add newJArray()
+        keys.add ""
+        continue
+    of '"': value = newJString(str())
+    of 't': value = literal("true", newJBool(true))
+    of 'f': value = literal("false", newJBool(false))
+    of 'n': value = literal("null", newJNull())
+    else: value = number()
+    # Attach the value, and close every container that ends after it.
+    while true:
+      if stack.len == 0:
+        ws()
+        if i != n: fail()
+        return value
+      let top = stack[^1]
+      if top.kind == JObject: top[keys[^1]] = value
+      else: top.add value
+      ws()
+      if i >= n: fail()
+      let c = text[i]
+      inc i
+      if c == ',':
+        if top.kind == JObject:
+          ws()
+          if not (i < n and text[i] == '"'): fail()
+          keys[^1] = str()
+          ws()
+          if not (i < n and text[i] == ':'): fail()
+          inc i
+        break
+      if (top.kind == JObject and c == '}') or (top.kind == JArray and c == ']'):
+        value = top
+        discard stack.pop()
+        discard keys.pop()
+        continue
+      fail()

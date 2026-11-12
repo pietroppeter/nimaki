@@ -706,19 +706,19 @@
       "corpus": 38,
       "parse": {
         "code": 1557,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 104,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 950,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/sequence/",
+      "post": "lifelines-and-messages",
+      "notes": "Identical to Pele on the 186 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim sequence); 10,000 more on four other seeds before merging. No layout engine: Pele lays sequence out itself."
     },
     {
       "id": "usecase",
