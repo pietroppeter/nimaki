@@ -72,7 +72,8 @@ many numbers before any renderer uses it.
 """, nkWarning, "Numbers are JavaScript numbers"
 
 nbNote """
-Pele's parsers use about 156 regular expressions. `std/re` needs PCRE at run time and differs
+Pele's source has about 480 regular expression literals, 122 of them sticky (counted in
+*How Pele is built*); lookahead is used, lookbehind never. `std/re` needs PCRE at run time and differs
 from JavaScript's engine in details (`\s`, Unicode classes, `lastIndex`, sticky `y` flags).
 The default is a hand-written scanner with the same behaviour; a regex package needs a decision
 record first.
@@ -82,6 +83,33 @@ nbNote """
 Gantt reads the current time (`Date.now()`) and works in local time. The port takes `now`
 from the options like Pele, and difftest fixes it and runs the oracle with `TZ=UTC`.
 """, nkWarning, "Time"
+
+nbNote """
+JavaScript rounds a tie up, toward +∞; Nim away from zero. `Math.round(-2.5)` is `-2`,
+`round(-2.5)` is `-3`. `(12.5).toFixed(0)` is `13`; `formatFloat(12.5, ffDecimal, 0)` is `12.`
+(C's `printf`: a tie to the even digit, and the dot kept). Pie writes every percentage with
+`toFixed`. Use our `jsRound` and `toFixed`, never `round` or `formatFloat`, where Pele rounds.
+""", nkWarning, "Rounding ties"
+
+nbNote """
+V8 computes `Math.sin`, `cos`, `atan2`, `pow`, `log10` with its own port of fdlibm and `hypot`
+with its own algorithm; Nim calls the C library. On 100,000 seeded inputs they differ in the
+last bit 0.6% (`log10`) to 40% (`hypot`) of the time, and never after `num()`'s rounding, but a
+bit can still flip a comparison in a layout. Call them through one module of ours (`jsmath`), so
+a port of V8's versions can replace Nim's in one place when difftest finds a case. `sqrt` is exact
+in both.
+""", nkWarning, "Math functions"
+
+nbNote """
+`Math.max` and `Math.min` return NaN when any argument is NaN; Nim's `max` and `min` do not.
+Pele's layout uses NaN for *unknown* (`hint`, `key`). Use `jsMax`/`jsMin` where NaN can reach.
+""", nkWarning, "NaN"
+
+nbNote """
+A JavaScript `RangeError` (stack overflow from deep nesting) is caught by `render()` and reported
+as a `limit` error. In Nim deep recursion crashes the process. Where Pele recurses on the input's
+nesting, the port counts depth and raises the same `limit` error.
+""", nkWarning, "Deep nesting"
 
 nbText: """
 ## The idiom map
@@ -98,6 +126,15 @@ one Nim translation everyone uses.
 | `Set<T>` (insertion order) | `OrderedSet[T]` |
 | `undefined` / `null` | `Option[T]`, or `nil` for `ref` types |
 | `throw new PeleError(msg, code)` | `raise newPeleError(msg, code)` |
+| `Math.round(x)` | `jsRound(x)`: `floor(x)`, plus one when `x - floor(x) >= 0.5` |
+| `x.toFixed(n)` | `toFixed(x, n)` of ours (exact decimal value, ties up) |
+| `` `${x}` ``, `String(x)` for a number | `jsString(x)` of ours (ECMAScript Number::toString) |
+| `Math.sin` and the other libm calls | `jsmath.sin`... |
+| `Math.max(a, b)` where NaN can occur | `jsMax(a, b)` |
+| `Int32Array`, `Float64Array`, `Uint8Array` | `seq[int32]`, `seq[float]`, `seq[uint8]` |
+| `Math.imul(a, b)`, `x >>> 0` | `uint32` arithmetic (wraps) |
+| `list.sort((a, b) => ...)` | `algorithm.sort` with the same comparator: both are stable |
+| `withPalette(p, () => ...)` (a module global set for a call) | set the global, `try` the call, restore it in `finally` |
 
 ## Names
 
