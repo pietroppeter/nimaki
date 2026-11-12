@@ -1,0 +1,21 @@
+deps/
+build/
+nimcache/
+# the pinned Pele, fetched by reference/fetch.sh
+reference/pele/
+reference/npm/
+# every page is generated (docs/all.nim) and built by CI (.github/workflows/pages.yml)
+*.html
+docs/assets/site.css
+_site/
+# compiled binaries
+docs/all
+tests/all
+tests/test_*
+!tests/test_*.nim
+!tests/test_*/
+tools/*
+!tools/*.nim
+!tools/*.sh
+!tools/*.mjs
+node_modules/

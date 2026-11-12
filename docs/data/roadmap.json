@@ -1,0 +1,649 @@
+{
+  "about": "The roadmap of the port. To pick the next step: the first planned step with no owner whose earlier steps in the same phase it needs are done. Claim a step by writing your thread's title as its `owner` (and status `started`), in a small pull request merged before you start, so nothing is done twice. `done_when` is the test a step must pass. The pull request that ships a step sets `status` to done, `post` to the slug of its devlog post and `pr` to its number. Steps may be added, split or dropped; the post of the step that caused it says why.",
+  "milestones": [
+    {
+      "id": "M1",
+      "title": "First light",
+      "after": "1",
+      "proof": "nimaki draws every pie and timeline of the corpus byte for byte as Pele 1.13.0 does in Node, with the same text measurer."
+    },
+    {
+      "id": "M2",
+      "title": "diagrammari without Node",
+      "after": "2",
+      "proof": "Flowchart and sequence identical to Pele on their corpus and on the examples of diagrammari; a proposal for diagrammari to use nimaki for these types."
+    },
+    {
+      "id": "M3",
+      "title": "Every diagram type",
+      "after": "3",
+      "proof": "Every row of the coverage map is done or a recorded divergence: all 34 corpus files and the compat inputs identical."
+    },
+    {
+      "id": "M4",
+      "title": "Everywhere",
+      "after": "4",
+      "proof": "The same renderer compiled with nim js draws in the browser on the pages; a C ABI build for other languages; a routine to follow new Pele releases."
+    }
+  ],
+  "phases": [
+    {
+      "id": "0",
+      "title": "Before the first line",
+      "goal": "A place for the port to happen, the tools to check it, and the context to understand it: what Pele and Mermaid are, how diagrams are drawn from text, and the plan.",
+      "steps": [
+        {
+          "id": "foundation",
+          "kind": "tooling",
+          "title": "The stage: conventions, roadmap, coverage map, CI",
+          "what": "AGENTS.md adapted from gleam-in-nim, the pin of Pele in reference/PIN and on every page, the roadmap with owners, the coverage map (diagram types × parse, layout, render), decision records, setup script, Pages CI, the nimib skeleton and its first post.",
+          "done_when": "The site builds in CI and deploys from main; links and drift checks pass.",
+          "owner": "Set up nimaki foundation and tooling",
+          "status": "started",
+          "post": "a-stage-for-a-port",
+          "pr": ""
+        },
+        {
+          "id": "difftest",
+          "kind": "tooling",
+          "title": "The referee: difftest against Pele in Node",
+          "what": "tools/oracle.mjs runs the pinned npm package in Node; tools/difftest.nim renders the same inputs with nimaki and compares byte for byte, per diagram type, with the first differing byte. Inputs: Pele's 34 corpus files, its compat specs, diagrammari's examples.",
+          "done_when": "difftest runs in CI, reports every case as unsupported today, and its self test shows it catches a one-byte difference.",
+          "owner": "Set up nimaki foundation and tooling",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "theme",
+          "kind": "tooling",
+          "title": "A look of its own",
+          "what": "Design nimaki's theme for the pages (docs/theme.nim, fonts in docs/assets/) to replace the placeholder borrowed from gleam-in-nim, in two modes, phone first.",
+          "done_when": "Every page builds with the new look in both modes; a phone-width preview is reviewed.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "pele-origins",
+          "kind": "research",
+          "title": "Pele, where it comes from",
+          "what": "Why kepano built Pele (size, speed, theming, the security of diagrams in Obsidian), how it was announced, how fast it moved (23 npm releases in a month), how it is tested, its contribution and AI policy. Every claim linked.",
+          "done_when": "A devlog post with sources.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "mermaid",
+          "kind": "research",
+          "title": "What Mermaid is",
+          "what": "History and people, the diagram types and how they arrived, the grammars (Jison, Langium), how mermaid.js renders (dagre, ELK, a browser to measure text) and why so many headless reimplementations exist.",
+          "done_when": "A devlog post with sources.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "family",
+          "kind": "research",
+          "title": "The family of diagram tools",
+          "what": "Other Mermaid renderers and ports (beautiful-mermaid, merman, ariel-rs, mermaid-rs-renderer, mmdflux, selkie, Mermaider, Naiad) and the tools before and beside it (Graphviz, PlantUML, D2, Pikchr, ELK, dagre): what each gets right, and which ideas or corpora the port can reuse, with their licences.",
+          "done_when": "A devlog post with sources.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "uses",
+          "kind": "research",
+          "title": "What diagrams are for",
+          "what": "Notable uses of Mermaid-style diagrams: documentation, GitHub and GitLab, Obsidian and notes, architecture, teaching, AI assistants that answer in diagrams. Which types people draw most, so the order of the port can follow.",
+          "done_when": "A devlog post with sources.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "rendering",
+          "kind": "research",
+          "title": "Drawing diagrams from text, from scratch",
+          "what": "Parsing one grammar per type, layered (Sugiyama) layout explained simply, Pele's own layered, compound and lane layouts, measuring text without a browser, writing SVG. For a reader who has never written a parser or a layout engine.",
+          "done_when": "A devlog post (or a short series) with a toy that runs on the page.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "pele-architecture",
+          "kind": "research",
+          "title": "How Pele is built",
+          "what": "src/diagrams/<type>/ (parser, model, layout, renderer) and the shared layout/, text/, svg/: what each does, how big each is, where its decisions come from.",
+          "done_when": "A devlog post whose numbers come from the coverage map data.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "rewrites",
+          "kind": "research",
+          "title": "What other AI-driven ports teach us",
+          "what": "What gleam-in-nim found (its devlog, decisions, AGENTS.md) and what is new for a port from TypeScript: UTF-16, JavaScript numbers, regexes, structural types.",
+          "done_when": "A devlog post; the porting guide gains its idiom map.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "plan",
+          "kind": "plan",
+          "title": "The port plan",
+          "what": "Order of the parts and types, non-overlapping steps, and the verification: compat specs, render and layout snapshots, differential fuzzing against Pele in Node, real diagrams (diagrammari). Updated after every step.",
+          "done_when": "A devlog post and this roadmap revised.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        }
+      ]
+    },
+    {
+      "id": "1",
+      "title": "The core, and pie",
+      "goal": "The whole chain under a diagram, end to end, on the smallest type: measure text, write SVG, theme it, render pie byte for byte.",
+      "steps": [
+        {
+          "id": "numbers-strings",
+          "kind": "port",
+          "title": "JavaScript numbers and strings in Nim",
+          "what": "The number formatter (num() and JavaScript's number-to-string) and UTF-16 string helpers, tested against Node.",
+          "done_when": "Identical to Node on a large sample of numbers and strings.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "text",
+          "kind": "port",
+          "title": "Measuring text: src/text",
+          "what": "The metrics measurer and its font tables, labels, entities.",
+          "done_when": "Widths identical to Pele's metricsMeasurer on every label of the corpus.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "svg",
+          "kind": "port",
+          "title": "Writing SVG: src/svg",
+          "what": "The builder, palette, theme, root, title.",
+          "done_when": "Exercised through pie; files verified.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "api",
+          "kind": "port",
+          "title": "Detect, preprocess, render",
+          "what": "detect.ts, preprocess.ts, errors.ts, core.ts render(), the registry, the YAML front matter reader.",
+          "done_when": "Type detection and errors identical to Pele on every corpus input.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "pie",
+          "kind": "port",
+          "title": "Pie",
+          "what": "src/diagrams/pie: parser, model, render.",
+          "done_when": "difftest: every pie case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "timeline",
+          "kind": "port",
+          "title": "Timeline",
+          "what": "src/diagrams/timeline.",
+          "done_when": "difftest: every timeline case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "title": "Layered layout, flowchart and sequence",
+      "goal": "The layout most types stand on, and the two types people draw most.",
+      "steps": [
+        {
+          "id": "layered",
+          "kind": "port",
+          "title": "The layered layout: src/layout",
+          "what": "layered.ts, compound.ts, lanes.ts, components.ts, explained as they are ported.",
+          "done_when": "Exercised through flowchart; Pele's layout invariants replayed.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "flowchart",
+          "kind": "port",
+          "title": "Flowchart",
+          "what": "src/diagrams/flowchart, with the shared shapes and edges.",
+          "done_when": "difftest: every flowchart case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "sequence",
+          "kind": "port",
+          "title": "Sequence",
+          "what": "src/diagrams/sequence.",
+          "done_when": "difftest: every sequence case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "diagrammari-proposal",
+          "kind": "plan",
+          "title": "A proposal for diagrammari",
+          "what": "How diagrammari could use nimaki instead of Node for the ported types, written as a proposal (diagrammari is not changed from here).",
+          "done_when": "A devlog post with the proposal.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "title": "Every other diagram type",
+      "goal": "The remaining types, smallest first, each done when its corpus matches.",
+      "steps": [
+        {
+          "id": "swimlane",
+          "kind": "port",
+          "title": "Swimlane",
+          "what": "src/diagrams/swimlane: 69 lines of TypeScript, 13 corpus cases.",
+          "done_when": "difftest: every swimlane case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "info",
+          "kind": "port",
+          "title": "Info",
+          "what": "src/diagrams/info: 108 lines of TypeScript, 2 corpus cases.",
+          "done_when": "difftest: every info case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "packet",
+          "kind": "port",
+          "title": "Packet",
+          "what": "src/diagrams/packet: 328 lines of TypeScript, 4 corpus cases.",
+          "done_when": "difftest: every packet case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "mindmap",
+          "kind": "port",
+          "title": "Mindmap",
+          "what": "src/diagrams/mindmap: 336 lines of TypeScript, 13 corpus cases.",
+          "done_when": "difftest: every mindmap case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "kanban",
+          "kind": "port",
+          "title": "Kanban",
+          "what": "src/diagrams/kanban: 366 lines of TypeScript, 3 corpus cases.",
+          "done_when": "difftest: every kanban case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "ishikawa",
+          "kind": "port",
+          "title": "Ishikawa",
+          "what": "src/diagrams/ishikawa: 419 lines of TypeScript, 1 corpus cases.",
+          "done_when": "difftest: every ishikawa case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "journey",
+          "kind": "port",
+          "title": "Journey",
+          "what": "src/diagrams/journey: 467 lines of TypeScript, 1 corpus cases.",
+          "done_when": "difftest: every journey case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "radar",
+          "kind": "port",
+          "title": "Radar",
+          "what": "src/diagrams/radar: 500 lines of TypeScript, 3 corpus cases.",
+          "done_when": "difftest: every radar case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "treemap",
+          "kind": "port",
+          "title": "Treemap",
+          "what": "src/diagrams/treemap: 504 lines of TypeScript, 8 corpus cases.",
+          "done_when": "difftest: every treemap case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "cynefin",
+          "kind": "port",
+          "title": "Cynefin",
+          "what": "src/diagrams/cynefin: 539 lines of TypeScript, 3 corpus cases.",
+          "done_when": "difftest: every cynefin case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "treeview",
+          "kind": "port",
+          "title": "Treeview",
+          "what": "src/diagrams/treeview: 582 lines of TypeScript, 13 corpus cases.",
+          "done_when": "difftest: every treeview case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "eventmodeling",
+          "kind": "port",
+          "title": "Eventmodeling",
+          "what": "src/diagrams/eventmodeling: 720 lines of TypeScript, 12 corpus cases.",
+          "done_when": "difftest: every eventmodeling case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "sankey",
+          "kind": "port",
+          "title": "Sankey",
+          "what": "src/diagrams/sankey: 786 lines of TypeScript, 8 corpus cases.",
+          "done_when": "difftest: every sankey case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "git",
+          "kind": "port",
+          "title": "Git",
+          "what": "src/diagrams/git: 826 lines of TypeScript, 35 corpus cases.",
+          "done_when": "difftest: every git case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "quadrant",
+          "kind": "port",
+          "title": "Quadrant",
+          "what": "src/diagrams/quadrant: 876 lines of TypeScript, 3 corpus cases.",
+          "done_when": "difftest: every quadrant case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "venn",
+          "kind": "port",
+          "title": "Venn",
+          "what": "src/diagrams/venn: 909 lines of TypeScript, 8 corpus cases.",
+          "done_when": "difftest: every venn case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "xychart",
+          "kind": "port",
+          "title": "Xychart",
+          "what": "src/diagrams/xychart: 953 lines of TypeScript, 8 corpus cases.",
+          "done_when": "difftest: every xychart case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "wardley",
+          "kind": "port",
+          "title": "Wardley",
+          "what": "src/diagrams/wardley: 1092 lines of TypeScript, 19 corpus cases.",
+          "done_when": "difftest: every wardley case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "architecture",
+          "kind": "port",
+          "title": "Architecture",
+          "what": "src/diagrams/architecture: 1247 lines of TypeScript, 6 corpus cases.",
+          "done_when": "difftest: every architecture case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "requirement",
+          "kind": "port",
+          "title": "Requirement",
+          "what": "src/diagrams/requirement: 1294 lines of TypeScript, 9 corpus cases.",
+          "done_when": "difftest: every requirement case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "railroad",
+          "kind": "port",
+          "title": "Railroad",
+          "what": "src/diagrams/railroad: 1491 lines of TypeScript, 14 corpus cases.",
+          "done_when": "difftest: every railroad case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "er",
+          "kind": "port",
+          "title": "Er",
+          "what": "src/diagrams/er: 1660 lines of TypeScript, 25 corpus cases.",
+          "done_when": "difftest: every er case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "c4",
+          "kind": "port",
+          "title": "C4",
+          "what": "src/diagrams/c4: 1888 lines of TypeScript, 6 corpus cases.",
+          "done_when": "difftest: every c4 case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "gantt",
+          "kind": "port",
+          "title": "Gantt",
+          "what": "src/diagrams/gantt: 1928 lines of TypeScript, 11 corpus cases.",
+          "done_when": "difftest: every gantt case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "block",
+          "kind": "port",
+          "title": "Block",
+          "what": "src/diagrams/block: 1957 lines of TypeScript, 30 corpus cases.",
+          "done_when": "difftest: every block case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "state",
+          "kind": "port",
+          "title": "State",
+          "what": "src/diagrams/state: 2097 lines of TypeScript, 22 corpus cases.",
+          "done_when": "difftest: every state case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "class",
+          "kind": "port",
+          "title": "Class",
+          "what": "src/diagrams/class: 2122 lines of TypeScript, 38 corpus cases.",
+          "done_when": "difftest: every class case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "usecase",
+          "kind": "port",
+          "title": "Usecase",
+          "what": "src/diagrams/usecase: 2821 lines of TypeScript, 24 corpus cases.",
+          "done_when": "difftest: every usecase case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "agentflow",
+          "kind": "port",
+          "title": "Agentflow",
+          "what": "src/diagrams/agentflow: 3465 lines of TypeScript, 251 corpus cases.",
+          "done_when": "difftest: every agentflow case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "title": "Everywhere",
+      "goal": "The port out of its repository: in the browser, in other languages, and following Pele.",
+      "steps": [
+        {
+          "id": "nimjs",
+          "kind": "port",
+          "title": "nimaki in the browser",
+          "what": "The same renderer compiled with nim js, drawing the diagrams of the pages.",
+          "done_when": "difftest passes on the JS build.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "cabi",
+          "kind": "tooling",
+          "title": "A C ABI",
+          "what": "A shared library for other languages (diagrammari-py).",
+          "done_when": "A Python smoke test renders a pie.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "follow-pele",
+          "kind": "tooling",
+          "title": "Following Pele",
+          "what": "A routine that diffs a new Pele release against the pin and ports the changes.",
+          "done_when": "The pin moves once, with a post.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        }
+      ]
+    }
+  ]
+}
