@@ -29,19 +29,19 @@
       "id": "text",
       "what": "measuring text without a browser: font metrics, labels, entities",
       "code": 675,
-      "status": "planned",
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "status": "started",
+      "nim": "src/nimaki/text/",
+      "post": "first-light",
+      "notes": "Every file of src/text/ is ported (the metrics measurer, labels, entities, icons, math). Checked through pie: its titles and legend labels, in the corpus and in the fuzzer. Markdown labels, math, icons and wrapping wait for the types that use them."
     },
     {
       "id": "svg",
       "what": "writing SVG: the builder, shapes, edges, clusters, the palette and the theme",
       "code": 1751,
-      "status": "planned",
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "status": "started",
+      "nim": "src/nimaki/svg/",
+      "post": "first-light",
+      "notes": "builder.ts, palette.ts, theme.ts, ink.ts and root.ts are ported and checked through pie. shapes, edges, cluster and title come with the types that draw them."
     },
     {
       "id": "layout",
@@ -56,28 +56,28 @@
       "id": "util",
       "what": "Unicode, URLs, a small YAML reader for front matter",
       "code": 592,
-      "status": "planned",
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "status": "started",
+      "nim": "src/nimaki/util/",
+      "post": "first-light",
+      "notes": "yaml.ts (front matter) and chars.ts are ported; unicode.ts and url.ts come with the types that use them."
     },
     {
       "id": "common",
       "what": "what several diagram types share: fitting text, scanning, icons",
       "code": 896,
-      "status": "planned",
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "status": "started",
+      "nim": "src/nimaki/diagrams/common/",
+      "post": "first-light",
+      "notes": "tokens.ts (the Langium-style tokenizer) and fit-width.ts are ported."
     },
     {
       "id": "api",
       "what": "detecting the type, preprocessing, render(), errors, the registry",
       "code": 783,
-      "status": "planned",
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "status": "done",
+      "nim": "src/nimaki/core.nim",
+      "post": "first-light",
+      "notes": "detect.ts, preprocess.ts, errors.ts, types.ts and core.ts render() are ported. detectType agrees with Pele on all 2,118 corpus inputs (tests/test_detect.nim). A type nimaki does not draw yet raises the code unsupported."
     },
     {
       "id": "browser",
@@ -160,19 +160,19 @@
       "corpus": 2,
       "parse": {
         "code": 165,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 0,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 163,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/pie/",
+      "post": "first-light",
+      "notes": "Identical to Pele on the 16 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim)."
     },
     {
       "id": "mindmap",

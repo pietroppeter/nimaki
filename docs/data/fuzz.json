@@ -1,0 +1,13 @@
+{
+  "about": "Written by tools/fuzz.nim: the last run for each diagram type. Do not edit by hand.",
+  "types": {
+    "pie": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 2965,
+      "errors": 2035
+    }
+  }
+}

@@ -1,0 +1,254 @@
+## JavaScript's numbers and strings, in Nim. Not a port of a file of Pele: the small set of
+## JavaScript behaviours Pele relies on without saying so, written once so every ported file
+## gets them the same way (the porting guide lists when to use each).
+##
+## Strings stay UTF-8 (decision 0011). Where Pele counts or reads UTF-16 code units
+## (`length`, `charCodeAt`), these helpers count and read them from the UTF-8 bytes.
+import std/[math, strutils, unicode]
+
+# ---------------------------------------------------------------------------------------------
+# Numbers
+
+func jsRound*(x: float): float =
+  ## `Math.round`: a tie goes up, toward +∞ (`Math.round(-2.5)` is -2).
+  if x.isNaN or x.classify in {fcInf, fcNegInf}: return x
+  let f = floor(x)
+  if x - f >= 0.5: f + 1 else: f
+
+func shortestDigits(x: float): tuple[digits: string, point: int] =
+  ## The shortest decimal digits that read back as `x` (x > 0, finite), and where the decimal
+  ## point goes: x = 0.digits × 10^point. Nim's `$` already finds the shortest digits.
+  let s = $x
+  var mant = s
+  var exp = 0
+  let e = s.find('e')
+  if e >= 0:
+    mant = s[0 ..< e]
+    exp = parseInt(s[e + 1 .. ^1])
+  var intPart = mant
+  var frac = ""
+  let dot = mant.find('.')
+  if dot >= 0:
+    intPart = mant[0 ..< dot]
+    frac = mant[dot + 1 .. ^1]
+  var digits = intPart & frac
+  var point = intPart.len + exp
+  var lead = 0
+  while lead < digits.len - 1 and digits[lead] == '0':
+    inc lead
+  digits = digits[lead .. ^1]
+  point -= lead
+  var last = digits.len
+  while last > 1 and digits[last - 1] == '0':
+    dec last
+  digits.setLen last
+  (digits, point)
+
+func jsString*(x: float): string =
+  ## ECMAScript's Number::toString: `String(x)`, `${x}`. `-0` is "0"; exponent form from 1e21
+  ## and below 1e-6.
+  if x.isNaN: return "NaN"
+  if x == Inf: return "Infinity"
+  if x == -Inf: return "-Infinity"
+  if x == 0: return "0"
+  if x < 0: return "-" & jsString(-x)
+  let (digits, n) = shortestDigits(x)
+  let k = digits.len
+  if k <= n and n <= 21:
+    result = digits & repeat('0', n - k)
+  elif 0 < n and n <= 21:
+    result = digits[0 ..< n] & "." & digits[n .. ^1]
+  elif -6 < n and n <= 0:
+    result = "0." & repeat('0', -n) & digits
+  else:
+    let e = n - 1
+    result = digits[0 .. 0]
+    if k > 1: result.add "." & digits[1 .. ^1]
+    result.add "e" & (if e >= 0: "+" else: "-") & $abs(e)
+
+func jsString*(x: int): string = jsString(float(x))
+
+func exactDecimal(x: float): string =
+  ## The exact decimal value of a finite double x >= 0, as "int.frac" (frac at least 101
+  ## digits long, zero padded): x = m × 2^e is m × 5^-e / 10^-e when e < 0.
+  var (m, e) = (x, 0)
+  if x != 0:
+    let fr = frexp(x)
+    m = fr.frac
+    e = fr.exp
+  # make m an integer: m × 2^53, e - 53
+  var mant = uint64(m * 9007199254740992.0)
+  e -= 53
+  while mant != 0 and (mant and 1) == 0 and e < 0:
+    mant = mant shr 1
+    inc e
+  var digits: seq[int]   # little-endian decimal digits
+  var t = mant
+  if t == 0: digits.add 0
+  while t > 0:
+    digits.add int(t mod 10)
+    t = t div 10
+  proc mul(d: var seq[int], k: int) =
+    var carry = 0
+    for i in 0 ..< d.len:
+      let v = d[i] * k + carry
+      d[i] = v mod 10
+      carry = v div 10
+    while carry > 0:
+      d.add carry mod 10
+      carry = carry div 10
+  var point = 0   # digits after the decimal point
+  if e >= 0:
+    for _ in 0 ..< e: mul(digits, 2)
+  else:
+    for _ in 0 ..< -e: mul(digits, 5)
+    point = -e
+  while digits.len <= point: digits.add 0
+  var s = ""
+  for i in countdown(digits.high, point): s.add char(ord('0') + digits[i])
+  s.add '.'
+  for i in countdown(point - 1, 0): s.add char(ord('0') + digits[i])
+  while s.len - s.find('.') - 1 < 101: s.add '0'
+  s
+
+func toFixed*(x: float, fractionDigits: int): string =
+  ## `x.toFixed(n)`: the exact decimal value of the double, rounded at n digits with a tie up
+  ## (away from zero, as JavaScript does on the magnitude).
+  if x.isNaN: return "NaN"
+  if abs(x) >= 1e21: return jsString(x)
+  let negative = x < 0
+  let exact = exactDecimal(abs(x))
+  let dot = exact.find('.')
+  var intPart = exact[0 ..< dot]
+  var frac = exact[dot + 1 .. ^1]
+  var kept = intPart & frac[0 ..< fractionDigits]
+  let roundUp = frac[fractionDigits] >= '5'
+  if roundUp:
+    var i = kept.high
+    while i >= 0:
+      if kept[i] == '9':
+        kept[i] = '0'
+        dec i
+      else:
+        kept[i] = char(ord(kept[i]) + 1)
+        break
+    if i < 0: kept = "1" & kept
+  let intLen = kept.len - fractionDigits
+  result = kept[0 ..< intLen]
+  if fractionDigits > 0: result.add "." & kept[intLen .. ^1]
+  if negative: result = "-" & result
+
+func jsNumber*(s: string): float =
+  ## `Number(s)` for the decimal numbers the lexers accept (`-?digits(.digits)?`).
+  parseFloat(s)
+
+func jsMax*(a, b: float): float =
+  ## `Math.max`: NaN when either is NaN.
+  if a.isNaN or b.isNaN: NaN else: max(a, b)
+
+func jsMin*(a, b: float): float =
+  if a.isNaN or b.isNaN: NaN else: min(a, b)
+
+# ---------------------------------------------------------------------------------------------
+# Strings: UTF-16 code units read from UTF-8
+
+func codePointAt*(s: string, i: int): tuple[rune: int, size: int] =
+  ## The code point that starts at byte `i`, and its length in bytes. A byte that does not
+  ## start a valid sequence reads as U+FFFD, one byte long (as TextDecoder does).
+  let b = ord(s[i])
+  if b < 0x80: return (b, 1)
+  var n, cp, least: int
+  if b >= 0xC2 and b <= 0xDF: (n, cp, least) = (2, b and 0x1F, 0x80)
+  elif b >= 0xE0 and b <= 0xEF: (n, cp, least) = (3, b and 0x0F, 0x800)
+  elif b >= 0xF0 and b <= 0xF4: (n, cp, least) = (4, b and 0x07, 0x10000)
+  else: return (0xFFFD, 1)
+  if i + n > s.len: return (0xFFFD, 1)
+  for k in 1 ..< n:
+    let c = ord(s[i + k])
+    if (c and 0xC0) != 0x80: return (0xFFFD, 1)
+    cp = (cp shl 6) or (c and 0x3F)
+  if cp < least or cp > 0x10FFFF or (cp >= 0xD800 and cp <= 0xDFFF): return (0xFFFD, 1)
+  (cp, n)
+
+iterator codeUnits*(s: string): int =
+  ## The UTF-16 code units of `s`, as `charCodeAt` reads them one by one.
+  var i = 0
+  while i < s.len:
+    let (cp, size) = codePointAt(s, i)
+    if cp >= 0x10000:
+      let v = cp - 0x10000
+      yield 0xD800 + (v shr 10)
+      yield 0xDC00 + (v and 0x3FF)
+    else:
+      yield cp
+    i += size
+
+func utf16Len*(s: string): int =
+  ## `s.length`.
+  for _ in codeUnits(s): inc result
+
+func utf16Len*(s: string, first, last: int): int =
+  ## The length in UTF-16 code units of the bytes `first ..< last` of `s`.
+  var i = first
+  while i < last:
+    let (cp, size) = codePointAt(s, i)
+    result += (if cp >= 0x10000: 2 else: 1)
+    i += size
+
+func fromCodePoint*(cp: int): string =
+  ## `String.fromCodePoint`.
+  $Rune(cp)
+
+func isJsSpace*(c: int): bool =
+  ## `\s` of a JavaScript regular expression, on a code point.
+  if c < 128: return c == 32 or (c >= 9 and c <= 13)
+  c == 0xa0 or c == 0x1680 or (c >= 0x2000 and c <= 0x200a) or c == 0x2028 or c == 0x2029 or
+    c == 0x202f or c == 0x205f or c == 0x3000 or c == 0xfeff
+
+func isJsSpaceAt*(s: string, i: int): bool =
+  ## Whether a `\s` starts at byte `i` (false past the end).
+  i >= 0 and i < s.len and isJsSpace(codePointAt(s, i).rune)
+
+func spaceLenAt*(s: string, i: int): int =
+  ## The bytes of the `\s` at byte `i`, or 0.
+  if i < s.len:
+    let (cp, size) = codePointAt(s, i)
+    if isJsSpace(cp): return size
+  0
+
+func jsTrimStart*(s: string): string =
+  ## `trimStart()`: removes `\s` (and line terminators, which `\s` holds) from the start.
+  var i = 0
+  while i < s.len:
+    let n = spaceLenAt(s, i)
+    if n == 0: break
+    i += n
+  s[i .. ^1]
+
+func jsTrimEnd*(s: string): string =
+  ## `trimEnd()`.
+  var stop = s.len
+  while stop > 0:
+    # step back one code point
+    var k = stop - 1
+    while k > 0 and (ord(s[k]) and 0xC0) == 0x80 and stop - k < 4: dec k
+    let (cp, size) = codePointAt(s, k)
+    if k + size != stop or not isJsSpace(cp): break
+    stop = k
+  s[0 ..< stop]
+
+func jsTrim*(s: string): string = jsTrimStart(jsTrimEnd(s))
+
+func prevRuneStart*(s: string, i: int): int =
+  ## The byte where the code point that ends at byte `i` starts (i > 0).
+  var k = i - 1
+  while k > 0 and (ord(s[k]) and 0xC0) == 0x80 and i - k < 4: dec k
+  if k + codePointAt(s, k).size == i: k else: i - 1
+
+func isJsSpaceBefore*(s: string, i: int): bool =
+  ## Whether the character before byte `i` is a `\s`.
+  i > 0 and isJsSpace(codePointAt(s, prevRuneStart(s, i)).rune)
+
+func isWordChar*(c: char): bool =
+  ## `\w`.
+  c in {'a'..'z', 'A'..'Z', '0'..'9', '_'}

@@ -80,6 +80,10 @@ jobs:
       - name: Difftest
         run: nim r tools/difftest.nim --check-done --show:30
 
+      # Differential fuzzing: inputs generated from each ported type's grammar, against Pele
+      - name: Fuzz
+        run: nim r tools/fuzz.nim pie --cases:5000
+
       - name: Tests
         run: |
           if [ -f tests/all.nim ]; then nim r tests/all.nim; else echo "no tests/all.nim yet"; fi
