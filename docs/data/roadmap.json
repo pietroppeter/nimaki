@@ -118,7 +118,7 @@
           "owner": "Explain diagram rendering and Pele architecture",
           "status": "done",
           "post": "drawing-a-diagram",
-          "pr": ""
+          "pr": "8"
         },
         {
           "id": "pele-architecture",
@@ -129,7 +129,7 @@
           "owner": "Explain diagram rendering and Pele architecture",
           "status": "done",
           "post": "how-pele-is-built",
-          "pr": ""
+          "pr": "8"
         },
         {
           "id": "rewrites",
