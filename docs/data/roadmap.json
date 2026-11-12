@@ -237,12 +237,12 @@
           "id": "layered",
           "kind": "port",
           "title": "The layered layout: src/layout",
-          "what": "layered.ts, compound.ts, lanes.ts, components.ts, explained as they are ported.",
+          "what": "layered.ts and compound.ts, explained as they are ported; lanes.ts and components.ts come with swimlane and class.",
           "done_when": "Exercised through flowchart; Pele's layout invariants replayed.",
           "owner": "Port layered layout and flowchart",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "layered-layout-and-flowchart",
+          "pr": "17"
         },
         {
           "id": "flowchart",
@@ -251,9 +251,9 @@
           "what": "src/diagrams/flowchart, with the shared shapes and edges.",
           "done_when": "difftest: every flowchart case identical.",
           "owner": "Port layered layout and flowchart",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "layered-layout-and-flowchart",
+          "pr": "17"
         },
         {
           "id": "sequence",

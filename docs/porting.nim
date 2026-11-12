@@ -186,6 +186,11 @@ filled it in; later steps add to it.
 | `text.match(/.../g)` that cuts text into pieces | an iterator or a proc returning `seq[string]`, the pattern in a comment (`units` in `fit.nim`) |
 | a value that is a number or `undefined` (`seriesOf`) | an `int` with a named sentinel (`NO_SERIES = -1`) when no real value can be negative |
 | a local arrow function that reads a `let` changed later (`eventTextW`) | a `template`, so it reads the current value |
+| `a.rank - b.rank \|\| a.seq - b.seq` in a comparator | `(a.rank - b.rank).orElse(a.seq - b.seq)` (`orElse` of `layout/layered.nim`) |
+| an inner function that changes an array its outer function was given as `var` | `let p = addr param`, then `template param: untyped = p[]`: a closure cannot capture a `var` parameter |
+| `r[0]` that may read past the end (`undefined`, then NaN in arithmetic) | `if r.len > 0: r[0] else: NaN`; Nim stops where JavaScript reads `undefined` |
+| `Object.is(a, b)` | equal, except that NaN is the same as NaN and 0 is not the same as -0 (`isSame` in `compound.nim`) |
+| a field that is an array or `undefined`, read only for its items | an empty `seq`; a flag (`hasGroups`) where empty and undefined differ |
 
 ## Names
 
@@ -201,6 +206,10 @@ Names changed because they clash with Nim (filled in as they are met).
 | `open` (a local) | `opening` |
 | `Style.Bold` and its siblings | `Bold`, `Italic`, `Mono`, `Sub`, `Sup`, `Underline` (`int` bits) |
 | `const enum T` of a parser | `T_name` constants (`T_newline`) |
+| `T.END` beside `T.end` (style insensitivity makes them one name) | `T_STOP` for `T.END`; `T_end` stays the `end` keyword |
+| `KIND` beside `Kind` | `kinds` (only the first letter of a Nim name is case sensitive) |
+| `reach.of(node, side)` | `reachOf` (`of` is a keyword) |
+| `LinkInfo` of `flowchart/types.ts` | `FlowLinkInfo` (the core's `LinkInfo` is a link in the SVG) |
 """
 
 nbSave

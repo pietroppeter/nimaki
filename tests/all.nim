@@ -3,3 +3,4 @@
 import test_difftest
 import test_js
 import test_detect
+import test_layout
