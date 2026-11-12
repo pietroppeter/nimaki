@@ -12,6 +12,7 @@ import nimaki/diagrams/flowchart/index as flowchartIndex
 import nimaki/diagrams/journey/index as journeyIndex
 import nimaki/diagrams/info/index as infoIndex
 import nimaki/diagrams/packet/index as packetIndex
+import nimaki/diagrams/swimlane/index as swimlaneIndex
 
 export core, errors, types, measurer
 
@@ -21,3 +22,4 @@ register(flowchartIndex.flowchart)
 register(journeyIndex.journey)
 register(infoIndex.info)
 register(packetIndex.packet)
+register(swimlaneIndex.swimlane)
