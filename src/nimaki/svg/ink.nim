@@ -57,30 +57,6 @@ func numberUnit(raw: string): (bool, string) =
      cmpIgnoreCase(unit, "rad") == 0 or cmpIgnoreCase(unit, "turn") == 0:
     return (true, unit)
 
-func jsParseFloat(raw: string): float =
-  ## parseFloat: the longest prefix that is a decimal number.
-  let s = jsTrimStart(raw)
-  var i = 0
-  if i < s.len and s[i] in {'+', '-'}: inc i
-  let digits0 = i
-  while i < s.len and s[i] in Digits: inc i
-  if i < s.len and s[i] == '.':
-    inc i
-    while i < s.len and s[i] in Digits: inc i
-  if i == digits0 or (i == digits0 + 1 and s[digits0] == '.'): return NaN
-  if i < s.len and s[i] in {'e', 'E'}:
-    var j = i + 1
-    if j < s.len and s[j] in {'+', '-'}: inc j
-    if j < s.len and s[j] in Digits:
-      while j < s.len and s[j] in Digits: inc j
-      i = j
-  var t = s[0 ..< i]
-  t = t.replace(".e", ".0e").replace(".E", ".0E")
-  if t.endsWith("."): t.add "0"
-  if t.startsWith("."): t = "0" & t
-  elif t.startsWith("-.") or t.startsWith("+."): t = t[0] & "0" & t[1 .. ^1]
-  parseFloat(t)
-
 func amount(raw: string, full: float): float =
   let (ok, unit) = numberUnit(raw)
   if not ok or (unit != "" and unit != "%"): return NaN

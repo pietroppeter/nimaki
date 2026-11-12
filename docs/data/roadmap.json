@@ -313,8 +313,8 @@
           "what": "src/diagrams/swimlane: 69 lines of TypeScript, 13 corpus cases. With src/layout/lanes.ts, the lane layout it draws on.",
           "done_when": "difftest: every swimlane case identical.",
           "owner": "Port class and swimlane",
-          "status": "started",
-          "post": "",
+          "status": "done",
+          "post": "lanes-and-handoffs",
           "pr": ""
         },
         {
@@ -345,8 +345,8 @@
           "title": "Mindmap",
           "what": "src/diagrams/mindmap: 336 lines of TypeScript, 13 corpus cases.",
           "done_when": "difftest: every mindmap case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port diagrams that need no layered layout",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -356,8 +356,8 @@
           "title": "Kanban",
           "what": "src/diagrams/kanban: 366 lines of TypeScript, 3 corpus cases.",
           "done_when": "difftest: every kanban case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port diagrams that need no layered layout",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -390,9 +390,9 @@
           "what": "src/diagrams/radar: 500 lines of TypeScript, 3 corpus cases.",
           "done_when": "difftest: every radar case identical.",
           "owner": "Port diagrams that need no layered layout",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "radar-treemap-treeview",
+          "pr": "21"
         },
         {
           "id": "treemap",
@@ -401,9 +401,9 @@
           "what": "src/diagrams/treemap: 504 lines of TypeScript, 8 corpus cases.",
           "done_when": "difftest: every treemap case identical.",
           "owner": "Port diagrams that need no layered layout",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "radar-treemap-treeview",
+          "pr": "21"
         },
         {
           "id": "cynefin",
@@ -423,9 +423,9 @@
           "what": "src/diagrams/treeview: 582 lines of TypeScript, 13 corpus cases.",
           "done_when": "difftest: every treeview case identical.",
           "owner": "Port diagrams that need no layered layout",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "radar-treemap-treeview",
+          "pr": "21"
         },
         {
           "id": "eventmodeling",
@@ -433,8 +433,8 @@
           "title": "Eventmodeling",
           "what": "src/diagrams/eventmodeling: 720 lines of TypeScript, 12 corpus cases.",
           "done_when": "difftest: every eventmodeling case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port diagrams that need no layered layout",
+          "status": "started",
           "post": "",
           "pr": ""
         },

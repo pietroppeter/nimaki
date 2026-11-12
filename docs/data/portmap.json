@@ -3,12 +3,12 @@
   "code": 47594,
   "totals": {
     "todo": {
-      "files": 220,
-      "code": 34025
+      "files": 201,
+      "code": 31791
     },
     "draft": {
-      "files": 71,
-      "code": 13569
+      "files": 90,
+      "code": 15803
     },
     "verified": {
       "files": 0,
@@ -74,8 +74,8 @@
     },
     {
       "component": "diagrams/common",
-      "todo": 377,
-      "draft": 519,
+      "todo": 358,
+      "draft": 538,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -194,8 +194,8 @@
     },
     {
       "component": "diagrams/radar",
-      "todo": 500,
-      "draft": 0,
+      "todo": 0,
+      "draft": 500,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -250,8 +250,8 @@
     },
     {
       "component": "diagrams/swimlane",
-      "todo": 69,
-      "draft": 0,
+      "todo": 0,
+      "draft": 69,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -266,16 +266,16 @@
     },
     {
       "component": "diagrams/treemap",
-      "todo": 504,
-      "draft": 0,
+      "todo": 0,
+      "draft": 504,
       "verified": 0,
       "conformant": 0,
       "skip": 0
     },
     {
       "component": "diagrams/treeview",
-      "todo": 582,
-      "draft": 0,
+      "todo": 0,
+      "draft": 582,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -322,8 +322,8 @@
     },
     {
       "component": "layout",
-      "todo": 627,
-      "draft": 2759,
+      "todo": 67,
+      "draft": 3319,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -739,8 +739,10 @@
       "component": "diagrams/common",
       "lines": 27,
       "code": 19,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/common/acc_descr.nim"
+      ]
     },
     {
       "path": "src/diagrams/common/caseless.ts",
@@ -1507,32 +1509,40 @@
       "component": "diagrams/radar",
       "lines": 11,
       "code": 9,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/radar/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/radar/model.ts",
       "component": "diagrams/radar",
       "lines": 79,
       "code": 68,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/radar/model.nim"
+      ]
     },
     {
       "path": "src/diagrams/radar/parser.ts",
       "component": "diagrams/radar",
       "lines": 298,
       "code": 265,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/radar/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/radar/render.ts",
       "component": "diagrams/radar",
       "lines": 184,
       "code": 158,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/radar/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/railroad/abnf.ts",
@@ -1883,8 +1893,10 @@
       "component": "diagrams/swimlane",
       "lines": 81,
       "code": 69,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/swimlane/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/timeline/db.ts",
@@ -1941,96 +1953,120 @@
       "component": "diagrams/treemap",
       "lines": 40,
       "code": 31,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/treemap/format.nim"
+      ]
     },
     {
       "path": "src/diagrams/treemap/index.ts",
       "component": "diagrams/treemap",
       "lines": 11,
       "code": 9,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/treemap/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/treemap/layout.ts",
       "component": "diagrams/treemap",
       "lines": 137,
       "code": 119,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/treemap/layout.nim"
+      ]
     },
     {
       "path": "src/diagrams/treemap/model.ts",
       "component": "diagrams/treemap",
       "lines": 84,
       "code": 72,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/treemap/model.nim"
+      ]
     },
     {
       "path": "src/diagrams/treemap/parser.ts",
       "component": "diagrams/treemap",
       "lines": 141,
       "code": 123,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/treemap/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/treemap/render.ts",
       "component": "diagrams/treemap",
       "lines": 171,
       "code": 150,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/treemap/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/treeview/boxDrawing.ts",
       "component": "diagrams/treeview",
       "lines": 130,
       "code": 107,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/treeview/box_drawing.nim"
+      ]
     },
     {
       "path": "src/diagrams/treeview/icons.ts",
       "component": "diagrams/treeview",
       "lines": 73,
       "code": 56,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/treeview/icons.nim"
+      ]
     },
     {
       "path": "src/diagrams/treeview/index.ts",
       "component": "diagrams/treeview",
       "lines": 10,
       "code": 8,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/treeview/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/treeview/model.ts",
       "component": "diagrams/treeview",
       "lines": 100,
       "code": 86,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/treeview/model.nim"
+      ]
     },
     {
       "path": "src/diagrams/treeview/parser.ts",
       "component": "diagrams/treeview",
       "lines": 161,
       "code": 147,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/treeview/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/treeview/render.ts",
       "component": "diagrams/treeview",
       "lines": 195,
       "code": 178,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/treeview/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/usecase/db.ts",
@@ -2561,8 +2597,10 @@
       "component": "layout",
       "lines": 630,
       "code": 560,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/layout/lanes.nim"
+      ]
     },
     {
       "path": "src/layout/layered.ts",

@@ -2,9 +2,9 @@
   "about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand.",
   "pin": "1.13.0",
   "cases": 2118,
-  "identical": 571,
+  "identical": 631,
   "different": 0,
-  "unsupported": 1547,
+  "unsupported": 1487,
   "types": [
     {
       "type": "agentflow",
@@ -162,9 +162,9 @@
       "type": "radar",
       "coverage": "radar",
       "cases": 14,
-      "identical": 0,
+      "identical": 14,
       "different": 0,
-      "unsupported": 14
+      "unsupported": 0
     },
     {
       "type": "railroad",
@@ -210,9 +210,9 @@
       "type": "swimlane",
       "coverage": "swimlane",
       "cases": 14,
-      "identical": 0,
+      "identical": 14,
       "different": 0,
-      "unsupported": 14
+      "unsupported": 0
     },
     {
       "type": "timeline",
@@ -226,17 +226,17 @@
       "type": "treeView",
       "coverage": "treeview",
       "cases": 24,
-      "identical": 0,
+      "identical": 24,
       "different": 0,
-      "unsupported": 24
+      "unsupported": 0
     },
     {
       "type": "treemap",
       "coverage": "treemap",
       "cases": 8,
-      "identical": 0,
+      "identical": 8,
       "different": 0,
-      "unsupported": 8
+      "unsupported": 0
     },
     {
       "type": "usecase",

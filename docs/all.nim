@@ -10,9 +10,11 @@ import devlog/diagrams_in_the_wild
 import devlog/drawing_a_diagram
 import devlog/first_light
 import devlog/how_pele_is_built
+import devlog/lanes_and_handoffs
 import devlog/layered_layout_and_flowchart
 import devlog/pele_origins
 import devlog/pomice
+import devlog/radar_treemap_treeview
 import devlog/states_and_regions
 import devlog/the_diagram_family
 import devlog/the_referee

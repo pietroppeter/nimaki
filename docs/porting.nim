@@ -191,6 +191,10 @@ filled it in; later steps add to it.
 | `r[0]` that may read past the end (`undefined`, then NaN in arithmetic) | `if r.len > 0: r[0] else: NaN`; Nim stops where JavaScript reads `undefined` |
 | `Object.is(a, b)` | equal, except that NaN is the same as NaN and 0 is not the same as -0 (`isSame` in `compound.nim`) |
 | a field that is an array or `undefined`, read only for its items | an empty `seq`; a flag (`hasGroups`) where empty and undefined differ |
+| `x.toPrecision(p)`, `x.toExponential(d)`, `parseFloat(s)` | `toPrecision`, `toExponential`, `jsParseFloat` of `js.nim` (exact decimal, ties up; `jsParseFloat` reads the longest number at the start) |
+| a token matcher that keeps state between calls (`unclosed` in `accDescr.ts`, a run of digits in radar) | a `scanner: proc (): Scanner` on the `TokenType`: the tokenizer makes the matcher once per text, so the state starts fresh |
+| an arrow function made in a loop, keeping that turn's values | a closure returned by a proc of its own (`columnMap` in `treeview/box_drawing.nim`): closures made in a Nim loop share the loop's variables |
+| an index into a string that enters arithmetic (a column, a depth) | UTF-16 code units: `utf16Len(s, 0, at)` from bytes, `unitOffset(s, first, units)` back to bytes |
 
 ## Names
 
@@ -200,6 +204,7 @@ Names changed because they clash with Nim (filled in as they are met).
 | --- | --- |
 | `type` | `kind` (`diagramType` where the type of a diagram is meant) |
 | `src/diagrams/common/fit-width.ts` | `fit_width.nim` (a module name has no `-`) |
+| `boxDrawing.ts`, `accDescr.ts` | `box_drawing.nim`, `acc_descr.nim` (a module named `accDescr` would clash with its proc `accDescr`) |
 | `end` | `stop` |
 | `from` | `start` or `first` |
 | `out` | `output` |
