@@ -17,6 +17,7 @@ import nimaki/diagrams/treemap/index as treemapIndex
 import nimaki/diagrams/treeview/index as treeviewIndex
 import nimaki/diagrams/mindmap/index as mindmapIndex
 import nimaki/diagrams/kanban/index as kanbanIndex
+import nimaki/diagrams/eventmodeling/index as eventmodelingIndex
 
 export core, errors, types, measurer
 
@@ -31,3 +32,4 @@ register(treemapIndex.treemap)
 register(treeviewIndex.treeView)
 register(mindmapIndex.mindmap)
 register(kanbanIndex.kanban)
+register(eventmodelingIndex.eventmodeling)
