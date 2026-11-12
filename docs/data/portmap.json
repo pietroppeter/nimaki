@@ -3,12 +3,12 @@
   "code": 47594,
   "totals": {
     "todo": {
-      "files": 259,
-      "code": 43641
+      "files": 243,
+      "code": 37153
     },
     "draft": {
-      "files": 32,
-      "code": 3953
+      "files": 48,
+      "code": 10441
     },
     "verified": {
       "files": 0,
@@ -106,8 +106,8 @@
     },
     {
       "component": "diagrams/flowchart",
-      "todo": 2863,
-      "draft": 0,
+      "todo": 0,
+      "draft": 2863,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -322,16 +322,16 @@
     },
     {
       "component": "layout",
-      "todo": 3386,
-      "draft": 0,
+      "todo": 627,
+      "draft": 2759,
       "verified": 0,
       "conformant": 0,
       "skip": 0
     },
     {
       "component": "svg",
-      "todo": 739,
-      "draft": 1012,
+      "todo": 0,
+      "draft": 1751,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -346,8 +346,8 @@
     },
     {
       "component": "util",
-      "todo": 127,
-      "draft": 465,
+      "todo": 0,
+      "draft": 592,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -979,72 +979,90 @@
       "component": "diagrams/flowchart",
       "lines": 459,
       "code": 416,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/flowchart/db.nim"
+      ]
     },
     {
       "path": "src/diagrams/flowchart/graph.ts",
       "component": "diagrams/flowchart",
       "lines": 272,
       "code": 251,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/flowchart/graph.nim"
+      ]
     },
     {
       "path": "src/diagrams/flowchart/index.ts",
       "component": "diagrams/flowchart",
       "lines": 19,
       "code": 17,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/flowchart/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/flowchart/lexer.ts",
       "component": "diagrams/flowchart",
       "lines": 956,
       "code": 912,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/flowchart/lexer.nim"
+      ]
     },
     {
       "path": "src/diagrams/flowchart/parser.ts",
       "component": "diagrams/flowchart",
       "lines": 624,
       "code": 588,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/flowchart/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/flowchart/render.ts",
       "component": "diagrams/flowchart",
       "lines": 372,
       "code": 343,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/flowchart/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/flowchart/shapes.ts",
       "component": "diagrams/flowchart",
       "lines": 110,
       "code": 101,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/flowchart/shapes.nim"
+      ]
     },
     {
       "path": "src/diagrams/flowchart/tokens.ts",
       "component": "diagrams/flowchart",
       "lines": 160,
       "code": 158,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/flowchart/tokens.nim"
+      ]
     },
     {
       "path": "src/diagrams/flowchart/types.ts",
       "component": "diagrams/flowchart",
       "lines": 87,
       "code": 77,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/flowchart/types.nim"
+      ]
     },
     {
       "path": "src/diagrams/gantt/axis.ts",
@@ -2487,8 +2505,10 @@
       "component": "layout",
       "lines": 945,
       "code": 869,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/layout/compound.nim"
+      ]
     },
     {
       "path": "src/layout/lanes.ts",
@@ -2503,8 +2523,10 @@
       "component": "layout",
       "lines": 2228,
       "code": 1890,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/layout/layered.nim"
+      ]
     },
     {
       "path": "src/lazy.ts",
@@ -2555,8 +2577,10 @@
       "component": "svg",
       "lines": 73,
       "code": 60,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/svg/cluster.nim"
+      ]
     },
     {
       "path": "src/svg/edges.ts",
@@ -2603,8 +2627,10 @@
       "component": "svg",
       "lines": 690,
       "code": 646,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/svg/shapes.nim"
+      ]
     },
     {
       "path": "src/svg/theme.ts",
@@ -2621,8 +2647,10 @@
       "component": "svg",
       "lines": 39,
       "code": 33,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/svg/title.nim"
+      ]
     },
     {
       "path": "src/text/entities.ts",
@@ -2709,16 +2737,20 @@
       "component": "util",
       "lines": 32,
       "code": 28,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/util/unicode.nim"
+      ]
     },
     {
       "path": "src/util/url.ts",
       "component": "util",
       "lines": 131,
       "code": 99,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/util/url.nim"
+      ]
     },
     {
       "path": "src/util/yaml.ts",

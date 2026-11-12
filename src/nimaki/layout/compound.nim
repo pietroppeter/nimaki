@@ -190,8 +190,9 @@ proc routeCrossings*(nodes: seq[CNode], edges: seq[CEdge], style = Curved): int 
       style == Curved and k > 0 and k < r.len - 3 and aligned(k) and aligned(k + 3) and
         length(k) >= 0.01 and length(k + 3) >= 0.01 and
         (abs(r[k] - r[k - 3]) < 0.01) != (abs(r[k + 3] - r[k]) < 0.01)
-    var atX = r[0]
-    var atY = r[1]
+    # An edge without a route (between nodes the layout left out) reads undefined: NaN.
+    var atX = if r.len > 0: r[0] else: NaN
+    var atY = if r.len > 1: r[1] else: NaN
     var k = 3
     while k < r.len:
       let part = (if k == 3: 1 else: 0) or (if k == r.len - 3: 2 else: 0)
