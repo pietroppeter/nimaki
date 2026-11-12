@@ -194,6 +194,10 @@ filled it in; later steps add to it.
 | `JSON.parse(text)` | `jsonParse(text)` of `js.nim` (strict, as JavaScript is; raises `JsSyntaxError`), never `std/json`'s `parseJson`, which accepts comments, trailing commas and `01` |
 | `s.toLowerCase()` compared with a list of words | `unicode.toLower(s)`: JavaScript lowers more than ASCII (the Kelvin sign is `k`) |
 | a value that is a string, a list or a nested list (`SeqItem` of sequence) | a variant `ref object` with one branch per shape, walked with an explicit stack |
+| `x.toPrecision(p)`, `x.toExponential(d)`, `parseFloat(s)` | `toPrecision`, `toExponential`, `jsParseFloat` of `js.nim` (exact decimal, ties up; `jsParseFloat` reads the longest number at the start) |
+| a token matcher that keeps state between calls (`unclosed` in `accDescr.ts`, a run of digits in radar) | a `scanner: proc (): Scanner` on the `TokenType`: the tokenizer makes the matcher once per text, so the state starts fresh |
+| an arrow function made in a loop, keeping that turn's values | a closure returned by a proc of its own (`columnMap` in `treeview/box_drawing.nim`): closures made in a Nim loop share the loop's variables |
+| an index into a string that enters arithmetic (a column, a depth) | UTF-16 code units: `utf16Len(s, 0, at)` from bytes, `unitOffset(s, first, units)` back to bytes |
 
 ## Names
 
@@ -203,6 +207,7 @@ Names changed because they clash with Nim (filled in as they are met).
 | --- | --- |
 | `type` | `kind` (`diagramType` where the type of a diagram is meant) |
 | `src/diagrams/common/fit-width.ts` | `fit_width.nim` (a module name has no `-`) |
+| `boxDrawing.ts`, `accDescr.ts` | `box_drawing.nim`, `acc_descr.nim` (a module named `accDescr` would clash with its proc `accDescr`) |
 | `end` | `stop` |
 | `from` | `start` or `first` |
 | `out` | `output` |

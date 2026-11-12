@@ -49,6 +49,30 @@
       "rendered": 3600,
       "errors": 1400
     },
+    "radar": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 4013,
+      "errors": 987
+    },
+    "treemap": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 3158,
+      "errors": 1842
+    },
+    "treeView": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 4234,
+      "errors": 766
+    },
     "sequence": {
       "seed": 1,
       "cases": 5000,

@@ -310,10 +310,10 @@
           "id": "swimlane",
           "kind": "port",
           "title": "Swimlane",
-          "what": "src/diagrams/swimlane: 69 lines of TypeScript, 13 corpus cases.",
+          "what": "src/diagrams/swimlane: 69 lines of TypeScript, 13 corpus cases. With src/layout/lanes.ts, the lane layout it draws on.",
           "done_when": "difftest: every swimlane case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port class and swimlane",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -390,9 +390,9 @@
           "what": "src/diagrams/radar: 500 lines of TypeScript, 3 corpus cases.",
           "done_when": "difftest: every radar case identical.",
           "owner": "Port diagrams that need no layered layout",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "radar-treemap-treeview",
+          "pr": "21"
         },
         {
           "id": "treemap",
@@ -401,9 +401,9 @@
           "what": "src/diagrams/treemap: 504 lines of TypeScript, 8 corpus cases.",
           "done_when": "difftest: every treemap case identical.",
           "owner": "Port diagrams that need no layered layout",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "radar-treemap-treeview",
+          "pr": "21"
         },
         {
           "id": "cynefin",
@@ -423,9 +423,9 @@
           "what": "src/diagrams/treeview: 582 lines of TypeScript, 13 corpus cases.",
           "done_when": "difftest: every treeview case identical.",
           "owner": "Port diagrams that need no layered layout",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "radar-treemap-treeview",
+          "pr": "21"
         },
         {
           "id": "eventmodeling",
@@ -521,8 +521,8 @@
           "title": "Requirement",
           "what": "src/diagrams/requirement: 1294 lines of TypeScript, 9 corpus cases.",
           "done_when": "difftest: every requirement case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port the compound-layout diagram types",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -543,8 +543,8 @@
           "title": "Er",
           "what": "src/diagrams/er: 1660 lines of TypeScript, 25 corpus cases.",
           "done_when": "difftest: every er case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port the compound-layout diagram types",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -587,8 +587,8 @@
           "title": "State",
           "what": "src/diagrams/state: 2097 lines of TypeScript, 22 corpus cases.",
           "done_when": "difftest: every state case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port the compound-layout diagram types",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -596,10 +596,10 @@
           "id": "class",
           "kind": "port",
           "title": "Class",
-          "what": "src/diagrams/class: 2122 lines of TypeScript, 38 corpus cases.",
+          "what": "src/diagrams/class: 2122 lines of TypeScript, 38 corpus cases. With src/layout/components.ts, the components layout it draws on.",
           "done_when": "difftest: every class case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port class and swimlane",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -609,8 +609,8 @@
           "title": "Usecase",
           "what": "src/diagrams/usecase: 2821 lines of TypeScript, 24 corpus cases.",
           "done_when": "difftest: every usecase case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port the compound-layout diagram types",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -620,8 +620,8 @@
           "title": "Agentflow",
           "what": "src/diagrams/agentflow: 3465 lines of TypeScript, 251 corpus cases.",
           "done_when": "difftest: every agentflow case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port the compound-layout diagram types",
+          "status": "started",
           "post": "",
           "pr": ""
         }
