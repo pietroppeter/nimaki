@@ -48,6 +48,14 @@
       "different": 0,
       "rendered": 3594,
       "errors": 1406
+    },
+    "state": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 3831,
+      "errors": 1169
     }
   }
 }

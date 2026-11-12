@@ -588,9 +588,9 @@
           "what": "src/diagrams/state: 2097 lines of TypeScript, 22 corpus cases.",
           "done_when": "difftest: every state case identical.",
           "owner": "Port the compound-layout diagram types",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "states-and-regions",
+          "pr": "PRNUM"
         },
         {
           "id": "class",

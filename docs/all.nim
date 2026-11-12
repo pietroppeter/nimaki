@@ -13,6 +13,7 @@ import devlog/how_pele_is_built
 import devlog/layered_layout_and_flowchart
 import devlog/pele_origins
 import devlog/pomice
+import devlog/states_and_regions
 import devlog/the_diagram_family
 import devlog/the_referee
 import devlog/three_small_diagrams
