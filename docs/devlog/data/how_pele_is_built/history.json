@@ -1,0 +1,437 @@
+{
+  "commits": 424,
+  "days": [
+    {
+      "date": "2026-10-05",
+      "commits": 56
+    },
+    {
+      "date": "2026-10-06",
+      "commits": 76
+    },
+    {
+      "date": "2026-10-07",
+      "commits": 18
+    },
+    {
+      "date": "2026-10-08",
+      "commits": 1
+    },
+    {
+      "date": "2026-10-09",
+      "commits": 10
+    },
+    {
+      "date": "2026-10-14",
+      "commits": 9
+    },
+    {
+      "date": "2026-10-15",
+      "commits": 6
+    },
+    {
+      "date": "2026-10-16",
+      "commits": 5
+    },
+    {
+      "date": "2026-10-17",
+      "commits": 5
+    },
+    {
+      "date": "2026-10-18",
+      "commits": 10
+    },
+    {
+      "date": "2026-10-19",
+      "commits": 19
+    },
+    {
+      "date": "2026-10-20",
+      "commits": 31
+    },
+    {
+      "date": "2026-10-21",
+      "commits": 1
+    },
+    {
+      "date": "2026-10-22",
+      "commits": 15
+    },
+    {
+      "date": "2026-10-23",
+      "commits": 7
+    },
+    {
+      "date": "2026-10-24",
+      "commits": 65
+    },
+    {
+      "date": "2026-10-25",
+      "commits": 8
+    },
+    {
+      "date": "2026-10-26",
+      "commits": 67
+    },
+    {
+      "date": "2026-10-27",
+      "commits": 4
+    },
+    {
+      "date": "2026-10-28",
+      "commits": 4
+    },
+    {
+      "date": "2026-10-29",
+      "commits": 2
+    },
+    {
+      "date": "2026-10-30",
+      "commits": 5
+    }
+  ],
+  "areas": [
+    {
+      "area": "(none)",
+      "commits": 168
+    },
+    {
+      "area": "Layout",
+      "commits": 28
+    },
+    {
+      "area": "Tests",
+      "commits": 20
+    },
+    {
+      "area": "Release",
+      "commits": 13
+    },
+    {
+      "area": "Website",
+      "commits": 13
+    },
+    {
+      "area": "Sequence",
+      "commits": 12
+    },
+    {
+      "area": "Label",
+      "commits": 11
+    },
+    {
+      "area": "Flowchart",
+      "commits": 10
+    },
+    {
+      "area": "Docs",
+      "commits": 10
+    },
+    {
+      "area": "Sankey",
+      "commits": 10
+    },
+    {
+      "area": "SVG",
+      "commits": 8
+    },
+    {
+      "area": "Block",
+      "commits": 7
+    },
+    {
+      "area": "Errors",
+      "commits": 7
+    },
+    {
+      "area": "Agentflow",
+      "commits": 7
+    },
+    {
+      "area": "Venn",
+      "commits": 6
+    },
+    {
+      "area": "Treemap",
+      "commits": 6
+    },
+    {
+      "area": "Mount",
+      "commits": 6
+    },
+    {
+      "area": "Text",
+      "commits": 6
+    },
+    {
+      "area": "C4",
+      "commits": 5
+    },
+    {
+      "area": "ER",
+      "commits": 5
+    },
+    {
+      "area": "Usecase",
+      "commits": 5
+    },
+    {
+      "area": "State",
+      "commits": 5
+    },
+    {
+      "area": "Quadrant",
+      "commits": 4
+    },
+    {
+      "area": "Class",
+      "commits": 4
+    },
+    {
+      "area": "Zoom",
+      "commits": 4
+    },
+    {
+      "area": "URL",
+      "commits": 3
+    },
+    {
+      "area": "Timeline",
+      "commits": 3
+    },
+    {
+      "area": "Labels",
+      "commits": 3
+    },
+    {
+      "area": "TreeView",
+      "commits": 3
+    },
+    {
+      "area": "Radar",
+      "commits": 3
+    },
+    {
+      "area": "Detect",
+      "commits": 3
+    },
+    {
+      "area": "Pie",
+      "commits": 2
+    },
+    {
+      "area": "Theming",
+      "commits": 2
+    },
+    {
+      "area": "Gantt",
+      "commits": 2
+    },
+    {
+      "area": "XYChart",
+      "commits": 2
+    },
+    {
+      "area": "Event Modeling",
+      "commits": 2
+    },
+    {
+      "area": "Styles",
+      "commits": 1
+    },
+    {
+      "area": "Restyle the mindmap",
+      "commits": 1
+    },
+    {
+      "area": "CI",
+      "commits": 1
+    },
+    {
+      "area": "Bench",
+      "commits": 1
+    },
+    {
+      "area": "Draw flowchart and state edges as clearer curves",
+      "commits": 1
+    },
+    {
+      "area": "YAML",
+      "commits": 1
+    },
+    {
+      "area": "Requirement",
+      "commits": 1
+    },
+    {
+      "area": "Code",
+      "commits": 1
+    },
+    {
+      "area": "Journey",
+      "commits": 1
+    },
+    {
+      "area": "Git",
+      "commits": 1
+    },
+    {
+      "area": "Architecture",
+      "commits": 1
+    },
+    {
+      "area": "Readme",
+      "commits": 1
+    },
+    {
+      "area": "Railroad",
+      "commits": 1
+    },
+    {
+      "area": "Swimlane",
+      "commits": 1
+    },
+    {
+      "area": "Build",
+      "commits": 1
+    },
+    {
+      "area": "Fan out the edges that run far across a gap between ranks",
+      "commits": 1
+    }
+  ],
+  "releases": [
+    {
+      "tag": "1.0.1",
+      "date": "2026-10-06",
+      "src": 46996,
+      "layout": 1755
+    },
+    {
+      "tag": "1.0.2",
+      "date": "2026-10-06",
+      "src": 46996,
+      "layout": 1755
+    },
+    {
+      "tag": "1.0.3",
+      "date": "2026-10-06",
+      "src": 46996,
+      "layout": 1755
+    },
+    {
+      "tag": "1.0.4",
+      "date": "2026-10-06",
+      "src": 47012,
+      "layout": 1755
+    },
+    {
+      "tag": "1.1.0",
+      "date": "2026-10-06",
+      "src": 47497,
+      "layout": 1755
+    },
+    {
+      "tag": "1.1.1",
+      "date": "2026-10-06",
+      "src": 47501,
+      "layout": 1755
+    },
+    {
+      "tag": "1.2.0",
+      "date": "2026-10-09",
+      "src": 48752,
+      "layout": 2796
+    },
+    {
+      "tag": "1.3.0",
+      "date": "2026-10-09",
+      "src": 48897,
+      "layout": 2796
+    },
+    {
+      "tag": "1.4.0",
+      "date": "2026-10-14",
+      "src": 49887,
+      "layout": 3019
+    },
+    {
+      "tag": "1.5.0",
+      "date": "2026-10-14",
+      "src": 49936,
+      "layout": 3019
+    },
+    {
+      "tag": "1.5.1",
+      "date": "2026-10-15",
+      "src": 49922,
+      "layout": 3019
+    },
+    {
+      "tag": "1.5.2",
+      "date": "2026-10-15",
+      "src": 49947,
+      "layout": 3019
+    },
+    {
+      "tag": "1.6.0",
+      "date": "2026-10-17",
+      "src": 50027,
+      "layout": 3012
+    },
+    {
+      "tag": "1.7.0",
+      "date": "2026-10-19",
+      "src": 50078,
+      "layout": 3012
+    },
+    {
+      "tag": "1.8.0",
+      "date": "2026-10-20",
+      "src": 51128,
+      "layout": 3748
+    },
+    {
+      "tag": "1.9.0",
+      "date": "2026-10-22",
+      "src": 51450,
+      "layout": 3820
+    },
+    {
+      "tag": "1.9.1",
+      "date": "2026-10-24",
+      "src": 51465,
+      "layout": 3820
+    },
+    {
+      "tag": "1.10.0",
+      "date": "2026-10-24",
+      "src": 51675,
+      "layout": 3820
+    },
+    {
+      "tag": "1.10.1",
+      "date": "2026-10-26",
+      "src": 51821,
+      "layout": 3836
+    },
+    {
+      "tag": "1.11.0",
+      "date": "2026-10-26",
+      "src": 52171,
+      "layout": 3836
+    },
+    {
+      "tag": "1.12.0",
+      "date": "2026-10-26",
+      "src": 52754,
+      "layout": 3836
+    },
+    {
+      "tag": "1.13.0",
+      "date": "2026-10-30",
+      "src": 52973,
+      "layout": 3872
+    }
+  ]
+}

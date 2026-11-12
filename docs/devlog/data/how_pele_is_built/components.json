@@ -1,0 +1,3576 @@
+{
+  "about": "Pele measured by measure.nim at the pin. Lines are all lines (wc -l).",
+  "pin": {
+    "tag": "1.13.0",
+    "commit": "3a2f075ee0c3d914f0fad3545fc0f193693975ac",
+    "date": "2026-10-30"
+  },
+  "types": [
+    {
+      "type": "agentflow",
+      "lines": 3781,
+      "roles": {
+        "parse": 3189,
+        "layout": 0,
+        "render": 566,
+        "entry": 26
+      },
+      "parser": "jison",
+      "uses": [
+        "diagrams/common/fit-width",
+        "diagrams/flowchart/shapes",
+        "layout/compound",
+        "svg/builder",
+        "svg/cluster",
+        "svg/edges",
+        "svg/ink",
+        "svg/root",
+        "svg/shapes",
+        "svg/theme",
+        "text/entities",
+        "text/label",
+        "text/measurer",
+        "util/chars",
+        "util/unicode",
+        "util/url",
+        "util/yaml"
+      ],
+      "traps": {
+        "regex": 29,
+        "utf16": 60,
+        "numberText": 1,
+        "libm": 0,
+        "round": 1,
+        "sort": 0,
+        "date": 0,
+        "sticky": 15
+      },
+      "testLines": 4864,
+      "docExamples": 12,
+      "added": {
+        "commit": "5b2158b",
+        "date": "2026-10-05",
+        "commits": 29
+      },
+      "files": [
+        {
+          "file": "src/diagrams/agentflow/colorSlots.ts",
+          "role": "render",
+          "lines": 50
+        },
+        {
+          "file": "src/diagrams/agentflow/db.ts",
+          "role": "parse",
+          "lines": 827
+        },
+        {
+          "file": "src/diagrams/agentflow/diagnostics.ts",
+          "role": "parse",
+          "lines": 28
+        },
+        {
+          "file": "src/diagrams/agentflow/graph.ts",
+          "role": "parse",
+          "lines": 263
+        },
+        {
+          "file": "src/diagrams/agentflow/index.ts",
+          "role": "entry",
+          "lines": 26
+        },
+        {
+          "file": "src/diagrams/agentflow/lexer.ts",
+          "role": "parse",
+          "lines": 1015
+        },
+        {
+          "file": "src/diagrams/agentflow/parser.ts",
+          "role": "parse",
+          "lines": 702
+        },
+        {
+          "file": "src/diagrams/agentflow/render.ts",
+          "role": "render",
+          "lines": 416
+        },
+        {
+          "file": "src/diagrams/agentflow/shapes.ts",
+          "role": "render",
+          "lines": 100
+        },
+        {
+          "file": "src/diagrams/agentflow/tokens.ts",
+          "role": "parse",
+          "lines": 165
+        },
+        {
+          "file": "src/diagrams/agentflow/types.ts",
+          "role": "parse",
+          "lines": 189
+        }
+      ]
+    },
+    {
+      "type": "usecase",
+      "lines": 3099,
+      "roles": {
+        "parse": 2500,
+        "layout": 0,
+        "render": 588,
+        "entry": 11
+      },
+      "parser": "jison",
+      "uses": [
+        "diagrams/common/fit-width",
+        "layout/compound",
+        "svg/builder",
+        "svg/cluster",
+        "svg/edges",
+        "svg/ink",
+        "svg/root",
+        "svg/theme",
+        "svg/title",
+        "text/entities",
+        "text/label",
+        "text/measurer",
+        "util/chars"
+      ],
+      "traps": {
+        "regex": 9,
+        "utf16": 89,
+        "numberText": 4,
+        "libm": 1,
+        "round": 6,
+        "sort": 5,
+        "date": 0,
+        "sticky": 0
+      },
+      "testLines": 3058,
+      "docExamples": 24,
+      "added": {
+        "commit": "3e38c7f",
+        "date": "2026-10-05",
+        "commits": 21
+      },
+      "files": [
+        {
+          "file": "src/diagrams/usecase/db.ts",
+          "role": "parse",
+          "lines": 588
+        },
+        {
+          "file": "src/diagrams/usecase/graph.ts",
+          "role": "parse",
+          "lines": 310
+        },
+        {
+          "file": "src/diagrams/usecase/index.ts",
+          "role": "entry",
+          "lines": 11
+        },
+        {
+          "file": "src/diagrams/usecase/json.ts",
+          "role": "parse",
+          "lines": 249
+        },
+        {
+          "file": "src/diagrams/usecase/lexer.ts",
+          "role": "parse",
+          "lines": 380
+        },
+        {
+          "file": "src/diagrams/usecase/parser.ts",
+          "role": "parse",
+          "lines": 705
+        },
+        {
+          "file": "src/diagrams/usecase/render.ts",
+          "role": "render",
+          "lines": 588
+        },
+        {
+          "file": "src/diagrams/usecase/tokens.ts",
+          "role": "parse",
+          "lines": 76
+        },
+        {
+          "file": "src/diagrams/usecase/types.ts",
+          "role": "parse",
+          "lines": 192
+        }
+      ]
+    },
+    {
+      "type": "flowchart",
+      "lines": 3050,
+      "roles": {
+        "parse": 2552,
+        "layout": 0,
+        "render": 480,
+        "entry": 18
+      },
+      "parser": "jison",
+      "uses": [
+        "diagrams/common/fit-width",
+        "layout/compound",
+        "layout/layered",
+        "svg/builder",
+        "svg/cluster",
+        "svg/edges",
+        "svg/ink",
+        "svg/root",
+        "svg/shapes",
+        "svg/theme",
+        "svg/title",
+        "text/entities",
+        "text/label",
+        "text/measurer",
+        "util/chars",
+        "util/unicode",
+        "util/url",
+        "util/yaml"
+      ],
+      "traps": {
+        "regex": 37,
+        "utf16": 44,
+        "numberText": 3,
+        "libm": 0,
+        "round": 1,
+        "sort": 0,
+        "date": 0,
+        "sticky": 24
+      },
+      "testLines": 4877,
+      "docExamples": 114,
+      "added": {
+        "commit": "699428c",
+        "date": "2026-10-05",
+        "commits": 51
+      },
+      "files": [
+        {
+          "file": "src/diagrams/flowchart/db.ts",
+          "role": "parse",
+          "lines": 458
+        },
+        {
+          "file": "src/diagrams/flowchart/graph.ts",
+          "role": "parse",
+          "lines": 271
+        },
+        {
+          "file": "src/diagrams/flowchart/index.ts",
+          "role": "entry",
+          "lines": 18
+        },
+        {
+          "file": "src/diagrams/flowchart/lexer.ts",
+          "role": "parse",
+          "lines": 955
+        },
+        {
+          "file": "src/diagrams/flowchart/parser.ts",
+          "role": "parse",
+          "lines": 623
+        },
+        {
+          "file": "src/diagrams/flowchart/render.ts",
+          "role": "render",
+          "lines": 371
+        },
+        {
+          "file": "src/diagrams/flowchart/shapes.ts",
+          "role": "render",
+          "lines": 109
+        },
+        {
+          "file": "src/diagrams/flowchart/tokens.ts",
+          "role": "parse",
+          "lines": 159
+        },
+        {
+          "file": "src/diagrams/flowchart/types.ts",
+          "role": "parse",
+          "lines": 86
+        }
+      ]
+    },
+    {
+      "type": "sequence",
+      "lines": 2800,
+      "roles": {
+        "parse": 1639,
+        "layout": 0,
+        "render": 1140,
+        "entry": 21
+      },
+      "parser": "jison",
+      "uses": [
+        "diagrams/common/fit-width",
+        "diagrams/common/literal-label",
+        "svg/builder",
+        "svg/edges",
+        "svg/ink",
+        "svg/root",
+        "svg/theme",
+        "svg/title",
+        "text/label",
+        "text/measurer",
+        "util/chars",
+        "util/yaml"
+      ],
+      "traps": {
+        "regex": 10,
+        "utf16": 49,
+        "numberText": 2,
+        "libm": 0,
+        "round": 4,
+        "sort": 1,
+        "date": 0,
+        "sticky": 0
+      },
+      "testLines": 3418,
+      "docExamples": 38,
+      "added": {
+        "commit": "32ba30a",
+        "date": "2026-10-05",
+        "commits": 23
+      },
+      "files": [
+        {
+          "file": "src/diagrams/sequence/actors.ts",
+          "role": "render",
+          "lines": 115
+        },
+        {
+          "file": "src/diagrams/sequence/colors.ts",
+          "role": "render",
+          "lines": 86
+        },
+        {
+          "file": "src/diagrams/sequence/db.ts",
+          "role": "parse",
+          "lines": 416
+        },
+        {
+          "file": "src/diagrams/sequence/index.ts",
+          "role": "entry",
+          "lines": 21
+        },
+        {
+          "file": "src/diagrams/sequence/lexer.ts",
+          "role": "parse",
+          "lines": 470
+        },
+        {
+          "file": "src/diagrams/sequence/parser.ts",
+          "role": "parse",
+          "lines": 426
+        },
+        {
+          "file": "src/diagrams/sequence/render.ts",
+          "role": "render",
+          "lines": 939
+        },
+        {
+          "file": "src/diagrams/sequence/tokens.ts",
+          "role": "parse",
+          "lines": 164
+        },
+        {
+          "file": "src/diagrams/sequence/types.ts",
+          "role": "parse",
+          "lines": 163
+        }
+      ]
+    },
+    {
+      "type": "class",
+      "lines": 2317,
+      "roles": {
+        "parse": 1575,
+        "layout": 0,
+        "render": 726,
+        "entry": 16
+      },
+      "parser": "jison",
+      "uses": [
+        "diagrams/common/fit-width",
+        "diagrams/common/generics",
+        "layout/components",
+        "layout/compound",
+        "svg/builder",
+        "svg/cluster",
+        "svg/edges",
+        "svg/ink",
+        "svg/root",
+        "svg/shapes",
+        "svg/theme",
+        "svg/title",
+        "text/entities",
+        "text/label",
+        "text/measurer",
+        "util/chars",
+        "util/unicode",
+        "util/url"
+      ],
+      "traps": {
+        "regex": 10,
+        "utf16": 23,
+        "numberText": 0,
+        "libm": 0,
+        "round": 8,
+        "sort": 1,
+        "date": 0,
+        "sticky": 4
+      },
+      "testLines": 3778,
+      "docExamples": 38,
+      "added": {
+        "commit": "2f53027",
+        "date": "2026-10-05",
+        "commits": 23
+      },
+      "files": [
+        {
+          "file": "src/diagrams/class/db.ts",
+          "role": "parse",
+          "lines": 289
+        },
+        {
+          "file": "src/diagrams/class/graph.ts",
+          "role": "parse",
+          "lines": 171
+        },
+        {
+          "file": "src/diagrams/class/index.ts",
+          "role": "entry",
+          "lines": 16
+        },
+        {
+          "file": "src/diagrams/class/lexer.ts",
+          "role": "parse",
+          "lines": 473
+        },
+        {
+          "file": "src/diagrams/class/markers.ts",
+          "role": "render",
+          "lines": 55
+        },
+        {
+          "file": "src/diagrams/class/members.ts",
+          "role": "parse",
+          "lines": 91
+        },
+        {
+          "file": "src/diagrams/class/parser.ts",
+          "role": "parse",
+          "lines": 351
+        },
+        {
+          "file": "src/diagrams/class/render.ts",
+          "role": "render",
+          "lines": 671
+        },
+        {
+          "file": "src/diagrams/class/tokens.ts",
+          "role": "parse",
+          "lines": 127
+        },
+        {
+          "file": "src/diagrams/class/types.ts",
+          "role": "parse",
+          "lines": 73
+        }
+      ]
+    },
+    {
+      "type": "state",
+      "lines": 2291,
+      "roles": {
+        "parse": 1570,
+        "layout": 0,
+        "render": 705,
+        "entry": 16
+      },
+      "parser": "jison",
+      "uses": [
+        "diagrams/common/fit-width",
+        "layout/compound",
+        "svg/builder",
+        "svg/edges",
+        "svg/ink",
+        "svg/root",
+        "svg/shapes",
+        "svg/theme",
+        "svg/title",
+        "text/entities",
+        "text/label",
+        "text/measurer",
+        "util/chars",
+        "util/url"
+      ],
+      "traps": {
+        "regex": 9,
+        "utf16": 48,
+        "numberText": 0,
+        "libm": 2,
+        "round": 3,
+        "sort": 3,
+        "date": 0,
+        "sticky": 0
+      },
+      "testLines": 2225,
+      "docExamples": 22,
+      "added": {
+        "commit": "442dbac",
+        "date": "2026-10-05",
+        "commits": 23
+      },
+      "files": [
+        {
+          "file": "src/diagrams/state/db.ts",
+          "role": "parse",
+          "lines": 224
+        },
+        {
+          "file": "src/diagrams/state/graph.ts",
+          "role": "parse",
+          "lines": 234
+        },
+        {
+          "file": "src/diagrams/state/index.ts",
+          "role": "entry",
+          "lines": 16
+        },
+        {
+          "file": "src/diagrams/state/lexer.ts",
+          "role": "parse",
+          "lines": 690
+        },
+        {
+          "file": "src/diagrams/state/parser.ts",
+          "role": "parse",
+          "lines": 222
+        },
+        {
+          "file": "src/diagrams/state/render.ts",
+          "role": "render",
+          "lines": 705
+        },
+        {
+          "file": "src/diagrams/state/tokens.ts",
+          "role": "parse",
+          "lines": 103
+        },
+        {
+          "file": "src/diagrams/state/types.ts",
+          "role": "parse",
+          "lines": 97
+        }
+      ]
+    },
+    {
+      "type": "gantt",
+      "lines": 2159,
+      "roles": {
+        "parse": 1415,
+        "layout": 0,
+        "render": 726,
+        "entry": 18
+      },
+      "parser": "jison",
+      "uses": [
+        "diagrams/common/fit-width",
+        "svg/builder",
+        "svg/root",
+        "svg/theme",
+        "text/label",
+        "text/measurer",
+        "util/chars",
+        "util/url"
+      ],
+      "traps": {
+        "regex": 50,
+        "utf16": 10,
+        "numberText": 4,
+        "libm": 3,
+        "round": 10,
+        "sort": 2,
+        "date": 30,
+        "sticky": 3
+      },
+      "testLines": 1405,
+      "docExamples": 11,
+      "added": {
+        "commit": "0b9645a",
+        "date": "2026-10-05",
+        "commits": 17
+      },
+      "files": [
+        {
+          "file": "src/diagrams/gantt/axis.ts",
+          "role": "render",
+          "lines": 362
+        },
+        {
+          "file": "src/diagrams/gantt/dates.ts",
+          "role": "parse",
+          "lines": 380
+        },
+        {
+          "file": "src/diagrams/gantt/db.ts",
+          "role": "parse",
+          "lines": 411
+        },
+        {
+          "file": "src/diagrams/gantt/index.ts",
+          "role": "entry",
+          "lines": 18
+        },
+        {
+          "file": "src/diagrams/gantt/lexer.ts",
+          "role": "parse",
+          "lines": 295
+        },
+        {
+          "file": "src/diagrams/gantt/parser.ts",
+          "role": "parse",
+          "lines": 199
+        },
+        {
+          "file": "src/diagrams/gantt/render.ts",
+          "role": "render",
+          "lines": 364
+        },
+        {
+          "file": "src/diagrams/gantt/tokens.ts",
+          "role": "parse",
+          "lines": 83
+        },
+        {
+          "file": "src/diagrams/gantt/types.ts",
+          "role": "parse",
+          "lines": 47
+        }
+      ]
+    },
+    {
+      "type": "block",
+      "lines": 2149,
+      "roles": {
+        "parse": 1066,
+        "layout": 140,
+        "render": 927,
+        "entry": 16
+      },
+      "parser": "jison",
+      "uses": [
+        "diagrams/common/fit-width",
+        "svg/builder",
+        "svg/edges",
+        "svg/ink",
+        "svg/root",
+        "svg/shapes",
+        "svg/theme",
+        "svg/title",
+        "text/label",
+        "text/measurer",
+        "util/chars"
+      ],
+      "traps": {
+        "regex": 0,
+        "utf16": 40,
+        "numberText": 3,
+        "libm": 22,
+        "round": 2,
+        "sort": 0,
+        "date": 0,
+        "sticky": 3
+      },
+      "testLines": 984,
+      "docExamples": 30,
+      "added": {
+        "commit": "6c92917",
+        "date": "2026-10-05",
+        "commits": 17
+      },
+      "files": [
+        {
+          "file": "src/diagrams/block/arrows.ts",
+          "role": "render",
+          "lines": 127
+        },
+        {
+          "file": "src/diagrams/block/db.ts",
+          "role": "parse",
+          "lines": 246
+        },
+        {
+          "file": "src/diagrams/block/index.ts",
+          "role": "entry",
+          "lines": 16
+        },
+        {
+          "file": "src/diagrams/block/layout.ts",
+          "role": "layout",
+          "lines": 140
+        },
+        {
+          "file": "src/diagrams/block/lexer.ts",
+          "role": "parse",
+          "lines": 505
+        },
+        {
+          "file": "src/diagrams/block/parser.ts",
+          "role": "parse",
+          "lines": 188
+        },
+        {
+          "file": "src/diagrams/block/render.ts",
+          "role": "render",
+          "lines": 800
+        },
+        {
+          "file": "src/diagrams/block/tokens.ts",
+          "role": "parse",
+          "lines": 81
+        },
+        {
+          "file": "src/diagrams/block/types.ts",
+          "role": "parse",
+          "lines": 46
+        }
+      ]
+    },
+    {
+      "type": "c4",
+      "lines": 2112,
+      "roles": {
+        "parse": 1002,
+        "layout": 785,
+        "render": 310,
+        "entry": 15
+      },
+      "parser": "jison",
+      "uses": [
+        "diagrams/common/fit-width",
+        "diagrams/common/literal-label",
+        "svg/builder",
+        "svg/edges",
+        "svg/ink",
+        "svg/root",
+        "svg/shapes",
+        "svg/theme",
+        "text/label",
+        "text/measurer",
+        "util/chars",
+        "util/url"
+      ],
+      "traps": {
+        "regex": 10,
+        "utf16": 18,
+        "numberText": 4,
+        "libm": 3,
+        "round": 1,
+        "sort": 0,
+        "date": 0,
+        "sticky": 5
+      },
+      "testLines": 1199,
+      "docExamples": 6,
+      "added": {
+        "commit": "2a5ae22",
+        "date": "2026-10-05",
+        "commits": 21
+      },
+      "files": [
+        {
+          "file": "src/diagrams/c4/db.ts",
+          "role": "parse",
+          "lines": 246
+        },
+        {
+          "file": "src/diagrams/c4/index.ts",
+          "role": "entry",
+          "lines": 15
+        },
+        {
+          "file": "src/diagrams/c4/layout.ts",
+          "role": "layout",
+          "lines": 219
+        },
+        {
+          "file": "src/diagrams/c4/lexer.ts",
+          "role": "parse",
+          "lines": 341
+        },
+        {
+          "file": "src/diagrams/c4/parser.ts",
+          "role": "parse",
+          "lines": 204
+        },
+        {
+          "file": "src/diagrams/c4/render.ts",
+          "role": "render",
+          "lines": 310
+        },
+        {
+          "file": "src/diagrams/c4/route.ts",
+          "role": "layout",
+          "lines": 566
+        },
+        {
+          "file": "src/diagrams/c4/tokens.ts",
+          "role": "parse",
+          "lines": 135
+        },
+        {
+          "file": "src/diagrams/c4/types.ts",
+          "role": "parse",
+          "lines": 76
+        }
+      ]
+    },
+    {
+      "type": "er",
+      "lines": 1823,
+      "roles": {
+        "parse": 1190,
+        "layout": 0,
+        "render": 617,
+        "entry": 16
+      },
+      "parser": "jison",
+      "uses": [
+        "diagrams/common/fit-width",
+        "diagrams/common/generics",
+        "layout/compound",
+        "svg/builder",
+        "svg/cluster",
+        "svg/edges",
+        "svg/ink",
+        "svg/root",
+        "svg/theme",
+        "svg/title",
+        "text/entities",
+        "text/label",
+        "text/measurer",
+        "util/chars",
+        "util/url"
+      ],
+      "traps": {
+        "regex": 16,
+        "utf16": 36,
+        "numberText": 0,
+        "libm": 1,
+        "round": 5,
+        "sort": 1,
+        "date": 0,
+        "sticky": 0
+      },
+      "testLines": 1959,
+      "docExamples": 25,
+      "added": {
+        "commit": "aa73d70",
+        "date": "2026-10-05",
+        "commits": 23
+      },
+      "files": [
+        {
+          "file": "src/diagrams/er/db.ts",
+          "role": "parse",
+          "lines": 141
+        },
+        {
+          "file": "src/diagrams/er/graph.ts",
+          "role": "parse",
+          "lines": 113
+        },
+        {
+          "file": "src/diagrams/er/index.ts",
+          "role": "entry",
+          "lines": 16
+        },
+        {
+          "file": "src/diagrams/er/lexer.ts",
+          "role": "parse",
+          "lines": 471
+        },
+        {
+          "file": "src/diagrams/er/markers.ts",
+          "role": "render",
+          "lines": 35
+        },
+        {
+          "file": "src/diagrams/er/parser.ts",
+          "role": "parse",
+          "lines": 296
+        },
+        {
+          "file": "src/diagrams/er/render.ts",
+          "role": "render",
+          "lines": 582
+        },
+        {
+          "file": "src/diagrams/er/tokens.ts",
+          "role": "parse",
+          "lines": 98
+        },
+        {
+          "file": "src/diagrams/er/types.ts",
+          "role": "parse",
+          "lines": 71
+        }
+      ]
+    },
+    {
+      "type": "railroad",
+      "lines": 1668,
+      "roles": {
+        "parse": 1230,
+        "layout": 0,
+        "render": 429,
+        "entry": 9
+      },
+      "parser": "langium",
+      "uses": [
+        "diagrams/common/fit-width",
+        "diagrams/common/tokens",
+        "svg/builder",
+        "svg/root",
+        "svg/theme",
+        "text/entities",
+        "text/label",
+        "text/measurer"
+      ],
+      "traps": {
+        "regex": 26,
+        "utf16": 10,
+        "numberText": 2,
+        "libm": 0,
+        "round": 3,
+        "sort": 0,
+        "date": 0,
+        "sticky": 17
+      },
+      "testLines": 1784,
+      "docExamples": 14,
+      "added": {
+        "commit": "e82235d",
+        "date": "2026-10-05",
+        "commits": 10
+      },
+      "files": [
+        {
+          "file": "src/diagrams/railroad/abnf.ts",
+          "role": "parse",
+          "lines": 211
+        },
+        {
+          "file": "src/diagrams/railroad/common.ts",
+          "role": "parse",
+          "lines": 214
+        },
+        {
+          "file": "src/diagrams/railroad/db.ts",
+          "role": "parse",
+          "lines": 94
+        },
+        {
+          "file": "src/diagrams/railroad/ebnf.ts",
+          "role": "parse",
+          "lines": 274
+        },
+        {
+          "file": "src/diagrams/railroad/index.ts",
+          "role": "entry",
+          "lines": 9
+        },
+        {
+          "file": "src/diagrams/railroad/ir.ts",
+          "role": "parse",
+          "lines": 187
+        },
+        {
+          "file": "src/diagrams/railroad/peg.ts",
+          "role": "parse",
+          "lines": 223
+        },
+        {
+          "file": "src/diagrams/railroad/render.ts",
+          "role": "render",
+          "lines": 429
+        },
+        {
+          "file": "src/diagrams/railroad/types.ts",
+          "role": "parse",
+          "lines": 27
+        }
+      ]
+    },
+    {
+      "type": "requirement",
+      "lines": 1406,
+      "roles": {
+        "parse": 1008,
+        "layout": 0,
+        "render": 382,
+        "entry": 16
+      },
+      "parser": "jison",
+      "uses": [
+        "diagrams/common/fit-width",
+        "layout/compound",
+        "svg/builder",
+        "svg/edges",
+        "svg/ink",
+        "svg/root",
+        "svg/theme",
+        "svg/title",
+        "text/label",
+        "text/measurer",
+        "util/chars"
+      ],
+      "traps": {
+        "regex": 8,
+        "utf16": 17,
+        "numberText": 0,
+        "libm": 0,
+        "round": 1,
+        "sort": 1,
+        "date": 0,
+        "sticky": 0
+      },
+      "testLines": 1180,
+      "docExamples": 9,
+      "added": {
+        "commit": "2198b0b",
+        "date": "2026-10-05",
+        "commits": 10
+      },
+      "files": [
+        {
+          "file": "src/diagrams/requirement/db.ts",
+          "role": "parse",
+          "lines": 180
+        },
+        {
+          "file": "src/diagrams/requirement/graph.ts",
+          "role": "parse",
+          "lines": 56
+        },
+        {
+          "file": "src/diagrams/requirement/index.ts",
+          "role": "entry",
+          "lines": 16
+        },
+        {
+          "file": "src/diagrams/requirement/lexer.ts",
+          "role": "parse",
+          "lines": 309
+        },
+        {
+          "file": "src/diagrams/requirement/parser.ts",
+          "role": "parse",
+          "lines": 259
+        },
+        {
+          "file": "src/diagrams/requirement/render.ts",
+          "role": "render",
+          "lines": 382
+        },
+        {
+          "file": "src/diagrams/requirement/tokens.ts",
+          "role": "parse",
+          "lines": 162
+        },
+        {
+          "file": "src/diagrams/requirement/types.ts",
+          "role": "parse",
+          "lines": 42
+        }
+      ]
+    },
+    {
+      "type": "architecture",
+      "lines": 1369,
+      "roles": {
+        "parse": 387,
+        "layout": 379,
+        "render": 588,
+        "entry": 15
+      },
+      "parser": "langium",
+      "uses": [
+        "diagrams/common/fit-width",
+        "svg/builder",
+        "svg/edges",
+        "svg/root",
+        "svg/theme",
+        "text/label",
+        "text/measurer"
+      ],
+      "traps": {
+        "regex": 10,
+        "utf16": 1,
+        "numberText": 0,
+        "libm": 3,
+        "round": 6,
+        "sort": 3,
+        "date": 0,
+        "sticky": 0
+      },
+      "testLines": 885,
+      "docExamples": 6,
+      "added": {
+        "commit": "64550fb",
+        "date": "2026-10-05",
+        "commits": 8
+      },
+      "files": [
+        {
+          "file": "src/diagrams/architecture/db.ts",
+          "role": "parse",
+          "lines": 147
+        },
+        {
+          "file": "src/diagrams/architecture/icons.ts",
+          "role": "render",
+          "lines": 14
+        },
+        {
+          "file": "src/diagrams/architecture/index.ts",
+          "role": "entry",
+          "lines": 15
+        },
+        {
+          "file": "src/diagrams/architecture/layout.ts",
+          "role": "layout",
+          "lines": 379
+        },
+        {
+          "file": "src/diagrams/architecture/parser.ts",
+          "role": "parse",
+          "lines": 240
+        },
+        {
+          "file": "src/diagrams/architecture/render.ts",
+          "role": "render",
+          "lines": 574
+        }
+      ]
+    },
+    {
+      "type": "wardley",
+      "lines": 1198,
+      "roles": {
+        "parse": 764,
+        "layout": 0,
+        "render": 423,
+        "entry": 11
+      },
+      "parser": "langium",
+      "uses": [
+        "diagrams/common/accDescr",
+        "diagrams/common/fit-width",
+        "svg/builder",
+        "svg/edges",
+        "svg/root",
+        "svg/theme",
+        "text/label",
+        "text/measurer"
+      ],
+      "traps": {
+        "regex": 12,
+        "utf16": 3,
+        "numberText": 4,
+        "libm": 5,
+        "round": 2,
+        "sort": 2,
+        "date": 0,
+        "sticky": 11
+      },
+      "testLines": 566,
+      "docExamples": 19,
+      "added": {
+        "commit": "d1ed341",
+        "date": "2026-10-05",
+        "commits": 14
+      },
+      "files": [
+        {
+          "file": "src/diagrams/wardley/builder.ts",
+          "role": "parse",
+          "lines": 193
+        },
+        {
+          "file": "src/diagrams/wardley/index.ts",
+          "role": "entry",
+          "lines": 11
+        },
+        {
+          "file": "src/diagrams/wardley/model.ts",
+          "role": "parse",
+          "lines": 163
+        },
+        {
+          "file": "src/diagrams/wardley/parser.ts",
+          "role": "parse",
+          "lines": 408
+        },
+        {
+          "file": "src/diagrams/wardley/render.ts",
+          "role": "render",
+          "lines": 423
+        }
+      ]
+    },
+    {
+      "type": "xychart",
+      "lines": 1065,
+      "roles": {
+        "parse": 606,
+        "layout": 0,
+        "render": 443,
+        "entry": 16
+      },
+      "parser": "jison",
+      "uses": [
+        "diagrams/common/caseless",
+        "diagrams/common/fit-width",
+        "svg/builder",
+        "svg/root",
+        "svg/theme",
+        "text/label",
+        "text/measurer",
+        "util/chars"
+      ],
+      "traps": {
+        "regex": 2,
+        "utf16": 15,
+        "numberText": 3,
+        "libm": 1,
+        "round": 6,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      },
+      "testLines": 849,
+      "docExamples": 8,
+      "added": {
+        "commit": "f70053f",
+        "date": "2026-10-05",
+        "commits": 10
+      },
+      "files": [
+        {
+          "file": "src/diagrams/xychart/db.ts",
+          "role": "parse",
+          "lines": 133
+        },
+        {
+          "file": "src/diagrams/xychart/index.ts",
+          "role": "entry",
+          "lines": 16
+        },
+        {
+          "file": "src/diagrams/xychart/lexer.ts",
+          "role": "parse",
+          "lines": 287
+        },
+        {
+          "file": "src/diagrams/xychart/parser.ts",
+          "role": "parse",
+          "lines": 113
+        },
+        {
+          "file": "src/diagrams/xychart/render.ts",
+          "role": "render",
+          "lines": 414
+        },
+        {
+          "file": "src/diagrams/xychart/ticks.ts",
+          "role": "render",
+          "lines": 29
+        },
+        {
+          "file": "src/diagrams/xychart/tokens.ts",
+          "role": "parse",
+          "lines": 73
+        }
+      ]
+    },
+    {
+      "type": "common",
+      "lines": 1045,
+      "roles": {
+        "parse": 535,
+        "layout": 161,
+        "render": 349,
+        "entry": 0
+      },
+      "parser": "shared",
+      "uses": [
+        "svg/builder",
+        "text/label",
+        "text/measurer",
+        "util/chars"
+      ],
+      "traps": {
+        "regex": 34,
+        "utf16": 21,
+        "numberText": 0,
+        "libm": 0,
+        "round": 1,
+        "sort": 0,
+        "date": 0,
+        "sticky": 21
+      },
+      "testLines": 0,
+      "docExamples": 0,
+      "added": {
+        "commit": "0e3676a",
+        "date": "2026-10-05",
+        "commits": 26
+      },
+      "files": [
+        {
+          "file": "src/diagrams/common/accDescr.ts",
+          "role": "parse",
+          "lines": 26
+        },
+        {
+          "file": "src/diagrams/common/caseless.ts",
+          "role": "parse",
+          "lines": 10
+        },
+        {
+          "file": "src/diagrams/common/fit-text.ts",
+          "role": "layout",
+          "lines": 43
+        },
+        {
+          "file": "src/diagrams/common/fit-width.ts",
+          "role": "layout",
+          "lines": 66
+        },
+        {
+          "file": "src/diagrams/common/fit.ts",
+          "role": "layout",
+          "lines": 52
+        },
+        {
+          "file": "src/diagrams/common/generics.ts",
+          "role": "parse",
+          "lines": 37
+        },
+        {
+          "file": "src/diagrams/common/icon.ts",
+          "role": "render",
+          "lines": 10
+        },
+        {
+          "file": "src/diagrams/common/literal-label.ts",
+          "role": "parse",
+          "lines": 101
+        },
+        {
+          "file": "src/diagrams/common/outline.ts",
+          "role": "render",
+          "lines": 339
+        },
+        {
+          "file": "src/diagrams/common/scan.ts",
+          "role": "parse",
+          "lines": 85
+        },
+        {
+          "file": "src/diagrams/common/tokens.ts",
+          "role": "parse",
+          "lines": 276
+        }
+      ]
+    },
+    {
+      "type": "venn",
+      "lines": 1040,
+      "roles": {
+        "parse": 460,
+        "layout": 346,
+        "render": 219,
+        "entry": 15
+      },
+      "parser": "jison",
+      "uses": [
+        "svg/builder",
+        "svg/ink",
+        "svg/root",
+        "svg/theme",
+        "text/label",
+        "text/measurer",
+        "util/chars"
+      ],
+      "traps": {
+        "regex": 1,
+        "utf16": 43,
+        "numberText": 1,
+        "libm": 22,
+        "round": 2,
+        "sort": 4,
+        "date": 0,
+        "sticky": 0
+      },
+      "testLines": 779,
+      "docExamples": 8,
+      "added": {
+        "commit": "3e38c7f",
+        "date": "2026-10-05",
+        "commits": 15
+      },
+      "files": [
+        {
+          "file": "src/diagrams/venn/db.ts",
+          "role": "parse",
+          "lines": 65
+        },
+        {
+          "file": "src/diagrams/venn/index.ts",
+          "role": "entry",
+          "lines": 15
+        },
+        {
+          "file": "src/diagrams/venn/layout.ts",
+          "role": "layout",
+          "lines": 346
+        },
+        {
+          "file": "src/diagrams/venn/lexer.ts",
+          "role": "parse",
+          "lines": 256
+        },
+        {
+          "file": "src/diagrams/venn/parser.ts",
+          "role": "parse",
+          "lines": 112
+        },
+        {
+          "file": "src/diagrams/venn/render.ts",
+          "role": "render",
+          "lines": 219
+        },
+        {
+          "file": "src/diagrams/venn/types.ts",
+          "role": "parse",
+          "lines": 27
+        }
+      ]
+    },
+    {
+      "type": "quadrant",
+      "lines": 974,
+      "roles": {
+        "parse": 739,
+        "layout": 0,
+        "render": 220,
+        "entry": 15
+      },
+      "parser": "jison",
+      "uses": [
+        "diagrams/common/caseless",
+        "diagrams/common/fit-width",
+        "svg/builder",
+        "svg/root",
+        "svg/theme",
+        "text/label",
+        "text/measurer",
+        "util/chars"
+      ],
+      "traps": {
+        "regex": 5,
+        "utf16": 30,
+        "numberText": 4,
+        "libm": 0,
+        "round": 6,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      },
+      "testLines": 819,
+      "docExamples": 3,
+      "added": {
+        "commit": "f70053f",
+        "date": "2026-10-05",
+        "commits": 12
+      },
+      "files": [
+        {
+          "file": "src/diagrams/quadrant/db.ts",
+          "role": "parse",
+          "lines": 148
+        },
+        {
+          "file": "src/diagrams/quadrant/index.ts",
+          "role": "entry",
+          "lines": 15
+        },
+        {
+          "file": "src/diagrams/quadrant/lexer.ts",
+          "role": "parse",
+          "lines": 361
+        },
+        {
+          "file": "src/diagrams/quadrant/parser.ts",
+          "role": "parse",
+          "lines": 141
+        },
+        {
+          "file": "src/diagrams/quadrant/render.ts",
+          "role": "render",
+          "lines": 220
+        },
+        {
+          "file": "src/diagrams/quadrant/tokens.ts",
+          "role": "parse",
+          "lines": 89
+        }
+      ]
+    },
+    {
+      "type": "git",
+      "lines": 923,
+      "roles": {
+        "parse": 527,
+        "layout": 0,
+        "render": 386,
+        "entry": 10
+      },
+      "parser": "langium",
+      "uses": [
+        "diagrams/common/fit",
+        "diagrams/common/fit-width",
+        "svg/builder",
+        "svg/palette",
+        "svg/root",
+        "svg/theme",
+        "text/label",
+        "text/measurer"
+      ],
+      "traps": {
+        "regex": 5,
+        "utf16": 0,
+        "numberText": 3,
+        "libm": 0,
+        "round": 2,
+        "sort": 3,
+        "date": 0,
+        "sticky": 0
+      },
+      "testLines": 1916,
+      "docExamples": 35,
+      "added": {
+        "commit": "de1e612",
+        "date": "2026-10-05",
+        "commits": 8
+      },
+      "files": [
+        {
+          "file": "src/diagrams/git/db.ts",
+          "role": "parse",
+          "lines": 271
+        },
+        {
+          "file": "src/diagrams/git/index.ts",
+          "role": "entry",
+          "lines": 10
+        },
+        {
+          "file": "src/diagrams/git/parser.ts",
+          "role": "parse",
+          "lines": 256
+        },
+        {
+          "file": "src/diagrams/git/render.ts",
+          "role": "render",
+          "lines": 386
+        }
+      ]
+    },
+    {
+      "type": "sankey",
+      "lines": 891,
+      "roles": {
+        "parse": 312,
+        "layout": 302,
+        "render": 262,
+        "entry": 15
+      },
+      "parser": "jison",
+      "uses": [
+        "diagrams/common/fit-width",
+        "svg/builder",
+        "svg/root",
+        "svg/theme",
+        "text/entities",
+        "text/label",
+        "text/measurer",
+        "util/chars"
+      ],
+      "traps": {
+        "regex": 3,
+        "utf16": 14,
+        "numberText": 3,
+        "libm": 1,
+        "round": 4,
+        "sort": 1,
+        "date": 0,
+        "sticky": 0
+      },
+      "testLines": 452,
+      "docExamples": 8,
+      "added": {
+        "commit": "2198b0b",
+        "date": "2026-10-05",
+        "commits": 17
+      },
+      "files": [
+        {
+          "file": "src/diagrams/sankey/db.ts",
+          "role": "parse",
+          "lines": 44
+        },
+        {
+          "file": "src/diagrams/sankey/index.ts",
+          "role": "entry",
+          "lines": 15
+        },
+        {
+          "file": "src/diagrams/sankey/layout.ts",
+          "role": "layout",
+          "lines": 302
+        },
+        {
+          "file": "src/diagrams/sankey/lexer.ts",
+          "role": "parse",
+          "lines": 126
+        },
+        {
+          "file": "src/diagrams/sankey/parser.ts",
+          "role": "parse",
+          "lines": 142
+        },
+        {
+          "file": "src/diagrams/sankey/render.ts",
+          "role": "render",
+          "lines": 262
+        }
+      ]
+    },
+    {
+      "type": "eventmodeling",
+      "lines": 802,
+      "roles": {
+        "parse": 424,
+        "layout": 0,
+        "render": 367,
+        "entry": 11
+      },
+      "parser": "langium",
+      "uses": [
+        "diagrams/common/accDescr",
+        "diagrams/common/fit-width",
+        "diagrams/common/literal-label",
+        "diagrams/common/tokens",
+        "svg/builder",
+        "svg/edges",
+        "svg/root",
+        "svg/theme",
+        "text/entities",
+        "text/label",
+        "text/measurer"
+      ],
+      "traps": {
+        "regex": 10,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 7,
+        "sort": 2,
+        "date": 0,
+        "sticky": 3
+      },
+      "testLines": 729,
+      "docExamples": 12,
+      "added": {
+        "commit": "d1ed341",
+        "date": "2026-10-05",
+        "commits": 11
+      },
+      "files": [
+        {
+          "file": "src/diagrams/eventmodeling/index.ts",
+          "role": "entry",
+          "lines": 11
+        },
+        {
+          "file": "src/diagrams/eventmodeling/model.ts",
+          "role": "parse",
+          "lines": 195
+        },
+        {
+          "file": "src/diagrams/eventmodeling/parser.ts",
+          "role": "parse",
+          "lines": 229
+        },
+        {
+          "file": "src/diagrams/eventmodeling/render.ts",
+          "role": "render",
+          "lines": 367
+        }
+      ]
+    },
+    {
+      "type": "treeview",
+      "lines": 663,
+      "roles": {
+        "parse": 259,
+        "layout": 0,
+        "render": 395,
+        "entry": 9
+      },
+      "parser": "langium",
+      "uses": [
+        "diagrams/common/accDescr",
+        "diagrams/common/fit-width",
+        "diagrams/common/literal-label",
+        "svg/builder",
+        "svg/root",
+        "svg/theme",
+        "text/entities",
+        "text/label",
+        "text/measurer",
+        "util/chars"
+      ],
+      "traps": {
+        "regex": 23,
+        "utf16": 6,
+        "numberText": 1,
+        "libm": 0,
+        "round": 2,
+        "sort": 0,
+        "date": 0,
+        "sticky": 4
+      },
+      "testLines": 1809,
+      "docExamples": 13,
+      "added": {
+        "commit": "d1ed341",
+        "date": "2026-10-05",
+        "commits": 11
+      },
+      "files": [
+        {
+          "file": "src/diagrams/treeview/boxDrawing.ts",
+          "role": "render",
+          "lines": 129
+        },
+        {
+          "file": "src/diagrams/treeview/icons.ts",
+          "role": "render",
+          "lines": 72
+        },
+        {
+          "file": "src/diagrams/treeview/index.ts",
+          "role": "entry",
+          "lines": 9
+        },
+        {
+          "file": "src/diagrams/treeview/model.ts",
+          "role": "parse",
+          "lines": 99
+        },
+        {
+          "file": "src/diagrams/treeview/parser.ts",
+          "role": "parse",
+          "lines": 160
+        },
+        {
+          "file": "src/diagrams/treeview/render.ts",
+          "role": "render",
+          "lines": 194
+        }
+      ]
+    },
+    {
+      "type": "cynefin",
+      "lines": 614,
+      "roles": {
+        "parse": 205,
+        "layout": 0,
+        "render": 399,
+        "entry": 10
+      },
+      "parser": "langium",
+      "uses": [
+        "svg/builder",
+        "svg/edges",
+        "svg/root",
+        "svg/theme",
+        "text/label",
+        "text/measurer"
+      ],
+      "traps": {
+        "regex": 3,
+        "utf16": 1,
+        "numberText": 0,
+        "libm": 3,
+        "round": 3,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      },
+      "testLines": 629,
+      "docExamples": 3,
+      "added": {
+        "commit": "d1ed341",
+        "date": "2026-10-05",
+        "commits": 6
+      },
+      "files": [
+        {
+          "file": "src/diagrams/cynefin/boundaries.ts",
+          "role": "render",
+          "lines": 100
+        },
+        {
+          "file": "src/diagrams/cynefin/index.ts",
+          "role": "entry",
+          "lines": 10
+        },
+        {
+          "file": "src/diagrams/cynefin/model.ts",
+          "role": "parse",
+          "lines": 74
+        },
+        {
+          "file": "src/diagrams/cynefin/parser.ts",
+          "role": "parse",
+          "lines": 131
+        },
+        {
+          "file": "src/diagrams/cynefin/render.ts",
+          "role": "render",
+          "lines": 299
+        }
+      ]
+    },
+    {
+      "type": "treemap",
+      "lines": 578,
+      "roles": {
+        "parse": 223,
+        "layout": 136,
+        "render": 209,
+        "entry": 10
+      },
+      "parser": "langium",
+      "uses": [
+        "diagrams/common/fit-text",
+        "diagrams/common/fit-width",
+        "svg/builder",
+        "svg/ink",
+        "svg/palette",
+        "svg/root",
+        "svg/theme",
+        "text/entities",
+        "text/label",
+        "text/measurer"
+      ],
+      "traps": {
+        "regex": 22,
+        "utf16": 0,
+        "numberText": 7,
+        "libm": 1,
+        "round": 17,
+        "sort": 1,
+        "date": 0,
+        "sticky": 3
+      },
+      "testLines": 527,
+      "docExamples": 8,
+      "added": {
+        "commit": "eb7a825",
+        "date": "2026-10-05",
+        "commits": 14
+      },
+      "files": [
+        {
+          "file": "src/diagrams/treemap/format.ts",
+          "role": "render",
+          "lines": 39
+        },
+        {
+          "file": "src/diagrams/treemap/index.ts",
+          "role": "entry",
+          "lines": 10
+        },
+        {
+          "file": "src/diagrams/treemap/layout.ts",
+          "role": "layout",
+          "lines": 136
+        },
+        {
+          "file": "src/diagrams/treemap/model.ts",
+          "role": "parse",
+          "lines": 83
+        },
+        {
+          "file": "src/diagrams/treemap/parser.ts",
+          "role": "parse",
+          "lines": 140
+        },
+        {
+          "file": "src/diagrams/treemap/render.ts",
+          "role": "render",
+          "lines": 170
+        }
+      ]
+    },
+    {
+      "type": "radar",
+      "lines": 568,
+      "roles": {
+        "parse": 375,
+        "layout": 0,
+        "render": 183,
+        "entry": 10
+      },
+      "parser": "langium",
+      "uses": [
+        "diagrams/common/fit-width",
+        "svg/builder",
+        "svg/root",
+        "svg/theme",
+        "text/label",
+        "text/measurer"
+      ],
+      "traps": {
+        "regex": 10,
+        "utf16": 5,
+        "numberText": 4,
+        "libm": 2,
+        "round": 1,
+        "sort": 0,
+        "date": 0,
+        "sticky": 7
+      },
+      "testLines": 968,
+      "docExamples": 3,
+      "added": {
+        "commit": "eb7a825",
+        "date": "2026-10-05",
+        "commits": 10
+      },
+      "files": [
+        {
+          "file": "src/diagrams/radar/index.ts",
+          "role": "entry",
+          "lines": 10
+        },
+        {
+          "file": "src/diagrams/radar/model.ts",
+          "role": "parse",
+          "lines": 78
+        },
+        {
+          "file": "src/diagrams/radar/parser.ts",
+          "role": "parse",
+          "lines": 297
+        },
+        {
+          "file": "src/diagrams/radar/render.ts",
+          "role": "render",
+          "lines": 183
+        }
+      ]
+    },
+    {
+      "type": "timeline",
+      "lines": 526,
+      "roles": {
+        "parse": 262,
+        "layout": 0,
+        "render": 249,
+        "entry": 15
+      },
+      "parser": "jison",
+      "uses": [
+        "diagrams/common/fit",
+        "diagrams/common/fit-width",
+        "diagrams/common/scan",
+        "svg/builder",
+        "svg/edges",
+        "svg/palette",
+        "svg/root",
+        "svg/theme",
+        "text/label",
+        "text/measurer",
+        "util/chars"
+      ],
+      "traps": {
+        "regex": 2,
+        "utf16": 18,
+        "numberText": 0,
+        "libm": 0,
+        "round": 4,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      },
+      "testLines": 364,
+      "docExamples": 14,
+      "added": {
+        "commit": "4a1b1eb",
+        "date": "2026-10-05",
+        "commits": 11
+      },
+      "files": [
+        {
+          "file": "src/diagrams/timeline/db.ts",
+          "role": "parse",
+          "lines": 74
+        },
+        {
+          "file": "src/diagrams/timeline/index.ts",
+          "role": "entry",
+          "lines": 15
+        },
+        {
+          "file": "src/diagrams/timeline/lexer.ts",
+          "role": "parse",
+          "lines": 134
+        },
+        {
+          "file": "src/diagrams/timeline/parser.ts",
+          "role": "parse",
+          "lines": 54
+        },
+        {
+          "file": "src/diagrams/timeline/render.ts",
+          "role": "render",
+          "lines": 249
+        }
+      ]
+    },
+    {
+      "type": "journey",
+      "lines": 521,
+      "roles": {
+        "parse": 236,
+        "layout": 0,
+        "render": 270,
+        "entry": 15
+      },
+      "parser": "jison",
+      "uses": [
+        "diagrams/common/fit",
+        "diagrams/common/fit-width",
+        "diagrams/common/scan",
+        "svg/builder",
+        "svg/root",
+        "svg/theme",
+        "text/label",
+        "text/measurer",
+        "util/chars"
+      ],
+      "traps": {
+        "regex": 2,
+        "utf16": 9,
+        "numberText": 1,
+        "libm": 0,
+        "round": 4,
+        "sort": 1,
+        "date": 0,
+        "sticky": 0
+      },
+      "testLines": 423,
+      "docExamples": 1,
+      "added": {
+        "commit": "4a1b1eb",
+        "date": "2026-10-05",
+        "commits": 10
+      },
+      "files": [
+        {
+          "file": "src/diagrams/journey/db.ts",
+          "role": "parse",
+          "lines": 63
+        },
+        {
+          "file": "src/diagrams/journey/index.ts",
+          "role": "entry",
+          "lines": 15
+        },
+        {
+          "file": "src/diagrams/journey/lexer.ts",
+          "role": "parse",
+          "lines": 125
+        },
+        {
+          "file": "src/diagrams/journey/parser.ts",
+          "role": "parse",
+          "lines": 48
+        },
+        {
+          "file": "src/diagrams/journey/render.ts",
+          "role": "render",
+          "lines": 270
+        }
+      ]
+    },
+    {
+      "type": "ishikawa",
+      "lines": 481,
+      "roles": {
+        "parse": 174,
+        "layout": 0,
+        "render": 292,
+        "entry": 15
+      },
+      "parser": "jison",
+      "uses": [
+        "diagrams/common/fit-width",
+        "diagrams/common/literal-label",
+        "svg/builder",
+        "svg/edges",
+        "svg/root",
+        "svg/theme",
+        "text/label",
+        "text/measurer",
+        "util/chars"
+      ],
+      "traps": {
+        "regex": 0,
+        "utf16": 9,
+        "numberText": 0,
+        "libm": 1,
+        "round": 3,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      },
+      "testLines": 244,
+      "docExamples": 1,
+      "added": {
+        "commit": "3e38c7f",
+        "date": "2026-10-05",
+        "commits": 9
+      },
+      "files": [
+        {
+          "file": "src/diagrams/ishikawa/db.ts",
+          "role": "parse",
+          "lines": 27
+        },
+        {
+          "file": "src/diagrams/ishikawa/index.ts",
+          "role": "entry",
+          "lines": 15
+        },
+        {
+          "file": "src/diagrams/ishikawa/lexer.ts",
+          "role": "parse",
+          "lines": 92
+        },
+        {
+          "file": "src/diagrams/ishikawa/parser.ts",
+          "role": "parse",
+          "lines": 44
+        },
+        {
+          "file": "src/diagrams/ishikawa/render.ts",
+          "role": "render",
+          "lines": 292
+        },
+        {
+          "file": "src/diagrams/ishikawa/types.ts",
+          "role": "parse",
+          "lines": 11
+        }
+      ]
+    },
+    {
+      "type": "kanban",
+      "lines": 406,
+      "roles": {
+        "parse": 98,
+        "layout": 0,
+        "render": 292,
+        "entry": 16
+      },
+      "parser": "own",
+      "uses": [
+        "diagrams/common/fit-width",
+        "diagrams/common/icon",
+        "diagrams/common/outline",
+        "svg/builder",
+        "svg/root",
+        "svg/theme",
+        "svg/title",
+        "text/icons",
+        "text/label",
+        "text/measurer",
+        "util/url",
+        "util/yaml"
+      ],
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 3,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      },
+      "testLines": 643,
+      "docExamples": 3,
+      "added": {
+        "commit": "bdada91",
+        "date": "2026-10-05",
+        "commits": 17
+      },
+      "files": [
+        {
+          "file": "src/diagrams/kanban/db.ts",
+          "role": "parse",
+          "lines": 89
+        },
+        {
+          "file": "src/diagrams/kanban/index.ts",
+          "role": "entry",
+          "lines": 16
+        },
+        {
+          "file": "src/diagrams/kanban/parser.ts",
+          "role": "parse",
+          "lines": 9
+        },
+        {
+          "file": "src/diagrams/kanban/render.ts",
+          "role": "render",
+          "lines": 292
+        }
+      ]
+    },
+    {
+      "type": "mindmap",
+      "lines": 398,
+      "roles": {
+        "parse": 78,
+        "layout": 0,
+        "render": 304,
+        "entry": 16
+      },
+      "parser": "own",
+      "uses": [
+        "diagrams/common/fit-width",
+        "diagrams/common/icon",
+        "diagrams/common/outline",
+        "svg/builder",
+        "svg/root",
+        "svg/shapes",
+        "svg/theme",
+        "svg/title",
+        "text/icons",
+        "text/label",
+        "text/measurer"
+      ],
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 1,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      },
+      "testLines": 907,
+      "docExamples": 13,
+      "added": {
+        "commit": "bdada91",
+        "date": "2026-10-05",
+        "commits": 9
+      },
+      "files": [
+        {
+          "file": "src/diagrams/mindmap/db.ts",
+          "role": "parse",
+          "lines": 69
+        },
+        {
+          "file": "src/diagrams/mindmap/index.ts",
+          "role": "entry",
+          "lines": 16
+        },
+        {
+          "file": "src/diagrams/mindmap/parser.ts",
+          "role": "parse",
+          "lines": 9
+        },
+        {
+          "file": "src/diagrams/mindmap/render.ts",
+          "role": "render",
+          "lines": 304
+        }
+      ]
+    },
+    {
+      "type": "packet",
+      "lines": 362,
+      "roles": {
+        "parse": 204,
+        "layout": 0,
+        "render": 148,
+        "entry": 10
+      },
+      "parser": "langium",
+      "uses": [
+        "diagrams/common/fit-text",
+        "diagrams/common/fit-width",
+        "diagrams/common/literal-label",
+        "svg/builder",
+        "svg/root",
+        "svg/theme",
+        "text/entities",
+        "text/label",
+        "text/measurer"
+      ],
+      "traps": {
+        "regex": 3,
+        "utf16": 0,
+        "numberText": 3,
+        "libm": 1,
+        "round": 3,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      },
+      "testLines": 487,
+      "docExamples": 4,
+      "added": {
+        "commit": "eb7a825",
+        "date": "2026-10-05",
+        "commits": 7
+      },
+      "files": [
+        {
+          "file": "src/diagrams/packet/index.ts",
+          "role": "entry",
+          "lines": 10
+        },
+        {
+          "file": "src/diagrams/packet/model.ts",
+          "role": "parse",
+          "lines": 85
+        },
+        {
+          "file": "src/diagrams/packet/parser.ts",
+          "role": "parse",
+          "lines": 119
+        },
+        {
+          "file": "src/diagrams/packet/render.ts",
+          "role": "render",
+          "lines": 148
+        }
+      ]
+    },
+    {
+      "type": "pie",
+      "lines": 360,
+      "roles": {
+        "parse": 168,
+        "layout": 0,
+        "render": 182,
+        "entry": 10
+      },
+      "parser": "langium",
+      "uses": [
+        "diagrams/common/fit-width",
+        "svg/builder",
+        "svg/palette",
+        "svg/root",
+        "svg/theme",
+        "text/label",
+        "text/measurer"
+      ],
+      "traps": {
+        "regex": 3,
+        "utf16": 8,
+        "numberText": 4,
+        "libm": 9,
+        "round": 1,
+        "sort": 0,
+        "date": 0,
+        "sticky": 1
+      },
+      "testLines": 534,
+      "docExamples": 2,
+      "added": {
+        "commit": "0e3676a",
+        "date": "2026-10-05",
+        "commits": 13
+      },
+      "files": [
+        {
+          "file": "src/diagrams/pie/index.ts",
+          "role": "entry",
+          "lines": 10
+        },
+        {
+          "file": "src/diagrams/pie/model.ts",
+          "role": "parse",
+          "lines": 33
+        },
+        {
+          "file": "src/diagrams/pie/parser.ts",
+          "role": "parse",
+          "lines": 135
+        },
+        {
+          "file": "src/diagrams/pie/render.ts",
+          "role": "render",
+          "lines": 182
+        }
+      ]
+    },
+    {
+      "type": "info",
+      "lines": 121,
+      "roles": {
+        "parse": 84,
+        "layout": 0,
+        "render": 27,
+        "entry": 10
+      },
+      "parser": "langium",
+      "uses": [
+        "svg/builder",
+        "svg/root",
+        "text/label",
+        "text/measurer"
+      ],
+      "traps": {
+        "regex": 2,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      },
+      "testLines": 200,
+      "docExamples": 2,
+      "added": {
+        "commit": "eb7a825",
+        "date": "2026-10-05",
+        "commits": 3
+      },
+      "files": [
+        {
+          "file": "src/diagrams/info/index.ts",
+          "role": "entry",
+          "lines": 10
+        },
+        {
+          "file": "src/diagrams/info/model.ts",
+          "role": "parse",
+          "lines": 17
+        },
+        {
+          "file": "src/diagrams/info/parser.ts",
+          "role": "parse",
+          "lines": 67
+        },
+        {
+          "file": "src/diagrams/info/render.ts",
+          "role": "render",
+          "lines": 27
+        }
+      ]
+    },
+    {
+      "type": "swimlane",
+      "lines": 80,
+      "roles": {
+        "parse": 0,
+        "layout": 0,
+        "render": 0,
+        "entry": 80
+      },
+      "parser": "own",
+      "uses": [
+        "diagrams/flowchart/db",
+        "diagrams/flowchart/graph",
+        "diagrams/flowchart/index",
+        "diagrams/flowchart/render",
+        "diagrams/flowchart/types",
+        "layout/compound",
+        "layout/lanes",
+        "svg/builder",
+        "svg/ink",
+        "svg/theme",
+        "text/label"
+      ],
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      },
+      "testLines": 62,
+      "docExamples": 13,
+      "added": {
+        "commit": "4f69a5d",
+        "date": "2026-10-05",
+        "commits": 6
+      },
+      "files": [
+        {
+          "file": "src/diagrams/swimlane/index.ts",
+          "role": "entry",
+          "lines": 80
+        }
+      ]
+    }
+  ],
+  "core": [
+    {
+      "file": "src/core.ts",
+      "part": "top",
+      "lines": 195,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/detect.ts",
+      "part": "top",
+      "lines": 92,
+      "traps": {
+        "regex": 37,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/diagrams/registry.ts",
+      "part": "registry",
+      "lines": 71,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/agentflow.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/architecture.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/block.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/c4.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/class.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/cynefin.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/er.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/eventmodeling.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/flowchart.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/gantt.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/gitGraph.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/info.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/ishikawa.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/journey.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/kanban.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/mindmap.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/packet.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/pie.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/quadrantChart.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/radar.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/railroad.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/requirement.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/sankey.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/sequence.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/state.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/swimlane.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/timeline.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/treeView.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/treemap.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/usecase.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/venn.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/wardley.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/entries/xychart.ts",
+      "part": "entries",
+      "lines": 2,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/errors.ts",
+      "part": "top",
+      "lines": 108,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/index.ts",
+      "part": "top",
+      "lines": 7,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/layout/components.ts",
+      "part": "layout",
+      "lines": 72,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/layout/compound.ts",
+      "part": "layout",
+      "lines": 944,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 1,
+        "round": 1,
+        "sort": 3,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/layout/lanes.ts",
+      "part": "layout",
+      "lines": 629,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 1,
+        "sort": 3,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/layout/layered.ts",
+      "part": "layout",
+      "lines": 2227,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 1,
+        "round": 0,
+        "sort": 13,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/lazy.ts",
+      "part": "top",
+      "lines": 92,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/models.ts",
+      "part": "top",
+      "lines": 106,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/mount.ts",
+      "part": "top",
+      "lines": 438,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 1,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/preprocess.ts",
+      "part": "top",
+      "lines": 247,
+      "traps": {
+        "regex": 9,
+        "utf16": 2,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/svg/builder.ts",
+      "part": "svg",
+      "lines": 179,
+      "traps": {
+        "regex": 8,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 1,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/svg/cluster.ts",
+      "part": "svg",
+      "lines": 72,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 3,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/svg/edges.ts",
+      "part": "svg",
+      "lines": 549,
+      "traps": {
+        "regex": 5,
+        "utf16": 7,
+        "numberText": 6,
+        "libm": 6,
+        "round": 1,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/svg/ink.ts",
+      "part": "svg",
+      "lines": 131,
+      "traps": {
+        "regex": 8,
+        "utf16": 0,
+        "numberText": 3,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/svg/palette.ts",
+      "part": "svg",
+      "lines": 138,
+      "traps": {
+        "regex": 3,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/svg/root.ts",
+      "part": "svg",
+      "lines": 56,
+      "traps": {
+        "regex": 1,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/svg/shapes.ts",
+      "part": "svg",
+      "lines": 689,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 2,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/svg/theme.ts",
+      "part": "svg",
+      "lines": 151,
+      "traps": {
+        "regex": 5,
+        "utf16": 0,
+        "numberText": 2,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/svg/title.ts",
+      "part": "svg",
+      "lines": 38,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/text/entities.ts",
+      "part": "text",
+      "lines": 79,
+      "traps": {
+        "regex": 2,
+        "utf16": 2,
+        "numberText": 3,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/text/icons.ts",
+      "part": "text",
+      "lines": 29,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/text/label.ts",
+      "part": "text",
+      "lines": 445,
+      "traps": {
+        "regex": 10,
+        "utf16": 2,
+        "numberText": 0,
+        "libm": 0,
+        "round": 3,
+        "sort": 0,
+        "date": 0,
+        "sticky": 1
+      }
+    },
+    {
+      "file": "src/text/math.ts",
+      "part": "text",
+      "lines": 50,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/text/measurer.ts",
+      "part": "text",
+      "lines": 159,
+      "traps": {
+        "regex": 0,
+        "utf16": 1,
+        "numberText": 1,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/text/metrics.ts",
+      "part": "text",
+      "lines": 6,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/types.ts",
+      "part": "top",
+      "lines": 87,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/util/chars.ts",
+      "part": "util",
+      "lines": 44,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 0,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/util/unicode.ts",
+      "part": "util",
+      "lines": 31,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 2,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/util/url.ts",
+      "part": "util",
+      "lines": 130,
+      "traps": {
+        "regex": 11,
+        "utf16": 1,
+        "numberText": 1,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/util/yaml.ts",
+      "part": "util",
+      "lines": 470,
+      "traps": {
+        "regex": 19,
+        "utf16": 5,
+        "numberText": 4,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/window.ts",
+      "part": "top",
+      "lines": 11,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 2,
+        "libm": 0,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    },
+    {
+      "file": "src/zoom.ts",
+      "part": "top",
+      "lines": 495,
+      "traps": {
+        "regex": 0,
+        "utf16": 0,
+        "numberText": 4,
+        "libm": 1,
+        "round": 0,
+        "sort": 0,
+        "date": 0,
+        "sticky": 0
+      }
+    }
+  ]
+}
