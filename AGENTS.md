@@ -25,6 +25,9 @@ coding agents*, so a change here is reviewed like any page. It is adapted from
 
 - The work goes in steps. A step is a well defined task (research, a plan, a piece of the port,
   tooling), small enough to verify, and it ships with an explainer: a devlog post.
+- **Every big task gets a devlog post** (Pietro's standing rule, 12 November 2026): a step, a tool,
+  a piece of infrastructure, a research finding, a replan. If a pull request does something a
+  reader would want explained, it carries the post that explains it; small fixes do not need one.
 - **Claim before you start.** The roadmap (`docs/data/roadmap.json`, page *Roadmap*) lists the
   steps with an `owner` field. A thread claims a step by setting `owner` to its thread title and
   `status` to `started`, in a small pull request merged first, so no step is done twice. A step
