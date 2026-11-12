@@ -1,0 +1,13 @@
+{
+  "first_commit": {"date": "2014-11-02", "author": "Knut Sveidqvist", "message": "Initial commit"},
+  "release_12_1_0": "2026-10-02",
+  "release_12_3_0": "2026-11-03",
+  "commits_at_12_1_0": 16264,
+  "authors_at_12_1_0": 880,
+  "stars_2026_11_12": 91085,
+  "runtime_dependencies_12_1_0": 23,
+  "getbbox_calls_12_1_0": 157,
+  "getbbox_files_12_1_0": 52,
+  "elk_default_since": "12.0.0",
+  "seed_round": {"amount": "7.5 million dollars", "date": "2024-03-20", "investors": "OCV, Sequoia, M12"}
+}
