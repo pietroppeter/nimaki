@@ -115,8 +115,8 @@
           "title": "Drawing diagrams from text, from scratch",
           "what": "Parsing one grammar per type, layered (Sugiyama) layout explained simply, Pele's own layered, compound and lane layouts, measuring text without a browser, writing SVG. For a reader who has never written a parser or a layout engine.",
           "done_when": "A devlog post (or a short series) with a toy that runs on the page.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Explain diagram rendering and Pele architecture",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -126,8 +126,8 @@
           "title": "How Pele is built",
           "what": "src/diagrams/<type>/ (parser, model, layout, renderer) and the shared layout/, text/, svg/: what each does, how big each is, where its decisions come from.",
           "done_when": "A devlog post whose numbers come from the coverage map data.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Explain diagram rendering and Pele architecture",
+          "status": "started",
           "post": "",
           "pr": ""
         },
