@@ -86,6 +86,7 @@ coding agents*, so a change here is reviewed like any page. It is adapted from
 src/nimaki.nim          the entry point: render(text, options)
 src/nimaki/             the port, paths after Pele's src/ (diagrams/<type>/, layout/, svg/, text/)
 tests/                  tests; tests/all.nim runs them all
+corpus/cases.json       the referee's inputs, built from Pele by tools/corpus.mjs (rebuilt only when the pin moves)
 reference/              PIN (the snapshot), fetch.sh; pele/ and npm/ are fetched, not committed
 tools/                  setup.sh and the tools of the port (difftest, oracle.mjs, portmap...)
 docs/                   the site: every page is a nimib notebook
@@ -139,7 +140,8 @@ nbSave
 - Nim code that can run, runs (`nbCode`), so the page proves itself. Numbers in the text come
   from code or a data file, not typed by hand. Code in other languages is a fence with its
   language (`ts`, `js`, `mermaid`, `sh`, `json`, `rust`, `python`), highlighted at build time.
-- Diagrams in a post can be drawn by Pele itself (run in Node at build time) and, once ported,
+- Diagrams in a post can be drawn by Pele itself, run in Node at build time (`peleSvg` in
+  `docs/pele.nim`), and, once ported,
   by nimaki: `nbSvg(svgText, caption)` shows SVG text inline.
 - Say what was checked and what was not. A claim about Pele, Mermaid, a tool or a person links
   its source. If a source could not be read, say so.

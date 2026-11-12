@@ -39,19 +39,19 @@
           "what": "AGENTS.md adapted from gleam-in-nim, the pin of Pele in reference/PIN and on every page, the roadmap with owners, the coverage map (diagram types × parse, layout, render), decision records, setup script, Pages CI, the nimib skeleton and its first post.",
           "done_when": "The site builds in CI and deploys from main; links and drift checks pass.",
           "owner": "Set up nimaki foundation and tooling",
-          "status": "started",
+          "status": "done",
           "post": "a-stage-for-a-port",
-          "pr": ""
+          "pr": "1"
         },
         {
           "id": "difftest",
           "kind": "tooling",
           "title": "The referee: difftest against Pele in Node",
-          "what": "tools/oracle.mjs runs the pinned npm package in Node; tools/difftest.nim renders the same inputs with nimaki and compares byte for byte, per diagram type, with the first differing byte. Inputs: Pele's 34 corpus files, its compat specs, diagrammari's examples.",
+          "what": "tools/corpus.mjs builds corpus/cases.json (2,118 cases of 33 types from Pele's corpus and compat specs); tools/oracle.mjs runs the pinned npm package in Node; tools/difftest.nim renders each case with nimaki and compares byte for byte, per type, showing the first differing byte, with a self test and --check-done in CI.",
           "done_when": "difftest runs in CI, reports every case as unsupported today, and its self test shows it catches a one-byte difference.",
           "owner": "Set up nimaki foundation and tooling",
-          "status": "planned",
-          "post": "",
+          "status": "done",
+          "post": "the-referee",
           "pr": ""
         },
         {
@@ -261,6 +261,28 @@
           "title": "Sequence",
           "what": "src/diagrams/sequence.",
           "done_when": "difftest: every sequence case identical.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "corpus-diagrammari",
+          "kind": "tooling",
+          "title": "diagrammari's examples as a corpus",
+          "what": "Collect the Mermaid text that diagrammari's builders and spec examples write, and add it to corpus/ as a second source of cases.",
+          "done_when": "difftest runs on them; the cases are counted on the coverage map.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "fuzz",
+          "kind": "tooling",
+          "title": "Differential fuzzing",
+          "what": "Mutated inputs (seeded, as Pele's own mutator does) compared with the oracle, for the ported types.",
+          "done_when": "A seeded fuzz run in CI with --fast finds no differences on the ported types.",
           "owner": "",
           "status": "planned",
           "post": "",

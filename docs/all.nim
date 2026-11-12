@@ -9,4 +9,5 @@ import devlog/a_stage_for_a_port
 import devlog/diagrams_in_the_wild
 import devlog/pele_origins
 import devlog/the_diagram_family
+import devlog/the_referee
 import devlog/what_mermaid_is
