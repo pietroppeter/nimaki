@@ -144,6 +144,52 @@ proc timelineSource(g: var Gen): string =
     result.add(if g.chance(0.05): "\r\n" else: "\n")
   if g.chance(0.1): result.add "   "
 
+const scores = ["5", "1", "3", "4", "2", "0", "7", "-1", "2.5", " 4 ", "", "x", "1e1", "0x3", "Infinity",
+                "3.", ".5", "NaN", "\u30003"]
+const actors = ["Me", "Cat", "Dog", "", " Me ", "Ünï", "日本", "Zed", "a b", "Me", "emoji 🎉",
+                "<b>bold</b>", "very long actor name that wraps", "\uE000", "😀"]
+
+proc journeyWord(g: var Gen): string =
+  ## A `;` or `#` ends any text in journey, so words with them are rare.
+  result = g.pick(timelineWords)
+  while (';' in result or '#' in result) and not g.chance(0.05): result = g.pick(timelineWords)
+
+proc journeySource(g: var Gen): string =
+  if g.chance(0.1):
+    result.add "---\n"
+    if g.chance(0.6): result.add "title: " & g.journeyWord() & "\n"
+    result.add "---\n"
+  if g.chance(0.05): result.add "%% leading comment\n"
+  result.add(if g.chance(0.03): g.pick(["Journey", "journeys", "journey x"]) else: "journey")
+  result.add "\n"
+  let n = g.rng.rand(0 .. 12)
+  for i in 0 ..< n:
+    let indent = g.pick(["", "  ", "    ", "\t"])
+    let r = g.rng.rand(1.0)
+    if r < 0.55:
+      var task = g.journeyWord()
+      if task == "" or task.startsWith("title") or task.startsWith("section"): task = "Task"
+      result.add indent & task & g.pick([": ", ":", " : "]) & g.pick(scores)
+      if g.chance(0.8):
+        result.add ":"
+        var people: seq[string]
+        for k in 0 .. g.rng.rand(0 .. 4): people.add g.pick(actors)
+        result.add " " & people.join(g.pick([", ", ",", " , "]))
+      if g.chance(0.03): result.add ":" & g.pick(actors)
+    elif r < 0.7: result.add indent & "section " & g.journeyWord()
+    elif r < 0.72: result.add indent & "section"
+    elif r < 0.76: result.add indent & g.pick(["title ", "title", "title  ", "Title\t"]) & g.journeyWord()
+    elif r < 0.79: result.add indent & "accTitle: " & g.journeyWord()
+    elif r < 0.82: result.add indent & "accDescr: " & g.journeyWord()
+    elif r < 0.84: result.add indent & "accDescr {\n    " & g.journeyWord() & "\n  " & g.journeyWord() & "\n}"
+    elif r < 0.87: result.add indent & "%% " & g.journeyWord()
+    elif r < 0.89: result.add indent & "# hash comment"
+    elif r < 0.92: result.add ""
+    elif r < 0.95: result.add indent & g.pick(["title\u3000", "section\u00a0"]) & g.journeyWord()
+    elif r < 0.97: result.add indent & g.pick(["Task", "Task:", ": 5", "a; b: 3", "Task 5", "x # y: 3", ":"])
+    else: result.add indent & g.pick(actors) & ": " & g.pick(scores) & ": " & g.pick(actors) & "," & g.pick(actors)
+    result.add(if g.chance(0.05): "\r\n" else: "\n")
+
 proc options(g: var Gen): JsonNode =
   result = newJObject()
   if g.chance(0.3): result["fontSize"] = %g.pick([12, 14, 16, 18, 20, 11])
@@ -192,14 +238,17 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline"]: quit "ERROR fuzz knows only: pie, timeline", 2
+  if kind notin ["pie", "timeline", "journey"]: quit "ERROR fuzz knows only: pie, timeline, journey", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
   for i in 0 ..< count:
     let opts = g.options()
     opts["now"] = %1767225600000.0
-    cases.add %*{"id": kind & "/" & $seed & "/" & $i, "source": (if kind == "pie": g.pieSource() else: g.timelineSource()), "options": opts}
+    cases.add %*{"id": kind & "/" & $seed & "/" & $i, "source": (case kind
+                                                          of "pie": g.pieSource()
+                                                          of "timeline": g.timelineSource()
+                                                          else: g.journeySource()), "options": opts}
   let dir = buildDir / "fuzz"
   createDir dir
   let inPath = dir / (kind & "-" & $seed & "-in.jsonl")

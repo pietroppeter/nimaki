@@ -141,7 +141,7 @@ character with `codeAt(src, p)` of `common/scan.nim` (a code point, -1 past the 
 with `sizeAt(src, p)` wherever the character tested can be outside ASCII (`isSpace`). A loop
 that only looks for ASCII (a colon, `#`, a line break) can step byte by byte: no byte of a longer
 character is ASCII. A `text.substring(n)` that drops a keyword and the `\s` after it drops
-characters, not bytes (`afterUnits` in the timeline parser).
+characters, not bytes (`substringFrom` of `js.nim`).
 """, nkNim, "Hand-written lexers"
 
 nbText: """
@@ -179,6 +179,9 @@ filled it in; later steps add to it.
 | a `Diagram<Model>` | `Diagram` of `types.nim`, with the model as a `ref object of RootObj` |
 | `Math.sin(x)` | `sin(x)` of `jsmath` (`import ../../jsmath`, and `from std/math import PI, ceil`) |
 | `` `${n}` `` in an attribute | `jsString(n)`; but a coordinate goes through `num(n)` as in Pele |
+| `Number(s)` of any text (a score, a value as written) | `jsToNumber(s)` (whitespace, `""` is 0, `Infinity`, `0x`; NaN otherwise); `jsNumber` only for what a lexer already checked |
+| `names.sort()` with no comparator, `a < b` on strings | `sort(names, jsCompare)`: UTF-16 code unit order |
+| `s.substring(n)` that drops a keyword and its space | `substringFrom(s, n)`: counts UTF-16 code units, not bytes |
 | `src.charCodeAt(p)` in a lexer, then `p++` | `codeAt(src, p)`, then `p += sizeAt(src, p)` (`common/scan.nim`) |
 | `text.match(/.../g)` that cuts text into pieces | an iterator or a proc returning `seq[string]`, the pattern in a comment (`units` in `fit.nim`) |
 | a value that is a number or `undefined` (`seriesOf`) | an `int` with a named sentinel (`NO_SERIES = -1`) when no real value can be negative |

@@ -1,6 +1,6 @@
 ## JavaScript's numbers and strings in Nim (src/nimaki/js.nim), checked against Node itself on
 ## a seeded sample: String(x), x.toFixed(n), Math.round(x), and the UTF-16 length.
-import std/[unittest, random, osproc, strutils, os, math]
+import std/[unittest, random, osproc, strutils, os, math, json, algorithm]
 import nimaki/js
 
 proc sample(): seq[float] =
@@ -62,3 +62,45 @@ suite "js strings":
   test "trim":
     check jsTrim("  x 　\n") == "x"
     check jsTrimEnd("x ") == "x"
+
+suite "Number() and string order, against Node":
+  let texts = @["", " ", "5", " 5 ", "\t3\n", "1.", ".5", "-.5", "+.5", "1e3", "1E+3", "1e", "e3", ".",
+                "-", "+", "0x1F", "0X1f", "-0x1", "0o17", "0b101", "0b2", "0x", "Infinity", "-Infinity",
+                "+Infinity", "infinity", "1_000", "007", "1.2.3", "5 5", "　5　", " 4",
+                "4 ", "NaN", "1e400", "-0", "0.0000001", "12abc", "١", "５", "1,5", "3:4",
+                "99999999999999999999", "123456789012345678901234567890", "0.1e-5", "+1", "--1"]
+  let names = @["b", "a", "B", "é", "e", "", "😀", "日本", "", " ", "Z", "ä", "￿", "𝟘"]
+  let dir = getTempDir() / "nimaki-test-js"
+  createDir dir
+  var input = ""
+  for t in texts: input.add t.escapeJson & "\n"
+  input.add "--\n"
+  for t in names: input.add t.escapeJson & "\n"
+  writeFile dir / "in2.txt", input
+  writeFile dir / "check2.js", """
+const fs = require('fs');
+const lines = fs.readFileSync(process.argv[2], 'utf8').trim().split('\n');
+const cut = lines.indexOf('--');
+const nums = lines.slice(0, cut).map((l) => String(Number(JSON.parse(l))));
+const names = lines.slice(cut + 1).map((l) => JSON.parse(l)).sort();
+fs.writeFileSync(process.argv[3], JSON.stringify({ nums, names }));
+"""
+  let ran = execCmd("node " & quoteShell(dir / "check2.js") & " " & quoteShell(dir / "in2.txt") & " " &
+                    quoteShell(dir / "out2.txt")) == 0
+
+  test "Number(s)":
+    check ran
+    if ran:
+      let want = parseJson(readFile(dir / "out2.txt"))["nums"]
+      for i, t in texts:
+        let got = jsString(jsToNumber(t))
+        if got != want[i].getStr: echo "ERROR Number(", t.escapeJson, "): Node ", want[i].getStr, ", nimaki ", got
+        check got == want[i].getStr
+
+  test "sort() order":
+    if ran:
+      var got = names
+      got.sort(jsCompare)
+      var want: seq[string]
+      for n in parseJson(readFile(dir / "out2.txt"))["names"]: want.add n.getStr
+      check got == want
