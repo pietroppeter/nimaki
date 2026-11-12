@@ -1,0 +1,2686 @@
+{
+  "pin": "1.13.0",
+  "code": 47594,
+  "totals": {
+    "todo": {
+      "files": 291,
+      "code": 47594
+    },
+    "draft": {
+      "files": 0,
+      "code": 0
+    },
+    "verified": {
+      "files": 0,
+      "code": 0
+    },
+    "conformant": {
+      "files": 0,
+      "code": 0
+    },
+    "skip": {
+      "files": 0,
+      "code": 0
+    }
+  },
+  "components": [
+    {
+      "component": "api",
+      "todo": 1565,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/agentflow",
+      "todo": 3465,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/architecture",
+      "todo": 1247,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/block",
+      "todo": 1957,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/c4",
+      "todo": 1888,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/class",
+      "todo": 2122,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/common",
+      "todo": 896,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/cynefin",
+      "todo": 539,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/er",
+      "todo": 1660,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/eventmodeling",
+      "todo": 720,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/flowchart",
+      "todo": 2863,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/gantt",
+      "todo": 1928,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/git",
+      "todo": 826,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/info",
+      "todo": 108,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/ishikawa",
+      "todo": 419,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/journey",
+      "todo": 467,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/kanban",
+      "todo": 366,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/mindmap",
+      "todo": 336,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/packet",
+      "todo": 328,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/pie",
+      "todo": 328,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/quadrant",
+      "todo": 876,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/radar",
+      "todo": 500,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/railroad",
+      "todo": 1491,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams",
+      "todo": 69,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/requirement",
+      "todo": 1294,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/sankey",
+      "todo": 786,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/sequence",
+      "todo": 2611,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/state",
+      "todo": 2097,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/swimlane",
+      "todo": 69,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/timeline",
+      "todo": 475,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/treemap",
+      "todo": 504,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/treeview",
+      "todo": 582,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/usecase",
+      "todo": 2821,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/venn",
+      "todo": 909,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/wardley",
+      "todo": 1092,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "diagrams/xychart",
+      "todo": 953,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "entries",
+      "todo": 33,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "layout",
+      "todo": 3386,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "svg",
+      "todo": 1751,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "text",
+      "todo": 675,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    },
+    {
+      "component": "util",
+      "todo": 592,
+      "draft": 0,
+      "verified": 0,
+      "conformant": 0,
+      "skip": 0
+    }
+  ],
+  "files": [
+    {
+      "path": "src/core.ts",
+      "component": "api",
+      "lines": 196,
+      "code": 160,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/detect.ts",
+      "component": "api",
+      "lines": 93,
+      "code": 85,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/agentflow/colorSlots.ts",
+      "component": "diagrams/agentflow",
+      "lines": 51,
+      "code": 38,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/agentflow/db.ts",
+      "component": "diagrams/agentflow",
+      "lines": 828,
+      "code": 736,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/agentflow/diagnostics.ts",
+      "component": "diagrams/agentflow",
+      "lines": 29,
+      "code": 23,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/agentflow/graph.ts",
+      "component": "diagrams/agentflow",
+      "lines": 264,
+      "code": 234,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/agentflow/index.ts",
+      "component": "diagrams/agentflow",
+      "lines": 27,
+      "code": 24,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/agentflow/lexer.ts",
+      "component": "diagrams/agentflow",
+      "lines": 1016,
+      "code": 962,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/agentflow/parser.ts",
+      "component": "diagrams/agentflow",
+      "lines": 703,
+      "code": 658,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/agentflow/render.ts",
+      "component": "diagrams/agentflow",
+      "lines": 417,
+      "code": 375,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/agentflow/shapes.ts",
+      "component": "diagrams/agentflow",
+      "lines": 101,
+      "code": 88,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/agentflow/tokens.ts",
+      "component": "diagrams/agentflow",
+      "lines": 166,
+      "code": 164,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/agentflow/types.ts",
+      "component": "diagrams/agentflow",
+      "lines": 190,
+      "code": 163,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/architecture/db.ts",
+      "component": "diagrams/architecture",
+      "lines": 148,
+      "code": 129,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/architecture/icons.ts",
+      "component": "diagrams/architecture",
+      "lines": 15,
+      "code": 11,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/architecture/index.ts",
+      "component": "diagrams/architecture",
+      "lines": 16,
+      "code": 14,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/architecture/layout.ts",
+      "component": "diagrams/architecture",
+      "lines": 380,
+      "code": 339,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/architecture/parser.ts",
+      "component": "diagrams/architecture",
+      "lines": 241,
+      "code": 222,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/architecture/render.ts",
+      "component": "diagrams/architecture",
+      "lines": 575,
+      "code": 532,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/block/arrows.ts",
+      "component": "diagrams/block",
+      "lines": 128,
+      "code": 114,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/block/db.ts",
+      "component": "diagrams/block",
+      "lines": 247,
+      "code": 218,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/block/index.ts",
+      "component": "diagrams/block",
+      "lines": 17,
+      "code": 15,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/block/layout.ts",
+      "component": "diagrams/block",
+      "lines": 141,
+      "code": 121,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/block/lexer.ts",
+      "component": "diagrams/block",
+      "lines": 506,
+      "code": 465,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/block/parser.ts",
+      "component": "diagrams/block",
+      "lines": 189,
+      "code": 174,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/block/render.ts",
+      "component": "diagrams/block",
+      "lines": 801,
+      "code": 731,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/block/tokens.ts",
+      "component": "diagrams/block",
+      "lines": 82,
+      "code": 80,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/block/types.ts",
+      "component": "diagrams/block",
+      "lines": 47,
+      "code": 39,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/c4/db.ts",
+      "component": "diagrams/c4",
+      "lines": 247,
+      "code": 205,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/c4/index.ts",
+      "component": "diagrams/c4",
+      "lines": 16,
+      "code": 14,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/c4/layout.ts",
+      "component": "diagrams/c4",
+      "lines": 220,
+      "code": 195,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/c4/lexer.ts",
+      "component": "diagrams/c4",
+      "lines": 342,
+      "code": 311,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/c4/parser.ts",
+      "component": "diagrams/c4",
+      "lines": 205,
+      "code": 183,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/c4/render.ts",
+      "component": "diagrams/c4",
+      "lines": 311,
+      "code": 283,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/c4/route.ts",
+      "component": "diagrams/c4",
+      "lines": 567,
+      "code": 500,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/c4/tokens.ts",
+      "component": "diagrams/c4",
+      "lines": 136,
+      "code": 134,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/c4/types.ts",
+      "component": "diagrams/c4",
+      "lines": 77,
+      "code": 63,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/class/db.ts",
+      "component": "diagrams/class",
+      "lines": 290,
+      "code": 250,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/class/graph.ts",
+      "component": "diagrams/class",
+      "lines": 172,
+      "code": 150,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/class/index.ts",
+      "component": "diagrams/class",
+      "lines": 17,
+      "code": 15,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/class/lexer.ts",
+      "component": "diagrams/class",
+      "lines": 474,
+      "code": 443,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/class/markers.ts",
+      "component": "diagrams/class",
+      "lines": 56,
+      "code": 50,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/class/members.ts",
+      "component": "diagrams/class",
+      "lines": 92,
+      "code": 79,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/class/parser.ts",
+      "component": "diagrams/class",
+      "lines": 352,
+      "code": 324,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/class/render.ts",
+      "component": "diagrams/class",
+      "lines": 672,
+      "code": 621,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/class/tokens.ts",
+      "component": "diagrams/class",
+      "lines": 128,
+      "code": 126,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/class/types.ts",
+      "component": "diagrams/class",
+      "lines": 74,
+      "code": 64,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/common/accDescr.ts",
+      "component": "diagrams/common",
+      "lines": 27,
+      "code": 19,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/common/caseless.ts",
+      "component": "diagrams/common",
+      "lines": 11,
+      "code": 8,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/common/fit-text.ts",
+      "component": "diagrams/common",
+      "lines": 44,
+      "code": 36,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/common/fit-width.ts",
+      "component": "diagrams/common",
+      "lines": 67,
+      "code": 48,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/common/fit.ts",
+      "component": "diagrams/common",
+      "lines": 53,
+      "code": 45,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/common/generics.ts",
+      "component": "diagrams/common",
+      "lines": 38,
+      "code": 33,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/common/icon.ts",
+      "component": "diagrams/common",
+      "lines": 11,
+      "code": 8,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/common/literal-label.ts",
+      "component": "diagrams/common",
+      "lines": 102,
+      "code": 92,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/common/outline.ts",
+      "component": "diagrams/common",
+      "lines": 340,
+      "code": 309,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/common/scan.ts",
+      "component": "diagrams/common",
+      "lines": 86,
+      "code": 70,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/common/tokens.ts",
+      "component": "diagrams/common",
+      "lines": 277,
+      "code": 228,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/cynefin/boundaries.ts",
+      "component": "diagrams/cynefin",
+      "lines": 101,
+      "code": 77,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/cynefin/index.ts",
+      "component": "diagrams/cynefin",
+      "lines": 11,
+      "code": 9,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/cynefin/model.ts",
+      "component": "diagrams/cynefin",
+      "lines": 75,
+      "code": 61,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/cynefin/parser.ts",
+      "component": "diagrams/cynefin",
+      "lines": 132,
+      "code": 122,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/cynefin/render.ts",
+      "component": "diagrams/cynefin",
+      "lines": 300,
+      "code": 270,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/er/db.ts",
+      "component": "diagrams/er",
+      "lines": 142,
+      "code": 127,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/er/graph.ts",
+      "component": "diagrams/er",
+      "lines": 114,
+      "code": 98,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/er/index.ts",
+      "component": "diagrams/er",
+      "lines": 17,
+      "code": 15,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/er/lexer.ts",
+      "component": "diagrams/er",
+      "lines": 472,
+      "code": 442,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/er/markers.ts",
+      "component": "diagrams/er",
+      "lines": 36,
+      "code": 28,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/er/parser.ts",
+      "component": "diagrams/er",
+      "lines": 297,
+      "code": 270,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/er/render.ts",
+      "component": "diagrams/er",
+      "lines": 583,
+      "code": 525,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/er/tokens.ts",
+      "component": "diagrams/er",
+      "lines": 99,
+      "code": 96,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/er/types.ts",
+      "component": "diagrams/er",
+      "lines": 72,
+      "code": 59,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/eventmodeling/index.ts",
+      "component": "diagrams/eventmodeling",
+      "lines": 12,
+      "code": 10,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/eventmodeling/model.ts",
+      "component": "diagrams/eventmodeling",
+      "lines": 196,
+      "code": 167,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/eventmodeling/parser.ts",
+      "component": "diagrams/eventmodeling",
+      "lines": 230,
+      "code": 210,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/eventmodeling/render.ts",
+      "component": "diagrams/eventmodeling",
+      "lines": 368,
+      "code": 333,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/flowchart/db.ts",
+      "component": "diagrams/flowchart",
+      "lines": 459,
+      "code": 416,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/flowchart/graph.ts",
+      "component": "diagrams/flowchart",
+      "lines": 272,
+      "code": 251,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/flowchart/index.ts",
+      "component": "diagrams/flowchart",
+      "lines": 19,
+      "code": 17,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/flowchart/lexer.ts",
+      "component": "diagrams/flowchart",
+      "lines": 956,
+      "code": 912,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/flowchart/parser.ts",
+      "component": "diagrams/flowchart",
+      "lines": 624,
+      "code": 588,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/flowchart/render.ts",
+      "component": "diagrams/flowchart",
+      "lines": 372,
+      "code": 343,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/flowchart/shapes.ts",
+      "component": "diagrams/flowchart",
+      "lines": 110,
+      "code": 101,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/flowchart/tokens.ts",
+      "component": "diagrams/flowchart",
+      "lines": 160,
+      "code": 158,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/flowchart/types.ts",
+      "component": "diagrams/flowchart",
+      "lines": 87,
+      "code": 77,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/gantt/axis.ts",
+      "component": "diagrams/gantt",
+      "lines": 363,
+      "code": 326,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/gantt/dates.ts",
+      "component": "diagrams/gantt",
+      "lines": 381,
+      "code": 339,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/gantt/db.ts",
+      "component": "diagrams/gantt",
+      "lines": 412,
+      "code": 343,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/gantt/index.ts",
+      "component": "diagrams/gantt",
+      "lines": 19,
+      "code": 17,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/gantt/lexer.ts",
+      "component": "diagrams/gantt",
+      "lines": 296,
+      "code": 276,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/gantt/parser.ts",
+      "component": "diagrams/gantt",
+      "lines": 200,
+      "code": 187,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/gantt/render.ts",
+      "component": "diagrams/gantt",
+      "lines": 365,
+      "code": 318,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/gantt/tokens.ts",
+      "component": "diagrams/gantt",
+      "lines": 84,
+      "code": 82,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/gantt/types.ts",
+      "component": "diagrams/gantt",
+      "lines": 48,
+      "code": 40,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/git/db.ts",
+      "component": "diagrams/git",
+      "lines": 272,
+      "code": 238,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/git/index.ts",
+      "component": "diagrams/git",
+      "lines": 11,
+      "code": 9,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/git/parser.ts",
+      "component": "diagrams/git",
+      "lines": 257,
+      "code": 236,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/git/render.ts",
+      "component": "diagrams/git",
+      "lines": 387,
+      "code": 343,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/info/index.ts",
+      "component": "diagrams/info",
+      "lines": 11,
+      "code": 9,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/info/model.ts",
+      "component": "diagrams/info",
+      "lines": 18,
+      "code": 15,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/info/parser.ts",
+      "component": "diagrams/info",
+      "lines": 68,
+      "code": 62,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/info/render.ts",
+      "component": "diagrams/info",
+      "lines": 28,
+      "code": 22,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/ishikawa/db.ts",
+      "component": "diagrams/ishikawa",
+      "lines": 28,
+      "code": 22,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/ishikawa/index.ts",
+      "component": "diagrams/ishikawa",
+      "lines": 16,
+      "code": 14,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/ishikawa/lexer.ts",
+      "component": "diagrams/ishikawa",
+      "lines": 93,
+      "code": 81,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/ishikawa/parser.ts",
+      "component": "diagrams/ishikawa",
+      "lines": 45,
+      "code": 35,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/ishikawa/render.ts",
+      "component": "diagrams/ishikawa",
+      "lines": 293,
+      "code": 258,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/ishikawa/types.ts",
+      "component": "diagrams/ishikawa",
+      "lines": 12,
+      "code": 9,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/journey/db.ts",
+      "component": "diagrams/journey",
+      "lines": 64,
+      "code": 49,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/journey/index.ts",
+      "component": "diagrams/journey",
+      "lines": 16,
+      "code": 14,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/journey/lexer.ts",
+      "component": "diagrams/journey",
+      "lines": 126,
+      "code": 113,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/journey/parser.ts",
+      "component": "diagrams/journey",
+      "lines": 49,
+      "code": 43,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/journey/render.ts",
+      "component": "diagrams/journey",
+      "lines": 271,
+      "code": 248,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/kanban/db.ts",
+      "component": "diagrams/kanban",
+      "lines": 90,
+      "code": 77,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/kanban/index.ts",
+      "component": "diagrams/kanban",
+      "lines": 17,
+      "code": 15,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/kanban/parser.ts",
+      "component": "diagrams/kanban",
+      "lines": 10,
+      "code": 7,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/kanban/render.ts",
+      "component": "diagrams/kanban",
+      "lines": 293,
+      "code": 267,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/mindmap/db.ts",
+      "component": "diagrams/mindmap",
+      "lines": 70,
+      "code": 56,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/mindmap/index.ts",
+      "component": "diagrams/mindmap",
+      "lines": 17,
+      "code": 15,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/mindmap/parser.ts",
+      "component": "diagrams/mindmap",
+      "lines": 10,
+      "code": 7,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/mindmap/render.ts",
+      "component": "diagrams/mindmap",
+      "lines": 305,
+      "code": 258,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/packet/index.ts",
+      "component": "diagrams/packet",
+      "lines": 11,
+      "code": 9,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/packet/model.ts",
+      "component": "diagrams/packet",
+      "lines": 86,
+      "code": 75,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/packet/parser.ts",
+      "component": "diagrams/packet",
+      "lines": 120,
+      "code": 111,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/packet/render.ts",
+      "component": "diagrams/packet",
+      "lines": 149,
+      "code": 133,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/pie/index.ts",
+      "component": "diagrams/pie",
+      "lines": 11,
+      "code": 9,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/pie/model.ts",
+      "component": "diagrams/pie",
+      "lines": 34,
+      "code": 31,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/pie/parser.ts",
+      "component": "diagrams/pie",
+      "lines": 136,
+      "code": 125,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/pie/render.ts",
+      "component": "diagrams/pie",
+      "lines": 183,
+      "code": 163,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/quadrant/db.ts",
+      "component": "diagrams/quadrant",
+      "lines": 149,
+      "code": 123,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/quadrant/index.ts",
+      "component": "diagrams/quadrant",
+      "lines": 16,
+      "code": 14,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/quadrant/lexer.ts",
+      "component": "diagrams/quadrant",
+      "lines": 362,
+      "code": 333,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/quadrant/parser.ts",
+      "component": "diagrams/quadrant",
+      "lines": 142,
+      "code": 130,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/quadrant/render.ts",
+      "component": "diagrams/quadrant",
+      "lines": 221,
+      "code": 188,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/quadrant/tokens.ts",
+      "component": "diagrams/quadrant",
+      "lines": 90,
+      "code": 88,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/radar/index.ts",
+      "component": "diagrams/radar",
+      "lines": 11,
+      "code": 9,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/radar/model.ts",
+      "component": "diagrams/radar",
+      "lines": 79,
+      "code": 68,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/radar/parser.ts",
+      "component": "diagrams/radar",
+      "lines": 298,
+      "code": 265,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/radar/render.ts",
+      "component": "diagrams/radar",
+      "lines": 184,
+      "code": 158,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/railroad/abnf.ts",
+      "component": "diagrams/railroad",
+      "lines": 212,
+      "code": 190,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/railroad/common.ts",
+      "component": "diagrams/railroad",
+      "lines": 215,
+      "code": 178,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/railroad/db.ts",
+      "component": "diagrams/railroad",
+      "lines": 95,
+      "code": 79,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/railroad/ebnf.ts",
+      "component": "diagrams/railroad",
+      "lines": 275,
+      "code": 248,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/railroad/index.ts",
+      "component": "diagrams/railroad",
+      "lines": 10,
+      "code": 8,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/railroad/ir.ts",
+      "component": "diagrams/railroad",
+      "lines": 188,
+      "code": 173,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/railroad/peg.ts",
+      "component": "diagrams/railroad",
+      "lines": 224,
+      "code": 200,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/railroad/render.ts",
+      "component": "diagrams/railroad",
+      "lines": 430,
+      "code": 394,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/railroad/types.ts",
+      "component": "diagrams/railroad",
+      "lines": 28,
+      "code": 21,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/registry.ts",
+      "component": "diagrams",
+      "lines": 72,
+      "code": 69,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/requirement/db.ts",
+      "component": "diagrams/requirement",
+      "lines": 181,
+      "code": 152,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/requirement/graph.ts",
+      "component": "diagrams/requirement",
+      "lines": 57,
+      "code": 51,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/requirement/index.ts",
+      "component": "diagrams/requirement",
+      "lines": 17,
+      "code": 15,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/requirement/lexer.ts",
+      "component": "diagrams/requirement",
+      "lines": 310,
+      "code": 288,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/requirement/parser.ts",
+      "component": "diagrams/requirement",
+      "lines": 260,
+      "code": 240,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/requirement/render.ts",
+      "component": "diagrams/requirement",
+      "lines": 383,
+      "code": 351,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/requirement/tokens.ts",
+      "component": "diagrams/requirement",
+      "lines": 163,
+      "code": 159,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/requirement/types.ts",
+      "component": "diagrams/requirement",
+      "lines": 43,
+      "code": 38,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/sankey/db.ts",
+      "component": "diagrams/sankey",
+      "lines": 45,
+      "code": 38,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/sankey/index.ts",
+      "component": "diagrams/sankey",
+      "lines": 16,
+      "code": 14,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/sankey/layout.ts",
+      "component": "diagrams/sankey",
+      "lines": 303,
+      "code": 266,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/sankey/lexer.ts",
+      "component": "diagrams/sankey",
+      "lines": 127,
+      "code": 114,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/sankey/parser.ts",
+      "component": "diagrams/sankey",
+      "lines": 143,
+      "code": 125,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/sankey/render.ts",
+      "component": "diagrams/sankey",
+      "lines": 263,
+      "code": 229,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/sequence/actors.ts",
+      "component": "diagrams/sequence",
+      "lines": 116,
+      "code": 104,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/sequence/colors.ts",
+      "component": "diagrams/sequence",
+      "lines": 87,
+      "code": 76,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/sequence/db.ts",
+      "component": "diagrams/sequence",
+      "lines": 417,
+      "code": 378,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/sequence/index.ts",
+      "component": "diagrams/sequence",
+      "lines": 22,
+      "code": 20,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/sequence/lexer.ts",
+      "component": "diagrams/sequence",
+      "lines": 471,
+      "code": 445,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/sequence/parser.ts",
+      "component": "diagrams/sequence",
+      "lines": 427,
+      "code": 403,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/sequence/render.ts",
+      "component": "diagrams/sequence",
+      "lines": 940,
+      "code": 874,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/sequence/tokens.ts",
+      "component": "diagrams/sequence",
+      "lines": 165,
+      "code": 162,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/sequence/types.ts",
+      "component": "diagrams/sequence",
+      "lines": 164,
+      "code": 149,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/state/db.ts",
+      "component": "diagrams/state",
+      "lines": 225,
+      "code": 188,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/state/graph.ts",
+      "component": "diagrams/state",
+      "lines": 235,
+      "code": 209,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/state/index.ts",
+      "component": "diagrams/state",
+      "lines": 17,
+      "code": 15,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/state/lexer.ts",
+      "component": "diagrams/state",
+      "lines": 691,
+      "code": 646,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/state/parser.ts",
+      "component": "diagrams/state",
+      "lines": 223,
+      "code": 213,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/state/render.ts",
+      "component": "diagrams/state",
+      "lines": 706,
+      "code": 641,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/state/tokens.ts",
+      "component": "diagrams/state",
+      "lines": 104,
+      "code": 102,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/state/types.ts",
+      "component": "diagrams/state",
+      "lines": 98,
+      "code": 83,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/swimlane/index.ts",
+      "component": "diagrams/swimlane",
+      "lines": 81,
+      "code": 69,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/timeline/db.ts",
+      "component": "diagrams/timeline",
+      "lines": 75,
+      "code": 58,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/timeline/index.ts",
+      "component": "diagrams/timeline",
+      "lines": 16,
+      "code": 14,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/timeline/lexer.ts",
+      "component": "diagrams/timeline",
+      "lines": 135,
+      "code": 123,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/timeline/parser.ts",
+      "component": "diagrams/timeline",
+      "lines": 55,
+      "code": 49,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/timeline/render.ts",
+      "component": "diagrams/timeline",
+      "lines": 250,
+      "code": 231,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/treemap/format.ts",
+      "component": "diagrams/treemap",
+      "lines": 40,
+      "code": 31,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/treemap/index.ts",
+      "component": "diagrams/treemap",
+      "lines": 11,
+      "code": 9,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/treemap/layout.ts",
+      "component": "diagrams/treemap",
+      "lines": 137,
+      "code": 119,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/treemap/model.ts",
+      "component": "diagrams/treemap",
+      "lines": 84,
+      "code": 72,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/treemap/parser.ts",
+      "component": "diagrams/treemap",
+      "lines": 141,
+      "code": 123,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/treemap/render.ts",
+      "component": "diagrams/treemap",
+      "lines": 171,
+      "code": 150,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/treeview/boxDrawing.ts",
+      "component": "diagrams/treeview",
+      "lines": 130,
+      "code": 107,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/treeview/icons.ts",
+      "component": "diagrams/treeview",
+      "lines": 73,
+      "code": 56,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/treeview/index.ts",
+      "component": "diagrams/treeview",
+      "lines": 10,
+      "code": 8,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/treeview/model.ts",
+      "component": "diagrams/treeview",
+      "lines": 100,
+      "code": 86,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/treeview/parser.ts",
+      "component": "diagrams/treeview",
+      "lines": 161,
+      "code": 147,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/treeview/render.ts",
+      "component": "diagrams/treeview",
+      "lines": 195,
+      "code": 178,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/usecase/db.ts",
+      "component": "diagrams/usecase",
+      "lines": 589,
+      "code": 530,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/usecase/graph.ts",
+      "component": "diagrams/usecase",
+      "lines": 311,
+      "code": 284,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/usecase/index.ts",
+      "component": "diagrams/usecase",
+      "lines": 12,
+      "code": 10,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/usecase/json.ts",
+      "component": "diagrams/usecase",
+      "lines": 250,
+      "code": 226,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/usecase/lexer.ts",
+      "component": "diagrams/usecase",
+      "lines": 381,
+      "code": 352,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/usecase/parser.ts",
+      "component": "diagrams/usecase",
+      "lines": 706,
+      "code": 635,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/usecase/render.ts",
+      "component": "diagrams/usecase",
+      "lines": 589,
+      "code": 538,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/usecase/tokens.ts",
+      "component": "diagrams/usecase",
+      "lines": 77,
+      "code": 73,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/usecase/types.ts",
+      "component": "diagrams/usecase",
+      "lines": 193,
+      "code": 173,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/venn/db.ts",
+      "component": "diagrams/venn",
+      "lines": 66,
+      "code": 51,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/venn/index.ts",
+      "component": "diagrams/venn",
+      "lines": 16,
+      "code": 14,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/venn/layout.ts",
+      "component": "diagrams/venn",
+      "lines": 347,
+      "code": 304,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/venn/lexer.ts",
+      "component": "diagrams/venn",
+      "lines": 257,
+      "code": 232,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/venn/parser.ts",
+      "component": "diagrams/venn",
+      "lines": 113,
+      "code": 96,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/venn/render.ts",
+      "component": "diagrams/venn",
+      "lines": 220,
+      "code": 191,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/venn/types.ts",
+      "component": "diagrams/venn",
+      "lines": 28,
+      "code": 21,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/wardley/builder.ts",
+      "component": "diagrams/wardley",
+      "lines": 194,
+      "code": 161,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/wardley/index.ts",
+      "component": "diagrams/wardley",
+      "lines": 12,
+      "code": 10,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/wardley/model.ts",
+      "component": "diagrams/wardley",
+      "lines": 164,
+      "code": 142,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/wardley/parser.ts",
+      "component": "diagrams/wardley",
+      "lines": 409,
+      "code": 391,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/wardley/render.ts",
+      "component": "diagrams/wardley",
+      "lines": 424,
+      "code": 388,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/xychart/db.ts",
+      "component": "diagrams/xychart",
+      "lines": 134,
+      "code": 108,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/xychart/index.ts",
+      "component": "diagrams/xychart",
+      "lines": 17,
+      "code": 15,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/xychart/lexer.ts",
+      "component": "diagrams/xychart",
+      "lines": 288,
+      "code": 268,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/xychart/parser.ts",
+      "component": "diagrams/xychart",
+      "lines": 114,
+      "code": 102,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/xychart/render.ts",
+      "component": "diagrams/xychart",
+      "lines": 415,
+      "code": 366,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/xychart/ticks.ts",
+      "component": "diagrams/xychart",
+      "lines": 30,
+      "code": 22,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/diagrams/xychart/tokens.ts",
+      "component": "diagrams/xychart",
+      "lines": 74,
+      "code": 72,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/agentflow.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/architecture.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/block.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/c4.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/class.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/cynefin.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/er.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/eventmodeling.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/flowchart.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/gantt.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/gitGraph.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/info.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/ishikawa.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/journey.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/kanban.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/mindmap.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/packet.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/pie.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/quadrantChart.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/radar.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/railroad.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/requirement.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/sankey.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/sequence.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/state.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/swimlane.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/timeline.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/treeView.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/treemap.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/usecase.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/venn.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/wardley.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/entries/xychart.ts",
+      "component": "entries",
+      "lines": 3,
+      "code": 1,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/errors.ts",
+      "component": "api",
+      "lines": 109,
+      "code": 92,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/index.ts",
+      "component": "api",
+      "lines": 8,
+      "code": 5,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/layout/components.ts",
+      "component": "layout",
+      "lines": 73,
+      "code": 67,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/layout/compound.ts",
+      "component": "layout",
+      "lines": 945,
+      "code": 869,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/layout/lanes.ts",
+      "component": "layout",
+      "lines": 630,
+      "code": 560,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/layout/layered.ts",
+      "component": "layout",
+      "lines": 2228,
+      "code": 1890,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/lazy.ts",
+      "component": "api",
+      "lines": 93,
+      "code": 79,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/models.ts",
+      "component": "api",
+      "lines": 107,
+      "code": 102,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/mount.ts",
+      "component": "api",
+      "lines": 439,
+      "code": 347,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/preprocess.ts",
+      "component": "api",
+      "lines": 248,
+      "code": 212,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/svg/builder.ts",
+      "component": "svg",
+      "lines": 180,
+      "code": 145,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/svg/cluster.ts",
+      "component": "svg",
+      "lines": 73,
+      "code": 60,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/svg/edges.ts",
+      "component": "svg",
+      "lines": 550,
+      "code": 475,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/svg/ink.ts",
+      "component": "svg",
+      "lines": 132,
+      "code": 107,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/svg/palette.ts",
+      "component": "svg",
+      "lines": 139,
+      "code": 115,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/svg/root.ts",
+      "component": "svg",
+      "lines": 57,
+      "code": 51,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/svg/shapes.ts",
+      "component": "svg",
+      "lines": 690,
+      "code": 646,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/svg/theme.ts",
+      "component": "svg",
+      "lines": 152,
+      "code": 119,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/svg/title.ts",
+      "component": "svg",
+      "lines": 39,
+      "code": 33,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/text/entities.ts",
+      "component": "text",
+      "lines": 80,
+      "code": 68,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/text/icons.ts",
+      "component": "text",
+      "lines": 30,
+      "code": 24,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/text/label.ts",
+      "component": "text",
+      "lines": 446,
+      "code": 400,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/text/math.ts",
+      "component": "text",
+      "lines": 51,
+      "code": 43,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/text/measurer.ts",
+      "component": "text",
+      "lines": 160,
+      "code": 136,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/text/metrics.ts",
+      "component": "text",
+      "lines": 7,
+      "code": 4,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/types.ts",
+      "component": "api",
+      "lines": 88,
+      "code": 58,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/util/chars.ts",
+      "component": "util",
+      "lines": 45,
+      "code": 32,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/util/unicode.ts",
+      "component": "util",
+      "lines": 32,
+      "code": 28,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/util/url.ts",
+      "component": "util",
+      "lines": 131,
+      "code": 99,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/util/yaml.ts",
+      "component": "util",
+      "lines": 471,
+      "code": 433,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/window.ts",
+      "component": "api",
+      "lines": 12,
+      "code": 7,
+      "status": "todo",
+      "nim": []
+    },
+    {
+      "path": "src/zoom.ts",
+      "component": "api",
+      "lines": 496,
+      "code": 418,
+      "status": "todo",
+      "nim": []
+    }
+  ]
+}
