@@ -6,3 +6,4 @@
 import index, roadmap, coverage, agents, decisions, porting
 import devlog/index as devlogIndex
 import devlog/a_stage_for_a_port
+import devlog/pomice

@@ -9,7 +9,7 @@
 ## - `nbCards what: nbCard(title, href, small, kind): ...`: a grid of cards
 ## - `nbFold label: ...`: blocks folded away under a line to press
 ## - `nbSvg svg, caption`: a drawing the page made itself (SVG text), with a caption
-## - `nbPipeline stages`: the parts of the renderer as lamps, lit when ported
+## - `nbPipeline stages`: the parts of the renderer as islands: lava while ported, olivine when done
 ## - `status(s)`: a status as Markdown-safe text for a table cell
 ##
 ## No HTML in a page, no CSS, no colours: what is needed twice becomes a block here, and its CSS
@@ -429,8 +429,8 @@ proc addPipeline*(nb: var Nb, stages: openArray[(string, Status)]) =
   nb.add newNbPipeline(stages = names, states = states)
 
 template nbPipeline*(tstages: openArray[(string, Status)]) =
-  ## The stages of the compiler, in order, as lamps: off (planned), yellow (started), pink and
-  ## glowing (done). `nbPipeline [("lexer", stStarted), ("parser", stPlanned)]`.
+  ## The steps, in order, as islands: grey (planned), glowing lava (started), olivine
+  ## (done). `nbPipeline [("pie", stStarted), ("flowchart", stPlanned)]`.
   nb.addPipeline(tstages)
 
 # ---------------------------------------------------------------------------------- devlog posts
@@ -533,7 +533,7 @@ func pageHeader(blk: JsonNode, nb: Nb): string =
   let home = c{"home_href"}.getStr
   let backLabel = esc(c{"back_label"}.getStr)
   let back = if home.len > 0: &"""<a href="{home}">← {backLabel}</a>""" else: ""
-  let wordmark = """<span class="spark">✦</span> nimaki"""
+  let wordmark = wordmarkSvg & "nimaki"   # the mark: an ember and a wave (theme.nim)
   let wordmarkHref = c{"wordmark_href"}.getStr
   let mark = if wordmarkHref.len > 0: &"""<a class="wordmark" href="{wordmarkHref}">{wordmark}</a>"""
              else: &"""<span class="wordmark">{wordmark}</span>"""

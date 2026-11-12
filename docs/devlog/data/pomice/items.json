@@ -1,0 +1,5 @@
+{
+ "family": "flowchart LR\n  mermaid[Mermaid<br/>the sea] --> pele[Pele<br/>the fire]\n  pele --> mari[diagrammari<br/>the seas]\n  pele -. port .-> nimaki[nimaki<br/>the sea again]\n  nimaki -. engine .-> mari",
+ "lines": "pie title Pele's 52,973 lines of TypeScript\n  \"34 diagram types\" : 43711\n  \"layout\" : 3872\n  \"svg\" : 2003\n  \"text\" : 768\n  \"util\" : 675",
+ "chain": "timeline\n  title Down the island chain, old to young\n  Kauaʻi : the oldest fire pits\n  Oʻahu : flooded by the sea\n  Maui : the last battle near Hāna\n  Hawaiʻi : Pele settles in Kīlauea"
+}

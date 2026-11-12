@@ -90,8 +90,8 @@ nbText: &"""
 {portmap["files"].len} TypeScript files, {portmap["code"].getInt.thousands} lines of code. The
 split into stages goes by file name and is a first guess: most types have no layout file and lay
 themselves out inside `render.ts`. The thread that explains how Pele is built will correct it.
-Each lamp below is a part of the core or a diagram type; it turns yellow when its port starts
-and lights up when the Nim draws the same bytes as Pele:
+Each island below is a part of the core or a diagram type; it glows like lava when its port starts
+and cools to olivine when the Nim draws the same bytes as Pele:
 """
 
 nbPipeline cov.pipeline
