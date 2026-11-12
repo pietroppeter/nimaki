@@ -2,9 +2,9 @@
   "about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand.",
   "pin": "1.13.0",
   "cases": 2118,
-  "identical": 698,
+  "identical": 782,
   "different": 0,
-  "unsupported": 1420,
+  "unsupported": 1336,
   "types": [
     {
       "type": "agentflow",
@@ -42,9 +42,9 @@
       "type": "class",
       "coverage": "class",
       "cases": 84,
-      "identical": 0,
+      "identical": 84,
       "different": 0,
-      "unsupported": 84
+      "unsupported": 0
     },
     {
       "type": "cynefin",

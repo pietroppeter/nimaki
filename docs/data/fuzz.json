@@ -81,6 +81,14 @@
       "rendered": 4004,
       "errors": 996
     },
+    "class": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 3732,
+      "errors": 1268
+    },
     "sequence": {
       "seed": 1,
       "cases": 5000,

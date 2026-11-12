@@ -264,6 +264,71 @@ proc swimlaneSource(g: var Gen): string =
       inc edges
     else: result.add "  " & flowStatement(g, 1, edges) & "\n"
 
+const classIds = ["Animal", "Duck", "Fish", "Zebra", "A", "B", "C", "note0", "interface0", "1st", "Ünï",
+                  "日本", "x_y", "a-b", "`Back tick`", "List~int~", "Map~K, V~", "ns.Inner"]
+const classMembers = ["+String name", "-int age", "#id", "~pkg", "+isMammal() bool", "+mate()", "-swim($speed) int$",
+                      "+run()*", "static$", "abstract*", "List~int~ items", "+get(List~T~ list) Map~K, V~",
+                      "+ a b c", "<<interface>>", "", "Ünïcödé field", "$$x^2$$", "&lt;tag&gt;", "run)",
+                      "+method(a, b) : int", "very long member name that goes on and on and on and on", "+f()$"]
+const classArrows = ["<|--", "*--", "o--", "-->", "--", "..>", "..|>", "..", "--|>", "--*", "--o", "<--", "()--",
+                     "--()", "<|..", "*..", "<|--|>", "<-->", "--", "-->"]
+
+proc className(g: var Gen): string = g.pick(classIds)
+
+proc classStatement(g: var Gen, depth: int): string =
+  let r = g.rng.rand(1.0)
+  if r < 0.3:
+    result = "class " & g.className()
+    if g.chance(0.15): result.add "[\"" & g.pick(["Label", "a b", "日本", "", "x&amp;y"]) & "\"]"
+    let s = g.rng.rand(1.0)
+    if s < 0.45:
+      result.add " {\n"
+      for k in 0 ..< g.rng.rand(0 .. 5): result.add "    " & g.pick(classMembers) & "\n"
+      result.add "  }"
+    elif s < 0.55: result.add ":::" & g.pick(["hot", "cold"])
+    elif s < 0.62: result.add " <<" & g.pick(["interface", "abstract", "Service"]) & ">>"
+  elif r < 0.6:
+    result = g.className()
+    if g.chance(0.2): result.add " \"" & g.pick(["1", "0..*", "many", "1..n", "$$n$$"]) & "\""
+    result.add " " & g.pick(classArrows) & " "
+    if g.chance(0.2): result.add "\"" & g.pick(["1", "0..*", "many", "*"]) & "\" "
+    result.add g.className()
+    if g.chance(0.35): result.add " : " & g.pick(["uses", "has", "a b", "日本", "very long relation label here", "<<x>>"])
+  elif r < 0.68: result = g.className() & " : " & g.pick(classMembers)
+  elif r < 0.74 and depth < 3:
+    result = "namespace " & g.pick(["Shapes", "ns", "a.b", "Outer.Inner", "Ünï"]) & " {\n"
+    for k in 0 ..< g.rng.rand(1 .. 3):
+      let s = classStatement(g, depth + 1)
+      if s.startsWith("class ") or s.startsWith("note") or s.startsWith("namespace"): result.add "  " & s & "\n"
+      else: result.add "  class " & g.className() & "\n"
+    result.add "}"
+  elif r < 0.8: result = "note " & (if g.chance(0.6): "for " & g.className() & " " else: "") & "\"" & g.pick(["a note", "line<br/>two", "日本", "x"]) & "\""
+  elif r < 0.84: result = "classDef " & g.pick(["hot", "cold", "default"]) & " fill:" & g.pick(flowColors) & ",stroke:" & g.pick(flowColors) & (if g.chance(0.3): ",color:#fff" else: "") & (if g.chance(0.2): ",font-size:20px" else: "")
+  elif r < 0.87: result = "cssClass \"" & g.className() & "," & g.className() & "\" " & g.pick(["hot", "cold"])
+  elif r < 0.9: result = "style " & g.pick(["Animal", "Duck", "A"]) & " fill:" & g.pick(flowColors) & (if g.chance(0.4): ",stroke-width:4px" else: "") & (if g.chance(0.2): ",font-style:italic" else: "")
+  elif r < 0.93: result = g.pick(["click ", "link ", "callback "]) & g.className() & " " & g.pick(["href \"https://example.com\"", "\"https://example.com\" \"tip\"", "call cb()", "\"javascript:x\" _blank", "\"cb\" \"tip\""])
+  elif r < 0.95: result = "direction " & g.pick(["TB", "BT", "LR", "RL"])
+  elif r < 0.96: result = g.pick(["accTitle: a title", "accDescr: described", "accDescr {\n  multi\n  line\n}"])
+  elif r < 0.97: result = "<<" & g.pick(["interface", "enum"]) & ">> " & g.className()
+  elif r < 0.995: result = "%% " & g.pick(flowLabels)
+  else: result = g.pick(["garbage ((", "class", "A <|-- ", "class A {", "}", "namespace {", "A : ", "--> B"])
+
+proc classSource(g: var Gen): string =
+  if g.chance(0.2):
+    result.add "---\n"
+    if g.chance(0.4): result.add "title: " & g.pick(["Classes", "A title", "日本"]) & "\n"
+    result.add "config:\n  class:\n"
+    if g.chance(0.4): result.add "    hideEmptyMembersBox: " & g.pick(["true", "false"]) & "\n"
+    if g.chance(0.4): result.add "    hierarchicalNamespaces: " & g.pick(["true", "false"]) & "\n"
+    if g.chance(0.3): result.add "    nodeSpacing: " & g.pick(["10", "80", "x"]) & "\n"
+    if g.chance(0.3): result.add "    rankSpacing: " & g.pick(["10", "100"]) & "\n"
+    result.add "    useMaxWidth: true\n---\n"
+  result.add(if g.chance(0.03): g.pick(["classDiagram-v3", "ClassDiagram"]) elif g.chance(0.2): "classDiagram-v2" else: "classDiagram")
+  result.add "\n"
+  for i in 0 ..< g.rng.rand(1 .. 12):
+    result.add g.pick(["  ", "    ", "", "\t"]) & classStatement(g, 0)
+    result.add(if g.chance(0.03): "\r\n" else: "\n")
+
 const scores = ["5", "1", "3", "4", "2", "0", "7", "-1", "2.5", " 4 ", "", "x", "1e1", "0x3", "Infinity",
                 "3.", ".5", "NaN", "\u30003"]
 const actors = ["Me", "Cat", "Dog", "", " Me ", "Ünï", "日本", "Zed", "a b", "Me", "emoji 🎉",
@@ -680,7 +745,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -696,6 +761,7 @@ proc main() =
                                                           of "flowchart": g.flowchartSource()
                                                           of "sequence": g.sequenceSource()
                                                           of "swimlane": g.swimlaneSource()
+                                                          of "class": g.classSource()
                                                           of "radar": g.radarSource()
                                                           of "treemap": g.treemapSource()
                                                           else: g.treeViewSource()), "options": opts}
