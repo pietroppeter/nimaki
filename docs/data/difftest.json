@@ -1,0 +1,274 @@
+{
+  "about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand.",
+  "pin": "1.13.0",
+  "cases": 2118,
+  "identical": 0,
+  "different": 0,
+  "unsupported": 2118,
+  "types": [
+    {
+      "type": "agentflow",
+      "coverage": "agentflow",
+      "cases": 238,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 238
+    },
+    {
+      "type": "architecture",
+      "coverage": "architecture",
+      "cases": 26,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 26
+    },
+    {
+      "type": "block",
+      "coverage": "block",
+      "cases": 71,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 71
+    },
+    {
+      "type": "c4",
+      "coverage": "c4",
+      "cases": 56,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 56
+    },
+    {
+      "type": "class",
+      "coverage": "class",
+      "cases": 84,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 84
+    },
+    {
+      "type": "cynefin",
+      "coverage": "cynefin",
+      "cases": 19,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 19
+    },
+    {
+      "type": "er",
+      "coverage": "er",
+      "cases": 142,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 142
+    },
+    {
+      "type": "eventmodeling",
+      "coverage": "eventmodeling",
+      "cases": 24,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 24
+    },
+    {
+      "type": "flowchart",
+      "coverage": "flowchart",
+      "cases": 383,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 383
+    },
+    {
+      "type": "gantt",
+      "coverage": "gantt",
+      "cases": 25,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 25
+    },
+    {
+      "type": "gitGraph",
+      "coverage": "git",
+      "cases": 94,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 94
+    },
+    {
+      "type": "info",
+      "coverage": "info",
+      "cases": 6,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 6
+    },
+    {
+      "type": "ishikawa",
+      "coverage": "ishikawa",
+      "cases": 4,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 4
+    },
+    {
+      "type": "journey",
+      "coverage": "journey",
+      "cases": 4,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 4
+    },
+    {
+      "type": "kanban",
+      "coverage": "kanban",
+      "cases": 33,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 33
+    },
+    {
+      "type": "mindmap",
+      "coverage": "mindmap",
+      "cases": 39,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 39
+    },
+    {
+      "type": "packet",
+      "coverage": "packet",
+      "cases": 19,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 19
+    },
+    {
+      "type": "pie",
+      "coverage": "pie",
+      "cases": 16,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 16
+    },
+    {
+      "type": "quadrantChart",
+      "coverage": "quadrant",
+      "cases": 35,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 35
+    },
+    {
+      "type": "radar",
+      "coverage": "radar",
+      "cases": 14,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 14
+    },
+    {
+      "type": "railroad",
+      "coverage": "railroad",
+      "cases": 91,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 91
+    },
+    {
+      "type": "requirement",
+      "coverage": "requirement",
+      "cases": 20,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 20
+    },
+    {
+      "type": "sankey",
+      "coverage": "sankey",
+      "cases": 14,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 14
+    },
+    {
+      "type": "sequence",
+      "coverage": "sequence",
+      "cases": 186,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 186
+    },
+    {
+      "type": "state",
+      "coverage": "state",
+      "cases": 119,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 119
+    },
+    {
+      "type": "swimlane",
+      "coverage": "swimlane",
+      "cases": 14,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 14
+    },
+    {
+      "type": "timeline",
+      "coverage": "timeline",
+      "cases": 24,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 24
+    },
+    {
+      "type": "treeView",
+      "coverage": "treeview",
+      "cases": 24,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 24
+    },
+    {
+      "type": "treemap",
+      "coverage": "treemap",
+      "cases": 8,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 8
+    },
+    {
+      "type": "usecase",
+      "coverage": "usecase",
+      "cases": 151,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 151
+    },
+    {
+      "type": "venn",
+      "coverage": "venn",
+      "cases": 25,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 25
+    },
+    {
+      "type": "wardley",
+      "coverage": "wardley",
+      "cases": 39,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 39
+    },
+    {
+      "type": "xychart",
+      "coverage": "xychart",
+      "cases": 71,
+      "identical": 0,
+      "different": 0,
+      "unsupported": 71
+    }
+  ]
+}

@@ -2,12 +2,17 @@
 ## stages (parse, layout, render), and how much of it is ported. Kept up to date: the data is
 ## docs/data/coverage.json; the lines of TypeScript come from `tools/coverage_seed.nim`, the
 ## rest (status, the Nim module, the post) from the pull request that ports a part.
-import std/[strformat]
+import std/[strformat, json, tables]
 import nimib
 import tabelline, tabelline/nimib
 import blocks, site
 
 let cov = loadCoverage()
+# what the referee found on its last full run (tools/difftest.nim): coverage id -> (identical, cases)
+var matched: Table[string, (int, int)]
+let difftest = parseFile(docsDir / "data" / "difftest.json")
+for t in difftest["types"]:
+  matched[t["coverage"].getStr] = (t["identical"].getInt, t["cases"].getInt)
 
 nbInit
 nb.doc.filename = docsDir / "coverage" / "index.html"
@@ -21,6 +26,8 @@ the SVG of Pele run in Node, on that part's corpus.
 """
 
 nbPipeline cov.pipeline
+
+nbText: &"The referee's last full run: **{difftest[\"identical\"].getInt}** of {difftest[\"cases\"].getInt} cases identical to Pele, {difftest[\"unsupported\"].getInt} not drawn yet, {difftest[\"different\"].getInt} different.\n"
 
 nbToc
 
@@ -58,28 +65,32 @@ Every diagram type is parsed (Mermaid text to a model), laid out (positions and 
 rendered (SVG text). The split of a type's lines into stages goes by file name: most types keep
 their layout inside `render.ts`, so a `0` under layout means "no file of its own", not "no
 layout". Smallest first, which is roughly the order of the port. *Tests* are the lines of
-Pele's tests for the type (compat specs from Mermaid, render and layout tests); *corpus* the
-cases of its `tests/corpus/` file.
+Pele's tests for the type (compat specs from Mermaid, render and layout tests). *Same SVG* is
+what the referee found on its last full run: of the type's cases in `corpus/cases.json`, how
+many nimaki draws byte for byte as Pele does.
 """
 
 block:
   type Row = object
     diagram: string
     parse, layout, render: string
-    tests, corpus: int
+    tests: int
+    identical: string
   var rows: seq[Row]
   proc cell(p: Part): string = &"{p.code}<br>{status(p.status)}"
   for d in cov.diagrams:
     let nim = if d.nim.len > 0: &"<br>`{d.nim}`" else: ""
     let notes = if d.notes.len > 0: &"<br>*{d.notes}*" else: ""
     rows.add Row(diagram: &"**{d.id}** · {d.code}{nim}{notes}", parse: cell(d.parse), layout: cell(d.layout),
-                 render: cell(d.render), tests: d.tests, corpus: d.corpus)
+                 render: cell(d.render), tests: d.tests,
+                 identical: (let m = matched.getOrDefault(d.id); &"{m[0]} of {m[1]}"))
   let t = tabella(rows):
     tabHeader "Diagram types", "lines of TypeScript per stage, and the status of each"
     colsLabel {"diagram": "type · lines"}
     fmtMarkdown "diagram"
     fmtPassthrough ["parse", "layout", "render"], escape = false
-    fmtInteger ["tests", "corpus"]
+    colsLabel {"identical": "same SVG"}
+    fmtInteger ["tests"]
     optCssTheme()
   nbTable t
 

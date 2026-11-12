@@ -66,6 +66,20 @@ jobs:
       - name: Port map
         run: nim r tools/portmap.nim check
 
+      # The referee. The corpus is rebuilt from the pinned Pele and must match the committed one;
+      # the self test proves difftest can fail; then every case is compared, and a type the
+      # coverage map marks done must be identical on every case.
+      - name: Corpus matches the pin
+        run: |
+          node tools/corpus.mjs
+          git diff --exit-code --stat corpus/ || { echo "::error::corpus/cases.json differs from what tools/corpus.mjs builds: rerun it and commit"; exit 1; }
+
+      - name: Difftest self test
+        run: nim r tools/difftest.nim --self-test
+
+      - name: Difftest
+        run: nim r tools/difftest.nim --check-done --show:30
+
       - name: Tests
         run: |
           if [ -f tests/all.nim ]; then nim r tests/all.nim; else echo "no tests/all.nim yet"; fi
