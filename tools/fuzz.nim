@@ -244,6 +244,106 @@ proc flowchartSource(g: var Gen): string =
     result.add g.pick(["", "  ", "    ", "\t"]) & flowStatement(g, 0, edges)
     result.add(if g.chance(0.03): "\r\n" else: "\n")
 
+const scores = ["5", "1", "3", "4", "2", "0", "7", "-1", "2.5", " 4 ", "", "x", "1e1", "0x3", "Infinity",
+                "3.", ".5", "NaN", "\u30003"]
+const actors = ["Me", "Cat", "Dog", "", " Me ", "Ünï", "日本", "Zed", "a b", "Me", "emoji 🎉",
+                "<b>bold</b>", "very long actor name that wraps", "\uE000", "😀"]
+
+proc journeyWord(g: var Gen): string =
+  ## A `;` or `#` ends any text in journey, so words with them are rare.
+  result = g.pick(timelineWords)
+  while (';' in result or '#' in result) and not g.chance(0.05): result = g.pick(timelineWords)
+
+proc journeySource(g: var Gen): string =
+  if g.chance(0.1):
+    result.add "---\n"
+    if g.chance(0.6): result.add "title: " & g.journeyWord() & "\n"
+    result.add "---\n"
+  if g.chance(0.05): result.add "%% leading comment\n"
+  result.add(if g.chance(0.03): g.pick(["Journey", "journeys", "journey x"]) else: "journey")
+  result.add "\n"
+  let n = g.rng.rand(0 .. 12)
+  for i in 0 ..< n:
+    let indent = g.pick(["", "  ", "    ", "\t"])
+    let r = g.rng.rand(1.0)
+    if r < 0.55:
+      var task = g.journeyWord()
+      if task == "" or task.startsWith("title") or task.startsWith("section"): task = "Task"
+      result.add indent & task & g.pick([": ", ":", " : "]) & g.pick(scores)
+      if g.chance(0.8):
+        result.add ":"
+        var people: seq[string]
+        for k in 0 .. g.rng.rand(0 .. 4): people.add g.pick(actors)
+        result.add " " & people.join(g.pick([", ", ",", " , "]))
+      if g.chance(0.03): result.add ":" & g.pick(actors)
+    elif r < 0.7: result.add indent & "section " & g.journeyWord()
+    elif r < 0.72: result.add indent & "section"
+    elif r < 0.76: result.add indent & g.pick(["title ", "title", "title  ", "Title\t"]) & g.journeyWord()
+    elif r < 0.79: result.add indent & "accTitle: " & g.journeyWord()
+    elif r < 0.82: result.add indent & "accDescr: " & g.journeyWord()
+    elif r < 0.84: result.add indent & "accDescr {\n    " & g.journeyWord() & "\n  " & g.journeyWord() & "\n}"
+    elif r < 0.87: result.add indent & "%% " & g.journeyWord()
+    elif r < 0.89: result.add indent & "# hash comment"
+    elif r < 0.92: result.add ""
+    elif r < 0.95: result.add indent & g.pick(["title\u3000", "section\u00a0"]) & g.journeyWord()
+    elif r < 0.97: result.add indent & g.pick(["Task", "Task:", ": 5", "a; b: 3", "Task 5", "x # y: 3", ":"])
+    else: result.add indent & g.pick(actors) & ": " & g.pick(scores) & ": " & g.pick(actors) & "," & g.pick(actors)
+    result.add(if g.chance(0.05): "\r\n" else: "\n")
+
+proc infoSource(g: var Gen): string =
+  if g.chance(0.15): result.add "---\ntitle: " & g.pick(labels) & "\n---\n"
+  if g.chance(0.1): result.add g.pick(["\n", "%% comment\n", "  \n"])
+  result.add(if g.chance(0.03): g.pick(["Info", "infox", "info:"]) else: "info")
+  if g.chance(0.4): result.add g.pick([" showInfo", "\nshowInfo", " showinfo", "  showInfo  "])
+  result.add "\n"
+  for i in 0 ..< g.rng.rand(0 .. 4):
+    let r = g.rng.rand(1.0)
+    let indent = g.pick(["", "  ", "\t"])
+    if r < 0.35: result.add indent & "title " & g.pick(labels)
+    elif r < 0.55: result.add indent & "accTitle: " & g.pick(labels)
+    elif r < 0.7: result.add indent & "accDescr: " & g.pick(labels)
+    elif r < 0.8: result.add indent & "accDescr {\n  " & g.pick(labels) & "\n" & g.pick(labels) & "\n}"
+    elif r < 0.88: result.add indent & "%% " & g.pick(labels)
+    elif r < 0.95: result.add ""
+    else: result.add indent & g.pick(["showInfo", "garbage", "title", "info"])
+    result.add(if g.chance(0.05): "\r\n" else: "\n")
+
+proc packetSource(g: var Gen): string =
+  if g.chance(0.35):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(labels) & "\n"
+    result.add "config:\n  packet:\n"
+    for key in ["bitsPerRow", "rowHeight", "bitWidth", "paddingX", "paddingY"]:
+      if g.chance(0.3): result.add "    " & key & ": " & g.pick(["8", "16", "32", "64", "1", "0", "7.5", "500", "-3", "x", "20"]) & "\n"
+    if g.chance(0.3): result.add "    showBits: " & g.pick(["false", "true", "0"]) & "\n"
+    if g.chance(0.3): result.add "    bitOrder: " & g.pick(["descending", "ascending", "x"]) & "\n"
+    result.add "    useMaxWidth: true\n---\n"
+  result.add(if g.chance(0.03): g.pick(["Packet", "packet-alpha", "packets"])
+             elif g.chance(0.3): "packet-beta" else: "packet")
+  result.add "\n"
+  var bit = 0
+  for i in 0 ..< g.rng.rand(0 .. 12):
+    let indent = g.pick(["", "  ", "\t"])
+    let r = g.rng.rand(1.0)
+    let label = "\"" & g.pick(labels) & "\""
+    if r < 0.45:
+      let width = g.pick([1, 1, 2, 4, 8, 8, 16, 16, 24, 32, 3, 40, 64, 100])
+      if g.chance(0.02): bit += g.pick([-1, 1, 2])   # not contiguous: an error
+      if width == 1 and g.chance(0.5): result.add indent & $bit & ": " & label
+      else: result.add indent & $bit & "-" & $(bit + width - 1) & ": " & label
+      bit += width
+    elif r < 0.75:
+      let width = g.pick([1, 2, 4, 8, 16, 32, 5, 12, 48, 0])
+      result.add indent & "+" & $width & g.pick([": ", ":", " : "]) & label
+      bit += max(width, 1)
+    elif r < 0.8: result.add indent & "title " & g.pick(labels)
+    elif r < 0.83: result.add indent & "accTitle: " & g.pick(labels)
+    elif r < 0.86: result.add indent & "accDescr: " & g.pick(labels)
+    elif r < 0.89: result.add indent & "%% " & g.pick(labels)
+    elif r < 0.98: result.add ""
+    else: result.add indent & g.pick(["1.5: \"x\"", "x: \"y\"", "5-3: \"back\"", "+: \"z\"", "0-: \"a\"", "007: \"z\"", $bit & "-" & $bit & " \"no colon\""])
+    result.add(if g.chance(0.05): "\r\n" else: "\n")
+
 proc options(g: var Gen): JsonNode =
   result = newJObject()
   if g.chance(0.3): result["fontSize"] = %g.pick([12, 14, 16, 18, 20, 11])
@@ -292,14 +392,20 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "flowchart"]: quit "ERROR fuzz knows only: pie, timeline, flowchart", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
   for i in 0 ..< count:
     let opts = g.options()
     opts["now"] = %1767225600000.0
-    cases.add %*{"id": kind & "/" & $seed & "/" & $i, "source": (if kind == "pie": g.pieSource() elif kind == "flowchart": g.flowchartSource() else: g.timelineSource()), "options": opts}
+    cases.add %*{"id": kind & "/" & $seed & "/" & $i, "source": (case kind
+                                                          of "pie": g.pieSource()
+                                                          of "timeline": g.timelineSource()
+                                                          of "journey": g.journeySource()
+                                                          of "info": g.infoSource()
+                                                          of "flowchart": g.flowchartSource()
+                                                          else: g.packetSource()), "options": opts}
   let dir = buildDir / "fuzz"
   createDir dir
   let inPath = dir / (kind & "-" & $seed & "-in.jsonl")

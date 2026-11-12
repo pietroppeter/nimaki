@@ -1,4 +1,4 @@
-## devlog: 12 Nov 2026 N | Boxes in layers: the layered layout and flowchart | nimaki draws Mermaid's flowcharts byte for byte as Pele does, on a port of the layout engine most of Pele's diagrams are built on: ranks, orders, positions and routes.
+## devlog: 12 Nov 2026 O | Boxes in layers: the layered layout and flowchart | nimaki draws Mermaid's flowcharts byte for byte as Pele does, on a port of the layout engine most of Pele's diagrams are built on: ranks, orders, positions and routes.
 ## kind: port
 import std/[os, strformat, strutils, json]
 import nimib
@@ -225,7 +225,7 @@ nbSvg down.svg, "A flowchart that runs across, turned to run down a phone."
 nbText: """
 ## The fuzzer, for flowcharts
 
-`tools/fuzz.nim` learned a third grammar. It writes flowcharts from lists of ids, labels (with
+`tools/fuzz.nim` learned another grammar. It writes flowcharts from lists of ids, labels (with
 Markdown, tags, entities, icons, long words, scripts other than Latin), every bracket shape, every
 link form, `@{ shape: ... }` metadata with the documented shape names and a few wrong ones,
 icons and images, subgraphs three deep with their own directions, `classDef`, `class`, `style`,

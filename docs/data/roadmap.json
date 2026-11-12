@@ -242,7 +242,7 @@
           "owner": "Port layered layout and flowchart",
           "status": "done",
           "post": "layered-layout-and-flowchart",
-          "pr": "15"
+          "pr": "17"
         },
         {
           "id": "flowchart",
@@ -253,7 +253,7 @@
           "owner": "Port layered layout and flowchart",
           "status": "done",
           "post": "layered-layout-and-flowchart",
-          "pr": "15"
+          "pr": "17"
         },
         {
           "id": "sequence",
@@ -324,9 +324,9 @@
           "what": "src/diagrams/info: 108 lines of TypeScript, 2 corpus cases.",
           "done_when": "difftest: every info case identical.",
           "owner": "Port diagrams that need no layered layout",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "three-small-diagrams",
+          "pr": "15"
         },
         {
           "id": "packet",
@@ -335,9 +335,9 @@
           "what": "src/diagrams/packet: 328 lines of TypeScript, 4 corpus cases.",
           "done_when": "difftest: every packet case identical.",
           "owner": "Port diagrams that need no layered layout",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "three-small-diagrams",
+          "pr": "15"
         },
         {
           "id": "mindmap",
@@ -379,9 +379,9 @@
           "what": "src/diagrams/journey: 467 lines of TypeScript, 1 corpus cases.",
           "done_when": "difftest: every journey case identical.",
           "owner": "Port diagrams that need no layered layout",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "three-small-diagrams",
+          "pr": "15"
         },
         {
           "id": "radar",
@@ -389,8 +389,8 @@
           "title": "Radar",
           "what": "src/diagrams/radar: 500 lines of TypeScript, 3 corpus cases.",
           "done_when": "difftest: every radar case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port diagrams that need no layered layout",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -400,8 +400,8 @@
           "title": "Treemap",
           "what": "src/diagrams/treemap: 504 lines of TypeScript, 8 corpus cases.",
           "done_when": "difftest: every treemap case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port diagrams that need no layered layout",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -422,8 +422,8 @@
           "title": "Treeview",
           "what": "src/diagrams/treeview: 582 lines of TypeScript, 13 corpus cases.",
           "done_when": "difftest: every treeview case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port diagrams that need no layered layout",
+          "status": "started",
           "post": "",
           "pr": ""
         },

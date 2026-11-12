@@ -8,17 +8,6 @@ import db, lexer
 const STATEMENT =
   "'EOF', 'SPACE', 'NEWLINE', 'title', 'acc_title', 'acc_descr', 'acc_descr_multiline_value', 'section', 'period', 'event'"
 
-func afterUnits(text: string, units: int): string =
-  ## text.substring(units), where the characters cut are a keyword and one `\s`, which may be
-  ## more than one byte.
-  var i = 0
-  var k = 0
-  while k < units and i < text.len:
-    let (cp, size) = codePointAt(text, i)
-    k += (if cp >= 0x10000: 2 else: 1)
-    i += size
-  text[i .. ^1]
-
 proc parseTimeline*(src: string, db: TimelineDb) =
   let tokens = tokenize(src)
   let types = tokens.types
@@ -39,7 +28,7 @@ proc parseTimeline*(src: string, db: TimelineDb) =
     let text = texts[i]
     case types[i]
     of T_NEWLINE: discard
-    of T_title: db.getCommonDb().setDiagramTitle(afterUnits(text, 6))
+    of T_title: db.getCommonDb().setDiagramTitle(substringFrom(text, 6))
     of T_acc_title:
       inc i
       db.getCommonDb().setAccTitle(jsTrim(texts[i]))
@@ -47,9 +36,9 @@ proc parseTimeline*(src: string, db: TimelineDb) =
       inc i
       db.getCommonDb().setAccDescription(jsTrim(texts[i]))
     of T_acc_descr_multiline_value: db.getCommonDb().setAccDescription(jsTrim(text))
-    of T_section: db.addSection(afterUnits(text, 8))
+    of T_section: db.addSection(substringFrom(text, 8))
     of T_period: db.addTask(text, 0, "")
-    of T_event: db.addEvent(afterUnits(text, 2))
+    of T_event: db.addEvent(substringFrom(text, 2))
     of T_EOF: return
     else: fail(i, STATEMENT)
     inc i
