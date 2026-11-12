@@ -74,7 +74,7 @@
           "owner": "Research Pele, Mermaid and diagram uses",
           "status": "done",
           "post": "pele-origins",
-          "pr": ""
+          "pr": "6"
         },
         {
           "id": "mermaid",
@@ -85,7 +85,7 @@
           "owner": "Research Pele, Mermaid and diagram uses",
           "status": "done",
           "post": "what-mermaid-is",
-          "pr": ""
+          "pr": "6"
         },
         {
           "id": "family",
@@ -96,7 +96,7 @@
           "owner": "Research Pele, Mermaid and diagram uses",
           "status": "done",
           "post": "the-diagram-family",
-          "pr": ""
+          "pr": "6"
         },
         {
           "id": "uses",
@@ -107,7 +107,7 @@
           "owner": "Research Pele, Mermaid and diagram uses",
           "status": "done",
           "post": "diagrams-in-the-wild",
-          "pr": ""
+          "pr": "6"
         },
         {
           "id": "rendering",
