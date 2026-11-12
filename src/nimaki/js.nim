@@ -406,3 +406,14 @@ func isJsSpaceBefore*(s: string, i: int): bool =
 func isWordChar*(c: char): bool =
   ## `\w`.
   c in {'a'..'z', 'A'..'Z', '0'..'9', '_'}
+
+func unitOffset*(s: string, first, units: int): int =
+  ## The byte offset `units` UTF-16 code units after byte `first` of `s`: the inverse of
+  ## `utf16Len(s, first, last)`. An index inside a surrogate pair rounds up to the next character.
+  result = first
+  var k = 0
+  while k < units and result < s.len:
+    let (cp, size) = codePointAt(s, result)
+    k += (if cp >= 0x10000: 2 else: 1)
+    result += size
+  if k < units: result += units - k
