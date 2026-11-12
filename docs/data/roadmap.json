@@ -221,8 +221,8 @@
           "title": "Timeline",
           "what": "src/diagrams/timeline.",
           "done_when": "difftest: every timeline case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port Pele core, pie and timeline",
+          "status": "started",
           "post": "",
           "pr": ""
         }
