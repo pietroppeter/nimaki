@@ -590,7 +590,7 @@
           "owner": "Port the compound-layout diagram types",
           "status": "done",
           "post": "states-and-regions",
-          "pr": "PRNUM"
+          "pr": "23"
         },
         {
           "id": "class",
