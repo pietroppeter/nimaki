@@ -6,6 +6,7 @@
 import index, roadmap, coverage, agents, decisions, porting
 import devlog/index as devlogIndex
 import devlog/a_stage_for_a_port
+import devlog/class_diagrams
 import devlog/diagrams_in_the_wild
 import devlog/drawing_a_diagram
 import devlog/first_light

@@ -16,6 +16,7 @@ import nimaki/diagrams/swimlane/index as swimlaneIndex
 import nimaki/diagrams/radar/index as radarIndex
 import nimaki/diagrams/treemap/index as treemapIndex
 import nimaki/diagrams/treeview/index as treeviewIndex
+import nimaki/diagrams/class/index as classIndex
 
 export core, errors, types, measurer
 
@@ -29,3 +30,4 @@ register(swimlaneIndex.swimlane)
 register(radarIndex.radar)
 register(treemapIndex.treemap)
 register(treeviewIndex.treeView)
+register(classIndex.classDiagram)

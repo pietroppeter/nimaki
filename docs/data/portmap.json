@@ -3,12 +3,12 @@
   "code": 47594,
   "totals": {
     "todo": {
-      "files": 209,
-      "code": 33888
+      "files": 197,
+      "code": 31666
     },
     "draft": {
-      "files": 82,
-      "code": 13706
+      "files": 94,
+      "code": 15928
     },
     "verified": {
       "files": 0,
@@ -66,16 +66,16 @@
     },
     {
       "component": "diagrams/class",
-      "todo": 2122,
-      "draft": 0,
+      "todo": 0,
+      "draft": 2122,
       "verified": 0,
       "conformant": 0,
       "skip": 0
     },
     {
       "component": "diagrams/common",
-      "todo": 358,
-      "draft": 538,
+      "todo": 325,
+      "draft": 571,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -322,8 +322,8 @@
     },
     {
       "component": "layout",
-      "todo": 67,
-      "draft": 3319,
+      "todo": 0,
+      "draft": 3386,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -659,80 +659,100 @@
       "component": "diagrams/class",
       "lines": 290,
       "code": 250,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/class/db.nim"
+      ]
     },
     {
       "path": "src/diagrams/class/graph.ts",
       "component": "diagrams/class",
       "lines": 172,
       "code": 150,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/class/graph.nim"
+      ]
     },
     {
       "path": "src/diagrams/class/index.ts",
       "component": "diagrams/class",
       "lines": 17,
       "code": 15,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/class/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/class/lexer.ts",
       "component": "diagrams/class",
       "lines": 474,
       "code": 443,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/class/lexer.nim"
+      ]
     },
     {
       "path": "src/diagrams/class/markers.ts",
       "component": "diagrams/class",
       "lines": 56,
       "code": 50,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/class/markers.nim"
+      ]
     },
     {
       "path": "src/diagrams/class/members.ts",
       "component": "diagrams/class",
       "lines": 92,
       "code": 79,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/class/members.nim"
+      ]
     },
     {
       "path": "src/diagrams/class/parser.ts",
       "component": "diagrams/class",
       "lines": 352,
       "code": 324,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/class/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/class/render.ts",
       "component": "diagrams/class",
       "lines": 672,
       "code": 621,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/class/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/class/tokens.ts",
       "component": "diagrams/class",
       "lines": 128,
       "code": 126,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/class/tokens.nim"
+      ]
     },
     {
       "path": "src/diagrams/class/types.ts",
       "component": "diagrams/class",
       "lines": 74,
       "code": 64,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/class/types.nim"
+      ]
     },
     {
       "path": "src/diagrams/common/accDescr.ts",
@@ -787,8 +807,10 @@
       "component": "diagrams/common",
       "lines": 38,
       "code": 33,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/common/generics.nim"
+      ]
     },
     {
       "path": "src/diagrams/common/icon.ts",
@@ -2563,8 +2585,10 @@
       "component": "layout",
       "lines": 73,
       "code": 67,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/layout/components.nim"
+      ]
     },
     {
       "path": "src/layout/compound.ts",
