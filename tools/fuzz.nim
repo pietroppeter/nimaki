@@ -190,6 +190,24 @@ proc journeySource(g: var Gen): string =
     else: result.add indent & g.pick(actors) & ": " & g.pick(scores) & ": " & g.pick(actors) & "," & g.pick(actors)
     result.add(if g.chance(0.05): "\r\n" else: "\n")
 
+proc infoSource(g: var Gen): string =
+  if g.chance(0.15): result.add "---\ntitle: " & g.pick(labels) & "\n---\n"
+  if g.chance(0.1): result.add g.pick(["\n", "%% comment\n", "  \n"])
+  result.add(if g.chance(0.03): g.pick(["Info", "infox", "info:"]) else: "info")
+  if g.chance(0.4): result.add g.pick([" showInfo", "\nshowInfo", " showinfo", "  showInfo  "])
+  result.add "\n"
+  for i in 0 ..< g.rng.rand(0 .. 4):
+    let r = g.rng.rand(1.0)
+    let indent = g.pick(["", "  ", "\t"])
+    if r < 0.35: result.add indent & "title " & g.pick(labels)
+    elif r < 0.55: result.add indent & "accTitle: " & g.pick(labels)
+    elif r < 0.7: result.add indent & "accDescr: " & g.pick(labels)
+    elif r < 0.8: result.add indent & "accDescr {\n  " & g.pick(labels) & "\n" & g.pick(labels) & "\n}"
+    elif r < 0.88: result.add indent & "%% " & g.pick(labels)
+    elif r < 0.95: result.add ""
+    else: result.add indent & g.pick(["showInfo", "garbage", "title", "info"])
+    result.add(if g.chance(0.05): "\r\n" else: "\n")
+
 proc options(g: var Gen): JsonNode =
   result = newJObject()
   if g.chance(0.3): result["fontSize"] = %g.pick([12, 14, 16, 18, 20, 11])
@@ -238,7 +256,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey"]: quit "ERROR fuzz knows only: pie, timeline, journey", 2
+  if kind notin ["pie", "timeline", "journey", "info"]: quit "ERROR fuzz knows only: pie, timeline, journey, info", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -248,7 +266,8 @@ proc main() =
     cases.add %*{"id": kind & "/" & $seed & "/" & $i, "source": (case kind
                                                           of "pie": g.pieSource()
                                                           of "timeline": g.timelineSource()
-                                                          else: g.journeySource()), "options": opts}
+                                                          of "journey": g.journeySource()
+                                                          else: g.infoSource()), "options": opts}
   let dir = buildDir / "fuzz"
   createDir dir
   let inPath = dir / (kind & "-" & $seed & "-in.jsonl")

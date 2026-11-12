@@ -9,9 +9,11 @@ import nimaki/text/measurer
 import nimaki/diagrams/pie/index as pieIndex
 import nimaki/diagrams/timeline/index as timelineIndex
 import nimaki/diagrams/journey/index as journeyIndex
+import nimaki/diagrams/info/index as infoIndex
 
 export core, errors, types, measurer
 
 register(pieIndex.pie)
 register(timelineIndex.timeline)
 register(journeyIndex.journey)
+register(infoIndex.info)
