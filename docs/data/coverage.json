@@ -41,7 +41,7 @@
       "status": "started",
       "nim": "src/nimaki/svg/",
       "post": "first-light",
-      "notes": "builder.ts, palette.ts, theme.ts, ink.ts and root.ts are ported and checked through pie. shapes, edges, cluster and title come with the types that draw them."
+      "notes": "builder.ts, palette.ts, theme.ts, ink.ts and root.ts are ported and checked through pie and timeline; of edges.ts, the arrow marker (timeline). shapes, the rest of edges, cluster and title come with the types that draw them."
     },
     {
       "id": "layout",
@@ -68,7 +68,7 @@
       "status": "started",
       "nim": "src/nimaki/diagrams/common/",
       "post": "first-light",
-      "notes": "tokens.ts (the Langium-style tokenizer) and fit-width.ts are ported."
+      "notes": "tokens.ts (the Langium-style tokenizer), fit-width.ts, scan.ts (the Jison-style lexer rules journey and timeline share) and fit.ts (plain labels, cut words) are ported."
     },
     {
       "id": "api",
@@ -265,19 +265,19 @@
       "corpus": 14,
       "parse": {
         "code": 244,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 0,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 231,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/timeline/",
+      "post": "timeline",
+      "notes": "Identical to Pele on the 24 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim timeline); 30,000 more across seeds before merging."
     },
     {
       "id": "radar",

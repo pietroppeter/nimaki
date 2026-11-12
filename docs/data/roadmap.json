@@ -219,12 +219,12 @@
           "id": "timeline",
           "kind": "port",
           "title": "Timeline",
-          "what": "src/diagrams/timeline.",
+          "what": "src/diagrams/timeline, with common/scan.ts, common/fit.ts and the arrow marker of svg/edges.ts.",
           "done_when": "difftest: every timeline case identical.",
           "owner": "Port Pele core, pie and timeline",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "timeline",
+          "pr": "13"
         }
       ]
     },

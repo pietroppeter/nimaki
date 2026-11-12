@@ -82,7 +82,9 @@ jobs:
 
       # Differential fuzzing: inputs generated from each ported type's grammar, against Pele
       - name: Fuzz
-        run: nim r tools/fuzz.nim pie --cases:5000
+        run: |
+          nim r tools/fuzz.nim pie --cases:5000
+          nim r tools/fuzz.nim timeline --cases:5000
 
       - name: Tests
         run: |
