@@ -16,6 +16,7 @@ import nimaki/diagrams/radar/index as radarIndex
 import nimaki/diagrams/treemap/index as treemapIndex
 import nimaki/diagrams/treeview/index as treeviewIndex
 import nimaki/diagrams/mindmap/index as mindmapIndex
+import nimaki/diagrams/kanban/index as kanbanIndex
 
 export core, errors, types, measurer
 
@@ -29,3 +30,4 @@ register(radarIndex.radar)
 register(treemapIndex.treemap)
 register(treeviewIndex.treeView)
 register(mindmapIndex.mindmap)
+register(kanbanIndex.kanban)
