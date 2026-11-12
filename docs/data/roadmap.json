@@ -175,7 +175,7 @@
           "id": "text",
           "kind": "port",
           "title": "Measuring text: src/text",
-          "what": "The metrics measurer and its font tables, labels, entities.",
+          "what": "The metrics measurer and its font tables, labels, entities. Checked through pie's labels (corpus and fuzzer); the label features other types use (Markdown, icons, math, wrapping) are ported and are checked as those types arrive.",
           "done_when": "Widths identical to Pele's metricsMeasurer on every label of the corpus.",
           "owner": "Port Pele core and pie",
           "status": "done",

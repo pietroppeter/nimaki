@@ -6,7 +6,7 @@ import ../blocks, ../site, ../pele
 import nimaki
 from nimaki/js import jsRound, toFixed, jsString, utf16Len, codeUnits
 from nimaki/svg/builder import num
-from nimaki/diagrams/common/tokens import tokenize, Tokens
+from nimaki/diagrams/common/tokens import tokenize
 from nimaki/diagrams/pie/parser import PIE_TOKENS, parsePie
 
 nbInit
@@ -72,7 +72,7 @@ nbSvg fromNimaki, "nimaki, in Nim. The same bytes."
 
 nbText: """
 They are not two pictures that look alike: they are the same text, down to the last byte. That
-is the bar for every part of the port ([decision 0004](../../decisions/#0004-done-means-byte-for-byte-identical)).
+is the bar for every part of the port ([decision 0004](../../decisions/#0004-the-svg-is-compared-byte-for-byte-with-the-same-text-measurer)).
 
 ## What the core is
 
@@ -116,8 +116,10 @@ nbCode:
   echo "JavaScript's round   = ", jsRound(-2.5)
   echo "num(-0.125)          = ", num(-0.125)   # -12.5 hundredths: a tie, which goes up to -12
   echo "toFixed(12.5, 0)     = ", toFixed(12.5, 0)
-  echo "Nim's $1e21          = ", $1e21
-  echo "JavaScript's String  = ", jsString(1e21)
+  echo "Nim's $5.0           = ", $5.0
+  echo "JavaScript's String  = ", jsString(5.0)
+  echo "Nim's $1e20          = ", $1e20
+  echo "JavaScript's String  = ", jsString(1e20)
 
 nbText: """
 `toFixed` has one more subtlety. A number like 1.005 is not stored as 1.005: the computer keeps
@@ -185,10 +187,10 @@ pie, as the port finds them:
 
 nbCode:
   let small = "pie showData\n  title Pets\n  \"Dogs\" : 386\n"
-  let tokens = tokenize(small, PIE_TOKENS, "pie")
-  for k in 0 ..< tokens.kinds.len - 1:
-    echo PIE_TOKENS[tokens.kinds[k]].name.alignLeft(10), " ",
-      small[tokens.starts[k] ..< tokens.ends[k]].escape
+  let found = tokenize(small, PIE_TOKENS, "pie")
+  for k in 0 ..< found.kinds.len - 1:
+    echo PIE_TOKENS[found.kinds[k]].name.alignLeft(10), " ",
+      small[found.starts[k] ..< found.ends[k]].escape
 
 nbText: """
 The spaces are gone (the `WHITESPACE` type is *hidden*), and so would be comments. The parser
