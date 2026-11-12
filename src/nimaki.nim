@@ -10,6 +10,7 @@ import nimaki/diagrams/pie/index as pieIndex
 import nimaki/diagrams/timeline/index as timelineIndex
 import nimaki/diagrams/journey/index as journeyIndex
 import nimaki/diagrams/info/index as infoIndex
+import nimaki/diagrams/packet/index as packetIndex
 
 export core, errors, types, measurer
 
@@ -17,3 +18,4 @@ register(pieIndex.pie)
 register(timelineIndex.timeline)
 register(journeyIndex.journey)
 register(infoIndex.info)
+register(packetIndex.packet)

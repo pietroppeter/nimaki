@@ -32,6 +32,14 @@
       "different": 0,
       "rendered": 824,
       "errors": 176
+    },
+    "packet": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 3436,
+      "errors": 1564
     }
   }
 }

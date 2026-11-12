@@ -14,5 +14,6 @@ import devlog/pele_origins
 import devlog/pomice
 import devlog/the_diagram_family
 import devlog/the_referee
+import devlog/three_small_diagrams
 import devlog/timeline
 import devlog/what_mermaid_is

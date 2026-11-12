@@ -208,6 +208,42 @@ proc infoSource(g: var Gen): string =
     else: result.add indent & g.pick(["showInfo", "garbage", "title", "info"])
     result.add(if g.chance(0.05): "\r\n" else: "\n")
 
+proc packetSource(g: var Gen): string =
+  if g.chance(0.35):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(labels) & "\n"
+    result.add "config:\n  packet:\n"
+    for key in ["bitsPerRow", "rowHeight", "bitWidth", "paddingX", "paddingY"]:
+      if g.chance(0.3): result.add "    " & key & ": " & g.pick(["8", "16", "32", "64", "1", "0", "7.5", "500", "-3", "x", "20"]) & "\n"
+    if g.chance(0.3): result.add "    showBits: " & g.pick(["false", "true", "0"]) & "\n"
+    if g.chance(0.3): result.add "    bitOrder: " & g.pick(["descending", "ascending", "x"]) & "\n"
+    result.add "    useMaxWidth: true\n---\n"
+  result.add(if g.chance(0.03): g.pick(["Packet", "packet-alpha", "packets"])
+             elif g.chance(0.3): "packet-beta" else: "packet")
+  result.add "\n"
+  var bit = 0
+  for i in 0 ..< g.rng.rand(0 .. 12):
+    let indent = g.pick(["", "  ", "\t"])
+    let r = g.rng.rand(1.0)
+    let label = "\"" & g.pick(labels) & "\""
+    if r < 0.45:
+      let width = g.pick([1, 1, 2, 4, 8, 8, 16, 16, 24, 32, 3, 40, 64, 100])
+      if g.chance(0.02): bit += g.pick([-1, 1, 2])   # not contiguous: an error
+      if width == 1 and g.chance(0.5): result.add indent & $bit & ": " & label
+      else: result.add indent & $bit & "-" & $(bit + width - 1) & ": " & label
+      bit += width
+    elif r < 0.75:
+      let width = g.pick([1, 2, 4, 8, 16, 32, 5, 12, 48, 0])
+      result.add indent & "+" & $width & g.pick([": ", ":", " : "]) & label
+      bit += max(width, 1)
+    elif r < 0.8: result.add indent & "title " & g.pick(labels)
+    elif r < 0.83: result.add indent & "accTitle: " & g.pick(labels)
+    elif r < 0.86: result.add indent & "accDescr: " & g.pick(labels)
+    elif r < 0.89: result.add indent & "%% " & g.pick(labels)
+    elif r < 0.98: result.add ""
+    else: result.add indent & g.pick(["1.5: \"x\"", "x: \"y\"", "5-3: \"back\"", "+: \"z\"", "0-: \"a\"", "007: \"z\"", $bit & "-" & $bit & " \"no colon\""])
+    result.add(if g.chance(0.05): "\r\n" else: "\n")
+
 proc options(g: var Gen): JsonNode =
   result = newJObject()
   if g.chance(0.3): result["fontSize"] = %g.pick([12, 14, 16, 18, 20, 11])
@@ -256,7 +292,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info"]: quit "ERROR fuzz knows only: pie, timeline, journey, info", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -267,7 +303,8 @@ proc main() =
                                                           of "pie": g.pieSource()
                                                           of "timeline": g.timelineSource()
                                                           of "journey": g.journeySource()
-                                                          else: g.infoSource()), "options": opts}
+                                                          of "info": g.infoSource()
+                                                          else: g.packetSource()), "options": opts}
   let dir = buildDir / "fuzz"
   createDir dir
   let inPath = dir / (kind & "-" & $seed & "-in.jsonl")

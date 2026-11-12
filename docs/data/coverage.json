@@ -68,7 +68,7 @@
       "status": "started",
       "nim": "src/nimaki/diagrams/common/",
       "post": "first-light",
-      "notes": "tokens.ts (the Langium-style tokenizer), fit-width.ts, scan.ts (the Jison-style lexer rules journey and timeline share) and fit.ts (plain labels, cut words) are ported."
+      "notes": "tokens.ts (the Langium-style tokenizer), fit-width.ts, scan.ts (the Jison-style lexer rules journey and timeline share), fit.ts (plain labels, cut words), fit-text.ts (shrink, then cut with an ellipsis) and literal-label.ts are ported."
     },
     {
       "id": "api",
@@ -118,19 +118,19 @@
       "corpus": 2,
       "parse": {
         "code": 86,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 0,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 22,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/info/",
+      "post": "three-small-diagrams",
+      "notes": "Identical on the 6 corpus cases and 1,000 generated inputs in CI. Draws Pele's version at the pin, 1.13.0, as Pele does."
     },
     {
       "id": "packet",
@@ -139,19 +139,19 @@
       "corpus": 4,
       "parse": {
         "code": 195,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 0,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 133,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/packet/",
+      "post": "three-small-diagrams",
+      "notes": "Identical on the 19 corpus cases and 5,000 generated inputs in CI (fields, configs, bit order, narrow widths); 40,000 across seeds before merging."
     },
     {
       "id": "pie",
@@ -244,19 +244,19 @@
       "corpus": 1,
       "parse": {
         "code": 219,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 0,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 248,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/journey/",
+      "post": "three-small-diagrams",
+      "notes": "Identical to Pele on the 4 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim journey); 35,000 across seeds before merging."
     },
     {
       "id": "timeline",
