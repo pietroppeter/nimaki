@@ -1,4 +1,4 @@
-## devlog: 12 Nov 2026 S | Boxes with sections: class diagrams | nimaki draws Mermaid's class diagrams byte for byte as Pele does: a lexer with thirteen states, a model of classes, members and namespaces, ends spread along the sides of a box, and a narrow screen that gets the diagram in rows.
+## devlog: 12 Nov 2026 T | Boxes with sections: class diagrams | nimaki draws Mermaid's class diagrams byte for byte as Pele does: a lexer with thirteen states, a model of classes, members and namespaces, ends spread along the sides of a box, and a narrow screen that gets the diagram in rows.
 ## kind: port
 import std/[strformat, strutils, json, tables, options]
 import nimib
