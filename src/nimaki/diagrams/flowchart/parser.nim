@@ -1,7 +1,7 @@
 ## port-of: src/diagrams/flowchart/parser.ts
 ## port-status: draft
 ##
-## Pele's `T.END` (the end of the tokens) is `T_STOP`; `T_end` is the `end` keyword. The
+## Pele's `T.END` (the end of the tokens) is `T_STOP`; `T_end` is the stop keyword. The
 ## `Uint8Array` tables of token types are sets.
 import std/[options, tables]
 import ../../errors
@@ -162,7 +162,7 @@ proc parseFlowchart*(source: string, db: FlowDb) =
       if n != T_TEXT and n != T_TAGSTART and n != T_TAGEND and n != T_UNICODE_TEXT: break
       s.add texts[i]
       inc i
-    FlowText(text: s, `type`: typ)
+    FlowText(text: s, kind: typ)
 
   proc closed(t: int) =
     discard expect(t, TEXT_TOKENS)
@@ -179,7 +179,7 @@ proc parseFlowchart*(source: string, db: FlowDb) =
     while types[i] == T_EDGE_TEXT or types[i] == T_UNICODE_TEXT:
       s.add texts[i]
       inc i
-    FlowText(text: s, `type`: typ)
+    FlowText(text: s, kind: typ)
 
   proc textNoTags(): FlowText =
     let t = types[i]
@@ -193,7 +193,7 @@ proc parseFlowchart*(source: string, db: FlowDb) =
     while types[i].isIn(NO_TAGS):
       s.add texts[i]
       inc i
-    FlowText(text: s, `type`: typ)
+    FlowText(text: s, kind: typ)
 
   proc shapeData(): string =
     var s = texts[i]

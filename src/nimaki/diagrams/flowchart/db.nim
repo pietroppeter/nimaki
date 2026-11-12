@@ -14,7 +14,7 @@ type
     direction*: string         ## "" for undefined
     # Pele's `warn` callback is never set by the flowchart's entry point; it is left out.
 
-  Destructed* = tuple[`type`, stroke: string, length: int]  ## length NO_LENGTH for undefined
+  Destructed* = tuple[kind, stroke: string, length: int]  ## length NO_LENGTH for undefined
 
 proc labelType(t: string): LabelType =
   ## `t` "" is undefined.
@@ -152,11 +152,11 @@ proc addVertex*(db: FlowDb, id: string, textObj = none(FlowText), typ = "",
     db.nodes[id] = vertex
 
   if textObj.isSome:
-    vertex.labelType = textObj.get.`type`
+    vertex.labelType = textObj.get.kind
     vertex.text = some(unquote(textObj.get.text.jsTrim))
   elif vertex.text.isNone:
     vertex.text = some(id)
-  if typ != "": vertex.`type` = typ
+  if typ != "": vertex.kind = typ
   if style.isSome:
     for s in style.get: vertex.styles.add s
   if classes.isSome:
@@ -173,7 +173,7 @@ proc addVertex*(db: FlowDb, id: string, textObj = none(FlowText), typ = "",
       raise newPeleError("No such shape: " & shape & ". Shape names should be lowercase.", "semantic", "flowchart")
     if not isValidShape(shape):
       raise newPeleError("No such shape: " & shape & ".", "semantic", "flowchart")
-    vertex.`type` = shape
+    vertex.kind = shape
   let lv = doc["label"]
   let isLabel = lv != nil and lv.kind == yString
   let label = if isLabel: lv.s else: ""
@@ -193,24 +193,24 @@ proc addVertex*(db: FlowDb, id: string, textObj = none(FlowText), typ = "",
   if truthy(doc["w"]): vertex.assetWidth = yamlNumber(doc["w"])
   if truthy(doc["h"]): vertex.assetHeight = yamlNumber(doc["h"])
 
-proc addSingleLink*(db: FlowDb, start, `end`: string, info: Option[FlowLinkInfo], id = "") =
-  let edge = FlowEdge(start: start, `end`: `end`, text: "", labelType: "text",
+proc addSingleLink*(db: FlowDb, start, stop: string, info: Option[FlowLinkInfo], id = "") =
+  let edge = FlowEdge(start: start, stop: stop, text: "", labelType: "text",
                       isUserDefinedId: false, interpolate: db.defaultInterpolate, length: NO_LENGTH)
   if info.isSome and info.get.text.isSome:
     let linkText = info.get.text.get
     edge.text = unquote(linkText.text.jsTrim)
-    edge.labelType = labelType(linkText.`type`)
+    edge.labelType = labelType(linkText.kind)
   if info.isSome:
-    edge.`type` = info.get.`type`
+    edge.kind = info.get.kind
     edge.stroke = info.get.stroke
     edge.length = if info.get.length != NO_LENGTH and info.get.length > 10: 10 else: info.get.length
-  let pair = start & "\0" & `end`
+  let pair = start & "\0" & stop
   let count = db.pairCount.getOrDefault(pair, 0)
   if id != "" and not db.edgeById.hasKey(id):
     edge.id = id
     edge.isUserDefinedId = true
   else:
-    edge.id = "L_" & start & "_" & `end` & "_" & $(if count == 0: 0 else: count + 1)
+    edge.id = "L_" & start & "_" & stop & "_" & $(if count == 0: 0 else: count + 1)
 
   let max = db.options.maxEdges
   if max.isSome and db.edges.len >= max.get:
@@ -354,7 +354,7 @@ proc addSubGraph*(db: FlowDb, idText: Option[FlowText], list: seq[DocItem],
   inc db.subCount
 
   let subgraph = FlowSubgraph(id: id, nodes: nodeList, title: title.jsTrim, dir: dir,
-                              labelType: labelType(if titleText.isSome: titleText.get.`type` else: ""))
+                              labelType: labelType(if titleText.isSome: titleText.get.kind else: ""))
   # A node belongs to the first subgraph that lists it, and a subgraph never contains itself.
   var kept: seq[string]
   for nodeId in nodeList:
@@ -381,19 +381,19 @@ proc makeUniq*(db: FlowDb, sg: FlowSubgraph, all: seq[FlowSubgraph]): seq[string
   for id in sg.nodes:
     if id notin taken: result.add id
 
-proc destructLink*(db: FlowDb, `end`: string, start = ""): FlowLinkInfo =
+proc destructLink*(db: FlowDb, stop: string, start = ""): FlowLinkInfo =
   ## `start` "" is undefined.
-  let info = destructEndLink(`end`)
-  if start == "": return FlowLinkInfo(`type`: info.`type`, stroke: info.stroke, length: info.length)
+  let info = destructEndLink(stop)
+  if start == "": return FlowLinkInfo(kind: info.kind, stroke: info.stroke, length: info.length)
   var startInfo = destructStartLink(start)
-  if startInfo.stroke != info.stroke: return FlowLinkInfo(`type`: "INVALID", stroke: "INVALID", length: NO_LENGTH)
-  if startInfo.`type` == "arrow_open":
-    startInfo.`type` = info.`type`
+  if startInfo.stroke != info.stroke: return FlowLinkInfo(kind: "INVALID", stroke: "INVALID", length: NO_LENGTH)
+  if startInfo.kind == "arrow_open":
+    startInfo.kind = info.kind
   else:
-    if startInfo.`type` != info.`type`: return FlowLinkInfo(`type`: "INVALID", stroke: "INVALID", length: NO_LENGTH)
-    startInfo.`type` = "double_" & startInfo.`type`
-  if startInfo.`type` == "double_arrow": startInfo.`type` = "double_arrow_point"
-  FlowLinkInfo(`type`: startInfo.`type`, stroke: startInfo.stroke, length: info.length)
+    if startInfo.kind != info.kind: return FlowLinkInfo(kind: "INVALID", stroke: "INVALID", length: NO_LENGTH)
+    startInfo.kind = "double_" & startInfo.kind
+  if startInfo.kind == "double_arrow": startInfo.kind = "double_arrow_point"
+  FlowLinkInfo(kind: startInfo.kind, stroke: startInfo.stroke, length: info.length)
 
 proc subgraph*(db: FlowDb, id: string): FlowSubgraph =
   ## nil when there is none.

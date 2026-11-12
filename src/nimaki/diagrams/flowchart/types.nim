@@ -11,13 +11,13 @@ type
 
   FlowText* = object
     text*: string
-    `type`*: LabelType
+    kind*: LabelType
 
   FlowNode* = ref object
     id*: string
     text*: Option[string]
     labelType*: LabelType
-    `type`*: string            ## "" for undefined
+    kind*: string            ## "" for undefined
     styles*: seq[string]
     classes*: seq[string]
     dir*: string               ## "" for undefined
@@ -34,8 +34,8 @@ type
 
   FlowEdge* = ref object
     start*: string
-    `end`*: string
-    `type`*: string            ## "" for undefined
+    stop*: string
+    kind*: string            ## "" for undefined
     text*: string
     labelType*: LabelType
     stroke*: string            ## "" for undefined
@@ -64,7 +64,7 @@ type
 
   FlowLinkInfo* = object
     ## Pele's `LinkInfo` of `types.ts` (renamed: the core's `LinkInfo` is a link in the SVG).
-    `type`*: string
+    kind*: string
     stroke*: string
     length*: int               ## NO_LENGTH for undefined
     text*: Option[FlowText]

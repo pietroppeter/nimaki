@@ -30,7 +30,7 @@ type
   FlowVariant* = ref object
     ## A diagram type that is a flowchart with a different layout, which may draw its top-level
     ## groups itself.
-    `type`*: string
+    kind*: string
     prepare*: proc (graph: var FlowGraph)
     layout*: proc (nodes: seq[CNode], edges: seq[CEdge], dir: Dir, opt: LayeredOptions, tight: bool): CompoundResult
     drawGroup*: proc (c: CNode, label: Label, style: ResolvedStyle, classes, id: string, dir: Dir,
@@ -90,7 +90,7 @@ func withoutFlowClasses(s: string): string =
 # `turned` draws a flowchart that runs across as one that runs down. `tight` sets nodes closer together.
 proc draw(db: FlowDb, config: Config, options: RenderOptions, variant: FlowVariant, turned, tight: bool): Rendered =
   let groupPad = if tight: 12.0 else: GROUP_PAD
-  let own = if variant != nil: config[variant.`type`] else: nil
+  let own = if variant != nil: config[variant.kind] else: nil
   let flow = if own.isRecord: own else: config["flowchart"]
   let curveOpt = flow["curve"]
   let isCurve = curveOpt != nil and curveOpt.kind == yString
@@ -154,7 +154,7 @@ proc draw(db: FlowDb, config: Config, options: RenderOptions, variant: FlowVaria
   for i, node in graph.nodes:
     cnodes[i].parent = if node.parentId.isSome: index.getOrDefault(node.parentId.get, -1) else: -1
   var ends: seq[(int, int)]
-  for edge in graph.edges: ends.add (index.getOrDefault(edge.start, -1), index.getOrDefault(edge.`end`, -1))
+  for edge in graph.edges: ends.add (index.getOrDefault(edge.start, -1), index.getOrDefault(edge.stop, -1))
   inheritCrossedDirections(cnodes, ends)
 
   let rootDir = if turned: "TB" else: direction(db.direction)
@@ -178,9 +178,9 @@ proc draw(db: FlowDb, config: Config, options: RenderOptions, variant: FlowVaria
   var edgeLabels: seq[Label]
   var drawn: seq[GraphEdge]
   for edge in graph.edges:
-    if not index.hasKey(edge.start) or not index.hasKey(edge.`end`): continue
+    if not index.hasKey(edge.start) or not index.hasKey(edge.stop): continue
     let src = index[edge.start]
-    let dst = index[edge.`end`]
+    let dst = index[edge.stop]
     let label = layoutLabel(edge.label, edge.labelType == "markdown", measurer, edgeSize, wrapWidth)
     if src == dst:
       # A self-loop sits beside the node, across the flow, and the node's box grows to hold it.
@@ -381,7 +381,7 @@ proc draw(db: FlowDb, config: Config, options: RenderOptions, variant: FlowVaria
       labelsOut.add edgeLabelSvg(edge.id, label, x, y, style.text, icons)
 
   let svg = svgDocument(
-    if variant != nil: variant.`type` else: "flowchart",
+    if variant != nil: variant.kind else: "flowchart",
     width,
     height,
     size,

@@ -33,8 +33,8 @@ type
     id*: string
     isUserDefinedId*: bool
     start*: string
-    `end`*: string
-    `type`*: string
+    stop*: string
+    kind*: string
     label*: string
     labelType*: LabelType
     thickness*: string           ## "" for undefined
@@ -60,13 +60,13 @@ proc shapeOf(vertex: FlowNode): string =
     if vertex.form == "square": return "iconSquare"
     if vertex.form == "rounded": return "iconRounded"
     return "icon"
-  case vertex.`type`
+  case vertex.kind
   of "square", "":
     "squareRect"
   of "round":
     "roundedRect"
   else:
-    vertex.`type`
+    vertex.kind
 
 proc arrows(t: string): (string, string) =
   case t
@@ -229,19 +229,19 @@ proc buildFlowGraph*(model: FlowDb, defaultCurve = ""): FlowGraph =
 
   for index, raw in model.edges:
     let start = collapsedInto.getOrDefault(raw.start, raw.start)
-    let e = collapsedInto.getOrDefault(raw.`end`, raw.`end`)
-    if start == e and (collapsedInto.hasKey(raw.start) or collapsedInto.hasKey(raw.`end`)): continue
+    let e = collapsedInto.getOrDefault(raw.stop, raw.stop)
+    if start == e and (collapsedInto.hasKey(raw.start) or collapsedInto.hasKey(raw.stop)): continue
 
-    let (arrowStart, arrowEnd) = arrows(raw.`type`)
+    let (arrowStart, arrowEnd) = arrows(raw.kind)
     var styles = model.defaultEdgeStyle
     for s in raw.style: styles.add s
-    let plain = raw.stroke == "invisible" or raw.`type` == "arrow_open"
+    let plain = raw.stroke == "invisible" or raw.kind == "arrow_open"
     edges.add GraphEdge(
       id: if raw.id != "": raw.id else: "L_" & start & "_" & e & "_" & $index,
       isUserDefinedId: raw.isUserDefinedId,
       start: start,
-      `end`: e,
-      `type`: if raw.`type` != "": raw.`type` else: "normal",
+      stop: e,
+      kind: if raw.kind != "": raw.kind else: "normal",
       label: raw.text,
       labelType: raw.labelType,
       thickness: raw.stroke,
