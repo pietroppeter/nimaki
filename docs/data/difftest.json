@@ -2,9 +2,9 @@
   "about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand.",
   "pin": "1.13.0",
   "cases": 2118,
-  "identical": 0,
+  "identical": 16,
   "different": 0,
-  "unsupported": 2118,
+  "unsupported": 2102,
   "types": [
     {
       "type": "agentflow",
@@ -146,9 +146,9 @@
       "type": "pie",
       "coverage": "pie",
       "cases": 16,
-      "identical": 0,
+      "identical": 16,
       "different": 0,
-      "unsupported": 16
+      "unsupported": 0
     },
     {
       "type": "quadrantChart",

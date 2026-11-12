@@ -59,24 +59,32 @@ nbNote """
 JavaScript strings are UTF-16: `text.length`, `charCodeAt(i)`, `slice` and the text measurer
 count 16-bit code units. Nim strings are bytes (UTF-8). Pele calls `charCodeAt` or
 `codePointAt` about 640 times. A width that counts characters differently is a different SVG.
-The port needs one agreed way to iterate and index "like JavaScript" (a small module of ours),
-used everywhere a TypeScript file indexes a string.
-""", nkWarning, "Strings are UTF-16"
+Settled by [decision 0011](../decisions/#0011-strings-stay-utf-8-javascript-s-utf-16-is-counted-only-where-it-shows):
+strings stay UTF-8 and indexes are bytes; `utf16Len`, `codeUnits` and `codePointAt` of
+`src/nimaki/js.nim` count and read UTF-16 where it shows (a limit, the measurer, an error
+column). A test on a character a regular expression makes (`\s`, `[^\n\r]`) reads a whole code
+point when the character can be outside ASCII.
+""", nkNim, "Strings are UTF-16"
 
 nbNote """
 Every number Pele writes into SVG goes through one formatter (`num()` in `src/svg/builder.ts`:
 round to 2 decimals). Below it is JavaScript's own number-to-string conversion (shortest
 round-trip, `1e21` and beyond in exponent form, `-0` printed as `0`). Nim's `$` for floats is
 not the same. Port `num()` once, with JavaScript's conversion, and test it against Node on
-many numbers before any renderer uses it.
-""", nkWarning, "Numbers are JavaScript numbers"
+many numbers before any renderer uses it. Done in the core step: `jsString`, `toFixed` and
+`jsRound` (`src/nimaki/js.nim`) agree with Node on about 4,000 seeded numbers, checked on
+every run of `tests/test_js.nim`; `num()` is in `src/nimaki/svg/builder.nim`.
+""", nkNim, "Numbers are JavaScript numbers"
 
 nbNote """
 Pele's source has about 480 regular expression literals, 122 of them sticky (counted in
 *How Pele is built*); lookahead is used, lookbehind never. `std/re` needs PCRE at run time and differs
 from JavaScript's engine in details (`\s`, Unicode classes, `lastIndex`, sticky `y` flags).
 The default is a hand-written scanner with the same behaviour; a regex package needs a decision
-record first.
+record first. The core and pie needed about 60 of them, all written as scanners: each one says
+in a comment the pattern it answers as. Watch the patterns that backtrack (`[OPEN]*[CJK]` in
+`label.ts`, `\s+$` with the `m` flag in `accDescrValue`) and `^\s*` with the `m` flag, which
+runs across line breaks.
 """, nkWarning, "Regular expressions"
 
 nbNote """
@@ -108,14 +116,29 @@ Pele's layout uses NaN for *unknown* (`hint`, `key`). Use `jsMax`/`jsMin` where 
 nbNote """
 A JavaScript `RangeError` (stack overflow from deep nesting) is caught by `render()` and reported
 as a `limit` error. In Nim deep recursion crashes the process. Where Pele recurses on the input's
-nesting, the port counts depth and raises the same `limit` error.
+nesting, the port counts depth and raises the same `limit` error. Any other `RangeError` Pele can
+throw (`String.fromCodePoint` of a bad code) is a `JsRangeError` of `errors.nim`, which `render()`
+turns into the same `limit` error.
 """, nkWarning, "Deep nesting"
+
+nbNote """
+Nim compares identifiers without case and underscores, except their first letter: `BOLD` and
+`Bold` are one name, and so are `metrics.BOLD` and `measurer.Bold`. Pele has both (the table of
+bold widths and `Style.Bold`). The core named the style bits `Bold`, `Italic`, `Mono`... (Pele's
+`Style` members) and gave the other the module's name or a suffix (`BOLD_ATTR`).
+""", nkWarning, "Two names that are one"
+
+nbNote """
+A closure that uses a `var` parameter (a `seq` passed by reference) does not compile in Nim.
+Pele's local helpers often change the arrays of the function around them (`commit()` in
+`label.ts`'s `wrap`): write them as a `template`, which pastes the code in place.
+""", nkWarning, "Local helpers that change their surroundings"
 
 nbText: """
 ## The idiom map
 
-To be filled by the first port steps (the core and pie). One row per TypeScript idiom, with the
-one Nim translation everyone uses.
+One row per TypeScript idiom, with the one Nim translation everyone uses. The core and pie
+filled it in; later steps add to it.
 
 | TypeScript | Nim |
 | --- | --- |
@@ -135,6 +158,17 @@ one Nim translation everyone uses.
 | `Math.imul(a, b)`, `x >>> 0` | `uint32` arithmetic (wraps) |
 | `list.sort((a, b) => ...)` | `algorithm.sort` with the same comparator: both are stable |
 | `withPalette(p, () => ...)` (a module global set for a call) | set the global, `try` the call, restore it in `finally` |
+| a sticky regex `re.lastIndex = p; re.test(s)` | a matcher `proc (s: string, p: int): int` returning the end, or -1, with the pattern in a comment |
+| `s.replace(re, ...)` with `/g` | a loop that copies `s` and writes the replacement at each match |
+| `s.length` that is compared or printed | `utf16Len(s)` |
+| `for (...) s.charCodeAt(i)` over a whole string | `for c in codeUnits(s)` |
+| `s.trim()`, `trimStart()`, `trimEnd()` | `jsTrim`, `jsTrimStart`, `jsTrimEnd` (JavaScript's whitespace, wider than Nim's) |
+| a string that may be `undefined` and is never `""` when set | `string`, with `""` for undefined (say so in a comment on the field) |
+| a number option `options.padding ?? 8` | `Option[float]`: `options.padding.get(8)` |
+| a `YamlValue` or `Config` (front matter, `%%{init}%%`) | `YamlValue` of `util/yaml.nim`: `nil` is undefined, kind `yNull` is null; `v["key"]` is nil when `v` is not a record |
+| a `Diagram<Model>` | `Diagram` of `types.nim`, with the model as a `ref object of RootObj` |
+| `Math.sin(x)` | `sin(x)` of `jsmath` (`import ../../jsmath`, and `from std/math import PI, ceil`) |
+| `` `${n}` `` in an attribute | `jsString(n)`; but a coordinate goes through `num(n)` as in Pele |
 
 ## Names
 
@@ -142,7 +176,14 @@ Names changed because they clash with Nim (filled in as they are met).
 
 | TypeScript | Nim |
 | --- | --- |
-| `type` | `kind` |
+| `type` | `kind` (`diagramType` where the type of a diagram is meant) |
+| `src/diagrams/common/fit-width.ts` | `fit_width.nim` (a module name has no `-`) |
+| `end` | `stop` |
+| `from` | `start` or `first` |
+| `out` | `output` |
+| `open` (a local) | `opening` |
+| `Style.Bold` and its siblings | `Bold`, `Italic`, `Mono`, `Sub`, `Sup`, `Underline` (`int` bits) |
+| `const enum T` of a parser | `T_name` constants (`T_newline`) |
 """
 
 nbSave

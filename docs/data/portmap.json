@@ -3,12 +3,12 @@
   "code": 47594,
   "totals": {
     "todo": {
-      "files": 291,
-      "code": 47594
+      "files": 267,
+      "code": 44706
     },
     "draft": {
-      "files": 0,
-      "code": 0
+      "files": 24,
+      "code": 2888
     },
     "verified": {
       "files": 0,
@@ -26,8 +26,8 @@
   "components": [
     {
       "component": "api",
-      "todo": 1565,
-      "draft": 0,
+      "todo": 958,
+      "draft": 607,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -74,8 +74,8 @@
     },
     {
       "component": "diagrams/common",
-      "todo": 896,
-      "draft": 0,
+      "todo": 620,
+      "draft": 276,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -178,8 +178,8 @@
     },
     {
       "component": "diagrams/pie",
-      "todo": 328,
-      "draft": 0,
+      "todo": 0,
+      "draft": 328,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -330,24 +330,24 @@
     },
     {
       "component": "svg",
-      "todo": 1751,
-      "draft": 0,
+      "todo": 1214,
+      "draft": 537,
       "verified": 0,
       "conformant": 0,
       "skip": 0
     },
     {
       "component": "text",
-      "todo": 675,
-      "draft": 0,
+      "todo": 0,
+      "draft": 675,
       "verified": 0,
       "conformant": 0,
       "skip": 0
     },
     {
       "component": "util",
-      "todo": 592,
-      "draft": 0,
+      "todo": 127,
+      "draft": 465,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -359,16 +359,20 @@
       "component": "api",
       "lines": 196,
       "code": 160,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/core.nim"
+      ]
     },
     {
       "path": "src/detect.ts",
       "component": "api",
       "lines": 93,
       "code": 85,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/detect.nim"
+      ]
     },
     {
       "path": "src/diagrams/agentflow/colorSlots.ts",
@@ -759,8 +763,10 @@
       "component": "diagrams/common",
       "lines": 67,
       "code": 48,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/common/fit_width.nim"
+      ]
     },
     {
       "path": "src/diagrams/common/fit.ts",
@@ -815,8 +821,10 @@
       "component": "diagrams/common",
       "lines": 277,
       "code": 228,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/common/tokens.nim"
+      ]
     },
     {
       "path": "src/diagrams/cynefin/boundaries.ts",
@@ -1359,32 +1367,40 @@
       "component": "diagrams/pie",
       "lines": 11,
       "code": 9,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/pie/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/pie/model.ts",
       "component": "diagrams/pie",
       "lines": 34,
       "code": 31,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/pie/model.nim"
+      ]
     },
     {
       "path": "src/diagrams/pie/parser.ts",
       "component": "diagrams/pie",
       "lines": 136,
       "code": 125,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/pie/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/pie/render.ts",
       "component": "diagrams/pie",
       "lines": 183,
       "code": 163,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/pie/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/quadrant/db.ts",
@@ -2431,8 +2447,10 @@
       "component": "api",
       "lines": 109,
       "code": 92,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/errors.nim"
+      ]
     },
     {
       "path": "src/index.ts",
@@ -2503,16 +2521,20 @@
       "component": "api",
       "lines": 248,
       "code": 212,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/preprocess.nim"
+      ]
     },
     {
       "path": "src/svg/builder.ts",
       "component": "svg",
       "lines": 180,
       "code": 145,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/svg/builder.nim"
+      ]
     },
     {
       "path": "src/svg/cluster.ts",
@@ -2535,24 +2557,30 @@
       "component": "svg",
       "lines": 132,
       "code": 107,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/svg/ink.nim"
+      ]
     },
     {
       "path": "src/svg/palette.ts",
       "component": "svg",
       "lines": 139,
       "code": 115,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/svg/palette.nim"
+      ]
     },
     {
       "path": "src/svg/root.ts",
       "component": "svg",
       "lines": 57,
       "code": 51,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/svg/root.nim"
+      ]
     },
     {
       "path": "src/svg/shapes.ts",
@@ -2567,8 +2595,10 @@
       "component": "svg",
       "lines": 152,
       "code": 119,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/svg/theme.nim"
+      ]
     },
     {
       "path": "src/svg/title.ts",
@@ -2583,64 +2613,80 @@
       "component": "text",
       "lines": 80,
       "code": 68,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/text/entities.nim"
+      ]
     },
     {
       "path": "src/text/icons.ts",
       "component": "text",
       "lines": 30,
       "code": 24,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/text/icons.nim"
+      ]
     },
     {
       "path": "src/text/label.ts",
       "component": "text",
       "lines": 446,
       "code": 400,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/text/label.nim"
+      ]
     },
     {
       "path": "src/text/math.ts",
       "component": "text",
       "lines": 51,
       "code": 43,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/text/math.nim"
+      ]
     },
     {
       "path": "src/text/measurer.ts",
       "component": "text",
       "lines": 160,
       "code": 136,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/text/measurer.nim"
+      ]
     },
     {
       "path": "src/text/metrics.ts",
       "component": "text",
       "lines": 7,
       "code": 4,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/text/metrics.nim"
+      ]
     },
     {
       "path": "src/types.ts",
       "component": "api",
       "lines": 88,
       "code": 58,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/types.nim"
+      ]
     },
     {
       "path": "src/util/chars.ts",
       "component": "util",
       "lines": 45,
       "code": 32,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/util/chars.nim"
+      ]
     },
     {
       "path": "src/util/unicode.ts",
@@ -2663,8 +2709,10 @@
       "component": "util",
       "lines": 471,
       "code": 433,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/util/yaml.nim"
+      ]
     },
     {
       "path": "src/window.ts",
