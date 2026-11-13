@@ -767,6 +767,63 @@ proc agentflowSource(g: var Gen): string =
     result.add g.pick(["  ", "  ", "", "\t"]) & afStatement(g, 0, edges)
     result.add(if g.chance(0.03): "\r\n" else: "\n")
 
+# Labels: the features of src/text/label.ts in the types that draw them. The words are safe in
+# every place a label goes here (no quotes, semicolons, colons or brackets of the grammars).
+const lbWords = ["Start", "a", "label", "Ünïcödé", "日本語のラベル", "中文標點，測試。", "emoji 🎉", "Ω≈ç√",
+                 "Supercalifragilisticexpialidocious", "super­cali­fragilistic", "zero​width​breaks",
+                 "x&amp;y", "#35; hash", "&lt;tag&gt;", "snake_case_word", "2*3*4", "a  b", "ﬂow"]
+const lbMarks = ["<b>bold</b>", "<i>it</i>", "<strong>s</strong>", "<em>e</em>", "<code>code()</code>", "<u>u</u>",
+                 "H<sub>2</sub>O", "x<sup>2</sup>", "<sub>a<sup>b</sup></sub>", "<span>span</span>", "<br>", "<br/>",
+                 "List<T>", "<kbd>K</kbd>", "<b>open", "</b>", "**bold**", "*it*", "_it_", "__b__", "** x**", "\\n",
+                 "fa:fa-car", "fab:fa-github", "fa:fa-none", "fas:fa-user icon", "fa:fa-car ", "$$x^2$$",
+                 "$$\\frac{a}{b}$$", "$$bad$$", "$$html$$", "$$nan$$", "$$a$$ and $$b$$", "$$unclosed", "$$ $$"]
+
+proc lbLabel(g: var Gen): string =
+  for k in 0 ..< g.rng.rand(1 .. 6):
+    if k > 0: result.add(if g.chance(0.8): " " else: "")
+    result.add(if g.chance(0.45): g.pick(lbMarks) else: g.pick(lbWords))
+  if g.chance(0.05): result = repeat(result & " ", g.rng.rand(2 .. 6))
+
+proc labelsSource(g: var Gen): string =
+  case g.rng.rand(0 .. 5)
+  of 0, 1:
+    result = "flowchart " & g.pick(["TD", "LR"]) & "\n"
+    for i in 0 ..< g.rng.rand(1 .. 6):
+      let a = g.pick(["A", "B", "C", "D"])
+      let b = g.pick(["A", "B", "C", "D", "E"])
+      let md = g.chance(0.3)
+      let la = if md: "\"`" & lbLabel(g) & "`\"" else: "\"" & lbLabel(g) & "\""
+      case g.rng.rand(0 .. 3)
+      of 0: result.add "  " & a & "[" & la & "]\n"
+      of 1: result.add "  " & a & "[" & la & "] -->|" & lbLabel(g).replace("|", "") & "| " & b & "\n"
+      of 2: result.add "  subgraph S" & $i & "[" & la & "]\n    " & a & " --> " & b & "\n  end\n"
+      else: result.add "  " & a & "(" & la & ") --- " & b & "{" & "\"" & lbLabel(g) & "\"}\n"
+  of 2:
+    result = "sequenceDiagram\n"
+    for i in 0 ..< g.rng.rand(1 .. 6):
+      let a = g.pick(["Alice", "Bob", "Carol"])
+      let b = g.pick(["Alice", "Bob", "Carol"])
+      if g.chance(0.3): result.add "  Note over " & a & ": " & lbLabel(g) & "\n"
+      elif g.chance(0.1): result.add "  participant " & a & " as " & lbLabel(g) & "\n"
+      else: result.add "  " & a & "->>" & b & ": " & lbLabel(g) & "\n"
+  of 3:
+    result = "stateDiagram-v2\n"
+    for i in 0 ..< g.rng.rand(1 .. 6):
+      let a = g.pick(["S1", "S2", "S3"])
+      if g.chance(0.4): result.add "  " & a & " : " & lbLabel(g) & "\n"
+      elif g.chance(0.3): result.add "  note right of " & a & " : " & lbLabel(g) & "\n"
+      else: result.add "  " & a & " --> " & g.pick(["S1", "S2", "S3"]) & " : " & lbLabel(g) & "\n"
+  of 4:
+    result = "classDiagram\n"
+    for i in 0 ..< g.rng.rand(1 .. 5):
+      let a = g.pick(["Animal", "Duck", "Fish"])
+      if g.chance(0.4): result.add "  note for " & a & " \"" & lbLabel(g) & "\"\n"
+      else: result.add "  " & a & " --> " & g.pick(["Animal", "Duck", "Fish"]) & " : " & lbLabel(g) & "\n"
+  else:
+    # Types that do not typeset math still read the markup.
+    result = "timeline\n  title " & lbLabel(g) & "\n"
+    for i in 0 ..< g.rng.rand(1 .. 4): result.add "  " & lbLabel(g) & " : " & lbLabel(g) & "\n"
+
 const scores = ["5", "1", "3", "4", "2", "0", "7", "-1", "2.5", " 4 ", "", "x", "1e1", "0x3", "Infinity",
                 "3.", ".5", "NaN", "\u30003"]
 const actors = ["Me", "Cat", "Dog", "", " Me ", "Ünï", "日本", "Zed", "a b", "Me", "emoji 🎉",
@@ -1855,6 +1912,7 @@ proc main() =
   var show = 10
   var packageArg = ""
   var js = false
+  var hosts = false   ## --hosts: every case gets the test icons and typesetter (tools/answers.nim)
   for k, key, val in getopt():
     case k
     of cmdLongOption, cmdShortOption:
@@ -1864,16 +1922,23 @@ proc main() =
       of "show": show = parseInt(val)
       of "package": packageArg = val
       of "js": js = true
+      of "hosts": hosts = true
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad", "gantt", "wardley", "architecture", "c4", "block", "agentflow", "mindmap", "kanban", "eventmodeling"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad, gantt, wardley, architecture, c4, block, agentflow, mindmap, kanban, eventmodeling", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad", "gantt", "wardley", "architecture", "c4", "block", "agentflow", "mindmap", "kanban", "eventmodeling", "labels"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad, gantt, wardley, architecture, c4, block, agentflow, mindmap, kanban, eventmodeling, labels", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
   for i in 0 ..< count:
     let opts = g.options()
     opts["now"] = %1767225600000.0
+    if hosts:
+      opts["icons"] = %"test"
+      opts["math"] = %"test"
+    elif kind == "labels":
+      if g.chance(0.7): opts["icons"] = %"test"
+      if g.chance(0.7): opts["math"] = %"test"
     cases.add %*{"id": kind & "/" & $seed & "/" & $i, "source": (case kind
                                                           of "pie": g.pieSource()
                                                           of "timeline": g.timelineSource()
@@ -1900,6 +1965,7 @@ proc main() =
                                                           of "requirement": g.requirementSource()
                                                           of "usecase": g.usecaseSource()
                                                           of "agentflow": g.agentflowSource()
+                                                          of "labels": g.labelsSource()
                                                           of "treeView": g.treeViewSource()
                                                           of "mindmap": g.mindmapSource()
                                                           of "kanban": g.kanbanSource()
