@@ -173,6 +173,7 @@ body > header { padding: .7rem 0 0; }
 .kicker .kind.port { background: var(--primary-soft); }
 .kicker .kind.plan { background: var(--success-soft); }
 .kicker .kind.tooling { background: var(--shade); }
+.kicker .kind.article { background: var(--warning-soft); }
 h1 { font: 760 2.35rem/1.08 var(--display); letter-spacing: -.03em; margin: .25rem 0 .7rem; text-wrap: balance; }
 .lede { font-size: 1.16rem; line-height: 1.5; color: var(--neutral-8); font-style: italic; }
 .lede p { margin: 0 0 .6rem; }
