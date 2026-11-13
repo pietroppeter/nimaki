@@ -726,6 +726,28 @@
           "status": "started",
           "post": "",
           "pr": ""
+        },
+        {
+          "id": "article-1",
+          "kind": "article",
+          "title": "A domain in diagrams: opening a web page",
+          "what": "The first article that uses diagrams drawn by nimaki to understand a domain: what happens between typing an address and reading the page (URL, DNS, TCP, TLS, HTTP, CDN), with as many diagram types as the domain calls for, and what using the library taught: missing API, rough edges, anything that differs from Pele.",
+          "done_when": "An article on the site whose every diagram is drawn by nimaki and checked against Pele when the page is built; its lessons are notes or steps on this roadmap.",
+          "owner": "Write domain articles with diagrams",
+          "status": "started",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "domain-articles",
+          "kind": "article",
+          "title": "Domain articles, every once in a while",
+          "what": "A recurring step: when a batch of new types or features lands, another article on a new domain, preferring the types no article has drawn yet. Each article is its own step in this phase, claimed here first; the thread proposes the next domains after each one.",
+          "done_when": "Never: it recurs while the port goes on.",
+          "owner": "Write domain articles with diagrams",
+          "status": "started",
+          "post": "",
+          "pr": ""
         }
       ]
     }
