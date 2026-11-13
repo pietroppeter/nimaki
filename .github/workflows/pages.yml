@@ -100,6 +100,7 @@ jobs:
           nim r tools/fuzz.nim er --cases:5000
           nim r tools/fuzz.nim requirement --cases:5000
           nim r tools/fuzz.nim usecase --cases:5000
+          nim r tools/fuzz.nim agentflow --cases:5000
           nim r tools/fuzz.nim gitGraph --cases:5000
           nim r tools/fuzz.nim railroad --cases:5000
           nim r tools/fuzz.nim gantt --cases:5000
