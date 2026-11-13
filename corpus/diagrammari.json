@@ -1,0 +1,226 @@
+{
+  "about": "The Mermaid text of diagrammari, built by tools/corpus_diagrammari.nim from diagrammari at the pin (reference/DIAGRAMMARI). Do not edit by hand.",
+  "repo": "https://github.com/pietroppeter/diagrammari",
+  "commit": "eb7d1c5702de5d5ddb8e6047af0202936995a648",
+  "count": 34,
+  "byType": {
+    "er": 1,
+    "flowchart": 14,
+    "gantt": 1,
+    "ishikawa": 1,
+    "mindmap": 2,
+    "pie": 4,
+    "railroad": 1,
+    "sankey": 1,
+    "sequence": 5,
+    "state": 1,
+    "timeline": 2,
+    "venn": 1
+  },
+  "cases": [
+    {
+      "id": "diagrammari/README.md:36",
+      "type": "flowchart",
+      "from": "README.md:36",
+      "source": "flowchart LR\n  nim([\"Nim code\"])\n  pele{{\"Pele\"}}\n  svg(\"SVG\")\n  nim -->|\"Mermaid text\"| pele\n  pele --> svg"
+    },
+    {
+      "id": "diagrammari/docs/devlog/day_one.nim:38",
+      "type": "flowchart",
+      "from": "docs/devlog/day_one.nim:38",
+      "source": "flowchart LR\n  a[Mermaid text] --> b[SVG]"
+    },
+    {
+      "id": "diagrammari/docs/explainer.nim:80",
+      "type": "flowchart",
+      "from": "docs/explainer.nim:80",
+      "source": "flowchart TD\n  ask{Ready?} -->|yes| go\n  ask -->|no| wait"
+    },
+    {
+      "id": "diagrammari/docs/explainer.nim:83",
+      "type": "sequence",
+      "from": "docs/explainer.nim:83",
+      "source": "sequenceDiagram\n  Ada->>Bob: hello\n  Bob-->>Ada: hi"
+    },
+    {
+      "id": "diagrammari/docs/explainer.nim:86",
+      "type": "pie",
+      "from": "docs/explainer.nim:86",
+      "source": "pie\n  \"Nim\" : 3\n  \"Other\" : 1"
+    },
+    {
+      "id": "diagrammari/docs/explainer.nim:89",
+      "type": "timeline",
+      "from": "docs/explainer.nim:89",
+      "source": "timeline\n  2014 : Mermaid\n  2026 : Pele"
+    },
+    {
+      "id": "diagrammari/docs/explainer.nim:380",
+      "type": "pie",
+      "from": "docs/explainer.nim:380",
+      "source": "pie showData\n  title Deaths in the Crimean War, Jan 1855 (Nightingale's figures)\n  \"Preventable disease\" : 2761\n  \"Wounds\" : 83\n  \"Other causes\" : 324"
+    },
+    {
+      "id": "diagrammari/docs/explainer.nim:398",
+      "type": "venn",
+      "from": "docs/explainer.nim:398",
+      "source": "venn-beta\n  title What a good diagram is\n  set Correct\n  set Clear\n  set Short\n  union Correct,Clear[\"useful\"]\n  union Clear,Short[\"glanceable\"]\n  union Correct,Clear,Short[\"the one to draw\"]"
+    },
+    {
+      "id": "diagrammari/docs/explainer.nim:418",
+      "type": "gantt",
+      "from": "docs/explainer.nim:418",
+      "source": "gantt\n  title Building diagrammari\n  dateFormat YYYY-MM-DD\n  section Day one\n    Read Pele           :done, read, 2026-11-07, 1d\n    Builders and specs  :done, build, after read, 1d\n  section Next\n    More builders       :more, after build, 5d\n    Build-time mode in nimibex :after more, 3d"
+    },
+    {
+      "id": "diagrammari/docs/explainer.nim:440",
+      "type": "sankey",
+      "from": "docs/explainer.nim:440",
+      "source": "sankey\n  Coal,Steam,100\n  Steam,Engine work,9\n  Steam,Exhaust,62\n  Steam,Condenser,22\n  Steam,Radiation,7"
+    },
+    {
+      "id": "diagrammari/docs/explainer.nim:484",
+      "type": "railroad",
+      "from": "docs/explainer.nim:484",
+      "source": "railroad-ebnf-beta\n  title \"A Nim identifier (ASCII)\"\n  identifier = letter , { [ \"_\" ] , ( letter | digit ) } ;\n  letter = \"a\" | \"...\" | \"z\" | \"A\" | \"...\" | \"Z\" ;\n  digit = \"0\" | \"...\" | \"9\" ;"
+    },
+    {
+      "id": "diagrammari/docs/explainer.nim:501",
+      "type": "er",
+      "from": "docs/explainer.nim:501",
+      "source": "erDiagram\n  DIAGRAM ||--|{ NODE : has\n  DIAGRAM ||--o{ EDGE : has\n  NODE ||--o{ EDGE : \"starts or ends\""
+    },
+    {
+      "id": "diagrammari/docs/explainer.nim:537",
+      "type": "state",
+      "from": "docs/explainer.nim:537",
+      "source": "stateDiagram-v2\n  [*] --> Text\n  Text --> Drawn : toSvg\n  Text --> Error : syntax error\n  Error --> Text : fix the line\n  state Drawn {\n    [*] --> Wide\n    Wide --> Narrow : below 640 px\n    Narrow --> Wide\n  }\n  Drawn --> [*]"
+    },
+    {
+      "id": "diagrammari/docs/explainer.nim:584",
+      "type": "ishikawa",
+      "from": "docs/explainer.nim:584",
+      "source": "ishikawa-beta\n  Unreadable diagram\n  Layout\n    Lines cross\n    Too wide for a phone\n  Labels\n    Too long\n    Font not measured\n  Content\n    Too many nodes\n    Two ideas in one drawing"
+    },
+    {
+      "id": "diagrammari/docs/explainer.nim:146",
+      "type": "flowchart",
+      "from": "docs/explainer.nim:146",
+      "source": "flowchart LR\n  a --> b"
+    },
+    {
+      "id": "diagrammari/docs/explainer.nim:157",
+      "type": "mindmap",
+      "from": "docs/explainer.nim:157",
+      "source": "mindmap\n  root((diagrammari))\n    text\n    verbs\n    Pele"
+    },
+    {
+      "id": "diagrammari/docs/explainer.nim:292",
+      "type": "flowchart",
+      "from": "docs/explainer.nim:292",
+      "source": "flowchart LR\n  a --> [oops"
+    },
+    {
+      "id": "diagrammari/docs/series/a_house_style.nim:98",
+      "type": "flowchart",
+      "from": "docs/series/a_house_style.nim:98",
+      "source": "flowchart LR\n  t[Mermaid text] --> p[Pele] --> s[SVG]"
+    },
+    {
+      "id": "diagrammari/docs/series/everyday_diagrams.nim:105",
+      "type": "flowchart",
+      "from": "docs/series/everyday_diagrams.nim:105",
+      "source": "flowchart LR\n  idea --> draft\n  draft --> review\n  review --> ship"
+    },
+    {
+      "id": "diagrammari/openspec/specs/diagram-text/spec.md:21",
+      "type": "flowchart",
+      "from": "openspec/specs/diagram-text/spec.md:21",
+      "source": "flowchart LR\n  A[Mermaid text] --> B[SVG]"
+    },
+    {
+      "id": "diagrammari/openspec/specs/flowchart/spec.md:22",
+      "type": "flowchart",
+      "from": "openspec/specs/flowchart/spec.md:22",
+      "source": "---\ntitle: From text to picture\n---\nflowchart LR\n  text[\"Mermaid text\"]\n  svg(\"SVG\")\n  text -->|\"Pele\"| svg"
+    },
+    {
+      "id": "diagrammari/openspec/specs/flowchart/spec.md:47",
+      "type": "flowchart",
+      "from": "openspec/specs/flowchart/spec.md:47",
+      "source": "flowchart TD\n  idea --> draft\n  draft --> review\n  review -.-> draft\n  review ==> done"
+    },
+    {
+      "id": "diagrammari/openspec/specs/flowchart/spec.md:70",
+      "type": "flowchart",
+      "from": "openspec/specs/flowchart/spec.md:70",
+      "source": "flowchart LR\n  start([\"Start\"])\n  ok{\"Is it clear?\"}\n  db[(\"Notes\")]\n  start --> ok\n  ok -->|\"yes\"| db"
+    },
+    {
+      "id": "diagrammari/openspec/specs/flowchart/spec.md:94",
+      "type": "flowchart",
+      "from": "openspec/specs/flowchart/spec.md:94",
+      "source": "flowchart LR\n  subgraph nim[\"Nim\"]\n    code[\"nimib notebook\"]\n  end\n  subgraph js[\"Pele, in Node\"]\n    svg[\"SVG\"]\n  end\n  code --> svg"
+    },
+    {
+      "id": "diagrammari/openspec/specs/flowchart/spec.md:118",
+      "type": "flowchart",
+      "from": "openspec/specs/flowchart/spec.md:118",
+      "source": "flowchart LR\n  classDef hot fill:#f6d365\n  a[\"Pele\"]:::hot\n  click a href \"https://pele.run\""
+    },
+    {
+      "id": "diagrammari/openspec/specs/pie/spec.md:23",
+      "type": "pie",
+      "from": "openspec/specs/pie/spec.md:23",
+      "source": "pie showData\n  title What a diagram is made of\n  \"Boxes\" : 40\n  \"Arrows\" : 35\n  \"Labels\" : 24.5"
+    },
+    {
+      "id": "diagrammari/openspec/specs/sequence/spec.md:28",
+      "type": "sequence",
+      "from": "openspec/specs/sequence/spec.md:28",
+      "source": "sequenceDiagram\n  actor you as You\n  participant nim as Nim\n  participant pele as Pele\n  you->>nim: nbDiagram f\n  nim->>+pele: Mermaid text\n  pele-->>-nim: SVG"
+    },
+    {
+      "id": "diagrammari/openspec/specs/sequence/spec.md:46",
+      "type": "sequence",
+      "from": "openspec/specs/sequence/spec.md:46",
+      "source": "sequenceDiagram\n  a->>b: time#58; 3#59; #35;1"
+    },
+    {
+      "id": "diagrammari/openspec/specs/sequence/spec.md:59",
+      "type": "sequence",
+      "from": "openspec/specs/sequence/spec.md:59",
+      "source": "sequenceDiagram\n  a->>b: hi\n  note over a,b: both see it"
+    },
+    {
+      "id": "diagrammari/openspec/specs/sequence/spec.md:81",
+      "type": "sequence",
+      "from": "openspec/specs/sequence/spec.md:81",
+      "source": "sequenceDiagram\n  loop every page\n    nim->>pele: draw\n    alt it parses\n      pele-->>nim: SVG\n    else it does not\n      pele-->>nim: error, line and column\n    end\n  end"
+    },
+    {
+      "id": "diagrammari/openspec/specs/timeline/spec.md:24",
+      "type": "timeline",
+      "from": "openspec/specs/timeline/spec.md:24",
+      "source": "timeline\n  title Diagrams before computers\n  section Charts\n    1765 : Priestley#58; A Chart of Biography\n    1801 : Playfair#58; the pie chart\n  section Processes\n    1896 : Adamiecki#58; the harmonogram\n    1921 : the Gilbreths#58; process charts"
+    },
+    {
+      "id": "diagrammari/tests/test_builders.nim:52",
+      "type": "mindmap",
+      "from": "tests/test_builders.nim:52",
+      "source": "%% a comment\nmindmap\n  root"
+    },
+    {
+      "id": "diagrammari/tests/test_nimib.nim:11",
+      "type": "pie",
+      "from": "tests/test_nimib.nim:11",
+      "source": "pie\n  \"a\" : 1"
+    },
+    {
+      "id": "diagrammari/tests/test_render.nim:18",
+      "type": "flowchart",
+      "from": "tests/test_render.nim:18",
+      "source": "flowchart LR\n  accTitle: Two nodes\n  a --> b"
+    }
+  ]
+}

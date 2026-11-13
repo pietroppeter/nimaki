@@ -1,0 +1,5 @@
+# The snapshot of diagrammari whose Mermaid text is nimaki's second corpus (corpus/diagrammari.json).
+# One fact per line, KEY=VALUE, read by reference/fetch.sh and tools/corpus_diagrammari.nim.
+REPO=https://github.com/pietroppeter/diagrammari
+COMMIT=eb7d1c5702de5d5ddb8e6047af0202936995a648
+DATE=2026-11-08
