@@ -163,11 +163,11 @@
     },
     "cynefin": {
       "seed": 1,
-      "cases": 300,
-      "identical": 300,
+      "cases": 3000,
+      "identical": 3000,
       "different": 0,
-      "rendered": 246,
-      "errors": 54
+      "rendered": 2434,
+      "errors": 566
     },
     "wardley": {
       "seed": 1,

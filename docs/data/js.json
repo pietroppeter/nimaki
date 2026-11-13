@@ -13,7 +13,7 @@
       "unsupported": 4
     }
   },
-  "bytes": 7285385,
+  "bytes": 7285694,
   "fuzz": {
     "pie": {
       "seed": 1,
@@ -101,8 +101,8 @@
     },
     "cynefin": {
       "seed": 1,
-      "cases": 2000,
-      "identical": 2000,
+      "cases": 3000,
+      "identical": 3000,
       "different": 0
     },
     "gitGraph": {
