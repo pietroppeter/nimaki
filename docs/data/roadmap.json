@@ -666,6 +666,35 @@
           "pr": ""
         }
       ]
+    },
+    {
+      "id": "5",
+      "title": "Along the way",
+      "goal": "Steps that recur while the port goes on: articles that explain nimaki's own code (its overall structure, one module, or a pattern that comes back), because explaining code is a way to review it. What an article uncovers becomes a note for the thread that owns the code, or a new step here.",
+      "steps": [
+        {
+          "id": "code-structure",
+          "kind": "research",
+          "title": "The shape of the port",
+          "what": "A tour of nimaki's Nim code as it stands on main: how the files map to Pele's, the path of one diagram through render(), the shared parts every type leans on, and what the tour uncovered.",
+          "done_when": "A devlog post whose numbers come from the code on main; findings filed as notes or roadmap steps.",
+          "owner": "Write articles explaining nimaki code",
+          "status": "started",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "code-articles",
+          "kind": "research",
+          "title": "Articles on the code, every once in a while",
+          "what": "A recurring step: every so often, one article on a module or a pattern of the port (the lexers, the layered layout, JavaScript's numbers and strings in Nim, the referee). Each article is its own step in this phase, claimed here first.",
+          "done_when": "Never: it recurs while the port goes on. Each article ships with its post and its findings.",
+          "owner": "Write articles explaining nimaki code",
+          "status": "started",
+          "post": "",
+          "pr": ""
+        }
+      ]
     }
   ]
 }
