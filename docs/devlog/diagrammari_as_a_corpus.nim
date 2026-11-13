@@ -17,6 +17,9 @@ var collected: seq[string]
 for l in readFile(docsDir / ".." / "reference" / "DIAGRAMMARI").splitLines:
   if l.startsWith("COMMIT="): collected.add l[7 .. ^1]
 let commit = collected[0]
+var waiting: seq[string]   # the types of diagrammari's text that nimaki does not draw yet
+for t in difftest["types"]:
+  if t.hasKey("diagrammari") and t["diagrammari"]["unsupported"].getInt > 0: waiting.add t["type"].getStr
 
 nbText: &"""
 ## The findings, first
@@ -28,7 +31,7 @@ nbText: &"""
   types, in `corpus/diagrammari.json`.
 - **All the ported ones match.** {d["identical"].getInt} of the {d["cases"].getInt} come out of
   nimaki identical to Pele's, byte for byte, and {d["different"].getInt} differ. The other
-  {d["unsupported"].getInt} are of types not ported yet (mindmap, ishikawa, sankey, venn).
+  {d["unsupported"].getInt} are of types not ported yet ({waiting.join(", ")}).
 - **Read, not run.** The texts are collected from diagrammari's files without running any of its
   code: the outputs its specs record, its ```` ```mermaid ```` blocks, and the strings its pages
   and tests give to `diagram` and `nbDiagram`. The diagrams its pages build with Nim verbs, and
@@ -172,8 +175,8 @@ nbText: &"""
 
 - **The coverage map counts diagrammari's text** in its own column, and the referee checks it on
   every pull request.
-- **An order for what is left.** diagrammari writes mindmaps, sankey and venn diagrams and an
-  ishikawa diagram in its explainer; those are the types it is waiting for.
+- **An order for what is left.** diagrammari's explainer also writes {waiting.join(", ")}: those
+  are the types it is waiting for.
 
 ## Sources
 
