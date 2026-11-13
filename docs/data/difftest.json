@@ -2,9 +2,9 @@
   "about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand.",
   "pin": "1.13.0",
   "cases": 2118,
-  "identical": 1422,
+  "identical": 1447,
   "different": 0,
-  "unsupported": 696,
+  "unsupported": 671,
   "types": [
     {
       "type": "agentflow",
@@ -82,9 +82,9 @@
       "type": "gantt",
       "coverage": "gantt",
       "cases": 25,
-      "identical": 0,
+      "identical": 25,
       "different": 0,
-      "unsupported": 25
+      "unsupported": 0
     },
     {
       "type": "gitGraph",

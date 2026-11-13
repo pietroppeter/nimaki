@@ -622,19 +622,19 @@
       "corpus": 11,
       "parse": {
         "code": 1284,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 326,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 318,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/gantt/",
+      "post": "gantt-charts",
+      "notes": "Identical to Pele on the 25 corpus cases (gantt) and on 5,000 generated charts in CI (tools/fuzz.nim gantt); 22,000 more across four seeds before merging. JavaScript dates: src/nimaki/jsdate.nim (decision 0012)."
     },
     {
       "id": "block",

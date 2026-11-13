@@ -1162,6 +1162,97 @@ proc railroadSource(g: var Gen): string =
     if g.chance(0.03): line.add g.pick([" )", " junk", " =", " ; trailing"])
     result.add line & "\n"
 
+proc ganttDate(g: var Gen, fmt: string, y, m, d, h, mi: int): string =
+  ## A date written in the chart's format, with a slip now and then.
+  let p2 = proc (n: int): string = (if n < 10: "0" & $n else: $n)
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+  case fmt
+  of "DD/MM/YYYY": p2(d) & "/" & p2(m) & "/" & $y
+  of "YYYY-MM-DD HH:mm": $y & "-" & p2(m) & "-" & p2(d) & " " & p2(h) & ":" & p2(mi)
+  of "HH:mm": p2(h) & ":" & p2(mi)
+  of "X": $(1767225600 + (d - 1) * 86400 + h * 3600)
+  of "x": $(1767225600000 + (d - 1) * 86400000 + h * 3600000)
+  of "MMM D YYYY": months[m - 1] & " " & $d & " " & $y
+  of "YYYY": $(y + d)
+  of "D": $d
+  of "YYYY-MM-DDTHH:mm:ssZ": $y & "-" & p2(m) & "-" & p2(d) & "T" & p2(h) & ":" & p2(mi) & ":00+00:00"
+  else: $y & "-" & p2(m) & "-" & p2(d)
+
+proc ganttSource(g: var Gen): string =
+  ## Mostly valid charts: dates in the chart's format, references to earlier tasks, durations,
+  ## exclusions and tick intervals, with a broken line now and then.
+  if g.chance(0.3):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(["Plan", "日本", "A long plan title"]) & "\n"
+    result.add "config:\n  gantt:\n"
+    for key in ["fontSize", "sectionFontSize", "barHeight", "barGap", "numberSectionStyles", "leftPadding",
+                "rightPadding", "useWidth", "topPadding", "gridLineStartPadding"]:
+      if g.chance(0.12): result.add "    " & key & ": " & g.pick(["0", "4", "12", "30", "75", "200", "900", "x", "-5"]) & "\n"
+    if g.chance(0.15): result.add "    topAxis: " & g.pick(["true", "false"]) & "\n"
+    if g.chance(0.15): result.add "    displayMode: " & g.pick(["compact", "\"\"", "other"]) & "\n"
+    if g.chance(0.1): result.add "    axisFormat: \"" & g.pick(["%d %b", "%H:%M", "%Y"]) & "\"\n"
+    if g.chance(0.1): result.add "    tickInterval: " & g.pick(["1day", "1week", "2month", "x"]) & "\n"
+    if g.chance(0.1): result.add "    weekday: " & g.pick(["monday", "friday", "nope"]) & "\n"
+    result.add "---\n"
+  result.add(if g.chance(0.03): g.pick(["Gantt", "gantt2", "gant"]) else: "gantt")
+  result.add "\n"
+  let fmt = if g.chance(0.65): "YYYY-MM-DD"
+            else: g.pick(["DD/MM/YYYY", "YYYY-MM-DD HH:mm", "HH:mm", "X", "x", "MMM D YYYY", "YYYY", "D",
+                          "YYYY-MM-DDTHH:mm:ssZ", "Do MMMM YYYY", "YYYY-MM-DD ww", "LL"])
+  if fmt != "YYYY-MM-DD" or g.chance(0.5): result.add "  dateFormat " & fmt & "\n"
+  if g.chance(0.3): result.add "  title " & g.pick(["Project plan", "日本", "x  y", "title"]) & "\n"
+  if g.chance(0.25):
+    result.add "  axisFormat " & g.pick(["%Y-%m-%d", "%b %d", "%e %B", "%H:%M", "%a %d", "%W", "%j", "%U", "%V",
+                                         "%G-W%V", "%x", "%-d/%-m", "%c", "%%", "%q", "%I %p", "%s", "%Z"]) & "\n"
+  if g.chance(0.2):
+    result.add "  tickInterval " & g.pick(["1day", "2day", "1week", "1month", "6hour", "15minute", "1year", "0day",
+                                           "30second", "500millisecond", "3week", "day"]) & "\n"
+  if g.chance(0.15): result.add "  weekday " & g.pick(["monday", "sunday", "friday", "Wednesday"]) & "\n"
+  if g.chance(0.15): result.add "  excludes " & g.pick(["weekends", "weekends, 2026-01-07", "monday sunday",
+                                                         "2026-01-05", "Weekends", "friday"]) & "\n"
+  if g.chance(0.08): result.add "  includes " & g.pick(["2026-01-10", "saturday", "2026-01-03, 2026-01-04"]) & "\n"
+  if g.chance(0.08): result.add "  weekend " & g.pick(["friday", "saturday"]) & "\n"
+  if g.chance(0.1): result.add "  todayMarker " & g.pick(["off", "stroke-width:5px,stroke:#0f0,opacity:0.5", "on"]) & "\n"
+  if g.chance(0.08): result.add "  inclusiveEndDates\n"
+  if g.chance(0.05): result.add "  topAxis\n"
+  if g.chance(0.05): result.add "  accTitle: Plan\n  accDescr: A plan\n"
+  if g.chance(0.04): result.add g.pick(["  %% note\n", "  % one\n", "  accDescr {\n many\n }\n"])
+  var ids: seq[string]
+  let year = g.pick([2026, 2026, 2025, 1999, 2014])
+  let month = g.rng.rand(1 .. 12)
+  for s in 0 ..< g.rng.rand(1 .. 3):
+    if s > 0 or g.chance(0.7): result.add "  section " & g.pick(["Design", "Build", "日本", "Test & ship", "a<br>b"]) & "\n"
+    for t in 0 ..< g.rng.rand(1 .. 5):
+      var data: seq[string]
+      if g.chance(0.3): data.add g.pick(["done", "active", "crit", "milestone", "crit, done", "active, crit", "vert"])
+      let hasId = g.chance(0.5)
+      let id = "t" & $(ids.len + 1)
+      let r = g.rng.rand(1.0)
+      var start = ""
+      if ids.len > 0 and r < 0.3:
+        start = "after " & g.pick(ids) & (if g.chance(0.2): " " & g.pick(ids) else: "")
+      elif r < 0.75:
+        start = g.ganttDate(fmt, year, month, g.rng.rand(1 .. 28), g.rng.rand(0 .. 23), g.rng.rand(0 .. 59))
+      elif r < 0.8:
+        start = g.pick(["2026-01-05", "Jan 5, 2026", "01/05/2026", "2026/1/5 10:00", "bad date", "after nope"])
+      let stop = if ids.len > 0 and g.chance(0.1): "until " & g.pick(ids)
+                 elif g.chance(0.6): g.pick(["3d", "1w", "2h", "30m", "1M", "1y", "0.5d", "10s", "100ms", "5d", "12h", "2d", "0d", "x"])
+                 else: g.ganttDate(fmt, year, month, g.rng.rand(1 .. 28), g.rng.rand(0 .. 23), g.rng.rand(0 .. 59))
+      if hasId:
+        data.add id
+        ids.add id
+        if start == "": start = g.ganttDate(fmt, year, month, 1, 9, 0)
+      if start != "": data.add start
+      data.add stop
+      let name = g.pick(["Research", "Write code", "Review", "日本語", "A task with a long name", "x", "Ship it",
+                         "a<br>b", "  spaced  "])
+      var line = "    " & name & " :" & data.join(", ")
+      if g.chance(0.03): line = "    " & name
+      if g.chance(0.02): line.add ", extra, fields, here"
+      result.add line & "\n"
+  if ids.len > 0 and g.chance(0.1):
+    result.add "  click " & g.pick(ids) & g.pick([" href \"https://example.com\"", " call cb()", " call cb(1) href \"x\""]) & "\n"
+
 proc options(g: var Gen): JsonNode =
   result = newJObject()
   if g.chance(0.3): result["fontSize"] = %g.pick([12, 14, 16, 18, 20, 11])
@@ -1213,7 +1304,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad", "gantt"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad, gantt", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -1235,6 +1326,7 @@ proc main() =
                                                           of "cynefin": g.cynefinSource()
                                                           of "gitGraph": g.gitSource()
                                                           of "railroad": g.railroadSource()
+                                                          of "gantt": g.ganttSource()
                                                           of "radar": g.radarSource()
                                                           of "treemap": g.treemapSource()
                                                           of "er": g.erSource()

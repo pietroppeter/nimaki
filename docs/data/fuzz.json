@@ -145,21 +145,29 @@
       "rendered": 3014,
       "errors": 1986
     },
+    "gantt": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 3401,
+      "errors": 1599
+    },
     "ishikawa": {
       "seed": 1,
-      "cases": 500,
-      "identical": 500,
+      "cases": 300,
+      "identical": 300,
       "different": 0,
-      "rendered": 374,
-      "errors": 126
+      "rendered": 218,
+      "errors": 82
     },
     "cynefin": {
       "seed": 1,
-      "cases": 500,
-      "identical": 500,
+      "cases": 300,
+      "identical": 300,
       "different": 0,
-      "rendered": 406,
-      "errors": 94
+      "rendered": 246,
+      "errors": 54
     }
   }
 }
