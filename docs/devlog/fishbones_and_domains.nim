@@ -1,4 +1,4 @@
-## devlog: 13 Nov 2026 A | Fishbones and domains: ishikawa and cynefin | Two small beta diagrams join the port: a fishbone of causes and a map of five ways a situation can be, whose wavy borders come from a seeded random number generator that has to match JavaScript's bit for bit.
+## devlog: 13 Nov 2026 D | Fishbones and domains: ishikawa and cynefin | Two small beta diagrams join the port: a fishbone of causes and a map of five ways a situation can be, whose wavy borders come from a seeded random number generator that has to match JavaScript's bit for bit.
 ## kind: port
 import std/[os, strformat, strutils, json, tables, options]
 import nimib
