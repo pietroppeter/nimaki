@@ -223,19 +223,19 @@
       "corpus": 1,
       "parse": {
         "code": 161,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 0,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 258,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/ishikawa/",
+      "post": "fishbones-and-domains",
+      "notes": "Identical to Pele on the 4 corpus and compat cases and on 5,000 generated inputs in CI (tools/fuzz.nim ishikawa); 9,000 more on seeds 1 to 3 before merging."
     },
     {
       "id": "journey",
@@ -328,19 +328,19 @@
       "corpus": 3,
       "parse": {
         "code": 192,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 77,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 270,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/cynefin/",
+      "post": "fishbones-and-domains",
+      "notes": "Identical to Pele on the 19 corpus and compat cases and on 5,000 generated inputs in CI (tools/fuzz.nim cynefin); 9,000 more on seeds 1 to 3 before merging."
     },
     {
       "id": "treeview",

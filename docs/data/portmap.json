@@ -3,12 +3,12 @@
   "code": 47594,
   "totals": {
     "todo": {
-      "files": 132,
-      "code": 16938
+      "files": 121,
+      "code": 15980
     },
     "draft": {
-      "files": 159,
-      "code": 30656
+      "files": 170,
+      "code": 31614
     },
     "verified": {
       "files": 0,
@@ -82,8 +82,8 @@
     },
     {
       "component": "diagrams/cynefin",
-      "todo": 539,
-      "draft": 0,
+      "todo": 0,
+      "draft": 539,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -138,8 +138,8 @@
     },
     {
       "component": "diagrams/ishikawa",
-      "todo": 419,
-      "draft": 0,
+      "todo": 0,
+      "draft": 419,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -863,40 +863,50 @@
       "component": "diagrams/cynefin",
       "lines": 101,
       "code": 77,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/cynefin/boundaries.nim"
+      ]
     },
     {
       "path": "src/diagrams/cynefin/index.ts",
       "component": "diagrams/cynefin",
       "lines": 11,
       "code": 9,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/cynefin/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/cynefin/model.ts",
       "component": "diagrams/cynefin",
       "lines": 75,
       "code": 61,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/cynefin/model.nim"
+      ]
     },
     {
       "path": "src/diagrams/cynefin/parser.ts",
       "component": "diagrams/cynefin",
       "lines": 132,
       "code": 122,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/cynefin/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/cynefin/render.ts",
       "component": "diagrams/cynefin",
       "lines": 300,
       "code": 270,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/cynefin/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/er/db.ts",
@@ -1285,48 +1295,60 @@
       "component": "diagrams/ishikawa",
       "lines": 28,
       "code": 22,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/ishikawa/db.nim"
+      ]
     },
     {
       "path": "src/diagrams/ishikawa/index.ts",
       "component": "diagrams/ishikawa",
       "lines": 16,
       "code": 14,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/ishikawa/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/ishikawa/lexer.ts",
       "component": "diagrams/ishikawa",
       "lines": 93,
       "code": 81,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/ishikawa/lexer.nim"
+      ]
     },
     {
       "path": "src/diagrams/ishikawa/parser.ts",
       "component": "diagrams/ishikawa",
       "lines": 45,
       "code": 35,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/ishikawa/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/ishikawa/render.ts",
       "component": "diagrams/ishikawa",
       "lines": 293,
       "code": 258,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/ishikawa/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/ishikawa/types.ts",
       "component": "diagrams/ishikawa",
       "lines": 12,
       "code": 9,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/ishikawa/types.nim"
+      ]
     },
     {
       "path": "src/diagrams/journey/db.ts",

@@ -1003,6 +1003,62 @@ proc treeViewSource(g: var Gen): string =
     else: result.add g.pick(["├──", "  indented", "\"unterminated", ":::", "icon(", "Section ─ A.txt", "## x"])
     result.add(if g.chance(0.05): "\r\n" else: "\n")
 
+proc ishikawaSource(g: var Gen): string =
+  if g.chance(0.2): result.add "---\ntitle: " & g.pick(labels) & "\n---\n"
+  if g.chance(0.1): result.add g.pick(["\n", "%% comment\n", "  \n\n", "   %% c\n"])
+  result.add(if g.chance(0.03): g.pick(["Ishikawa", "ishikawax", "fishbone"]) elif g.chance(0.3): "ishikawa-beta" else: "ishikawa")
+  result.add(if g.chance(0.05): " " else: "")
+  result.add "\n"
+  var level = 0
+  for i in 0 ..< g.rng.rand(0 .. 22):
+    let r = g.rng.rand(1.0)
+    if i > 0:
+      if r < 0.4: level = min(level + 1, 6)
+      elif r < 0.7: level = max(level - g.rng.rand(1 .. 3), 1)
+    let unit = if g.chance(0.95): g.pick(["  ", "    ", "\t"]) else: g.pick(["\u3000", " ", "\u00a0 "])
+    var indent = ""
+    for k in 0 ..< level: indent.add unit
+    let q = g.rng.rand(1.0)
+    if q < 0.85: result.add indent & g.pick(labels)
+    elif q < 0.9: result.add indent & "%% " & g.pick(labels)
+    elif q < 0.97: result.add ""
+    else: result.add indent & g.pick(["ishikawa", "x %% y", "a\tb"])
+    result.add(if g.chance(0.05): "\r\n" else: "\n")
+
+const cynefinDomains = ["complex", "complicated", "clear", "chaotic", "confusion"]
+
+proc cynefinSource(g: var Gen): string =
+  if g.chance(0.4):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(labels) & "\n"
+    result.add "config:\n  cynefin:\n"
+    if g.chance(0.4): result.add "    seed: " & g.pick(["1", "42", "0", "-7", "1.5", "123456789", "1e16", "x", "99999999999"]) & "\n"
+    if g.chance(0.3): result.add "    boundaryAmplitude: " & g.pick(["0", "4", "8", "20", "50", "60", "2.5"]) & "\n"
+    if g.chance(0.2): result.add "    showDomainDescriptions: " & g.pick(["false", "true", "0"]) & "\n"
+    if g.chance(0.2): result.add "    width: " & g.pick(["100", "300", "640", "1000", "50", "20000"]) & "\n"
+    if g.chance(0.2): result.add "    height: " & g.pick(["100", "300", "440", "900", "50"]) & "\n"
+    result.add "---\n"
+  if g.chance(0.05): result.add "%% comment\n"
+  result.add(if g.chance(0.03): g.pick(["cynefin", "Cynefin-beta", "cynefin-betax"]) elif g.chance(0.2): "cynefin-beta:" else: "cynefin-beta")
+  result.add "\n"
+  for i in 0 ..< g.rng.rand(0 .. 14):
+    let indent = g.pick(["", "  ", "    ", "\t"])
+    let r = g.rng.rand(1.0)
+    let q = if g.chance(0.9): "\"" else: "'"
+    if r < 0.45:
+      result.add indent & g.pick(cynefinDomains) & "\n"
+      for k in 0 ..< g.rng.rand(0 .. 5):
+        result.add indent & "  " & q & g.pick(labels) & q & "\n"
+    elif r < 0.75:
+      result.add indent & g.pick(cynefinDomains) & g.pick([" --> ", "-->", " -->  "]) & g.pick(cynefinDomains)
+      if g.chance(0.6): result.add g.pick([" : ", ": ", ":"]) & q & g.pick(labels) & q
+    elif r < 0.8: result.add indent & "title " & g.pick(labels)
+    elif r < 0.83: result.add indent & "accTitle: " & g.pick(labels)
+    elif r < 0.86: result.add indent & "accDescr: " & g.pick(labels)
+    elif r < 0.9: result.add indent & "%% " & g.pick(labels)
+    elif r < 0.97: result.add ""
+    else: result.add indent & g.pick(["complexity", "clear --> ", "x --> clear", "\"loose\"", "chaotic -> clear"])
+    result.add(if g.chance(0.05): "\r\n" else: "\n")
 const rrWords = ["a", "b", "expr", "term", "digit", "letter", "railroad", "title-x", "_x", "x-1", "nonterminal", "sequence"]
 const rrStrings = ["x", "+", "a b", " ", "  ", "<br>", "#35;", "&amp;", "日本", "*", "\\n", "\\\"", "if", "", "very long terminal text here", "'", "tab\\t", "🎉"]
 const rrSingle = ["x", "\"", "a b", "it\\'s"]
@@ -1248,7 +1304,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "er", "requirement", "gitGraph", "usecase", "railroad", "gantt"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, er, requirement, gitGraph, usecase, railroad, gantt", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad", "gantt"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad, gantt", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -1266,6 +1322,8 @@ proc main() =
                                                           of "state": g.stateSource()
                                                           of "swimlane": g.swimlaneSource()
                                                           of "class": g.classSource()
+                                                          of "ishikawa": g.ishikawaSource()
+                                                          of "cynefin": g.cynefinSource()
                                                           of "gitGraph": g.gitSource()
                                                           of "railroad": g.railroadSource()
                                                           of "gantt": g.ganttSource()

@@ -2,9 +2,9 @@
   "about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand.",
   "pin": "1.13.0",
   "cases": 2118,
-  "identical": 1424,
+  "identical": 1447,
   "different": 0,
-  "unsupported": 694,
+  "unsupported": 671,
   "types": [
     {
       "type": "agentflow",
@@ -50,9 +50,9 @@
       "type": "cynefin",
       "coverage": "cynefin",
       "cases": 19,
-      "identical": 0,
+      "identical": 19,
       "different": 0,
-      "unsupported": 19
+      "unsupported": 0
     },
     {
       "type": "er",
@@ -106,9 +106,9 @@
       "type": "ishikawa",
       "coverage": "ishikawa",
       "cases": 4,
-      "identical": 0,
+      "identical": 4,
       "different": 0,
-      "unsupported": 4
+      "unsupported": 0
     },
     {
       "type": "journey",
