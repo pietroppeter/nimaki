@@ -294,8 +294,8 @@
           "title": "A proposal for diagrammari",
           "what": "How diagrammari could use nimaki instead of Node for the ported types, written as a proposal (diagrammari is not changed from here).",
           "done_when": "A devlog post with the proposal.",
-          "owner": "Build C ABI and diagrammari proposal",
-          "status": "started",
+          "owner": "",
+          "status": "planned",
           "post": "",
           "pr": ""
         }
@@ -683,9 +683,9 @@
           "what": "A shared library for other languages (diagrammari-py).",
           "done_when": "A Python smoke test renders a pie.",
           "owner": "Build C ABI and diagrammari proposal",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "a-c-abi",
+          "pr": "44"
         },
         {
           "id": "follow-pele",
