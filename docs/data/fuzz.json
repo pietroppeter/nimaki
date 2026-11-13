@@ -89,13 +89,13 @@
       "rendered": 3732,
       "errors": 1268
     },
-    "sequence": {
+    "state": {
       "seed": 1,
       "cases": 5000,
       "identical": 5000,
       "different": 0,
-      "rendered": 2806,
-      "errors": 2194
+      "rendered": 3814,
+      "errors": 1186
     }
   }
 }
