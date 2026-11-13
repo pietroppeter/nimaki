@@ -105,6 +105,30 @@
       "rendered": 2213,
       "errors": 2787
     },
+    "er": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 3600,
+      "errors": 1400
+    },
+    "requirement": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 2997,
+      "errors": 2003
+    },
+    "sequence": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 2806,
+      "errors": 2194
+    },
     "railroad": {
       "seed": 1,
       "cases": 5000,

@@ -522,9 +522,9 @@
           "what": "src/diagrams/requirement: 1294 lines of TypeScript, 9 corpus cases.",
           "done_when": "difftest: every requirement case identical.",
           "owner": "Port the compound-layout diagram types",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "crows-feet",
+          "pr": "29"
         },
         {
           "id": "railroad",
@@ -544,9 +544,9 @@
           "what": "src/diagrams/er: 1660 lines of TypeScript, 25 corpus cases.",
           "done_when": "difftest: every er case identical.",
           "owner": "Port the compound-layout diagram types",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "crows-feet",
+          "pr": "29"
         },
         {
           "id": "c4",

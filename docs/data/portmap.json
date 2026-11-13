@@ -3,12 +3,12 @@
   "code": 47594,
   "totals": {
     "todo": {
-      "files": 167,
-      "code": 24641
+      "files": 150,
+      "code": 21687
     },
     "draft": {
-      "files": 124,
-      "code": 22953
+      "files": 141,
+      "code": 25907
     },
     "verified": {
       "files": 0,
@@ -90,8 +90,8 @@
     },
     {
       "component": "diagrams/er",
-      "todo": 1660,
-      "draft": 0,
+      "todo": 0,
+      "draft": 1660,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -218,8 +218,8 @@
     },
     {
       "component": "diagrams/requirement",
-      "todo": 1294,
-      "draft": 0,
+      "todo": 0,
+      "draft": 1294,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -903,72 +903,90 @@
       "component": "diagrams/er",
       "lines": 142,
       "code": 127,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/er/db.nim"
+      ]
     },
     {
       "path": "src/diagrams/er/graph.ts",
       "component": "diagrams/er",
       "lines": 114,
       "code": 98,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/er/graph.nim"
+      ]
     },
     {
       "path": "src/diagrams/er/index.ts",
       "component": "diagrams/er",
       "lines": 17,
       "code": 15,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/er/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/er/lexer.ts",
       "component": "diagrams/er",
       "lines": 472,
       "code": 442,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/er/lexer.nim"
+      ]
     },
     {
       "path": "src/diagrams/er/markers.ts",
       "component": "diagrams/er",
       "lines": 36,
       "code": 28,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/er/markers.nim"
+      ]
     },
     {
       "path": "src/diagrams/er/parser.ts",
       "component": "diagrams/er",
       "lines": 297,
       "code": 270,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/er/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/er/render.ts",
       "component": "diagrams/er",
       "lines": 583,
       "code": 525,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/er/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/er/tokens.ts",
       "component": "diagrams/er",
       "lines": 99,
       "code": 96,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/er/tokens.nim"
+      ]
     },
     {
       "path": "src/diagrams/er/types.ts",
       "component": "diagrams/er",
       "lines": 72,
       "code": 59,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/er/types.nim"
+      ]
     },
     {
       "path": "src/diagrams/eventmodeling/index.ts",
@@ -1677,64 +1695,80 @@
       "component": "diagrams/requirement",
       "lines": 181,
       "code": 152,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/requirement/db.nim"
+      ]
     },
     {
       "path": "src/diagrams/requirement/graph.ts",
       "component": "diagrams/requirement",
       "lines": 57,
       "code": 51,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/requirement/graph.nim"
+      ]
     },
     {
       "path": "src/diagrams/requirement/index.ts",
       "component": "diagrams/requirement",
       "lines": 17,
       "code": 15,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/requirement/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/requirement/lexer.ts",
       "component": "diagrams/requirement",
       "lines": 310,
       "code": 288,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/requirement/lexer.nim"
+      ]
     },
     {
       "path": "src/diagrams/requirement/parser.ts",
       "component": "diagrams/requirement",
       "lines": 260,
       "code": 240,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/requirement/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/requirement/render.ts",
       "component": "diagrams/requirement",
       "lines": 383,
       "code": 351,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/requirement/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/requirement/tokens.ts",
       "component": "diagrams/requirement",
       "lines": 163,
       "code": 159,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/requirement/tokens.nim"
+      ]
     },
     {
       "path": "src/diagrams/requirement/types.ts",
       "component": "diagrams/requirement",
       "lines": 43,
       "code": 38,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/requirement/types.nim"
+      ]
     },
     {
       "path": "src/diagrams/sankey/db.ts",
