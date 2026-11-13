@@ -96,6 +96,14 @@
       "different": 0,
       "rendered": 3814,
       "errors": 1186
+    },
+    "gitGraph": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 2213,
+      "errors": 2787
     }
   }
 }

@@ -3,12 +3,12 @@
   "code": 47594,
   "totals": {
     "todo": {
-      "files": 180,
-      "code": 26958
+      "files": 176,
+      "code": 26132
     },
     "draft": {
-      "files": 111,
-      "code": 20636
+      "files": 115,
+      "code": 21462
     },
     "verified": {
       "files": 0,
@@ -122,8 +122,8 @@
     },
     {
       "component": "diagrams/git",
-      "todo": 826,
-      "draft": 0,
+      "todo": 0,
+      "draft": 826,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -1169,32 +1169,40 @@
       "component": "diagrams/git",
       "lines": 272,
       "code": 238,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/git/db.nim"
+      ]
     },
     {
       "path": "src/diagrams/git/index.ts",
       "component": "diagrams/git",
       "lines": 11,
       "code": 9,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/git/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/git/parser.ts",
       "component": "diagrams/git",
       "lines": 257,
       "code": 236,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/git/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/git/render.ts",
       "component": "diagrams/git",
       "lines": 387,
       "code": 343,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/git/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/info/index.ts",
