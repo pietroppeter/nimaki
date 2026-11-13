@@ -444,8 +444,8 @@
           "title": "Sankey",
           "what": "src/diagrams/sankey: 786 lines of TypeScript, 8 corpus cases.",
           "done_when": "difftest: every sankey case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port diagrams that need no layered layout",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -466,8 +466,8 @@
           "title": "Quadrant",
           "what": "src/diagrams/quadrant: 876 lines of TypeScript, 3 corpus cases.",
           "done_when": "difftest: every quadrant case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port diagrams that need no layered layout",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -477,8 +477,8 @@
           "title": "Venn",
           "what": "src/diagrams/venn: 909 lines of TypeScript, 8 corpus cases.",
           "done_when": "difftest: every venn case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port diagrams that need no layered layout",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -488,8 +488,8 @@
           "title": "Xychart",
           "what": "src/diagrams/xychart: 953 lines of TypeScript, 8 corpus cases.",
           "done_when": "difftest: every xychart case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port diagrams that need no layered layout",
+          "status": "started",
           "post": "",
           "pr": ""
         },
