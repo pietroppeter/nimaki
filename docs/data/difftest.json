@@ -2,9 +2,9 @@
   "about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand.",
   "pin": "1.13.0",
   "cases": 2118,
-  "identical": 995,
+  "identical": 1157,
   "different": 0,
-  "unsupported": 1123,
+  "unsupported": 961,
   "types": [
     {
       "type": "agentflow",
@@ -58,9 +58,9 @@
       "type": "er",
       "coverage": "er",
       "cases": 142,
-      "identical": 0,
+      "identical": 142,
       "different": 0,
-      "unsupported": 142
+      "unsupported": 0
     },
     {
       "type": "eventmodeling",
@@ -178,9 +178,9 @@
       "type": "requirement",
       "coverage": "requirement",
       "cases": 20,
-      "identical": 0,
+      "identical": 20,
       "different": 0,
-      "unsupported": 20
+      "unsupported": 0
     },
     {
       "type": "sankey",
