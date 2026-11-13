@@ -294,8 +294,8 @@
           "title": "A proposal for diagrammari",
           "what": "How diagrammari could use nimaki instead of Node for the ported types, written as a proposal (diagrammari is not changed from here).",
           "done_when": "A devlog post with the proposal.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Build C ABI and diagrammari proposal",
+          "status": "started",
           "post": "",
           "pr": ""
         }
@@ -477,8 +477,8 @@
           "title": "Venn",
           "what": "src/diagrams/venn: 909 lines of TypeScript, 8 corpus cases.",
           "done_when": "difftest: every venn case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Build C ABI and diagrammari proposal",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -488,8 +488,8 @@
           "title": "Xychart",
           "what": "src/diagrams/xychart: 953 lines of TypeScript, 8 corpus cases.",
           "done_when": "difftest: every xychart case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Build C ABI and diagrammari proposal",
+          "status": "started",
           "post": "",
           "pr": ""
         },
