@@ -2,9 +2,9 @@
   "about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand.",
   "pin": "1.13.0",
   "cases": 2118,
-  "identical": 809,
+  "identical": 995,
   "different": 0,
-  "unsupported": 1309,
+  "unsupported": 1123,
   "types": [
     {
       "type": "agentflow",
@@ -194,9 +194,9 @@
       "type": "sequence",
       "coverage": "sequence",
       "cases": 186,
-      "identical": 0,
+      "identical": 186,
       "different": 0,
-      "unsupported": 186
+      "unsupported": 0
     },
     {
       "type": "state",
