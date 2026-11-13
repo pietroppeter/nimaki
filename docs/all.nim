@@ -29,6 +29,7 @@ import devlog/radar_treemap_treeview
 import devlog/states_and_regions
 import devlog/the_diagram_family
 import devlog/the_referee
+import devlog/the_shape_of_the_port
 import devlog/three_small_diagrams
 import devlog/timeline
 import devlog/what_mermaid_is
@@ -36,3 +37,4 @@ import devlog/lifelines_and_messages
 import devlog/fishbones_and_domains
 import devlog/maps_and_clouds
 import devlog/boxes_in_boxes
+import devlog/opening_a_web_page

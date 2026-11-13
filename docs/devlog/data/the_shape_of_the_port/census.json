@@ -1,0 +1,2703 @@
+{
+  "commit": "efe06cdf8dadea5964c196654e948328ac770c0a",
+  "date": "2026-11-13",
+  "pin": "1.13.0",
+  "files": 211,
+  "statuses": {
+    "draft": 207
+  },
+  "areas": [
+    {
+      "area": "core",
+      "files": 9,
+      "nim": 1631,
+      "ported": 631,
+      "ts": 607
+    },
+    {
+      "area": "diagrams/agentflow",
+      "files": 10,
+      "nim": 2695,
+      "ported": 2695,
+      "ts": 3442
+    },
+    {
+      "area": "diagrams/architecture",
+      "files": 6,
+      "nim": 1128,
+      "ported": 1128,
+      "ts": 1247
+    },
+    {
+      "area": "diagrams/block",
+      "files": 8,
+      "nim": 1650,
+      "ported": 1650,
+      "ts": 1918
+    },
+    {
+      "area": "diagrams/c4",
+      "files": 8,
+      "nim": 1657,
+      "ported": 1657,
+      "ts": 1825
+    },
+    {
+      "area": "diagrams/class",
+      "files": 10,
+      "nim": 1846,
+      "ported": 1846,
+      "ts": 2122
+    },
+    {
+      "area": "diagrams/common",
+      "files": 8,
+      "nim": 746,
+      "ported": 746,
+      "ts": 571
+    },
+    {
+      "area": "diagrams/cynefin",
+      "files": 5,
+      "nim": 474,
+      "ported": 474,
+      "ts": 539
+    },
+    {
+      "area": "diagrams/er",
+      "files": 9,
+      "nim": 1525,
+      "ported": 1525,
+      "ts": 1660
+    },
+    {
+      "area": "diagrams/flowchart",
+      "files": 9,
+      "nim": 2658,
+      "ported": 2658,
+      "ts": 2863
+    },
+    {
+      "area": "diagrams/gantt",
+      "files": 9,
+      "nim": 1831,
+      "ported": 1831,
+      "ts": 1928
+    },
+    {
+      "area": "diagrams/git",
+      "files": 4,
+      "nim": 728,
+      "ported": 728,
+      "ts": 826
+    },
+    {
+      "area": "diagrams/info",
+      "files": 4,
+      "nim": 96,
+      "ported": 96,
+      "ts": 108
+    },
+    {
+      "area": "diagrams/ishikawa",
+      "files": 6,
+      "nim": 394,
+      "ported": 394,
+      "ts": 419
+    },
+    {
+      "area": "diagrams/journey",
+      "files": 5,
+      "nim": 451,
+      "ported": 451,
+      "ts": 467
+    },
+    {
+      "area": "diagrams/packet",
+      "files": 4,
+      "nim": 309,
+      "ported": 309,
+      "ts": 328
+    },
+    {
+      "area": "diagrams/pie",
+      "files": 4,
+      "nim": 316,
+      "ported": 316,
+      "ts": 328
+    },
+    {
+      "area": "diagrams/radar",
+      "files": 4,
+      "nim": 480,
+      "ported": 480,
+      "ts": 500
+    },
+    {
+      "area": "diagrams/railroad",
+      "files": 9,
+      "nim": 1122,
+      "ported": 1122,
+      "ts": 1491
+    },
+    {
+      "area": "diagrams/requirement",
+      "files": 8,
+      "nim": 1115,
+      "ported": 1115,
+      "ts": 1294
+    },
+    {
+      "area": "diagrams/sequence",
+      "files": 9,
+      "nim": 2392,
+      "ported": 2392,
+      "ts": 2611
+    },
+    {
+      "area": "diagrams/state",
+      "files": 8,
+      "nim": 1875,
+      "ported": 1875,
+      "ts": 2097
+    },
+    {
+      "area": "diagrams/swimlane",
+      "files": 1,
+      "nim": 56,
+      "ported": 56,
+      "ts": 69
+    },
+    {
+      "area": "diagrams/timeline",
+      "files": 5,
+      "nim": 453,
+      "ported": 453,
+      "ts": 475
+    },
+    {
+      "area": "diagrams/treemap",
+      "files": 6,
+      "nim": 589,
+      "ported": 589,
+      "ts": 504
+    },
+    {
+      "area": "diagrams/treeview",
+      "files": 6,
+      "nim": 680,
+      "ported": 680,
+      "ts": 582
+    },
+    {
+      "area": "diagrams/usecase",
+      "files": 9,
+      "nim": 2645,
+      "ported": 2645,
+      "ts": 2821
+    },
+    {
+      "area": "diagrams/wardley",
+      "files": 5,
+      "nim": 1002,
+      "ported": 1002,
+      "ts": 1092
+    },
+    {
+      "area": "layout",
+      "files": 4,
+      "nim": 3339,
+      "ported": 3339,
+      "ts": 3386
+    },
+    {
+      "area": "svg",
+      "files": 9,
+      "nim": 1670,
+      "ported": 1670,
+      "ts": 1751
+    },
+    {
+      "area": "text",
+      "files": 6,
+      "nim": 693,
+      "ported": 693,
+      "ts": 675
+    },
+    {
+      "area": "util",
+      "files": 4,
+      "nim": 955,
+      "ported": 955,
+      "ts": 592
+    }
+  ],
+  "withoutOrigin": [
+    {
+      "path": "js.nim",
+      "code": 470
+    },
+    {
+      "path": "jsdate.nim",
+      "code": 460
+    },
+    {
+      "path": "jsmath.nim",
+      "code": 15
+    },
+    {
+      "path": "nimaki.nim",
+      "code": 55
+    }
+  ],
+  "shared": [
+    {
+      "module": "preprocess.nim",
+      "types": [
+        "diagrams/agentflow",
+        "diagrams/architecture",
+        "diagrams/block",
+        "diagrams/c4",
+        "diagrams/class",
+        "diagrams/cynefin",
+        "diagrams/er",
+        "diagrams/flowchart",
+        "diagrams/gantt",
+        "diagrams/git",
+        "diagrams/info",
+        "diagrams/ishikawa",
+        "diagrams/journey",
+        "diagrams/packet",
+        "diagrams/pie",
+        "diagrams/radar",
+        "diagrams/railroad",
+        "diagrams/requirement",
+        "diagrams/sequence",
+        "diagrams/state",
+        "diagrams/swimlane",
+        "diagrams/timeline",
+        "diagrams/treemap",
+        "diagrams/treeview",
+        "diagrams/usecase",
+        "diagrams/wardley"
+      ]
+    },
+    {
+      "module": "svg/builder.nim",
+      "types": [
+        "diagrams/agentflow",
+        "diagrams/architecture",
+        "diagrams/block",
+        "diagrams/c4",
+        "diagrams/class",
+        "diagrams/cynefin",
+        "diagrams/er",
+        "diagrams/flowchart",
+        "diagrams/gantt",
+        "diagrams/git",
+        "diagrams/info",
+        "diagrams/ishikawa",
+        "diagrams/journey",
+        "diagrams/packet",
+        "diagrams/pie",
+        "diagrams/radar",
+        "diagrams/railroad",
+        "diagrams/requirement",
+        "diagrams/sequence",
+        "diagrams/state",
+        "diagrams/swimlane",
+        "diagrams/timeline",
+        "diagrams/treemap",
+        "diagrams/treeview",
+        "diagrams/usecase",
+        "diagrams/wardley"
+      ]
+    },
+    {
+      "module": "text/label.nim",
+      "types": [
+        "diagrams/agentflow",
+        "diagrams/architecture",
+        "diagrams/block",
+        "diagrams/c4",
+        "diagrams/class",
+        "diagrams/cynefin",
+        "diagrams/er",
+        "diagrams/flowchart",
+        "diagrams/gantt",
+        "diagrams/git",
+        "diagrams/info",
+        "diagrams/ishikawa",
+        "diagrams/journey",
+        "diagrams/packet",
+        "diagrams/pie",
+        "diagrams/radar",
+        "diagrams/railroad",
+        "diagrams/requirement",
+        "diagrams/sequence",
+        "diagrams/state",
+        "diagrams/swimlane",
+        "diagrams/timeline",
+        "diagrams/treemap",
+        "diagrams/treeview",
+        "diagrams/usecase",
+        "diagrams/wardley"
+      ]
+    },
+    {
+      "module": "types.nim",
+      "types": [
+        "diagrams/agentflow",
+        "diagrams/architecture",
+        "diagrams/block",
+        "diagrams/c4",
+        "diagrams/class",
+        "diagrams/cynefin",
+        "diagrams/er",
+        "diagrams/flowchart",
+        "diagrams/gantt",
+        "diagrams/git",
+        "diagrams/info",
+        "diagrams/ishikawa",
+        "diagrams/journey",
+        "diagrams/packet",
+        "diagrams/pie",
+        "diagrams/radar",
+        "diagrams/railroad",
+        "diagrams/requirement",
+        "diagrams/sequence",
+        "diagrams/state",
+        "diagrams/swimlane",
+        "diagrams/timeline",
+        "diagrams/treemap",
+        "diagrams/treeview",
+        "diagrams/usecase",
+        "diagrams/wardley"
+      ]
+    },
+    {
+      "module": "js.nim",
+      "types": [
+        "diagrams/agentflow",
+        "diagrams/architecture",
+        "diagrams/block",
+        "diagrams/c4",
+        "diagrams/class",
+        "diagrams/cynefin",
+        "diagrams/er",
+        "diagrams/flowchart",
+        "diagrams/gantt",
+        "diagrams/git",
+        "diagrams/info",
+        "diagrams/ishikawa",
+        "diagrams/journey",
+        "diagrams/packet",
+        "diagrams/pie",
+        "diagrams/radar",
+        "diagrams/railroad",
+        "diagrams/requirement",
+        "diagrams/sequence",
+        "diagrams/state",
+        "diagrams/timeline",
+        "diagrams/treemap",
+        "diagrams/treeview",
+        "diagrams/usecase",
+        "diagrams/wardley"
+      ]
+    },
+    {
+      "module": "svg/root.nim",
+      "types": [
+        "diagrams/agentflow",
+        "diagrams/architecture",
+        "diagrams/block",
+        "diagrams/c4",
+        "diagrams/class",
+        "diagrams/cynefin",
+        "diagrams/er",
+        "diagrams/flowchart",
+        "diagrams/gantt",
+        "diagrams/git",
+        "diagrams/info",
+        "diagrams/ishikawa",
+        "diagrams/journey",
+        "diagrams/packet",
+        "diagrams/pie",
+        "diagrams/radar",
+        "diagrams/railroad",
+        "diagrams/requirement",
+        "diagrams/sequence",
+        "diagrams/state",
+        "diagrams/timeline",
+        "diagrams/treemap",
+        "diagrams/treeview",
+        "diagrams/usecase",
+        "diagrams/wardley"
+      ]
+    },
+    {
+      "module": "svg/theme.nim",
+      "types": [
+        "diagrams/agentflow",
+        "diagrams/architecture",
+        "diagrams/block",
+        "diagrams/c4",
+        "diagrams/class",
+        "diagrams/cynefin",
+        "diagrams/er",
+        "diagrams/flowchart",
+        "diagrams/gantt",
+        "diagrams/git",
+        "diagrams/ishikawa",
+        "diagrams/journey",
+        "diagrams/packet",
+        "diagrams/pie",
+        "diagrams/radar",
+        "diagrams/railroad",
+        "diagrams/requirement",
+        "diagrams/sequence",
+        "diagrams/state",
+        "diagrams/swimlane",
+        "diagrams/timeline",
+        "diagrams/treemap",
+        "diagrams/treeview",
+        "diagrams/usecase",
+        "diagrams/wardley"
+      ]
+    },
+    {
+      "module": "text/measurer.nim",
+      "types": [
+        "diagrams/agentflow",
+        "diagrams/architecture",
+        "diagrams/block",
+        "diagrams/c4",
+        "diagrams/class",
+        "diagrams/cynefin",
+        "diagrams/er",
+        "diagrams/flowchart",
+        "diagrams/gantt",
+        "diagrams/git",
+        "diagrams/info",
+        "diagrams/ishikawa",
+        "diagrams/journey",
+        "diagrams/packet",
+        "diagrams/pie",
+        "diagrams/radar",
+        "diagrams/railroad",
+        "diagrams/requirement",
+        "diagrams/sequence",
+        "diagrams/state",
+        "diagrams/timeline",
+        "diagrams/treemap",
+        "diagrams/treeview",
+        "diagrams/usecase",
+        "diagrams/wardley"
+      ]
+    },
+    {
+      "module": "diagrams/common/fit_width.nim",
+      "types": [
+        "diagrams/agentflow",
+        "diagrams/architecture",
+        "diagrams/block",
+        "diagrams/c4",
+        "diagrams/class",
+        "diagrams/er",
+        "diagrams/flowchart",
+        "diagrams/gantt",
+        "diagrams/git",
+        "diagrams/ishikawa",
+        "diagrams/journey",
+        "diagrams/packet",
+        "diagrams/pie",
+        "diagrams/radar",
+        "diagrams/railroad",
+        "diagrams/requirement",
+        "diagrams/sequence",
+        "diagrams/state",
+        "diagrams/timeline",
+        "diagrams/treemap",
+        "diagrams/treeview",
+        "diagrams/usecase",
+        "diagrams/wardley"
+      ]
+    },
+    {
+      "module": "errors.nim",
+      "types": [
+        "diagrams/agentflow",
+        "diagrams/architecture",
+        "diagrams/block",
+        "diagrams/c4",
+        "diagrams/class",
+        "diagrams/er",
+        "diagrams/flowchart",
+        "diagrams/gantt",
+        "diagrams/git",
+        "diagrams/ishikawa",
+        "diagrams/journey",
+        "diagrams/packet",
+        "diagrams/pie",
+        "diagrams/radar",
+        "diagrams/railroad",
+        "diagrams/requirement",
+        "diagrams/sequence",
+        "diagrams/state",
+        "diagrams/timeline",
+        "diagrams/treeview",
+        "diagrams/usecase",
+        "diagrams/wardley"
+      ]
+    },
+    {
+      "module": "util/yaml.nim",
+      "types": [
+        "diagrams/agentflow",
+        "diagrams/architecture",
+        "diagrams/block",
+        "diagrams/class",
+        "diagrams/cynefin",
+        "diagrams/er",
+        "diagrams/flowchart",
+        "diagrams/gantt",
+        "diagrams/git",
+        "diagrams/packet",
+        "diagrams/pie",
+        "diagrams/radar",
+        "diagrams/railroad",
+        "diagrams/sequence",
+        "diagrams/state",
+        "diagrams/timeline",
+        "diagrams/treemap",
+        "diagrams/treeview",
+        "diagrams/usecase",
+        "diagrams/wardley"
+      ]
+    },
+    {
+      "module": "svg/edges.nim",
+      "types": [
+        "diagrams/agentflow",
+        "diagrams/architecture",
+        "diagrams/block",
+        "diagrams/c4",
+        "diagrams/class",
+        "diagrams/cynefin",
+        "diagrams/er",
+        "diagrams/flowchart",
+        "diagrams/ishikawa",
+        "diagrams/requirement",
+        "diagrams/sequence",
+        "diagrams/state",
+        "diagrams/timeline",
+        "diagrams/usecase",
+        "diagrams/wardley"
+      ]
+    },
+    {
+      "module": "jsmath.nim",
+      "types": [
+        "diagrams/architecture",
+        "diagrams/block",
+        "diagrams/c4",
+        "diagrams/cynefin",
+        "diagrams/er",
+        "diagrams/gantt",
+        "diagrams/ishikawa",
+        "diagrams/packet",
+        "diagrams/pie",
+        "diagrams/radar",
+        "diagrams/state",
+        "diagrams/treemap",
+        "diagrams/usecase",
+        "diagrams/wardley"
+      ]
+    },
+    {
+      "module": "util/chars.nim",
+      "types": [
+        "diagrams/agentflow",
+        "diagrams/block",
+        "diagrams/c4",
+        "diagrams/class",
+        "diagrams/er",
+        "diagrams/flowchart",
+        "diagrams/ishikawa",
+        "diagrams/journey",
+        "diagrams/requirement",
+        "diagrams/sequence",
+        "diagrams/state",
+        "diagrams/timeline",
+        "diagrams/treeview",
+        "diagrams/usecase"
+      ]
+    },
+    {
+      "module": "svg/ink.nim",
+      "types": [
+        "diagrams/agentflow",
+        "diagrams/block",
+        "diagrams/c4",
+        "diagrams/class",
+        "diagrams/er",
+        "diagrams/flowchart",
+        "diagrams/requirement",
+        "diagrams/sequence",
+        "diagrams/state",
+        "diagrams/swimlane",
+        "diagrams/treemap",
+        "diagrams/usecase"
+      ]
+    },
+    {
+      "module": "diagrams/common/tokens.nim",
+      "types": [
+        "diagrams/architecture",
+        "diagrams/cynefin",
+        "diagrams/git",
+        "diagrams/info",
+        "diagrams/packet",
+        "diagrams/pie",
+        "diagrams/radar",
+        "diagrams/railroad",
+        "diagrams/treemap",
+        "diagrams/treeview",
+        "diagrams/wardley"
+      ]
+    },
+    {
+      "module": "text/entities.nim",
+      "types": [
+        "diagrams/agentflow",
+        "diagrams/class",
+        "diagrams/er",
+        "diagrams/flowchart",
+        "diagrams/packet",
+        "diagrams/railroad",
+        "diagrams/state",
+        "diagrams/treemap",
+        "diagrams/treeview",
+        "diagrams/usecase"
+      ]
+    },
+    {
+      "module": "layout/compound.nim",
+      "types": [
+        "diagrams/agentflow",
+        "diagrams/class",
+        "diagrams/er",
+        "diagrams/flowchart",
+        "diagrams/requirement",
+        "diagrams/state",
+        "diagrams/swimlane",
+        "diagrams/usecase"
+      ]
+    },
+    {
+      "module": "layout/layered.nim",
+      "types": [
+        "diagrams/agentflow",
+        "diagrams/class",
+        "diagrams/er",
+        "diagrams/flowchart",
+        "diagrams/requirement",
+        "diagrams/state",
+        "diagrams/swimlane",
+        "diagrams/usecase"
+      ]
+    },
+    {
+      "module": "svg/title.nim",
+      "types": [
+        "diagrams/block",
+        "diagrams/class",
+        "diagrams/er",
+        "diagrams/flowchart",
+        "diagrams/requirement",
+        "diagrams/sequence",
+        "diagrams/state",
+        "diagrams/usecase"
+      ]
+    },
+    {
+      "module": "util/url.nim",
+      "types": [
+        "diagrams/agentflow",
+        "diagrams/c4",
+        "diagrams/class",
+        "diagrams/er",
+        "diagrams/flowchart",
+        "diagrams/gantt",
+        "diagrams/state"
+      ]
+    },
+    {
+      "module": "diagrams/common/scan.nim",
+      "types": [
+        "diagrams/er",
+        "diagrams/ishikawa",
+        "diagrams/journey",
+        "diagrams/requirement",
+        "diagrams/state",
+        "diagrams/timeline"
+      ]
+    },
+    {
+      "module": "svg/shapes.nim",
+      "types": [
+        "diagrams/agentflow",
+        "diagrams/block",
+        "diagrams/c4",
+        "diagrams/class",
+        "diagrams/flowchart",
+        "diagrams/state"
+      ]
+    },
+    {
+      "module": "text/icons.nim",
+      "types": [
+        "diagrams/architecture",
+        "diagrams/er",
+        "diagrams/flowchart",
+        "diagrams/sequence",
+        "diagrams/swimlane",
+        "diagrams/usecase"
+      ]
+    },
+    {
+      "module": "diagrams/common/literal_label.nim",
+      "types": [
+        "diagrams/c4",
+        "diagrams/ishikawa",
+        "diagrams/packet",
+        "diagrams/sequence",
+        "diagrams/treeview"
+      ]
+    },
+    {
+      "module": "svg/cluster.nim",
+      "types": [
+        "diagrams/agentflow",
+        "diagrams/class",
+        "diagrams/er",
+        "diagrams/flowchart",
+        "diagrams/usecase"
+      ]
+    },
+    {
+      "module": "svg/palette.nim",
+      "types": [
+        "diagrams/git",
+        "diagrams/pie",
+        "diagrams/timeline",
+        "diagrams/treemap"
+      ]
+    },
+    {
+      "module": "diagrams/common/fit.nim",
+      "types": [
+        "diagrams/git",
+        "diagrams/journey",
+        "diagrams/timeline"
+      ]
+    },
+    {
+      "module": "util/unicode.nim",
+      "types": [
+        "diagrams/agentflow",
+        "diagrams/class",
+        "diagrams/flowchart"
+      ]
+    },
+    {
+      "module": "diagrams/common/acc_descr.nim",
+      "types": [
+        "diagrams/treeview",
+        "diagrams/wardley"
+      ]
+    },
+    {
+      "module": "diagrams/common/fit_text.nim",
+      "types": [
+        "diagrams/packet",
+        "diagrams/treemap"
+      ]
+    },
+    {
+      "module": "diagrams/common/generics.nim",
+      "types": [
+        "diagrams/class",
+        "diagrams/er"
+      ]
+    },
+    {
+      "module": "jsdate.nim",
+      "types": [
+        "diagrams/gantt"
+      ]
+    },
+    {
+      "module": "layout/components.nim",
+      "types": [
+        "diagrams/class"
+      ]
+    },
+    {
+      "module": "layout/lanes.nim",
+      "types": [
+        "diagrams/swimlane"
+      ]
+    }
+  ],
+  "betweenTypes": [
+    {
+      "from": "diagrams/agentflow",
+      "to": "diagrams/flowchart",
+      "imports": 2
+    },
+    {
+      "from": "diagrams/swimlane",
+      "to": "diagrams/flowchart",
+      "imports": 4
+    }
+  ],
+  "upward": [],
+  "regexHelpers": 216,
+  "regexes": [
+    {
+      "regex": "/\\n\\s+/g",
+      "helpers": [
+        {
+          "file": "diagrams/agentflow/db.nim",
+          "proc": "setAccDescription"
+        },
+        {
+          "file": "diagrams/architecture/db.nim",
+          "proc": "dropBreakSpaces"
+        },
+        {
+          "file": "diagrams/c4/db.nim",
+          "proc": "setAccDescription"
+        },
+        {
+          "file": "diagrams/class/db.nim",
+          "proc": "setAccDescription"
+        },
+        {
+          "file": "diagrams/cynefin/model.nim",
+          "proc": "dropBreakSpaces"
+        },
+        {
+          "file": "diagrams/er/db.nim",
+          "proc": "setAccDescription"
+        },
+        {
+          "file": "diagrams/flowchart/db.nim",
+          "proc": "setAccDescription"
+        },
+        {
+          "file": "diagrams/gantt/db.nim",
+          "proc": "dropBreakSpaces"
+        },
+        {
+          "file": "diagrams/git/db.nim",
+          "proc": "collapseIndents"
+        },
+        {
+          "file": "diagrams/info/model.nim",
+          "proc": "collapseIndents"
+        },
+        {
+          "file": "diagrams/journey/db.nim",
+          "proc": "setAccDescription"
+        },
+        {
+          "file": "diagrams/packet/model.nim",
+          "proc": "collapseIndents"
+        },
+        {
+          "file": "diagrams/pie/model.nim",
+          "proc": "collapseIndents"
+        },
+        {
+          "file": "diagrams/radar/model.nim",
+          "proc": "collapseIndents"
+        },
+        {
+          "file": "diagrams/railroad/db.nim",
+          "proc": "dropBreakSpaces"
+        },
+        {
+          "file": "diagrams/requirement/db.nim",
+          "proc": "setAccDescription"
+        },
+        {
+          "file": "diagrams/sequence/db.nim",
+          "proc": "setAccDescription"
+        },
+        {
+          "file": "diagrams/state/db.nim",
+          "proc": "setAccDescription"
+        },
+        {
+          "file": "diagrams/timeline/db.nim",
+          "proc": "setAccDescription"
+        },
+        {
+          "file": "diagrams/treemap/model.nim",
+          "proc": "collapseIndents"
+        },
+        {
+          "file": "diagrams/treeview/model.nim",
+          "proc": "collapseIndents"
+        },
+        {
+          "file": "diagrams/usecase/db.nim",
+          "proc": "dropIndentation"
+        },
+        {
+          "file": "diagrams/wardley/model.nim",
+          "proc": "dropBreakSpaces"
+        }
+      ],
+      "peleFiles": 26
+    },
+    {
+      "regex": "/^default\\s?/",
+      "helpers": [
+        {
+          "file": "diagrams/agentflow/render.nim",
+          "proc": "stripDefault"
+        },
+        {
+          "file": "diagrams/class/render.nim",
+          "proc": "stripDefault"
+        },
+        {
+          "file": "diagrams/er/render.nim",
+          "proc": "stripDefault"
+        },
+        {
+          "file": "diagrams/flowchart/render.nim",
+          "proc": "stripDefault"
+        },
+        {
+          "file": "diagrams/requirement/render.nim",
+          "proc": "stripDefault"
+        }
+      ],
+      "peleFiles": 6
+    },
+    {
+      "regex": "/0|[1-9][0-9]*(?!\\.)/y",
+      "helpers": [
+        {
+          "file": "diagrams/git/parser.nim",
+          "proc": "matchInt"
+        },
+        {
+          "file": "diagrams/packet/parser.nim",
+          "proc": "matchInt"
+        },
+        {
+          "file": "diagrams/wardley/parser.nim",
+          "proc": "matchInt"
+        }
+      ],
+      "peleFiles": 3
+    },
+    {
+      "regex": "/[\\n\\r  ]/g",
+      "helpers": [
+        {
+          "file": "diagrams/class/lexer.nim",
+          "proc": "lineEndFrom"
+        },
+        {
+          "file": "diagrams/er/lexer.nim",
+          "proc": "nextLineEnd"
+        },
+        {
+          "file": "diagrams/state/lexer.nim",
+          "proc": "searchLineEnd"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[\\w]([-\\w]*\\w)?/y",
+      "helpers": [
+        {
+          "file": "diagrams/architecture/parser.nim",
+          "proc": "matchId"
+        },
+        {
+          "file": "diagrams/radar/parser.nim",
+          "proc": "matchId"
+        },
+        {
+          "file": "diagrams/wardley/parser.nim",
+          "proc": "matchId"
+        }
+      ],
+      "peleFiles": 3
+    },
+    {
+      "regex": "/\\s+/",
+      "helpers": [
+        {
+          "file": "diagrams/sequence/colors.nim",
+          "proc": "splitSpaces"
+        },
+        {
+          "file": "diagrams/treeview/render.nim",
+          "proc": "hasHighlight"
+        },
+        {
+          "file": "svg/ink.nim",
+          "proc": "splitSpaces"
+        }
+      ],
+      "peleFiles": 5
+    },
+    {
+      "regex": "/^\\s+/g",
+      "helpers": [
+        {
+          "file": "diagrams/journey/db.nim",
+          "proc": "setAccTitle"
+        },
+        {
+          "file": "diagrams/pie/model.nim",
+          "proc": "dropLeadingSpaces"
+        },
+        {
+          "file": "diagrams/timeline/db.nim",
+          "proc": "setAccTitle"
+        }
+      ],
+      "peleFiles": 24
+    },
+    {
+      "regex": "/\"([^\"\\\\]|\\\\.)*\"|'([^'\\\\]|\\\\.)*'/y",
+      "helpers": [
+        {
+          "file": "diagrams/common/tokens.nim",
+          "proc": "matchString"
+        },
+        {
+          "file": "diagrams/railroad/common.nim",
+          "proc": "quoted"
+        }
+      ],
+      "peleFiles": 2
+    },
+    {
+      "regex": "/\"[^\"]*\"|'[^']*'/y",
+      "helpers": [
+        {
+          "file": "diagrams/treemap/parser.nim",
+          "proc": "matchString"
+        },
+        {
+          "file": "diagrams/treeview/parser.nim",
+          "proc": "matchQuoted"
+        }
+      ],
+      "peleFiles": 2
+    },
+    {
+      "regex": "/(?:\\r?\\n)*\\s*\\n/y",
+      "helpers": [
+        {
+          "file": "diagrams/agentflow/lexer.nim",
+          "proc": "reNodir"
+        },
+        {
+          "file": "diagrams/flowchart/lexer.nim",
+          "proc": "reNodir"
+        }
+      ],
+      "peleFiles": 2
+    },
+    {
+      "regex": "/.*direction\\s+NAME[^\\n]*/y",
+      "helpers": [
+        {
+          "file": "diagrams/agentflow/lexer.nim",
+          "proc": "reDirection"
+        },
+        {
+          "file": "diagrams/flowchart/lexer.nim",
+          "proc": "reDirection"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[ \\t]{1,}/y",
+      "helpers": [
+        {
+          "file": "diagrams/treemap/parser.nim",
+          "proc": "matchBlanks"
+        },
+        {
+          "file": "diagrams/treeview/parser.nim",
+          "proc": "matchBlanks"
+        }
+      ],
+      "peleFiles": 2
+    },
+    {
+      "regex": "/[\";]font-family:/",
+      "helpers": [
+        {
+          "file": "diagrams/class/render.nim",
+          "proc": "hasFontFamily"
+        },
+        {
+          "file": "diagrams/er/render.nim",
+          "proc": "setsFontFamily"
+        }
+      ],
+      "peleFiles": 2
+    },
+    {
+      "regex": "/[\\t ]*accDescr\\s*{/y",
+      "helpers": [
+        {
+          "file": "diagrams/git/parser.nim",
+          "proc": "blockOpener"
+        },
+        {
+          "file": "diagrams/radar/parser.nim",
+          "proc": "blockEnd"
+        }
+      ],
+      "peleFiles": 2
+    },
+    {
+      "regex": "/\\%\\%[^\\n]*/y",
+      "helpers": [
+        {
+          "file": "diagrams/treemap/parser.nim",
+          "proc": "matchComment"
+        },
+        {
+          "file": "diagrams/treeview/parser.nim",
+          "proc": "matchComment"
+        }
+      ],
+      "peleFiles": 2
+    },
+    {
+      "regex": "/\\(\\s*\\)/y",
+      "helpers": [
+        {
+          "file": "diagrams/agentflow/lexer.nim",
+          "proc": "reEmptyCall"
+        },
+        {
+          "file": "diagrams/flowchart/lexer.nim",
+          "proc": "reEmptyCall"
+        }
+      ],
+      "peleFiles": 3
+    },
+    {
+      "regex": "/\\n\\s*/g",
+      "helpers": [
+        {
+          "file": "diagrams/agentflow/lexer.nim",
+          "proc": "brs"
+        },
+        {
+          "file": "diagrams/flowchart/lexer.nim",
+          "proc": "replaceBreaks"
+        }
+      ],
+      "peleFiles": 3
+    },
+    {
+      "regex": "/\\r?\\n/y",
+      "helpers": [
+        {
+          "file": "diagrams/treemap/parser.nim",
+          "proc": "matchNewline"
+        },
+        {
+          "file": "diagrams/treeview/parser.nim",
+          "proc": "matchNewline"
+        }
+      ],
+      "peleFiles": 3
+    },
+    {
+      "regex": "/\\s*(?:LR|RL|TB|BT|TD|BR)\\b/y",
+      "helpers": [
+        {
+          "file": "diagrams/agentflow/lexer.nim",
+          "proc": "reDir"
+        },
+        {
+          "file": "diagrams/flowchart/lexer.nim",
+          "proc": "reDir"
+        }
+      ],
+      "peleFiles": 2
+    },
+    {
+      "regex": "/\\s*[<>^]/y",
+      "helpers": [
+        {
+          "file": "diagrams/agentflow/lexer.nim",
+          "proc": "reDirSym"
+        },
+        {
+          "file": "diagrams/flowchart/lexer.nim",
+          "proc": "reDirSym"
+        }
+      ],
+      "peleFiles": 2
+    },
+    {
+      "regex": "/\\s*v\\b/y",
+      "helpers": [
+        {
+          "file": "diagrams/agentflow/lexer.nim",
+          "proc": "reDirV"
+        },
+        {
+          "file": "diagrams/flowchart/lexer.nim",
+          "proc": "reDirV"
+        }
+      ],
+      "peleFiles": 2
+    },
+    {
+      "regex": "/\\s/",
+      "helpers": [
+        {
+          "file": "diagrams/common/literal_label.nim",
+          "proc": "isSpaceChar"
+        },
+        {
+          "file": "diagrams/flowchart/db.nim",
+          "proc": "hasSpace"
+        }
+      ],
+      "peleFiles": 6
+    },
+    {
+      "regex": "/^[+-]?(?:\\d+(?:\\.\\d+)?|\\.\\d+)(?:e[+-]?\\d+)?(%|deg|grad|rad|turn)?$/i",
+      "helpers": [
+        {
+          "file": "diagrams/sequence/colors.nim",
+          "proc": "reTerm"
+        },
+        {
+          "file": "svg/ink.nim",
+          "proc": "numberUnit"
+        }
+      ],
+      "peleFiles": 2
+    },
+    {
+      "regex": "/direction/gi",
+      "helpers": [
+        {
+          "file": "diagrams/er/lexer.nim",
+          "proc": "searchDirectionWord"
+        },
+        {
+          "file": "diagrams/state/lexer.nim",
+          "proc": "searchDirection"
+        }
+      ],
+      "peleFiles": 2
+    },
+    {
+      "regex": "/edge-thickness-normal|edge-pattern-solid|flowchart-link/g",
+      "helpers": [
+        {
+          "file": "diagrams/agentflow/render.nim",
+          "proc": "withoutFlowClasses"
+        },
+        {
+          "file": "diagrams/flowchart/render.nim",
+          "proc": "withoutFlowClasses"
+        }
+      ],
+      "peleFiles": 2
+    },
+    {
+      "regex": "/w\\s*:\\s*/y",
+      "helpers": [
+        {
+          "file": "diagrams/agentflow/lexer.nim",
+          "proc": "reWordSpaces"
+        },
+        {
+          "file": "diagrams/flowchart/lexer.nim",
+          "proc": "reWordSpaces"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/!important/gi",
+      "helpers": [
+        {
+          "file": "svg/theme.nim",
+          "proc": "removeImportant"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/\"[^\"]*\"/y",
+      "helpers": [
+        {
+          "file": "diagrams/railroad/abnf.nim",
+          "proc": "matchAbnfString"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/%%/g",
+      "helpers": [
+        {
+          "file": "diagrams/state/lexer.nim",
+          "proc": "searchPercent"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/%[xXdDbB][0-9A-Fa-f]+(?:-[0-9A-Fa-f]+|\\.[0-9A-Fa-f]+)*/y",
+      "helpers": [
+        {
+          "file": "diagrams/railroad/abnf.nim",
+          "proc": "matchNumVal"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/%{2}{\\s*(?:(\\w+)\\s*:|(\\w+))\\s*(?:(\\w+)|((?:(?!}%{2}).|\\r?\\n)*))?\\s*(?:}%{2})?/i",
+      "helpers": [
+        {
+          "file": "preprocess.nim",
+          "proc": "matchDirective"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/&#(\\w+)(^\\w|;)?/g",
+      "helpers": [
+        {
+          "file": "util/url.nim",
+          "proc": "replaceEntities"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/&(newline|tab);/gi",
+      "helpers": [
+        {
+          "file": "util/url.nim",
+          "proc": "ctrlEntityAt"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/(?!:::|icon\\(|##)[^ \\t\\n\\r\"'](?:(?![ \\t]+:::[ \\t]*[A-Za-z_]|[ \\t]+icon\\(|[ \\t]+##)[^\\n\\r])*/y",
+      "helpers": [
+        {
+          "file": "diagrams/treeview/parser.nim",
+          "proc": "matchBareName"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/(?!title\\s|accTitle|accDescr)[A-Za-z](?:[A-Za-z0-9_()&]|-(?!>))*(?:[ \\t]+[A-Za-z(](?:[A-Za-z0-9_()&]|-(?!>))*)*/y",
+      "helpers": [
+        {
+          "file": "diagrams/wardley/parser.nim",
+          "proc": "matchNameWithSpaces"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/(?:\\r?\\n)+/y",
+      "helpers": [
+        {
+          "file": "diagrams/flowchart/lexer.nim",
+          "proc": "reNewline"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/(?:^| )statediagram-(?:state|cluster-alt|cluster|note)(?= |$)/g",
+      "helpers": [
+        {
+          "file": "diagrams/state/render.nim",
+          "proc": "withoutMermaidClasses"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/(?:^|;)\\s*prop:([^;]*)/",
+      "helpers": [
+        {
+          "file": "svg/builder.nim",
+          "proc": "styleProp"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/([#+~-])?(.+)\\((.*)\\)([\\s$*])?(.*)([$*])?/",
+      "helpers": [
+        {
+          "file": "diagrams/class/members.nim",
+          "proc": "parseMethod"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/([\\w-]*)\\s*\\(/g",
+      "helpers": [
+        {
+          "file": "svg/palette.nim",
+          "proc": "functionNames"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/(\\\\|%5[cC])((%(6[eE]|72|74))|[nrt])/g",
+      "helpers": [
+        {
+          "file": "util/url.nim",
+          "proc": "wsEscapeAt"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/,([\\t ]*)$/",
+      "helpers": [
+        {
+          "file": "diagrams/agentflow/db.nim",
+          "proc": "withoutTrailingComma"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/---[\\t ]*\\r?\\n(?:[\\S\\s]*?\\r?\\n)?---(?:\\r?\\n|(?!\\S))/y",
+      "helpers": [
+        {
+          "file": "diagrams/common/tokens.nim",
+          "proc": "matchYaml"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/---[\\t ]*\\r?\\n/y",
+      "helpers": [
+        {
+          "file": "diagrams/common/tokens.nim",
+          "proc": "yamlOpener"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/-->|-\\.->|>|\\+'[^']*'<>|\\+'[^']*'<|\\+'[^']*'>/y",
+      "helpers": [
+        {
+          "file": "diagrams/wardley/parser.nim",
+          "proc": "matchLinkArrow"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/->/y",
+      "helpers": [
+        {
+          "file": "diagrams/wardley/parser.nim",
+          "proc": "matchArrow"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/.*direction\\s+DIR[^\\n]*/iy",
+      "helpers": [
+        {
+          "file": "diagrams/er/lexer.nim",
+          "proc": "directionAt"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/.*direction\\s+TB[^\\n]*/y",
+      "helpers": [
+        {
+          "file": "diagrams/class/lexer.nim",
+          "proc": "directionEnd"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/.*direction\\s+WORD[^\\n]*/y",
+      "helpers": [
+        {
+          "file": "diagrams/c4/lexer.nim",
+          "proc": "matchDirection"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/:\\s*[>|][\\d+-]*\\s*$/",
+      "helpers": [
+        {
+          "file": "diagrams/agentflow/db.nim",
+          "proc": "blockScalarHeader"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/;[^\\n\\r]+/y",
+      "helpers": [
+        {
+          "file": "diagrams/wardley/parser.nim",
+          "proc": "matchLinkLabel"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/<(?!br\\s*\\/?>)/gi",
+      "helpers": [
+        {
+          "file": "diagrams/common/fit.nim",
+          "proc": "tagStartAt"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/<(\\w+)([^>]*)>/g",
+      "helpers": [
+        {
+          "file": "preprocess.nim",
+          "proc": "htmlTags"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/</g",
+      "helpers": [
+        {
+          "file": "diagrams/class/render.nim",
+          "proc": "escapeAngles"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/<<(?:fork|join|choice)>>|\\[\\[(?:fork|join|choice)\\]\\]/gi",
+      "helpers": [
+        {
+          "file": "diagrams/state/lexer.nim",
+          "proc": "searchStereotype"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/<\\/?([a-zA-Z][\\w-]*)(?:\\s[^<>]*)?\\/?>/y",
+      "helpers": [
+        {
+          "file": "text/label.nim",
+          "proc": "matchTag"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/<br\\s*\\/?>/gi",
+      "helpers": [
+        {
+          "file": "diagrams/gantt/render.nim",
+          "proc": "dropBreaks"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/<br\\s*\\/?>/i",
+      "helpers": [
+        {
+          "file": "diagrams/common/fit.nim",
+          "proc": "brEnd"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/<br\\s*\\/?>|\\\\n|\\n/gi",
+      "helpers": [
+        {
+          "file": "text/label.nim",
+          "proc": "splitBreaks"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/<br\\s*\\/?>|ﬂ°°?\\w+¶ß|&#?\\w+;|[\\ud800-\\udbff][\\udc00-\\udfff]|[\\s\\S]/gi",
+      "helpers": [
+        {
+          "file": "diagrams/common/fit.nim",
+          "proc": "units"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/<|>/y",
+      "helpers": [
+        {
+          "file": "diagrams/architecture/parser.nim",
+          "proc": "matchInto"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/L|R|T|B/y",
+      "helpers": [
+        {
+          "file": "diagrams/architecture/parser.nim",
+          "proc": "matchDirection"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[ \\t]+##[^\\n\\r]*/y",
+      "helpers": [
+        {
+          "file": "diagrams/treeview/parser.nim",
+          "proc": "matchDesc"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[ \\t]+/y",
+      "helpers": [
+        {
+          "file": "diagrams/wardley/parser.nim",
+          "proc": "matchWs"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[ \\t]+:::[ \\t]*[A-Za-z_][\\w-]*/y",
+      "helpers": [
+        {
+          "file": "diagrams/treeview/parser.nim",
+          "proc": "matchClass"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[ \\t]+icon\\([\\w-]*(?::[\\w-]+)?\\)/y",
+      "helpers": [
+        {
+          "file": "diagrams/treeview/parser.nim",
+          "proc": "matchIcon"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[\";]fill:/",
+      "helpers": [
+        {
+          "file": "svg/theme.nim",
+          "proc": "setsFill"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[\";]prop:([^;\"]*)/",
+      "helpers": [
+        {
+          "file": "svg/ink.nim",
+          "proc": "styleValue"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[\";]prop:/",
+      "helpers": [
+        {
+          "file": "svg/edges.nim",
+          "proc": "hasDecl"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[-\\w]*\\w/y",
+      "helpers": [
+        {
+          "file": "diagrams/radar/parser.nim",
+          "proc": "nameRestEnd"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[0-9]*\\*[0-9]*/y",
+      "helpers": [
+        {
+          "file": "diagrams/railroad/abnf.nim",
+          "proc": "matchRepeat"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[0-9]+/y",
+      "helpers": [
+        {
+          "file": "diagrams/railroad/abnf.nim",
+          "proc": "matchExact"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[0-9_\\.\\,]+/y",
+      "helpers": [
+        {
+          "file": "diagrams/treemap/parser.nim",
+          "proc": "matchNumber"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[<\\\\\\n*_]|fa[bklrs]?:fa-/",
+      "helpers": [
+        {
+          "file": "text/label.nim",
+          "proc": "hasMarkup"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[A-Z_a-z][\\w-]*/y",
+      "helpers": [
+        {
+          "file": "diagrams/railroad/common.nim",
+          "proc": "matchIdentifier"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[A-Za-z][A-Za-z0-9-]*/y",
+      "helpers": [
+        {
+          "file": "diagrams/railroad/abnf.nim",
+          "proc": "matchName"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[\\n\\r]{2,}/gm",
+      "helpers": [
+        {
+          "file": "diagrams/common/tokens.nim",
+          "proc": "collapseLineBreaks"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[\\r  ]/",
+      "helpers": [
+        {
+          "file": "diagrams/sequence/db.nim",
+          "proc": "isLineTerminator"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[\\s,]+/",
+      "helpers": [
+        {
+          "file": "diagrams/gantt/db.nim",
+          "proc": "splitTokens"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[\\t \\r\\n]+/y",
+      "helpers": [
+        {
+          "file": "diagrams/railroad/common.nim",
+          "proc": "matchBlankRun"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[\\t ]*%%[^\\n\\r]*/y",
+      "helpers": [
+        {
+          "file": "diagrams/common/tokens.nim",
+          "proc": "matchComment"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[\\t ]*%%{/y",
+      "helpers": [
+        {
+          "file": "diagrams/common/tokens.nim",
+          "proc": "directiveOpener"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[\\t ]*%%{[\\S\\s]*?}%%(?:\\r?\\n|(?!\\S))/y",
+      "helpers": [
+        {
+          "file": "diagrams/common/tokens.nim",
+          "proc": "matchDirective"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[\\t ]*accDescr(?:[\\t ]*:(?:[^\\n\\r]*?(?=%%)|[^\\n\\r]*)|\\s*({))/y",
+      "helpers": [
+        {
+          "file": "diagrams/common/acc_descr.nim",
+          "proc": "headEnd"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[\\t ]*accDescr(?:[\\t ]*:([^\\n\\r]*?(?=%%)|[^\\n\\r]*)|\\s*{([^}]*)})/y",
+      "helpers": [
+        {
+          "file": "diagrams/common/tokens.nim",
+          "proc": "matchAccDescr"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[\\t ]*accTitle[\\t ]*:(?:[^\\n\\r]*?(?=%%)|[^\\n\\r]*)/y",
+      "helpers": [
+        {
+          "file": "diagrams/common/tokens.nim",
+          "proc": "matchAccTitle"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[\\t ]*title(?:[\\t ][^\\n\\r]*?(?=%%)|[\\t ][^\\n\\r]*|)/y",
+      "helpers": [
+        {
+          "file": "diagrams/common/tokens.nim",
+          "proc": "matchTitle"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[\\t ]+/y",
+      "helpers": [
+        {
+          "file": "diagrams/common/tokens.nim",
+          "proc": "matchWhitespace"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[\\t ]{2,}/gm",
+      "helpers": [
+        {
+          "file": "diagrams/common/tokens.nim",
+          "proc": "collapseBlanks"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[\\u0000-\\u001F\\u007F-\\u009F -‍﻿\\uD800-\\uDFFF￾￿]/u",
+      "helpers": [
+        {
+          "file": "util/url.nim",
+          "proc": "isCtrl"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[^\\S\\n\\r]+/y",
+      "helpers": [
+        {
+          "file": "diagrams/flowchart/lexer.nim",
+          "proc": "reSpace"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[^\\w-]+/g",
+      "helpers": [
+        {
+          "file": "svg/theme.nim",
+          "proc": "classNames"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/[a-zA-Z_][a-zA-Z0-9_]*/y",
+      "helpers": [
+        {
+          "file": "diagrams/treemap/parser.nim",
+          "proc": "matchId"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/\\([\\w-:]+\\)/y",
+      "helpers": [
+        {
+          "file": "diagrams/architecture/parser.nim",
+          "proc": "matchIcon"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/\\+<>|\\+>|\\+</y",
+      "helpers": [
+        {
+          "file": "diagrams/wardley/parser.nim",
+          "proc": "matchLinkPort"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/\\.?0+$/",
+      "helpers": [
+        {
+          "file": "diagrams/treemap/format.nim",
+          "proc": "dropTrailingZeros"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/\\W/g",
+      "helpers": [
+        {
+          "file": "diagrams/usecase/parser.nim",
+          "proc": "generatedId"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/\\[(?:\"([^\"\\\\]|\\\\.)*\"|'([^'\\\\]|\\\\.)*'|[^\\[\\]\\r\\n]+)\\]/y",
+      "helpers": [
+        {
+          "file": "diagrams/architecture/parser.nim",
+          "proc": "matchLabel"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/\\[([^\\]]+)]/",
+      "helpers": [
+        {
+          "file": "diagrams/gantt/dates.nim",
+          "proc": "bracketEnd"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/\\[[^\\]]+]/g",
+      "helpers": [
+        {
+          "file": "diagrams/gantt/dates.nim",
+          "proc": "dropLiterals"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/\\\\\"/g",
+      "helpers": [
+        {
+          "file": "diagrams/architecture/parser.nim",
+          "proc": "unescapeQuotes"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/\\b<prefix>(\\d+)\\b/",
+      "helpers": [
+        {
+          "file": "diagrams/usecase/json.nim",
+          "proc": "numberAfter"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/\\bline\\s+(\\d+)\\b/gi",
+      "helpers": [
+        {
+          "file": "diagrams/treeview/box_drawing.nim",
+          "proc": "remapErrorLines"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/\\d+/",
+      "helpers": [
+        {
+          "file": "diagrams/gantt/dates.nim",
+          "proc": "readDo"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/\\d\\d\\d\\d-\\d\\d-\\d\\d\\b/y",
+      "helpers": [
+        {
+          "file": "diagrams/gantt/lexer.nim",
+          "proc": "matchDate"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/\\d{n}/",
+      "helpers": [
+        {
+          "file": "diagrams/gantt/dates.nim",
+          "proc": "digitsExactly"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/\\s*[xo<]?--\\s*/y",
+      "helpers": [
+        {
+          "file": "diagrams/flowchart/lexer.nim",
+          "proc": "reStart"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/\\s*[xo<]?-?\\.+-[xo>]?\\s*/y",
+      "helpers": [
+        {
+          "file": "diagrams/flowchart/lexer.nim",
+          "proc": "reDotted"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/\\s*[xo<]?CC+[Cxo>]\\s*/y",
+      "helpers": [
+        {
+          "file": "diagrams/flowchart/lexer.nim",
+          "proc": "reRun"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/\\s*~~~+\\s*/y",
+      "helpers": [
+        {
+          "file": "diagrams/flowchart/lexer.nim",
+          "proc": "reInvis"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/\\s+$/gm",
+      "helpers": [
+        {
+          "file": "diagrams/common/tokens.nim",
+          "proc": "dropTrailingSpaces"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/\\w([-\\./\\w]*[-\\w])?/y",
+      "helpers": [
+        {
+          "file": "diagrams/git/parser.nim",
+          "proc": "matchReference"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/\\{/g",
+      "helpers": [
+        {
+          "file": "diagrams/state/lexer.nim",
+          "proc": "searchBrace"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/\\{group\\}/y",
+      "helpers": [
+        {
+          "file": "diagrams/architecture/parser.nim",
+          "proc": "matchArrowGroup"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^ +$/",
+      "helpers": [
+        {
+          "file": "diagrams/railroad/render.nim",
+          "proc": "allSpaces"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^#(?:[\\da-f]{3,4}|[\\da-f]{6}|[\\da-f]{8})$/i",
+      "helpers": [
+        {
+          "file": "svg/ink.nim",
+          "proc": "isHexColor"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^(?:.?[<>=^])?([-+( ])?(\\$)?0?\\d*(,)?(?:\\.(\\d+))?(~)?([a-zA-Z%])?$/",
+      "helpers": [
+        {
+          "file": "diagrams/treemap/format.nim",
+          "proc": "matchSpec"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^(?:rgba?|hsla?)\\s*\\(/",
+      "helpers": [
+        {
+          "file": "diagrams/sequence/db.nim",
+          "proc": "reBoxFunction"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^([^\\w]*)(javascript|data|vbscript)/im",
+      "helpers": [
+        {
+          "file": "util/url.nim",
+          "proc": "invalidProtocol"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^(\\d+(?:\\.\\d+)?)([Mdhmswy]|ms)$/",
+      "helpers": [
+        {
+          "file": "diagrams/gantt/db.nim",
+          "proc": "parseDuration"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^.+(:|&colon;)/gim",
+      "helpers": [
+        {
+          "file": "util/url.nim",
+          "proc": "schemeMatch"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^:?wrap:/",
+      "helpers": [
+        {
+          "file": "diagrams/sequence/db.nim",
+          "proc": "reWrap"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^[-+]?(?:0|[1-9][0-9]*)$/",
+      "helpers": [
+        {
+          "file": "util/yaml.nim",
+          "proc": "reInt"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^[-+]?(?:[0-9][0-9]*(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][-+]?[0-9]+)?$/",
+      "helpers": [
+        {
+          "file": "util/yaml.nim",
+          "proc": "reFloat"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^[YMDHhmsSZXx\\-/.:, T]*$/",
+      "helpers": [
+        {
+          "file": "diagrams/gantt/db.nim",
+          "proc": "isNumericFormat"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^[\\d.]+(?:px)?$/",
+      "helpers": [
+        {
+          "file": "svg/edges.nim",
+          "proc": "isPlainWidth"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^[\\s<allowed>]+$/",
+      "helpers": [
+        {
+          "file": "diagrams/treeview/box_drawing.nim",
+          "proc": "onlyOf"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^[\\w\\s#%.,+\\-/()]{1,200}$/",
+      "helpers": [
+        {
+          "file": "svg/palette.nim",
+          "proc": "charsOk"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^[|>][-+0-9]*\\s*(?:#.*)?$/",
+      "helpers": [
+        {
+          "file": "util/yaml.nim",
+          "proc": "isBlockHeader"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^\\d+$/",
+      "helpers": [
+        {
+          "file": "diagrams/gantt/db.nim",
+          "proc": "allDigits"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^\\s*%%(?!{)[^\\n]+\\n?/m",
+      "helpers": [
+        {
+          "file": "preprocess.nim",
+          "proc": "matchComment"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^\\s*(active|done|crit|milestone|vert)\\s*$/",
+      "helpers": [
+        {
+          "file": "diagrams/gantt/db.nim",
+          "proc": "tagOf"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^\\s*(title[\\t ]|accTitle[\\t ]*:|accDescr[\\t ]*[:{])/",
+      "helpers": [
+        {
+          "file": "diagrams/treeview/box_drawing.nim",
+          "proc": "metadataLine"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^\\s*/",
+      "helpers": [
+        {
+          "file": "diagrams/treeview/box_drawing.nim",
+          "proc": "afterSpaces"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^\\s*/gm",
+      "helpers": [
+        {
+          "file": "diagrams/common/tokens.nim",
+          "proc": "dropLeadingSpaces"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^\\s*railroad-(ebnf-|abnf-|peg-)?beta/i",
+      "helpers": [
+        {
+          "file": "diagrams/railroad/db.nim",
+          "proc": "notationOf"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/^keyword\\s+([\\d\\w- ]+)/",
+      "helpers": [
+        {
+          "file": "diagrams/gantt/db.nim",
+          "proc": "referenceList"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/accDescr(?:[\\t ]*:([^\\n\\r]*)|\\s*{([^}]*)})/",
+      "helpers": [
+        {
+          "file": "diagrams/common/tokens.nim",
+          "proc": "accDescrValue"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/accTitle[\\t ]*:(?:[^\\n\\r]*?(?=%%)|[^\\n\\r]*)/y",
+      "helpers": [
+        {
+          "file": "diagrams/railroad/common.nim",
+          "proc": "matchAccTitle"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/accTitle[\\t ]*:([^\\n\\r]*)/",
+      "helpers": [
+        {
+          "file": "diagrams/common/tokens.nim",
+          "proc": "accTitleValue"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/build|buy|outsource|market/y",
+      "helpers": [
+        {
+          "file": "diagrams/wardley/parser.nim",
+          "proc": "matchStrategy"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/classDef\\s+([a-zA-Z_][a-zA-Z0-9_]+)(?:\\s+([^;\\r\\n]*))?(?:;)?/y",
+      "helpers": [
+        {
+          "file": "diagrams/treemap/parser.nim",
+          "proc": "classDefParts"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/complex|complicated|clear|chaotic|confusion/y",
+      "helpers": [
+        {
+          "file": "diagrams/cynefin/parser.nim",
+          "proc": "matchDomain"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/keyword.*:\\S*#.*;/g",
+      "helpers": [
+        {
+          "file": "preprocess.nim",
+          "proc": "dropColorSemicolons"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/open[\\s\\S]*?close/y",
+      "helpers": [
+        {
+          "file": "diagrams/railroad/common.nim",
+          "proc": "between"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/start[^\\n\\r]*/y",
+      "helpers": [
+        {
+          "file": "diagrams/railroad/common.nim",
+          "proc": "lineComment"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/title([\\t ][^\\n\\r]*|)/",
+      "helpers": [
+        {
+          "file": "diagrams/common/tokens.nim",
+          "proc": "titleValue"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/title[^\\S\\r\\n]*(?=[\\r\\n]|$)/iy",
+      "helpers": [
+        {
+          "file": "diagrams/gantt/lexer.nim",
+          "proc": "bareTitle"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/title[^\\S\\r\\n]*(?=[\\r\\n]|$)\\s*/y",
+      "helpers": [
+        {
+          "file": "diagrams/c4/lexer.nim",
+          "proc": "matchBareTitle"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/title[^\\S\\r\\n][^\\n]+/iy",
+      "helpers": [
+        {
+          "file": "diagrams/gantt/lexer.nim",
+          "proc": "titleLine"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/treemap-beta|treemap/y",
+      "helpers": [
+        {
+          "file": "diagrams/treemap/parser.nim",
+          "proc": "matchKeyword"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/url\\s*\\(|expression\\s*\\(|javascript:|[<>{};\\\\]|@import|image-set|\\/\\*/i",
+      "helpers": [
+        {
+          "file": "svg/theme.nim",
+          "proc": "isUnsafe"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/var\\(--_(r|tw|hw|w)\\)/g",
+      "helpers": [
+        {
+          "file": "svg/root.nim",
+          "proc": "usedNames"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/var\\(\\s*([\\w-]*)/gi",
+      "helpers": [
+        {
+          "file": "svg/palette.nim",
+          "proc": "varNames"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/w\\b/iy",
+      "helpers": [
+        {
+          "file": "diagrams/gantt/lexer.nim",
+          "proc": "keywordWord"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/w\\s*c\\s*/iy",
+      "helpers": [
+        {
+          "file": "diagrams/gantt/lexer.nim",
+          "proc": "spacedTo"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/w\\s+/iy",
+      "helpers": [
+        {
+          "file": "diagrams/gantt/lexer.nim",
+          "proc": "spacedPlus"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/w\\s[^stops]+/iy",
+      "helpers": [
+        {
+          "file": "diagrams/gantt/lexer.nim",
+          "proc": "keywordLine"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/}[^\\S\\n]*\\n/g",
+      "helpers": [
+        {
+          "file": "diagrams/agentflow/parser.nim",
+          "proc": "braceTrail"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/}\\s*\\n/g",
+      "helpers": [
+        {
+          "file": "diagrams/flowchart/parser.nim",
+          "proc": "braceTrail"
+        }
+      ],
+      "peleFiles": 0
+    },
+    {
+      "regex": "/ﬂ°°?(\\w+)¶ß/g",
+      "helpers": [
+        {
+          "file": "text/entities.nim",
+          "proc": "writtenCodes"
+        }
+      ],
+      "peleFiles": 0
+    }
+  ],
+  "tests": {
+    "files": 6,
+    "code": 934
+  }
+}
