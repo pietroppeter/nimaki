@@ -1,4 +1,4 @@
-## devlog: 13 Nov 2026 J | What happens when you open a web page | The trip from a typed address to a page on the screen, in ten diagrams drawn by nimaki itself: the first of the articles that use the port to understand a domain, and what using it taught about the library.
+## devlog: 13 Nov 2026 L | What happens when you open a web page | The trip from a typed address to a page on the screen, in ten diagrams drawn by nimaki itself: the first of the articles that use the port to understand a domain, and what using it taught about the library.
 ## kind: article
 import std/[strformat, strutils, json, tables, options]
 import nimib
