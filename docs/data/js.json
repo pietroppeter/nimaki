@@ -3,9 +3,9 @@
   "difftest": {
     "pin": "1.13.0",
     "cases": 2118,
-    "identical": 1512,
+    "identical": 1750,
     "different": 0,
-    "unsupported": 606,
+    "unsupported": 368,
     "diagrammari": {
       "cases": 34,
       "identical": 30,
@@ -13,7 +13,7 @@
       "unsupported": 4
     }
   },
-  "bytes": 7285694,
+  "bytes": 7795736,
   "fuzz": {
     "pie": {
       "seed": 1,

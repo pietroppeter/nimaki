@@ -28,8 +28,8 @@ nbText: &"""
   cases, over the {fuzzTypes} ported types the fuzzer knows.
 - **It compiled at once.** The renderer uses only Nim's standard library, which runs in both. A
   first run drew most cases right. The rest failed on two ways of writing Nim that the C backend
-  runs and the JavaScript backend does not, and a third turned up in wardley maps, ported the same
-  day. All three are rewritten, and the porting guide now lists them.
+  runs and the JavaScript backend does not, and two more turned up in wardley maps and cynefin diagrams,
+  ported the same day. All four are rewritten, and the porting guide now lists them.
 - **Checked on every pull request.** `tools/difftest.nim --js` compiles the JavaScript build and
   compares it with Pele, and CI runs it. Decision 0013 records that nimaki builds both ways.
 - **Not yet in a browser.** The build runs in Node; a page that draws with it, and making the
@@ -48,7 +48,7 @@ and a `ref` is an address in memory. In JavaScript there are no addresses: an ob
 the engine moves around, and a number is a 64-bit float. So Nim writes a `ref object` as a
 JavaScript object, a `seq` as an array, a `string` as an array of bytes, and an address, which
 has no JavaScript equivalent, as a pair: the object that holds the value and the name of its
-field. Almost all of nimaki maps cleanly. Three things did not.
+field. Almost all of nimaki maps cleanly. Four things did not.
 
 ## The first: an address picked by `if`
 
@@ -112,6 +112,26 @@ var stages = m.axes.stages
 if stages.len == 0: stages = @DEFAULT_STAGES
 ```
 
+## And one that depends on the compiler
+
+Cynefin diagrams draw wavy boundaries from a small random number generator, *mulberry32*, which
+Pele seeds so that the same text always gives the same curve. It multiplies 32-bit numbers with
+`Math.imul`, which keeps the low 32 bits of the product. The port wrote that as a product of two
+`uint32`. In C that is exact. In JavaScript every number is a double, with 53 bits of precision,
+and the product of two 32-bit numbers can need 64: its low bits are gone before they are kept.
+The sandbox's Nim (a 2.2 nightly) got it right and CI's (2.2.4) did not, so the JavaScript build
+drew the same curves here and different ones in CI. The fix multiplies in 16-bit halves, so that
+no partial product passes 2^48:
+
+```nim
+func imul(a, b: int32): int32 =
+  let ua = cast[uint32](a)
+  let ub = cast[uint32](b)
+  let lo = (ua and 0xffff'u32) * ub
+  let hi = ((ua shr 16) * (ub and 0xffff'u32)) and 0xffff'u32
+  cast[int32](lo + (hi shl 16))
+```
+
 ## How the referee runs it
 
 The referee, `tools/difftest.nim`, compares Pele's SVG with nimaki's. Until today it called
@@ -142,7 +162,8 @@ nbNote """
   and `jsAnswers`, which compiles and runs the JavaScript build); `tools/jsrunner.nim` is the
   program compiled with `nim js`.
 - The fixes are in `layout/layered.nim`, `diagrams/railroad/render.nim`,
-  `diagrams/gantt/render.nim` and `diagrams/wardley/render.nim`. They change no output of the C build: the corpus and the fuzzer
+  `diagrams/gantt/render.nim`, `diagrams/wardley/render.nim` and
+  `diagrams/cynefin/boundaries.nim`. They change no output of the C build: the corpus and the fuzzer
   give the same results as before.
 - No `when defined(js)` was needed in the renderer.
 """, nkNim, "In the port"
