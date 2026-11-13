@@ -262,9 +262,9 @@
           "what": "src/diagrams/sequence.",
           "done_when": "difftest: every sequence case identical.",
           "owner": "Port sequence diagrams",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "lifelines-and-messages",
+          "pr": "25"
         },
         {
           "id": "corpus-diagrammari",
@@ -272,10 +272,10 @@
           "title": "diagrammari's examples as a corpus",
           "what": "Collect the Mermaid text that diagrammari's builders and spec examples write, and add it to corpus/ as a second source of cases.",
           "done_when": "difftest runs on them; the cases are counted on the coverage map.",
-          "owner": "",
-          "status": "planned",
-          "post": "",
-          "pr": ""
+          "owner": "Port class and swimlane",
+          "status": "done",
+          "post": "diagrammari-as-a-corpus",
+          "pr": "35"
         },
         {
           "id": "fuzz",
@@ -315,7 +315,7 @@
           "owner": "Port class and swimlane",
           "status": "done",
           "post": "lanes-and-handoffs",
-          "pr": ""
+          "pr": "22"
         },
         {
           "id": "info",
@@ -368,9 +368,9 @@
           "what": "src/diagrams/ishikawa: 419 lines of TypeScript, 1 corpus cases.",
           "done_when": "difftest: every ishikawa case identical.",
           "owner": "Port sequence diagrams",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "fishbones-and-domains",
+          "pr": "30"
         },
         {
           "id": "journey",
@@ -412,9 +412,9 @@
           "what": "src/diagrams/cynefin: 539 lines of TypeScript, 3 corpus cases.",
           "done_when": "difftest: every cynefin case identical.",
           "owner": "Port sequence diagrams",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "fishbones-and-domains",
+          "pr": "30"
         },
         {
           "id": "treeview",
@@ -455,10 +455,10 @@
           "title": "Git",
           "what": "src/diagrams/git: 826 lines of TypeScript, 35 corpus cases.",
           "done_when": "difftest: every git case identical.",
-          "owner": "",
-          "status": "planned",
-          "post": "",
-          "pr": ""
+          "owner": "Port class and swimlane",
+          "status": "done",
+          "post": "git-graphs",
+          "pr": "28"
         },
         {
           "id": "quadrant",
@@ -500,9 +500,9 @@
           "what": "src/diagrams/wardley: 1092 lines of TypeScript, 19 corpus cases.",
           "done_when": "difftest: every wardley case identical.",
           "owner": "Port sequence diagrams",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "maps-and-clouds",
+          "pr": "36"
         },
         {
           "id": "architecture",
@@ -511,9 +511,9 @@
           "what": "src/diagrams/architecture: 1247 lines of TypeScript, 6 corpus cases.",
           "done_when": "difftest: every architecture case identical.",
           "owner": "Port sequence diagrams",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "maps-and-clouds",
+          "pr": "36"
         },
         {
           "id": "requirement",
@@ -522,9 +522,9 @@
           "what": "src/diagrams/requirement: 1294 lines of TypeScript, 9 corpus cases.",
           "done_when": "difftest: every requirement case identical.",
           "owner": "Port the compound-layout diagram types",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "crows-feet",
+          "pr": "29"
         },
         {
           "id": "railroad",
@@ -532,10 +532,10 @@
           "title": "Railroad",
           "what": "src/diagrams/railroad: 1491 lines of TypeScript, 14 corpus cases.",
           "done_when": "difftest: every railroad case identical.",
-          "owner": "",
-          "status": "planned",
-          "post": "",
-          "pr": ""
+          "owner": "Port class and swimlane",
+          "status": "done",
+          "post": "railroad-diagrams",
+          "pr": "31"
         },
         {
           "id": "er",
@@ -544,9 +544,9 @@
           "what": "src/diagrams/er: 1660 lines of TypeScript, 25 corpus cases.",
           "done_when": "difftest: every er case identical.",
           "owner": "Port the compound-layout diagram types",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "crows-feet",
+          "pr": "29"
         },
         {
           "id": "c4",
@@ -565,10 +565,10 @@
           "title": "Gantt",
           "what": "src/diagrams/gantt: 1928 lines of TypeScript, 11 corpus cases.",
           "done_when": "difftest: every gantt case identical.",
-          "owner": "",
-          "status": "planned",
-          "post": "",
-          "pr": ""
+          "owner": "Port class and swimlane",
+          "status": "done",
+          "post": "gantt-charts",
+          "pr": "33"
         },
         {
           "id": "block",
@@ -588,9 +588,9 @@
           "what": "src/diagrams/state: 2097 lines of TypeScript, 22 corpus cases.",
           "done_when": "difftest: every state case identical.",
           "owner": "Port the compound-layout diagram types",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "states-and-regions",
+          "pr": "23"
         },
         {
           "id": "class",
@@ -599,9 +599,9 @@
           "what": "src/diagrams/class: 2122 lines of TypeScript, 38 corpus cases. With src/layout/components.ts, the components layout it draws on.",
           "done_when": "difftest: every class case identical.",
           "owner": "Port class and swimlane",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "class-diagrams",
+          "pr": "26"
         },
         {
           "id": "usecase",
@@ -610,9 +610,9 @@
           "what": "src/diagrams/usecase: 2821 lines of TypeScript, 24 corpus cases.",
           "done_when": "difftest: every usecase case identical.",
           "owner": "Port the compound-layout diagram types",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "actors-and-use-cases",
+          "pr": "32"
         },
         {
           "id": "agentflow",

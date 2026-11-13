@@ -5,7 +5,7 @@
 ##
 ##   nim r tools/fuzz.nim pie                 1000 cases of pie, seed 1
 ##   nim r tools/fuzz.nim timeline            the same for timeline
-##   nim r tools/fuzz.nim flowchart           and for flowchart
+##   nim r tools/fuzz.nim flowchart           and for flowchart (and the other ported types)
 ##   options:
 ##     --cases:N         how many cases (default 1000)
 ##     --seed:S          the seed of the generator (default 1)
@@ -14,7 +14,7 @@
 ##
 ## The last run of each type is summed up in docs/data/fuzz.json, which the pages read. Each
 ## failing case is written whole to build/fuzz/<type>-<seed>.jsonl, so it can be replayed.
-import std/[os, osproc, strutils, json, random, parseopt, options]
+import std/[os, osproc, strutils, json, random, parseopt, options, sequtils]
 import common, verdict
 import nimaki
 
@@ -244,6 +244,67 @@ proc flowchartSource(g: var Gen): string =
     result.add g.pick(["", "  ", "    ", "\t"]) & flowStatement(g, 0, edges)
     result.add(if g.chance(0.03): "\r\n" else: "\n")
 
+const stateIds = ["A", "B", "C", "Still", "Moving", "Crash", "s1", "s2", "Long_name_state", "X", "fork1",
+                  "Ünï", "[*]", "[*]", "[*]", "First", "Second", "N1"]
+const stateLabels = ["", "text", "a b c", "EvNewValue", "Ünïcödé", "日本語のラベル", "emoji 🎉", "x&amp;y",
+                     "*em*", "**bold**", "a<br>b", "very long transition label that goes on and on and on",
+                     "#35; hash", ":colon", "  spaces  ", "fa:fa-car icon", "a\\nb", "<b>tag</b>", "$x^2$"]
+const stateColors = ["#ff0000", "red", "#abc", "transparent", "#12345678", "black", "white", "lightgray", "notacolor"]
+
+proc stateStatement(g: var Gen, depth: int): string =
+  let r = g.rng.rand(1.0)
+  if r < 0.4:
+    result = g.pick(stateIds) & (if g.chance(0.08): ":::" & g.pick(["hot", "cold"]) else: "") & " --> " &
+      g.pick(stateIds) & (if g.chance(0.05): ":::" & g.pick(["hot", "cold"]) else: "")
+    if g.chance(0.35): result.add " : " & g.pick(stateLabels)
+  elif r < 0.5 and depth < 3:
+    result = "state " & g.pick(["A", "B", "Comp", "\"Composite title\" as C2", "s1", "First", "Ünï"]) & " {\n"
+    if g.chance(0.25): result.add "  direction " & g.pick(["LR", "RL", "TB", "BT"]) & "\n"
+    let n = g.rng.rand(0 .. 5)
+    for k in 0 ..< n:
+      result.add "  " & stateStatement(g, depth + 1) & "\n"
+      if g.chance(0.12): result.add "  --\n"
+    result.add "}"
+  elif r < 0.55: result = "state " & g.pick(stateIds.filterIt(it != "[*]")) & " " & g.pick(["<<fork>>", "<<join>>", "<<choice>>"])
+  elif r < 0.6: result = "state \"" & g.pick(stateLabels).replace("\"", "") & "\" as " & g.pick(stateIds.filterIt(it != "[*]"))
+  elif r < 0.66: result = g.pick(stateIds.filterIt(it != "[*]")) & " : " & g.pick(stateLabels)
+  elif r < 0.71:
+    let id = g.pick(stateIds.filterIt(it != "[*]"))
+    if g.chance(0.5): result = "note " & g.pick(["left of", "right of"]) & " " & id & " : " & g.pick(stateLabels)
+    else: result = "note " & g.pick(["left of", "right of"]) & " " & id & "\n  " & g.pick(stateLabels) & "\n  " & g.pick(stateLabels) & "\nend note"
+  elif r < 0.73: result = "note \"" & g.pick(stateLabels).replace("\"", "") & "\" as N" & $g.rng.rand(1 .. 3)
+  elif r < 0.76: result = "classDef " & g.pick(["hot", "cold", "default"]) & " fill:" & g.pick(stateColors) & ",stroke:" & g.pick(stateColors) & (if g.chance(0.3): ",color:#fff" else: "") & (if g.chance(0.2): ",font-weight:bold" else: "")
+  elif r < 0.79: result = "class " & g.pick(stateIds.filterIt(it != "[*]")) & (if g.chance(0.3): "," & g.pick(stateIds.filterIt(it != "[*]")) else: "") & " " & g.pick(["hot", "cold"])
+  elif r < 0.82: result = "style " & g.pick(stateIds.filterIt(it != "[*]")) & " fill:" & g.pick(stateColors) & ",stroke-width:" & g.pick(["2px", "4px"]) & (if g.chance(0.05): ",font-style:italic" else: "")
+  elif r < 0.84: result = "click " & g.pick(stateIds.filterIt(it != "[*]")) & " " & g.pick(["href \"https://example.com\"", "\"https://example.com\" \"tip\"", "\"javascript:x\" \"t&amp;t\"", "\"\"\"x\"\"\" \"\"q\"\""])
+  elif r < 0.86: result = g.pick(stateIds) & " --> " & g.pick(stateIds) & "\n" & g.pick(stateIds) & " --> " & g.pick(stateIds)
+  elif r < 0.88: result = "%% " & g.pick(stateLabels)
+  elif r < 0.89: result = "accTitle: " & g.pick(stateLabels)
+  elif r < 0.9: result = "accDescr { " & g.pick(stateLabels) & "\n  " & g.pick(stateLabels) & " }"
+  elif r < 0.91: result = g.pick(["hide empty description", "scale 350 width", "direction LR"])
+  elif r < 0.92: result = g.pick(["garbage {", "A -->", "-->", "state", "}", "note left of", "state A <<nope>>", "A --> B : x : y", "x-y --> a.b", "--"])
+  elif r < 0.96:
+    let a = g.pick(stateIds.filterIt(it != "[*]"))
+    result = a & " --> " & a & (if g.chance(0.5): " : " & g.pick(stateLabels) else: "")
+  else: result = g.pick(stateIds.filterIt(it != "[*]"))
+
+proc stateSource(g: var Gen): string =
+  if g.chance(0.15):
+    result.add "---\n"
+    if g.chance(0.4): result.add "title: " & g.pick(stateLabels).replace("\"", "").replace(":", "") & "\n"
+    result.add "config:\n"
+    if g.chance(0.5): result.add "  flowchart:\n    curve: " & g.pick(["basis", "linear", "step", "stepAfter", "natural", "x"]) & "\n"
+    result.add "  state:\n"
+    if g.chance(0.3): result.add "    nodeSpacing: " & g.pick(["10", "80", "0", "x"]) & "\n"
+    if g.chance(0.3): result.add "    rankSpacing: " & g.pick(["10", "100", "3000"]) & "\n"
+    if g.chance(0.3): result.add "    wrappingWidth: " & g.pick(["50", "100", "400"]) & "\n"
+    result.add "    useMaxWidth: true\n"
+    result.add "---\n"
+  result.add g.pick(["stateDiagram-v2", "stateDiagram", "stateDiagram-v2"]) & "\n"
+  if g.chance(0.2): result.add "  direction " & g.pick(["LR", "RL", "TB", "BT"]) & "\n"
+  for i in 0 ..< g.rng.rand(0 .. 12):
+    result.add g.pick(["", "  ", "    ", "\t"]) & stateStatement(g, 0)
+    result.add(if g.chance(0.03): "\r\n" else: "\n")
 proc swimlaneSource(g: var Gen): string =
   ## A flowchart whose top-level subgraphs are lanes: lanes of steps, handoffs between them, a
   ## few loose steps (they share an unnamed lane) and groups inside lanes.
@@ -263,6 +324,319 @@ proc swimlaneSource(g: var Gen): string =
       result.add "  " & g.pick(flowIds) & " " & flowLink(g) & " " & g.pick(flowIds) & "\n"
       inc edges
     else: result.add "  " & flowStatement(g, 1, edges) & "\n"
+
+const classIds = ["Animal", "Duck", "Fish", "Zebra", "A", "B", "C", "note0", "interface0", "1st", "Ünï",
+                  "日本", "x_y", "a-b", "`Back tick`", "List~int~", "Map~K, V~", "ns.Inner"]
+const classMembers = ["+String name", "-int age", "#id", "~pkg", "+isMammal() bool", "+mate()", "-swim($speed) int$",
+                      "+run()*", "static$", "abstract*", "List~int~ items", "+get(List~T~ list) Map~K, V~",
+                      "+ a b c", "<<interface>>", "", "Ünïcödé field", "$$x^2$$", "&lt;tag&gt;", "run)",
+                      "+method(a, b) : int", "very long member name that goes on and on and on and on", "+f()$"]
+const classArrows = ["<|--", "*--", "o--", "-->", "--", "..>", "..|>", "..", "--|>", "--*", "--o", "<--", "()--",
+                     "--()", "<|..", "*..", "<|--|>", "<-->", "--", "-->"]
+
+proc className(g: var Gen): string = g.pick(classIds)
+
+proc classStatement(g: var Gen, depth: int): string =
+  let r = g.rng.rand(1.0)
+  if r < 0.3:
+    result = "class " & g.className()
+    if g.chance(0.15): result.add "[\"" & g.pick(["Label", "a b", "日本", "", "x&amp;y"]) & "\"]"
+    let s = g.rng.rand(1.0)
+    if s < 0.45:
+      result.add " {\n"
+      for k in 0 ..< g.rng.rand(0 .. 5): result.add "    " & g.pick(classMembers) & "\n"
+      result.add "  }"
+    elif s < 0.55: result.add ":::" & g.pick(["hot", "cold"])
+    elif s < 0.62: result.add " <<" & g.pick(["interface", "abstract", "Service"]) & ">>"
+  elif r < 0.6:
+    result = g.className()
+    if g.chance(0.2): result.add " \"" & g.pick(["1", "0..*", "many", "1..n", "$$n$$"]) & "\""
+    result.add " " & g.pick(classArrows) & " "
+    if g.chance(0.2): result.add "\"" & g.pick(["1", "0..*", "many", "*"]) & "\" "
+    result.add g.className()
+    if g.chance(0.35): result.add " : " & g.pick(["uses", "has", "a b", "日本", "very long relation label here", "<<x>>"])
+  elif r < 0.68: result = g.className() & " : " & g.pick(classMembers)
+  elif r < 0.74 and depth < 3:
+    result = "namespace " & g.pick(["Shapes", "ns", "a.b", "Outer.Inner", "Ünï"]) & " {\n"
+    for k in 0 ..< g.rng.rand(1 .. 3):
+      let s = classStatement(g, depth + 1)
+      if s.startsWith("class ") or s.startsWith("note") or s.startsWith("namespace"): result.add "  " & s & "\n"
+      else: result.add "  class " & g.className() & "\n"
+    result.add "}"
+  elif r < 0.8: result = "note " & (if g.chance(0.6): "for " & g.className() & " " else: "") & "\"" & g.pick(["a note", "line<br/>two", "日本", "x"]) & "\""
+  elif r < 0.84: result = "classDef " & g.pick(["hot", "cold", "default"]) & " fill:" & g.pick(flowColors) & ",stroke:" & g.pick(flowColors) & (if g.chance(0.3): ",color:#fff" else: "") & (if g.chance(0.2): ",font-size:20px" else: "")
+  elif r < 0.87: result = "cssClass \"" & g.className() & "," & g.className() & "\" " & g.pick(["hot", "cold"])
+  elif r < 0.9: result = "style " & g.pick(["Animal", "Duck", "A"]) & " fill:" & g.pick(flowColors) & (if g.chance(0.4): ",stroke-width:4px" else: "") & (if g.chance(0.2): ",font-style:italic" else: "")
+  elif r < 0.93: result = g.pick(["click ", "link ", "callback "]) & g.className() & " " & g.pick(["href \"https://example.com\"", "\"https://example.com\" \"tip\"", "call cb()", "\"javascript:x\" _blank", "\"cb\" \"tip\""])
+  elif r < 0.95: result = "direction " & g.pick(["TB", "BT", "LR", "RL"])
+  elif r < 0.96: result = g.pick(["accTitle: a title", "accDescr: described", "accDescr {\n  multi\n  line\n}"])
+  elif r < 0.97: result = "<<" & g.pick(["interface", "enum"]) & ">> " & g.className()
+  elif r < 0.995: result = "%% " & g.pick(flowLabels)
+  else: result = g.pick(["garbage ((", "class", "A <|-- ", "class A {", "}", "namespace {", "A : ", "--> B"])
+
+proc classSource(g: var Gen): string =
+  if g.chance(0.2):
+    result.add "---\n"
+    if g.chance(0.4): result.add "title: " & g.pick(["Classes", "A title", "日本"]) & "\n"
+    result.add "config:\n  class:\n"
+    if g.chance(0.4): result.add "    hideEmptyMembersBox: " & g.pick(["true", "false"]) & "\n"
+    if g.chance(0.4): result.add "    hierarchicalNamespaces: " & g.pick(["true", "false"]) & "\n"
+    if g.chance(0.3): result.add "    nodeSpacing: " & g.pick(["10", "80", "x"]) & "\n"
+    if g.chance(0.3): result.add "    rankSpacing: " & g.pick(["10", "100"]) & "\n"
+    result.add "    useMaxWidth: true\n---\n"
+  result.add(if g.chance(0.03): g.pick(["classDiagram-v3", "ClassDiagram"]) elif g.chance(0.2): "classDiagram-v2" else: "classDiagram")
+  result.add "\n"
+  for i in 0 ..< g.rng.rand(1 .. 12):
+    result.add g.pick(["  ", "    ", "", "\t"]) & classStatement(g, 0)
+const erIds = ["CUSTOMER", "ORDER", "LINE-ITEM", "A", "B", "C", "p[Person]", "a[\"Customer Account\"]", "\"two words\"",
+               "Ünï", "日本", "x_1", "car", "u", "1", "S1", "id1", "DELIVERY-ADDRESS"]
+const erRelIds = ["CUSTOMER", "ORDER", "LINE-ITEM", "A", "B", "C", "\"two words\"", "Ünï", "日本", "x_1", "car",
+                  "S1", "id1", "DELIVERY-ADDRESS", "p", "a"]
+const erLefts = ["||", "|o", "}o", "}|", "o|", "o{", "|{", "one or zero", "zero or more", "one or more", "only one",
+                 "many(0)", "many(1)", "1+", "0+", "1", "u", "many", "zero or one", "one"]
+const erRights = ["||", "o|", "o{", "|{", "|o", "}o", "}|", "one or zero", "zero or more", "one or more", "only one",
+                  "many(0)", "many(1)", "1+", "0+", "1", "u", "many"]
+const erTypes = ["string", "int", "float", "List~int~", "Map~string,int~", "type?", "Ünï", "decimal(10,2)",
+                 "`weird type`", "*PK", "x~y~z"]
+const erNames = ["name", "id", "firstName", "created_at", "日本", "a-b", "x.y", "List~str~"]
+
+proc erAttribute(g: var Gen): string =
+  result = g.pick(erTypes) & " " & g.pick(erNames)
+  if g.chance(0.3): result.add " " & g.pick(["PK", "FK", "UK", "PK, FK", "pk,uk", "FK,PK,UK"])
+  if g.chance(0.25): result.add " \"" & g.pick(stateLabels).replace("\"", "") & "\""
+
+proc erStatement(g: var Gen, depth: int): string =
+  let r = g.rng.rand(1.0)
+  if r < 0.45:
+    let sep = if g.chance(0.7): (if g.chance(0.5): "--" else: "..") else: g.pick([" to ", " optionally to "])
+    result = g.pick(erRelIds) & (if g.chance(0.05): ":::hot" else: "") & " " & g.pick(erLefts) & sep & g.pick(erRights) &
+      " " & g.pick(erRelIds) & (if g.chance(0.04): ":::cold" else: "") & " : " &
+      g.pick(["places", "has", "\"insured for\"", "\"\"", "contains", "uses", "日本", "a-b", "\"a b c\""])
+  elif r < 0.62:
+    result = g.pick(erIds) & (if g.chance(0.1): ":::" & g.pick(["hot", "cold"]) else: "") & " {\n"
+    for k in 0 ..< g.rng.rand(0 .. 5): result.add "    " & erAttribute(g) & "\n"
+    result.add "  }"
+  elif r < 0.68: result = g.pick(erIds)
+  elif r < 0.73 and depth < 2:
+    result = "subgraph " & g.pick(["S1", "S2", "Group", "\"Quoted\"", "G [A title]", "H [\"Quoted title\"]"]) & "\n"
+    if g.chance(0.3): result.add "  direction " & g.pick(["LR", "RL", "TB", "BT"]) & "\n"
+    for k in 0 ..< g.rng.rand(0 .. 4): result.add "  " & erStatement(g, depth + 1) & "\n"
+    result.add "end"
+  elif r < 0.77: result = "classDef " & g.pick(["hot", "cold"]) & " fill:" & g.pick(stateColors) & ",stroke:" & g.pick(stateColors) & (if g.chance(0.3): ",color:#fff" else: "") & (if g.chance(0.2): ",font-weight:bold" else: "")
+  elif r < 0.8: result = "class " & g.pick(["A", "B", "CUSTOMER", "S1"]) & (if g.chance(0.3): ",ORDER" else: "") & " " & g.pick(["hot", "cold"])
+  elif r < 0.83: result = "style " & g.pick(["A", "B", "CUSTOMER", "S1", "id1"]) & " fill:" & g.pick(stateColors) & ",stroke-width:" & g.pick(["2px", "4px"]) & (if g.chance(0.2): ",font-family:monospace" else: "")
+  elif r < 0.86:
+    let a = g.pick(erRelIds)
+    result = a & " " & g.pick(erLefts) & "--" & g.pick(erRights) & " " & a & " : " & g.pick(["self", "parent of", "x"])
+  elif r < 0.88: result = "%% " & g.pick(stateLabels)
+  elif r < 0.89: result = "accTitle: " & g.pick(stateLabels)
+  elif r < 0.9: result = "accDescr { " & g.pick(stateLabels) & "\n  " & g.pick(stateLabels) & " }"
+  elif r < 0.92: result = "direction " & g.pick(["LR", "RL", "TB", "BT"])
+  elif r < 0.925: result = g.pick(["A ||--", "A {", "}", "A ||--o{ B", "end", "A |x--|| B : y", "style", "A[unclosed"])
+  else: result = g.pick(erRelIds) & " " & g.pick(erLefts) & "--" & g.pick(erRights) & " " & g.pick(erRelIds) & " : " & g.pick(["has", "a"])
+
+proc erSource(g: var Gen): string =
+  if g.chance(0.15):
+    result.add "---\n"
+    if g.chance(0.4): result.add "title: " & g.pick(["Order example", "日本", "A title"]) & "\n"
+    result.add "config:\n  er:\n"
+    if g.chance(0.3): result.add "    nodeSpacing: " & g.pick(["10", "80", "0", "x"]) & "\n"
+    if g.chance(0.3): result.add "    rankSpacing: " & g.pick(["10", "100", "3000"]) & "\n"
+    result.add "    useMaxWidth: true\n"
+    result.add "---\n"
+  result.add "erDiagram\n"
+  if g.chance(0.15): result.add "  direction " & g.pick(["LR", "RL", "TB", "BT"]) & "\n"
+  for i in 0 ..< g.rng.rand(0 .. 10):
+    result.add g.pick(["", "  ", "    ", "\t"]) & erStatement(g, 0)
+    result.add(if g.chance(0.03): "\r\n" else: "\n")
+
+const reqNames = ["test_req", "test_req2", "test_entity", "R1", "E1", "\"quoted name\"", "\"Ünï 日本\"", "a.b", "x",
+                  "test_req", "R1", "E1"]
+const reqKinds = ["requirement", "functionalRequirement", "interfaceRequirement", "performanceRequirement",
+                  "physicalRequirement", "designConstraint", "Requirement", "REQUIREMENT"]
+const reqRels = ["contains", "copies", "derives", "satisfies", "verifies", "refines", "traces"]
+
+proc reqName(g: var Gen): string = (if g.chance(0.02): g.pick(["Ünï", "日本"]) else: g.pick(reqNames))
+
+proc reqStatement(g: var Gen): string =
+  let r = g.rng.rand(1.0)
+  if r < 0.25:
+    result = g.pick(reqKinds) & " " & reqName(g) & (if g.chance(0.1): ":::" & g.pick(["hot", "cold"]) else: "") & " {\n"
+    for k in 0 ..< g.rng.rand(0 .. 5):
+      result.add "    " & (if g.chance(0.03): g.pick(["type: x", "risk: none", "text: *em*"]) else: g.pick([
+        "id: " & g.pick(["1", "1.1", "R-7", "\"q id\""]),
+        "text: " & g.pick(["the test text.", "\"quoted text\"", "\"*em* text\"", "\"日本語\"", "a very long requirement text that wraps around the box", "x", "\"**bold** and $x^2$\""]),
+        "risk: " & g.pick(["low", "medium", "high", "High"]),
+        "verifymethod: " & g.pick(["analysis", "demonstration", "inspection", "test", "Test"])])) & "\n"
+    result.add "  }"
+  elif r < 0.4:
+    result = "element " & reqName(g) & (if g.chance(0.1): ":::hot" else: "") & " {\n"
+    for k in 0 ..< g.rng.rand(0 .. 2):
+      result.add "    " & g.pick(["type: " & g.pick(["simulation", "word doc", "\"quoted\"", "\"**bold**\""]),
+                                   "docRef: " & g.pick(["reqs/test_entity", "github.com/x", "\"q\""])]) & "\n"
+    result.add "  }"
+  elif r < 0.65:
+    if g.chance(0.7): result = reqName(g) & " - " & g.pick(reqRels) & " -> " & reqName(g)
+    else: result = reqName(g) & " <- " & g.pick(reqRels) & " - " & reqName(g)
+  elif r < 0.7:
+    let a = reqName(g)
+    result = a & " - " & g.pick(reqRels) & " -> " & a
+  elif r < 0.75: result = "classDef " & g.pick(["hot", "cold", "important"]) & " fill:" & g.pick(stateColors) & ",stroke:" & g.pick(stateColors) & (if g.chance(0.3): ",color:#fff" else: "") & (if g.chance(0.2): ",font-weight:bold" else: "")
+  elif r < 0.79: result = "class " & g.pick(["test_req", "R1", "E1", "x"]) & (if g.chance(0.3): "," & g.pick(["test_entity", "x"]) else: "") & " " & g.pick(["hot", "cold", "important"])
+  elif r < 0.83: result = "style " & g.pick(["test_req", "R1", "E1", "x", "a.b"]) & " fill:" & g.pick(stateColors) & ",stroke-width:" & g.pick(["2px", "4px"]) & (if g.chance(0.2): ",font-style:italic" else: "")
+  elif r < 0.86: result = reqName(g) & ":::" & g.pick(["hot", "cold"])
+  elif r < 0.88: result = "%% " & g.pick(stateLabels)
+  elif r < 0.89: result = "accTitle: " & g.pick(stateLabels)
+  elif r < 0.9: result = "accDescr { " & g.pick(stateLabels) & "\n  " & g.pick(stateLabels) & " }"
+  elif r < 0.93: result = "direction " & g.pick(["LR", "RL", "TB", "BT"])
+  elif r < 0.945: result = g.pick(["requirement x {", "}", "a - b -> c", "element {", "a -> b", "style", "risk: high"])
+  else: result = reqName(g) & " - " & g.pick(reqRels) & " -> " & reqName(g)
+
+proc requirementSource(g: var Gen): string =
+  if g.chance(0.1): result.add "---\ntitle: " & g.pick(["Requirements", "日本", "A title"]) & "\n---\n"
+  if g.chance(0.05): result.add "accTitle: before\n"
+  result.add g.pick(["requirementDiagram", "requirementDiagram", "  requirementDiagram"]) & "\n"
+  for i in 0 ..< g.rng.rand(0 .. 10):
+    result.add g.pick(["", "  ", "    ", "\t"]) & reqStatement(g)
+    result.add(if g.chance(0.03): "\r\n" else: "\n")
+
+proc gitSource(g: var Gen): string =
+  ## Mostly valid histories: the generator tracks branches, the current branch and commit ids,
+  ## then sometimes breaks a rule on purpose.
+  if g.chance(0.25):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(["History", "A title", "日本"]) & "\n"
+    result.add "config:\n  gitGraph:\n"
+    for key in ["showBranches", "showCommitLabel", "rotateCommitLabel", "parallelCommits"]:
+      if g.chance(0.3): result.add "    " & key & ": " & g.pick(["true", "false", "1"]) & "\n"
+    if g.chance(0.2): result.add "    mainBranchName: " & g.pick(["trunk", "main", "develop", "1"]) & "\n"
+    if g.chance(0.15): result.add "    mainBranchOrder: " & g.pick(["0", "2", "-1", "x"]) & "\n"
+    result.add "---\n"
+  result.add(if g.chance(0.03): g.pick(["gitgraph", "gitGraph:", "GitGraph"]) else: "gitGraph")
+  if g.chance(0.4): result.add " " & g.pick(["LR", "TB", "BT"]) & ":"
+  elif g.chance(0.1): result.add ":"
+  result.add "\n"
+  var branches = @["main"]
+  var current = "main"
+  var ids: seq[string]
+  var idBranch: seq[string]
+  var heads = @[false]
+  let names = ["develop", "feature", "fix/bug-1", "release.v2", "x", "日本", "\"quoted name\"", "feature-2", "commits"]
+  for i in 0 ..< g.rng.rand(1 .. 16):
+    let indent = g.pick(["  ", "    ", "", "\t"])
+    let r = g.rng.rand(1.0)
+    var line = ""
+    if r < 0.4:
+      line = "commit"
+      if g.chance(0.3):
+        let id = g.pick(["a1", "b2", "c3", "fix", "日本", "same", "x y"])
+        line.add " id: \"" & id & "\""
+        ids.add id
+        idBranch.add current
+      if g.chance(0.25): line.add " tag: \"" & g.pick(["v1.0", "v2", "release candidate", "", "日本"]) & "\""
+      if g.chance(0.1): line.add " tag: \"" & g.pick(["extra", "x"]) & "\""
+      if g.chance(0.2): line.add " type: " & g.pick(["NORMAL", "REVERSE", "HIGHLIGHT"])
+      if g.chance(0.2): line.add (if g.chance(0.5): " msg: " else: " ") & "\"" & g.pick(["a message", "", "fix it", "日本"]) & "\""
+      heads[branches.find(current)] = true
+    elif r < 0.55:
+      let name = g.pick(names)
+      line = "branch " & name
+      if g.chance(0.2): line.add " order: " & g.pick(["1", "2", "0", "5", "10"])
+      let clean = name.strip(chars = {'"'})
+      if clean notin branches:
+        branches.add clean
+        heads.add heads[branches.find(current)]
+      current = clean
+      if g.chance(0.7): line.add "\n" & indent & "commit"
+    elif r < 0.7:
+      let name = g.pick(branches)
+      line = g.pick(["checkout ", "switch "]) & (if ' ' in name: "\"" & name & "\"" else: name)
+      current = name
+    elif r < 0.85 and branches.len > 1:
+      var name = g.pick(branches)
+      if name == current and branches.len > 1 and g.chance(0.9):
+        while name == current: name = g.pick(branches)
+      line = "merge " & (if ' ' in name: "\"" & name & "\"" else: name)
+      if g.chance(0.5): line = "commit\n" & indent & line
+      if g.chance(0.2): line.add " id: \"" & g.pick(["m1", "m2", "merge-it"]) & "\""
+      if g.chance(0.2): line.add " tag: \"" & g.pick(["v1", "merged"]) & "\""
+      if g.chance(0.15): line.add " type: " & g.pick(["NORMAL", "REVERSE", "HIGHLIGHT"])
+    elif r < 0.92 and ids.len > 0:
+      var k = g.rng.rand(ids.high)
+      for tries in 0 ..< 4:
+        if idBranch[k] != current: break
+        k = g.rng.rand(ids.high)
+      line = "cherry-pick id: \"" & ids[k] & "\""
+      if g.chance(0.2): line.add " tag: \"" & g.pick(["picked", ""]) & "\""
+      if g.chance(0.1): line.add " parent: \"" & g.pick(ids) & "\""
+    elif r < 0.95: line = g.pick(["accTitle: a title", "accDescr: described", "accDescr {\n  multi\n  line\n}", "title A history"])
+    elif r < 0.98: line = "%% " & g.pick(flowLabels)
+    else: line = g.pick(["garbage", "commit id:", "branch", "merge", "checkout nowhere", "commit type: OTHER"])
+    result.add indent & line
+    result.add(if g.chance(0.03): "\r\n" else: "\n")
+
+const ucIds = ["User", "Admin", "Login", "Checkout", "Profile", "Payload", "Auth", "Shop", "Guest", "Pay", "x1", "Sys"]
+const ucLabels = ["Sign in", "Place order", "\"Quoted case\"", "Edit profile", "日本語", "a very long use case name that has to wrap", "**bold** label", "x", "Ünï"]
+const ucJson = ["{\"ok\": true}", "{}", "{\"2\": \"b\", \"1\": \"a\", \"name\": \"n\"}",
+                "{\"colors\": [\"Red\", \"Green\"], \"n\": 3, \"z\": null}",
+                "{\"address\": {\"city\": \"Oslo\", \"zip\": 123}, \"items\": [{\"name\": \"A\"}, {}], \"e\": []}",
+                "{\"dup\": \"old\", \"dup\": \"new\", \"f\": 1.5e3, \"neg\": -0}",
+                "{\"long\": \"a value long enough to need wrapping in the table cell of the json node\"}",
+                "{\"a\": tru}", "{a: 1}", "{\"a\": 1,}", "{\"a\": 01}", "{\"a\" 1}", "{\"a\": \"x\\q\"}",
+                "{\"esc\": \"line\\nbreak \\u00e9 \\\"q\\\"\"}", "{\"nested\": {\"deep\": {\"deeper\": [1, [2, 3]]}}}"]
+const ucArrows = ["-->", "-->", "<--", "--", "--->", "---->", "--|>", "--o", "--x", "o--", "x--", "<---", "-- label -->",
+                  "<-- label --", "-- \"quoted label\" --o", "o-- why --", "..> : include", "..> : extend", "..> : INCLUDE",
+                  "-- uses ---", "-- x --x", "e1@-->", "e2@--"]
+
+proc ucId(g: var Gen): string = (if g.chance(0.03): g.pick(["\"Gen id\"", "\"`md`\"", "\"日本\""]) else: g.pick(ucIds))
+
+proc ucElement(g: var Gen, actor: bool): string =
+  result = g.ucId()
+  if not result.startsWith("\"") and g.chance(0.4):
+    let l = g.pick(ucLabels)
+    result.add(if actor or g.chance(0.5): "(" & l & ")" else: "[" & l & "]")
+  if g.chance(0.12):
+    result.add "@{ " & g.pick(["type: hollow", "type: awesome", "business: true", "icon: user", "type: normal, business: false",
+                               "business: true, type: hollow", "icon: \"\"", "type: rect", "animation: fast"]) & " }"
+  if g.chance(0.1): result.add " <<" & (if g.chance(0.05): " " else: g.pick(["Human", "System", "ext"])) & ">>"
+  if g.chance(0.05): result.add ":::" & g.pick(["hot", "cold", "hot,cold"])
+
+proc ucStatement(g: var Gen, depth: int): string =
+  let r = g.rng.rand(1.0)
+  if r < 0.18:
+    result = "actor " & g.ucElement(true)
+    if g.chance(0.2): result.add ", " & g.ucElement(true)
+    elif g.chance(0.15): result.add " " & g.pick(ucArrows) & " " & g.ucId()
+  elif r < 0.32: result = g.ucElement(false)
+  elif r < 0.6:
+    result = g.ucId() & (if g.chance(0.03): ":::hot" else: "") & " " & g.pick(ucArrows) & " " &
+      (if g.chance(0.15): g.ucElement(false) else: g.ucId())
+  elif r < 0.66 and depth == 0:
+    result = "systemBoundary " & g.pick(["Auth", "Shop", "\"Ordering system\"", "Sys[The system]", "S2"]) &
+      (if g.chance(0.2): "@{ type: " & g.pick(["package", "rect"]) & " }" else: "") &
+      (if g.chance(0.1): ":::hot" else: "") & "\n"
+    for k in 0 ..< g.rng.rand(0 .. 4):
+      result.add "  " & (if g.chance(0.3): "actor " & g.ucElement(true) else: g.ucElement(false)) & "\n"
+    result.add(if g.chance(0.97): "end" else: "")
+  elif r < 0.7: result = "note for " & g.ucId() & " " & g.pick(["\"Remember this\"", "plain words here", "`**md**`", "x"])
+  elif r < 0.75: result = "json " & g.pick(["Payload", "Data", "Session"]) & (if g.chance(0.5): " " else: "") & "@" & (if g.chance(0.3): g.pick(ucJson) else: g.pick(ucJson[0 .. 6])) & (if g.chance(0.2): ":::" & g.pick(["data", "hot"]) else: "")
+  elif r < 0.79: result = g.pick(["Auth", "e1", "e2", "Payload", "User", "Login", "Nope"]) & "@{ " & g.pick(["type: package", "animation: fast", "animate: true", "animation: slow", "business: true", "type: hollow", "icon: cog", "type: rect", "x: 1"]) & " }"
+  elif r < 0.83: result = "classDef " & g.pick(["hot", "cold", "default", "data"]) & " fill:" & g.pick(stateColors) & ",stroke:" & g.pick(stateColors) & (if g.chance(0.3): ",color:#fff" else: "") & (if g.chance(0.2): ",stroke-width:3px" else: "")
+  elif r < 0.86: result = "class " & g.ucId() & (if g.chance(0.3): "," & g.ucId() else: "") & " " & g.pick(["hot", "cold", "data"])
+  elif r < 0.89: result = "style " & g.pick(["User", "Login", "Auth", "e1", "Payload", "Nope"]) & " fill:" & g.pick(stateColors) & ",stroke-width:" & g.pick(["2px", "4px"]) & (if g.chance(0.2): ",font-style:italic" else: "")
+  elif r < 0.91: result = "%% " & g.pick(stateLabels)
+  elif r < 0.92: result = "accTitle: " & g.pick(stateLabels)
+  elif r < 0.93: result = "accDescr { " & g.pick(stateLabels) & "\n    " & g.pick(stateLabels) & " }"
+  elif r < 0.95: result = "direction " & g.pick(["LR", "RL", "TB", "BT", "TD"])
+  elif r < 0.955: result = g.pick(["package X", "actor", "end", "-->", "note X", "json x @{", "classDef", "A B C"])
+  else: result = g.ucId() & " --> " & g.ucId()
+
+proc usecaseSource(g: var Gen): string =
+  if g.chance(0.1): result.add "---\ntitle: " & g.pick(["Use cases", "日本", "A title"]) & "\n---\n"
+  result.add (if g.chance(0.02): g.pick(["usecase", "usecase-beta x"]) else: "usecase-beta") & "\n"
+  for i in 0 ..< g.rng.rand(0 .. 10):
+    result.add g.pick(["", "", "  ", "\t"]) & g.ucStatement(0)
+    result.add(if g.chance(0.03): "\r\n" else: "\n")
 
 const scores = ["5", "1", "3", "4", "2", "0", "7", "-1", "2.5", " 4 ", "", "x", "1e1", "0x3", "Infinity",
                 "3.", ".5", "NaN", "\u30003"]
@@ -363,6 +737,106 @@ proc packetSource(g: var Gen): string =
     elif r < 0.98: result.add ""
     else: result.add indent & g.pick(["1.5: \"x\"", "x: \"y\"", "5-3: \"back\"", "+: \"z\"", "0-: \"a\"", "007: \"z\"", $bit & "-" & $bit & " \"no colon\""])
     result.add(if g.chance(0.05): "\r\n" else: "\n")
+
+const seqNames = ["Alice", "Bob", "John", "A", "B", "C", "Ünï", "日本", "API", "DB", "a_b", "Q🎉", "Alice", "Bob"]
+const seqOddNames = ["x y", "a-b", "1", "a#b", "a,b"]
+const seqTexts = ["Hello", "Hi Bob!", "", "a long message that goes on and on and on until it has to wrap somewhere",
+                  "wrap:wrapped text that is long enough to need wrapping in the diagram", "nowrap:no wrap here",
+                  "a<br>b", "<b>bold</b>", "Ünïcödé", "日本語のテキスト", "emoji 🎉",
+                  "fa:fa-car icon", "50%", "tab\there", "ideo\u3000space", "$$x^2$$", "*em*"]
+const seqArrows = ["->>", "-->>", "->", "-->", "-x", "--x", "-)", "--)", "<<->>", "<<-->>", "-|\\", "-|/",
+                   "-\\\\", "-//", "--|\\", "--|/", "--\\\\", "--//", "/|-", "\\|-", "//-", "\\\\-",
+                   "/|--", "\\|--", "//--", "\\\\--"]
+const seqKinds = ["participant", "actor", "participant", "participant"]
+const seqShapes = ["boundary", "control", "entity", "database", "collections", "queue", "actor", "participant", "other"]
+
+proc sequenceSource(g: var Gen): string =
+  if g.chance(0.3):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(seqTexts) & "\n"
+    result.add "config:\n"
+    if g.chance(0.2): result.add "  wrap: " & g.pick(["true", "false"]) & "\n"
+    result.add "  sequence:\n"
+    for key in ["actorMargin", "width", "height", "messageMargin", "noteMargin", "boxMargin"]:
+      if g.chance(0.15): result.add "    " & key & ": " & g.pick(["0", "10", "40", "100", "150", "3000", "-5", "x", "7.5"]) & "\n"
+    for key in ["mirrorActors", "rightAngles", "hideUnusedParticipants", "showSequenceNumbers", "wrap"]:
+      if g.chance(0.15): result.add "    " & key & ": " & g.pick(["true", "false", "1"]) & "\n"
+    if g.chance(0.15): result.add "    messageAlign: " & g.pick(["left", "right", "center", "x"]) & "\n"
+    result.add "---\n"
+  if g.chance(0.05): result.add "%%{wrap}%%\n"
+  if g.chance(0.05): result.add "%% leading comment\n"
+  result.add(if g.chance(0.03): g.pick(["sequenceDiagramx", "sequence", "SequenceDiagram"]) else: "sequenceDiagram")
+  result.add "\n"
+  var depth: seq[string]
+  var inBox = false
+  for i in 0 ..< g.rng.rand(0 .. 18):
+    let indent = g.pick(["", "  ", "    ", "\t"])
+    let r = g.rng.rand(1.0)
+    let a = if g.chance(0.03): g.pick(seqOddNames) else: g.pick(seqNames)
+    let b = g.pick(seqNames)
+    if inBox and r < 0.7:
+      if g.chance(0.3):
+        result.add indent & "end"
+        inBox = false
+      else: result.add indent & g.pick(seqKinds) & " " & a
+    elif r < 0.35:
+      result.add indent & a & g.pick(seqArrows) & (if g.chance(0.85): "" else: g.pick(["+", "+", "-", "()"])) & b & g.pick([": ", ":", " : "]) & g.pick(seqTexts)
+    elif r < 0.37:
+      result.add indent & a & "()" & g.pick(seqArrows) & g.pick(["", "()"]) & b & ": " & g.pick(seqTexts)
+    elif r < 0.45:
+      result.add indent & g.pick(seqKinds) & " " & a
+      let k = g.rng.rand(1.0)
+      if k < 0.3: result.add " as " & g.pick(seqTexts)
+      elif k < 0.45: result.add "@{ \"type\": \"" & g.pick(seqShapes) & "\" }"
+      elif k < 0.5: result.add "@{ \"type\": \"" & g.pick(seqShapes) & "\", \"alias\": \"" & g.pick(seqNames) & "\" }"
+      elif k < 0.52: result.add "@{ bad: [ }"
+    elif r < 0.52:
+      result.add indent & "Note " & g.pick(["left of ", "right of ", "over ", "over "]) & a
+      if g.chance(0.3): result.add "," & b
+      result.add ": " & g.pick(seqTexts)
+    elif r < 0.62 and depth.len < 4:
+      let kind = g.pick(["loop", "alt", "opt", "par", "critical", "break", "rect", "par_over"])
+      let text = if kind == "rect": g.pick(["rgb(200, 150, 255)", "rgba(0,0,255,0.1)", "red", "#abc", "", "notacolor"]) else: g.pick(seqTexts)
+      result.add indent & kind & " " & text
+      depth.add kind
+    elif r < 0.66 and depth.len > 0:
+      let kind = depth[^1]
+      if kind == "alt": result.add indent & "else " & g.pick(seqTexts)
+      elif kind == "par" or kind == "par_over": result.add indent & "and " & g.pick(seqTexts)
+      elif kind == "critical": result.add indent & "option " & g.pick(seqTexts)
+      else:
+        result.add indent & "end"
+        discard depth.pop()
+    elif r < 0.7 and depth.len > 0:
+      result.add indent & "end"
+      discard depth.pop()
+    elif r < 0.73:
+      result.add indent & "activate " & a
+      if g.chance(0.6): result.add "\n" & indent & a & "->>" & b & ": " & g.pick(seqTexts) & "\n" & indent & "deactivate " & a
+    elif r < 0.76: result.add indent & g.pick(["autonumber", "autonumber 10", "autonumber 1 5", "autonumber off", "autonumber 1.5 0.25"])
+    elif r < 0.79 and depth.len == 0 and not inBox:
+      result.add indent & "box " & g.pick(["", "Aqua ", "rgb(33,66,99) ", "transparent ", "lightgray ", "notacolor "]) & g.pick(seqTexts)
+      inBox = true
+    elif r < 0.82:
+      let fresh = if g.chance(0.9): "New" & $i else: a
+      result.add indent & "create " & g.pick(seqKinds) & " " & fresh & "\n"
+      result.add indent & b & "->>" & fresh & ": " & g.pick(seqTexts)
+    elif r < 0.84:
+      result.add indent & "destroy " & a & "\n"
+      result.add indent & a & "-x" & b & ": " & g.pick(seqTexts)
+    elif r < 0.86: result.add indent & g.pick(["title ", "title: "]) & g.pick(seqTexts)
+    elif r < 0.87: result.add indent & "accTitle: " & g.pick(seqTexts)
+    elif r < 0.88: result.add indent & "accDescr: " & g.pick(seqTexts)
+    elif r < 0.9: result.add indent & g.pick(["links ", "link ", "properties ", "details "]) & a & ": " &
+      g.pick(["{\"class\": \"my-class x\"}", "{\"a\": \"http://x\"}", "Repo @ https://x", "\"str\"", "{bad"])
+    elif r < 0.92: result.add indent & "%% " & g.pick(seqTexts)
+    elif r < 0.975: result.add ""
+    else: result.add indent & g.pick(["garbage ->", "A->>B: x&amp;y", "A->>", "Note left B", "end", "else x", "->>B: x", "A-->>B", "participant", "A->>B: x; B->>A: y"])
+    result.add(if g.chance(0.05): "\r\n" else: "\n")
+  while depth.len > 0 and g.chance(0.9):
+    result.add "end\n"
+    discard depth.pop()
+  if inBox and g.chance(0.9): result.add "end\n"
 
 const radarNames = ["A", "B", "speed", "power", "x1", "my-axis", "titleX", "a_b", "Z9", "Q", "r2d2", "maxi"]
 const radarOdd = ["ü", "axis", "curve", "max", "-x", "x-"]   # names the grammar takes for something else
@@ -637,6 +1111,420 @@ proc eventmodelingSource(g: var Gen): string =
     elif r < 0.99: result.add ""
     else: result.add indent & g.pick(["tf 01", "tf x ui A", "data X {", "gwt 01 given", "tf 01 ui A [[B", "note 01 { x }"])
     result.add(if g.chance(0.04): "\r\n" else: "\n")
+proc ishikawaSource(g: var Gen): string =
+  if g.chance(0.2): result.add "---\ntitle: " & g.pick(labels) & "\n---\n"
+  if g.chance(0.1): result.add g.pick(["\n", "%% comment\n", "  \n\n", "   %% c\n"])
+  result.add(if g.chance(0.03): g.pick(["Ishikawa", "ishikawax", "fishbone"]) elif g.chance(0.3): "ishikawa-beta" else: "ishikawa")
+  result.add(if g.chance(0.05): " " else: "")
+  result.add "\n"
+  var level = 0
+  for i in 0 ..< g.rng.rand(0 .. 22):
+    let r = g.rng.rand(1.0)
+    if i > 0:
+      if r < 0.4: level = min(level + 1, 6)
+      elif r < 0.7: level = max(level - g.rng.rand(1 .. 3), 1)
+    let unit = if g.chance(0.95): g.pick(["  ", "    ", "\t"]) else: g.pick(["\u3000", " ", "\u00a0 "])
+    var indent = ""
+    for k in 0 ..< level: indent.add unit
+    let q = g.rng.rand(1.0)
+    if q < 0.85: result.add indent & g.pick(labels)
+    elif q < 0.9: result.add indent & "%% " & g.pick(labels)
+    elif q < 0.97: result.add ""
+    else: result.add indent & g.pick(["ishikawa", "x %% y", "a\tb"])
+    result.add(if g.chance(0.05): "\r\n" else: "\n")
+
+const cynefinDomains = ["complex", "complicated", "clear", "chaotic", "confusion"]
+
+proc cynefinSource(g: var Gen): string =
+  if g.chance(0.4):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(labels) & "\n"
+    result.add "config:\n  cynefin:\n"
+    if g.chance(0.4): result.add "    seed: " & g.pick(["1", "42", "0", "-7", "1.5", "123456789", "1e16", "x", "99999999999"]) & "\n"
+    if g.chance(0.3): result.add "    boundaryAmplitude: " & g.pick(["0", "4", "8", "20", "50", "60", "2.5"]) & "\n"
+    if g.chance(0.2): result.add "    showDomainDescriptions: " & g.pick(["false", "true", "0"]) & "\n"
+    if g.chance(0.2): result.add "    width: " & g.pick(["100", "300", "640", "1000", "50", "20000"]) & "\n"
+    if g.chance(0.2): result.add "    height: " & g.pick(["100", "300", "440", "900", "50"]) & "\n"
+    result.add "---\n"
+  if g.chance(0.05): result.add "%% comment\n"
+  result.add(if g.chance(0.03): g.pick(["cynefin", "Cynefin-beta", "cynefin-betax"]) elif g.chance(0.2): "cynefin-beta:" else: "cynefin-beta")
+  result.add "\n"
+  for i in 0 ..< g.rng.rand(0 .. 14):
+    let indent = g.pick(["", "  ", "    ", "\t"])
+    let r = g.rng.rand(1.0)
+    let q = if g.chance(0.9): "\"" else: "'"
+    if r < 0.45:
+      result.add indent & g.pick(cynefinDomains) & "\n"
+      for k in 0 ..< g.rng.rand(0 .. 5):
+        result.add indent & "  " & q & g.pick(labels) & q & "\n"
+    elif r < 0.75:
+      result.add indent & g.pick(cynefinDomains) & g.pick([" --> ", "-->", " -->  "]) & g.pick(cynefinDomains)
+      if g.chance(0.6): result.add g.pick([" : ", ": ", ":"]) & q & g.pick(labels) & q
+    elif r < 0.8: result.add indent & "title " & g.pick(labels)
+    elif r < 0.83: result.add indent & "accTitle: " & g.pick(labels)
+    elif r < 0.86: result.add indent & "accDescr: " & g.pick(labels)
+    elif r < 0.9: result.add indent & "%% " & g.pick(labels)
+    elif r < 0.97: result.add ""
+    else: result.add indent & g.pick(["complexity", "clear --> ", "x --> clear", "\"loose\"", "chaotic -> clear"])
+    result.add(if g.chance(0.05): "\r\n" else: "\n")
+const rrWords = ["a", "b", "expr", "term", "digit", "letter", "railroad", "title-x", "_x", "x-1", "nonterminal", "sequence"]
+const rrStrings = ["x", "+", "a b", " ", "  ", "<br>", "#35;", "&amp;", "日本", "*", "\\n", "\\\"", "if", "", "very long terminal text here", "'", "tab\\t", "🎉"]
+const rrSingle = ["x", "\"", "a b", "it\\'s"]
+
+proc rrTerm(g: var Gen): string =
+  ## a quoted string in the style of IR, EBNF and PEG
+  if g.chance(0.85): "\"" & g.pick(rrStrings) & "\"" else: "'" & g.pick(rrSingle) & "'"
+
+proc rrIr(g: var Gen, depth: int): string =
+  let r = g.rng.rand(1.0)
+  if depth <= 0 or r < 0.4:
+    case g.rng.rand(2)
+    of 0: return "terminal(" & g.rrTerm() & ")"
+    of 1: return "nonterminal(\"" & g.pick(rrWords) & "\")"
+    else: return "special(\"" & g.pick(["any char", "x", "  "]) & "\")"
+  let kind = g.pick(["sequence", "choice", "optional", "oneOrMore", "zeroOrMore", "sequence", "choice"])
+  if kind in ["optional", "oneOrMore", "zeroOrMore"]: return kind & "(" & g.rrIr(depth - 1) & ")"
+  var parts: seq[string]
+  for i in 0 ..< g.rng.rand(1 .. 4): parts.add g.rrIr(depth - 1)
+  kind & "(" & parts.join(g.pick([", ", ",", " ,\n  "])) & ")"
+
+proc rrEbnf(g: var Gen, depth: int): string =
+  var alts: seq[string]
+  for a in 0 ..< (if g.chance(0.4): g.rng.rand(2 .. 4) else: 1):
+    var terms: seq[string]
+    for t in 0 ..< g.rng.rand(1 .. 4):
+      var term = ""
+      let r = g.rng.rand(1.0)
+      if depth > 0 and r < 0.25:
+        let (o, c) = g.pick([("(", ")"), ("[", "]"), ("{", "}")])
+        term = o & " " & g.rrEbnf(depth - 1) & " " & c
+      elif r < 0.55: term = g.rrTerm()
+      elif r < 0.9: term = g.pick(rrWords)
+      else: term = "? " & g.pick(["any char", "x", "日本"]) & " ?"
+      if g.chance(0.25): term.add g.pick(["?", "*", "+", "*?", "+"])
+      if g.chance(0.08): term.add " - " & g.pick(["\"x\"", "letter", "( a | b )"])
+      terms.add term
+    alts.add terms.join(g.pick([", ", " ", " , "]))
+  alts.join(g.pick([" | ", "\n  | "]))
+
+proc rrAbnf(g: var Gen, depth: int): string =
+  var alts: seq[string]
+  for a in 0 ..< (if g.chance(0.4): g.rng.rand(2 .. 4) else: 1):
+    var elems: seq[string]
+    for t in 0 ..< g.rng.rand(1 .. 4):
+      var e = if g.chance(0.3): g.pick(["*", "1*", "*3", "2*5", "3", "0*1", "1*1", "12", "99999999999999999999999*"]) else: ""
+      let r = g.rng.rand(1.0)
+      if depth > 0 and r < 0.25:
+        let (o, c) = g.pick([("(", ")"), ("[", "]")])
+        e.add o & g.rrAbnf(depth - 1) & c
+      elif r < 0.5: e.add "\"" & g.pick(["x", "a b", "<br>", "", "日本", "\\"]) & "\""
+      elif r < 0.65: e.add g.pick(["%x41-5A", "%d13.10", "%b0101", "%x20"])
+      else: e.add g.pick(["ALPHA", "DIGIT", "rule-1", "a", "expr"])
+      elems.add e
+    alts.add elems.join(" ")
+  alts.join(g.pick([" / ", "\n  / "]))
+
+proc rrPeg(g: var Gen, depth: int): string =
+  var alts: seq[string]
+  for a in 0 ..< (if g.chance(0.4): g.rng.rand(2 .. 4) else: 1):
+    var items: seq[string]
+    for t in 0 ..< g.rng.rand(1 .. 4):
+      var item = if g.chance(0.15): g.pick(["&", "!"]) else: ""
+      let r = g.rng.rand(1.0)
+      if depth > 0 and r < 0.25: item.add "(" & g.rrPeg(depth - 1) & ")"
+      elif r < 0.55: item.add g.rrTerm()
+      elif r < 0.9: item.add g.pick(rrWords)
+      else: item.add "."
+      if g.chance(0.25): item.add g.pick(["?", "*", "+"])
+      items.add item
+    alts.add items.join(" ")
+  alts.join(g.pick([" / ", "\n  / "]))
+
+proc railroadSource(g: var Gen): string =
+  ## The four notations, mostly valid, with a broken rule now and then.
+  if g.chance(0.3):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(["Grammar", "日本", "A long title for a grammar diagram"]) & "\n"
+    result.add "config:\n  railroad:\n"
+    for key in ["fontSize", "padding", "horizontalSeparation", "verticalSeparation", "arcRadius", "markerRadius", "strokeWidth"]:
+      if g.chance(0.2): result.add "    " & key & ": " & g.pick(["0", "4", "10", "24", "-1", "1000", "x", "2.5"]) & "\n"
+    if g.chance(0.2): result.add "    showMarkers: " & g.pick(["false", "true", "0"]) & "\n"
+    result.add "---\n"
+  let notation = g.pick(["railroad", "ebnf", "abnf", "peg"])
+  let keyword = if notation == "railroad": "railroad-beta" else: "railroad-" & notation & "-beta"
+  result.add(if g.chance(0.03): g.pick(["Railroad-Beta", "railroad-betax", "railroad"]) else: keyword)
+  result.add "\n"
+  if g.chance(0.2): result.add g.pick(["title Grammar", "title \"Quoted title\"", "title", "title 'x\\ty'", "title a %% c"]) & "\n"
+  if g.chance(0.1): result.add "accTitle: Rules\n"
+  if g.chance(0.1): result.add g.pick(["accDescr: A grammar\n", "accDescr {\n  many\n   lines\n}\n"])
+  if g.chance(0.05): result.add g.pick(["%% comment\n", "/* block */\n", "# hash\n", "(* iso *)\n", "; abnf comment\n"])
+  for i in 0 ..< g.rng.rand(1 .. 5):
+    let name = g.pick(["expr", "term", "digit", "a", "rule-1", "x_y", "letter"])
+    let depth = g.rng.rand(0 .. 3)
+    var line = case notation
+      of "railroad": name & " = " & g.rrIr(depth) & ";"
+      of "ebnf": name & g.pick([" = ", " ::= "]) & g.rrEbnf(depth) & " ;"
+      of "abnf": name & " = " & g.rrAbnf(depth) & ";"
+      else: name & " <- " & g.rrPeg(depth) & ";"
+    if g.chance(0.04): line = line[0 ..< line.len - 1]
+    if g.chance(0.03): line.add g.pick([" )", " junk", " =", " ; trailing"])
+    result.add line & "\n"
+
+proc ganttDate(g: var Gen, fmt: string, y, m, d, h, mi: int): string =
+  ## A date written in the chart's format, with a slip now and then.
+  let p2 = proc (n: int): string = (if n < 10: "0" & $n else: $n)
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+  case fmt
+  of "DD/MM/YYYY": p2(d) & "/" & p2(m) & "/" & $y
+  of "YYYY-MM-DD HH:mm": $y & "-" & p2(m) & "-" & p2(d) & " " & p2(h) & ":" & p2(mi)
+  of "HH:mm": p2(h) & ":" & p2(mi)
+  of "X": $(1767225600 + (d - 1) * 86400 + h * 3600)
+  of "x": $(1767225600000 + (d - 1) * 86400000 + h * 3600000)
+  of "MMM D YYYY": months[m - 1] & " " & $d & " " & $y
+  of "YYYY": $(y + d)
+  of "D": $d
+  of "YYYY-MM-DDTHH:mm:ssZ": $y & "-" & p2(m) & "-" & p2(d) & "T" & p2(h) & ":" & p2(mi) & ":00+00:00"
+  else: $y & "-" & p2(m) & "-" & p2(d)
+
+proc ganttSource(g: var Gen): string =
+  ## Mostly valid charts: dates in the chart's format, references to earlier tasks, durations,
+  ## exclusions and tick intervals, with a broken line now and then.
+  if g.chance(0.3):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(["Plan", "日本", "A long plan title"]) & "\n"
+    result.add "config:\n  gantt:\n"
+    for key in ["fontSize", "sectionFontSize", "barHeight", "barGap", "numberSectionStyles", "leftPadding",
+                "rightPadding", "useWidth", "topPadding", "gridLineStartPadding"]:
+      if g.chance(0.12): result.add "    " & key & ": " & g.pick(["0", "4", "12", "30", "75", "200", "900", "x", "-5"]) & "\n"
+    if g.chance(0.15): result.add "    topAxis: " & g.pick(["true", "false"]) & "\n"
+    if g.chance(0.15): result.add "    displayMode: " & g.pick(["compact", "\"\"", "other"]) & "\n"
+    if g.chance(0.1): result.add "    axisFormat: \"" & g.pick(["%d %b", "%H:%M", "%Y"]) & "\"\n"
+    if g.chance(0.1): result.add "    tickInterval: " & g.pick(["1day", "1week", "2month", "x"]) & "\n"
+    if g.chance(0.1): result.add "    weekday: " & g.pick(["monday", "friday", "nope"]) & "\n"
+    result.add "---\n"
+  result.add(if g.chance(0.03): g.pick(["Gantt", "gantt2", "gant"]) else: "gantt")
+  result.add "\n"
+  let fmt = if g.chance(0.65): "YYYY-MM-DD"
+            else: g.pick(["DD/MM/YYYY", "YYYY-MM-DD HH:mm", "HH:mm", "X", "x", "MMM D YYYY", "YYYY", "D",
+                          "YYYY-MM-DDTHH:mm:ssZ", "Do MMMM YYYY", "YYYY-MM-DD ww", "LL"])
+  if fmt != "YYYY-MM-DD" or g.chance(0.5): result.add "  dateFormat " & fmt & "\n"
+  if g.chance(0.3): result.add "  title " & g.pick(["Project plan", "日本", "x  y", "title"]) & "\n"
+  if g.chance(0.25):
+    result.add "  axisFormat " & g.pick(["%Y-%m-%d", "%b %d", "%e %B", "%H:%M", "%a %d", "%W", "%j", "%U", "%V",
+                                         "%G-W%V", "%x", "%-d/%-m", "%c", "%%", "%q", "%I %p", "%s", "%Z"]) & "\n"
+  if g.chance(0.2):
+    result.add "  tickInterval " & g.pick(["1day", "2day", "1week", "1month", "6hour", "15minute", "1year", "0day",
+                                           "30second", "500millisecond", "3week", "day"]) & "\n"
+  if g.chance(0.15): result.add "  weekday " & g.pick(["monday", "sunday", "friday", "Wednesday"]) & "\n"
+  if g.chance(0.15): result.add "  excludes " & g.pick(["weekends", "weekends, 2026-01-07", "monday sunday",
+                                                         "2026-01-05", "Weekends", "friday"]) & "\n"
+  if g.chance(0.08): result.add "  includes " & g.pick(["2026-01-10", "saturday", "2026-01-03, 2026-01-04"]) & "\n"
+  if g.chance(0.08): result.add "  weekend " & g.pick(["friday", "saturday"]) & "\n"
+  if g.chance(0.1): result.add "  todayMarker " & g.pick(["off", "stroke-width:5px,stroke:#0f0,opacity:0.5", "on"]) & "\n"
+  if g.chance(0.08): result.add "  inclusiveEndDates\n"
+  if g.chance(0.05): result.add "  topAxis\n"
+  if g.chance(0.05): result.add "  accTitle: Plan\n  accDescr: A plan\n"
+  if g.chance(0.04): result.add g.pick(["  %% note\n", "  % one\n", "  accDescr {\n many\n }\n"])
+  var ids: seq[string]
+  let year = g.pick([2026, 2026, 2025, 1999, 2014])
+  let month = g.rng.rand(1 .. 12)
+  for s in 0 ..< g.rng.rand(1 .. 3):
+    if s > 0 or g.chance(0.7): result.add "  section " & g.pick(["Design", "Build", "日本", "Test & ship", "a<br>b"]) & "\n"
+    for t in 0 ..< g.rng.rand(1 .. 5):
+      var data: seq[string]
+      if g.chance(0.3): data.add g.pick(["done", "active", "crit", "milestone", "crit, done", "active, crit", "vert"])
+      let hasId = g.chance(0.5)
+      let id = "t" & $(ids.len + 1)
+      let r = g.rng.rand(1.0)
+      var start = ""
+      if ids.len > 0 and r < 0.3:
+        start = "after " & g.pick(ids) & (if g.chance(0.2): " " & g.pick(ids) else: "")
+      elif r < 0.75:
+        start = g.ganttDate(fmt, year, month, g.rng.rand(1 .. 28), g.rng.rand(0 .. 23), g.rng.rand(0 .. 59))
+      elif r < 0.8:
+        start = g.pick(["2026-01-05", "Jan 5, 2026", "01/05/2026", "2026/1/5 10:00", "bad date", "after nope"])
+      let stop = if ids.len > 0 and g.chance(0.1): "until " & g.pick(ids)
+                 elif g.chance(0.6): g.pick(["3d", "1w", "2h", "30m", "1M", "1y", "0.5d", "10s", "100ms", "5d", "12h", "2d", "0d", "x"])
+                 else: g.ganttDate(fmt, year, month, g.rng.rand(1 .. 28), g.rng.rand(0 .. 23), g.rng.rand(0 .. 59))
+      if hasId:
+        data.add id
+        ids.add id
+        if start == "": start = g.ganttDate(fmt, year, month, 1, 9, 0)
+      if start != "": data.add start
+      data.add stop
+      let name = g.pick(["Research", "Write code", "Review", "日本語", "A task with a long name", "x", "Ship it",
+                         "a<br>b", "  spaced  "])
+      var line = "    " & name & " :" & data.join(", ")
+      if g.chance(0.03): line = "    " & name
+      if g.chance(0.02): line.add ", extra, fields, here"
+      result.add line & "\n"
+  if ids.len > 0 and g.chance(0.1):
+    result.add "  click " & g.pick(ids) & g.pick([" href \"https://example.com\"", " call cb()", " call cb(1) href \"x\""]) & "\n"
+
+const wardleyNames = ["User", "Web Site", "Customer Service", "Cup of Tea", "Tea", "Kettle", "Power", "Hot Water",
+                      "Data-Store", "A&B", "x_1", "Compute (cloud)", "Business", "Public", "CRM", "a", "Z9"]
+const wardleyOddNames = ["\"Quoted name\"", "\"日本語\"", "'single'", "title x", "note", "component", "build",
+                         "-dash", "9lives", "a->b", "\"\""]
+const wardleyDecimals = ["0.1", "0.95", "0.5", "0.33", "0.79", "0.62", "0.05", "1.0", "0.0", "0.99", "0.25",
+                         "45.5", "100.0", "0.001", "0.85", "0.15", "0.71", "0.45"]
+const wardleyBadDecimals = ["100.5", "5", "1", "0", "-0.5", "1e2", ".5"]
+const wardleyInts = ["0", "5", "10", "-5", "-10", "20", "100", "1", "3", "2"]
+const wardleyArrows = [" -> ", " -> ", "->", " --> ", " -.-> ", " > ", " +'flows'> ", " +'back'< ", " +'both'<> ",
+                       " +'' > ", " +<> ", " +> ", " +< "]
+
+proc wardleySource(g: var Gen): string =
+  proc decimal(g: var Gen): string =
+    if g.chance(0.02): g.pick(wardleyBadDecimals) else: g.pick(wardleyDecimals)
+  proc coords(g: var Gen): string =
+    "[" & g.decimal & (if g.chance(0.8): ", " else: ",") & g.decimal & "]"
+  if g.chance(0.3):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(labels) & "\n"
+    result.add "config:\n  wardley-beta:\n"
+    if g.chance(0.4): result.add "    showGrid: " & g.pick(["true", "false", "1"]) & "\n"
+    if g.chance(0.3): result.add "    width: " & g.pick(["300", "640", "900", "1200", "50", "20000"]) & "\n"
+    if g.chance(0.3): result.add "    height: " & g.pick(["200", "400", "600", "900", "x"]) & "\n"
+    result.add "---\n"
+  if g.chance(0.05): result.add "%% comment\n"
+  result.add(if g.chance(0.03): g.pick(["wardley", "Wardley-beta", "wardley-betax"]) else: "wardley-beta")
+  result.add "\n"
+  var declared: seq[string]
+  proc newName(g: var Gen): string =
+    if g.chance(0.05): return g.pick(wardleyOddNames)
+    result = g.pick(wardleyNames)
+    if g.chance(0.3): result.add " " & g.pick(["One", "Two", "B", "x2", "(v2)"])
+  proc known(g: var Gen): string =
+    if declared.len == 0 or g.chance(0.05): g.newName() else: g.pick(declared)
+  for i in 0 ..< g.rng.rand(0 .. 18):
+    let indent = g.pick(["", "  ", "    ", "\t"])
+    let r = g.rng.rand(1.0)
+    if r < 0.3:
+      let n = g.newName()
+      declared.add n
+      result.add indent & "component " & n & " " & g.coords
+      if g.chance(0.25): result.add " label [" & g.pick(wardleyInts) & ", " & g.pick(wardleyInts) & "]"
+      if g.chance(0.2): result.add " (" & g.pick(["build", "buy", "outsource", "market"]) & ")"
+      if g.chance(0.1): result.add g.pick([" inertia", " (inertia)"])
+    elif r < 0.38:
+      let n = g.newName()
+      declared.add n
+      result.add indent & "anchor " & n & " " & g.coords
+    elif r < 0.58:
+      result.add indent & g.known() & g.pick(wardleyArrows) & g.known()
+      if g.chance(0.2): result.add g.pick(["; label", ";limited by", "; 日本"])
+    elif r < 0.63:
+      result.add indent & "evolve " & g.known() & " " & g.decimal
+    elif r < 0.68 and declared.len > 0:
+      result.add indent & "pipeline " & g.pick(declared) & " {\n"
+      for k in 0 ..< g.rng.rand(1 .. 4):
+        let n = g.newName()
+        result.add indent & "  component " & n & " [" & g.decimal & "]"
+        if g.chance(0.2): result.add " label [" & g.pick(wardleyInts) & ", " & g.pick(wardleyInts) & "]"
+        result.add "\n"
+      result.add indent & "}"
+    elif r < 0.72:
+      result.add indent & "note \"" & g.pick(labels).replace("\"", "") & "\" " & g.coords
+    elif r < 0.76:
+      result.add indent & "annotation " & $g.rng.rand(1 .. 12) & "," & "[" & g.pick(@wardleyDecimals & @["1", "0", "50"]) &
+        ", " & g.pick(wardleyDecimals) & "] \"" & g.pick(labels).replace("\"", "") & "\""
+    elif r < 0.78:
+      result.add indent & "annotations [" & g.pick(["0.1", "0.9", "5", "0.5"]) & ", " & g.pick(["0.1", "0.9", "50", "0.5"]) & "]"
+    elif r < 0.82:
+      result.add indent & g.pick(["accelerator ", "deaccelerator "]) & g.newName() & " " & g.coords
+    elif r < 0.85:
+      result.add indent & "evolution " & g.pick(["Genesis", "Uncharted"]) &
+        (if g.chance(0.4): "@" & g.pick(["0.25", "0.2", "0.5"]) else: "") & " -> " &
+        g.pick(["Custom", "Custom Built", "Emerging"]) & (if g.chance(0.4): "@" & g.pick(["0.5", "0.45"]) else: "") &
+        (if g.chance(0.6): " -> Product" & (if g.chance(0.4): "@0.75" else: "") & " -> Commodity" &
+          (if g.chance(0.4): "@1.0" else: "") else: "") & (if g.chance(0.2): " / Utility" else: "")
+    elif r < 0.87:
+      result.add indent & "size [" & g.pick(["400", "800", "1100", "100", "20000"]) & ", " & g.pick(["300", "600", "800"]) & "]"
+    elif r < 0.9: result.add indent & "title " & g.pick(labels)
+    elif r < 0.92: result.add indent & "accTitle: " & g.pick(labels)
+    elif r < 0.94: result.add indent & "accDescr: " & g.pick(labels)
+    elif r < 0.96: result.add indent & "%% " & g.pick(labels)
+    elif r < 0.98: result.add ""
+    else: result.add indent & g.pick(["component", "anchor X [1, 2]", "evolve", "pipeline X {", "}", "size [1.5, 2]", "@"])
+    result.add(if g.chance(0.03): "\r\n" else: "\n")
+
+const archIds = ["api", "db", "disk1", "server", "gateway", "cache", "web", "queue", "auth", "store", "a", "b_2", "x-y",
+                 "edge9"]
+const archIcons = ["(database)", "(server)", "(disk)", "(internet)", "(cloud)", "(logos:aws)", "(mdi-home)", "(unknown)"]
+const archTitles = ["[API]", "[Database]", "[My Server]", "[\"Quoted title\"]", "['single \\' quote']", "[日本語]",
+                    "[a very long title that will need to wrap somewhere]", "[  spaced  ]", "[x]", "[**bold**]",
+                    "[emoji 🎉 here]", "[\"\"]"]
+const archIconTexts = ["\"PG\"", "\"Postgres database cluster\"", "\"🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉\"", "\"a\"", "\"日本語のテキストです長い\"",
+                       "\"one two three four five six seven eight nine ten\""]
+const archSides = ['L', 'R', 'T', 'B']
+
+proc architectureSource(g: var Gen): string =
+  if g.chance(0.25):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(labels) & "\n"
+    result.add "config:\n  architecture:\n"
+    if g.chance(0.4): result.add "    iconSize: " & g.pick(["24", "48", "80", "4", "600", "x"]) & "\n"
+    if g.chance(0.3): result.add "    fontSize: " & g.pick(["10", "16", "22", "2"]) & "\n"
+    if g.chance(0.3): result.add "    padding: " & g.pick(["0", "10", "40", "300"]) & "\n"
+    result.add "---\n"
+  if g.chance(0.05): result.add "%% comment\n"
+  result.add(if g.chance(0.03): g.pick(["architecture", "Architecture-beta", "architecture-betax"]) else: "architecture-beta")
+  result.add "\n"
+  var groups, nodes: seq[string]
+  var used: seq[string]
+  proc fresh(g: var Gen): string =
+    for t in 0 ..< 5:
+      let id = (if g.chance(0.01): g.pick(["Lb", "Rx", "Top"]) else: g.pick(archIds)) &
+        (if g.chance(0.3): $g.rng.rand(1 .. 9) else: "")
+      if id notin used or g.chance(0.02):
+        used.add id
+        return id
+    "n" & $used.len
+  for i in 0 ..< g.rng.rand(0 .. 3):
+    let id = g.fresh()
+    result.add "  group " & id
+    if g.chance(0.5): result.add g.pick(archIcons)
+    if g.chance(0.8): result.add g.pick(archTitles)
+    if groups.len > 0 and g.chance(0.4): result.add " in " & g.pick(groups)
+    groups.add id
+    result.add "\n"
+  for i in 0 ..< g.rng.rand(0 .. 9):
+    let id = g.fresh()
+    if g.chance(0.85):
+      result.add "  service " & id
+      let r = g.rng.rand(1.0)
+      if r < 0.5: result.add g.pick(archIcons)
+      elif r < 0.7: result.add g.pick(archIconTexts)
+      if g.chance(0.8): result.add g.pick(archTitles)
+    else:
+      result.add "  junction " & id
+    if groups.len > 0 and g.chance(0.5): result.add " in " & g.pick(groups)
+    nodes.add id
+    result.add "\n"
+  for i in 0 ..< g.rng.rand(0 .. 10):
+    let r = g.rng.rand(1.0)
+    if r < 0.75 and nodes.len > 0:
+      let a = if g.chance(0.97): g.pick(nodes) else: g.pick(@["nope"] & groups)
+      let b = if g.chance(0.97): g.pick(nodes) else: g.pick(@["nope"] & groups)
+      result.add "  " & a & (if groups.len > 0 and g.chance(0.06): "{group}" else: "") & ":" & g.pick(archSides) &
+        (if g.chance(0.2): " <" else: " ") &
+        (if g.chance(0.25): "-" & g.pick(archTitles) & "-" else: "--") &
+        (if g.chance(0.3): "> " else: " ") & g.pick(archSides) & ":" & b &
+        (if groups.len > 0 and g.chance(0.06): "{group}" else: "")
+    elif r < 0.85 and nodes.len > 1:
+      result.add "  align " & g.pick(["row", "column"])
+      var members: seq[string]
+      for k in 0 ..< g.rng.rand(2 .. 4):
+        let m = g.pick(nodes)
+        if m notin members or g.chance(0.05): members.add m
+      for m in members: result.add " " & m
+    elif r < 0.88: result.add "  title " & g.pick(labels)
+    elif r < 0.9: result.add "  accTitle: " & g.pick(labels)
+    elif r < 0.92: result.add "  accDescr: " & g.pick(labels)
+    elif r < 0.95: result.add "  %% " & g.pick(labels)
+    elif r < 0.97: result.add ""
+    else: result.add "  " & g.pick(["service", "group g in", "a:Q -- L:b", "align diagonal a b", "junction"])
+    result.add(if g.chance(0.03): "\r\n" else: "\n")
+
 
 proc options(g: var Gen): JsonNode =
   result = newJObject()
@@ -647,7 +1535,7 @@ proc options(g: var Gen): JsonNode =
   if g.chance(0.05): result["directionBreakpoint"] = %g.pick([0, 400, 1000])
   if g.chance(0.1): result["idPrefix"] = %g.pick(["x", "my-id", "a\"b"])
   if g.chance(0.1): result["responsive"] = %g.chance(0.5)
-  if g.chance(0.05): result["monospace"] = %[g.pick(["files", "members"])]
+  if g.chance(0.05): result["monospace"] = %[g.pick(["files", "members", "attributes", "messages"])]
   if g.chance(0.05): result["fontFamily"] = %g.pick(["Inter", "\"Fira Sans\", sans-serif", "bad;font", "Times New Roman"])
 
 proc toOptions(j: JsonNode): RenderOptions =
@@ -689,7 +1577,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "swimlane", "radar", "treemap", "treeView", "mindmap", "kanban", "eventmodeling"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, swimlane, radar, treemap, treeView, mindmap, kanban, eventmodeling", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad", "gantt", "wardley", "architecture", "mindmap", "kanban", "eventmodeling"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad, gantt, wardley, architecture, mindmap, kanban, eventmodeling", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -703,9 +1591,22 @@ proc main() =
                                                           of "info": g.infoSource()
                                                           of "packet": g.packetSource()
                                                           of "flowchart": g.flowchartSource()
+                                                          of "sequence": g.sequenceSource()
+                                                          of "state": g.stateSource()
                                                           of "swimlane": g.swimlaneSource()
+                                                          of "class": g.classSource()
+                                                          of "ishikawa": g.ishikawaSource()
+                                                          of "cynefin": g.cynefinSource()
+                                                          of "gitGraph": g.gitSource()
+                                                          of "railroad": g.railroadSource()
+                                                          of "gantt": g.ganttSource()
+                                                          of "wardley": g.wardleySource()
+                                                          of "architecture": g.architectureSource()
                                                           of "radar": g.radarSource()
                                                           of "treemap": g.treemapSource()
+                                                          of "er": g.erSource()
+                                                          of "requirement": g.requirementSource()
+                                                          of "usecase": g.usecaseSource()
                                                           of "treeView": g.treeViewSource()
                                                           of "mindmap": g.mindmapSource()
                                                           of "kanban": g.kanbanSource()

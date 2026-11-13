@@ -146,3 +146,50 @@ fs.writeFileSync(process.argv[3], JSON.stringify({ nums, floats }));
       let want = parseJson(readFile(dir / "out3.txt"))["floats"]
       for i, f in floats:
         check jsString(jsParseFloat(f)) == want[i].getStr
+
+suite "JSON.parse, against Node":
+  let texts = @["{\"class\": \"x\"}", "{\"class\":\"x\"} // c", "{\"a\":1} /* c */", "{\"a\":1,}", "[1,]",
+                "{\"a\":01}", "{\"a\":1.}", "{\"a\":+1}", "\"\\x41\"", "\"\\u0041\\n\"", "NaN", "Infinity",
+                "", " ", "null", " true ", "false x", "[]", "{}", "[[[[1]]]]", "{\"a\":{\"b\":[1,2,{\"c\":null}]}}",
+                "{\"a\":1,\"a\":2}", "-0", "-", "1e5", "1E-2", "1e", ".5", "0.5", "{'a':1}", "{a:1}",
+                "\"tab\there\"", "\"\\ud83c\\udf89\"", "[1 2]", "{\"a\" 1}", "{\"a\":1 \"b\":2}", "\"unterminated",
+                "[1,\n2]\n", "\u00a0{}", "{\"日本\": \"語\"}", "123abc", "[-1.5e+3]"]
+  let dir = getTempDir() / "nimaki-test-js"
+  createDir dir
+  var input = ""
+  for t in texts: input.add t.escapeJson & "\n"
+  writeFile dir / "in4.txt", input
+  writeFile dir / "check4.js", """
+const fs = require('fs');
+const lines = fs.readFileSync(process.argv[2], 'utf8').trim().split('\n');
+const out = lines.map((l) => {
+  try { return JSON.stringify(JSON.parse(JSON.parse(l))); } catch { return '!'; }
+});
+fs.writeFileSync(process.argv[3], JSON.stringify(out));
+"""
+  let ran = execCmd("node " & quoteShell(dir / "check4.js") & " " & quoteShell(dir / "in4.txt") & " " &
+                    quoteShell(dir / "out4.txt")) == 0
+
+  proc canonical(j: JsonNode): string =
+    ## JSON.stringify of the value: numbers as JavaScript writes them.
+    case j.kind
+    of JFloat: jsString(j.fnum)
+    of JInt: jsString(float(j.num))
+    of JArray:
+      var parts: seq[string]
+      for it in j.elems: parts.add canonical(it)
+      "[" & parts.join(",") & "]"
+    of JObject:
+      var parts: seq[string]
+      for k, v in j: parts.add escapeJson(k) & ":" & canonical(v)
+      "{" & parts.join(",") & "}"
+    else: $j
+
+  test "JSON.parse(s)":
+    check ran
+    if ran:
+      let want = parseJson(readFile(dir / "out4.txt"))
+      for i, t in texts:
+        let got = try: canonical(jsonParse(t)) except JsSyntaxError: "!"
+        if got != want[i].getStr: echo "ERROR JSON.parse(", t.escapeJson, "): Node ", want[i].getStr, ", nimaki ", got
+        check got == want[i].getStr

@@ -50,7 +50,7 @@
       "status": "started",
       "nim": "src/nimaki/layout/",
       "post": "layered-layout-and-flowchart",
-      "notes": "layered.ts and compound.ts are ported and checked through flowchart (383 corpus cases, 5,000 generated in CI) and by Pele's 31 layout tests (tests/test_layout.nim). lanes.ts is ported and checked through swimlane (14 corpus cases, 5,000 generated in CI). components.ts (class) is not ported yet."
+      "notes": "All four are ported. layered.ts and compound.ts are checked through flowchart (383 corpus cases, 5,000 generated in CI) and by Pele's 31 layout tests (tests/test_layout.nim); lanes.ts through swimlane (14 corpus cases, 5,000 generated in CI); components.ts through class (84 corpus cases, 5,000 generated in CI)."
     },
     {
       "id": "util",
@@ -223,19 +223,19 @@
       "corpus": 1,
       "parse": {
         "code": 161,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 0,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 258,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/ishikawa/",
+      "post": "fishbones-and-domains",
+      "notes": "Identical to Pele on the 4 corpus and compat cases and on 5,000 generated inputs in CI (tools/fuzz.nim ishikawa); 9,000 more on seeds 1 to 3 before merging."
     },
     {
       "id": "journey",
@@ -328,19 +328,19 @@
       "corpus": 3,
       "parse": {
         "code": 192,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 77,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 270,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/cynefin/",
+      "post": "fishbones-and-domains",
+      "notes": "Identical to Pele on the 19 corpus and compat cases and on 5,000 generated inputs in CI (tools/fuzz.nim cynefin); 9,000 more on seeds 1 to 3 before merging."
     },
     {
       "id": "treeview",
@@ -412,19 +412,19 @@
       "corpus": 35,
       "parse": {
         "code": 483,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 0,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 343,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/git/",
+      "post": "git-graphs",
+      "notes": "Identical to Pele on the 94 corpus cases (gitGraph) and on 5,000 generated histories in CI (tools/fuzz.nim gitGraph); 18,000 more across seeds before merging."
     },
     {
       "id": "quadrant",
@@ -496,19 +496,19 @@
       "corpus": 19,
       "parse": {
         "code": 704,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 0,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 388,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/wardley/",
+      "post": "maps-and-clouds",
+      "notes": "Identical to Pele on the 39 corpus and compat cases and on 5,000 generated inputs in CI (tools/fuzz.nim wardley); 9,000 more on seeds 2 to 4 before merging."
     },
     {
       "id": "architecture",
@@ -517,19 +517,19 @@
       "corpus": 6,
       "parse": {
         "code": 365,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 339,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 543,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/architecture/",
+      "post": "maps-and-clouds",
+      "notes": "Identical to Pele on the 26 corpus and compat cases and on 5,000 generated inputs in CI (tools/fuzz.nim architecture); 9,000 more on seeds 2 to 4 before merging."
     },
     {
       "id": "requirement",
@@ -538,19 +538,19 @@
       "corpus": 9,
       "parse": {
         "code": 892,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 51,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 351,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/requirement/",
+      "post": "crows-feet",
+      "notes": "Identical to Pele on the 20 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim requirement); 9,000 more across seeds before merging."
     },
     {
       "id": "railroad",
@@ -559,19 +559,19 @@
       "corpus": 14,
       "parse": {
         "code": 1097,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 0,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 394,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/railroad/",
+      "post": "railroad-diagrams",
+      "notes": "Identical to Pele on the 91 corpus cases (railroad, in four notations) and on 5,000 generated grammars in CI (tools/fuzz.nim railroad); 15,000 more across three seeds before merging."
     },
     {
       "id": "er",
@@ -580,19 +580,19 @@
       "corpus": 25,
       "parse": {
         "code": 1009,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 98,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 553,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/er/",
+      "post": "crows-feet",
+      "notes": "Identical to Pele on the 142 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim er); 14,000 more across seeds before merging."
     },
     {
       "id": "c4",
@@ -622,19 +622,19 @@
       "corpus": 11,
       "parse": {
         "code": 1284,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 326,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 318,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/gantt/",
+      "post": "gantt-charts",
+      "notes": "Identical to Pele on the 25 corpus cases (gantt) and on 5,000 generated charts in CI (tools/fuzz.nim gantt); 22,000 more across four seeds before merging. JavaScript dates: src/nimaki/jsdate.nim (decision 0012)."
     },
     {
       "id": "block",
@@ -664,19 +664,19 @@
       "corpus": 22,
       "parse": {
         "code": 1247,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 209,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 641,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/state/",
+      "post": "states-and-regions",
+      "notes": "Identical to Pele on the 119 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim state); 9,000 more across seeds before merging."
     },
     {
       "id": "class",
@@ -685,19 +685,19 @@
       "corpus": 38,
       "parse": {
         "code": 1301,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 150,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 671,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/class/",
+      "post": "class-diagrams",
+      "notes": "Identical to Pele on the 84 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim class); 13,000 more across seeds before merging. The narrow layout wraps disconnected parts into rows with layout/components.ts."
     },
     {
       "id": "sequence",
@@ -706,19 +706,19 @@
       "corpus": 38,
       "parse": {
         "code": 1557,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 104,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 950,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/sequence/",
+      "post": "lifelines-and-messages",
+      "notes": "Identical to Pele on the 186 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim sequence); 10,000 more on four other seeds before merging. No layout engine: Pele lays sequence out itself."
     },
     {
       "id": "usecase",
@@ -727,19 +727,19 @@
       "corpus": 24,
       "parse": {
         "code": 1999,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 284,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 538,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/usecase/",
+      "post": "actors-and-use-cases",
+      "notes": "Identical to Pele on the 151 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim usecase); 9,000 more across seeds before merging. A json node's errors are V8's JSON.parse messages, reproduced by diagrams/usecase/json.nim."
     },
     {
       "id": "flowchart",

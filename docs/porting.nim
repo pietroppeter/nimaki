@@ -166,6 +166,7 @@ filled it in; later steps add to it.
 | `Math.max(a, b)` where NaN can occur | `jsMax(a, b)` |
 | `Int32Array`, `Float64Array`, `Uint8Array` | `seq[int32]`, `seq[float]`, `seq[uint8]` |
 | `Math.imul(a, b)`, `x >>> 0` | `uint32` arithmetic (wraps) |
+| `x | 0`, `x ^ y`, `x >>> n` on a float (ToInt32 first) | ECMAScript ToInt32 (drop the fraction, wrap modulo 2^32; NaN and infinity give 0), then casts between `int32` and `uint32`, as in `cynefin/boundaries.nim` |
 | `list.sort((a, b) => ...)` | `algorithm.sort` with the same comparator: both are stable |
 | `withPalette(p, () => ...)` (a module global set for a call) | set the global, `try` the call, restore it in `finally` |
 | a sticky regex `re.lastIndex = p; re.test(s)` | a matcher `proc (s: string, p: int): int` returning the end, or -1, with the pattern in a comment |
@@ -191,6 +192,9 @@ filled it in; later steps add to it.
 | `r[0]` that may read past the end (`undefined`, then NaN in arithmetic) | `if r.len > 0: r[0] else: NaN`; Nim stops where JavaScript reads `undefined` |
 | `Object.is(a, b)` | equal, except that NaN is the same as NaN and 0 is not the same as -0 (`isSame` in `compound.nim`) |
 | a field that is an array or `undefined`, read only for its items | an empty `seq`; a flag (`hasGroups`) where empty and undefined differ |
+| `JSON.parse(text)` | `jsonParse(text)` of `js.nim` (strict, as JavaScript is; raises `JsSyntaxError`), never `std/json`'s `parseJson`, which accepts comments, trailing commas and `01` |
+| `s.toLowerCase()` compared with a list of words | `unicode.toLower(s)`: JavaScript lowers more than ASCII (the Kelvin sign is `k`) |
+| a value that is a string, a list or a nested list (`SeqItem` of sequence) | a variant `ref object` with one branch per shape, walked with an explicit stack |
 | `x.toPrecision(p)`, `x.toExponential(d)`, `parseFloat(s)` | `toPrecision`, `toExponential`, `jsParseFloat` of `js.nim` (exact decimal, ties up; `jsParseFloat` reads the longest number at the start) |
 | a token matcher that keeps state between calls (`unclosed` in `accDescr.ts`, a run of digits in radar) | a `scanner: proc (): Scanner` on the `TokenType`: the tokenizer makes the matcher once per text, so the state starts fresh |
 | an arrow function made in a loop, keeping that turn's values | a closure returned by a proc of its own (`columnMap` in `treeview/box_drawing.nim`): closures made in a Nim loop share the loop's variables |
@@ -215,6 +219,8 @@ Names changed because they clash with Nim (filled in as they are met).
 | `KIND` beside `Kind` | `kinds` (only the first letter of a Nim name is case sensitive) |
 | `reach.of(node, side)` | `reachOf` (`of` is a keyword) |
 | `LinkInfo` of `flowchart/types.ts` | `FlowLinkInfo` (the core's `LinkInfo` is a link in the SVG) |
+| `const enum LINETYPE`, `PLACEMENT` of sequence | `LINETYPE_SOLID`, `PLACEMENT_OVER`... (`NO_TYPE` = -1 for an undefined `type`) |
+| a message's `from` (sequence) | `start` |
 """
 
 nbSave
