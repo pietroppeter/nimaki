@@ -99,6 +99,10 @@ proc rows[B: Box](boxes: seq[B], perRow: int, gapX, gapY: float, stretch: bool):
     start += perRow
   (width, if boxes.len > 0: y - gapY else: 0.0)
 
+func widestOf[B: Box](boxes: seq[B]): float =
+  result = 1.0
+  for box in boxes: result = max(result, box.w)
+
 func toCount(x: float): int =
   ## A row length: at least 1 here, and no more than any list holds.
   if x > 1e9: 1_000_000_000 else: int(x)
@@ -155,13 +159,11 @@ proc layoutC4*(db: C4Db, measurer: TextMeasurer, size, small, room, gap: float):
   for i in countdown(order.len - 1, 0):
     let group = order[i]
     let gapX = if loose: GAP_X else: gap
-    proc count[B: Box](boxes: seq[B], limit, gap: float): int =
+    proc count(widest, limit, gap: float): int =
       if loose: return toCount(limit)
-      var widest = 1.0
-      for box in boxes: widest = max(widest, box.w)
       toCount(max(1.0, min(limit, floor((room + gap - 2 * groupPad) / (widest + gap)))))
-    let (gridW, gridH) = rows(group.nodes, count(group.nodes, perRow, gapX), gapX, GAP_Y, true)
-    let (kidsW, kidsH) = rows(group.kids, count(group.kids, groupsPerRow, GROUP_GAP), GROUP_GAP,
+    let (gridW, gridH) = rows(group.nodes, count(widestOf(group.nodes), perRow, gapX), gapX, GAP_Y, true)
+    let (kidsW, kidsH) = rows(group.kids, count(widestOf(group.kids), groupsPerRow, GROUP_GAP), GROUP_GAP,
                               GROUP_GAP, false)
     let between = if gridH > 0 and kidsH > 0: GROUP_GAP else: 0.0
     let frame = if group == root: 0.0 else: groupPad

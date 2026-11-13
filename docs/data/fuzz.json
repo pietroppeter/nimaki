@@ -187,11 +187,11 @@
     },
     "c4": {
       "seed": 1,
-      "cases": 300,
-      "identical": 300,
+      "cases": 1000,
+      "identical": 1000,
       "different": 0,
-      "rendered": 156,
-      "errors": 144
+      "rendered": 505,
+      "errors": 495
     },
     "block": {
       "seed": 1,
