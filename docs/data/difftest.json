@@ -2,9 +2,9 @@
   "about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand.",
   "pin": "1.13.0",
   "cases": 2118,
-  "identical": 1447,
+  "identical": 1512,
   "different": 0,
-  "unsupported": 671,
+  "unsupported": 606,
   "types": [
     {
       "type": "agentflow",
@@ -18,9 +18,9 @@
       "type": "architecture",
       "coverage": "architecture",
       "cases": 26,
-      "identical": 0,
+      "identical": 26,
       "different": 0,
-      "unsupported": 26
+      "unsupported": 0
     },
     {
       "type": "block",
@@ -258,9 +258,9 @@
       "type": "wardley",
       "coverage": "wardley",
       "cases": 39,
-      "identical": 0,
+      "identical": 39,
       "different": 0,
-      "unsupported": 39
+      "unsupported": 0
     },
     {
       "type": "xychart",

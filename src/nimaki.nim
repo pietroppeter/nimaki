@@ -17,6 +17,8 @@ import nimaki/diagrams/state/index as stateIndex
 import nimaki/diagrams/swimlane/index as swimlaneIndex
 import nimaki/diagrams/ishikawa/index as ishikawaIndex
 import nimaki/diagrams/cynefin/index as cynefinIndex
+import nimaki/diagrams/wardley/index as wardleyIndex
+import nimaki/diagrams/architecture/index as architectureIndex
 import nimaki/diagrams/radar/index as radarIndex
 import nimaki/diagrams/treemap/index as treemapIndex
 import nimaki/diagrams/treeview/index as treeviewIndex
@@ -41,6 +43,8 @@ register(stateIndex.state)
 register(swimlaneIndex.swimlane)
 register(ishikawaIndex.ishikawa)
 register(cynefinIndex.cynefin)
+register(wardleyIndex.wardley)
+register(architectureIndex.architecture)
 register(radarIndex.radar)
 register(treemapIndex.treemap)
 register(treeviewIndex.treeView)
