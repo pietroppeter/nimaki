@@ -769,19 +769,19 @@
       "corpus": 251,
       "parse": {
         "code": 2730,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 234,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 501,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/agentflow/",
+      "post": "agents-in-flows",
+      "notes": "Identical to Pele on the 238 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim agentflow); 9,000 more across seeds before merging. The semantic model, statement mappings and diagnostics are left out: nothing drawn reads them."
     }
   ]
 }

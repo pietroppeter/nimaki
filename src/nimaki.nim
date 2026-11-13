@@ -31,6 +31,7 @@ import nimaki/diagrams/requirement/index as requirementIndex
 import nimaki/diagrams/git/index as gitIndex
 import nimaki/diagrams/railroad/index as railroadIndex
 import nimaki/diagrams/usecase/index as usecaseIndex
+import nimaki/diagrams/agentflow/index as agentflowIndex
 import nimaki/diagrams/gantt/index as ganttIndex
 
 export core, errors, types, measurer
@@ -60,4 +61,5 @@ register(requirementIndex.requirement)
 register(gitIndex.gitGraph)
 register(railroadIndex.railroad)
 register(usecaseIndex.usecase)
+register(agentflowIndex.agentflow)
 register(ganttIndex.gantt)

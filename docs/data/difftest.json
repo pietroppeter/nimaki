@@ -2,9 +2,9 @@
   "about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand. `cases` and the counts beside it are Pele's corpus; `diagrammari` counts diagrammari's.",
   "pin": "1.13.0",
   "cases": 2118,
-  "identical": 1608,
+  "identical": 1846,
   "different": 0,
-  "unsupported": 510,
+  "unsupported": 272,
   "diagrammari": {
     "cases": 34,
     "identical": 32,
@@ -16,9 +16,9 @@
       "type": "agentflow",
       "coverage": "agentflow",
       "cases": 238,
-      "identical": 0,
+      "identical": 238,
       "different": 0,
-      "unsupported": 238
+      "unsupported": 0
     },
     {
       "type": "architecture",

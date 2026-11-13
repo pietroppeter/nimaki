@@ -621,8 +621,8 @@
           "what": "src/diagrams/agentflow: 3465 lines of TypeScript, 251 corpus cases.",
           "done_when": "difftest: every agentflow case identical.",
           "owner": "Port the compound-layout diagram types",
-          "status": "started",
-          "post": "",
+          "status": "done",
+          "post": "agents-in-flows",
           "pr": ""
         }
       ]

@@ -201,8 +201,8 @@ nbText: """
 
 - **Mindmap, kanban and eventmodeling are done** on the [coverage map](../../coverage/) and the
   [roadmap](../../roadmap/). `common/outline.ts` and `common/icon.ts` are shared and ported.
-- **Next, in this thread:** sankey, git, quadrant, venn and xychart, then railroad and gantt,
-  smallest first, each claimed on the roadmap before it starts.
+- **Next, in this thread:** sankey, quadrant, venn and xychart, smallest first, each claimed on
+  the roadmap before it starts. Git, railroad and gantt went to another thread.
 
 ## Sources
 
