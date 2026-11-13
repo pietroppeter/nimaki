@@ -538,19 +538,19 @@
       "corpus": 9,
       "parse": {
         "code": 892,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 51,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 351,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/requirement/",
+      "post": "crows-feet",
+      "notes": "Identical to Pele on the 20 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim requirement); 9,000 more across seeds before merging."
     },
     {
       "id": "railroad",
@@ -580,19 +580,19 @@
       "corpus": 25,
       "parse": {
         "code": 1009,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 98,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 553,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/er/",
+      "post": "crows-feet",
+      "notes": "Identical to Pele on the 142 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim er); 14,000 more across seeds before merging."
     },
     {
       "id": "c4",

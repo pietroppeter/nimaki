@@ -388,6 +388,116 @@ proc classSource(g: var Gen): string =
   result.add "\n"
   for i in 0 ..< g.rng.rand(1 .. 12):
     result.add g.pick(["  ", "    ", "", "\t"]) & classStatement(g, 0)
+const erIds = ["CUSTOMER", "ORDER", "LINE-ITEM", "A", "B", "C", "p[Person]", "a[\"Customer Account\"]", "\"two words\"",
+               "Ünï", "日本", "x_1", "car", "u", "1", "S1", "id1", "DELIVERY-ADDRESS"]
+const erRelIds = ["CUSTOMER", "ORDER", "LINE-ITEM", "A", "B", "C", "\"two words\"", "Ünï", "日本", "x_1", "car",
+                  "S1", "id1", "DELIVERY-ADDRESS", "p", "a"]
+const erLefts = ["||", "|o", "}o", "}|", "o|", "o{", "|{", "one or zero", "zero or more", "one or more", "only one",
+                 "many(0)", "many(1)", "1+", "0+", "1", "u", "many", "zero or one", "one"]
+const erRights = ["||", "o|", "o{", "|{", "|o", "}o", "}|", "one or zero", "zero or more", "one or more", "only one",
+                  "many(0)", "many(1)", "1+", "0+", "1", "u", "many"]
+const erTypes = ["string", "int", "float", "List~int~", "Map~string,int~", "type?", "Ünï", "decimal(10,2)",
+                 "`weird type`", "*PK", "x~y~z"]
+const erNames = ["name", "id", "firstName", "created_at", "日本", "a-b", "x.y", "List~str~"]
+
+proc erAttribute(g: var Gen): string =
+  result = g.pick(erTypes) & " " & g.pick(erNames)
+  if g.chance(0.3): result.add " " & g.pick(["PK", "FK", "UK", "PK, FK", "pk,uk", "FK,PK,UK"])
+  if g.chance(0.25): result.add " \"" & g.pick(stateLabels).replace("\"", "") & "\""
+
+proc erStatement(g: var Gen, depth: int): string =
+  let r = g.rng.rand(1.0)
+  if r < 0.45:
+    let sep = if g.chance(0.7): (if g.chance(0.5): "--" else: "..") else: g.pick([" to ", " optionally to "])
+    result = g.pick(erRelIds) & (if g.chance(0.05): ":::hot" else: "") & " " & g.pick(erLefts) & sep & g.pick(erRights) &
+      " " & g.pick(erRelIds) & (if g.chance(0.04): ":::cold" else: "") & " : " &
+      g.pick(["places", "has", "\"insured for\"", "\"\"", "contains", "uses", "日本", "a-b", "\"a b c\""])
+  elif r < 0.62:
+    result = g.pick(erIds) & (if g.chance(0.1): ":::" & g.pick(["hot", "cold"]) else: "") & " {\n"
+    for k in 0 ..< g.rng.rand(0 .. 5): result.add "    " & erAttribute(g) & "\n"
+    result.add "  }"
+  elif r < 0.68: result = g.pick(erIds)
+  elif r < 0.73 and depth < 2:
+    result = "subgraph " & g.pick(["S1", "S2", "Group", "\"Quoted\"", "G [A title]", "H [\"Quoted title\"]"]) & "\n"
+    if g.chance(0.3): result.add "  direction " & g.pick(["LR", "RL", "TB", "BT"]) & "\n"
+    for k in 0 ..< g.rng.rand(0 .. 4): result.add "  " & erStatement(g, depth + 1) & "\n"
+    result.add "end"
+  elif r < 0.77: result = "classDef " & g.pick(["hot", "cold"]) & " fill:" & g.pick(stateColors) & ",stroke:" & g.pick(stateColors) & (if g.chance(0.3): ",color:#fff" else: "") & (if g.chance(0.2): ",font-weight:bold" else: "")
+  elif r < 0.8: result = "class " & g.pick(["A", "B", "CUSTOMER", "S1"]) & (if g.chance(0.3): ",ORDER" else: "") & " " & g.pick(["hot", "cold"])
+  elif r < 0.83: result = "style " & g.pick(["A", "B", "CUSTOMER", "S1", "id1"]) & " fill:" & g.pick(stateColors) & ",stroke-width:" & g.pick(["2px", "4px"]) & (if g.chance(0.2): ",font-family:monospace" else: "")
+  elif r < 0.86:
+    let a = g.pick(erRelIds)
+    result = a & " " & g.pick(erLefts) & "--" & g.pick(erRights) & " " & a & " : " & g.pick(["self", "parent of", "x"])
+  elif r < 0.88: result = "%% " & g.pick(stateLabels)
+  elif r < 0.89: result = "accTitle: " & g.pick(stateLabels)
+  elif r < 0.9: result = "accDescr { " & g.pick(stateLabels) & "\n  " & g.pick(stateLabels) & " }"
+  elif r < 0.92: result = "direction " & g.pick(["LR", "RL", "TB", "BT"])
+  elif r < 0.925: result = g.pick(["A ||--", "A {", "}", "A ||--o{ B", "end", "A |x--|| B : y", "style", "A[unclosed"])
+  else: result = g.pick(erRelIds) & " " & g.pick(erLefts) & "--" & g.pick(erRights) & " " & g.pick(erRelIds) & " : " & g.pick(["has", "a"])
+
+proc erSource(g: var Gen): string =
+  if g.chance(0.15):
+    result.add "---\n"
+    if g.chance(0.4): result.add "title: " & g.pick(["Order example", "日本", "A title"]) & "\n"
+    result.add "config:\n  er:\n"
+    if g.chance(0.3): result.add "    nodeSpacing: " & g.pick(["10", "80", "0", "x"]) & "\n"
+    if g.chance(0.3): result.add "    rankSpacing: " & g.pick(["10", "100", "3000"]) & "\n"
+    result.add "    useMaxWidth: true\n"
+    result.add "---\n"
+  result.add "erDiagram\n"
+  if g.chance(0.15): result.add "  direction " & g.pick(["LR", "RL", "TB", "BT"]) & "\n"
+  for i in 0 ..< g.rng.rand(0 .. 10):
+    result.add g.pick(["", "  ", "    ", "\t"]) & erStatement(g, 0)
+    result.add(if g.chance(0.03): "\r\n" else: "\n")
+
+const reqNames = ["test_req", "test_req2", "test_entity", "R1", "E1", "\"quoted name\"", "\"Ünï 日本\"", "a.b", "x",
+                  "test_req", "R1", "E1"]
+const reqKinds = ["requirement", "functionalRequirement", "interfaceRequirement", "performanceRequirement",
+                  "physicalRequirement", "designConstraint", "Requirement", "REQUIREMENT"]
+const reqRels = ["contains", "copies", "derives", "satisfies", "verifies", "refines", "traces"]
+
+proc reqName(g: var Gen): string = (if g.chance(0.02): g.pick(["Ünï", "日本"]) else: g.pick(reqNames))
+
+proc reqStatement(g: var Gen): string =
+  let r = g.rng.rand(1.0)
+  if r < 0.25:
+    result = g.pick(reqKinds) & " " & reqName(g) & (if g.chance(0.1): ":::" & g.pick(["hot", "cold"]) else: "") & " {\n"
+    for k in 0 ..< g.rng.rand(0 .. 5):
+      result.add "    " & (if g.chance(0.03): g.pick(["type: x", "risk: none", "text: *em*"]) else: g.pick([
+        "id: " & g.pick(["1", "1.1", "R-7", "\"q id\""]),
+        "text: " & g.pick(["the test text.", "\"quoted text\"", "\"*em* text\"", "\"日本語\"", "a very long requirement text that wraps around the box", "x", "\"**bold** and $x^2$\""]),
+        "risk: " & g.pick(["low", "medium", "high", "High"]),
+        "verifymethod: " & g.pick(["analysis", "demonstration", "inspection", "test", "Test"])])) & "\n"
+    result.add "  }"
+  elif r < 0.4:
+    result = "element " & reqName(g) & (if g.chance(0.1): ":::hot" else: "") & " {\n"
+    for k in 0 ..< g.rng.rand(0 .. 2):
+      result.add "    " & g.pick(["type: " & g.pick(["simulation", "word doc", "\"quoted\"", "\"**bold**\""]),
+                                   "docRef: " & g.pick(["reqs/test_entity", "github.com/x", "\"q\""])]) & "\n"
+    result.add "  }"
+  elif r < 0.65:
+    if g.chance(0.7): result = reqName(g) & " - " & g.pick(reqRels) & " -> " & reqName(g)
+    else: result = reqName(g) & " <- " & g.pick(reqRels) & " - " & reqName(g)
+  elif r < 0.7:
+    let a = reqName(g)
+    result = a & " - " & g.pick(reqRels) & " -> " & a
+  elif r < 0.75: result = "classDef " & g.pick(["hot", "cold", "important"]) & " fill:" & g.pick(stateColors) & ",stroke:" & g.pick(stateColors) & (if g.chance(0.3): ",color:#fff" else: "") & (if g.chance(0.2): ",font-weight:bold" else: "")
+  elif r < 0.79: result = "class " & g.pick(["test_req", "R1", "E1", "x"]) & (if g.chance(0.3): "," & g.pick(["test_entity", "x"]) else: "") & " " & g.pick(["hot", "cold", "important"])
+  elif r < 0.83: result = "style " & g.pick(["test_req", "R1", "E1", "x", "a.b"]) & " fill:" & g.pick(stateColors) & ",stroke-width:" & g.pick(["2px", "4px"]) & (if g.chance(0.2): ",font-style:italic" else: "")
+  elif r < 0.86: result = reqName(g) & ":::" & g.pick(["hot", "cold"])
+  elif r < 0.88: result = "%% " & g.pick(stateLabels)
+  elif r < 0.89: result = "accTitle: " & g.pick(stateLabels)
+  elif r < 0.9: result = "accDescr { " & g.pick(stateLabels) & "\n  " & g.pick(stateLabels) & " }"
+  elif r < 0.93: result = "direction " & g.pick(["LR", "RL", "TB", "BT"])
+  elif r < 0.945: result = g.pick(["requirement x {", "}", "a - b -> c", "element {", "a -> b", "style", "risk: high"])
+  else: result = reqName(g) & " - " & g.pick(reqRels) & " -> " & reqName(g)
+
+proc requirementSource(g: var Gen): string =
+  if g.chance(0.1): result.add "---\ntitle: " & g.pick(["Requirements", "日本", "A title"]) & "\n---\n"
+  if g.chance(0.05): result.add "accTitle: before\n"
+  result.add g.pick(["requirementDiagram", "requirementDiagram", "  requirementDiagram"]) & "\n"
+  for i in 0 ..< g.rng.rand(0 .. 10):
+    result.add g.pick(["", "  ", "    ", "\t"]) & reqStatement(g)
     result.add(if g.chance(0.03): "\r\n" else: "\n")
 
 const scores = ["5", "1", "3", "4", "2", "0", "7", "-1", "2.5", " 4 ", "", "x", "1e1", "0x3", "Infinity",
@@ -664,7 +774,7 @@ proc options(g: var Gen): JsonNode =
   if g.chance(0.05): result["directionBreakpoint"] = %g.pick([0, 400, 1000])
   if g.chance(0.1): result["idPrefix"] = %g.pick(["x", "my-id", "a\"b"])
   if g.chance(0.1): result["responsive"] = %g.chance(0.5)
-  if g.chance(0.05): result["monospace"] = %[g.pick(["files", "members"])]
+  if g.chance(0.05): result["monospace"] = %[g.pick(["files", "members", "attributes"])]
   if g.chance(0.05): result["fontFamily"] = %g.pick(["Inter", "\"Fira Sans\", sans-serif", "bad;font", "Times New Roman"])
 
 proc toOptions(j: JsonNode): RenderOptions =
@@ -706,7 +816,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "radar", "treemap", "treeView", "swimlane", "class", "state"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, radar, treemap, treeView, swimlane, class, state", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "radar", "treemap", "treeView", "swimlane", "class", "state", "er", "requirement"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, radar, treemap, treeView, swimlane, class, state, er, requirement", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -725,6 +835,8 @@ proc main() =
                                                           of "class": g.classSource()
                                                           of "radar": g.radarSource()
                                                           of "treemap": g.treemapSource()
+                                                          of "er": g.erSource()
+                                                          of "requirement": g.requirementSource()
                                                           else: g.treeViewSource()), "options": opts}
   let dir = buildDir / "fuzz"
   createDir dir

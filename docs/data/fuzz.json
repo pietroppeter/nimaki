@@ -96,6 +96,22 @@
       "different": 0,
       "rendered": 3814,
       "errors": 1186
+    },
+    "requirement": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 2997,
+      "errors": 2003
+    },
+    "er": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 3600,
+      "errors": 1400
     }
   }
 }
