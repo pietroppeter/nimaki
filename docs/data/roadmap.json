@@ -272,9 +272,9 @@
           "title": "diagrammari's examples as a corpus",
           "what": "Collect the Mermaid text that diagrammari's builders and spec examples write, and add it to corpus/ as a second source of cases.",
           "done_when": "difftest runs on them; the cases are counted on the coverage map.",
-          "owner": "",
-          "status": "planned",
-          "post": "",
+          "owner": "Port class and swimlane",
+          "status": "done",
+          "post": "diagrammari-as-a-corpus",
           "pr": ""
         },
         {

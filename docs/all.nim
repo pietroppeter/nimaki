@@ -15,6 +15,7 @@ import devlog/first_light
 import devlog/git_graphs
 import devlog/railroad_diagrams
 import devlog/gantt_charts
+import devlog/diagrammari_as_a_corpus
 import devlog/how_pele_is_built
 import devlog/lanes_and_handoffs
 import devlog/layered_layout_and_flowchart
