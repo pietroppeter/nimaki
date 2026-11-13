@@ -502,7 +502,7 @@
           "owner": "Port sequence diagrams",
           "status": "done",
           "post": "maps-and-clouds",
-          "pr": ""
+          "pr": "36"
         },
         {
           "id": "architecture",
@@ -513,7 +513,7 @@
           "owner": "Port sequence diagrams",
           "status": "done",
           "post": "maps-and-clouds",
-          "pr": ""
+          "pr": "36"
         },
         {
           "id": "requirement",
