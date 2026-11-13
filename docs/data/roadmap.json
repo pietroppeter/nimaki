@@ -458,7 +458,7 @@
           "owner": "Port class and swimlane",
           "status": "done",
           "post": "git-graphs",
-          "pr": ""
+          "pr": "28"
         },
         {
           "id": "quadrant",
@@ -533,8 +533,8 @@
           "what": "src/diagrams/railroad: 1491 lines of TypeScript, 14 corpus cases.",
           "done_when": "difftest: every railroad case identical.",
           "owner": "Port class and swimlane",
-          "status": "started",
-          "post": "",
+          "status": "done",
+          "post": "railroad-diagrams",
           "pr": ""
         },
         {
@@ -601,7 +601,7 @@
           "owner": "Port class and swimlane",
           "status": "done",
           "post": "class-diagrams",
-          "pr": ""
+          "pr": "26"
         },
         {
           "id": "usecase",

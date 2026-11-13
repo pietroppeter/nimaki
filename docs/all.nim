@@ -11,6 +11,7 @@ import devlog/diagrams_in_the_wild
 import devlog/drawing_a_diagram
 import devlog/first_light
 import devlog/git_graphs
+import devlog/railroad_diagrams
 import devlog/how_pele_is_built
 import devlog/lanes_and_handoffs
 import devlog/layered_layout_and_flowchart

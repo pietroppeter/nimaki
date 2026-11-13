@@ -3,12 +3,12 @@
   "code": 47594,
   "totals": {
     "todo": {
-      "files": 176,
-      "code": 26132
+      "files": 167,
+      "code": 24641
     },
     "draft": {
-      "files": 115,
-      "code": 21462
+      "files": 124,
+      "code": 22953
     },
     "verified": {
       "files": 0,
@@ -202,8 +202,8 @@
     },
     {
       "component": "diagrams/railroad",
-      "todo": 1491,
-      "draft": 0,
+      "todo": 0,
+      "draft": 1491,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -1579,72 +1579,90 @@
       "component": "diagrams/railroad",
       "lines": 212,
       "code": 190,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/railroad/abnf.nim"
+      ]
     },
     {
       "path": "src/diagrams/railroad/common.ts",
       "component": "diagrams/railroad",
       "lines": 215,
       "code": 178,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/railroad/common.nim"
+      ]
     },
     {
       "path": "src/diagrams/railroad/db.ts",
       "component": "diagrams/railroad",
       "lines": 95,
       "code": 79,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/railroad/db.nim"
+      ]
     },
     {
       "path": "src/diagrams/railroad/ebnf.ts",
       "component": "diagrams/railroad",
       "lines": 275,
       "code": 248,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/railroad/ebnf.nim"
+      ]
     },
     {
       "path": "src/diagrams/railroad/index.ts",
       "component": "diagrams/railroad",
       "lines": 10,
       "code": 8,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/railroad/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/railroad/ir.ts",
       "component": "diagrams/railroad",
       "lines": 188,
       "code": 173,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/railroad/ir.nim"
+      ]
     },
     {
       "path": "src/diagrams/railroad/peg.ts",
       "component": "diagrams/railroad",
       "lines": 224,
       "code": 200,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/railroad/peg.nim"
+      ]
     },
     {
       "path": "src/diagrams/railroad/render.ts",
       "component": "diagrams/railroad",
       "lines": 430,
       "code": 394,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/railroad/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/railroad/types.ts",
       "component": "diagrams/railroad",
       "lines": 28,
       "code": 21,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/railroad/types.nim"
+      ]
     },
     {
       "path": "src/diagrams/registry.ts",

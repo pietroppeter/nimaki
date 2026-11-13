@@ -20,6 +20,7 @@ import nimaki/diagrams/treemap/index as treemapIndex
 import nimaki/diagrams/treeview/index as treeviewIndex
 import nimaki/diagrams/class/index as classIndex
 import nimaki/diagrams/git/index as gitIndex
+import nimaki/diagrams/railroad/index as railroadIndex
 
 export core, errors, types, measurer
 
@@ -37,3 +38,4 @@ register(treemapIndex.treemap)
 register(treeviewIndex.treeView)
 register(classIndex.classDiagram)
 register(gitIndex.gitGraph)
+register(railroadIndex.railroad)
