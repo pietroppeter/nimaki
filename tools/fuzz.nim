@@ -1059,6 +1059,108 @@ proc cynefinSource(g: var Gen): string =
     elif r < 0.97: result.add ""
     else: result.add indent & g.pick(["complexity", "clear --> ", "x --> clear", "\"loose\"", "chaotic -> clear"])
     result.add(if g.chance(0.05): "\r\n" else: "\n")
+const rrWords = ["a", "b", "expr", "term", "digit", "letter", "railroad", "title-x", "_x", "x-1", "nonterminal", "sequence"]
+const rrStrings = ["x", "+", "a b", " ", "  ", "<br>", "#35;", "&amp;", "日本", "*", "\\n", "\\\"", "if", "", "very long terminal text here", "'", "tab\\t", "🎉"]
+const rrSingle = ["x", "\"", "a b", "it\\'s"]
+
+proc rrTerm(g: var Gen): string =
+  ## a quoted string in the style of IR, EBNF and PEG
+  if g.chance(0.85): "\"" & g.pick(rrStrings) & "\"" else: "'" & g.pick(rrSingle) & "'"
+
+proc rrIr(g: var Gen, depth: int): string =
+  let r = g.rng.rand(1.0)
+  if depth <= 0 or r < 0.4:
+    case g.rng.rand(2)
+    of 0: return "terminal(" & g.rrTerm() & ")"
+    of 1: return "nonterminal(\"" & g.pick(rrWords) & "\")"
+    else: return "special(\"" & g.pick(["any char", "x", "  "]) & "\")"
+  let kind = g.pick(["sequence", "choice", "optional", "oneOrMore", "zeroOrMore", "sequence", "choice"])
+  if kind in ["optional", "oneOrMore", "zeroOrMore"]: return kind & "(" & g.rrIr(depth - 1) & ")"
+  var parts: seq[string]
+  for i in 0 ..< g.rng.rand(1 .. 4): parts.add g.rrIr(depth - 1)
+  kind & "(" & parts.join(g.pick([", ", ",", " ,\n  "])) & ")"
+
+proc rrEbnf(g: var Gen, depth: int): string =
+  var alts: seq[string]
+  for a in 0 ..< (if g.chance(0.4): g.rng.rand(2 .. 4) else: 1):
+    var terms: seq[string]
+    for t in 0 ..< g.rng.rand(1 .. 4):
+      var term = ""
+      let r = g.rng.rand(1.0)
+      if depth > 0 and r < 0.25:
+        let (o, c) = g.pick([("(", ")"), ("[", "]"), ("{", "}")])
+        term = o & " " & g.rrEbnf(depth - 1) & " " & c
+      elif r < 0.55: term = g.rrTerm()
+      elif r < 0.9: term = g.pick(rrWords)
+      else: term = "? " & g.pick(["any char", "x", "日本"]) & " ?"
+      if g.chance(0.25): term.add g.pick(["?", "*", "+", "*?", "+"])
+      if g.chance(0.08): term.add " - " & g.pick(["\"x\"", "letter", "( a | b )"])
+      terms.add term
+    alts.add terms.join(g.pick([", ", " ", " , "]))
+  alts.join(g.pick([" | ", "\n  | "]))
+
+proc rrAbnf(g: var Gen, depth: int): string =
+  var alts: seq[string]
+  for a in 0 ..< (if g.chance(0.4): g.rng.rand(2 .. 4) else: 1):
+    var elems: seq[string]
+    for t in 0 ..< g.rng.rand(1 .. 4):
+      var e = if g.chance(0.3): g.pick(["*", "1*", "*3", "2*5", "3", "0*1", "1*1", "12", "99999999999999999999999*"]) else: ""
+      let r = g.rng.rand(1.0)
+      if depth > 0 and r < 0.25:
+        let (o, c) = g.pick([("(", ")"), ("[", "]")])
+        e.add o & g.rrAbnf(depth - 1) & c
+      elif r < 0.5: e.add "\"" & g.pick(["x", "a b", "<br>", "", "日本", "\\"]) & "\""
+      elif r < 0.65: e.add g.pick(["%x41-5A", "%d13.10", "%b0101", "%x20"])
+      else: e.add g.pick(["ALPHA", "DIGIT", "rule-1", "a", "expr"])
+      elems.add e
+    alts.add elems.join(" ")
+  alts.join(g.pick([" / ", "\n  / "]))
+
+proc rrPeg(g: var Gen, depth: int): string =
+  var alts: seq[string]
+  for a in 0 ..< (if g.chance(0.4): g.rng.rand(2 .. 4) else: 1):
+    var items: seq[string]
+    for t in 0 ..< g.rng.rand(1 .. 4):
+      var item = if g.chance(0.15): g.pick(["&", "!"]) else: ""
+      let r = g.rng.rand(1.0)
+      if depth > 0 and r < 0.25: item.add "(" & g.rrPeg(depth - 1) & ")"
+      elif r < 0.55: item.add g.rrTerm()
+      elif r < 0.9: item.add g.pick(rrWords)
+      else: item.add "."
+      if g.chance(0.25): item.add g.pick(["?", "*", "+"])
+      items.add item
+    alts.add items.join(" ")
+  alts.join(g.pick([" / ", "\n  / "]))
+
+proc railroadSource(g: var Gen): string =
+  ## The four notations, mostly valid, with a broken rule now and then.
+  if g.chance(0.3):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(["Grammar", "日本", "A long title for a grammar diagram"]) & "\n"
+    result.add "config:\n  railroad:\n"
+    for key in ["fontSize", "padding", "horizontalSeparation", "verticalSeparation", "arcRadius", "markerRadius", "strokeWidth"]:
+      if g.chance(0.2): result.add "    " & key & ": " & g.pick(["0", "4", "10", "24", "-1", "1000", "x", "2.5"]) & "\n"
+    if g.chance(0.2): result.add "    showMarkers: " & g.pick(["false", "true", "0"]) & "\n"
+    result.add "---\n"
+  let notation = g.pick(["railroad", "ebnf", "abnf", "peg"])
+  let keyword = if notation == "railroad": "railroad-beta" else: "railroad-" & notation & "-beta"
+  result.add(if g.chance(0.03): g.pick(["Railroad-Beta", "railroad-betax", "railroad"]) else: keyword)
+  result.add "\n"
+  if g.chance(0.2): result.add g.pick(["title Grammar", "title \"Quoted title\"", "title", "title 'x\\ty'", "title a %% c"]) & "\n"
+  if g.chance(0.1): result.add "accTitle: Rules\n"
+  if g.chance(0.1): result.add g.pick(["accDescr: A grammar\n", "accDescr {\n  many\n   lines\n}\n"])
+  if g.chance(0.05): result.add g.pick(["%% comment\n", "/* block */\n", "# hash\n", "(* iso *)\n", "; abnf comment\n"])
+  for i in 0 ..< g.rng.rand(1 .. 5):
+    let name = g.pick(["expr", "term", "digit", "a", "rule-1", "x_y", "letter"])
+    let depth = g.rng.rand(0 .. 3)
+    var line = case notation
+      of "railroad": name & " = " & g.rrIr(depth) & ";"
+      of "ebnf": name & g.pick([" = ", " ::= "]) & g.rrEbnf(depth) & " ;"
+      of "abnf": name & " = " & g.rrAbnf(depth) & ";"
+      else: name & " <- " & g.rrPeg(depth) & ";"
+    if g.chance(0.04): line = line[0 ..< line.len - 1]
+    if g.chance(0.03): line.add g.pick([" )", " junk", " =", " ; trailing"])
+    result.add line & "\n"
 
 proc options(g: var Gen): JsonNode =
   result = newJObject()
@@ -1111,7 +1213,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -1132,6 +1234,7 @@ proc main() =
                                                           of "ishikawa": g.ishikawaSource()
                                                           of "cynefin": g.cynefinSource()
                                                           of "gitGraph": g.gitSource()
+                                                          of "railroad": g.railroadSource()
                                                           of "radar": g.radarSource()
                                                           of "treemap": g.treemapSource()
                                                           of "er": g.erSource()
