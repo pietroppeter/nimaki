@@ -623,6 +623,28 @@
           "owner": "Port the compound-layout diagram types",
           "status": "done",
           "post": "agents-in-flows",
+          "pr": "34"
+        },
+        {
+          "id": "labels-check",
+          "kind": "tooling",
+          "title": "Check the label features against Pele",
+          "what": "Markdown, icons, math and line wrapping in labels (src/text) were ported with pie and left draft. Targeted corpus cases and a label fuzzer compare them with Pele across the types that use them; wanted differences go to the divergences page.",
+          "done_when": "A label fuzz run in CI finds no differences, and the text files move from draft to verified.",
+          "owner": "Verify labels and Pele's test suites",
+          "status": "started",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "pele-tests",
+          "kind": "tooling",
+          "title": "Run Pele's own test suites",
+          "what": "Pele's tests at the pin (tests/compat, tests/render, tests/layout and the per-type tests) hold inputs and expectations beyond the difftest corpus. Their inputs go through the port and the oracle, and their checks are ported where they test the port's own functions.",
+          "done_when": "Every input of those suites gives the same result in nimaki as in Pele, or a divergence says why; the files they cover move from draft to verified.",
+          "owner": "Verify labels and Pele's test suites",
+          "status": "started",
+          "post": "",
           "pr": ""
         }
       ]
