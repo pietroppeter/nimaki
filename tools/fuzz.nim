@@ -638,6 +638,133 @@ proc usecaseSource(g: var Gen): string =
     result.add g.pick(["", "", "  ", "\t"]) & g.ucStatement(0)
     result.add(if g.chance(0.03): "\r\n" else: "\n")
 
+const afIds = ["a", "b", "c", "brief", "draft", "lint", "ok", "ship", "x1", "Ünï", "日本", "n-2", "end1", "connectors", "team", "tools"]
+const afFlows = ["team", "writer", "reviewer", "tools", "inner", "a", "Ünï"]
+const afLabels = ["Brief", "Draft the notes", "run_linter", "Clean?", "a b c", "日本語のラベル", "emoji 🎉", "x&amp;y",
+                  "**bold** text", "a very long label that goes on and on and has to wrap in its box", "x", "", "Ω≈ç√"]
+const afShapes = ["task", "tool", "input", "decision", "refdoc", "action", "round", "rect", "roundedRect",
+                  "subroutine", "subprocess", "framed-rectangle", "lean-right", "diamond", "lin-doc", "hexagon", "hex",
+                  "stadium", "circle", "cylinder", "doc", "odd", "cloud", "bolt", "Task", "lean_right", "nope",
+                  "constructor", "connector", "1", "[a]", "collapsedGroup"]
+const afMeta = ["view: \"collapsed\"", "view: collapsed", "protocol: \"http\"", "label: \"Relabelled\"",
+                "label: \"**md**\", labelType: markdown", "animate: true", "curve: basis", "curve: linear",
+                "connectorRef: \"x.y\"", "value: 3", "w: 10", "a: [1, 2]", "a: {b: c}", "__proto__: x",
+                "label: 42", "shape:", "bad: [", "\"unterminated", "- 1", "view: \"collapsed\""]
+const afOpens = [("[", "]"), ("[", "]"), ("[", "]"), ("(", ")"), ("(", ")"), ("[[", "]]"), ("[", "]"),
+                 ("[", "]"), ("(", ")"), ("{", "}"), ("((", "))")]
+const afLinks = ["-->", "-->", "-->", "-.-", "-.-", "--x", "--->", "-..-", "---x", "-->", "-.-", "--x", "-->"]
+const afColors = ["#ff0000", "red", "#abc", "transparent", "#12345678", "black", "white", "notacolor"]
+
+proc afMetaBody(g: var Gen): string =
+  if g.chance(0.12):
+    # The multi-line form, sometimes with the commas of the single-line one.
+    result = "\n"
+    for k in 0 ..< g.rng.rand(1 .. 3):
+      result.add "    " & g.pick(afMeta) & (if g.chance(0.4): "," else: "") & "\n"
+    result.add "  "
+  else:
+    var parts: seq[string]
+    for k in 0 ..< g.rng.rand(1 .. 2): parts.add g.pick(afMeta)
+    result = " " & parts.join(", ") & " "
+
+proc afNode(g: var Gen, last: bool): string =
+  ## Metadata ends a statement: Mermaid takes no link after it.
+  result = g.pick(afIds)
+  let r = if last or g.chance(0.03): g.rng.rand(1.0) else: 0.35 + g.rng.rand(0.3)
+  if r < 0.35:
+    let label = g.pick(afLabels)
+    result.add "[\"" & (if label == "" and g.chance(0.9): "x" else: label) & "\"]@{ shape: " & g.pick(afShapes) & " }"
+  elif r < 0.55:
+    let (o, c) = g.pick(afOpens)
+    let label = g.pick(afLabels).replace("&", "and")
+    result.add o & (if label == "" and g.chance(0.9): "x" else: label) & c
+  elif r < 0.55 + (if last: 0.07 else: 0.0):
+    result.add "@{ shape: " & g.pick(afShapes) & (if g.chance(0.5): ", label: \"" & g.pick(afLabels) & "\"" else: "") & " }"
+  elif r < 0.65 and last:
+    result.add "@{" & afMetaBody(g) & "}"
+  if (r >= 0.35 and r < 0.55 or g.chance(0.05)) and g.chance(0.05): result.add ":::" & g.pick(["hot", "cold", "internal-link"])
+
+proc afLink(g: var Gen): string =
+  let link = g.pick(afLinks)
+  let r = g.rng.rand(1.0)
+  if r < 0.15:
+    let label = g.pick(afLabels).replace("|", "")
+    link & "|" & (if label == "": "x" else: label) & "|"
+  elif r < 0.22 and link in ["-->", "--x", "---"]:
+    "-- " & g.pick(["yes", "no", "a b", "日本"]) & " " & link
+  elif r < 0.25: "e" & $g.rng.rand(0 .. 3) & "@" & link
+  else: link
+
+proc afStatement(g: var Gen, depth: int, edges: var int): string =
+  let ind = repeat("  ", depth + 1)
+  let r = g.rng.rand(1.0)
+  if r < 0.45:
+    let n = g.rng.rand(0 .. 3)
+    result = afNode(g, n == 0)
+    for k in 0 ..< n:
+      if g.chance(0.08): result.add " & " & afNode(g, false)
+      result.add " " & afLink(g) & " " & afNode(g, k == n - 1)
+      inc edges
+  elif r < 0.57 and depth < 3:
+    let head = g.rng.rand(1.0)
+    result =
+      if head < 0.75: "flow " & g.pick(afFlows) & (if g.chance(0.7): "[\"" & g.pick(afLabels) & "\"]" else: "") &
+                      (if g.chance(0.15): "@{" & afMetaBody(g) & "}" else: "") & "\n"
+      elif head < 0.85: "flow\n"
+      else: "global\n"
+    if g.chance(0.2): result.add ind & "  direction " & g.pick(["LR", "RL", "TB", "BT"]) & "\n"
+    for k in 0 ..< g.rng.rand(0 .. 4): result.add ind & "  " & afStatement(g, depth + 1, edges) & "\n"
+    result.add ind & "end"
+  elif r < 0.6:
+    result = "connector " & g.pick(["github", "llm", "api", "Ünï"]) & (if g.chance(0.6): "[\"" & g.pick(afLabels) & "\"]" else: "") &
+      (if g.chance(0.3): "@{" & afMetaBody(g) & "}" else: "")
+  elif r < 0.66: result = g.pick(@afIds & @afFlows) & "@{" & afMetaBody(g) & "}"
+  elif r < 0.69: result = "classDef " & g.pick(["hot", "cold", "default"]) & " fill:" & g.pick(afColors) & ",stroke:" & g.pick(afColors) & (if g.chance(0.3): ",color:#fff" else: "")
+  elif r < 0.71: result = "class " & g.pick(afIds) & "," & g.pick(afFlows) & " " & g.pick(["hot", "cold"])
+  elif r < 0.73: result = "style " & g.pick(@afIds & @afFlows) & " fill:" & g.pick(afColors) & ",stroke-width:" & g.pick(["2px", "4px"]) & (if g.chance(0.3): ",font-weight:bold" else: "")
+  elif r < 0.75 and edges > 0:
+    result = "linkStyle " & (if g.chance(0.2): "default" else: $g.rng.rand(0 .. edges - 1)) &
+      (if g.chance(0.2): " interpolate " & g.pick(["basis", "linear", "step", "cardinal"]) else: "") &
+      " stroke:" & g.pick(afColors)
+  elif r < 0.77: result = "click " & g.pick(afIds) & " " & g.pick(["href \"https://example.com\"", "\"https://example.com\" \"tip\"", "callback", "\"[[Note]]\""])
+  elif r < 0.8: result = "%% " & g.pick(afLabels)
+  elif r < 0.81: result = "accTitle: " & g.pick(afLabels)
+  elif r < 0.82: result = "accDescr: " & g.pick(afLabels)
+  elif r < 0.85:
+    # An edge into a flow from inside it, or across flows.
+    result = g.pick(afIds) & " " & g.pick(["-->", "-.-", "--x"]) & " " & g.pick(afFlows)
+    inc edges
+  elif r < 0.87: result = g.pick(["garbage ((", "a -->", "-->", "a[unclosed", "end", "flow", "a@{ shape: }", "a --> b --x", "a <-- b", "subgraph x", "a -.-> b", "a --- b", "a ==> b"])
+  else:
+    let a = g.pick(afIds)
+    result = a & " " & g.pick(["-->", "-.-"]) & " " & a
+    inc edges
+
+proc agentflowSource(g: var Gen): string =
+  if g.chance(0.2):
+    result.add "---\n"
+    if g.chance(0.4): result.add "title: " & g.pick(afLabels) & "\n"
+    result.add "config:\n"
+    if g.chance(0.3): result.add "  direction: " & g.pick(["LR", "TB", "x"]) & "\n"
+    if g.chance(0.6):
+      result.add "  agentflow:\n"
+      result.add "    nodeSpacing: " & g.pick(["10", "80", "0", "x"]) & "\n"
+      if g.chance(0.4): result.add "    wrappingWidth: " & g.pick(["50", "200", "3000"]) & "\n"
+      if g.chance(0.4): result.add "    minNodeWidth: " & g.pick(["20", "200"]) & "\n"
+      if g.chance(0.3): result.add "    rankSpacing: " & g.pick(["10", "100"]) & "\n"
+    if g.chance(0.4):
+      result.add "  flowchart:\n"
+      result.add "    curve: " & g.pick(["basis", "linear", "step", "natural"]) & "\n"
+      if g.chance(0.5): result.add "    inheritDir: " & g.pick(["true", "false"]) & "\n"
+    result.add "---\n"
+  result.add "agentflow-beta"
+  result.add(if g.chance(0.08): "" else: " " & g.pick(["TB", "LR", "RL", "BT", "TD", "TB", "LR", ">", "v", "TB", "LR"]))
+  result.add(if g.chance(0.05): ";\n" else: "\n")
+  var edges = 0
+  for i in 0 ..< g.rng.rand(0 .. 10):
+    result.add g.pick(["  ", "  ", "", "\t"]) & afStatement(g, 0, edges)
+    result.add(if g.chance(0.03): "\r\n" else: "\n")
+
 const scores = ["5", "1", "3", "4", "2", "0", "7", "-1", "2.5", " 4 ", "", "x", "1e1", "0x3", "Infinity",
                 "3.", ".5", "NaN", "\u30003"]
 const actors = ["Me", "Cat", "Dog", "", " Me ", "Ünï", "日本", "Zed", "a b", "Me", "emoji 🎉",
@@ -1054,7 +1181,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "er", "requirement", "gitGraph", "usecase"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, er, requirement, gitGraph, usecase", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "er", "requirement", "gitGraph", "usecase", "agentflow"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, er, requirement, gitGraph, usecase, agentflow", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -1078,6 +1205,7 @@ proc main() =
                                                           of "er": g.erSource()
                                                           of "requirement": g.requirementSource()
                                                           of "usecase": g.usecaseSource()
+                                                          of "agentflow": g.agentflowSource()
                                                           else: g.treeViewSource()), "options": opts}
   let dir = buildDir / "fuzz"
   createDir dir

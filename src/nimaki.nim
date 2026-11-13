@@ -23,6 +23,7 @@ import nimaki/diagrams/er/index as erIndex
 import nimaki/diagrams/requirement/index as requirementIndex
 import nimaki/diagrams/git/index as gitIndex
 import nimaki/diagrams/usecase/index as usecaseIndex
+import nimaki/diagrams/agentflow/index as agentflowIndex
 
 export core, errors, types, measurer
 
@@ -43,3 +44,4 @@ register(erIndex.er)
 register(requirementIndex.requirement)
 register(gitIndex.gitGraph)
 register(usecaseIndex.usecase)
+register(agentflowIndex.agentflow)

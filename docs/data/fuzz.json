@@ -136,6 +136,14 @@
       "different": 0,
       "rendered": 1890,
       "errors": 3110
+    },
+    "agentflow": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 2862,
+      "errors": 2138
     }
   }
 }

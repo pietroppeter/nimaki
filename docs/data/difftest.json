@@ -2,17 +2,17 @@
   "about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand.",
   "pin": "1.13.0",
   "cases": 2118,
-  "identical": 1308,
+  "identical": 1546,
   "different": 0,
-  "unsupported": 810,
+  "unsupported": 572,
   "types": [
     {
       "type": "agentflow",
       "coverage": "agentflow",
       "cases": 238,
-      "identical": 0,
+      "identical": 238,
       "different": 0,
-      "unsupported": 238
+      "unsupported": 0
     },
     {
       "type": "architecture",
