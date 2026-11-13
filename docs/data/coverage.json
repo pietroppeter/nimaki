@@ -727,19 +727,19 @@
       "corpus": 24,
       "parse": {
         "code": 1999,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 284,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 538,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/usecase/",
+      "post": "actors-and-use-cases",
+      "notes": "Identical to Pele on the 151 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim usecase); 9,000 more across seeds before merging. A json node's errors are V8's JSON.parse messages, reproduced by diagrams/usecase/json.nim."
     },
     {
       "id": "flowchart",

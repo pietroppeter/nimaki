@@ -3,12 +3,12 @@
   "code": 47594,
   "totals": {
     "todo": {
-      "files": 159,
-      "code": 23178
+      "files": 150,
+      "code": 20357
     },
     "draft": {
-      "files": 132,
-      "code": 24416
+      "files": 141,
+      "code": 27237
     },
     "verified": {
       "files": 0,
@@ -282,8 +282,8 @@
     },
     {
       "component": "diagrams/usecase",
-      "todo": 2821,
-      "draft": 0,
+      "todo": 0,
+      "draft": 2821,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -2155,72 +2155,90 @@
       "component": "diagrams/usecase",
       "lines": 589,
       "code": 530,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/usecase/db.nim"
+      ]
     },
     {
       "path": "src/diagrams/usecase/graph.ts",
       "component": "diagrams/usecase",
       "lines": 311,
       "code": 284,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/usecase/graph.nim"
+      ]
     },
     {
       "path": "src/diagrams/usecase/index.ts",
       "component": "diagrams/usecase",
       "lines": 12,
       "code": 10,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/usecase/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/usecase/json.ts",
       "component": "diagrams/usecase",
       "lines": 250,
       "code": 226,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/usecase/json.nim"
+      ]
     },
     {
       "path": "src/diagrams/usecase/lexer.ts",
       "component": "diagrams/usecase",
       "lines": 381,
       "code": 352,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/usecase/lexer.nim"
+      ]
     },
     {
       "path": "src/diagrams/usecase/parser.ts",
       "component": "diagrams/usecase",
       "lines": 706,
       "code": 635,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/usecase/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/usecase/render.ts",
       "component": "diagrams/usecase",
       "lines": 589,
       "code": 538,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/usecase/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/usecase/tokens.ts",
       "component": "diagrams/usecase",
       "lines": 77,
       "code": 73,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/usecase/tokens.nim"
+      ]
     },
     {
       "path": "src/diagrams/usecase/types.ts",
       "component": "diagrams/usecase",
       "lines": 193,
       "code": 173,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/usecase/types.nim"
+      ]
     },
     {
       "path": "src/diagrams/venn/db.ts",
