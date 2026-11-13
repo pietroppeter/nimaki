@@ -185,21 +185,29 @@
       "rendered": 182,
       "errors": 118
     },
+    "agentflow": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 2862,
+      "errors": 2138
+    },
     "c4": {
       "seed": 1,
-      "cases": 2000,
-      "identical": 2000,
+      "cases": 300,
+      "identical": 300,
       "different": 0,
-      "rendered": 1007,
-      "errors": 993
+      "rendered": 156,
+      "errors": 144
     },
     "block": {
       "seed": 1,
-      "cases": 2000,
-      "identical": 2000,
+      "cases": 300,
+      "identical": 300,
       "different": 0,
-      "rendered": 963,
-      "errors": 1037
+      "rendered": 172,
+      "errors": 128
     }
   }
 }

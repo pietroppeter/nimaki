@@ -3,12 +3,12 @@
   "code": 47594,
   "totals": {
     "todo": {
-      "files": 94,
-      "code": 9898
+      "files": 84,
+      "code": 6456
     },
     "draft": {
-      "files": 197,
-      "code": 37696
+      "files": 207,
+      "code": 41138
     },
     "verified": {
       "files": 0,
@@ -34,8 +34,8 @@
     },
     {
       "component": "diagrams/agentflow",
-      "todo": 3465,
-      "draft": 0,
+      "todo": 23,
+      "draft": 3442,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -379,16 +379,20 @@
       "component": "diagrams/agentflow",
       "lines": 51,
       "code": 38,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/agentflow/colorSlots.nim"
+      ]
     },
     {
       "path": "src/diagrams/agentflow/db.ts",
       "component": "diagrams/agentflow",
       "lines": 828,
       "code": 736,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/agentflow/db.nim"
+      ]
     },
     {
       "path": "src/diagrams/agentflow/diagnostics.ts",
@@ -403,64 +407,80 @@
       "component": "diagrams/agentflow",
       "lines": 264,
       "code": 234,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/agentflow/graph.nim"
+      ]
     },
     {
       "path": "src/diagrams/agentflow/index.ts",
       "component": "diagrams/agentflow",
       "lines": 27,
       "code": 24,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/agentflow/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/agentflow/lexer.ts",
       "component": "diagrams/agentflow",
       "lines": 1016,
       "code": 962,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/agentflow/lexer.nim"
+      ]
     },
     {
       "path": "src/diagrams/agentflow/parser.ts",
       "component": "diagrams/agentflow",
       "lines": 703,
       "code": 658,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/agentflow/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/agentflow/render.ts",
       "component": "diagrams/agentflow",
       "lines": 417,
       "code": 375,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/agentflow/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/agentflow/shapes.ts",
       "component": "diagrams/agentflow",
       "lines": 101,
       "code": 88,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/agentflow/shapes.nim"
+      ]
     },
     {
       "path": "src/diagrams/agentflow/tokens.ts",
       "component": "diagrams/agentflow",
       "lines": 166,
       "code": 164,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/agentflow/tokens.nim"
+      ]
     },
     {
       "path": "src/diagrams/agentflow/types.ts",
       "component": "diagrams/agentflow",
       "lines": 190,
       "code": 163,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/agentflow/types.nim"
+      ]
     },
     {
       "path": "src/diagrams/architecture/db.ts",
