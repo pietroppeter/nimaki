@@ -4,6 +4,8 @@ nimcache/
 # the pinned Pele, fetched by reference/fetch.sh
 reference/pele/
 reference/npm/
+# the pinned diagrammari, fetched by reference/fetch.sh diagrammari
+reference/diagrammari/
 # every page is generated (docs/all.nim) and built by CI (.github/workflows/pages.yml)
 *.html
 docs/assets/site.css
