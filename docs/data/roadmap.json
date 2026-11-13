@@ -500,9 +500,9 @@
           "what": "src/diagrams/wardley: 1092 lines of TypeScript, 19 corpus cases.",
           "done_when": "difftest: every wardley case identical.",
           "owner": "Port sequence diagrams",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "maps-and-clouds",
+          "pr": "36"
         },
         {
           "id": "architecture",
@@ -511,9 +511,9 @@
           "what": "src/diagrams/architecture: 1247 lines of TypeScript, 6 corpus cases.",
           "done_when": "difftest: every architecture case identical.",
           "owner": "Port sequence diagrams",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "maps-and-clouds",
+          "pr": "36"
         },
         {
           "id": "requirement",
