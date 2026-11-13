@@ -2,9 +2,9 @@
   "about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand.",
   "pin": "1.13.0",
   "cases": 2118,
-  "identical": 877,
+  "identical": 1157,
   "different": 0,
-  "unsupported": 1241,
+  "unsupported": 961,
   "types": [
     {
       "type": "agentflow",
@@ -90,9 +90,9 @@
       "type": "gitGraph",
       "coverage": "git",
       "cases": 94,
-      "identical": 0,
+      "identical": 94,
       "different": 0,
-      "unsupported": 94
+      "unsupported": 0
     },
     {
       "type": "info",
@@ -194,9 +194,9 @@
       "type": "sequence",
       "coverage": "sequence",
       "cases": 186,
-      "identical": 0,
+      "identical": 186,
       "different": 0,
-      "unsupported": 186
+      "unsupported": 0
     },
     {
       "type": "state",

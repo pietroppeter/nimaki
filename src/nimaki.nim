@@ -12,6 +12,7 @@ import nimaki/diagrams/flowchart/index as flowchartIndex
 import nimaki/diagrams/journey/index as journeyIndex
 import nimaki/diagrams/info/index as infoIndex
 import nimaki/diagrams/packet/index as packetIndex
+import nimaki/diagrams/sequence/index as sequenceIndex
 import nimaki/diagrams/state/index as stateIndex
 import nimaki/diagrams/swimlane/index as swimlaneIndex
 import nimaki/diagrams/radar/index as radarIndex
@@ -20,6 +21,7 @@ import nimaki/diagrams/treeview/index as treeviewIndex
 import nimaki/diagrams/class/index as classIndex
 import nimaki/diagrams/er/index as erIndex
 import nimaki/diagrams/requirement/index as requirementIndex
+import nimaki/diagrams/git/index as gitIndex
 
 export core, errors, types, measurer
 
@@ -29,6 +31,7 @@ register(flowchartIndex.flowchart)
 register(journeyIndex.journey)
 register(infoIndex.info)
 register(packetIndex.packet)
+register(sequenceIndex.sequence)
 register(stateIndex.state)
 register(swimlaneIndex.swimlane)
 register(radarIndex.radar)
@@ -37,3 +40,4 @@ register(treeviewIndex.treeView)
 register(classIndex.classDiagram)
 register(erIndex.er)
 register(requirementIndex.requirement)
+register(gitIndex.gitGraph)
