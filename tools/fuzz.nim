@@ -1132,6 +1132,114 @@ proc treeViewSource(g: var Gen): string =
     else: result.add g.pick(["├──", "  indented", "\"unterminated", ":::", "icon(", "Section ─ A.txt", "## x"])
     result.add(if g.chance(0.05): "\r\n" else: "\n")
 
+const outlineDelims = [("[", "]"), ("(", ")"), ("((", "))"), (")", "("), ("))", "(("), ("{{", "}}"), ("(-", "-)"), ("", "")]
+const outlineIcons = ["fa fa-book", "mdi:rocket", "logos:nim", ""]
+const outlineClasses = ["urgent", "large", "a b", "highlight"]
+
+proc outlineText(g: var Gen): string =
+  if g.chance(0.1): return "\"`**bold** and _it_`\""
+  if g.chance(0.1): return "\"" & g.pick(labels).replace("\"", "") & "\""
+  result = g.pick(labels)
+  for bad in ["(", ")", "[", "]", "{", "}", "\"", "\n", "@"]: result = result.replace(bad, "")
+  if result == "": result = "x"
+
+proc outlineNode(g: var Gen, kanban: bool): string =
+  let (open, close) = g.pick(outlineDelims)
+  let id = g.pick(["a", "node1", "Root", "id_2", "x-y", "日本", "Ünï"])
+  if open == "":
+    result = g.outlineText().replace("\"", "").replace("`", "")
+    if result.strip == "" or result.strip.startsWith("%%"): result = id
+  else:
+    result = (if g.chance(0.7): id else: "") & open & g.outlineText() & close
+  if kanban and g.chance(0.3):
+    var parts: seq[string]
+    if g.chance(0.5): parts.add "ticket: " & g.pick(["MC-2037", "42", "'a b'", "\"x\""])
+    if g.chance(0.5): parts.add "assigned: " & g.pick(["'knsv'", "bob", "\"Ann Lee\""])
+    if g.chance(0.5): parts.add "priority: " & g.pick(["'High'", "Very High", "low", "'Very Low'", "Medium", "urgent"])
+    if g.chance(0.2): parts.add "label: " & g.pick(["'Relabelled'", "new"])
+    if g.chance(0.1): parts.add "icon: " & g.pick(["mdi:rocket", "x"])
+    if g.chance(0.04): parts.add "shape: " & g.pick(["rect", "Rect", "my_shape"])
+    if g.chance(0.03): parts.add g.pick(["[unclosed", "a: : b"])
+    result.add(g.pick(["@{ ", "@{"]) & parts.join(", ") & " }")
+
+proc outlineSource(g: var Gen, kanban: bool): string =
+  let kind = if kanban: "kanban" else: "mindmap"
+  if g.chance(0.4):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(labels) & "\n"
+    result.add "config:\n  " & kind & ":\n"
+    if kanban:
+      if g.chance(0.3): result.add "    sectionWidth: " & g.pick(["100", "150", "300", "50", "x"]) & "\n"
+      if g.chance(0.3): result.add "    ticketBaseUrl: '" & g.pick(["https://example.com/browse/#TICKET#", "javascript:alert(1)", "/t/#TICKET#"]) & "'\n"
+    else:
+      if g.chance(0.3): result.add "    maxNodeWidth: " & g.pick(["100", "150", "300", "50", "x", "0"]) & "\n"
+    result.add "    useMaxWidth: true\n---\n"
+  if g.chance(0.1): result.add "%% a comment\n"
+  result.add(if g.chance(0.03): g.pick([kind & "x", kind.toUpperAscii, "  " & kind & " extra"]) else: kind)
+  result.add "\n"
+  let unit = g.pick([2, 4, 1])
+  var depth = 0
+  for i in 0 ..< g.rng.rand(0 .. 16):
+    let r = g.rng.rand(1.0)
+    if r < 0.8:
+      if i > 0: depth = max(if kanban: 1 else: 1, min(depth + g.rng.rand(-2 .. 1), if kanban: 2 else: 4))
+      if i == 0: depth = (if kanban: 1 else: 0)
+      result.add repeat(" ", (depth + 1) * unit) & g.outlineNode(kanban)
+    elif r < 0.87: result.add repeat(" ", (depth + 1) * unit) & "::icon(" & g.pick(outlineIcons) & ")"
+    elif r < 0.93: result.add repeat(" ", (depth + 1) * unit) & ":::" & g.pick(outlineClasses)
+    elif r < 0.96: result.add repeat(" ", depth * unit) & "%% " & g.pick(labels)
+    elif r < 0.99: result.add ""
+    else: result.add g.pick(["(", "a[b", "::icon(", "\"", "x)y", "@{ a: 1"])
+    result.add(if g.chance(0.04): "\r\n" else: "\n")
+
+proc mindmapSource(g: var Gen): string = g.outlineSource(false)
+proc kanbanSource(g: var Gen): string = g.outlineSource(true)
+
+const emKinds = ["ui", "cmd", "command", "evt", "event", "rmo", "readmodel", "pcr", "processor"]
+const emNames = ["CartUI", "AddItem", "ItemAdded", "Cart.Items", "Inventory.Changed", "X", "a_b", "External.Thing", "Long.Name.Here"]
+const emTypes = ["json", "jsobj", "figma", "salt", "uri", "md", "html", "text"]
+
+proc eventmodelingSource(g: var Gen): string =
+  if g.chance(0.1): result.add "---\ntitle: " & g.pick(labels) & "\n---\n"
+  result.add(if g.chance(0.03): g.pick(["eventmodel", "eventmodeling x"]) else: "eventmodeling")
+  result.add "\n"
+  if g.chance(0.05): result.add "title " & g.pick(labels) & "\n"
+  if g.chance(0.05): result.add "accTitle: " & g.pick(labels) & "\n"
+  if g.chance(0.05): result.add "accDescr { " & g.pick(labels) & " }\n"
+  var frames = 0
+  var dataNames: seq[string]
+  let indent = g.pick(["", "  ", "    "])
+  for i in 0 ..< g.rng.rand(0 .. 12):
+    let r = g.rng.rand(1.0)
+    if r < 0.7:
+      inc frames
+      var line = g.pick(["tf", "timeframe", "tf", "rf", "resetframe"]) & " " &
+        (if g.chance(0.95): align($frames, 2, '0') else: $g.rng.rand(1 .. frames)) & " " &
+        g.pick(emKinds) & " " & g.pick(emNames)
+      if frames > 1 and g.chance(0.2):
+        for k in 0 ..< g.rng.rand(1 .. 2): line.add " ->> " & align($g.rng.rand(1 .. frames - 1), 2, '0')
+      if g.chance(0.15):
+        let name = g.pick(["Data1", "Data2", "Missing"])
+        dataNames.add name
+        line.add " [[" & name & "]]"
+      elif g.chance(0.2):
+        line.add(if g.chance(0.3): " `" & g.pick(emTypes) & "`" else: "")
+        line.add " " & g.pick(["{ id: 7 }", "{ name: string, price: 20.4 }", "\"quoted text\"", "'single'", "{ \"a\": { \"b\": 1 } }"])
+      result.add indent & line
+    elif r < 0.78:
+      let name = g.pick(["Data1", "Data2"])
+      result.add indent & "data " & name & (if g.chance(0.2): " `json`" else: "") & " {\n" & indent & "  description: '" &
+        g.pick(["john", "a much longer description that goes past the forty-eight columns of a box"]) & "'\n" & indent & "  price: 20.4\n}"
+    elif r < 0.84 and frames > 0:
+      result.add indent & "note " & align($g.rng.rand(1 .. frames), 2, '0') & " {\n" & indent & "  " & g.pick(labels) & "\n}"
+    elif r < 0.9 and frames > 0:
+      result.add indent & "gwt " & align($g.rng.rand(1 .. frames), 2, '0') & " given evt " & g.pick(emNames).replace(".", "") &
+        (if g.chance(0.5): " when cmd AddItem" else: "") & " then evt ItemAdded rmo Cart"
+    elif r < 0.93: result.add indent & "entity " & g.pick(emNames)
+    elif r < 0.96: result.add indent & g.pick(["%% comment", "// comment", "/* block */"])
+    elif r < 0.99: result.add ""
+    else: result.add indent & g.pick(["tf 01", "tf x ui A", "data X {", "gwt 01 given", "tf 01 ui A [[B", "note 01 { x }"])
+    result.add(if g.chance(0.04): "\r\n" else: "\n")
 proc ishikawaSource(g: var Gen): string =
   if g.chance(0.2): result.add "---\ntitle: " & g.pick(labels) & "\n---\n"
   if g.chance(0.1): result.add g.pick(["\n", "%% comment\n", "  \n\n", "   %% c\n"])
@@ -1759,7 +1867,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad", "gantt", "wardley", "architecture", "c4", "block", "agentflow"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad, gantt, wardley, architecture, c4, block, agentflow", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad", "gantt", "wardley", "architecture", "c4", "block", "agentflow", "mindmap", "kanban", "eventmodeling"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad, gantt, wardley, architecture, c4, block, agentflow, mindmap, kanban, eventmodeling", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -1792,7 +1900,10 @@ proc main() =
                                                           of "requirement": g.requirementSource()
                                                           of "usecase": g.usecaseSource()
                                                           of "agentflow": g.agentflowSource()
-                                                          else: g.treeViewSource()), "options": opts}
+                                                          of "treeView": g.treeViewSource()
+                                                          of "mindmap": g.mindmapSource()
+                                                          of "kanban": g.kanbanSource()
+                                                          else: g.eventmodelingSource()), "options": opts}
   let dir = buildDir / "fuzz"
   createDir dir
   let inPath = dir / (kind & "-" & $seed & "-in.jsonl")

@@ -68,7 +68,7 @@
       "status": "started",
       "nim": "src/nimaki/diagrams/common/",
       "post": "first-light",
-      "notes": "tokens.ts (the Langium-style tokenizer), fit-width.ts, scan.ts (the Jison-style lexer rules journey and timeline share), fit.ts (plain labels, cut words), fit-text.ts (shrink, then cut with an ellipsis), literal-label.ts and accDescr.ts (the accDescr terminal for grammars that keep lexing after an unclosed brace) are ported."
+      "notes": "tokens.ts (the Langium-style tokenizer), fit-width.ts, scan.ts (the Jison-style lexer rules journey and timeline share), fit.ts (plain labels, cut words), fit-text.ts (shrink, then cut with an ellipsis), literal-label.ts accDescr.ts (the accDescr terminal for grammars that keep lexing after an unclosed brace), outline.ts (the indented outline mindmap and kanban share) and icon.ts are ported."
     },
     {
       "id": "api",
@@ -181,19 +181,19 @@
       "corpus": 13,
       "parse": {
         "code": 78,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 0,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 258,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/mindmap/",
+      "post": "mindmap-kanban-eventmodeling",
+      "notes": "Identical to Pele on the 39 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim mindmap); 20,000 more across seeds before merging."
     },
     {
       "id": "kanban",
@@ -202,19 +202,19 @@
       "corpus": 3,
       "parse": {
         "code": 99,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 0,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 267,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/kanban/",
+      "post": "mindmap-kanban-eventmodeling",
+      "notes": "Identical to Pele on the 33 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim kanban); 20,000 more across seeds before merging."
     },
     {
       "id": "ishikawa",
@@ -370,19 +370,19 @@
       "corpus": 12,
       "parse": {
         "code": 387,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 0,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 333,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/eventmodeling/",
+      "post": "mindmap-kanban-eventmodeling",
+      "notes": "Identical to Pele on the 24 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim eventmodeling); 20,000 more across seeds before merging."
     },
     {
       "id": "sankey",
