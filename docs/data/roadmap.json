@@ -555,9 +555,9 @@
           "what": "src/diagrams/c4: 1888 lines of TypeScript, 6 corpus cases.",
           "done_when": "difftest: every c4 case identical.",
           "owner": "Port sequence diagrams",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "boxes-in-boxes",
+          "pr": "37"
         },
         {
           "id": "gantt",
@@ -577,9 +577,9 @@
           "what": "src/diagrams/block: 1957 lines of TypeScript, 30 corpus cases.",
           "done_when": "difftest: every block case identical.",
           "owner": "Port sequence diagrams",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "boxes-in-boxes",
+          "pr": "37"
         },
         {
           "id": "state",
@@ -623,6 +623,28 @@
           "owner": "Port the compound-layout diagram types",
           "status": "done",
           "post": "agents-in-flows",
+          "pr": "34"
+        },
+        {
+          "id": "labels-check",
+          "kind": "tooling",
+          "title": "Check the label features against Pele",
+          "what": "Markdown, icons, math and line wrapping in labels (src/text) were ported with pie and left draft. Targeted corpus cases and a label fuzzer compare them with Pele across the types that use them; wanted differences go to the divergences page.",
+          "done_when": "A label fuzz run in CI finds no differences, and the text files move from draft to verified.",
+          "owner": "Verify labels and Pele's test suites",
+          "status": "started",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "pele-tests",
+          "kind": "tooling",
+          "title": "Run Pele's own test suites",
+          "what": "Pele's tests at the pin (tests/compat, tests/render, tests/layout and the per-type tests) hold inputs and expectations beyond the difftest corpus. Their inputs go through the port and the oracle, and their checks are ported where they test the port's own functions.",
+          "done_when": "Every input of those suites gives the same result in nimaki as in Pele, or a divergence says why; the files they cover move from draft to verified.",
+          "owner": "Verify labels and Pele's test suites",
+          "status": "started",
+          "post": "",
           "pr": ""
         }
       ]
@@ -636,8 +658,19 @@
           "id": "nimjs",
           "kind": "port",
           "title": "nimaki in the browser",
-          "what": "The same renderer compiled with nim js, drawing the diagrams of the pages.",
+          "what": "The same renderer compiled with nim js, checked by the referee (difftest --js) in Node and in CI.",
           "done_when": "difftest passes on the JS build.",
+          "owner": "Port class and swimlane",
+          "status": "done",
+          "post": "nimaki-in-javascript",
+          "pr": "38"
+        },
+        {
+          "id": "nimjs-browser",
+          "kind": "port",
+          "title": "nimaki drawing in the browser",
+          "what": "A browser entry point for the JavaScript build (render(text) exported), a page whose diagrams nimaki draws in the reader's browser, and a smaller file.",
+          "done_when": "a page draws its diagrams with nimaki in the browser, identical to the SVG drawn at build time.",
           "owner": "",
           "status": "planned",
           "post": "",
@@ -662,6 +695,35 @@
           "done_when": "The pin moves once, with a post.",
           "owner": "",
           "status": "planned",
+          "post": "",
+          "pr": ""
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "title": "Along the way",
+      "goal": "Steps that recur while the port goes on: articles that explain nimaki's own code (its overall structure, one module, or a pattern that comes back), because explaining code is a way to review it. What an article uncovers becomes a note for the thread that owns the code, or a new step here.",
+      "steps": [
+        {
+          "id": "code-structure",
+          "kind": "research",
+          "title": "The shape of the port",
+          "what": "A tour of nimaki's Nim code as it stands on main: how the files map to Pele's, the path of one diagram through render(), the shared parts every type leans on, and what the tour uncovered.",
+          "done_when": "A devlog post whose numbers come from the code on main; findings filed as notes or roadmap steps.",
+          "owner": "Write articles explaining nimaki code",
+          "status": "started",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "code-articles",
+          "kind": "research",
+          "title": "Articles on the code, every once in a while",
+          "what": "A recurring step: every so often, one article on a module or a pattern of the port (the lexers, the layered layout, JavaScript's numbers and strings in Nim, the referee). Each article is its own step in this phase, claimed here first.",
+          "done_when": "Never: it recurs while the port goes on. Each article ships with its post and its findings.",
+          "owner": "Write articles explaining nimaki code",
+          "status": "started",
           "post": "",
           "pr": ""
         }

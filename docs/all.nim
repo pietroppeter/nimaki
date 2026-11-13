@@ -17,6 +17,7 @@ import devlog/git_graphs
 import devlog/railroad_diagrams
 import devlog/gantt_charts
 import devlog/diagrammari_as_a_corpus
+import devlog/nimaki_in_javascript
 import devlog/how_pele_is_built
 import devlog/lanes_and_handoffs
 import devlog/layered_layout_and_flowchart
@@ -33,3 +34,4 @@ import devlog/what_mermaid_is
 import devlog/lifelines_and_messages
 import devlog/fishbones_and_domains
 import devlog/maps_and_clouds
+import devlog/boxes_in_boxes

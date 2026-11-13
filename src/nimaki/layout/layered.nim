@@ -176,6 +176,12 @@ template orElse*(d: float, f: untyped): int =
     let x = d
     if x < 0: -1 elif x > 0: 1 else: f
 
+proc choose[T](cond: bool, a, b: var T): ptr T {.inline.} =
+  ## `addr a` or `addr b`. Not `if cond: addr a else: addr b`: Nim's JavaScript backend loses
+  ## the field of such an address (Nim 2.2), and the port is also built with nim js.
+  if cond: result = addr a
+  else: result = addr b
+
 func isDummy(kind: int): bool = kind == ord(kDummy) or kind == ord(kLabel)
 
 proc sortRange(list: var seq[int], first, to: int, key: seq[float]) =
@@ -948,9 +954,9 @@ proc sideEnds(g: Graph, v, side: int, span: float, kinds: seq[int], idsVar: var 
   let roomP = addr roomVar
   template ids: untyped = idsP[]
   template room: untyped = roomP[]
-  let startP = if side == 0: addr g.predStart else: addr g.succStart
-  let listP = if side == 0: addr g.predE else: addr g.succE
-  let otherP = if side == 0: addr g.EF else: addr g.ET
+  let startP = choose(side == 0, g.predStart, g.succStart)
+  let listP = choose(side == 0, g.predE, g.succE)
+  let otherP = choose(side == 0, g.EF, g.ET)
   template start: untyped = startP[]
   template list: untyped = listP[]
   template other: untyped = otherP[]
@@ -1173,9 +1179,9 @@ proc settle(g: Graph, nodes: seq[LNode], xsVar: var seq[float], EFK, ETK: seq[in
       if ids.len == 0: continue
       if ids.len == 1: room = @[0.0]
       var all: seq[int]
-      let startP = if side == 0: addr g.predStart else: addr g.succStart
-      let listP = if side == 0: addr g.predE else: addr g.succE
-      let otherP = if side == 0: addr g.EF else: addr g.ET
+      let startP = choose(side == 0, g.predStart, g.succStart)
+      let listP = choose(side == 0, g.predE, g.succE)
+      let otherP = choose(side == 0, g.EF, g.ET)
       for k in startP[][v] ..< startP[][v + 1]: all.add listP[][k]
       all.sort(proc (a, b: int): int =
         let d = g.pos[otherP[][a]] - g.pos[otherP[][b]]
@@ -1192,19 +1198,18 @@ proc settle(g: Graph, nodes: seq[LNode], xsVar: var seq[float], EFK, ETK: seq[in
       template ids: untyped = info.ids
       template room: untyped = info.room
       template all: untyped = info.all
-      let kindsP = if side == 0: unsafeAddr ETK else: unsafeAddr EFK
-      let dxP = if side == 0: addr g.ETD else: addr g.EFD
-      template kinds: untyped = kindsP[]
+      let dxP = choose(side == 0, g.ETD, g.EFD)
+      template kinds(i: int): int = (if side == 0: ETK[i] else: EFK[i])
       template dx: untyped = dxP[]
       var k = 0
       var lo = -span / 2
       for i in 0 .. all.len:
-        let held = i < all.len and kinds[all[i]] == Held
+        let held = i < all.len and kinds(all[i]) == Held
         if i < all.len and not held: continue
         # Free ends since the last held end occupy ids[k..k + size).
         var size = 0
         var j0 = i - 1
-        while j0 >= 0 and kinds[all[j0]] != Held:
+        while j0 >= 0 and kinds(all[j0]) != Held:
           inc size
           dec j0
         let hi = if held: dx[all[i]] - PORT_PITCH else: span / 2
@@ -1872,10 +1877,10 @@ proc reduceCrossings(g: Graph, nodes: seq[LNode]): (int, int) =
   let startCount = min(best, declared)
 
   proc sweep(down: bool, biasRight: bool) =
-    let startP = if down: addr g.predStart else: addr g.succStart
-    let listP = if down: addr g.predE else: addr g.succE
-    let otherP = if down: addr g.EF else: addr g.ET
-    let otherDxP = if down: addr g.EFD else: addr g.ETD
+    let startP = choose(down, g.predStart, g.succStart)
+    let listP = choose(down, g.predE, g.succE)
+    let otherP = choose(down, g.EF, g.ET)
+    let otherDxP = choose(down, g.EFD, g.ETD)
     template start: untyped = startP[]
     template list: untyped = listP[]
     template other: untyped = otherP[]
@@ -2101,11 +2106,11 @@ proc position(g: Graph, opt: LayeredOptions): seq[float] =
   for variant in 0 ..< 4:
     let up = variant < 2
     let right = (variant and 1) == 1
-    let startP = if up: addr g.predStart else: addr g.succStart
-    let listP = if up: addr g.predE else: addr g.succE
-    let otherP = if up: addr g.EF else: addr g.ET
-    let ownDxP = if up: addr g.ETD else: addr g.EFD
-    let otherDxP = if up: addr g.EFD else: addr g.ETD
+    let startP = choose(up, g.predStart, g.succStart)
+    let listP = choose(up, g.predE, g.succE)
+    let otherP = choose(up, g.EF, g.ET)
+    let ownDxP = choose(up, g.ETD, g.EFD)
+    let otherDxP = choose(up, g.EFD, g.ETD)
     template start: untyped = startP[]
     template list: untyped = listP[]
     template other: untyped = otherP[]

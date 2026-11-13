@@ -11,11 +11,13 @@
 ##     --seed:S          the seed of the generator (default 1)
 ##     --show:N          print at most N differences as ERROR lines (default 10)
 ##     --package:PATH    the oracle package (default reference/npm/package or $PELE_PACKAGE)
+##     --js              compare Pele with nimaki compiled to JavaScript (tools/jsrunner.nim, in
+##                       Node); records the run in docs/data/js.json instead of fuzz.json
 ##
 ## The last run of each type is summed up in docs/data/fuzz.json, which the pages read. Each
 ## failing case is written whole to build/fuzz/<type>-<seed>.jsonl, so it can be replayed.
-import std/[os, osproc, strutils, json, random, parseopt, options, sequtils]
-import common, verdict
+import std/[os, osproc, strutils, json, random, parseopt, options, sequtils, tables]
+import common, verdict, answers
 import nimaki
 
 type Gen = object
@@ -1652,6 +1654,187 @@ proc architectureSource(g: var Gen): string =
     else: result.add "  " & g.pick(["service", "group g in", "a:Q -- L:b", "align diagonal a b", "junction"])
     result.add(if g.chance(0.03): "\r\n" else: "\n")
 
+const
+  c4Headers = ["C4Context", "C4Container", "C4Component", "C4Dynamic", "C4Deployment"]
+  c4Shapes = ["Person", "Person_Ext", "System", "SystemDb", "SystemQueue", "System_Ext",
+    "SystemDb_Ext", "SystemQueue_Ext", "Container", "ContainerDb", "ContainerQueue",
+    "Container_Ext", "ContainerDb_Ext", "ContainerQueue_Ext", "Component", "ComponentDb",
+    "ComponentQueue", "Component_Ext", "ComponentDb_Ext", "ComponentQueue_Ext"]
+  c4Boundaries = ["Enterprise_Boundary", "System_Boundary", "Boundary", "Container_Boundary",
+    "Deployment_Node", "Node", "Node_L", "Node_R"]
+  c4Rels = ["Rel", "BiRel", "Rel_Up", "Rel_U", "Rel_Down", "Rel_D", "Rel_Left", "Rel_L",
+    "Rel_Right", "Rel_R", "Rel_Back", "RelIndex"]
+  c4Ids = ["a", "b", "web", "db", "api", "customer", "spa", "q", "global", "x1", "Ünï"]
+  c4Texts = ["Web App", "Uses", "Reads from", "JSON/HTTPS", "Java, Spring", "a b c", "",
+    "Ünïcödé", "日本語", "emoji 🎉", "x&amp;y", "#35; hash", "very long description that goes on and on and wraps",
+    "fa:fa-car", "<b>b</b>", "a\\nb", "semi; colon", "x#y"]
+  c4Keys = ["descr", "techn", "sprite", "tags", "link", "label", "type", "bgColor", "fontColor",
+    "borderColor", "shape", "offsetX", "offsetY", "textColor", "lineColor", "alias", "legendText", "nope"]
+  c4Values = ["red", "#ff8800", "rgba(0,0,0,0.2)", "person", "database", "queue", "pipe", "rounded",
+    "box", "cylinder", "db", "component", "tag1,queue", "https://example.com", "javascript:alert(1)",
+    "-40", "20", "abc", "3", "0", "x"]
+
+proc c4Attr(g: var Gen, ids: seq[string], last = false): string =
+  # An unquoted value runs to the next comma, through `)` and line breaks: rare in last place.
+  let r = if last and g.chance(0.95): g.rng.rand(0.6) else: g.rng.rand(1.0)
+  if r < 0.12: "$" & g.pick(c4Keys) & "=\"" & g.pick(c4Values) & "\""
+  elif r < 0.17: ""
+  elif r < 0.6: "\"" & g.pick(c4Texts) & "\""
+  elif r < 0.66: g.pick(c4Values)
+  elif r < 0.7: "\"" & g.pick(c4Values) & "\""
+  else: g.pick(c4Texts)
+
+proc c4Args(g: var Gen, first: string, count: int, ids: seq[string]): string =
+  result = "(" & first
+  for i in 0 ..< count: result.add (if g.chance(0.1): "," else: ", ") & g.c4Attr(ids, i == count - 1)
+  if g.chance(0.15) or (count == 0 and g.chance(0.9)):
+    result.add ", $" & g.pick(c4Keys) & "=\"" & g.pick(c4Values) & "\""
+  result.add(if g.chance(0.02): "" else: ")")
+
+proc c4Source(g: var Gen): string =
+  if g.chance(0.1): result.add "---\ntitle: " & g.pick(labels) & "\n---\n"
+  if g.chance(0.05): result.add "%% comment\n"
+  result.add(if g.chance(0.02): g.pick(["C4context", "C4", "c4Context"]) else: g.pick(c4Headers))
+  result.add "\n"
+  var ids: seq[string]
+  var depth = 0
+  proc id(g: var Gen): string =
+    if ids.len > 0 and g.chance(0.15): g.pick(ids)
+    else: g.pick(c4Ids) & (if g.chance(0.5): $g.rng.rand(1 .. 20) else: "")
+  var opened = false
+  for i in 0 ..< g.rng.rand((if g.chance(0.02): 0 else: 1) .. 14):
+    let indent = repeat("  ", depth)
+    # The first statement in a boundary is a shape, almost always.
+    let r = if opened and g.chance(0.97): g.rng.rand(0.39) else: g.rng.rand(1.0)
+    opened = false
+    if r < 0.4:
+      let alias = if g.chance(0.04): "$alias=\"" & g.pick(c4Ids) & "\"" else: g.id()
+      result.add indent & g.pick(c4Shapes) & g.c4Args(alias, g.rng.rand(0 .. 5), ids)
+      ids.add alias
+    elif r < 0.55 and depth < 4:
+      let alias = g.id()
+      result.add indent & g.pick(c4Boundaries) & g.c4Args(alias, g.rng.rand(0 .. 4), ids)
+      let r2 = g.rng.rand(1.0)
+      result.add(if r2 < 0.85: "{" elif r2 < 0.97: "\n" & indent & "{" else: " {")
+      ids.add alias
+      inc depth
+      opened = true
+    elif r < 0.62 and depth > 0:
+      dec depth
+      result.add repeat("  ", depth) & "}"
+    elif r < 0.84 and ids.len > 0:
+      let rel = g.pick(c4Rels)
+      var args = "(" & (if rel == "RelIndex": $g.rng.rand(1 .. 9) & ", " else: "") & g.pick(ids) & ", " &
+        (if g.chance(0.98): g.pick(ids) else: "nope")
+      let count = g.rng.rand((if g.chance(0.95): 1 else: 0) .. 4)
+      for k in 0 ..< count: args.add ", " & g.c4Attr(ids, k == count - 1)
+      if g.chance(0.1) or (count == 0 and g.chance(0.9)): args.add ", $" & g.pick(c4Keys) & "=\"" & g.pick(c4Values) & "\""
+      result.add indent & rel & args & ")"
+    elif r < 0.875 and ids.len > 0:
+      result.add indent & "UpdateElementStyle(" & g.pick(ids)
+      for k in 0 ..< g.rng.rand(1 .. 3):
+        result.add ", $" & g.pick(["bgColor", "fontColor", "borderColor", "shape", "sprite", "techn", "legendText"]) &
+          "=\"" & g.pick(c4Values) & "\""
+      result.add ")"
+    elif r < 0.9 and ids.len > 1:
+      result.add indent & "UpdateRelStyle(" & g.pick(ids) & ", " & g.pick(ids)
+      for k in 0 ..< g.rng.rand(1 .. 3):
+        result.add ", $" & g.pick(["textColor", "lineColor", "offsetX", "offsetY"]) & "=\"" & g.pick(c4Values) & "\""
+      result.add ")"
+    elif r < 0.91:
+      result.add indent & "UpdateLayoutConfig(" &
+        (if g.chance(0.5): "$c4ShapeInRow=\"" & g.pick(["1", "2", "3", "6", "0", "x"]) & "\""
+         else: g.pick(["1", "2", "3"])) &
+        (if g.chance(0.5): ", $c4BoundaryInRow=\"" & g.pick(["1", "2", "3", "0"]) & "\"" else: "") & ")"
+    elif r < 0.93: result.add indent & "title " & g.pick(labels)
+    elif r < 0.94: result.add indent & "accTitle: " & g.pick(labels)
+    elif r < 0.95: result.add indent & "accDescr: " & g.pick(labels)
+    elif r < 0.955: result.add indent & "accDescr {\n  " & g.pick(labels) & "\n  more\n}"
+    elif r < 0.96: result.add indent & "direction " & g.pick(["TB", "LR", "BT", "RL"])
+    elif r < 0.975: result.add indent & "%% " & g.pick(labels)
+    elif r < 0.993: result.add ""
+    else: result.add indent & g.pick(["Person", "Rel(a)", "System(a, \"b\"", "}", "Foo(a)", "title"])
+    result.add(if g.chance(0.03): "\r\n" else: "\n")
+  while depth > 0 and g.chance(0.95):
+    dec depth
+    result.add repeat("  ", depth) & "}\n"
+
+const
+  blockIds = ["a", "b", "c", "db", "id1", "root", "x", "Ünï", "blockArrowId", "B2", "e"]
+  blockShapes = [("[", "]"), ("(", ")"), ("((", "))"), (">", "]"), ("{", "}"), ("{{", "}}"),
+    ("([", "])"), ("[[", "]]"), ("[(", ")]"), ("(((", ")))"), ("[/", "/]"), ("[\\", "\\]"),
+    ("[/", "\\]"), ("[\\", "/]")]
+  blockLinks = ["-->", "---", "==>", "-.->", "--x", "--o", "<-->", "x--x", "o--o", "===", "-.-", "...->"]
+  blockDirs = ["right", "left", "up", "down", "x", "y", " up ", "right, down"]
+  blockStyles = ["fill:#969", "stroke:#333,stroke-width:4px", "fill:#f9f,color:red", "font-weight:bold",
+    "fill:none", "color:#fff;fill:#000", "stroke-dasharray: 5 5", "font-size:20px", "font-style:italic"]
+
+proc blockSource(g: var Gen): string =
+  if g.chance(0.1): result.add "---\ntitle: " & g.pick(labels) & "\n" &
+    (if g.chance(0.5): "config:\n  block:\n    padding: " & g.pick(["0", "4", "30", "300", "x"]) & "\n" else: "") & "---\n"
+  if g.chance(0.05): result.add "%% comment\n"
+  result.add(if g.chance(0.02): g.pick(["blocks", "Block", "block-betax"]) elif g.chance(0.5): "block" else: "block-beta")
+  result.add "\n"
+  var ids: seq[string]
+  var depth = 0
+  var opened = false
+  proc id(g: var Gen): string =
+    if ids.len > 0 and g.chance(0.3): g.pick(ids)
+    else: g.pick(blockIds) & (if g.chance(0.5): $g.rng.rand(1 .. 30) else: "")
+  proc node(g: var Gen): string =
+    let name = g.id()
+    ids.add name
+    let r = g.rng.rand(1.0)
+    if r < 0.45: name
+    elif r < 0.9:
+      let (a, b) = g.pick(blockShapes)
+      name & a & "\"" & g.pick(labels) & "\"" & b
+    else:
+      var dirs = g.pick(blockDirs)
+      if g.chance(0.2): dirs.add ", " & g.pick(blockDirs)
+      name & "<[\"" & g.pick(labels) & "\"]>(" & dirs & ")"
+  for i in 0 ..< g.rng.rand((if g.chance(0.03): 0 else: 1) .. 16):
+    let indent = repeat("  ", depth + 1)
+    let r = if opened and g.chance(0.95): g.rng.rand(0.44) else: g.rng.rand(1.0)
+    opened = false
+    if r < 0.45:
+      var line = g.node()
+      if g.chance(0.15): line.add ":" & $g.rng.rand(1 .. 4)
+      for k in 0 ..< (if g.chance(0.3): g.rng.rand(1 .. 3) else: 0):
+        if g.chance(0.25): line.add " -- \"" & g.pick(labels) & "\" " & g.pick(["-->", "---", "==>"]) & " "
+        else: line.add " " & g.pick(blockLinks) & " "
+        line.add g.node()
+      if g.chance(0.2):
+        line.add " " & g.node()
+      result.add indent & line
+    elif r < 0.55 and depth < 4:
+      result.add indent & (if g.chance(0.6): "block" else: "block:" & g.node())
+      inc depth
+      opened = true
+    elif r < 0.65 and depth > 0:
+      dec depth
+      result.add repeat("  ", depth + 1) & "end"
+    elif r < 0.72: result.add indent & "columns " & g.pick(["1", "2", "3", "4", "auto", "0", "10"])
+    elif r < 0.78: result.add indent & (if g.chance(0.5): "space" else: "space:" & $g.rng.rand(1 .. 4))
+    elif r < 0.82: result.add indent & "classDef " & g.pick(["hot", "cold", "default"]) & " " & g.pick(blockStyles)
+    elif r < 0.86 and ids.len > 0:
+      result.add indent & "class " & g.pick(ids) & (if g.chance(0.3): "," & g.pick(ids) else: "") & " " &
+        g.pick(["hot", "cold", "nope"])
+    elif r < 0.9 and ids.len > 0:
+      result.add indent & "style " & g.pick(ids) & " " & g.pick(blockStyles)
+    elif r < 0.92 and ids.len > 1:
+      result.add indent & g.pick(ids) & " " & g.pick(blockLinks) & " " & g.pick(ids)
+    elif r >= 0.92 and r < 0.933: result.add indent & "accTitle: " & g.pick(labels)
+    elif r >= 0.933 and r < 0.936: result.add indent & "accDescr: " & g.pick(labels)
+    elif r >= 0.936 and r < 0.96: result.add indent & "%% " & g.pick(labels)
+    elif r >= 0.96 and r < 0.99: result.add ""
+    elif r >= 0.99: result.add indent & g.pick(["a[\"x\"", "end", "columns", "block:", "a --> ", "x(\"y\"]", "space:-1"])
+    else: result.add indent & g.node()
+    result.add(if g.chance(0.03): "\r\n" else: "\n")
+  if opened and g.chance(0.95): result.add repeat("  ", depth + 1) & g.node() & "\n"
+  while depth > 0 and g.chance(0.98):
+    dec depth
+    result.add repeat("  ", depth + 1) & "end\n"
 
 proc options(g: var Gen): JsonNode =
   result = newJObject()
@@ -1665,34 +1848,13 @@ proc options(g: var Gen): JsonNode =
   if g.chance(0.05): result["monospace"] = %[g.pick(["files", "members", "attributes", "messages"])]
   if g.chance(0.05): result["fontFamily"] = %g.pick(["Inter", "\"Fira Sans\", sans-serif", "bad;font", "Times New Roman"])
 
-proc toOptions(j: JsonNode): RenderOptions =
-  if j.hasKey("fontSize"): result.fontSize = some(j["fontSize"].getFloat)
-  if j.hasKey("padding"): result.padding = some(j["padding"].getFloat)
-  if j.hasKey("maxWidth"): result.maxWidth = some(j["maxWidth"].getFloat)
-  if j.hasKey("idPrefix"): result.idPrefix = some(j["idPrefix"].getStr)
-  if j.hasKey("responsive"): result.responsive = some(j["responsive"].getBool)
-  if j.hasKey("fontFamily"): result.fontFamily = j["fontFamily"].getStr
-  if j.hasKey("autoDirection"): result.autoDirection = some(j["autoDirection"].getBool)
-  if j.hasKey("directionBreakpoint"): result.directionBreakpoint = some(j["directionBreakpoint"].getFloat)
-  if j.hasKey("monospace"):
-    for m in j["monospace"]: result.monospace.add m.getStr
-  if j.hasKey("now"): result.now = j["now"].getFloat
-
-proc nimakiAnswer(source: string, options: JsonNode): Answer =
-  try:
-    let r = render(source, toOptions(options))
-    Answer(ok: true, svg: r.svg)
-  except PeleError as e:
-    Answer(ok: false, code: e.code, message: e.msg)
-  except CatchableError as e:
-    Answer(ok: false, code: "internal", message: e.msg)
-
 proc main() =
   var kind = ""
   var count = 1000
   var seed = 1
   var show = 10
   var packageArg = ""
+  var js = false
   for k, key, val in getopt():
     case k
     of cmdLongOption, cmdShortOption:
@@ -1701,10 +1863,11 @@ proc main() =
       of "seed": seed = parseInt(val)
       of "show": show = parseInt(val)
       of "package": packageArg = val
+      of "js": js = true
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad", "gantt", "wardley", "architecture", "agentflow", "mindmap", "kanban", "eventmodeling"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad, gantt, wardley, architecture, agentflow, mindmap, kanban, eventmodeling", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad", "gantt", "wardley", "architecture", "c4", "block", "agentflow", "mindmap", "kanban", "eventmodeling"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad, gantt, wardley, architecture, c4, block, agentflow, mindmap, kanban, eventmodeling", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -1729,6 +1892,8 @@ proc main() =
                                                           of "gantt": g.ganttSource()
                                                           of "wardley": g.wardleySource()
                                                           of "architecture": g.architectureSource()
+                                                          of "c4": g.c4Source()
+                                                          of "block": g.blockSource()
                                                           of "radar": g.radarSource()
                                                           of "treemap": g.treemapSource()
                                                           of "er": g.erSource()
@@ -1749,17 +1914,18 @@ proc main() =
   if execShellCmd("TZ=UTC node " & quoteShell(repoDir / "tools" / "oracle.mjs") & " " &
                   quoteShell(packageDir) & " < " & quoteShell(inPath) & " > " & quoteShell(outPath)) != 0:
     quit "ERROR the oracle failed", 2
-  var answers: seq[JsonNode]
+  var peles: seq[JsonNode]
   for line in lines(outPath):
-    if line.len > 0: answers.add parseJson(line)
+    if line.len > 0: peles.add parseJson(line)
+  let fromJs = if js: jsAnswers(cases, "fuzz-" & kind & "-" & $seed) else: initTable[string, Answer]()
   var identical, different, shown, rendered = 0
   var failing = ""
   for i, c in cases:
-    let a = answers[i]
+    let a = peles[i]
     let want = if a["ok"].getBool: Answer(ok: true, svg: a["svg"].getStr)
                else: Answer(ok: false, code: a["code"].getStr, message: a["message"].getStr)
     if want.ok: inc rendered
-    let got = nimakiAnswer(c["source"].getStr, c["options"])
+    let got = if js: fromJs[c["id"].getStr] else: nimakiAnswer(c["source"].getStr, c["options"])
     let o = compare(c["id"].getStr, kind, want, got)
     if o.verdict == vIdentical: inc identical
     else:
@@ -1770,13 +1936,15 @@ proc main() =
         inc shown
   let failPath = dir / (kind & "-" & $seed & ".jsonl")
   writeFile failPath, failing
-  # the summary the pages show: the last run of each type
+  # the summary the pages show: the last run of each type (of the C build)
   let dataPath = dataDir / "fuzz.json"
   var data = if fileExists(dataPath): parseFile(dataPath) else: %*{"about": "Written by tools/fuzz.nim: the last run for each diagram type. Do not edit by hand.", "types": {}}
   data["types"][kind] = %*{"seed": seed, "cases": cases.len, "identical": identical, "different": different,
                            "rendered": rendered, "errors": cases.len - rendered}
-  writeFile dataPath, data.pretty & "\n"
-  echo "fuzz: ", kind, ", seed ", seed, ", ", cases.len, " cases: ", identical, " identical, ",
+  if js:
+    updateJsData("fuzz", kind, %*{"seed": seed, "cases": cases.len, "identical": identical, "different": different})
+  else: writeFile dataPath, data.pretty & "\n"
+  echo "fuzz: ", kind, (if js: " in JavaScript" else: ""), ", seed ", seed, ", ", cases.len, " cases: ", identical, " identical, ",
     different, " different", (if different > 0: " (" & failPath & ")" else: "")
   if different > 0: quit 1
 

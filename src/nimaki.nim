@@ -19,6 +19,8 @@ import nimaki/diagrams/ishikawa/index as ishikawaIndex
 import nimaki/diagrams/cynefin/index as cynefinIndex
 import nimaki/diagrams/wardley/index as wardleyIndex
 import nimaki/diagrams/architecture/index as architectureIndex
+import nimaki/diagrams/c4/index as c4Index
+import "nimaki/diagrams/block/index" as blockIndex
 import nimaki/diagrams/radar/index as radarIndex
 import nimaki/diagrams/treemap/index as treemapIndex
 import nimaki/diagrams/treeview/index as treeviewIndex
@@ -49,6 +51,8 @@ register(ishikawaIndex.ishikawa)
 register(cynefinIndex.cynefin)
 register(wardleyIndex.wardley)
 register(architectureIndex.architecture)
+register(c4Index.c4)
+register(blockIndex.blockDiagram)
 register(radarIndex.radar)
 register(treemapIndex.treemap)
 register(treeviewIndex.treeView)

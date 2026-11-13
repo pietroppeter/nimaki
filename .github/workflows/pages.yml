@@ -80,6 +80,10 @@ jobs:
       - name: Difftest
         run: nim r tools/difftest.nim --check-done --show:30
 
+      # The same renderer compiled to JavaScript (nim js), run in Node, against the same oracle
+      - name: Difftest of the JavaScript build
+        run: nim r tools/difftest.nim --js --check-done --show:30
+
       # Differential fuzzing: inputs generated from each ported type's grammar, against Pele
       - name: Fuzz
         run: |
@@ -95,6 +99,8 @@ jobs:
           nim r tools/fuzz.nim cynefin --cases:5000
           nim r tools/fuzz.nim wardley --cases:5000
           nim r tools/fuzz.nim architecture --cases:5000
+          nim r tools/fuzz.nim c4 --cases:5000
+          nim r tools/fuzz.nim block --cases:5000
           nim r tools/fuzz.nim swimlane --cases:5000
           nim r tools/fuzz.nim class --cases:5000
           nim r tools/fuzz.nim er --cases:5000
