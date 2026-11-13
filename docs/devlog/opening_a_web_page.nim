@@ -163,8 +163,9 @@ for name, text in diagrams:
 doAssert wide == @["tcp-states", "path"], "the text says which drawings stay wide: " & $wide
 let crossingSvg = render(crossing).svg
 var unported = ""
-try: discard render("mindmap\n  root\n    a branch\n")
+try: discard render("sankey-beta\nDNS,TCP,1\n")
 except PeleError as e: unported = e.msg
+doAssert unported.len > 0, "sankey is ported now: pick another unported type for the example"
 
 proc show(name, caption: string) =
   ## A diagram of the page, then its Mermaid text, folded.
@@ -360,7 +361,7 @@ nbText: &"""
   {drawn["tcp-states"].width.int} pixels wide at any `maxWidth` (the layered layout places its
   boxes and does not wrap them), and the architecture {drawn["path"].width.int} (its grid of
   services). Worth knowing for diagrammari, whose readers are on phones too.
-- **An unported type fails loudly.** At the time of writing, asking for a mindmap gives
+- **An unported type fails loudly.** At the time of writing, asking for a sankey diagram gives
   *{unported}* That is the right behaviour, and the message is clear enough to show a user.
 - **Gantt charts read the clock.** A gantt chart marks today, so a page that draws one must pass a
   fixed `now`, or a chart whose dates include today changes from one build to the next. This one
