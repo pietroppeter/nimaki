@@ -28,6 +28,7 @@ import devlog/radar_treemap_treeview
 import devlog/states_and_regions
 import devlog/the_diagram_family
 import devlog/the_referee
+import devlog/the_shape_of_the_port
 import devlog/three_small_diagrams
 import devlog/timeline
 import devlog/what_mermaid_is
