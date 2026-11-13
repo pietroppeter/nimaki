@@ -6,6 +6,7 @@
 #   reference/fetch.sh            source and package
 #   reference/fetch.sh source     only the source checkout   -> reference/pele/
 #   reference/fetch.sh package    only the npm package       -> reference/npm/package/
+#   reference/fetch.sh diagrammari  the pinned diagrammari (not in "all") -> reference/diagrammari/
 set -euo pipefail
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck disable=SC1091
@@ -32,4 +33,16 @@ if [[ "$what" == all || "$what" == package ]]; then
     tar -xzf "$here/npm/$tarball" -C "$here/npm"
   fi
   echo "package: $here/npm/package ($NPM)"
+fi
+
+# diagrammari, only on request: its Mermaid text is the second corpus (tools/corpus_diagrammari.nim)
+if [[ "$what" == diagrammari ]]; then
+  dREPO="$(grep -E '^REPO=' "$here/DIAGRAMMARI" | cut -d= -f2-)"
+  dCOMMIT="$(grep -E '^COMMIT=' "$here/DIAGRAMMARI" | cut -d= -f2-)"
+  if [[ "$(git -C "$here/diagrammari" rev-parse HEAD 2>/dev/null || true)" != "$dCOMMIT" ]]; then
+    rm -rf "$here/diagrammari" && git init --quiet "$here/diagrammari"
+    git -C "$here/diagrammari" fetch --quiet --depth 1 "$dREPO" "$dCOMMIT"
+    git -c advice.detachedHead=false -C "$here/diagrammari" checkout --quiet FETCH_HEAD
+  fi
+  echo "diagrammari: $here/diagrammari at $dCOMMIT"
 fi

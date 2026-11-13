@@ -1,10 +1,16 @@
 {
-  "about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand.",
+  "about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand. `cases` and the counts beside it are Pele's corpus; `diagrammari` counts diagrammari's.",
   "pin": "1.13.0",
   "cases": 2118,
   "identical": 1639,
   "different": 0,
   "unsupported": 479,
+  "diagrammari": {
+    "cases": 34,
+    "identical": 30,
+    "different": 0,
+    "unsupported": 4
+  },
   "types": [
     {
       "type": "agentflow",
@@ -60,7 +66,13 @@
       "cases": 142,
       "identical": 142,
       "different": 0,
-      "unsupported": 0
+      "unsupported": 0,
+      "diagrammari": {
+        "cases": 1,
+        "identical": 1,
+        "different": 0,
+        "unsupported": 0
+      }
     },
     {
       "type": "eventmodeling",
@@ -76,7 +88,13 @@
       "cases": 383,
       "identical": 383,
       "different": 0,
-      "unsupported": 0
+      "unsupported": 0,
+      "diagrammari": {
+        "cases": 14,
+        "identical": 14,
+        "different": 0,
+        "unsupported": 0
+      }
     },
     {
       "type": "gantt",
@@ -84,7 +102,13 @@
       "cases": 25,
       "identical": 25,
       "different": 0,
-      "unsupported": 0
+      "unsupported": 0,
+      "diagrammari": {
+        "cases": 1,
+        "identical": 1,
+        "different": 0,
+        "unsupported": 0
+      }
     },
     {
       "type": "gitGraph",
@@ -108,7 +132,13 @@
       "cases": 4,
       "identical": 4,
       "different": 0,
-      "unsupported": 0
+      "unsupported": 0,
+      "diagrammari": {
+        "cases": 1,
+        "identical": 1,
+        "different": 0,
+        "unsupported": 0
+      }
     },
     {
       "type": "journey",
@@ -132,7 +162,13 @@
       "cases": 39,
       "identical": 0,
       "different": 0,
-      "unsupported": 39
+      "unsupported": 39,
+      "diagrammari": {
+        "cases": 2,
+        "identical": 0,
+        "different": 0,
+        "unsupported": 2
+      }
     },
     {
       "type": "packet",
@@ -148,7 +184,13 @@
       "cases": 16,
       "identical": 16,
       "different": 0,
-      "unsupported": 0
+      "unsupported": 0,
+      "diagrammari": {
+        "cases": 4,
+        "identical": 4,
+        "different": 0,
+        "unsupported": 0
+      }
     },
     {
       "type": "quadrantChart",
@@ -172,7 +214,13 @@
       "cases": 91,
       "identical": 91,
       "different": 0,
-      "unsupported": 0
+      "unsupported": 0,
+      "diagrammari": {
+        "cases": 1,
+        "identical": 1,
+        "different": 0,
+        "unsupported": 0
+      }
     },
     {
       "type": "requirement",
@@ -188,7 +236,13 @@
       "cases": 14,
       "identical": 0,
       "different": 0,
-      "unsupported": 14
+      "unsupported": 14,
+      "diagrammari": {
+        "cases": 1,
+        "identical": 0,
+        "different": 0,
+        "unsupported": 1
+      }
     },
     {
       "type": "sequence",
@@ -196,7 +250,13 @@
       "cases": 186,
       "identical": 186,
       "different": 0,
-      "unsupported": 0
+      "unsupported": 0,
+      "diagrammari": {
+        "cases": 5,
+        "identical": 5,
+        "different": 0,
+        "unsupported": 0
+      }
     },
     {
       "type": "state",
@@ -204,7 +264,13 @@
       "cases": 119,
       "identical": 119,
       "different": 0,
-      "unsupported": 0
+      "unsupported": 0,
+      "diagrammari": {
+        "cases": 1,
+        "identical": 1,
+        "different": 0,
+        "unsupported": 0
+      }
     },
     {
       "type": "swimlane",
@@ -220,7 +286,13 @@
       "cases": 24,
       "identical": 24,
       "different": 0,
-      "unsupported": 0
+      "unsupported": 0,
+      "diagrammari": {
+        "cases": 2,
+        "identical": 2,
+        "different": 0,
+        "unsupported": 0
+      }
     },
     {
       "type": "treeView",
@@ -252,7 +324,13 @@
       "cases": 25,
       "identical": 0,
       "different": 0,
-      "unsupported": 25
+      "unsupported": 25,
+      "diagrammari": {
+        "cases": 1,
+        "identical": 0,
+        "different": 0,
+        "unsupported": 1
+      }
     },
     {
       "type": "wardley",

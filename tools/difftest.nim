@@ -11,11 +11,15 @@
 ##     --self-test       prove the referee can fail: compare Pele with itself (all identical), then
 ##                       with itself with one byte changed (all different)
 ##     --package:PATH    the oracle package (default reference/npm/package or $PELE_PACKAGE)
+##     --corpus:NAME     only one corpus: `pele` or `diagrammari` (default both)
 ##
 ## A case is identical when both sides draw the same bytes, or both throw the same error code with
 ## the same message. `unsupported` is what nimaki raises for a type it does not draw yet. Both
 ## sides get `now` = 2026-01-01T00:00:00Z, and the oracle runs with TZ=UTC: gantt reads both.
-## The inputs are corpus/cases.json (built by tools/corpus.mjs from Pele at the pin). The oracle's
+## The inputs are corpus/cases.json (built by tools/corpus.mjs from Pele at the pin) and
+## corpus/diagrammari.json (the Mermaid text of diagrammari, tools/corpus_diagrammari.nim). The
+## summary counts the two apart: a type's `cases` are Pele's, its `diagrammari` are the others,
+## and --check-done wants both identical. The oracle's
 ## answers are cached in build/oracle/; the full report is build/difftest/report.json, and a run
 ## over the whole corpus writes the summary the pages show, docs/data/difftest.json.
 import std/[os, osproc, strutils, json, tables, algorithm, parseopt, hashes, random, sets]
@@ -25,19 +29,28 @@ import nimaki
 const
   fixedNow = 1767225600000.0                 ## 2026-01-01T00:00:00Z
   casesPath = repoDir / "corpus" / "cases.json"
+  diagrammariPath = repoDir / "corpus" / "diagrammari.json"
   coverageNames = {"gitGraph": "git", "quadrantChart": "quadrant", "treeView": "treeview"}.toTable
     ## Pele's type names where the coverage map (Pele's folder names) differs
 
 type
   Case = object
     id, diagramType, source: string
+    corpus: string   ## `pele` or `diagrammari`
 
 func coverageName*(peleType: string): string = coverageNames.getOrDefault(peleType, peleType)
 
 proc loadCases(): seq[Case] =
   if not fileExists(casesPath): quit "ERROR no corpus at " & casesPath & " (run: node tools/corpus.mjs)", 2
-  for c in parseFile(casesPath)["cases"]:
-    result.add Case(id: c["id"].getStr, diagramType: c["type"].getStr, source: c["source"].getStr)
+  for (corpus, path) in [("pele", casesPath), ("diagrammari", diagrammariPath)]:
+    if not fileExists(path): continue
+    for c in parseFile(path)["cases"]:
+      result.add Case(id: c["id"].getStr, diagramType: c["type"].getStr, source: c["source"].getStr, corpus: corpus)
+
+proc corpusText(): string =
+  ## The inputs, for the oracle's cache key.
+  result = readFile(casesPath)
+  if fileExists(diagrammariPath): result.add readFile(diagrammariPath)
 
 proc toAnswer(j: JsonNode): Answer =
   if j["ok"].getBool: Answer(ok: true, svg: j["svg"].getStr)
@@ -45,7 +58,7 @@ proc toAnswer(j: JsonNode): Answer =
 
 proc oracle(cases: seq[Case], packageDir: string): Table[string, Answer] =
   ## Pele's answers for every case, from the cache when the corpus, the package and `now` match.
-  let key = $hash(readFile(casesPath) & readFile(packageDir / "dist" / "pele.js") & $fixedNow)
+  let key = $hash(corpusText() & readFile(packageDir / "dist" / "pele.js") & $fixedNow)
   let dir = buildDir / "oracle"
   let cached = dir / ("answers-" & key.replace("-", "m") & ".jsonl")
   if not fileExists(cached):
@@ -90,6 +103,7 @@ proc main() =
   var seed = 1
   var show = 10
   var strict, checkDone, selfTest = false
+  var onlyCorpus = ""
   for kind, key, val in getopt():
     case kind
     of cmdLongOption, cmdShortOption:
@@ -101,6 +115,9 @@ proc main() =
       of "strict": strict = true
       of "check-done": checkDone = true
       of "self-test": selfTest = true
+      of "corpus":
+        if val notin ["pele", "diagrammari"]: quit "ERROR --corpus is pele or diagrammari, not " & val, 2
+        onlyCorpus = val
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: only.add key
     of cmdEnd: discard
@@ -111,6 +128,7 @@ proc main() =
   var cases: seq[Case]
   var rng = initRand(seed)
   for c in all:
+    if onlyCorpus.len > 0 and c.corpus != onlyCorpus: continue
     if only.len > 0 and c.diagramType notin only and c.diagramType.coverageName notin only: continue
     if fast < 100 and rng.rand(99) >= fast: continue
     if c.id notin answers: quit "ERROR the oracle has no answer for " & c.id & " (delete build/oracle/ and rerun)", 2
@@ -135,13 +153,15 @@ proc main() =
     outcomes.add compare(c.id, c.diagramType, answers[c.id], nimakiAnswer(c))
 
   type Tally = array[Verdict, int]
-  var byType: OrderedTable[string, Tally]
+  func count(t: Tally): int = t[vIdentical] + t[vDifferent] + t[vUnsupported]
+  func toJson(t: Tally): JsonNode =
+    %*{"cases": t.count, "identical": t[vIdentical], "different": t[vDifferent], "unsupported": t[vUnsupported]}
+  var byType, byTypeD: OrderedTable[string, Tally]   # Pele's corpus, diagrammari's
   var types: seq[string]
-  for o in outcomes:
-    if o.diagramType notin byType:
-      byType[o.diagramType] = default(Tally)
-      types.add o.diagramType
-  for o in outcomes: inc byType[o.diagramType][o.verdict]
+  for i, o in outcomes:
+    if o.diagramType notin types: types.add o.diagramType
+    if cases[i].corpus == "pele": inc byType.mgetOrPut(o.diagramType, default(Tally))[o.verdict]
+    else: inc byTypeD.mgetOrPut(o.diagramType, default(Tally))[o.verdict]
   types.sort
 
   var shown = 0
@@ -157,40 +177,54 @@ proc main() =
   let done = doneTypes()
   var regressions: seq[string]
   for t in types:
-    let tally = byType[t]
-    if t.coverageName in done and tally[vIdentical] != tally[vIdentical] + tally[vDifferent] + tally[vUnsupported]:
+    var tally: Tally
+    for v in Verdict: tally[v] = byType.getOrDefault(t)[v] + byTypeD.getOrDefault(t)[v]
+    if t.coverageName in done and tally[vIdentical] != tally.count:
       regressions.add t
       echo "ERROR ", t, " is done on the coverage map, but only ", tally[vIdentical], " of ",
-        tally[vIdentical] + tally[vDifferent] + tally[vUnsupported], " cases are identical"
+        tally.count, " cases are identical"
 
   # the report, and on a full run the summary the pages show
   createDir buildDir / "difftest"
   var report = newJArray()
-  for o in outcomes:
-    report.add %*{"id": o.id, "type": o.diagramType, "verdict": $o.verdict, "detail": o.detail}
+  for i, o in outcomes:
+    report.add %*{"id": o.id, "type": o.diagramType, "corpus": cases[i].corpus, "verdict": $o.verdict, "detail": o.detail}
   writeFile buildDir / "difftest" / "report.json", report.pretty & "\n"
-  var total: Tally
+  var total, totalD: Tally
   var rows = newJArray()
   for t in types:
-    let tally = byType[t]
-    for v in Verdict: total[v] += tally[v]
-    rows.add %*{"type": t, "coverage": t.coverageName, "cases": tally[vIdentical] + tally[vDifferent] + tally[vUnsupported],
-                "identical": tally[vIdentical], "different": tally[vDifferent], "unsupported": tally[vUnsupported]}
-  if only.len == 0 and fast == 100:
-    writeFile dataDir / "difftest.json", (%*{"about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand.",
-      "pin": pinOf(packageDir), "cases": outcomes.len, "identical": total[vIdentical], "different": total[vDifferent],
-      "unsupported": total[vUnsupported], "types": rows}).pretty & "\n"
+    let tally = byType.getOrDefault(t)
+    let tallyD = byTypeD.getOrDefault(t)
+    for v in Verdict:
+      total[v] += tally[v]
+      totalD[v] += tallyD[v]
+    var row = %*{"type": t, "coverage": t.coverageName}
+    for k, v in tally.toJson: row[k] = v
+    if tallyD.count > 0: row["diagrammari"] = tallyD.toJson
+    rows.add row
+  if only.len == 0 and fast == 100 and onlyCorpus.len == 0:
+    var summary = %*{"about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand. " &
+      "`cases` and the counts beside it are Pele's corpus; `diagrammari` counts diagrammari's.",
+      "pin": pinOf(packageDir)}
+    for k, v in total.toJson: summary[k] = v
+    summary["diagrammari"] = totalD.toJson
+    summary["types"] = rows
+    writeFile dataDir / "difftest.json", summary.pretty & "\n"
 
   for t in types:
-    let tally = byType[t]
+    var tally: Tally
+    for v in Verdict: tally[v] = byType.getOrDefault(t)[v] + byTypeD.getOrDefault(t)[v]
     if tally[vIdentical] + tally[vDifferent] > 0:
       echo "  ", t.alignLeft(14), align($tally[vIdentical], 5), " identical", align($tally[vDifferent], 5), " different",
         align($tally[vUnsupported], 5), " unsupported"
+  var sum: Tally
+  for v in Verdict: sum[v] = total[v] + totalD[v]
   echo "difftest: pele ", pinOf(packageDir), ", ", outcomes.len, " cases of ", types.len, " types",
+    (if totalD.count > 0: " (" & $totalD.count & " of them diagrammari's)" else: ""),
     (if fast < 100: " (sample of " & $fast & "%, seed " & $seed & ")" else: ""), ": ",
-    total[vIdentical], " identical, ", total[vDifferent], " different, ", total[vUnsupported], " unsupported"
+    sum[vIdentical], " identical, ", sum[vDifferent], " different, ", sum[vUnsupported], " unsupported"
   if regressions.len > 0 and checkDone: quit 1
-  if strict and total[vIdentical] != outcomes.len: quit 1
+  if strict and sum[vIdentical] != outcomes.len: quit 1
 
 when isMainModule:
   main()
