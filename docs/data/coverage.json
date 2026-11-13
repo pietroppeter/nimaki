@@ -601,19 +601,19 @@
       "corpus": 6,
       "parse": {
         "code": 910,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 695,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 283,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/c4/",
+      "post": "boxes-in-boxes",
+      "notes": "Identical to Pele on the 56 corpus and compat cases and on 5,000 generated inputs in CI (tools/fuzz.nim c4); 9,000 more on seeds 2 to 4 before merging."
     },
     {
       "id": "gantt",
@@ -643,19 +643,19 @@
       "corpus": 30,
       "parse": {
         "code": 991,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 121,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 845,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/block/",
+      "post": "boxes-in-boxes",
+      "notes": "Identical to Pele on the 71 corpus and compat cases and on 5,000 generated inputs in CI (tools/fuzz.nim block); 9,000 more on seeds 2 to 4 before merging."
     },
     {
       "id": "state",

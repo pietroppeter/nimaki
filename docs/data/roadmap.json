@@ -555,9 +555,9 @@
           "what": "src/diagrams/c4: 1888 lines of TypeScript, 6 corpus cases.",
           "done_when": "difftest: every c4 case identical.",
           "owner": "Port sequence diagrams",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "boxes-in-boxes",
+          "pr": "37"
         },
         {
           "id": "gantt",
@@ -577,9 +577,9 @@
           "what": "src/diagrams/block: 1957 lines of TypeScript, 30 corpus cases.",
           "done_when": "difftest: every block case identical.",
           "owner": "Port sequence diagrams",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "boxes-in-boxes",
+          "pr": "37"
         },
         {
           "id": "state",

@@ -2,9 +2,9 @@
   "about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand. `cases` and the counts beside it are Pele's corpus; `diagrammari` counts diagrammari's.",
   "pin": "1.13.0",
   "cases": 2118,
-  "identical": 1750,
+  "identical": 1877,
   "different": 0,
-  "unsupported": 368,
+  "unsupported": 241,
   "diagrammari": {
     "cases": 34,
     "identical": 30,
@@ -32,17 +32,17 @@
       "type": "block",
       "coverage": "block",
       "cases": 71,
-      "identical": 0,
+      "identical": 71,
       "different": 0,
-      "unsupported": 71
+      "unsupported": 0
     },
     {
       "type": "c4",
       "coverage": "c4",
       "cases": 56,
-      "identical": 0,
+      "identical": 56,
       "different": 0,
-      "unsupported": 56
+      "unsupported": 0
     },
     {
       "type": "class",

@@ -1546,6 +1546,187 @@ proc architectureSource(g: var Gen): string =
     else: result.add "  " & g.pick(["service", "group g in", "a:Q -- L:b", "align diagonal a b", "junction"])
     result.add(if g.chance(0.03): "\r\n" else: "\n")
 
+const
+  c4Headers = ["C4Context", "C4Container", "C4Component", "C4Dynamic", "C4Deployment"]
+  c4Shapes = ["Person", "Person_Ext", "System", "SystemDb", "SystemQueue", "System_Ext",
+    "SystemDb_Ext", "SystemQueue_Ext", "Container", "ContainerDb", "ContainerQueue",
+    "Container_Ext", "ContainerDb_Ext", "ContainerQueue_Ext", "Component", "ComponentDb",
+    "ComponentQueue", "Component_Ext", "ComponentDb_Ext", "ComponentQueue_Ext"]
+  c4Boundaries = ["Enterprise_Boundary", "System_Boundary", "Boundary", "Container_Boundary",
+    "Deployment_Node", "Node", "Node_L", "Node_R"]
+  c4Rels = ["Rel", "BiRel", "Rel_Up", "Rel_U", "Rel_Down", "Rel_D", "Rel_Left", "Rel_L",
+    "Rel_Right", "Rel_R", "Rel_Back", "RelIndex"]
+  c4Ids = ["a", "b", "web", "db", "api", "customer", "spa", "q", "global", "x1", "Ünï"]
+  c4Texts = ["Web App", "Uses", "Reads from", "JSON/HTTPS", "Java, Spring", "a b c", "",
+    "Ünïcödé", "日本語", "emoji 🎉", "x&amp;y", "#35; hash", "very long description that goes on and on and wraps",
+    "fa:fa-car", "<b>b</b>", "a\\nb", "semi; colon", "x#y"]
+  c4Keys = ["descr", "techn", "sprite", "tags", "link", "label", "type", "bgColor", "fontColor",
+    "borderColor", "shape", "offsetX", "offsetY", "textColor", "lineColor", "alias", "legendText", "nope"]
+  c4Values = ["red", "#ff8800", "rgba(0,0,0,0.2)", "person", "database", "queue", "pipe", "rounded",
+    "box", "cylinder", "db", "component", "tag1,queue", "https://example.com", "javascript:alert(1)",
+    "-40", "20", "abc", "3", "0", "x"]
+
+proc c4Attr(g: var Gen, ids: seq[string], last = false): string =
+  # An unquoted value runs to the next comma, through `)` and line breaks: rare in last place.
+  let r = if last and g.chance(0.95): g.rng.rand(0.6) else: g.rng.rand(1.0)
+  if r < 0.12: "$" & g.pick(c4Keys) & "=\"" & g.pick(c4Values) & "\""
+  elif r < 0.17: ""
+  elif r < 0.6: "\"" & g.pick(c4Texts) & "\""
+  elif r < 0.66: g.pick(c4Values)
+  elif r < 0.7: "\"" & g.pick(c4Values) & "\""
+  else: g.pick(c4Texts)
+
+proc c4Args(g: var Gen, first: string, count: int, ids: seq[string]): string =
+  result = "(" & first
+  for i in 0 ..< count: result.add (if g.chance(0.1): "," else: ", ") & g.c4Attr(ids, i == count - 1)
+  if g.chance(0.15) or (count == 0 and g.chance(0.9)):
+    result.add ", $" & g.pick(c4Keys) & "=\"" & g.pick(c4Values) & "\""
+  result.add(if g.chance(0.02): "" else: ")")
+
+proc c4Source(g: var Gen): string =
+  if g.chance(0.1): result.add "---\ntitle: " & g.pick(labels) & "\n---\n"
+  if g.chance(0.05): result.add "%% comment\n"
+  result.add(if g.chance(0.02): g.pick(["C4context", "C4", "c4Context"]) else: g.pick(c4Headers))
+  result.add "\n"
+  var ids: seq[string]
+  var depth = 0
+  proc id(g: var Gen): string =
+    if ids.len > 0 and g.chance(0.15): g.pick(ids)
+    else: g.pick(c4Ids) & (if g.chance(0.5): $g.rng.rand(1 .. 20) else: "")
+  var opened = false
+  for i in 0 ..< g.rng.rand((if g.chance(0.02): 0 else: 1) .. 14):
+    let indent = repeat("  ", depth)
+    # The first statement in a boundary is a shape, almost always.
+    let r = if opened and g.chance(0.97): g.rng.rand(0.39) else: g.rng.rand(1.0)
+    opened = false
+    if r < 0.4:
+      let alias = if g.chance(0.04): "$alias=\"" & g.pick(c4Ids) & "\"" else: g.id()
+      result.add indent & g.pick(c4Shapes) & g.c4Args(alias, g.rng.rand(0 .. 5), ids)
+      ids.add alias
+    elif r < 0.55 and depth < 4:
+      let alias = g.id()
+      result.add indent & g.pick(c4Boundaries) & g.c4Args(alias, g.rng.rand(0 .. 4), ids)
+      let r2 = g.rng.rand(1.0)
+      result.add(if r2 < 0.85: "{" elif r2 < 0.97: "\n" & indent & "{" else: " {")
+      ids.add alias
+      inc depth
+      opened = true
+    elif r < 0.62 and depth > 0:
+      dec depth
+      result.add repeat("  ", depth) & "}"
+    elif r < 0.84 and ids.len > 0:
+      let rel = g.pick(c4Rels)
+      var args = "(" & (if rel == "RelIndex": $g.rng.rand(1 .. 9) & ", " else: "") & g.pick(ids) & ", " &
+        (if g.chance(0.98): g.pick(ids) else: "nope")
+      let count = g.rng.rand((if g.chance(0.95): 1 else: 0) .. 4)
+      for k in 0 ..< count: args.add ", " & g.c4Attr(ids, k == count - 1)
+      if g.chance(0.1) or (count == 0 and g.chance(0.9)): args.add ", $" & g.pick(c4Keys) & "=\"" & g.pick(c4Values) & "\""
+      result.add indent & rel & args & ")"
+    elif r < 0.875 and ids.len > 0:
+      result.add indent & "UpdateElementStyle(" & g.pick(ids)
+      for k in 0 ..< g.rng.rand(1 .. 3):
+        result.add ", $" & g.pick(["bgColor", "fontColor", "borderColor", "shape", "sprite", "techn", "legendText"]) &
+          "=\"" & g.pick(c4Values) & "\""
+      result.add ")"
+    elif r < 0.9 and ids.len > 1:
+      result.add indent & "UpdateRelStyle(" & g.pick(ids) & ", " & g.pick(ids)
+      for k in 0 ..< g.rng.rand(1 .. 3):
+        result.add ", $" & g.pick(["textColor", "lineColor", "offsetX", "offsetY"]) & "=\"" & g.pick(c4Values) & "\""
+      result.add ")"
+    elif r < 0.91:
+      result.add indent & "UpdateLayoutConfig(" &
+        (if g.chance(0.5): "$c4ShapeInRow=\"" & g.pick(["1", "2", "3", "6", "0", "x"]) & "\""
+         else: g.pick(["1", "2", "3"])) &
+        (if g.chance(0.5): ", $c4BoundaryInRow=\"" & g.pick(["1", "2", "3", "0"]) & "\"" else: "") & ")"
+    elif r < 0.93: result.add indent & "title " & g.pick(labels)
+    elif r < 0.94: result.add indent & "accTitle: " & g.pick(labels)
+    elif r < 0.95: result.add indent & "accDescr: " & g.pick(labels)
+    elif r < 0.955: result.add indent & "accDescr {\n  " & g.pick(labels) & "\n  more\n}"
+    elif r < 0.96: result.add indent & "direction " & g.pick(["TB", "LR", "BT", "RL"])
+    elif r < 0.975: result.add indent & "%% " & g.pick(labels)
+    elif r < 0.993: result.add ""
+    else: result.add indent & g.pick(["Person", "Rel(a)", "System(a, \"b\"", "}", "Foo(a)", "title"])
+    result.add(if g.chance(0.03): "\r\n" else: "\n")
+  while depth > 0 and g.chance(0.95):
+    dec depth
+    result.add repeat("  ", depth) & "}\n"
+
+const
+  blockIds = ["a", "b", "c", "db", "id1", "root", "x", "Ünï", "blockArrowId", "B2", "e"]
+  blockShapes = [("[", "]"), ("(", ")"), ("((", "))"), (">", "]"), ("{", "}"), ("{{", "}}"),
+    ("([", "])"), ("[[", "]]"), ("[(", ")]"), ("(((", ")))"), ("[/", "/]"), ("[\\", "\\]"),
+    ("[/", "\\]"), ("[\\", "/]")]
+  blockLinks = ["-->", "---", "==>", "-.->", "--x", "--o", "<-->", "x--x", "o--o", "===", "-.-", "...->"]
+  blockDirs = ["right", "left", "up", "down", "x", "y", " up ", "right, down"]
+  blockStyles = ["fill:#969", "stroke:#333,stroke-width:4px", "fill:#f9f,color:red", "font-weight:bold",
+    "fill:none", "color:#fff;fill:#000", "stroke-dasharray: 5 5", "font-size:20px", "font-style:italic"]
+
+proc blockSource(g: var Gen): string =
+  if g.chance(0.1): result.add "---\ntitle: " & g.pick(labels) & "\n" &
+    (if g.chance(0.5): "config:\n  block:\n    padding: " & g.pick(["0", "4", "30", "300", "x"]) & "\n" else: "") & "---\n"
+  if g.chance(0.05): result.add "%% comment\n"
+  result.add(if g.chance(0.02): g.pick(["blocks", "Block", "block-betax"]) elif g.chance(0.5): "block" else: "block-beta")
+  result.add "\n"
+  var ids: seq[string]
+  var depth = 0
+  var opened = false
+  proc id(g: var Gen): string =
+    if ids.len > 0 and g.chance(0.3): g.pick(ids)
+    else: g.pick(blockIds) & (if g.chance(0.5): $g.rng.rand(1 .. 30) else: "")
+  proc node(g: var Gen): string =
+    let name = g.id()
+    ids.add name
+    let r = g.rng.rand(1.0)
+    if r < 0.45: name
+    elif r < 0.9:
+      let (a, b) = g.pick(blockShapes)
+      name & a & "\"" & g.pick(labels) & "\"" & b
+    else:
+      var dirs = g.pick(blockDirs)
+      if g.chance(0.2): dirs.add ", " & g.pick(blockDirs)
+      name & "<[\"" & g.pick(labels) & "\"]>(" & dirs & ")"
+  for i in 0 ..< g.rng.rand((if g.chance(0.03): 0 else: 1) .. 16):
+    let indent = repeat("  ", depth + 1)
+    let r = if opened and g.chance(0.95): g.rng.rand(0.44) else: g.rng.rand(1.0)
+    opened = false
+    if r < 0.45:
+      var line = g.node()
+      if g.chance(0.15): line.add ":" & $g.rng.rand(1 .. 4)
+      for k in 0 ..< (if g.chance(0.3): g.rng.rand(1 .. 3) else: 0):
+        if g.chance(0.25): line.add " -- \"" & g.pick(labels) & "\" " & g.pick(["-->", "---", "==>"]) & " "
+        else: line.add " " & g.pick(blockLinks) & " "
+        line.add g.node()
+      if g.chance(0.2):
+        line.add " " & g.node()
+      result.add indent & line
+    elif r < 0.55 and depth < 4:
+      result.add indent & (if g.chance(0.6): "block" else: "block:" & g.node())
+      inc depth
+      opened = true
+    elif r < 0.65 and depth > 0:
+      dec depth
+      result.add repeat("  ", depth + 1) & "end"
+    elif r < 0.72: result.add indent & "columns " & g.pick(["1", "2", "3", "4", "auto", "0", "10"])
+    elif r < 0.78: result.add indent & (if g.chance(0.5): "space" else: "space:" & $g.rng.rand(1 .. 4))
+    elif r < 0.82: result.add indent & "classDef " & g.pick(["hot", "cold", "default"]) & " " & g.pick(blockStyles)
+    elif r < 0.86 and ids.len > 0:
+      result.add indent & "class " & g.pick(ids) & (if g.chance(0.3): "," & g.pick(ids) else: "") & " " &
+        g.pick(["hot", "cold", "nope"])
+    elif r < 0.9 and ids.len > 0:
+      result.add indent & "style " & g.pick(ids) & " " & g.pick(blockStyles)
+    elif r < 0.92 and ids.len > 1:
+      result.add indent & g.pick(ids) & " " & g.pick(blockLinks) & " " & g.pick(ids)
+    elif r >= 0.92 and r < 0.933: result.add indent & "accTitle: " & g.pick(labels)
+    elif r >= 0.933 and r < 0.936: result.add indent & "accDescr: " & g.pick(labels)
+    elif r >= 0.936 and r < 0.96: result.add indent & "%% " & g.pick(labels)
+    elif r >= 0.96 and r < 0.99: result.add ""
+    elif r >= 0.99: result.add indent & g.pick(["a[\"x\"", "end", "columns", "block:", "a --> ", "x(\"y\"]", "space:-1"])
+    else: result.add indent & g.node()
+    result.add(if g.chance(0.03): "\r\n" else: "\n")
+  if opened and g.chance(0.95): result.add repeat("  ", depth + 1) & g.node() & "\n"
+  while depth > 0 and g.chance(0.98):
+    dec depth
+    result.add repeat("  ", depth + 1) & "end\n"
 
 proc options(g: var Gen): JsonNode =
   result = newJObject()
@@ -1578,7 +1759,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad", "gantt", "wardley", "architecture", "agentflow"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad, gantt, wardley, architecture, agentflow", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad", "gantt", "wardley", "architecture", "c4", "block", "agentflow"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad, gantt, wardley, architecture, c4, block, agentflow", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -1603,6 +1784,8 @@ proc main() =
                                                           of "gantt": g.ganttSource()
                                                           of "wardley": g.wardleySource()
                                                           of "architecture": g.architectureSource()
+                                                          of "c4": g.c4Source()
+                                                          of "block": g.blockSource()
                                                           of "radar": g.radarSource()
                                                           of "treemap": g.treemapSource()
                                                           of "er": g.erSource()
