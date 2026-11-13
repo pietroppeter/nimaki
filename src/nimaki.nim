@@ -22,6 +22,7 @@ import nimaki/diagrams/class/index as classIndex
 import nimaki/diagrams/er/index as erIndex
 import nimaki/diagrams/requirement/index as requirementIndex
 import nimaki/diagrams/git/index as gitIndex
+import nimaki/diagrams/railroad/index as railroadIndex
 import nimaki/diagrams/usecase/index as usecaseIndex
 
 export core, errors, types, measurer
@@ -42,4 +43,5 @@ register(classIndex.classDiagram)
 register(erIndex.er)
 register(requirementIndex.requirement)
 register(gitIndex.gitGraph)
+register(railroadIndex.railroad)
 register(usecaseIndex.usecase)

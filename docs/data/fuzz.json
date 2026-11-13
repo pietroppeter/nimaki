@@ -136,6 +136,14 @@
       "different": 0,
       "rendered": 1890,
       "errors": 3110
+    },
+    "railroad": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 3014,
+      "errors": 1986
     }
   }
 }

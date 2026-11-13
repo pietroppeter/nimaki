@@ -2,9 +2,9 @@
   "about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand.",
   "pin": "1.13.0",
   "cases": 2118,
-  "identical": 1308,
+  "identical": 1399,
   "different": 0,
-  "unsupported": 810,
+  "unsupported": 719,
   "types": [
     {
       "type": "agentflow",
@@ -170,9 +170,9 @@
       "type": "railroad",
       "coverage": "railroad",
       "cases": 91,
-      "identical": 0,
+      "identical": 91,
       "different": 0,
-      "unsupported": 91
+      "unsupported": 0
     },
     {
       "type": "requirement",
