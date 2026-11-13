@@ -412,19 +412,19 @@
       "corpus": 35,
       "parse": {
         "code": 483,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 0,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 343,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/git/",
+      "post": "git-graphs",
+      "notes": "Identical to Pele on the 94 corpus cases (gitGraph) and on 5,000 generated histories in CI (tools/fuzz.nim gitGraph); 18,000 more across seeds before merging."
     },
     {
       "id": "quadrant",

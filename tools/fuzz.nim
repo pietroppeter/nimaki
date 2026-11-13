@@ -390,6 +390,81 @@ proc classSource(g: var Gen): string =
     result.add g.pick(["  ", "    ", "", "\t"]) & classStatement(g, 0)
     result.add(if g.chance(0.03): "\r\n" else: "\n")
 
+proc gitSource(g: var Gen): string =
+  ## Mostly valid histories: the generator tracks branches, the current branch and commit ids,
+  ## then sometimes breaks a rule on purpose.
+  if g.chance(0.25):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(["History", "A title", "日本"]) & "\n"
+    result.add "config:\n  gitGraph:\n"
+    for key in ["showBranches", "showCommitLabel", "rotateCommitLabel", "parallelCommits"]:
+      if g.chance(0.3): result.add "    " & key & ": " & g.pick(["true", "false", "1"]) & "\n"
+    if g.chance(0.2): result.add "    mainBranchName: " & g.pick(["trunk", "main", "develop", "1"]) & "\n"
+    if g.chance(0.15): result.add "    mainBranchOrder: " & g.pick(["0", "2", "-1", "x"]) & "\n"
+    result.add "---\n"
+  result.add(if g.chance(0.03): g.pick(["gitgraph", "gitGraph:", "GitGraph"]) else: "gitGraph")
+  if g.chance(0.4): result.add " " & g.pick(["LR", "TB", "BT"]) & ":"
+  elif g.chance(0.1): result.add ":"
+  result.add "\n"
+  var branches = @["main"]
+  var current = "main"
+  var ids: seq[string]
+  var idBranch: seq[string]
+  var heads = @[false]
+  let names = ["develop", "feature", "fix/bug-1", "release.v2", "x", "日本", "\"quoted name\"", "feature-2", "commits"]
+  for i in 0 ..< g.rng.rand(1 .. 16):
+    let indent = g.pick(["  ", "    ", "", "\t"])
+    let r = g.rng.rand(1.0)
+    var line = ""
+    if r < 0.4:
+      line = "commit"
+      if g.chance(0.3):
+        let id = g.pick(["a1", "b2", "c3", "fix", "日本", "same", "x y"])
+        line.add " id: \"" & id & "\""
+        ids.add id
+        idBranch.add current
+      if g.chance(0.25): line.add " tag: \"" & g.pick(["v1.0", "v2", "release candidate", "", "日本"]) & "\""
+      if g.chance(0.1): line.add " tag: \"" & g.pick(["extra", "x"]) & "\""
+      if g.chance(0.2): line.add " type: " & g.pick(["NORMAL", "REVERSE", "HIGHLIGHT"])
+      if g.chance(0.2): line.add (if g.chance(0.5): " msg: " else: " ") & "\"" & g.pick(["a message", "", "fix it", "日本"]) & "\""
+      heads[branches.find(current)] = true
+    elif r < 0.55:
+      let name = g.pick(names)
+      line = "branch " & name
+      if g.chance(0.2): line.add " order: " & g.pick(["1", "2", "0", "5", "10"])
+      let clean = name.strip(chars = {'"'})
+      if clean notin branches:
+        branches.add clean
+        heads.add heads[branches.find(current)]
+      current = clean
+      if g.chance(0.7): line.add "\n" & indent & "commit"
+    elif r < 0.7:
+      let name = g.pick(branches)
+      line = g.pick(["checkout ", "switch "]) & (if ' ' in name: "\"" & name & "\"" else: name)
+      current = name
+    elif r < 0.85 and branches.len > 1:
+      var name = g.pick(branches)
+      if name == current and branches.len > 1 and g.chance(0.9):
+        while name == current: name = g.pick(branches)
+      line = "merge " & (if ' ' in name: "\"" & name & "\"" else: name)
+      if g.chance(0.5): line = "commit\n" & indent & line
+      if g.chance(0.2): line.add " id: \"" & g.pick(["m1", "m2", "merge-it"]) & "\""
+      if g.chance(0.2): line.add " tag: \"" & g.pick(["v1", "merged"]) & "\""
+      if g.chance(0.15): line.add " type: " & g.pick(["NORMAL", "REVERSE", "HIGHLIGHT"])
+    elif r < 0.92 and ids.len > 0:
+      var k = g.rng.rand(ids.high)
+      for tries in 0 ..< 4:
+        if idBranch[k] != current: break
+        k = g.rng.rand(ids.high)
+      line = "cherry-pick id: \"" & ids[k] & "\""
+      if g.chance(0.2): line.add " tag: \"" & g.pick(["picked", ""]) & "\""
+      if g.chance(0.1): line.add " parent: \"" & g.pick(ids) & "\""
+    elif r < 0.95: line = g.pick(["accTitle: a title", "accDescr: described", "accDescr {\n  multi\n  line\n}", "title A history"])
+    elif r < 0.98: line = "%% " & g.pick(flowLabels)
+    else: line = g.pick(["garbage", "commit id:", "branch", "merge", "checkout nowhere", "commit type: OTHER"])
+    result.add indent & line
+    result.add(if g.chance(0.03): "\r\n" else: "\n")
+
 const scores = ["5", "1", "3", "4", "2", "0", "7", "-1", "2.5", " 4 ", "", "x", "1e1", "0x3", "Infinity",
                 "3.", ".5", "NaN", "\u30003"]
 const actors = ["Me", "Cat", "Dog", "", " Me ", "Ünï", "日本", "Zed", "a b", "Me", "emoji 🎉",
@@ -863,7 +938,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -883,6 +958,7 @@ proc main() =
                                                           of "class": g.classSource()
                                                           of "ishikawa": g.ishikawaSource()
                                                           of "cynefin": g.cynefinSource()
+                                                          of "gitGraph": g.gitSource()
                                                           of "radar": g.radarSource()
                                                           of "treemap": g.treemapSource()
                                                           else: g.treeViewSource()), "options": opts}

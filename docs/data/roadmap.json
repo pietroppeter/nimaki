@@ -456,8 +456,8 @@
           "what": "src/diagrams/git: 826 lines of TypeScript, 35 corpus cases.",
           "done_when": "difftest: every git case identical.",
           "owner": "Port class and swimlane",
-          "status": "started",
-          "post": "",
+          "status": "done",
+          "post": "git-graphs",
           "pr": ""
         },
         {
