@@ -74,8 +74,9 @@ was made "for the next version of Obsidian".
 """
 
 nbNote("""
-The X posts could not be read from our sandbox (the site refuses automated readers). Their
-text here comes from the Mastodon copy of the same post, from GIGAZINE, which reproduces
+The X posts could not be read from our sandbox: X refuses automated readers, and on
+13 November 2026 its mirrors were closed too (xcancel.com answered "XCancel service is
+suspended", nitter.net showed an offline notice). Their text here comes from the Mastodon copy of the same post, from GIGAZINE, which reproduces
 both the post and kepano's reply, and, for Obsidian's post, from the snippet a search engine
 shows.
 """, nkWarning, "What we could and could not read")
