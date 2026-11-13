@@ -1,4 +1,4 @@
-## devlog: 13 Nov 2026 H | Boxes in boxes: c4 and block | The last two types of this thread come out of nimaki byte for byte as Pele draws them: C4 diagrams, whose boundaries nest and whose relations find lanes between shapes, and block diagrams, which put blocks on a grid of columns the author chooses.
+## devlog: 13 Nov 2026 I | Boxes in boxes: c4 and block | The last two types of this thread come out of nimaki byte for byte as Pele draws them: C4 diagrams, whose boundaries nest and whose relations find lanes between shapes, and block diagrams, which put blocks on a grid of columns the author chooses.
 ## kind: port
 import std/[os, strformat, strutils, json, tables]
 import nimib

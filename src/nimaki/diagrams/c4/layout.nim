@@ -1,7 +1,7 @@
 ## port-of: src/diagrams/c4/layout.ts
 ## port-status: draft
 ##
-## Pele's maps keyed by elements and groups are keyed here by their addresses.
+## Pele's maps keyed by elements and groups are keyed here by the elements' `uid`.
 import std/[tables, strutils, math]
 import ../../svg/edges
 import ../../js
@@ -40,9 +40,9 @@ type
 
   Layout* = object
     order*: seq[Group]    ## The boundaries drawn, parents first. The first is the unnamed top level.
-    boxes*: Table[pointer, Box]
+    boxes*: Table[int, Box]
 
-func key*(e: C4Element): pointer = cast[pointer](e)
+func key*(e: C4Element): int = e.uid
 
 proc formOf(shape: C4Element): string =
   let explicit = FORMS.getOrDefault(shape["shape"].toLowerAscii,
@@ -74,7 +74,7 @@ proc measure(shape: C4Element, measurer: TextMeasurer, size, small: float, width
   for label in labels:
     tw = max(tw, label.width)
     textH += label.height
-  Node(shape: shape, form: form, labels: labels, textH: textH, x: 0, y: 0,
+  Node(uid: shape.uid, shape: shape, form: form, labels: labels, textH: textH, x: 0, y: 0,
        w: max(width, tw + 2 * PAD_X + capW), h: max(SHAPE_MIN_H, textH + 2 * PAD_Y + capH))
 
 proc rows[B: Box](boxes: seq[B], perRow: int, gapX, gapY: float, stretch: bool): (float, float) =
@@ -112,7 +112,7 @@ proc layoutC4*(db: C4Db, measurer: TextMeasurer, size, small, room, gap: float):
   ## inside it in rows of c4BoundaryInRow. `room` NaN is undefined.
   let loose = room.isNaN
   let groupPad = if loose: GROUP_PAD else: 12.0
-  var groups = initTable[pointer, Group]()
+  var groups = initTable[int, Group]()
   var all: seq[Group]
   for boundary in db.boundaries:
     let labelRoom = if loose: 4000.0 else: max(80.0, room - 2 * HEAD_LEFT - 2 * GROUP_PAD * 2)
@@ -128,7 +128,7 @@ proc layoutC4*(db: C4Db, measurer: TextMeasurer, size, small, room, gap: float):
     for label in labels:
       head += label.height
       headW = max(headW, label.width)
-    let group = Group(boundary: boundary, labels: labels,
+    let group = Group(uid: boundary.uid, boundary: boundary, labels: labels,
       head: (if head > 0: head + HEAD_TOP + 6 + LANE else: groupPad),
       headW: headW, headX: HEAD_LEFT, form: "rect")
     if key(boundary) notin groups: all.add group
@@ -155,7 +155,7 @@ proc layoutC4*(db: C4Db, measurer: TextMeasurer, size, small, room, gap: float):
 
   let perRow = max(1.0, db.shapeInRow)
   let groupsPerRow = max(1.0, db.boundaryInRow)
-  var kidsTop = initTable[pointer, float]()
+  var kidsTop = initTable[int, float]()
   for i in countdown(order.len - 1, 0):
     let group = order[i]
     let gapX = if loose: GAP_X else: gap
@@ -167,7 +167,7 @@ proc layoutC4*(db: C4Db, measurer: TextMeasurer, size, small, room, gap: float):
                               GROUP_GAP, false)
     let between = if gridH > 0 and kidsH > 0: GROUP_GAP else: 0.0
     let frame = if group == root: 0.0 else: groupPad
-    kidsTop[cast[pointer](group)] = gridH + between
+    kidsTop[group.uid] = gridH + between
     group.w = max(max(gridW, kidsW), group.headW + 2 * HEAD_LEFT - 2 * frame) + 2 * frame
     group.h = (if frame != 0: group.head else: frame) + gridH + between + kidsH + frame
 
@@ -180,6 +180,6 @@ proc layoutC4*(db: C4Db, measurer: TextMeasurer, size, small, room, gap: float):
       result.boxes[key(node.shape)] = node
     for kid in group.kids:
       kid.x += left
-      kid.y += top + kidsTop[cast[pointer](group)]
+      kid.y += top + kidsTop[group.uid]
     if group != root: result.boxes[key(group.boundary)] = group
   result.order = order

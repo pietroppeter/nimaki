@@ -132,7 +132,8 @@ func replaceFirst(s, sub, by: string): string =
   if at == -1: s else: s[0 ..< at] & by & s[at + sub.len .. ^1]
 
 proc addStyleClass(db: BlockDb, id: string, styleAttributes: string) =
-  let found = addr db.classes.mgetOrPut(id, BlockClassDef(id: id))
+  if id notin db.classes: db.classes[id] = BlockClassDef(id: id)
+  template found: untyped = db.classes[id]
   for attribute in styleAttributes.split(','):
     let semi = attribute.find(';')
     let fixed = jsTrim(if semi == -1: attribute else: attribute[0 ..< semi] & attribute[semi + 1 .. ^1])

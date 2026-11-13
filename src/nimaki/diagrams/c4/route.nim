@@ -1,7 +1,7 @@
 ## port-of: src/diagrams/c4/route.ts
 ## port-status: draft
 ##
-## Boxes are compared by identity, as in Pele: `Lanes.taken` is keyed by the box's address.
+## Boxes are compared by identity, as in Pele: `Lanes.taken` is keyed by the box's `uid`.
 import std/tables
 from std/math import ceil, isNaN
 import ../../svg/builder
@@ -12,6 +12,7 @@ type
     ## A laid out shape or boundary: top-left corner, size, and the shared shape it is drawn as.
     x*, y*, w*, h*: float
     form*: string
+    uid*: int   ## the uid of the element it lays out
 
   Route* = object
     d*: string
@@ -188,10 +189,10 @@ type Lanes* = ref object
   ## left, right; and where lines leave or reach each side of a shape.
   upright, level: seq[float]
   frames: array[2, seq[float]]
-  taken: Table[pointer, seq[float]]
+  taken: Table[int, seq[float]]
   squeezed*: int
 
-func key(box: Box): pointer = cast[pointer](box)
+func key(box: Box): int = box.uid
 
 proc free*(lanes: Lanes, upright: bool, at, a0, a1: float): bool =
   let lo = min(a0, a1)

@@ -16,7 +16,9 @@ type
     s*, key*, value*: string
 
   C4Element* = ref object
-    ## A shape (`kind` set) or a boundary (`nodeType` set on deployment nodes).
+    ## A shape (`kind` set) or a boundary (`nodeType` set on deployment nodes). `uid` numbers
+    ## elements in the order they were made, so tables can key them by identity in any backend.
+    uid*: int
     alias*, label*: string
     aliasAttr*, labelAttr*: Option[C4Attr]
     parent*: C4Element
@@ -42,6 +44,7 @@ type
     relIndex: Table[string, Table[string, C4Rel]]
     current: C4Element
     stack: seq[C4Element]
+    uids: int
 
 const
   ELEMENT_FIELDS = ["label", "type", "descr", "techn", "sprite", "tags", "link", "bgColor",
@@ -144,10 +147,11 @@ proc setAccDescription*(db: C4Db, descr: string) =
   db.accDescr = s
 
 proc element(list: var seq[C4Element], index: var Table[string, C4Element], alias: C4Attr,
-             title: Option[C4Attr]): C4Element =
+             title: Option[C4Attr], uids: var int): C4Element =
   var el = if not alias.isNamed: index.getOrDefault(alias.s) else: nil
   if el == nil:
-    el = C4Element()
+    inc uids
+    el = C4Element(uid: uids)
     list.add el
     if not alias.isNamed:
       el.alias = alias.s
@@ -167,13 +171,13 @@ proc finishShape(db: C4Db, shape: C4Element, kind: string, attrs: seq[C4Attr], a
 
 proc addPersonOrSystem*(db: C4Db, kind: string, attrs: seq[C4Attr]) =
   ## alias, label, ?descr, ?sprite, ?tags, $link
-  let shape = element(db.shapes, db.shapeIndex, attrs[0], attrs.at(1))
+  let shape = element(db.shapes, db.shapeIndex, attrs[0], attrs.at(1), db.uids)
   text(shape, "descr", attrs.at(2))
   db.finishShape(shape, kind, attrs, 3)
 
 proc addContainer*(db: C4Db, kind: string, attrs: seq[C4Attr]) =
   ## alias, label, ?techn, ?descr, ?sprite, ?tags, $link
-  let shape = element(db.shapes, db.shapeIndex, attrs[0], attrs.at(1))
+  let shape = element(db.shapes, db.shapeIndex, attrs[0], attrs.at(1), db.uids)
   text(shape, "techn", attrs.at(2))
   text(shape, "descr", attrs.at(3))
   db.finishShape(shape, kind, attrs, 4)
@@ -181,7 +185,7 @@ proc addContainer*(db: C4Db, kind: string, attrs: seq[C4Attr]) =
 proc addComponent*(db: C4Db, kind: string, attrs: seq[C4Attr]) = db.addContainer(kind, attrs)
 
 proc boundary(db: C4Db, attrs: seq[C4Attr], fallback: string): C4Element =
-  let boundary = element(db.boundaries, db.boundaryIndex, attrs[0], attrs.at(1))
+  let boundary = element(db.boundaries, db.boundaryIndex, attrs[0], attrs.at(1), db.uids)
   if attrs.len <= 2: boundary.fields["type"] = fallback
   else: put(boundary, "type", attrs.at(2))
   boundary

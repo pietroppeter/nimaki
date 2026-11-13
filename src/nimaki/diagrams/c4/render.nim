@@ -75,7 +75,7 @@ proc draw(db: C4Db, options: RenderOptions, tight: bool, gap = NARROW_GAP): (Ren
     maxY = max(maxY, y1)
 
   var ends: seq[Box]
-  var pairs = initTable[pointer, HashSet[pointer]]()
+  var pairs = initTable[int, HashSet[int]]()
   for rel in db.rels:
     let start = if rel.fromAttr.isSome: nil else: db.getC4Shape(rel.start)
     let to = if rel.toAttr.isSome: nil else: db.getC4Shape(rel.to)
@@ -86,7 +86,7 @@ proc draw(db: C4Db, options: RenderOptions, tight: bool, gap = NARROW_GAP): (Ren
         "\" references an unknown shape or boundary", "semantic", ErrorInfo(diagramType: "c4"))
     ends.add a
     ends.add b
-    pairs.mgetOrPut(cast[pointer](a), initHashSet[pointer]()).incl cast[pointer](b)
+    pairs.mgetOrPut(a.uid, initHashSet[int]()).incl b.uid
 
   # What a relation's label should not cover: shapes, arrowheads, boundary headings, and the
   # labels placed before it.
@@ -128,8 +128,8 @@ proc draw(db: C4Db, options: RenderOptions, tight: bool, gap = NARROW_GAP): (Ren
     let style = userStyle("", rel["lineColor"], "")
     let startArrow = rel.typ == "birel" or rel.typ == "rel_b"
     let endArrow = rel.typ != "rel_b"
-    let back = pairs.getOrDefault(cast[pointer](b))
-    let reverse = a != b and cast[pointer](a) in back
+    let back = pairs.getOrDefault(b.uid)
+    let reverse = a != b and a.uid in back
     let r = route(a, b, (if reverse: PAIR_SHIFT else: 0.0), nodes, careful, lanes,
                   (if startArrow: trim else: 0.0), (if endArrow: trim else: 0.0))
     grow(min(r.x0, r.x1), min(r.y0, r.y1), max(r.x0, r.x1), max(r.y0, r.y1))
