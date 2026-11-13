@@ -496,19 +496,19 @@
       "corpus": 19,
       "parse": {
         "code": 704,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 0,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 388,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/wardley/",
+      "post": "maps-and-clouds",
+      "notes": "Identical to Pele on the 39 corpus and compat cases and on 5,000 generated inputs in CI (tools/fuzz.nim wardley); 9,000 more on seeds 2 to 4 before merging."
     },
     {
       "id": "architecture",
@@ -517,19 +517,19 @@
       "corpus": 6,
       "parse": {
         "code": 365,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 339,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 543,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/architecture/",
+      "post": "maps-and-clouds",
+      "notes": "Identical to Pele on the 26 corpus and compat cases and on 5,000 generated inputs in CI (tools/fuzz.nim architecture); 9,000 more on seeds 2 to 4 before merging."
     },
     {
       "id": "requirement",

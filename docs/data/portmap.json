@@ -3,12 +3,12 @@
   "code": 47594,
   "totals": {
     "todo": {
-      "files": 121,
-      "code": 15980
+      "files": 110,
+      "code": 13641
     },
     "draft": {
-      "files": 170,
-      "code": 31614
+      "files": 181,
+      "code": 33953
     },
     "verified": {
       "files": 0,
@@ -42,8 +42,8 @@
     },
     {
       "component": "diagrams/architecture",
-      "todo": 1247,
-      "draft": 0,
+      "todo": 0,
+      "draft": 1247,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -298,8 +298,8 @@
     },
     {
       "component": "diagrams/wardley",
-      "todo": 1092,
-      "draft": 0,
+      "todo": 0,
+      "draft": 1092,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -467,48 +467,60 @@
       "component": "diagrams/architecture",
       "lines": 148,
       "code": 129,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/architecture/db.nim"
+      ]
     },
     {
       "path": "src/diagrams/architecture/icons.ts",
       "component": "diagrams/architecture",
       "lines": 15,
       "code": 11,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/architecture/icons.nim"
+      ]
     },
     {
       "path": "src/diagrams/architecture/index.ts",
       "component": "diagrams/architecture",
       "lines": 16,
       "code": 14,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/architecture/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/architecture/layout.ts",
       "component": "diagrams/architecture",
       "lines": 380,
       "code": 339,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/architecture/layout.nim"
+      ]
     },
     {
       "path": "src/diagrams/architecture/parser.ts",
       "component": "diagrams/architecture",
       "lines": 241,
       "code": 222,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/architecture/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/architecture/render.ts",
       "component": "diagrams/architecture",
       "lines": 575,
       "code": 532,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/architecture/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/block/arrows.ts",
@@ -2359,40 +2371,50 @@
       "component": "diagrams/wardley",
       "lines": 194,
       "code": 161,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/wardley/builder.nim"
+      ]
     },
     {
       "path": "src/diagrams/wardley/index.ts",
       "component": "diagrams/wardley",
       "lines": 12,
       "code": 10,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/wardley/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/wardley/model.ts",
       "component": "diagrams/wardley",
       "lines": 164,
       "code": 142,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/wardley/model.nim"
+      ]
     },
     {
       "path": "src/diagrams/wardley/parser.ts",
       "component": "diagrams/wardley",
       "lines": 409,
       "code": 391,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/wardley/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/wardley/render.ts",
       "component": "diagrams/wardley",
       "lines": 424,
       "code": 388,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/wardley/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/xychart/db.ts",

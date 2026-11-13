@@ -168,6 +168,22 @@
       "different": 0,
       "rendered": 246,
       "errors": 54
+    },
+    "wardley": {
+      "seed": 1,
+      "cases": 300,
+      "identical": 300,
+      "different": 0,
+      "rendered": 151,
+      "errors": 149
+    },
+    "architecture": {
+      "seed": 1,
+      "cases": 300,
+      "identical": 300,
+      "different": 0,
+      "rendered": 182,
+      "errors": 118
     }
   }
 }
