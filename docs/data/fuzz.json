@@ -193,21 +193,13 @@
       "rendered": 2862,
       "errors": 2138
     },
-    "c4": {
+    "labels": {
       "seed": 1,
-      "cases": 300,
-      "identical": 300,
+      "cases": 5000,
+      "identical": 5000,
       "different": 0,
-      "rendered": 156,
-      "errors": 144
-    },
-    "block": {
-      "seed": 1,
-      "cases": 300,
-      "identical": 300,
-      "different": 0,
-      "rendered": 172,
-      "errors": 128
+      "rendered": 3662,
+      "errors": 1338
     }
   }
 }
