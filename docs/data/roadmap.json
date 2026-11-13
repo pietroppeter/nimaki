@@ -370,7 +370,7 @@
           "owner": "Port sequence diagrams",
           "status": "done",
           "post": "fishbones-and-domains",
-          "pr": ""
+          "pr": "30"
         },
         {
           "id": "journey",
@@ -414,7 +414,7 @@
           "owner": "Port sequence diagrams",
           "status": "done",
           "post": "fishbones-and-domains",
-          "pr": ""
+          "pr": "30"
         },
         {
           "id": "treeview",
