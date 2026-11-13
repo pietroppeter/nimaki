@@ -490,6 +490,106 @@ proc packetSource(g: var Gen): string =
     else: result.add indent & g.pick(["1.5: \"x\"", "x: \"y\"", "5-3: \"back\"", "+: \"z\"", "0-: \"a\"", "007: \"z\"", $bit & "-" & $bit & " \"no colon\""])
     result.add(if g.chance(0.05): "\r\n" else: "\n")
 
+const seqNames = ["Alice", "Bob", "John", "A", "B", "C", "Ünï", "日本", "API", "DB", "a_b", "Q🎉", "Alice", "Bob"]
+const seqOddNames = ["x y", "a-b", "1", "a#b", "a,b"]
+const seqTexts = ["Hello", "Hi Bob!", "", "a long message that goes on and on and on until it has to wrap somewhere",
+                  "wrap:wrapped text that is long enough to need wrapping in the diagram", "nowrap:no wrap here",
+                  "a<br>b", "<b>bold</b>", "Ünïcödé", "日本語のテキスト", "emoji 🎉",
+                  "fa:fa-car icon", "50%", "tab\there", "ideo\u3000space", "$$x^2$$", "*em*"]
+const seqArrows = ["->>", "-->>", "->", "-->", "-x", "--x", "-)", "--)", "<<->>", "<<-->>", "-|\\", "-|/",
+                   "-\\\\", "-//", "--|\\", "--|/", "--\\\\", "--//", "/|-", "\\|-", "//-", "\\\\-",
+                   "/|--", "\\|--", "//--", "\\\\--"]
+const seqKinds = ["participant", "actor", "participant", "participant"]
+const seqShapes = ["boundary", "control", "entity", "database", "collections", "queue", "actor", "participant", "other"]
+
+proc sequenceSource(g: var Gen): string =
+  if g.chance(0.3):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(seqTexts) & "\n"
+    result.add "config:\n"
+    if g.chance(0.2): result.add "  wrap: " & g.pick(["true", "false"]) & "\n"
+    result.add "  sequence:\n"
+    for key in ["actorMargin", "width", "height", "messageMargin", "noteMargin", "boxMargin"]:
+      if g.chance(0.15): result.add "    " & key & ": " & g.pick(["0", "10", "40", "100", "150", "3000", "-5", "x", "7.5"]) & "\n"
+    for key in ["mirrorActors", "rightAngles", "hideUnusedParticipants", "showSequenceNumbers", "wrap"]:
+      if g.chance(0.15): result.add "    " & key & ": " & g.pick(["true", "false", "1"]) & "\n"
+    if g.chance(0.15): result.add "    messageAlign: " & g.pick(["left", "right", "center", "x"]) & "\n"
+    result.add "---\n"
+  if g.chance(0.05): result.add "%%{wrap}%%\n"
+  if g.chance(0.05): result.add "%% leading comment\n"
+  result.add(if g.chance(0.03): g.pick(["sequenceDiagramx", "sequence", "SequenceDiagram"]) else: "sequenceDiagram")
+  result.add "\n"
+  var depth: seq[string]
+  var inBox = false
+  for i in 0 ..< g.rng.rand(0 .. 18):
+    let indent = g.pick(["", "  ", "    ", "\t"])
+    let r = g.rng.rand(1.0)
+    let a = if g.chance(0.03): g.pick(seqOddNames) else: g.pick(seqNames)
+    let b = g.pick(seqNames)
+    if inBox and r < 0.7:
+      if g.chance(0.3):
+        result.add indent & "end"
+        inBox = false
+      else: result.add indent & g.pick(seqKinds) & " " & a
+    elif r < 0.35:
+      result.add indent & a & g.pick(seqArrows) & (if g.chance(0.85): "" else: g.pick(["+", "+", "-", "()"])) & b & g.pick([": ", ":", " : "]) & g.pick(seqTexts)
+    elif r < 0.37:
+      result.add indent & a & "()" & g.pick(seqArrows) & g.pick(["", "()"]) & b & ": " & g.pick(seqTexts)
+    elif r < 0.45:
+      result.add indent & g.pick(seqKinds) & " " & a
+      let k = g.rng.rand(1.0)
+      if k < 0.3: result.add " as " & g.pick(seqTexts)
+      elif k < 0.45: result.add "@{ \"type\": \"" & g.pick(seqShapes) & "\" }"
+      elif k < 0.5: result.add "@{ \"type\": \"" & g.pick(seqShapes) & "\", \"alias\": \"" & g.pick(seqNames) & "\" }"
+      elif k < 0.52: result.add "@{ bad: [ }"
+    elif r < 0.52:
+      result.add indent & "Note " & g.pick(["left of ", "right of ", "over ", "over "]) & a
+      if g.chance(0.3): result.add "," & b
+      result.add ": " & g.pick(seqTexts)
+    elif r < 0.62 and depth.len < 4:
+      let kind = g.pick(["loop", "alt", "opt", "par", "critical", "break", "rect", "par_over"])
+      let text = if kind == "rect": g.pick(["rgb(200, 150, 255)", "rgba(0,0,255,0.1)", "red", "#abc", "", "notacolor"]) else: g.pick(seqTexts)
+      result.add indent & kind & " " & text
+      depth.add kind
+    elif r < 0.66 and depth.len > 0:
+      let kind = depth[^1]
+      if kind == "alt": result.add indent & "else " & g.pick(seqTexts)
+      elif kind == "par" or kind == "par_over": result.add indent & "and " & g.pick(seqTexts)
+      elif kind == "critical": result.add indent & "option " & g.pick(seqTexts)
+      else:
+        result.add indent & "end"
+        discard depth.pop()
+    elif r < 0.7 and depth.len > 0:
+      result.add indent & "end"
+      discard depth.pop()
+    elif r < 0.73:
+      result.add indent & "activate " & a
+      if g.chance(0.6): result.add "\n" & indent & a & "->>" & b & ": " & g.pick(seqTexts) & "\n" & indent & "deactivate " & a
+    elif r < 0.76: result.add indent & g.pick(["autonumber", "autonumber 10", "autonumber 1 5", "autonumber off", "autonumber 1.5 0.25"])
+    elif r < 0.79 and depth.len == 0 and not inBox:
+      result.add indent & "box " & g.pick(["", "Aqua ", "rgb(33,66,99) ", "transparent ", "lightgray ", "notacolor "]) & g.pick(seqTexts)
+      inBox = true
+    elif r < 0.82:
+      let fresh = if g.chance(0.9): "New" & $i else: a
+      result.add indent & "create " & g.pick(seqKinds) & " " & fresh & "\n"
+      result.add indent & b & "->>" & fresh & ": " & g.pick(seqTexts)
+    elif r < 0.84:
+      result.add indent & "destroy " & a & "\n"
+      result.add indent & a & "-x" & b & ": " & g.pick(seqTexts)
+    elif r < 0.86: result.add indent & g.pick(["title ", "title: "]) & g.pick(seqTexts)
+    elif r < 0.87: result.add indent & "accTitle: " & g.pick(seqTexts)
+    elif r < 0.88: result.add indent & "accDescr: " & g.pick(seqTexts)
+    elif r < 0.9: result.add indent & g.pick(["links ", "link ", "properties ", "details "]) & a & ": " &
+      g.pick(["{\"class\": \"my-class x\"}", "{\"a\": \"http://x\"}", "Repo @ https://x", "\"str\"", "{bad"])
+    elif r < 0.92: result.add indent & "%% " & g.pick(seqTexts)
+    elif r < 0.975: result.add ""
+    else: result.add indent & g.pick(["garbage ->", "A->>B: x&amp;y", "A->>", "Note left B", "end", "else x", "->>B: x", "A-->>B", "participant", "A->>B: x; B->>A: y"])
+    result.add(if g.chance(0.05): "\r\n" else: "\n")
+  while depth.len > 0 and g.chance(0.9):
+    result.add "end\n"
+    discard depth.pop()
+  if inBox and g.chance(0.9): result.add "end\n"
+
 const radarNames = ["A", "B", "speed", "power", "x1", "my-axis", "titleX", "a_b", "Z9", "Q", "r2d2", "maxi"]
 const radarOdd = ["ü", "axis", "curve", "max", "-x", "x-"]   # names the grammar takes for something else
 const radarNumbers = ["1", "2", "3", "4", "5", "0", "10", "2.5", "100", "0.5", "1.25", "99999", "0.0"]
@@ -664,7 +764,7 @@ proc options(g: var Gen): JsonNode =
   if g.chance(0.05): result["directionBreakpoint"] = %g.pick([0, 400, 1000])
   if g.chance(0.1): result["idPrefix"] = %g.pick(["x", "my-id", "a\"b"])
   if g.chance(0.1): result["responsive"] = %g.chance(0.5)
-  if g.chance(0.05): result["monospace"] = %[g.pick(["files", "members"])]
+  if g.chance(0.05): result["monospace"] = %[g.pick(["files", "members", "messages"])]
   if g.chance(0.05): result["fontFamily"] = %g.pick(["Inter", "\"Fira Sans\", sans-serif", "bad;font", "Times New Roman"])
 
 proc toOptions(j: JsonNode): RenderOptions =
@@ -706,7 +806,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "radar", "treemap", "treeView", "swimlane", "class", "state"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, radar, treemap, treeView, swimlane, class, state", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -720,6 +820,7 @@ proc main() =
                                                           of "info": g.infoSource()
                                                           of "packet": g.packetSource()
                                                           of "flowchart": g.flowchartSource()
+                                                          of "sequence": g.sequenceSource()
                                                           of "state": g.stateSource()
                                                           of "swimlane": g.swimlaneSource()
                                                           of "class": g.classSource()
