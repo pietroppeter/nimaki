@@ -501,7 +501,7 @@ type Post* = object
   slug*, date*, title*, lede*, kind*, letter*, file*: string
   day*: DateTime
 
-const postKinds* = ["research", "plan", "port", "tooling"]
+const postKinds* = ["research", "plan", "port", "tooling", "article"]
 
 proc readPost*(path: string): Post =
   ## The post in a source file; `slug` is empty when the file is not a post.

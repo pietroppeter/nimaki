@@ -22,6 +22,7 @@ import devlog/drawn_in_your_browser
 import devlog/how_pele_is_built
 import devlog/lanes_and_handoffs
 import devlog/layered_layout_and_flowchart
+import devlog/mindmap_kanban_eventmodeling
 import devlog/pele_origins
 import devlog/pomice
 import devlog/radar_treemap_treeview
@@ -34,3 +35,4 @@ import devlog/what_mermaid_is
 import devlog/lifelines_and_messages
 import devlog/fishbones_and_domains
 import devlog/maps_and_clouds
+import devlog/boxes_in_boxes

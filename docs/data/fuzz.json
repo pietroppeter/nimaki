@@ -192,6 +192,46 @@
       "different": 0,
       "rendered": 2862,
       "errors": 2138
+    },
+    "c4": {
+      "seed": 1,
+      "cases": 300,
+      "identical": 300,
+      "different": 0,
+      "rendered": 156,
+      "errors": 144
+    },
+    "block": {
+      "seed": 1,
+      "cases": 300,
+      "identical": 300,
+      "different": 0,
+      "rendered": 172,
+      "errors": 128
+    },
+    "mindmap": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 3781,
+      "errors": 1219
+    },
+    "kanban": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 4033,
+      "errors": 967
+    },
+    "eventmodeling": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 3916,
+      "errors": 1084
     }
   }
 }
