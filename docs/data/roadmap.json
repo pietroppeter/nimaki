@@ -634,7 +634,7 @@
           "owner": "Verify labels and Pele's test suites",
           "status": "done",
           "post": "what-a-label-holds",
-          "pr": ""
+          "pr": "48"
         },
         {
           "id": "pele-tests",
