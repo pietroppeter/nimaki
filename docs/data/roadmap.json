@@ -294,8 +294,8 @@
           "title": "A proposal for diagrammari",
           "what": "How diagrammari could use nimaki instead of Node for the ported types, written as a proposal (diagrammari is not changed from here).",
           "done_when": "A devlog post with the proposal.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Build C ABI and diagrammari proposal",
+          "status": "started",
           "post": "",
           "pr": ""
         }
@@ -346,9 +346,9 @@
           "what": "src/diagrams/mindmap: 336 lines of TypeScript, 13 corpus cases.",
           "done_when": "difftest: every mindmap case identical.",
           "owner": "Port diagrams that need no layered layout",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "mindmap-kanban-eventmodeling",
+          "pr": "27"
         },
         {
           "id": "kanban",
@@ -357,9 +357,9 @@
           "what": "src/diagrams/kanban: 366 lines of TypeScript, 3 corpus cases.",
           "done_when": "difftest: every kanban case identical.",
           "owner": "Port diagrams that need no layered layout",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "mindmap-kanban-eventmodeling",
+          "pr": "27"
         },
         {
           "id": "ishikawa",
@@ -434,9 +434,9 @@
           "what": "src/diagrams/eventmodeling: 720 lines of TypeScript, 12 corpus cases.",
           "done_when": "difftest: every eventmodeling case identical.",
           "owner": "Port diagrams that need no layered layout",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "mindmap-kanban-eventmodeling",
+          "pr": "27"
         },
         {
           "id": "sankey",
@@ -682,8 +682,8 @@
           "title": "A C ABI",
           "what": "A shared library for other languages (diagrammari-py).",
           "done_when": "A Python smoke test renders a pie.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Build C ABI and diagrammari proposal",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -723,6 +723,28 @@
           "what": "A recurring step: every so often, one article on a module or a pattern of the port (the lexers, the layered layout, JavaScript's numbers and strings in Nim, the referee). Each article is its own step in this phase, claimed here first.",
           "done_when": "Never: it recurs while the port goes on. Each article ships with its post and its findings.",
           "owner": "Write articles explaining nimaki code",
+          "status": "started",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "article-1",
+          "kind": "article",
+          "title": "A domain in diagrams: opening a web page",
+          "what": "The first article that uses diagrams drawn by nimaki to understand a domain: what happens between typing an address and reading the page (URL, DNS, TCP, TLS, HTTP, CDN), with as many diagram types as the domain calls for, and what using the library taught: missing API, rough edges, anything that differs from Pele.",
+          "done_when": "An article on the site whose every diagram is drawn by nimaki and checked against Pele when the page is built; its lessons are notes or steps on this roadmap.",
+          "owner": "Write domain articles with diagrams",
+          "status": "started",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "domain-articles",
+          "kind": "article",
+          "title": "Domain articles, every once in a while",
+          "what": "A recurring step: when a batch of new types or features lands, another article on a new domain, preferring the types no article has drawn yet. Each article is its own step in this phase, claimed here first; the thread proposes the next domains after each one.",
+          "done_when": "Never: it recurs while the port goes on.",
+          "owner": "Write domain articles with diagrams",
           "status": "started",
           "post": "",
           "pr": ""
