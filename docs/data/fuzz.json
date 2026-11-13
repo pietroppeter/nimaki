@@ -137,6 +137,54 @@
       "rendered": 1890,
       "errors": 3110
     },
+    "railroad": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 3014,
+      "errors": 1986
+    },
+    "gantt": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 3401,
+      "errors": 1599
+    },
+    "ishikawa": {
+      "seed": 1,
+      "cases": 300,
+      "identical": 300,
+      "different": 0,
+      "rendered": 218,
+      "errors": 82
+    },
+    "cynefin": {
+      "seed": 1,
+      "cases": 300,
+      "identical": 300,
+      "different": 0,
+      "rendered": 246,
+      "errors": 54
+    },
+    "wardley": {
+      "seed": 1,
+      "cases": 300,
+      "identical": 300,
+      "different": 0,
+      "rendered": 151,
+      "errors": 149
+    },
+    "architecture": {
+      "seed": 1,
+      "cases": 300,
+      "identical": 300,
+      "different": 0,
+      "rendered": 182,
+      "errors": 118
+    },
     "agentflow": {
       "seed": 1,
       "cases": 5000,

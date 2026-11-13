@@ -8,11 +8,15 @@ import tabelline, tabelline/nimib
 import blocks, site
 
 let cov = loadCoverage()
-# what the referee found on its last full run (tools/difftest.nim): coverage id -> (identical, cases)
-var matched: Table[string, (int, int)]
+# what the referee found on its last full run (tools/difftest.nim): coverage id -> (identical, cases),
+# on Pele's corpus and on diagrammari's
+var matched, matchedD: Table[string, (int, int)]
 let difftest = parseFile(docsDir / "data" / "difftest.json")
 for t in difftest["types"]:
   matched[t["coverage"].getStr] = (t["identical"].getInt, t["cases"].getInt)
+  if t.hasKey("diagrammari"):
+    matchedD[t["coverage"].getStr] = (t["diagrammari"]["identical"].getInt, t["diagrammari"]["cases"].getInt)
+let dCorpus = difftest{"diagrammari"}
 
 nbInit
 nb.doc.filename = docsDir / "coverage" / "index.html"
@@ -28,6 +32,8 @@ the SVG of Pele run in Node, on that part's corpus.
 nbPipeline cov.pipeline
 
 nbText: &"The referee's last full run: **{difftest[\"identical\"].getInt}** of {difftest[\"cases\"].getInt} cases identical to Pele, {difftest[\"unsupported\"].getInt} not drawn yet, {difftest[\"different\"].getInt} different.\n"
+if dCorpus != nil:
+  nbText: &"On the Mermaid text of [diagrammari](https://github.com/pietroppeter/diagrammari), nimaki's first user: **{dCorpus[\"identical\"].getInt}** of {dCorpus[\"cases\"].getInt} cases identical, {dCorpus[\"unsupported\"].getInt} not drawn yet, {dCorpus[\"different\"].getInt} different.\n"
 
 nbToc
 
@@ -67,7 +73,8 @@ their layout inside `render.ts`, so a `0` under layout means "no file of its own
 layout". Smallest first, which is roughly the order of the port. *Tests* are the lines of
 Pele's tests for the type (compat specs from Mermaid, render and layout tests). *Same SVG* is
 what the referee found on its last full run: of the type's cases in `corpus/cases.json`, how
-many nimaki draws byte for byte as Pele does.
+many nimaki draws byte for byte as Pele does. *diagrammari* is the same on the Mermaid text of
+diagrammari (`corpus/diagrammari.json`), for the types it writes.
 """
 
 block:
@@ -75,7 +82,7 @@ block:
     diagram: string
     parse, layout, render: string
     tests: int
-    identical: string
+    identical, diagrammari: string
   var rows: seq[Row]
   proc cell(p: Part): string = &"{p.code}<br>{status(p.status)}"
   for d in cov.diagrams:
@@ -83,7 +90,8 @@ block:
     let notes = if d.notes.len > 0: &"<br>*{d.notes}*" else: ""
     rows.add Row(diagram: &"**{d.id}** · {d.code}{nim}{notes}", parse: cell(d.parse), layout: cell(d.layout),
                  render: cell(d.render), tests: d.tests,
-                 identical: (let m = matched.getOrDefault(d.id); &"{m[0]} of {m[1]}"))
+                 identical: (let m = matched.getOrDefault(d.id); &"{m[0]} of {m[1]}"),
+                 diagrammari: (if d.id in matchedD: (let m = matchedD[d.id]; &"{m[0]} of {m[1]}") else: ""))
   let t = tabella(rows):
     tabHeader "Diagram types", "lines of TypeScript per stage, and the status of each"
     colsLabel {"diagram": "type · lines"}

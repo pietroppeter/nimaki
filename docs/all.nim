@@ -14,6 +14,9 @@ import devlog/diagrams_in_the_wild
 import devlog/drawing_a_diagram
 import devlog/first_light
 import devlog/git_graphs
+import devlog/railroad_diagrams
+import devlog/gantt_charts
+import devlog/diagrammari_as_a_corpus
 import devlog/how_pele_is_built
 import devlog/lanes_and_handoffs
 import devlog/layered_layout_and_flowchart
@@ -27,3 +30,5 @@ import devlog/three_small_diagrams
 import devlog/timeline
 import devlog/what_mermaid_is
 import devlog/lifelines_and_messages
+import devlog/fishbones_and_domains
+import devlog/maps_and_clouds

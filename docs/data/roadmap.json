@@ -272,10 +272,10 @@
           "title": "diagrammari's examples as a corpus",
           "what": "Collect the Mermaid text that diagrammari's builders and spec examples write, and add it to corpus/ as a second source of cases.",
           "done_when": "difftest runs on them; the cases are counted on the coverage map.",
-          "owner": "",
-          "status": "planned",
-          "post": "",
-          "pr": ""
+          "owner": "Port class and swimlane",
+          "status": "done",
+          "post": "diagrammari-as-a-corpus",
+          "pr": "35"
         },
         {
           "id": "fuzz",
@@ -368,9 +368,9 @@
           "what": "src/diagrams/ishikawa: 419 lines of TypeScript, 1 corpus cases.",
           "done_when": "difftest: every ishikawa case identical.",
           "owner": "Port sequence diagrams",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "fishbones-and-domains",
+          "pr": "30"
         },
         {
           "id": "journey",
@@ -412,9 +412,9 @@
           "what": "src/diagrams/cynefin: 539 lines of TypeScript, 3 corpus cases.",
           "done_when": "difftest: every cynefin case identical.",
           "owner": "Port sequence diagrams",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "fishbones-and-domains",
+          "pr": "30"
         },
         {
           "id": "treeview",
@@ -458,7 +458,7 @@
           "owner": "Port class and swimlane",
           "status": "done",
           "post": "git-graphs",
-          "pr": ""
+          "pr": "28"
         },
         {
           "id": "quadrant",
@@ -500,9 +500,9 @@
           "what": "src/diagrams/wardley: 1092 lines of TypeScript, 19 corpus cases.",
           "done_when": "difftest: every wardley case identical.",
           "owner": "Port sequence diagrams",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "maps-and-clouds",
+          "pr": "36"
         },
         {
           "id": "architecture",
@@ -511,9 +511,9 @@
           "what": "src/diagrams/architecture: 1247 lines of TypeScript, 6 corpus cases.",
           "done_when": "difftest: every architecture case identical.",
           "owner": "Port sequence diagrams",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "maps-and-clouds",
+          "pr": "36"
         },
         {
           "id": "requirement",
@@ -533,9 +533,9 @@
           "what": "src/diagrams/railroad: 1491 lines of TypeScript, 14 corpus cases.",
           "done_when": "difftest: every railroad case identical.",
           "owner": "Port class and swimlane",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "railroad-diagrams",
+          "pr": "31"
         },
         {
           "id": "er",
@@ -566,9 +566,9 @@
           "what": "src/diagrams/gantt: 1928 lines of TypeScript, 11 corpus cases.",
           "done_when": "difftest: every gantt case identical.",
           "owner": "Port class and swimlane",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "gantt-charts",
+          "pr": "33"
         },
         {
           "id": "block",
@@ -601,7 +601,7 @@
           "owner": "Port class and swimlane",
           "status": "done",
           "post": "class-diagrams",
-          "pr": ""
+          "pr": "26"
         },
         {
           "id": "usecase",

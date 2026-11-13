@@ -90,7 +90,8 @@ src/nimaki.nim          the entry point: render(text, options)
 src/nimaki/             the port, paths after Pele's src/ (diagrams/<type>/, layout/, svg/, text/)
 tests/                  tests; tests/all.nim runs them all
 corpus/cases.json       the referee's inputs, built from Pele by tools/corpus.mjs (rebuilt only when the pin moves)
-reference/              PIN (the snapshot), fetch.sh; pele/ and npm/ are fetched, not committed
+corpus/diagrammari.json the Mermaid text of diagrammari, by tools/corpus_diagrammari.nim (pin: reference/DIAGRAMMARI)
+reference/              PIN (the snapshot), DIAGRAMMARI, fetch.sh; pele/, npm/, diagrammari/ are fetched, not committed
 tools/                  setup.sh and the tools of the port (difftest, oracle.mjs, portmap...)
 docs/                   the site: every page is a nimib notebook
   all.nim               builds every page in one program; a new page adds its import here

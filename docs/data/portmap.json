@@ -3,12 +3,12 @@
   "code": 47594,
   "totals": {
     "todo": {
-      "files": 140,
-      "code": 16915
+      "files": 100,
+      "code": 10199
     },
     "draft": {
-      "files": 151,
-      "code": 30679
+      "files": 191,
+      "code": 37395
     },
     "verified": {
       "files": 0,
@@ -42,8 +42,8 @@
     },
     {
       "component": "diagrams/architecture",
-      "todo": 1247,
-      "draft": 0,
+      "todo": 0,
+      "draft": 1247,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -82,8 +82,8 @@
     },
     {
       "component": "diagrams/cynefin",
-      "todo": 539,
-      "draft": 0,
+      "todo": 0,
+      "draft": 539,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -114,8 +114,8 @@
     },
     {
       "component": "diagrams/gantt",
-      "todo": 1928,
-      "draft": 0,
+      "todo": 0,
+      "draft": 1928,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -138,8 +138,8 @@
     },
     {
       "component": "diagrams/ishikawa",
-      "todo": 419,
-      "draft": 0,
+      "todo": 0,
+      "draft": 419,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -202,8 +202,8 @@
     },
     {
       "component": "diagrams/railroad",
-      "todo": 1491,
-      "draft": 0,
+      "todo": 0,
+      "draft": 1491,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -298,8 +298,8 @@
     },
     {
       "component": "diagrams/wardley",
-      "todo": 1092,
-      "draft": 0,
+      "todo": 0,
+      "draft": 1092,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -487,48 +487,60 @@
       "component": "diagrams/architecture",
       "lines": 148,
       "code": 129,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/architecture/db.nim"
+      ]
     },
     {
       "path": "src/diagrams/architecture/icons.ts",
       "component": "diagrams/architecture",
       "lines": 15,
       "code": 11,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/architecture/icons.nim"
+      ]
     },
     {
       "path": "src/diagrams/architecture/index.ts",
       "component": "diagrams/architecture",
       "lines": 16,
       "code": 14,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/architecture/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/architecture/layout.ts",
       "component": "diagrams/architecture",
       "lines": 380,
       "code": 339,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/architecture/layout.nim"
+      ]
     },
     {
       "path": "src/diagrams/architecture/parser.ts",
       "component": "diagrams/architecture",
       "lines": 241,
       "code": 222,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/architecture/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/architecture/render.ts",
       "component": "diagrams/architecture",
       "lines": 575,
       "code": 532,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/architecture/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/block/arrows.ts",
@@ -883,40 +895,50 @@
       "component": "diagrams/cynefin",
       "lines": 101,
       "code": 77,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/cynefin/boundaries.nim"
+      ]
     },
     {
       "path": "src/diagrams/cynefin/index.ts",
       "component": "diagrams/cynefin",
       "lines": 11,
       "code": 9,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/cynefin/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/cynefin/model.ts",
       "component": "diagrams/cynefin",
       "lines": 75,
       "code": 61,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/cynefin/model.nim"
+      ]
     },
     {
       "path": "src/diagrams/cynefin/parser.ts",
       "component": "diagrams/cynefin",
       "lines": 132,
       "code": 122,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/cynefin/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/cynefin/render.ts",
       "component": "diagrams/cynefin",
       "lines": 300,
       "code": 270,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/cynefin/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/er/db.ts",
@@ -1135,72 +1157,90 @@
       "component": "diagrams/gantt",
       "lines": 363,
       "code": 326,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/gantt/axis.nim"
+      ]
     },
     {
       "path": "src/diagrams/gantt/dates.ts",
       "component": "diagrams/gantt",
       "lines": 381,
       "code": 339,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/gantt/dates.nim"
+      ]
     },
     {
       "path": "src/diagrams/gantt/db.ts",
       "component": "diagrams/gantt",
       "lines": 412,
       "code": 343,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/gantt/db.nim"
+      ]
     },
     {
       "path": "src/diagrams/gantt/index.ts",
       "component": "diagrams/gantt",
       "lines": 19,
       "code": 17,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/gantt/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/gantt/lexer.ts",
       "component": "diagrams/gantt",
       "lines": 296,
       "code": 276,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/gantt/lexer.nim"
+      ]
     },
     {
       "path": "src/diagrams/gantt/parser.ts",
       "component": "diagrams/gantt",
       "lines": 200,
       "code": 187,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/gantt/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/gantt/render.ts",
       "component": "diagrams/gantt",
       "lines": 365,
       "code": 318,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/gantt/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/gantt/tokens.ts",
       "component": "diagrams/gantt",
       "lines": 84,
       "code": 82,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/gantt/tokens.nim"
+      ]
     },
     {
       "path": "src/diagrams/gantt/types.ts",
       "component": "diagrams/gantt",
       "lines": 48,
       "code": 40,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/gantt/types.nim"
+      ]
     },
     {
       "path": "src/diagrams/git/db.ts",
@@ -1287,48 +1327,60 @@
       "component": "diagrams/ishikawa",
       "lines": 28,
       "code": 22,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/ishikawa/db.nim"
+      ]
     },
     {
       "path": "src/diagrams/ishikawa/index.ts",
       "component": "diagrams/ishikawa",
       "lines": 16,
       "code": 14,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/ishikawa/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/ishikawa/lexer.ts",
       "component": "diagrams/ishikawa",
       "lines": 93,
       "code": 81,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/ishikawa/lexer.nim"
+      ]
     },
     {
       "path": "src/diagrams/ishikawa/parser.ts",
       "component": "diagrams/ishikawa",
       "lines": 45,
       "code": 35,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/ishikawa/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/ishikawa/render.ts",
       "component": "diagrams/ishikawa",
       "lines": 293,
       "code": 258,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/ishikawa/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/ishikawa/types.ts",
       "component": "diagrams/ishikawa",
       "lines": 12,
       "code": 9,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/ishikawa/types.nim"
+      ]
     },
     {
       "path": "src/diagrams/journey/db.ts",
@@ -1617,72 +1669,90 @@
       "component": "diagrams/railroad",
       "lines": 212,
       "code": 190,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/railroad/abnf.nim"
+      ]
     },
     {
       "path": "src/diagrams/railroad/common.ts",
       "component": "diagrams/railroad",
       "lines": 215,
       "code": 178,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/railroad/common.nim"
+      ]
     },
     {
       "path": "src/diagrams/railroad/db.ts",
       "component": "diagrams/railroad",
       "lines": 95,
       "code": 79,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/railroad/db.nim"
+      ]
     },
     {
       "path": "src/diagrams/railroad/ebnf.ts",
       "component": "diagrams/railroad",
       "lines": 275,
       "code": 248,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/railroad/ebnf.nim"
+      ]
     },
     {
       "path": "src/diagrams/railroad/index.ts",
       "component": "diagrams/railroad",
       "lines": 10,
       "code": 8,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/railroad/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/railroad/ir.ts",
       "component": "diagrams/railroad",
       "lines": 188,
       "code": 173,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/railroad/ir.nim"
+      ]
     },
     {
       "path": "src/diagrams/railroad/peg.ts",
       "component": "diagrams/railroad",
       "lines": 224,
       "code": 200,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/railroad/peg.nim"
+      ]
     },
     {
       "path": "src/diagrams/railroad/render.ts",
       "component": "diagrams/railroad",
       "lines": 430,
       "code": 394,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/railroad/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/railroad/types.ts",
       "component": "diagrams/railroad",
       "lines": 28,
       "code": 21,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/railroad/types.nim"
+      ]
     },
     {
       "path": "src/diagrams/registry.ts",
@@ -2321,40 +2391,50 @@
       "component": "diagrams/wardley",
       "lines": 194,
       "code": 161,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/wardley/builder.nim"
+      ]
     },
     {
       "path": "src/diagrams/wardley/index.ts",
       "component": "diagrams/wardley",
       "lines": 12,
       "code": 10,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/wardley/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/wardley/model.ts",
       "component": "diagrams/wardley",
       "lines": 164,
       "code": 142,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/wardley/model.nim"
+      ]
     },
     {
       "path": "src/diagrams/wardley/parser.ts",
       "component": "diagrams/wardley",
       "lines": 409,
       "code": 391,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/wardley/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/wardley/render.ts",
       "component": "diagrams/wardley",
       "lines": 424,
       "code": 388,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/wardley/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/xychart/db.ts",

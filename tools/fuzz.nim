@@ -1130,6 +1130,421 @@ proc treeViewSource(g: var Gen): string =
     else: result.add g.pick(["├──", "  indented", "\"unterminated", ":::", "icon(", "Section ─ A.txt", "## x"])
     result.add(if g.chance(0.05): "\r\n" else: "\n")
 
+proc ishikawaSource(g: var Gen): string =
+  if g.chance(0.2): result.add "---\ntitle: " & g.pick(labels) & "\n---\n"
+  if g.chance(0.1): result.add g.pick(["\n", "%% comment\n", "  \n\n", "   %% c\n"])
+  result.add(if g.chance(0.03): g.pick(["Ishikawa", "ishikawax", "fishbone"]) elif g.chance(0.3): "ishikawa-beta" else: "ishikawa")
+  result.add(if g.chance(0.05): " " else: "")
+  result.add "\n"
+  var level = 0
+  for i in 0 ..< g.rng.rand(0 .. 22):
+    let r = g.rng.rand(1.0)
+    if i > 0:
+      if r < 0.4: level = min(level + 1, 6)
+      elif r < 0.7: level = max(level - g.rng.rand(1 .. 3), 1)
+    let unit = if g.chance(0.95): g.pick(["  ", "    ", "\t"]) else: g.pick(["\u3000", " ", "\u00a0 "])
+    var indent = ""
+    for k in 0 ..< level: indent.add unit
+    let q = g.rng.rand(1.0)
+    if q < 0.85: result.add indent & g.pick(labels)
+    elif q < 0.9: result.add indent & "%% " & g.pick(labels)
+    elif q < 0.97: result.add ""
+    else: result.add indent & g.pick(["ishikawa", "x %% y", "a\tb"])
+    result.add(if g.chance(0.05): "\r\n" else: "\n")
+
+const cynefinDomains = ["complex", "complicated", "clear", "chaotic", "confusion"]
+
+proc cynefinSource(g: var Gen): string =
+  if g.chance(0.4):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(labels) & "\n"
+    result.add "config:\n  cynefin:\n"
+    if g.chance(0.4): result.add "    seed: " & g.pick(["1", "42", "0", "-7", "1.5", "123456789", "1e16", "x", "99999999999"]) & "\n"
+    if g.chance(0.3): result.add "    boundaryAmplitude: " & g.pick(["0", "4", "8", "20", "50", "60", "2.5"]) & "\n"
+    if g.chance(0.2): result.add "    showDomainDescriptions: " & g.pick(["false", "true", "0"]) & "\n"
+    if g.chance(0.2): result.add "    width: " & g.pick(["100", "300", "640", "1000", "50", "20000"]) & "\n"
+    if g.chance(0.2): result.add "    height: " & g.pick(["100", "300", "440", "900", "50"]) & "\n"
+    result.add "---\n"
+  if g.chance(0.05): result.add "%% comment\n"
+  result.add(if g.chance(0.03): g.pick(["cynefin", "Cynefin-beta", "cynefin-betax"]) elif g.chance(0.2): "cynefin-beta:" else: "cynefin-beta")
+  result.add "\n"
+  for i in 0 ..< g.rng.rand(0 .. 14):
+    let indent = g.pick(["", "  ", "    ", "\t"])
+    let r = g.rng.rand(1.0)
+    let q = if g.chance(0.9): "\"" else: "'"
+    if r < 0.45:
+      result.add indent & g.pick(cynefinDomains) & "\n"
+      for k in 0 ..< g.rng.rand(0 .. 5):
+        result.add indent & "  " & q & g.pick(labels) & q & "\n"
+    elif r < 0.75:
+      result.add indent & g.pick(cynefinDomains) & g.pick([" --> ", "-->", " -->  "]) & g.pick(cynefinDomains)
+      if g.chance(0.6): result.add g.pick([" : ", ": ", ":"]) & q & g.pick(labels) & q
+    elif r < 0.8: result.add indent & "title " & g.pick(labels)
+    elif r < 0.83: result.add indent & "accTitle: " & g.pick(labels)
+    elif r < 0.86: result.add indent & "accDescr: " & g.pick(labels)
+    elif r < 0.9: result.add indent & "%% " & g.pick(labels)
+    elif r < 0.97: result.add ""
+    else: result.add indent & g.pick(["complexity", "clear --> ", "x --> clear", "\"loose\"", "chaotic -> clear"])
+    result.add(if g.chance(0.05): "\r\n" else: "\n")
+const rrWords = ["a", "b", "expr", "term", "digit", "letter", "railroad", "title-x", "_x", "x-1", "nonterminal", "sequence"]
+const rrStrings = ["x", "+", "a b", " ", "  ", "<br>", "#35;", "&amp;", "日本", "*", "\\n", "\\\"", "if", "", "very long terminal text here", "'", "tab\\t", "🎉"]
+const rrSingle = ["x", "\"", "a b", "it\\'s"]
+
+proc rrTerm(g: var Gen): string =
+  ## a quoted string in the style of IR, EBNF and PEG
+  if g.chance(0.85): "\"" & g.pick(rrStrings) & "\"" else: "'" & g.pick(rrSingle) & "'"
+
+proc rrIr(g: var Gen, depth: int): string =
+  let r = g.rng.rand(1.0)
+  if depth <= 0 or r < 0.4:
+    case g.rng.rand(2)
+    of 0: return "terminal(" & g.rrTerm() & ")"
+    of 1: return "nonterminal(\"" & g.pick(rrWords) & "\")"
+    else: return "special(\"" & g.pick(["any char", "x", "  "]) & "\")"
+  let kind = g.pick(["sequence", "choice", "optional", "oneOrMore", "zeroOrMore", "sequence", "choice"])
+  if kind in ["optional", "oneOrMore", "zeroOrMore"]: return kind & "(" & g.rrIr(depth - 1) & ")"
+  var parts: seq[string]
+  for i in 0 ..< g.rng.rand(1 .. 4): parts.add g.rrIr(depth - 1)
+  kind & "(" & parts.join(g.pick([", ", ",", " ,\n  "])) & ")"
+
+proc rrEbnf(g: var Gen, depth: int): string =
+  var alts: seq[string]
+  for a in 0 ..< (if g.chance(0.4): g.rng.rand(2 .. 4) else: 1):
+    var terms: seq[string]
+    for t in 0 ..< g.rng.rand(1 .. 4):
+      var term = ""
+      let r = g.rng.rand(1.0)
+      if depth > 0 and r < 0.25:
+        let (o, c) = g.pick([("(", ")"), ("[", "]"), ("{", "}")])
+        term = o & " " & g.rrEbnf(depth - 1) & " " & c
+      elif r < 0.55: term = g.rrTerm()
+      elif r < 0.9: term = g.pick(rrWords)
+      else: term = "? " & g.pick(["any char", "x", "日本"]) & " ?"
+      if g.chance(0.25): term.add g.pick(["?", "*", "+", "*?", "+"])
+      if g.chance(0.08): term.add " - " & g.pick(["\"x\"", "letter", "( a | b )"])
+      terms.add term
+    alts.add terms.join(g.pick([", ", " ", " , "]))
+  alts.join(g.pick([" | ", "\n  | "]))
+
+proc rrAbnf(g: var Gen, depth: int): string =
+  var alts: seq[string]
+  for a in 0 ..< (if g.chance(0.4): g.rng.rand(2 .. 4) else: 1):
+    var elems: seq[string]
+    for t in 0 ..< g.rng.rand(1 .. 4):
+      var e = if g.chance(0.3): g.pick(["*", "1*", "*3", "2*5", "3", "0*1", "1*1", "12", "99999999999999999999999*"]) else: ""
+      let r = g.rng.rand(1.0)
+      if depth > 0 and r < 0.25:
+        let (o, c) = g.pick([("(", ")"), ("[", "]")])
+        e.add o & g.rrAbnf(depth - 1) & c
+      elif r < 0.5: e.add "\"" & g.pick(["x", "a b", "<br>", "", "日本", "\\"]) & "\""
+      elif r < 0.65: e.add g.pick(["%x41-5A", "%d13.10", "%b0101", "%x20"])
+      else: e.add g.pick(["ALPHA", "DIGIT", "rule-1", "a", "expr"])
+      elems.add e
+    alts.add elems.join(" ")
+  alts.join(g.pick([" / ", "\n  / "]))
+
+proc rrPeg(g: var Gen, depth: int): string =
+  var alts: seq[string]
+  for a in 0 ..< (if g.chance(0.4): g.rng.rand(2 .. 4) else: 1):
+    var items: seq[string]
+    for t in 0 ..< g.rng.rand(1 .. 4):
+      var item = if g.chance(0.15): g.pick(["&", "!"]) else: ""
+      let r = g.rng.rand(1.0)
+      if depth > 0 and r < 0.25: item.add "(" & g.rrPeg(depth - 1) & ")"
+      elif r < 0.55: item.add g.rrTerm()
+      elif r < 0.9: item.add g.pick(rrWords)
+      else: item.add "."
+      if g.chance(0.25): item.add g.pick(["?", "*", "+"])
+      items.add item
+    alts.add items.join(" ")
+  alts.join(g.pick([" / ", "\n  / "]))
+
+proc railroadSource(g: var Gen): string =
+  ## The four notations, mostly valid, with a broken rule now and then.
+  if g.chance(0.3):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(["Grammar", "日本", "A long title for a grammar diagram"]) & "\n"
+    result.add "config:\n  railroad:\n"
+    for key in ["fontSize", "padding", "horizontalSeparation", "verticalSeparation", "arcRadius", "markerRadius", "strokeWidth"]:
+      if g.chance(0.2): result.add "    " & key & ": " & g.pick(["0", "4", "10", "24", "-1", "1000", "x", "2.5"]) & "\n"
+    if g.chance(0.2): result.add "    showMarkers: " & g.pick(["false", "true", "0"]) & "\n"
+    result.add "---\n"
+  let notation = g.pick(["railroad", "ebnf", "abnf", "peg"])
+  let keyword = if notation == "railroad": "railroad-beta" else: "railroad-" & notation & "-beta"
+  result.add(if g.chance(0.03): g.pick(["Railroad-Beta", "railroad-betax", "railroad"]) else: keyword)
+  result.add "\n"
+  if g.chance(0.2): result.add g.pick(["title Grammar", "title \"Quoted title\"", "title", "title 'x\\ty'", "title a %% c"]) & "\n"
+  if g.chance(0.1): result.add "accTitle: Rules\n"
+  if g.chance(0.1): result.add g.pick(["accDescr: A grammar\n", "accDescr {\n  many\n   lines\n}\n"])
+  if g.chance(0.05): result.add g.pick(["%% comment\n", "/* block */\n", "# hash\n", "(* iso *)\n", "; abnf comment\n"])
+  for i in 0 ..< g.rng.rand(1 .. 5):
+    let name = g.pick(["expr", "term", "digit", "a", "rule-1", "x_y", "letter"])
+    let depth = g.rng.rand(0 .. 3)
+    var line = case notation
+      of "railroad": name & " = " & g.rrIr(depth) & ";"
+      of "ebnf": name & g.pick([" = ", " ::= "]) & g.rrEbnf(depth) & " ;"
+      of "abnf": name & " = " & g.rrAbnf(depth) & ";"
+      else: name & " <- " & g.rrPeg(depth) & ";"
+    if g.chance(0.04): line = line[0 ..< line.len - 1]
+    if g.chance(0.03): line.add g.pick([" )", " junk", " =", " ; trailing"])
+    result.add line & "\n"
+
+proc ganttDate(g: var Gen, fmt: string, y, m, d, h, mi: int): string =
+  ## A date written in the chart's format, with a slip now and then.
+  let p2 = proc (n: int): string = (if n < 10: "0" & $n else: $n)
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+  case fmt
+  of "DD/MM/YYYY": p2(d) & "/" & p2(m) & "/" & $y
+  of "YYYY-MM-DD HH:mm": $y & "-" & p2(m) & "-" & p2(d) & " " & p2(h) & ":" & p2(mi)
+  of "HH:mm": p2(h) & ":" & p2(mi)
+  of "X": $(1767225600 + (d - 1) * 86400 + h * 3600)
+  of "x": $(1767225600000 + (d - 1) * 86400000 + h * 3600000)
+  of "MMM D YYYY": months[m - 1] & " " & $d & " " & $y
+  of "YYYY": $(y + d)
+  of "D": $d
+  of "YYYY-MM-DDTHH:mm:ssZ": $y & "-" & p2(m) & "-" & p2(d) & "T" & p2(h) & ":" & p2(mi) & ":00+00:00"
+  else: $y & "-" & p2(m) & "-" & p2(d)
+
+proc ganttSource(g: var Gen): string =
+  ## Mostly valid charts: dates in the chart's format, references to earlier tasks, durations,
+  ## exclusions and tick intervals, with a broken line now and then.
+  if g.chance(0.3):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(["Plan", "日本", "A long plan title"]) & "\n"
+    result.add "config:\n  gantt:\n"
+    for key in ["fontSize", "sectionFontSize", "barHeight", "barGap", "numberSectionStyles", "leftPadding",
+                "rightPadding", "useWidth", "topPadding", "gridLineStartPadding"]:
+      if g.chance(0.12): result.add "    " & key & ": " & g.pick(["0", "4", "12", "30", "75", "200", "900", "x", "-5"]) & "\n"
+    if g.chance(0.15): result.add "    topAxis: " & g.pick(["true", "false"]) & "\n"
+    if g.chance(0.15): result.add "    displayMode: " & g.pick(["compact", "\"\"", "other"]) & "\n"
+    if g.chance(0.1): result.add "    axisFormat: \"" & g.pick(["%d %b", "%H:%M", "%Y"]) & "\"\n"
+    if g.chance(0.1): result.add "    tickInterval: " & g.pick(["1day", "1week", "2month", "x"]) & "\n"
+    if g.chance(0.1): result.add "    weekday: " & g.pick(["monday", "friday", "nope"]) & "\n"
+    result.add "---\n"
+  result.add(if g.chance(0.03): g.pick(["Gantt", "gantt2", "gant"]) else: "gantt")
+  result.add "\n"
+  let fmt = if g.chance(0.65): "YYYY-MM-DD"
+            else: g.pick(["DD/MM/YYYY", "YYYY-MM-DD HH:mm", "HH:mm", "X", "x", "MMM D YYYY", "YYYY", "D",
+                          "YYYY-MM-DDTHH:mm:ssZ", "Do MMMM YYYY", "YYYY-MM-DD ww", "LL"])
+  if fmt != "YYYY-MM-DD" or g.chance(0.5): result.add "  dateFormat " & fmt & "\n"
+  if g.chance(0.3): result.add "  title " & g.pick(["Project plan", "日本", "x  y", "title"]) & "\n"
+  if g.chance(0.25):
+    result.add "  axisFormat " & g.pick(["%Y-%m-%d", "%b %d", "%e %B", "%H:%M", "%a %d", "%W", "%j", "%U", "%V",
+                                         "%G-W%V", "%x", "%-d/%-m", "%c", "%%", "%q", "%I %p", "%s", "%Z"]) & "\n"
+  if g.chance(0.2):
+    result.add "  tickInterval " & g.pick(["1day", "2day", "1week", "1month", "6hour", "15minute", "1year", "0day",
+                                           "30second", "500millisecond", "3week", "day"]) & "\n"
+  if g.chance(0.15): result.add "  weekday " & g.pick(["monday", "sunday", "friday", "Wednesday"]) & "\n"
+  if g.chance(0.15): result.add "  excludes " & g.pick(["weekends", "weekends, 2026-01-07", "monday sunday",
+                                                         "2026-01-05", "Weekends", "friday"]) & "\n"
+  if g.chance(0.08): result.add "  includes " & g.pick(["2026-01-10", "saturday", "2026-01-03, 2026-01-04"]) & "\n"
+  if g.chance(0.08): result.add "  weekend " & g.pick(["friday", "saturday"]) & "\n"
+  if g.chance(0.1): result.add "  todayMarker " & g.pick(["off", "stroke-width:5px,stroke:#0f0,opacity:0.5", "on"]) & "\n"
+  if g.chance(0.08): result.add "  inclusiveEndDates\n"
+  if g.chance(0.05): result.add "  topAxis\n"
+  if g.chance(0.05): result.add "  accTitle: Plan\n  accDescr: A plan\n"
+  if g.chance(0.04): result.add g.pick(["  %% note\n", "  % one\n", "  accDescr {\n many\n }\n"])
+  var ids: seq[string]
+  let year = g.pick([2026, 2026, 2025, 1999, 2014])
+  let month = g.rng.rand(1 .. 12)
+  for s in 0 ..< g.rng.rand(1 .. 3):
+    if s > 0 or g.chance(0.7): result.add "  section " & g.pick(["Design", "Build", "日本", "Test & ship", "a<br>b"]) & "\n"
+    for t in 0 ..< g.rng.rand(1 .. 5):
+      var data: seq[string]
+      if g.chance(0.3): data.add g.pick(["done", "active", "crit", "milestone", "crit, done", "active, crit", "vert"])
+      let hasId = g.chance(0.5)
+      let id = "t" & $(ids.len + 1)
+      let r = g.rng.rand(1.0)
+      var start = ""
+      if ids.len > 0 and r < 0.3:
+        start = "after " & g.pick(ids) & (if g.chance(0.2): " " & g.pick(ids) else: "")
+      elif r < 0.75:
+        start = g.ganttDate(fmt, year, month, g.rng.rand(1 .. 28), g.rng.rand(0 .. 23), g.rng.rand(0 .. 59))
+      elif r < 0.8:
+        start = g.pick(["2026-01-05", "Jan 5, 2026", "01/05/2026", "2026/1/5 10:00", "bad date", "after nope"])
+      let stop = if ids.len > 0 and g.chance(0.1): "until " & g.pick(ids)
+                 elif g.chance(0.6): g.pick(["3d", "1w", "2h", "30m", "1M", "1y", "0.5d", "10s", "100ms", "5d", "12h", "2d", "0d", "x"])
+                 else: g.ganttDate(fmt, year, month, g.rng.rand(1 .. 28), g.rng.rand(0 .. 23), g.rng.rand(0 .. 59))
+      if hasId:
+        data.add id
+        ids.add id
+        if start == "": start = g.ganttDate(fmt, year, month, 1, 9, 0)
+      if start != "": data.add start
+      data.add stop
+      let name = g.pick(["Research", "Write code", "Review", "日本語", "A task with a long name", "x", "Ship it",
+                         "a<br>b", "  spaced  "])
+      var line = "    " & name & " :" & data.join(", ")
+      if g.chance(0.03): line = "    " & name
+      if g.chance(0.02): line.add ", extra, fields, here"
+      result.add line & "\n"
+  if ids.len > 0 and g.chance(0.1):
+    result.add "  click " & g.pick(ids) & g.pick([" href \"https://example.com\"", " call cb()", " call cb(1) href \"x\""]) & "\n"
+
+const wardleyNames = ["User", "Web Site", "Customer Service", "Cup of Tea", "Tea", "Kettle", "Power", "Hot Water",
+                      "Data-Store", "A&B", "x_1", "Compute (cloud)", "Business", "Public", "CRM", "a", "Z9"]
+const wardleyOddNames = ["\"Quoted name\"", "\"日本語\"", "'single'", "title x", "note", "component", "build",
+                         "-dash", "9lives", "a->b", "\"\""]
+const wardleyDecimals = ["0.1", "0.95", "0.5", "0.33", "0.79", "0.62", "0.05", "1.0", "0.0", "0.99", "0.25",
+                         "45.5", "100.0", "0.001", "0.85", "0.15", "0.71", "0.45"]
+const wardleyBadDecimals = ["100.5", "5", "1", "0", "-0.5", "1e2", ".5"]
+const wardleyInts = ["0", "5", "10", "-5", "-10", "20", "100", "1", "3", "2"]
+const wardleyArrows = [" -> ", " -> ", "->", " --> ", " -.-> ", " > ", " +'flows'> ", " +'back'< ", " +'both'<> ",
+                       " +'' > ", " +<> ", " +> ", " +< "]
+
+proc wardleySource(g: var Gen): string =
+  proc decimal(g: var Gen): string =
+    if g.chance(0.02): g.pick(wardleyBadDecimals) else: g.pick(wardleyDecimals)
+  proc coords(g: var Gen): string =
+    "[" & g.decimal & (if g.chance(0.8): ", " else: ",") & g.decimal & "]"
+  if g.chance(0.3):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(labels) & "\n"
+    result.add "config:\n  wardley-beta:\n"
+    if g.chance(0.4): result.add "    showGrid: " & g.pick(["true", "false", "1"]) & "\n"
+    if g.chance(0.3): result.add "    width: " & g.pick(["300", "640", "900", "1200", "50", "20000"]) & "\n"
+    if g.chance(0.3): result.add "    height: " & g.pick(["200", "400", "600", "900", "x"]) & "\n"
+    result.add "---\n"
+  if g.chance(0.05): result.add "%% comment\n"
+  result.add(if g.chance(0.03): g.pick(["wardley", "Wardley-beta", "wardley-betax"]) else: "wardley-beta")
+  result.add "\n"
+  var declared: seq[string]
+  proc newName(g: var Gen): string =
+    if g.chance(0.05): return g.pick(wardleyOddNames)
+    result = g.pick(wardleyNames)
+    if g.chance(0.3): result.add " " & g.pick(["One", "Two", "B", "x2", "(v2)"])
+  proc known(g: var Gen): string =
+    if declared.len == 0 or g.chance(0.05): g.newName() else: g.pick(declared)
+  for i in 0 ..< g.rng.rand(0 .. 18):
+    let indent = g.pick(["", "  ", "    ", "\t"])
+    let r = g.rng.rand(1.0)
+    if r < 0.3:
+      let n = g.newName()
+      declared.add n
+      result.add indent & "component " & n & " " & g.coords
+      if g.chance(0.25): result.add " label [" & g.pick(wardleyInts) & ", " & g.pick(wardleyInts) & "]"
+      if g.chance(0.2): result.add " (" & g.pick(["build", "buy", "outsource", "market"]) & ")"
+      if g.chance(0.1): result.add g.pick([" inertia", " (inertia)"])
+    elif r < 0.38:
+      let n = g.newName()
+      declared.add n
+      result.add indent & "anchor " & n & " " & g.coords
+    elif r < 0.58:
+      result.add indent & g.known() & g.pick(wardleyArrows) & g.known()
+      if g.chance(0.2): result.add g.pick(["; label", ";limited by", "; 日本"])
+    elif r < 0.63:
+      result.add indent & "evolve " & g.known() & " " & g.decimal
+    elif r < 0.68 and declared.len > 0:
+      result.add indent & "pipeline " & g.pick(declared) & " {\n"
+      for k in 0 ..< g.rng.rand(1 .. 4):
+        let n = g.newName()
+        result.add indent & "  component " & n & " [" & g.decimal & "]"
+        if g.chance(0.2): result.add " label [" & g.pick(wardleyInts) & ", " & g.pick(wardleyInts) & "]"
+        result.add "\n"
+      result.add indent & "}"
+    elif r < 0.72:
+      result.add indent & "note \"" & g.pick(labels).replace("\"", "") & "\" " & g.coords
+    elif r < 0.76:
+      result.add indent & "annotation " & $g.rng.rand(1 .. 12) & "," & "[" & g.pick(@wardleyDecimals & @["1", "0", "50"]) &
+        ", " & g.pick(wardleyDecimals) & "] \"" & g.pick(labels).replace("\"", "") & "\""
+    elif r < 0.78:
+      result.add indent & "annotations [" & g.pick(["0.1", "0.9", "5", "0.5"]) & ", " & g.pick(["0.1", "0.9", "50", "0.5"]) & "]"
+    elif r < 0.82:
+      result.add indent & g.pick(["accelerator ", "deaccelerator "]) & g.newName() & " " & g.coords
+    elif r < 0.85:
+      result.add indent & "evolution " & g.pick(["Genesis", "Uncharted"]) &
+        (if g.chance(0.4): "@" & g.pick(["0.25", "0.2", "0.5"]) else: "") & " -> " &
+        g.pick(["Custom", "Custom Built", "Emerging"]) & (if g.chance(0.4): "@" & g.pick(["0.5", "0.45"]) else: "") &
+        (if g.chance(0.6): " -> Product" & (if g.chance(0.4): "@0.75" else: "") & " -> Commodity" &
+          (if g.chance(0.4): "@1.0" else: "") else: "") & (if g.chance(0.2): " / Utility" else: "")
+    elif r < 0.87:
+      result.add indent & "size [" & g.pick(["400", "800", "1100", "100", "20000"]) & ", " & g.pick(["300", "600", "800"]) & "]"
+    elif r < 0.9: result.add indent & "title " & g.pick(labels)
+    elif r < 0.92: result.add indent & "accTitle: " & g.pick(labels)
+    elif r < 0.94: result.add indent & "accDescr: " & g.pick(labels)
+    elif r < 0.96: result.add indent & "%% " & g.pick(labels)
+    elif r < 0.98: result.add ""
+    else: result.add indent & g.pick(["component", "anchor X [1, 2]", "evolve", "pipeline X {", "}", "size [1.5, 2]", "@"])
+    result.add(if g.chance(0.03): "\r\n" else: "\n")
+
+const archIds = ["api", "db", "disk1", "server", "gateway", "cache", "web", "queue", "auth", "store", "a", "b_2", "x-y",
+                 "edge9"]
+const archIcons = ["(database)", "(server)", "(disk)", "(internet)", "(cloud)", "(logos:aws)", "(mdi-home)", "(unknown)"]
+const archTitles = ["[API]", "[Database]", "[My Server]", "[\"Quoted title\"]", "['single \\' quote']", "[日本語]",
+                    "[a very long title that will need to wrap somewhere]", "[  spaced  ]", "[x]", "[**bold**]",
+                    "[emoji 🎉 here]", "[\"\"]"]
+const archIconTexts = ["\"PG\"", "\"Postgres database cluster\"", "\"🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉\"", "\"a\"", "\"日本語のテキストです長い\"",
+                       "\"one two three four five six seven eight nine ten\""]
+const archSides = ['L', 'R', 'T', 'B']
+
+proc architectureSource(g: var Gen): string =
+  if g.chance(0.25):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(labels) & "\n"
+    result.add "config:\n  architecture:\n"
+    if g.chance(0.4): result.add "    iconSize: " & g.pick(["24", "48", "80", "4", "600", "x"]) & "\n"
+    if g.chance(0.3): result.add "    fontSize: " & g.pick(["10", "16", "22", "2"]) & "\n"
+    if g.chance(0.3): result.add "    padding: " & g.pick(["0", "10", "40", "300"]) & "\n"
+    result.add "---\n"
+  if g.chance(0.05): result.add "%% comment\n"
+  result.add(if g.chance(0.03): g.pick(["architecture", "Architecture-beta", "architecture-betax"]) else: "architecture-beta")
+  result.add "\n"
+  var groups, nodes: seq[string]
+  var used: seq[string]
+  proc fresh(g: var Gen): string =
+    for t in 0 ..< 5:
+      let id = (if g.chance(0.01): g.pick(["Lb", "Rx", "Top"]) else: g.pick(archIds)) &
+        (if g.chance(0.3): $g.rng.rand(1 .. 9) else: "")
+      if id notin used or g.chance(0.02):
+        used.add id
+        return id
+    "n" & $used.len
+  for i in 0 ..< g.rng.rand(0 .. 3):
+    let id = g.fresh()
+    result.add "  group " & id
+    if g.chance(0.5): result.add g.pick(archIcons)
+    if g.chance(0.8): result.add g.pick(archTitles)
+    if groups.len > 0 and g.chance(0.4): result.add " in " & g.pick(groups)
+    groups.add id
+    result.add "\n"
+  for i in 0 ..< g.rng.rand(0 .. 9):
+    let id = g.fresh()
+    if g.chance(0.85):
+      result.add "  service " & id
+      let r = g.rng.rand(1.0)
+      if r < 0.5: result.add g.pick(archIcons)
+      elif r < 0.7: result.add g.pick(archIconTexts)
+      if g.chance(0.8): result.add g.pick(archTitles)
+    else:
+      result.add "  junction " & id
+    if groups.len > 0 and g.chance(0.5): result.add " in " & g.pick(groups)
+    nodes.add id
+    result.add "\n"
+  for i in 0 ..< g.rng.rand(0 .. 10):
+    let r = g.rng.rand(1.0)
+    if r < 0.75 and nodes.len > 0:
+      let a = if g.chance(0.97): g.pick(nodes) else: g.pick(@["nope"] & groups)
+      let b = if g.chance(0.97): g.pick(nodes) else: g.pick(@["nope"] & groups)
+      result.add "  " & a & (if groups.len > 0 and g.chance(0.06): "{group}" else: "") & ":" & g.pick(archSides) &
+        (if g.chance(0.2): " <" else: " ") &
+        (if g.chance(0.25): "-" & g.pick(archTitles) & "-" else: "--") &
+        (if g.chance(0.3): "> " else: " ") & g.pick(archSides) & ":" & b &
+        (if groups.len > 0 and g.chance(0.06): "{group}" else: "")
+    elif r < 0.85 and nodes.len > 1:
+      result.add "  align " & g.pick(["row", "column"])
+      var members: seq[string]
+      for k in 0 ..< g.rng.rand(2 .. 4):
+        let m = g.pick(nodes)
+        if m notin members or g.chance(0.05): members.add m
+      for m in members: result.add " " & m
+    elif r < 0.88: result.add "  title " & g.pick(labels)
+    elif r < 0.9: result.add "  accTitle: " & g.pick(labels)
+    elif r < 0.92: result.add "  accDescr: " & g.pick(labels)
+    elif r < 0.95: result.add "  %% " & g.pick(labels)
+    elif r < 0.97: result.add ""
+    else: result.add "  " & g.pick(["service", "group g in", "a:Q -- L:b", "align diagonal a b", "junction"])
+    result.add(if g.chance(0.03): "\r\n" else: "\n")
+
+
 proc options(g: var Gen): JsonNode =
   result = newJObject()
   if g.chance(0.3): result["fontSize"] = %g.pick([12, 14, 16, 18, 20, 11])
@@ -1181,7 +1596,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "er", "requirement", "gitGraph", "usecase", "agentflow"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, er, requirement, gitGraph, usecase, agentflow", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad", "gantt", "wardley", "architecture", "agentflow"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad, gantt, wardley, architecture, agentflow", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -1199,7 +1614,13 @@ proc main() =
                                                           of "state": g.stateSource()
                                                           of "swimlane": g.swimlaneSource()
                                                           of "class": g.classSource()
+                                                          of "ishikawa": g.ishikawaSource()
+                                                          of "cynefin": g.cynefinSource()
                                                           of "gitGraph": g.gitSource()
+                                                          of "railroad": g.railroadSource()
+                                                          of "gantt": g.ganttSource()
+                                                          of "wardley": g.wardleySource()
+                                                          of "architecture": g.architectureSource()
                                                           of "radar": g.radarSource()
                                                           of "treemap": g.treemapSource()
                                                           of "er": g.erSource()
