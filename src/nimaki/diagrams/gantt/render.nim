@@ -1,6 +1,6 @@
 ## port-of: src/diagrams/gantt/render.ts
 ## port-status: draft
-import std/[algorithm, options, strutils, tables]
+import std/[algorithm, options, strutils, tables, hashes]
 from std/math import ceil, floor
 import ../../js
 import ../../jsdate
@@ -62,9 +62,10 @@ func scheduled(task: GanttTask): bool =
   ## Whether scheduling gave the task a start and an end. One that waits on a task that never resolves has neither.
   finite(task.startTime) and finite(task.endTime)
 
-func key(task: GanttTask): int = cast[int](task)
+proc hash(g: GanttTask): Hash = hash(cast[pointer](g))   ## by identity (an id in JavaScript)
+func key(task: GanttTask): GanttTask = task   ## by identity: a ref hashes by its address (by an id in JavaScript)
 
-proc packRows(tasks: seq[GanttTask], offset: int, rowOf: var Table[int, int]): int =
+proc packRows(tasks: seq[GanttTask], offset: int, rowOf: var Table[GanttTask, int]): int =
   ## Mermaid's compact mode: within a section, a task goes on the first row that is free when it starts.
   var sorted: seq[GanttTask]
   for task in tasks:
@@ -120,7 +121,7 @@ proc renderGantt*(model: GanttDb, config: Config, options: RenderOptions): Rende
   for task in rowTasks:
     if task.section notin categories: categories[task.section] = categories.len
 
-  var rowOf = initTable[int, int]()
+  var rowOf = initTable[GanttTask, int]()
   var rowSection: seq[string]
   if compact:
     var groups = initOrderedTable[string, seq[GanttTask]]()

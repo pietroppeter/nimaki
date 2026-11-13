@@ -1,0 +1,145 @@
+{
+  "about": "Written by tools/difftest.nim --js and tools/fuzz.nim --js: the last runs of nimaki compiled to JavaScript. Do not edit by hand.",
+  "difftest": {
+    "pin": "1.13.0",
+    "cases": 2118,
+    "identical": 1447,
+    "different": 0,
+    "unsupported": 671,
+    "diagrammari": {
+      "cases": 34,
+      "identical": 30,
+      "different": 0,
+      "unsupported": 4
+    }
+  },
+  "bytes": 6721855,
+  "fuzz": {
+    "pie": {
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
+      "different": 0
+    },
+    "timeline": {
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
+      "different": 0
+    },
+    "journey": {
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
+      "different": 0
+    },
+    "info": {
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
+      "different": 0
+    },
+    "packet": {
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
+      "different": 0
+    },
+    "flowchart": {
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
+      "different": 0
+    },
+    "sequence": {
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
+      "different": 0
+    },
+    "radar": {
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
+      "different": 0
+    },
+    "treemap": {
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
+      "different": 0
+    },
+    "treeView": {
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
+      "different": 0
+    },
+    "swimlane": {
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
+      "different": 0
+    },
+    "class": {
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
+      "different": 0
+    },
+    "state": {
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
+      "different": 0
+    },
+    "ishikawa": {
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
+      "different": 0
+    },
+    "cynefin": {
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
+      "different": 0
+    },
+    "gitGraph": {
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
+      "different": 0
+    },
+    "er": {
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
+      "different": 0
+    },
+    "requirement": {
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
+      "different": 0
+    },
+    "usecase": {
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
+      "different": 0
+    },
+    "railroad": {
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
+      "different": 0
+    },
+    "gantt": {
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
+      "different": 0
+    }
+  }
+}

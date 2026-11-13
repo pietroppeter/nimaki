@@ -1,8 +1,8 @@
 ## port-of: src/diagrams/railroad/render.ts
 ## port-status: draft
 ##
-## Port notes: Pele keys the width budgets by node object in a Map; here by the node's address.
-import std/[options, strutils, tables]
+## Port notes: Pele keys the width budgets by node object in a Map; here by the node (a ref, which hashes by identity).
+import std/[options, strutils, tables, hashes]
 from std/math import ceil
 import ../../js
 import ../../preprocess
@@ -101,13 +101,15 @@ proc rowOf(row: seq[Box], width: float): Box =
     down = max(down, kid.down)
   Box(kind: Sequence, width: width, up: up, down: down, kids: row)
 
+proc hash(r: RailroadNode): Hash = hash(cast[pointer](r))   ## by identity (an id in JavaScript)
+
 proc measure(root: RailroadNode, m: Metrics, room = Inf): Box =
-  var budgets = initTable[int, float]()
+  var budgets = initTable[RailroadNode, float]()
   var pending: seq[(RailroadNode, float)] = @[(root, room)]
   var i = 0
   while room != Inf and i < pending.len:
     let (node, width) = pending[i]
-    budgets[cast[int](node)] = width
+    budgets[node] = width
     # A sequence that folds puts its rows inside rails, so its parts are sized for those rows.
     let around = case node.kind
       of nkChoice, nkOptional: 4 * m.arc
@@ -117,7 +119,7 @@ proc measure(root: RailroadNode, m: Metrics, room = Inf): Box =
     for child in partsOf(node): pending.add (child, max(40.0, width - around))
     inc i
   fold[RailroadNode, Box](root, partsOf, proc (node: RailroadNode, kids: seq[Box]): Box =
-    let room = budgets.getOrDefault(cast[int](node), Inf)
+    let room = budgets.getOrDefault(node, Inf)
     case node.kind
     of nkTerminal:
       let text = shown(node.text)

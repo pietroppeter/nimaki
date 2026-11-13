@@ -12,6 +12,9 @@
 ##                       with itself with one byte changed (all different)
 ##     --package:PATH    the oracle package (default reference/npm/package or $PELE_PACKAGE)
 ##     --corpus:NAME     only one corpus: `pele` or `diagrammari` (default both)
+##     --js              compare Pele with nimaki compiled to JavaScript (tools/jsrunner.nim, in
+##                       Node) instead of nimaki compiled to C; a full run writes its summary in
+##                       docs/data/js.json instead of difftest.json
 ##
 ## A case is identical when both sides draw the same bytes, or both throw the same error code with
 ## the same message. `unsupported` is what nimaki raises for a type it does not draw yet. Both
@@ -23,7 +26,7 @@
 ## answers are cached in build/oracle/; the full report is build/difftest/report.json, and a run
 ## over the whole corpus writes the summary the pages show, docs/data/difftest.json.
 import std/[os, osproc, strutils, json, tables, algorithm, parseopt, hashes, random, sets]
-import common, verdict
+import common, verdict, answers
 import nimaki
 
 const
@@ -52,9 +55,9 @@ proc corpusText(): string =
   result = readFile(casesPath)
   if fileExists(diagrammariPath): result.add readFile(diagrammariPath)
 
-proc toAnswer(j: JsonNode): Answer =
-  if j["ok"].getBool: Answer(ok: true, svg: j["svg"].getStr)
-  else: Answer(ok: false, code: j["code"].getStr, message: j["message"].getStr)
+proc input(c: Case): JsonNode =
+  ## A case as the oracle and the JavaScript build read it.
+  %*{"id": c.id, "source": c.source, "options": {"now": fixedNow}}
 
 proc oracle(cases: seq[Case], packageDir: string): Table[string, Answer] =
   ## Pele's answers for every case, from the cache when the corpus, the package and `now` match.
@@ -64,11 +67,11 @@ proc oracle(cases: seq[Case], packageDir: string): Table[string, Answer] =
   if not fileExists(cached):
     if findExe("node").len == 0: quit "ERROR node not found: install Node 20 or later (the oracle runs in it)", 2
     createDir dir
-    var input = ""
+    var text = ""
     for c in cases:
-      input.add $(%*{"id": c.id, "source": c.source, "options": {"now": fixedNow}}) & "\n"
+      text.add $input(c) & "\n"
     let inPath = dir / "cases.jsonl"
-    writeFile inPath, input
+    writeFile inPath, text
     let cmd = "TZ=UTC node " & quoteShell(repoDir / "tools" / "oracle.mjs") & " " & quoteShell(packageDir) &
               " < " & quoteShell(inPath) & " > " & quoteShell(cached & ".tmp")
     if execShellCmd(cmd) != 0:
@@ -79,13 +82,6 @@ proc oracle(cases: seq[Case], packageDir: string): Table[string, Answer] =
     if line.len > 0:
       let j = parseJson(line)
       result[j["id"].getStr] = toAnswer(j)
-
-proc nimakiAnswer(c: Case): Answer =
-  try:
-    let r = render(c.source, RenderOptions(now: fixedNow))
-    Answer(ok: true, svg: r.svg)
-  except PeleError as e:
-    Answer(ok: false, code: e.code, message: e.msg)
 
 proc doneTypes(): HashSet[string] =
   ## The diagram types the coverage map says are done (all three stages).
@@ -104,6 +100,7 @@ proc main() =
   var show = 10
   var strict, checkDone, selfTest = false
   var onlyCorpus = ""
+  var js = false
   for kind, key, val in getopt():
     case kind
     of cmdLongOption, cmdShortOption:
@@ -115,6 +112,7 @@ proc main() =
       of "strict": strict = true
       of "check-done": checkDone = true
       of "self-test": selfTest = true
+      of "js": js = true
       of "corpus":
         if val notin ["pele", "diagrammari"]: quit "ERROR --corpus is pele or diagrammari, not " & val, 2
         onlyCorpus = val
@@ -123,7 +121,7 @@ proc main() =
     of cmdEnd: discard
   let packageDir = packageDirFrom(packageArg)
   let all = loadCases()
-  let answers = oracle(all, packageDir)
+  let peles = oracle(all, packageDir)
 
   var cases: seq[Case]
   var rng = initRand(seed)
@@ -131,14 +129,14 @@ proc main() =
     if onlyCorpus.len > 0 and c.corpus != onlyCorpus: continue
     if only.len > 0 and c.diagramType notin only and c.diagramType.coverageName notin only: continue
     if fast < 100 and rng.rand(99) >= fast: continue
-    if c.id notin answers: quit "ERROR the oracle has no answer for " & c.id & " (delete build/oracle/ and rerun)", 2
+    if c.id notin peles: quit "ERROR the oracle has no answer for " & c.id & " (delete build/oracle/ and rerun)", 2
     cases.add c
   if cases.len == 0: quit "ERROR no case matches " & only.join(" "), 2
 
   if selfTest:
     var same, flippedDifferent = 0
     for c in cases:
-      let want = answers[c.id]
+      let want = peles[c.id]
       if compare(c.id, c.diagramType, want, want).verdict == vIdentical: inc same
       if compare(c.id, c.diagramType, want, want.flipped).verdict == vDifferent: inc flippedDifferent
     if same != cases.len: echo "ERROR self test: Pele against itself is identical on only ", same, " of ", cases.len, " cases"
@@ -149,8 +147,13 @@ proc main() =
     quit(if ok: 0 else: 1)
 
   var outcomes: seq[Outcome]
-  for c in cases:
-    outcomes.add compare(c.id, c.diagramType, answers[c.id], nimakiAnswer(c))
+  if js:
+    var inputs: seq[JsonNode]
+    for c in cases: inputs.add c.input
+    let got = jsAnswers(inputs, "difftest")
+    for c in cases: outcomes.add compare(c.id, c.diagramType, peles[c.id], got[c.id])
+  else:
+    for c in cases: outcomes.add compare(c.id, c.diagramType, peles[c.id], nimakiAnswer(c.source, c.input["options"]))
 
   type Tally = array[Verdict, int]
   func count(t: Tally): int = t[vIdentical] + t[vDifferent] + t[vUnsupported]
@@ -202,7 +205,12 @@ proc main() =
     for k, v in tally.toJson: row[k] = v
     if tallyD.count > 0: row["diagrammari"] = tallyD.toJson
     rows.add row
-  if only.len == 0 and fast == 100 and onlyCorpus.len == 0:
+  if only.len == 0 and fast == 100 and onlyCorpus.len == 0 and js:
+    var summary = %*{"pin": pinOf(packageDir)}
+    for k, v in total.toJson: summary[k] = v
+    summary["diagrammari"] = totalD.toJson
+    updateJsData("difftest", "", summary)
+  if only.len == 0 and fast == 100 and onlyCorpus.len == 0 and not js:
     var summary = %*{"about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand. " &
       "`cases` and the counts beside it are Pele's corpus; `diagrammari` counts diagrammari's.",
       "pin": pinOf(packageDir)}
@@ -219,7 +227,7 @@ proc main() =
         align($tally[vUnsupported], 5), " unsupported"
   var sum: Tally
   for v in Verdict: sum[v] = total[v] + totalD[v]
-  echo "difftest: pele ", pinOf(packageDir), ", ", outcomes.len, " cases of ", types.len, " types",
+  echo "difftest: pele ", pinOf(packageDir), (if js: " against nimaki in JavaScript" else: ""), ", ", outcomes.len, " cases of ", types.len, " types",
     (if totalD.count > 0: " (" & $totalD.count & " of them diagrammari's)" else: ""),
     (if fast < 100: " (sample of " & $fast & "%, seed " & $seed & ")" else: ""), ": ",
     sum[vIdentical], " identical, ", sum[vDifferent], " different, ", sum[vUnsupported], " unsupported"
