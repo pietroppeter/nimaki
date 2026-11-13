@@ -103,7 +103,8 @@ proc draw(model: WardleyModel, config: Config, options: RenderOptions, plotW, na
   proc projectX(value: float): float = (value / 100) * plotW
   proc projectY(value: float): float = plotH - (value / 100) * plotH
 
-  let stages = if m.axes.stages.len > 0: m.axes.stages else: @DEFAULT_STAGES
+  var stages = m.axes.stages   # not `if ...: m.axes.stages else: @DEFAULT_STAGES`: nim js drops that else
+  if stages.len == 0: stages = @DEFAULT_STAGES
   let boundaries = m.axes.stageBoundaries
   let custom = boundaries.len == stages.len
   var frame = ""

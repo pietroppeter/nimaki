@@ -60,6 +60,8 @@ coding agents*, so a change here is reviewed like any page. It is adapted from
   `conformant`). A file that ports only a part of a TypeScript file says `## port-part-of:`.
   `nim r tools/portmap.nim` builds the port map from these headers (`docs/data/portmap.json`);
   run it in the pull request that ports or advances a file.
+- `src/` must also compile with `nim js` (decision 0013): `nim r tools/difftest.nim --js` compares
+  the JavaScript build with Pele, and CI runs it. The porting guide lists the Nim that only C runs.
 - `src/diagrams/pie/parser.ts` becomes `src/nimaki/diagrams/pie/parser.nim`. The public entry
   point is `src/nimaki.nim` (`render(text, options)`), as Pele's `src/core.ts` is.
 - A part is done when `nim r tools/difftest.nim <type>` finds the Nim SVG identical, byte for

@@ -14,7 +14,15 @@ func toInt32(x: float): int32 =
   let m = floorMod(trunc(x), 4294967296.0)
   cast[int32](uint32(m))
 
-func imul(a, b: int32): int32 = cast[int32](cast[uint32](a) * cast[uint32](b))
+func imul(a, b: int32): int32 =
+  ## Math.imul: the low 32 bits of the product. Computed in 16-bit halves so that no partial
+  ## product passes 2^48: in JavaScript, Nim's numbers are doubles, and a full 32 x 32-bit product
+  ## would lose its low bits before they are masked (the JavaScript build of Nim 2.2.4 does).
+  let ua = cast[uint32](a)
+  let ub = cast[uint32](b)
+  let lo = (ua and 0xffff'u32) * ub
+  let hi = ((ua shr 16) * (ub and 0xffff'u32)) and 0xffff'u32
+  cast[int32](lo + (hi shl 16))
 func ushr(a: int32, n: int): int32 = cast[int32](cast[uint32](a) shr n)
 
 func seededRandom*(seed: float): float =

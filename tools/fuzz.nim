@@ -11,11 +11,13 @@
 ##     --seed:S          the seed of the generator (default 1)
 ##     --show:N          print at most N differences as ERROR lines (default 10)
 ##     --package:PATH    the oracle package (default reference/npm/package or $PELE_PACKAGE)
+##     --js              compare Pele with nimaki compiled to JavaScript (tools/jsrunner.nim, in
+##                       Node); records the run in docs/data/js.json instead of fuzz.json
 ##
 ## The last run of each type is summed up in docs/data/fuzz.json, which the pages read. Each
 ## failing case is written whole to build/fuzz/<type>-<seed>.jsonl, so it can be replayed.
-import std/[os, osproc, strutils, json, random, parseopt, options, sequtils]
-import common, verdict
+import std/[os, osproc, strutils, json, random, parseopt, options, sequtils, tables]
+import common, verdict, answers
 import nimaki
 
 type Gen = object
@@ -1557,34 +1559,13 @@ proc options(g: var Gen): JsonNode =
   if g.chance(0.05): result["monospace"] = %[g.pick(["files", "members", "attributes", "messages"])]
   if g.chance(0.05): result["fontFamily"] = %g.pick(["Inter", "\"Fira Sans\", sans-serif", "bad;font", "Times New Roman"])
 
-proc toOptions(j: JsonNode): RenderOptions =
-  if j.hasKey("fontSize"): result.fontSize = some(j["fontSize"].getFloat)
-  if j.hasKey("padding"): result.padding = some(j["padding"].getFloat)
-  if j.hasKey("maxWidth"): result.maxWidth = some(j["maxWidth"].getFloat)
-  if j.hasKey("idPrefix"): result.idPrefix = some(j["idPrefix"].getStr)
-  if j.hasKey("responsive"): result.responsive = some(j["responsive"].getBool)
-  if j.hasKey("fontFamily"): result.fontFamily = j["fontFamily"].getStr
-  if j.hasKey("autoDirection"): result.autoDirection = some(j["autoDirection"].getBool)
-  if j.hasKey("directionBreakpoint"): result.directionBreakpoint = some(j["directionBreakpoint"].getFloat)
-  if j.hasKey("monospace"):
-    for m in j["monospace"]: result.monospace.add m.getStr
-  if j.hasKey("now"): result.now = j["now"].getFloat
-
-proc nimakiAnswer(source: string, options: JsonNode): Answer =
-  try:
-    let r = render(source, toOptions(options))
-    Answer(ok: true, svg: r.svg)
-  except PeleError as e:
-    Answer(ok: false, code: e.code, message: e.msg)
-  except CatchableError as e:
-    Answer(ok: false, code: "internal", message: e.msg)
-
 proc main() =
   var kind = ""
   var count = 1000
   var seed = 1
   var show = 10
   var packageArg = ""
+  var js = false
   for k, key, val in getopt():
     case k
     of cmdLongOption, cmdShortOption:
@@ -1593,6 +1574,7 @@ proc main() =
       of "seed": seed = parseInt(val)
       of "show": show = parseInt(val)
       of "package": packageArg = val
+      of "js": js = true
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
@@ -1638,17 +1620,18 @@ proc main() =
   if execShellCmd("TZ=UTC node " & quoteShell(repoDir / "tools" / "oracle.mjs") & " " &
                   quoteShell(packageDir) & " < " & quoteShell(inPath) & " > " & quoteShell(outPath)) != 0:
     quit "ERROR the oracle failed", 2
-  var answers: seq[JsonNode]
+  var peles: seq[JsonNode]
   for line in lines(outPath):
-    if line.len > 0: answers.add parseJson(line)
+    if line.len > 0: peles.add parseJson(line)
+  let fromJs = if js: jsAnswers(cases, "fuzz-" & kind & "-" & $seed) else: initTable[string, Answer]()
   var identical, different, shown, rendered = 0
   var failing = ""
   for i, c in cases:
-    let a = answers[i]
+    let a = peles[i]
     let want = if a["ok"].getBool: Answer(ok: true, svg: a["svg"].getStr)
                else: Answer(ok: false, code: a["code"].getStr, message: a["message"].getStr)
     if want.ok: inc rendered
-    let got = nimakiAnswer(c["source"].getStr, c["options"])
+    let got = if js: fromJs[c["id"].getStr] else: nimakiAnswer(c["source"].getStr, c["options"])
     let o = compare(c["id"].getStr, kind, want, got)
     if o.verdict == vIdentical: inc identical
     else:
@@ -1659,13 +1642,15 @@ proc main() =
         inc shown
   let failPath = dir / (kind & "-" & $seed & ".jsonl")
   writeFile failPath, failing
-  # the summary the pages show: the last run of each type
+  # the summary the pages show: the last run of each type (of the C build)
   let dataPath = dataDir / "fuzz.json"
   var data = if fileExists(dataPath): parseFile(dataPath) else: %*{"about": "Written by tools/fuzz.nim: the last run for each diagram type. Do not edit by hand.", "types": {}}
   data["types"][kind] = %*{"seed": seed, "cases": cases.len, "identical": identical, "different": different,
                            "rendered": rendered, "errors": cases.len - rendered}
-  writeFile dataPath, data.pretty & "\n"
-  echo "fuzz: ", kind, ", seed ", seed, ", ", cases.len, " cases: ", identical, " identical, ",
+  if js:
+    updateJsData("fuzz", kind, %*{"seed": seed, "cases": cases.len, "identical": identical, "different": different})
+  else: writeFile dataPath, data.pretty & "\n"
+  echo "fuzz: ", kind, (if js: " in JavaScript" else: ""), ", seed ", seed, ", ", cases.len, " cases: ", identical, " identical, ",
     different, " different", (if different > 0: " (" & failPath & ")" else: "")
   if different > 0: quit 1
 

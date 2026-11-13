@@ -48,6 +48,10 @@ nbText: """
    ([decision 0005](../decisions/#0005-every-file-goes-through-translate-verify-conform)).
 8. **Check, then claim.** A part is `done` on the [coverage map](../coverage/) only when
    `nim r tools/difftest.nim <type>` reports every case identical.
+9. **It also compiles to JavaScript.** `nim js` must build the same renderer, and
+   `nim r tools/difftest.nim --js` must find it identical too
+   ([decision 0013](../decisions/#0013-nimaki-also-builds-with-nim-js)). A few ways of writing
+   Nim break there and nowhere else; the traps below say which.
 
 ## The traps we already know of
 
@@ -133,6 +137,20 @@ A closure that uses a `var` parameter (a `seq` passed by reference) does not com
 Pele's local helpers often change the arrays of the function around them (`commit()` in
 `label.ts`'s `wrap`): write them as a `template`, which pastes the code in place.
 """, nkWarning, "Local helpers that change their surroundings"
+
+nbNote """
+Four ways of writing Nim compile to C but not to JavaScript (Nim 2.2), and the JavaScript build
+is checked in CI. An address chosen by an `if` expression, `let p = if down: addr g.a else: addr
+g.b`, loses its field in JavaScript: use `choose(down, g.a, g.b)` of `layout/layered.nim`, or an
+`if` statement. A `ref` cast to `int` (`cast[int](node)`, a key by identity) is no number in
+JavaScript: key the `Table` by the `ref` itself, with `proc hash(n: Node): Hash =
+hash(cast[pointer](n))`, which is the address in C and an id in JavaScript. And an `if`
+expression whose branch is a constant array made a `seq` (`if s.len > 0: s else: @DEFAULTS`)
+loses that branch: assign it in an `if` statement. Last, a JavaScript number is a double: a product
+of two 32-bit numbers can pass 2^53 and lose its low bits before Nim masks it (the JavaScript build
+of Nim 2.2.4, which CI uses, does). Multiply in 16-bit halves, as `imul` in
+`diagrams/cynefin/boundaries.nim` does.
+""", nkWarning, "Code that only C can run"
 
 nbNote """
 The older types (timeline, journey, flowchart, sequence...) are read by hand-written loops that
