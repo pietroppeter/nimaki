@@ -734,9 +734,9 @@
           "what": "The first article that uses diagrams drawn by nimaki to understand a domain: what happens between typing an address and reading the page (URL, DNS, TCP, TLS, HTTP, CDN), with as many diagram types as the domain calls for, and what using the library taught: missing API, rough edges, anything that differs from Pele.",
           "done_when": "An article on the site whose every diagram is drawn by nimaki and checked against Pele when the page is built; its lessons are notes or steps on this roadmap.",
           "owner": "Write domain articles with diagrams",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "opening-a-web-page",
+          "pr": "45"
         },
         {
           "id": "domain-articles",
@@ -746,6 +746,17 @@
           "done_when": "Never: it recurs while the port goes on.",
           "owner": "Write domain articles with diagrams",
           "status": "started",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "mermaid-block",
+          "kind": "tooling",
+          "title": "A Mermaid block for the pages, checked against Pele",
+          "what": "Found by the first domain article: every page that draws writes its own few lines to render Mermaid text with nimaki, show the SVG and fold the text under it. One block in docs/blocks.nim (say nbMermaid text, caption, options) would do it everywhere, and could ask Pele for the same drawing at build time, so each diagram on the site is also a small test.",
+          "done_when": "The block exists, the posts that draw use it, and a difference from Pele fails the build.",
+          "owner": "",
+          "status": "planned",
           "post": "",
           "pr": ""
         },
