@@ -664,19 +664,19 @@
       "corpus": 22,
       "parse": {
         "code": 1247,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 209,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 641,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/state/",
+      "post": "states-and-regions",
+      "notes": "Identical to Pele on the 119 corpus cases and on 5,000 generated inputs in CI (tools/fuzz.nim state); 9,000 more across seeds before merging."
     },
     {
       "id": "class",

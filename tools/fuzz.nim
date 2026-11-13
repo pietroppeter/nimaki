@@ -5,7 +5,7 @@
 ##
 ##   nim r tools/fuzz.nim pie                 1000 cases of pie, seed 1
 ##   nim r tools/fuzz.nim timeline            the same for timeline
-##   nim r tools/fuzz.nim flowchart           and for flowchart
+##   nim r tools/fuzz.nim flowchart           and for flowchart (and the other ported types)
 ##   options:
 ##     --cases:N         how many cases (default 1000)
 ##     --seed:S          the seed of the generator (default 1)
@@ -14,7 +14,7 @@
 ##
 ## The last run of each type is summed up in docs/data/fuzz.json, which the pages read. Each
 ## failing case is written whole to build/fuzz/<type>-<seed>.jsonl, so it can be replayed.
-import std/[os, osproc, strutils, json, random, parseopt, options]
+import std/[os, osproc, strutils, json, random, parseopt, options, sequtils]
 import common, verdict
 import nimaki
 
@@ -244,6 +244,67 @@ proc flowchartSource(g: var Gen): string =
     result.add g.pick(["", "  ", "    ", "\t"]) & flowStatement(g, 0, edges)
     result.add(if g.chance(0.03): "\r\n" else: "\n")
 
+const stateIds = ["A", "B", "C", "Still", "Moving", "Crash", "s1", "s2", "Long_name_state", "X", "fork1",
+                  "Ünï", "[*]", "[*]", "[*]", "First", "Second", "N1"]
+const stateLabels = ["", "text", "a b c", "EvNewValue", "Ünïcödé", "日本語のラベル", "emoji 🎉", "x&amp;y",
+                     "*em*", "**bold**", "a<br>b", "very long transition label that goes on and on and on",
+                     "#35; hash", ":colon", "  spaces  ", "fa:fa-car icon", "a\\nb", "<b>tag</b>", "$x^2$"]
+const stateColors = ["#ff0000", "red", "#abc", "transparent", "#12345678", "black", "white", "lightgray", "notacolor"]
+
+proc stateStatement(g: var Gen, depth: int): string =
+  let r = g.rng.rand(1.0)
+  if r < 0.4:
+    result = g.pick(stateIds) & (if g.chance(0.08): ":::" & g.pick(["hot", "cold"]) else: "") & " --> " &
+      g.pick(stateIds) & (if g.chance(0.05): ":::" & g.pick(["hot", "cold"]) else: "")
+    if g.chance(0.35): result.add " : " & g.pick(stateLabels)
+  elif r < 0.5 and depth < 3:
+    result = "state " & g.pick(["A", "B", "Comp", "\"Composite title\" as C2", "s1", "First", "Ünï"]) & " {\n"
+    if g.chance(0.25): result.add "  direction " & g.pick(["LR", "RL", "TB", "BT"]) & "\n"
+    let n = g.rng.rand(0 .. 5)
+    for k in 0 ..< n:
+      result.add "  " & stateStatement(g, depth + 1) & "\n"
+      if g.chance(0.12): result.add "  --\n"
+    result.add "}"
+  elif r < 0.55: result = "state " & g.pick(stateIds.filterIt(it != "[*]")) & " " & g.pick(["<<fork>>", "<<join>>", "<<choice>>"])
+  elif r < 0.6: result = "state \"" & g.pick(stateLabels).replace("\"", "") & "\" as " & g.pick(stateIds.filterIt(it != "[*]"))
+  elif r < 0.66: result = g.pick(stateIds.filterIt(it != "[*]")) & " : " & g.pick(stateLabels)
+  elif r < 0.71:
+    let id = g.pick(stateIds.filterIt(it != "[*]"))
+    if g.chance(0.5): result = "note " & g.pick(["left of", "right of"]) & " " & id & " : " & g.pick(stateLabels)
+    else: result = "note " & g.pick(["left of", "right of"]) & " " & id & "\n  " & g.pick(stateLabels) & "\n  " & g.pick(stateLabels) & "\nend note"
+  elif r < 0.73: result = "note \"" & g.pick(stateLabels).replace("\"", "") & "\" as N" & $g.rng.rand(1 .. 3)
+  elif r < 0.76: result = "classDef " & g.pick(["hot", "cold", "default"]) & " fill:" & g.pick(stateColors) & ",stroke:" & g.pick(stateColors) & (if g.chance(0.3): ",color:#fff" else: "") & (if g.chance(0.2): ",font-weight:bold" else: "")
+  elif r < 0.79: result = "class " & g.pick(stateIds.filterIt(it != "[*]")) & (if g.chance(0.3): "," & g.pick(stateIds.filterIt(it != "[*]")) else: "") & " " & g.pick(["hot", "cold"])
+  elif r < 0.82: result = "style " & g.pick(stateIds.filterIt(it != "[*]")) & " fill:" & g.pick(stateColors) & ",stroke-width:" & g.pick(["2px", "4px"]) & (if g.chance(0.05): ",font-style:italic" else: "")
+  elif r < 0.84: result = "click " & g.pick(stateIds.filterIt(it != "[*]")) & " " & g.pick(["href \"https://example.com\"", "\"https://example.com\" \"tip\"", "\"javascript:x\" \"t&amp;t\"", "\"\"\"x\"\"\" \"\"q\"\""])
+  elif r < 0.86: result = g.pick(stateIds) & " --> " & g.pick(stateIds) & "\n" & g.pick(stateIds) & " --> " & g.pick(stateIds)
+  elif r < 0.88: result = "%% " & g.pick(stateLabels)
+  elif r < 0.89: result = "accTitle: " & g.pick(stateLabels)
+  elif r < 0.9: result = "accDescr { " & g.pick(stateLabels) & "\n  " & g.pick(stateLabels) & " }"
+  elif r < 0.91: result = g.pick(["hide empty description", "scale 350 width", "direction LR"])
+  elif r < 0.92: result = g.pick(["garbage {", "A -->", "-->", "state", "}", "note left of", "state A <<nope>>", "A --> B : x : y", "x-y --> a.b", "--"])
+  elif r < 0.96:
+    let a = g.pick(stateIds.filterIt(it != "[*]"))
+    result = a & " --> " & a & (if g.chance(0.5): " : " & g.pick(stateLabels) else: "")
+  else: result = g.pick(stateIds.filterIt(it != "[*]"))
+
+proc stateSource(g: var Gen): string =
+  if g.chance(0.15):
+    result.add "---\n"
+    if g.chance(0.4): result.add "title: " & g.pick(stateLabels).replace("\"", "").replace(":", "") & "\n"
+    result.add "config:\n"
+    if g.chance(0.5): result.add "  flowchart:\n    curve: " & g.pick(["basis", "linear", "step", "stepAfter", "natural", "x"]) & "\n"
+    result.add "  state:\n"
+    if g.chance(0.3): result.add "    nodeSpacing: " & g.pick(["10", "80", "0", "x"]) & "\n"
+    if g.chance(0.3): result.add "    rankSpacing: " & g.pick(["10", "100", "3000"]) & "\n"
+    if g.chance(0.3): result.add "    wrappingWidth: " & g.pick(["50", "100", "400"]) & "\n"
+    result.add "    useMaxWidth: true\n"
+    result.add "---\n"
+  result.add g.pick(["stateDiagram-v2", "stateDiagram", "stateDiagram-v2"]) & "\n"
+  if g.chance(0.2): result.add "  direction " & g.pick(["LR", "RL", "TB", "BT"]) & "\n"
+  for i in 0 ..< g.rng.rand(0 .. 12):
+    result.add g.pick(["", "  ", "    ", "\t"]) & stateStatement(g, 0)
+    result.add(if g.chance(0.03): "\r\n" else: "\n")
 proc swimlaneSource(g: var Gen): string =
   ## A flowchart whose top-level subgraphs are lanes: lanes of steps, handoffs between them, a
   ## few loose steps (they share an unnamed lane) and groups inside lanes.
@@ -720,7 +781,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "radar", "treemap", "treeView", "swimlane", "class", "gitGraph"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, radar, treemap, treeView, swimlane, class, gitGraph", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "radar", "treemap", "treeView", "swimlane", "class", "state", "gitGraph"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, radar, treemap, treeView, swimlane, class, state, gitGraph", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -734,6 +795,7 @@ proc main() =
                                                           of "info": g.infoSource()
                                                           of "packet": g.packetSource()
                                                           of "flowchart": g.flowchartSource()
+                                                          of "state": g.stateSource()
                                                           of "swimlane": g.swimlaneSource()
                                                           of "class": g.classSource()
                                                           of "gitGraph": g.gitSource()
