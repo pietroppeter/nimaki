@@ -3,12 +3,12 @@
   "code": 47594,
   "totals": {
     "todo": {
-      "files": 141,
-      "code": 18866
+      "files": 132,
+      "code": 16938
     },
     "draft": {
-      "files": 150,
-      "code": 28728
+      "files": 159,
+      "code": 30656
     },
     "verified": {
       "files": 0,
@@ -114,8 +114,8 @@
     },
     {
       "component": "diagrams/gantt",
-      "todo": 1928,
-      "draft": 0,
+      "todo": 0,
+      "draft": 1928,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -1115,72 +1115,90 @@
       "component": "diagrams/gantt",
       "lines": 363,
       "code": 326,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/gantt/axis.nim"
+      ]
     },
     {
       "path": "src/diagrams/gantt/dates.ts",
       "component": "diagrams/gantt",
       "lines": 381,
       "code": 339,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/gantt/dates.nim"
+      ]
     },
     {
       "path": "src/diagrams/gantt/db.ts",
       "component": "diagrams/gantt",
       "lines": 412,
       "code": 343,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/gantt/db.nim"
+      ]
     },
     {
       "path": "src/diagrams/gantt/index.ts",
       "component": "diagrams/gantt",
       "lines": 19,
       "code": 17,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/gantt/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/gantt/lexer.ts",
       "component": "diagrams/gantt",
       "lines": 296,
       "code": 276,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/gantt/lexer.nim"
+      ]
     },
     {
       "path": "src/diagrams/gantt/parser.ts",
       "component": "diagrams/gantt",
       "lines": 200,
       "code": 187,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/gantt/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/gantt/render.ts",
       "component": "diagrams/gantt",
       "lines": 365,
       "code": 318,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/gantt/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/gantt/tokens.ts",
       "component": "diagrams/gantt",
       "lines": 84,
       "code": 82,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/gantt/tokens.nim"
+      ]
     },
     {
       "path": "src/diagrams/gantt/types.ts",
       "component": "diagrams/gantt",
       "lines": 48,
       "code": 40,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/gantt/types.nim"
+      ]
     },
     {
       "path": "src/diagrams/git/db.ts",
