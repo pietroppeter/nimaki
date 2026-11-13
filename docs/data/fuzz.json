@@ -184,6 +184,22 @@
       "different": 0,
       "rendered": 2881,
       "errors": 2119
+    },
+    "c4": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 2529,
+      "errors": 2471
+    },
+    "block": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 2407,
+      "errors": 2593
     }
   }
 }

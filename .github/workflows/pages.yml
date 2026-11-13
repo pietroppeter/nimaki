@@ -95,6 +95,8 @@ jobs:
           nim r tools/fuzz.nim cynefin --cases:5000
           nim r tools/fuzz.nim wardley --cases:5000
           nim r tools/fuzz.nim architecture --cases:5000
+          nim r tools/fuzz.nim c4 --cases:5000
+          nim r tools/fuzz.nim block --cases:5000
           nim r tools/fuzz.nim swimlane --cases:5000
           nim r tools/fuzz.nim class --cases:5000
           nim r tools/fuzz.nim er --cases:5000
