@@ -28,8 +28,8 @@ nbText: &"""
   cases, over the {fuzzTypes} ported types the fuzzer knows.
 - **It compiled at once.** The renderer uses only Nim's standard library, which runs in both. A
   first run drew most cases right. The rest failed on two ways of writing Nim that the C backend
-  runs and the JavaScript backend does not. Both are rewritten, and the porting guide now lists
-  them.
+  runs and the JavaScript backend does not, and a third turned up in wardley maps, ported the same
+  day. All three are rewritten, and the porting guide now lists them.
 - **Checked on every pull request.** `tools/difftest.nim --js` compiles the JavaScript build and
   compares it with Pele, and CI runs it. Decision 0013 records that nimaki builds both ways.
 - **Not yet in a browser.** The build runs in Node; a page that draws with it, and making the
@@ -48,7 +48,7 @@ and a `ref` is an address in memory. In JavaScript there are no addresses: an ob
 the engine moves around, and a number is a 64-bit float. So Nim writes a `ref object` as a
 JavaScript object, a `seq` as an array, a `string` as an array of bytes, and an address, which
 has no JavaScript equivalent, as a pair: the object that holds the value and the name of its
-field. Almost all of nimaki maps cleanly. Two things did not.
+field. Almost all of nimaki maps cleanly. Three things did not.
 
 ## The first: an address picked by `if`
 
@@ -95,6 +95,23 @@ proc hash(r: RailroadNode): Hash = hash(cast[pointer](r))
 var budgets = initTable[RailroadNode, float]()
 ```
 
+## The third: a constant in a branch
+
+Wardley maps were ported the same day, and CI, which tests a pull request merged with the latest
+`main`, ran them through the JavaScript build for the first time. One line failed:
+
+```nim
+let stages = if m.axes.stages.len > 0: m.axes.stages else: @DEFAULT_STAGES
+```
+
+`@DEFAULT_STAGES` makes a `seq` from a constant array. Inside an `if` expression the JavaScript
+backend writes an empty `else`, so `stages` stays undefined. The same choice as a statement works:
+
+```nim
+var stages = m.axes.stages
+if stages.len == 0: stages = @DEFAULT_STAGES
+```
+
 ## How the referee runs it
 
 The referee, `tools/difftest.nim`, compares Pele's SVG with nimaki's. Until today it called
@@ -124,8 +141,8 @@ nbNote """
 - `tools/answers.nim` holds nimaki's side of the referee for both builds (the options, the answer,
   and `jsAnswers`, which compiles and runs the JavaScript build); `tools/jsrunner.nim` is the
   program compiled with `nim js`.
-- The two fixes are in `layout/layered.nim`, `diagrams/railroad/render.nim` and
-  `diagrams/gantt/render.nim`. They change no output of the C build: the corpus and the fuzzer
+- The fixes are in `layout/layered.nim`, `diagrams/railroad/render.nim`,
+  `diagrams/gantt/render.nim` and `diagrams/wardley/render.nim`. They change no output of the C build: the corpus and the fuzzer
   give the same results as before.
 - No `when defined(js)` was needed in the renderer.
 """, nkNim, "In the port"

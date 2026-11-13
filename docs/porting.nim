@@ -50,8 +50,8 @@ nbText: """
    `nim r tools/difftest.nim <type>` reports every case identical.
 9. **It also compiles to JavaScript.** `nim js` must build the same renderer, and
    `nim r tools/difftest.nim --js` must find it identical too
-   ([decision 0013](../decisions/#0013-nimaki-also-builds-with-nim-js)). Two things break there
-   and nowhere else; the traps below say which.
+   ([decision 0013](../decisions/#0013-nimaki-also-builds-with-nim-js)). A few ways of writing
+   Nim break there and nowhere else; the traps below say which.
 
 ## The traps we already know of
 
@@ -139,12 +139,14 @@ Pele's local helpers often change the arrays of the function around them (`commi
 """, nkWarning, "Local helpers that change their surroundings"
 
 nbNote """
-Two ways of writing Nim compile to C but not to JavaScript (Nim 2.2), and the JavaScript build
+Three ways of writing Nim compile to C but not to JavaScript (Nim 2.2), and the JavaScript build
 is checked in CI. An address chosen by an `if` expression, `let p = if down: addr g.a else: addr
 g.b`, loses its field in JavaScript: use `choose(down, g.a, g.b)` of `layout/layered.nim`, or an
 `if` statement. A `ref` cast to `int` (`cast[int](node)`, a key by identity) is no number in
 JavaScript: key the `Table` by the `ref` itself, with `proc hash(n: Node): Hash =
-hash(cast[pointer](n))`, which is the address in C and an id in JavaScript.
+hash(cast[pointer](n))`, which is the address in C and an id in JavaScript. And an `if`
+expression whose branch is a constant array made a `seq` (`if s.len > 0: s else: @DEFAULTS`)
+loses that branch: assign it in an `if` statement.
 """, nkWarning, "Code that only C can run"
 
 nbNote """

@@ -3,9 +3,9 @@
   "difftest": {
     "pin": "1.13.0",
     "cases": 2118,
-    "identical": 1447,
+    "identical": 1512,
     "different": 0,
-    "unsupported": 671,
+    "unsupported": 606,
     "diagrammari": {
       "cases": 34,
       "identical": 30,
@@ -13,7 +13,7 @@
       "unsupported": 4
     }
   },
-  "bytes": 6721855,
+  "bytes": 7285385,
   "fuzz": {
     "pie": {
       "seed": 1,
@@ -136,6 +136,12 @@
       "different": 0
     },
     "gantt": {
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
+      "different": 0
+    },
+    "wardley": {
       "seed": 1,
       "cases": 2000,
       "identical": 2000,
