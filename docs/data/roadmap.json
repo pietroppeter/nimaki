@@ -566,8 +566,8 @@
           "what": "src/diagrams/gantt: 1928 lines of TypeScript, 11 corpus cases.",
           "done_when": "difftest: every gantt case identical.",
           "owner": "Port class and swimlane",
-          "status": "started",
-          "post": "",
+          "status": "done",
+          "post": "gantt-charts",
           "pr": ""
         },
         {

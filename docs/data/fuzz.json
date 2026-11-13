@@ -144,6 +144,14 @@
       "different": 0,
       "rendered": 3014,
       "errors": 1986
+    },
+    "gantt": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 3401,
+      "errors": 1599
     }
   }
 }

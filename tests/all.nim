@@ -2,5 +2,6 @@
 {.warning[UnusedImport]: off.}
 import test_difftest
 import test_js
+import test_jsdate
 import test_detect
 import test_layout
