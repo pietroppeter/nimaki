@@ -166,6 +166,7 @@ filled it in; later steps add to it.
 | `Math.max(a, b)` where NaN can occur | `jsMax(a, b)` |
 | `Int32Array`, `Float64Array`, `Uint8Array` | `seq[int32]`, `seq[float]`, `seq[uint8]` |
 | `Math.imul(a, b)`, `x >>> 0` | `uint32` arithmetic (wraps) |
+| `x | 0`, `x ^ y`, `x >>> n` on a float (ToInt32 first) | ECMAScript ToInt32 (drop the fraction, wrap modulo 2^32; NaN and infinity give 0), then casts between `int32` and `uint32`, as in `cynefin/boundaries.nim` |
 | `list.sort((a, b) => ...)` | `algorithm.sort` with the same comparator: both are stable |
 | `withPalette(p, () => ...)` (a module global set for a call) | set the global, `try` the call, restore it in `finally` |
 | a sticky regex `re.lastIndex = p; re.test(s)` | a matcher `proc (s: string, p: int): int` returning the end, or -1, with the pattern in a comment |

@@ -15,6 +15,8 @@ import nimaki/diagrams/packet/index as packetIndex
 import nimaki/diagrams/sequence/index as sequenceIndex
 import nimaki/diagrams/state/index as stateIndex
 import nimaki/diagrams/swimlane/index as swimlaneIndex
+import nimaki/diagrams/ishikawa/index as ishikawaIndex
+import nimaki/diagrams/cynefin/index as cynefinIndex
 import nimaki/diagrams/radar/index as radarIndex
 import nimaki/diagrams/treemap/index as treemapIndex
 import nimaki/diagrams/treeview/index as treeviewIndex
@@ -37,6 +39,8 @@ register(packetIndex.packet)
 register(sequenceIndex.sequence)
 register(stateIndex.state)
 register(swimlaneIndex.swimlane)
+register(ishikawaIndex.ishikawa)
+register(cynefinIndex.cynefin)
 register(radarIndex.radar)
 register(treemapIndex.treemap)
 register(treeviewIndex.treeView)

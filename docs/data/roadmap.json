@@ -368,9 +368,9 @@
           "what": "src/diagrams/ishikawa: 419 lines of TypeScript, 1 corpus cases.",
           "done_when": "difftest: every ishikawa case identical.",
           "owner": "Port sequence diagrams",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "fishbones-and-domains",
+          "pr": "30"
         },
         {
           "id": "journey",
@@ -412,9 +412,9 @@
           "what": "src/diagrams/cynefin: 539 lines of TypeScript, 3 corpus cases.",
           "done_when": "difftest: every cynefin case identical.",
           "owner": "Port sequence diagrams",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "fishbones-and-domains",
+          "pr": "30"
         },
         {
           "id": "treeview",

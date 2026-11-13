@@ -152,6 +152,22 @@
       "different": 0,
       "rendered": 3401,
       "errors": 1599
+    },
+    "ishikawa": {
+      "seed": 1,
+      "cases": 300,
+      "identical": 300,
+      "different": 0,
+      "rendered": 218,
+      "errors": 82
+    },
+    "cynefin": {
+      "seed": 1,
+      "cases": 300,
+      "identical": 300,
+      "different": 0,
+      "rendered": 246,
+      "errors": 54
     }
   }
 }

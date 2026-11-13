@@ -2,14 +2,14 @@
   "about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand. `cases` and the counts beside it are Pele's corpus; `diagrammari` counts diagrammari's.",
   "pin": "1.13.0",
   "cases": 2118,
-  "identical": 1424,
+  "identical": 1447,
   "different": 0,
-  "unsupported": 694,
+  "unsupported": 671,
   "diagrammari": {
     "cases": 34,
-    "identical": 29,
+    "identical": 30,
     "different": 0,
-    "unsupported": 5
+    "unsupported": 4
   },
   "types": [
     {
@@ -56,9 +56,9 @@
       "type": "cynefin",
       "coverage": "cynefin",
       "cases": 19,
-      "identical": 0,
+      "identical": 19,
       "different": 0,
-      "unsupported": 19
+      "unsupported": 0
     },
     {
       "type": "er",
@@ -130,14 +130,14 @@
       "type": "ishikawa",
       "coverage": "ishikawa",
       "cases": 4,
-      "identical": 0,
+      "identical": 4,
       "different": 0,
-      "unsupported": 4,
+      "unsupported": 0,
       "diagrammari": {
         "cases": 1,
-        "identical": 0,
+        "identical": 1,
         "different": 0,
-        "unsupported": 1
+        "unsupported": 0
       }
     },
     {
