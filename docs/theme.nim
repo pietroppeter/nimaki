@@ -224,6 +224,17 @@ figure { margin: 1.4rem 0; }
 figcaption { color: var(--muted); font: 500 .86rem/1.4 var(--display); margin-top: .6rem; }
 figure.diagram { padding: 1rem; background: var(--surface); border: 1px solid var(--line); border-radius: var(--stone); overflow-x: auto; }
 figure.diagram svg { display: block; margin: 0 auto; }
+/* nimaki drawing in the reader's browser (nbLive, nbPlayground, assets/live.js) */
+.live-status { margin: .6rem 0 0; color: var(--muted); font: 500 .82rem/1.4 var(--display); }
+.live-status.good::before { content: "✓ "; color: var(--success); font-weight: 700; }
+.live-status.bad::before { content: "✗ "; color: var(--primary); font-weight: 700; }
+.playground .live-status.bad { white-space: pre-wrap; font-family: var(--mono); font-variant-ligatures: none; }   /* Pele's error points at a column */
+.playground-text { display: block; box-sizing: border-box; width: 100%; min-height: 11rem; resize: vertical;
+  padding: .8rem .95rem; font: 400 .85rem/1.5 var(--mono); color: var(--ink); background: var(--shade);
+  border: 1px solid var(--line); border-radius: var(--stone); font-variant-ligatures: none;
+  white-space: pre; overflow-wrap: normal; overflow-x: auto; }
+.playground-text:focus { outline: 2px solid var(--secondary); outline-offset: 1px; }
+.playground-drawing:empty { display: none; }
 .pele {
   --pele-bg: var(--surface); --pele-fg: var(--ink); --pele-muted: var(--muted); --pele-line: var(--neutral-7);
   --pele-surface: var(--paper); --pele-surface-alt: var(--shade); --pele-border: var(--neutral-6);

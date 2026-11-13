@@ -16,7 +16,7 @@
 ## goes in `theme.nim`, from the tokens. Code fences in Markdown are highlighted at build time
 ## (Nim, TypeScript and JavaScript, Mermaid, Rust, Python, shell, TOML, YAML, JSON).
 
-import std/[json, os, strutils, strformat, times, algorithm]
+import std/[json, os, osproc, strutils, strformat, times, algorithm]
 import nimib
 import theme, review
 export theme, os   # os: every page builds paths with `/`
@@ -395,6 +395,66 @@ template nbSvg*(tsvg: string, tcaption = "") =
   ## build time, later nimaki), shown inline with a caption in Markdown. Pele's drawings take
   ## their colours from `--pele-*` custom properties, which the theme sets from its tokens.
   nb.addSvg(tsvg, tcaption)
+
+# --------------------------------------------------------------------- nimaki in the browser
+
+var nimakiJsBuilt = false
+
+proc nimakiJs*(): string =
+  ## `docs/assets/nimaki.js`, nimaki compiled to JavaScript from `src/nimaki/web.nim`, built
+  ## once per run of the pages (it is not committed: CI builds it with the pages).
+  result = assetsDir / "nimaki.js"
+  if not nimakiJsBuilt:
+    let cmd = "nim js --hints:off --warnings:off -d:danger -o:" & quoteShell(result) & " " &
+              quoteShell(repoDir / "src" / "nimaki" / "web.nim")
+    doAssert execShellCmd(cmd) == 0, "nim js failed: " & cmd
+    nimakiJsBuilt = true
+
+proc liveScript(pageFile: string): string =
+  ## The script of the live blocks, `docs/assets/live.js`, which loads `nimaki.js` when the page
+  ## has a live block. Every live block adds it; the script runs once.
+  discard nimakiJs()
+  &"""<script defer src="{assetHref("live.js", pageFile)}" data-nimaki="{assetHref("nimaki.js", pageFile)}"></script>"""
+
+newNbBlock(NbLive):
+  svg: string
+  source: string
+  options: string
+  caption: string
+  script: string
+  toHtml:
+    &"""<figure class="diagram live" data-options="{esc(blk.options)}"><div class="live-drawing">{blk.svg}</div>""" &
+      &"""<textarea class="live-source" hidden>{esc(blk.source)}</textarea>""" &
+      &"""<textarea class="live-built" hidden>{esc(blk.svg)}</textarea>""" &
+      (if blk.caption.len > 0: &"<figcaption>{inline(blk.caption)}</figcaption>" else: "") &
+      """<p class="live-status">Drawn by nimaki when the page was built. With JavaScript on, nimaki draws it again here.</p>""" &
+      "</figure>" & blk.script
+
+proc addLive*(nb: var Nb, source, svg: string, caption = "", options = "{}") =
+  doAssert svg.strip.startsWith("<svg"), "nbLive: the drawing must be one <svg> element"
+  doAssert "<script" notin svg.toLowerAscii, "nbLive: no scripts in a drawing"
+  nb.add newNbLive(svg = svg.strip, source = source, options = options, caption = caption,
+                   script = liveScript(nb.doc.filename))
+
+template nbLive*(tsource, tsvg: string, tcaption = "", toptions = "{}") =
+  ## A diagram drawn twice: by nimaki when the page is built (`tsvg`, from `tsource` with the
+  ## render options `toptions`, as JSON), and again by nimaki compiled to JavaScript in the
+  ## reader's browser, which then says whether the two drawings are the same bytes.
+  nb.addLive(tsource, tsvg, tcaption, toptions)
+
+newNbBlock(NbPlayground):
+  source: string
+  options: string
+  script: string
+  toHtml:
+    &"""<div class="playground" data-options="{esc(blk.options)}">""" &
+      &"""<textarea class="playground-text" spellcheck="false" autocapitalize="off" aria-label="Mermaid text">{esc(blk.source)}</textarea>""" &
+      """<p class="live-status">With JavaScript on, nimaki draws the text above here, as you type.</p>""" &
+      """<figure class="diagram playground-drawing"></figure></div>""" & blk.script
+
+template nbPlayground*(tsource: string, toptions = "{}") =
+  ## A text area for Mermaid text, drawn by nimaki in the reader's browser as it is typed.
+  nb.add newNbPlayground(source = tsource, options = toptions, script = liveScript(nb.doc.filename))
 
 # -------------------------------------------------------------------------------------- pipeline
 

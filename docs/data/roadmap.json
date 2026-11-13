@@ -647,11 +647,11 @@
           "id": "nimjs-browser",
           "kind": "port",
           "title": "nimaki drawing in the browser",
-          "what": "A browser entry point for the JavaScript build (render(text) exported), a page whose diagrams nimaki draws in the reader's browser, and a smaller file.",
+          "what": "A browser entry point for the JavaScript build (nimaki.render exported), and a page whose diagrams nimaki draws in the reader's browser: the Playground. A smaller file is left open.",
           "done_when": "a page draws its diagrams with nimaki in the browser, identical to the SVG drawn at build time.",
-          "owner": "",
-          "status": "planned",
-          "post": "",
+          "owner": "Port class and swimlane",
+          "status": "done",
+          "post": "drawn-in-your-browser",
           "pr": ""
         },
         {
