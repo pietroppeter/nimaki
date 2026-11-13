@@ -575,6 +575,69 @@ proc gitSource(g: var Gen): string =
     result.add indent & line
     result.add(if g.chance(0.03): "\r\n" else: "\n")
 
+const ucIds = ["User", "Admin", "Login", "Checkout", "Profile", "Payload", "Auth", "Shop", "Guest", "Pay", "x1", "Sys"]
+const ucLabels = ["Sign in", "Place order", "\"Quoted case\"", "Edit profile", "日本語", "a very long use case name that has to wrap", "**bold** label", "x", "Ünï"]
+const ucJson = ["{\"ok\": true}", "{}", "{\"2\": \"b\", \"1\": \"a\", \"name\": \"n\"}",
+                "{\"colors\": [\"Red\", \"Green\"], \"n\": 3, \"z\": null}",
+                "{\"address\": {\"city\": \"Oslo\", \"zip\": 123}, \"items\": [{\"name\": \"A\"}, {}], \"e\": []}",
+                "{\"dup\": \"old\", \"dup\": \"new\", \"f\": 1.5e3, \"neg\": -0}",
+                "{\"long\": \"a value long enough to need wrapping in the table cell of the json node\"}",
+                "{\"a\": tru}", "{a: 1}", "{\"a\": 1,}", "{\"a\": 01}", "{\"a\" 1}", "{\"a\": \"x\\q\"}",
+                "{\"esc\": \"line\\nbreak \\u00e9 \\\"q\\\"\"}", "{\"nested\": {\"deep\": {\"deeper\": [1, [2, 3]]}}}"]
+const ucArrows = ["-->", "-->", "<--", "--", "--->", "---->", "--|>", "--o", "--x", "o--", "x--", "<---", "-- label -->",
+                  "<-- label --", "-- \"quoted label\" --o", "o-- why --", "..> : include", "..> : extend", "..> : INCLUDE",
+                  "-- uses ---", "-- x --x", "e1@-->", "e2@--"]
+
+proc ucId(g: var Gen): string = (if g.chance(0.03): g.pick(["\"Gen id\"", "\"`md`\"", "\"日本\""]) else: g.pick(ucIds))
+
+proc ucElement(g: var Gen, actor: bool): string =
+  result = g.ucId()
+  if not result.startsWith("\"") and g.chance(0.4):
+    let l = g.pick(ucLabels)
+    result.add(if actor or g.chance(0.5): "(" & l & ")" else: "[" & l & "]")
+  if g.chance(0.12):
+    result.add "@{ " & g.pick(["type: hollow", "type: awesome", "business: true", "icon: user", "type: normal, business: false",
+                               "business: true, type: hollow", "icon: \"\"", "type: rect", "animation: fast"]) & " }"
+  if g.chance(0.1): result.add " <<" & (if g.chance(0.05): " " else: g.pick(["Human", "System", "ext"])) & ">>"
+  if g.chance(0.05): result.add ":::" & g.pick(["hot", "cold", "hot,cold"])
+
+proc ucStatement(g: var Gen, depth: int): string =
+  let r = g.rng.rand(1.0)
+  if r < 0.18:
+    result = "actor " & g.ucElement(true)
+    if g.chance(0.2): result.add ", " & g.ucElement(true)
+    elif g.chance(0.15): result.add " " & g.pick(ucArrows) & " " & g.ucId()
+  elif r < 0.32: result = g.ucElement(false)
+  elif r < 0.6:
+    result = g.ucId() & (if g.chance(0.03): ":::hot" else: "") & " " & g.pick(ucArrows) & " " &
+      (if g.chance(0.15): g.ucElement(false) else: g.ucId())
+  elif r < 0.66 and depth == 0:
+    result = "systemBoundary " & g.pick(["Auth", "Shop", "\"Ordering system\"", "Sys[The system]", "S2"]) &
+      (if g.chance(0.2): "@{ type: " & g.pick(["package", "rect"]) & " }" else: "") &
+      (if g.chance(0.1): ":::hot" else: "") & "\n"
+    for k in 0 ..< g.rng.rand(0 .. 4):
+      result.add "  " & (if g.chance(0.3): "actor " & g.ucElement(true) else: g.ucElement(false)) & "\n"
+    result.add(if g.chance(0.97): "end" else: "")
+  elif r < 0.7: result = "note for " & g.ucId() & " " & g.pick(["\"Remember this\"", "plain words here", "`**md**`", "x"])
+  elif r < 0.75: result = "json " & g.pick(["Payload", "Data", "Session"]) & (if g.chance(0.5): " " else: "") & "@" & (if g.chance(0.3): g.pick(ucJson) else: g.pick(ucJson[0 .. 6])) & (if g.chance(0.2): ":::" & g.pick(["data", "hot"]) else: "")
+  elif r < 0.79: result = g.pick(["Auth", "e1", "e2", "Payload", "User", "Login", "Nope"]) & "@{ " & g.pick(["type: package", "animation: fast", "animate: true", "animation: slow", "business: true", "type: hollow", "icon: cog", "type: rect", "x: 1"]) & " }"
+  elif r < 0.83: result = "classDef " & g.pick(["hot", "cold", "default", "data"]) & " fill:" & g.pick(stateColors) & ",stroke:" & g.pick(stateColors) & (if g.chance(0.3): ",color:#fff" else: "") & (if g.chance(0.2): ",stroke-width:3px" else: "")
+  elif r < 0.86: result = "class " & g.ucId() & (if g.chance(0.3): "," & g.ucId() else: "") & " " & g.pick(["hot", "cold", "data"])
+  elif r < 0.89: result = "style " & g.pick(["User", "Login", "Auth", "e1", "Payload", "Nope"]) & " fill:" & g.pick(stateColors) & ",stroke-width:" & g.pick(["2px", "4px"]) & (if g.chance(0.2): ",font-style:italic" else: "")
+  elif r < 0.91: result = "%% " & g.pick(stateLabels)
+  elif r < 0.92: result = "accTitle: " & g.pick(stateLabels)
+  elif r < 0.93: result = "accDescr { " & g.pick(stateLabels) & "\n    " & g.pick(stateLabels) & " }"
+  elif r < 0.95: result = "direction " & g.pick(["LR", "RL", "TB", "BT", "TD"])
+  elif r < 0.955: result = g.pick(["package X", "actor", "end", "-->", "note X", "json x @{", "classDef", "A B C"])
+  else: result = g.ucId() & " --> " & g.ucId()
+
+proc usecaseSource(g: var Gen): string =
+  if g.chance(0.1): result.add "---\ntitle: " & g.pick(["Use cases", "日本", "A title"]) & "\n---\n"
+  result.add (if g.chance(0.02): g.pick(["usecase", "usecase-beta x"]) else: "usecase-beta") & "\n"
+  for i in 0 ..< g.rng.rand(0 .. 10):
+    result.add g.pick(["", "", "  ", "\t"]) & g.ucStatement(0)
+    result.add(if g.chance(0.03): "\r\n" else: "\n")
+
 const scores = ["5", "1", "3", "4", "2", "0", "7", "-1", "2.5", " 4 ", "", "x", "1e1", "0x3", "Infinity",
                 "3.", ".5", "NaN", "\u30003"]
 const actors = ["Me", "Cat", "Dog", "", " Me ", "Ünï", "日本", "Zed", "a b", "Me", "emoji 🎉",
@@ -1048,7 +1111,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -1073,6 +1136,7 @@ proc main() =
                                                           of "treemap": g.treemapSource()
                                                           of "er": g.erSource()
                                                           of "requirement": g.requirementSource()
+                                                          of "usecase": g.usecaseSource()
                                                           else: g.treeViewSource()), "options": opts}
   let dir = buildDir / "fuzz"
   createDir dir

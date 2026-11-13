@@ -610,9 +610,9 @@
           "what": "src/diagrams/usecase: 2821 lines of TypeScript, 24 corpus cases.",
           "done_when": "difftest: every usecase case identical.",
           "owner": "Port the compound-layout diagram types",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "actors-and-use-cases",
+          "pr": "32"
         },
         {
           "id": "agentflow",

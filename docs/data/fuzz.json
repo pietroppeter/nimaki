@@ -107,43 +107,51 @@
     },
     "er": {
       "seed": 1,
-      "cases": 3000,
-      "identical": 3000,
+      "cases": 5000,
+      "identical": 5000,
       "different": 0,
-      "rendered": 2169,
-      "errors": 831
+      "rendered": 3600,
+      "errors": 1400
     },
     "requirement": {
       "seed": 1,
-      "cases": 3000,
-      "identical": 3000,
+      "cases": 5000,
+      "identical": 5000,
       "different": 0,
-      "rendered": 1772,
-      "errors": 1228
+      "rendered": 2997,
+      "errors": 2003
     },
     "sequence": {
       "seed": 1,
-      "cases": 3000,
-      "identical": 3000,
+      "cases": 5000,
+      "identical": 5000,
       "different": 0,
-      "rendered": 1660,
-      "errors": 1340
+      "rendered": 2806,
+      "errors": 2194
+    },
+    "usecase": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 1890,
+      "errors": 3110
     },
     "ishikawa": {
       "seed": 1,
-      "cases": 3000,
-      "identical": 3000,
+      "cases": 500,
+      "identical": 500,
       "different": 0,
-      "rendered": 2300,
-      "errors": 700
+      "rendered": 374,
+      "errors": 126
     },
     "cynefin": {
       "seed": 1,
-      "cases": 3000,
-      "identical": 3000,
+      "cases": 500,
+      "identical": 500,
       "different": 0,
-      "rendered": 2434,
-      "errors": 566
+      "rendered": 406,
+      "errors": 94
     }
   }
 }
