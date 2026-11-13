@@ -95,6 +95,7 @@ jobs:
           nim r tools/fuzz.nim class --cases:5000
           nim r tools/fuzz.nim er --cases:5000
           nim r tools/fuzz.nim requirement --cases:5000
+          nim r tools/fuzz.nim usecase --cases:5000
           nim r tools/fuzz.nim gitGraph --cases:5000
           nim r tools/fuzz.nim railroad --cases:5000
           nim r tools/fuzz.nim radar --cases:5000
