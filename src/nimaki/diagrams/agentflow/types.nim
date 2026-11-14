@@ -4,7 +4,7 @@
 ## As in the flowchart's types: a string that may be undefined and is never `""` when set is a
 ## `string` with `""` for undefined; an edge's length is `NO_LENGTH` when undefined. Pele's
 ## element mappings and diagnostics are for tools that read the text, and nothing drawn reads
-## them; they are kept, as Pele's model has them. The semantic model, a method, is left out.
+## them; they are kept, as Pele's model has them. The semantic model is `semanticModel` in db.nim.
 import std/[options, tables]
 import ../../util/yaml
 import ../../model

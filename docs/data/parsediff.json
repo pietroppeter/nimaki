@@ -2,22 +2,22 @@
   "about": "Pele's parse() against nimaki's, on corpus/cases.json, by tools/parsediff.nim. Do not edit by hand.",
   "pin": "1.13.0",
   "cases": 2118,
-  "same": 1064,
-  "different": 681,
+  "same": 1745,
+  "different": 0,
   "error": 373,
   "unsupported": 0,
   "types": [
     {
       "type": "agentflow",
-      "same": 0,
-      "different": 180,
+      "same": 180,
+      "different": 0,
       "error": 58,
       "unsupported": 0
     },
     {
       "type": "architecture",
-      "same": 5,
-      "different": 15,
+      "same": 20,
+      "different": 0,
       "error": 6,
       "unsupported": 0
     },
@@ -30,15 +30,15 @@
     },
     {
       "type": "c4",
-      "same": 0,
-      "different": 30,
+      "same": 30,
+      "different": 0,
       "error": 26,
       "unsupported": 0
     },
     {
       "type": "class",
-      "same": 0,
-      "different": 77,
+      "same": 77,
+      "different": 0,
       "error": 7,
       "unsupported": 0
     },
@@ -72,8 +72,8 @@
     },
     {
       "type": "gantt",
-      "same": 0,
-      "different": 22,
+      "same": 22,
+      "different": 0,
       "error": 3,
       "unsupported": 0
     },
@@ -170,15 +170,15 @@
     },
     {
       "type": "sequence",
-      "same": 7,
-      "different": 172,
+      "same": 179,
+      "different": 0,
       "error": 7,
       "unsupported": 0
     },
     {
       "type": "state",
-      "same": 2,
-      "different": 111,
+      "same": 113,
+      "different": 0,
       "error": 6,
       "unsupported": 0
     },
@@ -212,8 +212,8 @@
     },
     {
       "type": "usecase",
-      "same": 1,
-      "different": 74,
+      "same": 75,
+      "different": 0,
       "error": 76,
       "unsupported": 0
     },
