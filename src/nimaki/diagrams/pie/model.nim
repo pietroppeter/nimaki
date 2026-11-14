@@ -11,10 +11,6 @@ type PieModel* = ref object of RootObj
   showData*: bool
   sections*: OrderedTable[string, float]
 
-func dropLeadingSpaces(s: string): string =
-  ## s.replace(/^\s+/g, '')
-  jsTrimStart(s)
-
 func collapseIndents(s: string): string =
   s.replace(jsre"/\n\s+/g", "\n")
 
@@ -28,7 +24,7 @@ proc buildPie*(ast: PieAst, title: string): PieModel =
     if section.label notin sections: sections[section.label] = section.value
   PieModel(
     title: if ast.title != "": ast.title else: title,
-    accTitle: if ast.accTitle != "": dropLeadingSpaces(ast.accTitle) else: "",
+    accTitle: if ast.accTitle != "": ast.accTitle.replace(jsre"/^\s+/g", "") else: "",
     accDescr: if ast.accDescr != "": collapseIndents(ast.accDescr) else: "",
     showData: ast.showData,
     sections: sections)

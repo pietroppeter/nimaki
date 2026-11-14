@@ -2,6 +2,7 @@
 ## port-status: draft
 import ../common/tokens
 import ../../js
+import ../../jsregex
 
 const
   # const enum T: the index of each token type in PIE_TOKENS
@@ -52,7 +53,8 @@ let PIE_TOKENS*: seq[TokenType] = @[
   keyword("showData"),
   keyword("pie"),
   TokenType(name: ":", literal: ":"),
-  TokenType(name: "NUMBER_PIE", scanner: numberScanner, first: "-0123456789", hasFirst: true),
+  TokenType(name: "NUMBER_PIE", pattern: jsre"/(?:-?[0-9]+\.[0-9]+(?!\.))|(?:-?(0|[1-9][0-9]*)(?!\.))/y",
+            scanner: numberScanner, first: "-0123456789", hasFirst: true),
     # /(?:-?[0-9]+\.[0-9]+(?!\.))|(?:-?(0|[1-9][0-9]*)(?!\.))/y
   ACC_DESCR,
   ACC_TITLE,
