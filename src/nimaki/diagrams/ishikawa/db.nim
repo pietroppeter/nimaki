@@ -1,5 +1,6 @@
 ## port-of: src/diagrams/ishikawa/db.ts
 ## port-status: conformant
+import std/options
 import types
 
 type
@@ -10,8 +11,7 @@ type
   IshikawaDb* = ref object of IshikawaModel
     stack: seq[Entry]
       ## The line of ancestors of the last node, each with its level.
-    baseLevel: int
-    hasBase: bool
+    baseLevel: Option[int]
 
 proc addNode*(db: IshikawaDb, rawLevel: int, text: string) =
   ## The first line is the effect. Every later line is a cause, nested by its indentation relative
@@ -21,10 +21,8 @@ proc addNode*(db: IshikawaDb, rawLevel: int, text: string) =
     db.root = node
     db.stack = @[Entry(level: 0, node: node)]
     return
-  if not db.hasBase:
-    db.baseLevel = rawLevel
-    db.hasBase = true
-  let level = max(rawLevel - db.baseLevel + 1, 1)
+  if db.baseLevel.isNone: db.baseLevel = some(rawLevel)
+  let level = max(rawLevel - db.baseLevel.get + 1, 1)
   while db.stack.len > 1 and db.stack[^1].level >= level: discard db.stack.pop()
   db.stack[^1].node.children.add node
   db.stack.add Entry(level: level, node: node)

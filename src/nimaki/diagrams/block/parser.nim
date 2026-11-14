@@ -1,5 +1,6 @@
 ## port-of: src/diagrams/block/parser.ts
 ## port-status: conformant
+import std/options
 import ../../errors
 import ../../js
 import db, lexer, tokens
@@ -122,8 +123,7 @@ proc parseBlock*(src: string, db: BlockDb) =
       list.items.add nodeStatement()
     of T_COLUMNS:
       let b = newBlock("", "column-setting")
-      b.hasId = false
-      b.columns = digitsValue(texts[i])
+      b.columns = some(digitsValue(texts[i]))
       inc i
       list.items.add one(b)
     of T_SPACE_BLOCK:
@@ -153,7 +153,6 @@ proc parseBlock*(src: string, db: BlockDb) =
         b = newBlock(id, "composite")
       elif frame.header.isList:
         b = newBlock("", "composite")
-        b.hasId = false
       else:
         b = Block()
         b[] = frame.header.blocks[0][]

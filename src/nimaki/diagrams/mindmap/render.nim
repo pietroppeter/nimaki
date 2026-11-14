@@ -223,9 +223,9 @@ proc draw(model: MindmapModel, config: Config, options: RenderOptions, down: boo
     minY = jsMin(minY, top)
     maxY = jsMax(maxY, top + h[i])
 
-    if i == 0 or parent[i] == 0: flush(nodes[k - 1].section)
+    if i == 0 or parent[i] == 0: flush(nodes[k - 1].section.get(0))
     if i > 0 and down:
-      if parent[i] == 0: color = seriesColor(node.section)
+      if parent[i] == 0: color = seriesColor(node.section.get(0))
       let p = parent[i]
       # The link drops from under its parent and turns in to the node's left. It starts where
       # the link to the sibling above turned in, so each stretch of a shared trunk has one color.
@@ -242,7 +242,7 @@ proc draw(model: MindmapModel, config: Config, options: RenderOptions, down: boo
       edges.add "<path class=\"pele-edge\" d=\"M" & num(x1) & "," & num(y1) & "V" & num(y2 - bend) & "Q" &
         num(x1) & "," & num(y2) & " " & num(x1 + bend) & "," & num(y2) & "H" & num(x2) & "\"/>"
     elif i > 0:
-      if parent[i] == 0: color = seriesColor(node.section)
+      if parent[i] == 0: color = seriesColor(node.section.get(0))
       let p = parent[i]
       let dir = float(side[i])
       let start = if dir > 0: 1 else: 3
