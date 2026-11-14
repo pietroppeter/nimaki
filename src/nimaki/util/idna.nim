@@ -224,10 +224,10 @@ func codePointsToPunycode*(input: openArray[int]): Option[string] =
 func rangeIndex(cp: int): int =
   ## ada's find_range_index: the row whose range holds `cp`.
   var lo = 0
-  var hi = idnaTable.high
+  var hi = idnaStarts.high
   while lo <= hi:
     let mid = (lo + hi) shr 1
-    let v = int(idnaTable[mid][0])
+    let v = int(idnaStarts[mid])
     if v < cp: lo = mid + 1
     elif v > cp: hi = mid - 1
     else: return mid
@@ -238,7 +238,7 @@ func map*(input: openArray[int]): Option[seq[int]] =
   ## disallowed.
   var answer: seq[int]
   for x in input:
-    let descriptor = idnaTable[rangeIndex(x)][1]
+    let descriptor = idnaDescriptors[rangeIndex(x)]
     case descriptor and 0xff
     of 0: discard
     of 1: answer.add x
@@ -251,17 +251,17 @@ func map*(input: openArray[int]): Option[seq[int]] =
 
 func direction(cp: int): IdnaDirection =
   var lo = 0
-  var hi = idnaDirections.high
+  var hi = idnaDirLast.high
   # the first row whose last code point is at least cp (std::lower_bound)
-  var found = idnaDirections.len
+  var found = idnaDirLast.len
   while lo <= hi:
     let mid = (lo + hi) shr 1
-    if int(idnaDirections[mid][1]) < cp: lo = mid + 1
+    if int(idnaDirLast[mid]) < cp: lo = mid + 1
     else:
       found = mid
       hi = mid - 1
-  if found == idnaDirections.len: return dNONE
-  if cp >= int(idnaDirections[found][0]): idnaDirections[found][2] else: dNONE
+  if found == idnaDirLast.len: return dNONE
+  if cp >= int(idnaDirFirst[found]): idnaDirKind[found] else: dNONE
 
 func validLabel*(label: openArray[int]): bool =
   ## ada's is_label_valid.

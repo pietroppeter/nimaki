@@ -76,25 +76,34 @@ text.add wrap(dirNames.mapIt("d" & it)) & "\n"
 
 let mappings = numbers(body("const uint32_t mappings["))
 text.add &"\nconst idnaMappings*: array[{mappings.len}, int32] = [\n"
-text.add wrap(mappings.mapIt($it & "")) & "]\n"
+text.add wrap(mappings.mapIt($it)) & "]\n"
 
+# Flat arrays rather than arrays of tuples: nim js writes a tuple as an object with named fields,
+# which would make these tables three times as large in the JavaScript build.
 let tableNums = numbers(body("const uint32_t table["))
-var rows: seq[string]
+var starts, descriptors: seq[string]
 for i in countup(0, tableNums.len - 1, 2):
-  rows.add &"({tableNums[i]}, {tableNums[i + 1]})"
-text.add &"\n## (first code point of a range, descriptor): the low byte is 0 ignored, 1 valid, 2 disallowed,\n"
-text.add "## or else a mapping, `count shl 24 or index shl 8` into idnaMappings.\n"
-text.add &"const idnaTable*: array[{rows.len}, (int32, uint32)] = [\n" & wrap(rows) & "]\n"
+  starts.add $tableNums[i]
+  descriptors.add $tableNums[i + 1]
+text.add "\n## The ranges of code points, by their first one, and what each range does (its descriptor):\n"
+text.add "## the low byte is 0 ignored, 1 valid, 2 disallowed, or else a mapping,\n"
+text.add "## `count shl 24 or index shl 8` into idnaMappings.\n"
+text.add &"const idnaStarts*: array[{starts.len}, int32] = [\n" & wrap(starts) & "]\n"
+text.add &"const idnaDescriptors*: array[{descriptors.len}, uint32] = [\n" & wrap(descriptors) & "]\n"
 
 let dirBody = body("static directions dir_table[]")
-var dirRows: seq[string]
+var firsts, lasts, kinds: seq[string]
 for entry in dirBody.split('}'):
   let e = entry.strip(chars = Whitespace + {',', '{'})
   if e == "": continue
   let parts = e.split(',')
-  let name = parts[2].strip.replace("direction::", "")
-  dirRows.add &"({parseInt(parts[0].strip)}, {parseInt(parts[1].strip)}, d{name})"
-text.add &"\nconst idnaDirections*: array[{dirRows.len}, (int32, int32, IdnaDirection)] = [\n" & wrap(dirRows) & "]\n"
+  firsts.add $parseInt(parts[0].strip)
+  lasts.add $parseInt(parts[1].strip)
+  kinds.add "d" & parts[2].strip.replace("direction::", "")
+text.add "\n## The writing direction (Bidi class) of ranges of code points: first, last, direction.\n"
+text.add &"const idnaDirFirst*: array[{firsts.len}, int32] = [\n" & wrap(firsts) & "]\n"
+text.add &"const idnaDirLast*: array[{lasts.len}, int32] = [\n" & wrap(lasts) & "]\n"
+text.add &"const idnaDirKind*: array[{kinds.len}, IdnaDirection] = [\n" & wrap(kinds) & "]\n"
 
 for (name, decl) in [("idnaCombining", "constexpr static uint32_t combining[]"),
                      ("idnaVirama", "constexpr static uint32_t virama[]"),
@@ -106,4 +115,4 @@ for (name, decl) in [("idnaCombining", "constexpr static uint32_t combining[]"),
 
 let target = repo / "src/nimaki/util/idna_data.nim"
 writeFile(target, text)
-echo &"idna_data: ada {AdaVersion}, IDNA {unicode}: {rows.len} ranges, {mappings.len} mapped code points, {dirRows.len} directions -> {target}"
+echo &"idna_data: ada {AdaVersion}, IDNA {unicode}: {starts.len} ranges, {mappings.len} mapped code points, {firsts.len} directions -> {target}"

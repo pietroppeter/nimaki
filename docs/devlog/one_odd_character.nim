@@ -1,6 +1,6 @@
 ## devlog: 14 Nov 2026 S | One odd character | The corpus with one odd character slipped into each case now gives Pele's answers every time: nimaki writes a host name in any script as a URL does, and four places that counted bytes count as JavaScript does.
 ## kind: port
-import std/[json, math, os, options, sequtils, strformat, strutils, tables, unicode]
+import std/[json, math, os, osproc, options, sequtils, strformat, strutils, tables, unicode]
 import nimib
 import tabelline, tabelline/nimib
 import ../blocks
@@ -35,6 +35,11 @@ for run in before:
     if "href" in d["detail"].getStr: inc hostDifferences
 # Figures of runs made while writing: the test of hosts, and the first port (from tr46).
 let notes = parseJson(readFile(here / "one_odd_character" / "notes.json"))
+# The size of the JavaScript build, before this step (main when it started) and now.
+let jsBefore = parseJson(execCmdEx("git show d1414ae32d00cb2a78ef01ee246c16de56421938:docs/data/js.json",
+                                   workingDir = here / ".." / "..").output)["bytes"].getInt
+let jsAfter = parseJson(readFile(here / ".." / ".." / "data" / "js.json"))["bytes"].getInt
+proc kilobytes(n: int): string = thousands((n + 512) div 1024) & " KB"
 # The version of ada, from the header of the tables it wrote.
 let adaVersion = readFile(currentSourcePath.parentDir.parentDir.parentDir / "src/nimaki/util/idna_data.nim")
   .split("as ada ")[1].split(" ")[0]
@@ -134,12 +139,17 @@ Punycode.
 
 ada's tables (which characters are mapped and to what, and which way each one is written) are
 read from that C++ file by a new tool, `tools/idna_data.nim`, into `idna_data.nim`:
-{thousands(idnaTable.len)} ranges of code points, {thousands(idnaMappings.len)} code points of
-mappings, {thousands(idnaDirections.len)} ranges of writing direction. Normalization reads the
+{thousands(idnaStarts.len)} ranges of code points, {thousands(idnaMappings.len)} code points of
+mappings, {thousands(idnaDirFirst.len)} ranges of writing direction. Normalization reads the
 tables of unicodedb, which the regular expressions already use. They are of a later Unicode
 (17.0) than ada's (15.0), and that does not matter: Unicode promises that text normalizes the same
 way in every later version, and a character newer than ada's tables is disallowed before it is
 normalized.
+
+The tables cost room: the JavaScript build grew from {kilobytes(jsBefore)} to
+{kilobytes(jsAfter)}, mostly for them and for the normalization tables of unicodedb, which it did
+not hold before. They are written as flat arrays of numbers, since `nim js` writes each tuple of an
+array as an object with named fields, which is larger.
 """
 
 nbNote &"""
