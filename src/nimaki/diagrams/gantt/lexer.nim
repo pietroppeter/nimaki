@@ -76,7 +76,7 @@ proc tokenize*(src: string): Tokens =
     let e = src.find(ch, start)
     if e == -1: n else: e
 
-  proc at(re: JsRegExp): int = re.matchEnd(src, p)
+  template at(re: JsRegExp): int = re.matchEnd(src, p)  # not a closure: nim js copies src per call
 
   proc keyword(c: char): bool =
     var e: int

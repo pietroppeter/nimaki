@@ -44,6 +44,10 @@ type
     atStart*: bool         ## it can only match at 0: a leading `^`, no `m` flag, no `|` around it
     prefix*: string        ## text every match starts with, found with `find` before the engine runs
     translated*: string    ## the pattern in the engine's syntax
+    run*: seq[(int, int)]  ## for a pattern that is one class repeated (`\s+`, `[^"]*`): its ranges
+    runKind*: int          ## 0: not such a pattern; 1: the class with `*`; 2: with `+`; 3: plain text
+    first*: set[char]      ## the bytes a match can start with, when `firstKnown`
+    firstKnown*: bool      ## false when a match can be empty, or the pattern is not read here
     slot: int
       ## Where its engine is: a `jsre` literal's place in `literals` plus one, or minus one less
       ## the place in `made` of a regex made at run time (0 for none).
@@ -531,10 +535,170 @@ func literalPrefix(pattern, flags: string): string =
     result.add ch
     i = next
 
+func classRun(translated: string): (seq[(int, int)], int) =
+  ## The ranges and the kind of a pattern that is one class repeated, as the translation writes
+  ## it (`[\x{0009}-\x{000D}\x{0020}]+`), or kind 0. The wrapper matches such a pattern
+  ## itself: in the JavaScript build the engine costs microseconds a character (it copies its
+  ## small state objects), and a lexer runs these patterns over the whole text.
+  let t = translated
+  if t.len < 4 or t[0] != '[' or t[1] == '^' or t[^2] != ']' or t[^1] notin {'+', '*'}: return
+  var rs: seq[(int, int)]
+  var i = 1
+  proc hexAt(i: var int): int =
+    if i + 3 > t.len or t[i] != '\\' or t[i + 1] != 'x' or t[i + 2] != '{': return -1
+    let close = t.find('}', i + 3)
+    if close < 0: return -1
+    try: result = parseHexInt(t[i + 3 ..< close])
+    except ValueError: return -1
+    i = close + 1
+  while i < t.len - 2:
+    let a = hexAt(i)
+    if a < 0: return
+    var b = a
+    if i < t.len - 2 and t[i] == '-':
+      inc i
+      b = hexAt(i)
+      if b < 0: return
+    rs.add (a, b)
+  if i != t.len - 2: return
+  (rs, if t[^1] == '+': 2 else: 1)
+
+func hexValue(t: string, i: var int): int =
+  ## `\x{HHHH}` at `i`, or -1.
+  if i + 3 > t.len or t[i] != '\\' or t[i + 1] != 'x' or t[i + 2] != '{': return -1
+  let close = t.find('}', i + 3)
+  if close < 0: return -1
+  try: result = parseHexInt(t[i + 3 ..< close])
+  except ValueError: return -1
+  i = close + 1
+
+func leadBytes(a, b: int): set[char] =
+  ## The first bytes of the UTF-8 of the code points a..b.
+  for c in a .. min(b, 0x7F): result.incl char(c)
+  if b >= 0x80: result = result + {'\xC2' .. '\xF4'}
+
+type FirstSet = tuple[known, nullable: bool, bytes: set[char]]
+
+func firstAlts(t: string, i: var int): FirstSet
+
+func firstAtom(t: string, i: var int): FirstSet =
+  ## The first bytes of the atom at `i` (and its quantifier), moving `i` past it.
+  result.known = true
+  if i >= t.len: return (false, false, {})
+  let c = t[i]
+  case c
+  of '[':
+    inc i
+    if i < t.len and t[i] == '^': return (false, false, {})
+    while i < t.len and t[i] != ']':
+      let a = hexValue(t, i)
+      if a < 0: return (false, false, {})
+      var b = a
+      if i < t.len and t[i] == '-':
+        inc i
+        b = hexValue(t, i)
+        if b < 0: return (false, false, {})
+      result.bytes = result.bytes + leadBytes(a, b)
+    if i >= t.len: return (false, false, {})
+    inc i
+  of '(':
+    if t.continuesWith("(?:", i): i += 3
+    elif i + 1 < t.len and t[i + 1] == '?': return (false, false, {})   # lookaround, flags
+    else: inc i
+    result = firstAlts(t, i)
+    if not result.known or i >= t.len or t[i] != ')': return (false, false, {})
+    inc i
+  of '\\':
+    if i + 1 < t.len and t[i + 1] in {'{', '}', '(', ')', '[', ']', '.', '*', '+', '?', '|', '^',
+                                       '$', '\\', '/', '-'}:
+      result.bytes = {t[i + 1]}
+      i += 2
+    else:
+      let a = hexValue(t, i)
+      if a < 0: return (false, false, {})
+      result.bytes = leadBytes(a, a)
+  of '^', '$', '.', '|', ')', '?', '*', '+', '{', '}', ']':
+    return (false, false, {})
+  else:
+    result.bytes = {c}
+    inc i
+  # The quantifier: one that allows none makes the atom nullable.
+  if i < t.len:
+    case t[i]
+    of '?', '*': result.nullable = true; inc i
+    of '+': inc i
+    of '{':
+      let close = t.find('}', i)
+      if close < 0: return (false, false, {})
+      if t[i + 1] == '0': result.nullable = true
+      i = close + 1
+    else: discard
+    if i < t.len and t[i] == '?': inc i     # lazy
+
+func skipAtom(t: string, i: var int) =
+  ## Moves `i` past the atom at `i` and its quantifier, without reading it.
+  var depth = 0
+  var inClass = false
+  while i < t.len:
+    let c = t[i]
+    if c == '\\':
+      if t.continuesWith("\\x{", i):
+        let close = t.find('}', i)
+        i = (if close < 0: t.len else: close + 1)
+      else: i += 2
+    elif inClass:
+      if c == ']': inClass = false
+      inc i
+    elif c == '[': inClass = true; inc i
+    elif c == '(': inc depth; inc i
+    elif c == ')': dec depth; inc i
+    else: inc i
+    if depth == 0 and not inClass: break
+  if i < t.len:
+    case t[i]
+    of '?', '*', '+': inc i
+    of '{':
+      let close = t.find('}', i)
+      i = (if close < 0: t.len else: close + 1)
+    else: discard
+    if i < t.len and t[i] == '?': inc i
+
+func firstAlts(t: string, i: var int): FirstSet =
+  ## The first bytes of the alternatives from `i` to the `)` or the end.
+  result.known = true
+  var alt: FirstSet = (true, true, {})       # the alternative read so far: nullable until an atom is not
+  while true:
+    if i >= t.len or t[i] == ')' or t[i] == '|':
+      if alt.nullable: result.nullable = true
+      result.bytes = result.bytes + alt.bytes
+      if i >= t.len or t[i] == ')': return
+      inc i
+      alt = (true, true, {})
+      continue
+    if not alt.nullable:
+      skipAtom(t, i)                         # the start of this alternative is known already
+      continue
+    let a = firstAtom(t, i)
+    if not a.known: return (false, false, {})
+    alt.bytes = alt.bytes + a.bytes
+    alt.nullable = a.nullable
+
+func firstBytes(translated: string): (bool, set[char]) =
+  ## The bytes every match starts with, when the pattern is read here and cannot match empty.
+  var i = 0
+  let f = firstAlts(translated, i)
+  if f.known and not f.nullable and i == translated.len: (true, f.bytes) else: (false, {})
+
 func made(pattern, flags, translated: string, slot: int): JsRegExp =
-  JsRegExp(source: pattern, flags: flags, global: 'g' in flags, sticky: 'y' in flags,
+  var (run, runKind) = classRun(translated)
+  # Plain text (`/</g`): every match is found with `find`, without the engine.
+  if pattern.len > 0 and 'i' notin flags and
+      pattern.allCharsInSet(AllChars - {'\\', '^', '$', '.', '|', '?', '*', '+', '(', ')', '[', ']', '{', '}'}):
+    runKind = 3
+  result = JsRegExp(source: pattern, flags: flags, global: 'g' in flags, sticky: 'y' in flags,
            atStart: onlyAtStart(pattern, flags), prefix: literalPrefix(pattern, flags),
-           translated: translated, slot: slot)
+           translated: translated, run: run, runKind: runKind, slot: slot)
+  (result.firstKnown, result.first) = firstBytes(translated)
 
 proc dynamicSlot(pattern, flags: string): JsRegExp =
   let key = flags & "/" & pattern
@@ -641,10 +805,57 @@ func toJsMatch(s: string, m: RegexMatch2): JsMatch =
       result.groups[k + 1] = s[g.a .. g.b]
       result.defined[k + 1] = true
 
+func codeAt(s: string, i: int): (int, int) {.inline.} =
+  ## The code point at byte `i` and its length, as the engine reads valid UTF-8.
+  let b = ord(s[i])
+  if b < 0x80: return (b, 1)
+  let n = if b < 0xE0: 2 elif b < 0xF0: 3 else: 4
+  if i + n > s.len: return (b, 1)
+  var c = b and (0x7F shr n)
+  for k in 1 ..< n: c = (c shl 6) or (ord(s[i + k]) and 0x3F)
+  (c, n)
+
+func inRun(re: JsRegExp, c: int): bool {.inline.} =
+  for r in re.run:
+    if c < r[0]: return false
+    if c <= r[1]: return true
+  false
+
+func runEnd(re: JsRegExp, s: string, at: int): int =
+  ## Where the run of the class that starts at `at` ends.
+  result = at
+  while result < s.len:
+    let (c, n) = codeAt(s, result)
+    if not re.inRun(c): break
+    result += n
+
+func runFrom(re: JsRegExp, s: string, at: int, anchored: bool): (int, int) =
+  ## The match of a class run: its start and end, or (-1, -1).
+  if at > s.len: return (-1, -1)
+  if re.runKind == 3:
+    let p = if anchored: (if s.continuesWith(re.source, at): at else: -1) else: s.find(re.source, at)
+    return (if p < 0: (-1, -1) else: (p, p + re.source.len))
+  if re.runKind == 1 or anchored:
+    let e = re.runEnd(s, at)
+    return (if re.runKind == 2 and e == at: (-1, -1) else: (at, e))
+  var i = at
+  while i < s.len:
+    let (c, n) = codeAt(s, i)
+    if re.inRun(c): return (i, re.runEnd(s, i + n))
+    i += n
+  (-1, -1)
+
+func runMatch(re: JsRegExp, s: string, at: int, anchored: bool): JsMatch =
+  let (a, b) = re.runFrom(s, at, anchored)
+  if a < 0: noMatch()
+  else: JsMatch(index: a, stop: b, groups: @[s[a ..< b]], defined: @[true])
+
 func matchHere(re: JsRegExp, s: string, at: int): JsMatch =
   ## The match that starts exactly at `at` (a sticky match), if any.
   var m: RegexMatch2
   if at > s.len: return noMatch()
+  if re.runKind != 0: return re.runMatch(s, at, true)
+  if re.firstKnown and (at >= s.len or s[at] notin re.first): return noMatch()
   withEngine(re, r):
     result = if matchImpl(s, r.toRegex, m, at, {mfAnchored}): toJsMatch(s, m) else: noMatch()
 
@@ -653,6 +864,7 @@ func searchFrom(re: JsRegExp, s: string, at: int): JsMatch =
   var m: RegexMatch2
   if at > s.len: return noMatch()
   if re.atStart: return (if at == 0: matchHere(re, s, 0) else: noMatch())
+  if re.runKind != 0: return re.runMatch(s, at, false)
   if re.prefix.len > 0:
     var p = s.find(re.prefix, at)
     while p >= 0:
@@ -660,6 +872,10 @@ func searchFrom(re: JsRegExp, s: string, at: int): JsMatch =
       if m.found: return m
       p = s.find(re.prefix, p + 1)
     return noMatch()
+  var at = at
+  if re.firstKnown:                          # no match starts before a byte it can start with
+    while at < s.len and s[at] notin re.first: inc at
+    if at >= s.len: return noMatch()
   withEngine(re, r):
     result = if find(s, r, m, at): toJsMatch(s, m) else: noMatch()
 
@@ -674,6 +890,7 @@ func matchEnd*(re: JsRegExp, s: string, lastIndex = 0): int =
   ## match, without reading its groups (what a lexer needs, and quicker).
   var m: RegexMatch2
   if lastIndex > s.len or (re.atStart and lastIndex > 0): return -1
+  if re.runKind != 0: return re.runFrom(s, lastIndex, re.sticky)[1]
   if re.prefix.len > 0 and not re.sticky and not re.atStart:
     var p = s.find(re.prefix, lastIndex)
     while p >= 0:
@@ -684,10 +901,16 @@ func matchEnd*(re: JsRegExp, s: string, lastIndex = 0): int =
   withEngine(re, r):
     result =
       if re.sticky or re.atStart:
-        if matchImpl(s, r.toRegex, m, lastIndex, {mfAnchored, mfNoCaptures}): m.boundaries.b + 1
+        if re.firstKnown and (lastIndex >= s.len or s[lastIndex] notin re.first): -1
+        elif matchImpl(s, r.toRegex, m, lastIndex, {mfAnchored, mfNoCaptures}): m.boundaries.b + 1
         else: -1
-      elif find(s, r, m, lastIndex): m.boundaries.b + 1
-      else: -1
+      else:
+        var at = lastIndex
+        if re.firstKnown:
+          while at < s.len and s[at] notin re.first: inc at
+        if at < s.len or not re.firstKnown:
+          if find(s, r, m, at): m.boundaries.b + 1 else: -1
+        else: -1
 
 func test*(re: JsRegExp, s: string, lastIndex = 0): bool =
   ## `re.test(s)`.
@@ -710,7 +933,7 @@ func nextIndex(s: string, i: int): int =
 iterator matches*(re: JsRegExp, s: string): JsMatch =
   ## The matches of a `g` regex, as `s.matchAll(re)` (or a `while (m = re.exec(s))` loop) finds
   ## them; for a sticky regex they must follow each other from 0.
-  if re.sticky or re.atStart or re.prefix.len > 0:
+  if re.sticky or re.atStart or re.prefix.len > 0 or re.runKind != 0:
     var at = 0
     while at <= s.len:
       let m = exec(re, s, at)

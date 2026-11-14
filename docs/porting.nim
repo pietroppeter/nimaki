@@ -94,7 +94,10 @@ JavaScript matches UTF-16 code units, so a `.` there can take half of an emoji, 
 it whole (`docs/divergences.md`). A pattern that holds `"` is written between triple quotes, as
 `\"` ends a raw string. A regex applied to one character (`/\s/.test(c)`) stays a test on the
 character. A hand-written scanner stays only where a regex cannot be faithful (a lone surrogate,
-a count in UTF-16 units), and says why in its comment.
+a count in UTF-16 units) or where it runs on every label of every drawing (`text/label.nim`,
+`text/entities.nim`, `diagrams/common/fit.nim`, `svg/root.nim`: the engine compiled to JavaScript
+costs microseconds a character), and says why in its comment. A pattern that is one class
+repeated (`/\s+/y`) or plain text (`/</g`) is matched by the wrapper itself, without the engine.
 """, nkNim, "Regular expressions"
 
 nbNote """

@@ -1,75 +1,75 @@
 {
- "note": "Measured on 14 Nov 2026 in one sandbox, the tree before (main) and after (this branch), alternating runs; the fastest of 4 runs of 5 rounds each (build/bench), and the faster of 2 clean compiles. Lines from tools/census.nim.",
+ "note": "Measured on 14 Nov 2026 in one sandbox, the tree before (main at base, which has the JavaScript speed-ups of PR 73) and after (this branch), alternating runs; the fastest of 4 runs of 5 rounds each (tools/bench.nim), and the faster of 2 clean compiles (tools/bench.nim in C, tools/jsrunner.nim in JavaScript). Lines from tools/census.nim. firstMeasure was taken earlier the same day against an older main (15997016).",
  "commit": "a60ab415915e4137a8fb60f74242563100bfbe83",
- "base": "15997016eb721458d2d301dd2237d2ba5d9d4c5b",
+ "base": "2554d1d8c05020517acd2a3b2259474f5ad607c4",
  "lines": {
   "before": {
-   "nim": 44482,
-   "ported": 43056,
+   "nim": 44543,
+   "ported": 43103,
    "ts": 46409,
    "helpers": 236,
    "regexes": 175,
    "areas": {
-    "core": 2057,
+    "core": 2087,
     "diagrams/agentflow": 2695,
     "diagrams/architecture": 1128,
-    "diagrams/block": 1650,
+    "diagrams/block": 1652,
     "diagrams/c4": 1657,
     "diagrams/class": 1846,
-    "diagrams/common": 1059,
+    "diagrams/common": 1058,
     "diagrams/cynefin": 474,
     "diagrams/er": 1525,
     "diagrams/eventmodeling": 765,
     "diagrams/flowchart": 2658,
-    "diagrams/gantt": 1831,
+    "diagrams/gantt": 1833,
     "diagrams/git": 728,
     "diagrams/info": 96,
     "diagrams/ishikawa": 394,
     "diagrams/journey": 451,
     "diagrams/kanban": 305,
     "diagrams/mindmap": 310,
-    "diagrams/packet": 309,
+    "diagrams/packet": 316,
     "diagrams/pie": 316,
     "diagrams/quadrant": 729,
     "diagrams/radar": 480,
     "diagrams/railroad": 1122,
     "diagrams/requirement": 1115,
-    "diagrams/sankey": 723,
-    "diagrams/sequence": 2392,
-    "diagrams/state": 1875,
+    "diagrams/sankey": 724,
+    "diagrams/sequence": 2391,
+    "diagrams/state": 1879,
     "diagrams/swimlane": 56,
     "diagrams/timeline": 453,
     "diagrams/treemap": 589,
     "diagrams/treeview": 680,
-    "diagrams/usecase": 2645,
+    "diagrams/usecase": 2648,
     "diagrams/venn": 838,
     "diagrams/wardley": 1002,
     "diagrams/xychart": 872,
-    "layout": 3339,
+    "layout": 3348,
     "svg": 1670,
-    "text": 693,
-    "util": 955
+    "text": 697,
+    "util": 956
    }
   },
   "after": {
-   "nim": 42814,
-   "ported": 40745,
+   "nim": 43299,
+   "ported": 41026,
    "ts": 46409,
-   "helpers": 17,
-   "regexes": 15,
+   "helpers": 25,
+   "regexes": 22,
    "areas": {
-    "core": 2627,
+    "core": 2847,
     "diagrams/agentflow": 2597,
     "diagrams/architecture": 1065,
-    "diagrams/block": 1650,
+    "diagrams/block": 1652,
     "diagrams/c4": 1624,
     "diagrams/class": 1823,
-    "diagrams/common": 810,
+    "diagrams/common": 851,
     "diagrams/cynefin": 459,
     "diagrams/er": 1478,
     "diagrams/eventmodeling": 698,
     "diagrams/flowchart": 2516,
-    "diagrams/gantt": 1557,
+    "diagrams/gantt": 1564,
     "diagrams/git": 687,
     "diagrams/info": 85,
     "diagrams/ishikawa": 394,
@@ -84,7 +84,7 @@
     "diagrams/requirement": 1080,
     "diagrams/sankey": 702,
     "diagrams/sequence": 2327,
-    "diagrams/state": 1825,
+    "diagrams/state": 1829,
     "diagrams/swimlane": 56,
     "diagrams/timeline": 440,
     "diagrams/treemap": 509,
@@ -93,10 +93,10 @@
     "diagrams/venn": 838,
     "diagrams/wardley": 925,
     "diagrams/xychart": 863,
-    "layout": 3339,
-    "svg": 1423,
-    "text": 502,
-    "util": 862
+    "layout": 3348,
+    "svg": 1429,
+    "text": 697,
+    "util": 863
    }
   }
  },
@@ -105,7 +105,7 @@
    "types": {
     "agentflow": {
      "cases": 238,
-     "ms": 10.3
+     "ms": 9.9
     },
     "architecture": {
      "cases": 26,
@@ -113,11 +113,11 @@
     },
     "block": {
      "cases": 71,
-     "ms": 1.9
+     "ms": 1.8
     },
     "c4": {
      "cases": 56,
-     "ms": 2.6
+     "ms": 2.5
     },
     "class": {
      "cases": 84,
@@ -125,19 +125,19 @@
     },
     "cynefin": {
      "cases": 19,
-     "ms": 1.6
+     "ms": 1.7
     },
     "er": {
      "cases": 142,
-     "ms": 4.8
+     "ms": 4.9
     },
     "eventmodeling": {
      "cases": 24,
-     "ms": 1.4
+     "ms": 1.5
     },
     "flowchart": {
      "cases": 383,
-     "ms": 15.3
+     "ms": 14.7
     },
     "gantt": {
      "cases": 25,
@@ -145,7 +145,7 @@
     },
     "gitGraph": {
      "cases": 94,
-     "ms": 5.8
+     "ms": 6.0
     },
     "info": {
      "cases": 6,
@@ -173,7 +173,7 @@
     },
     "pie": {
      "cases": 16,
-     "ms": 0.6
+     "ms": 0.7
     },
     "quadrantChart": {
      "cases": 35,
@@ -185,7 +185,7 @@
     },
     "railroad": {
      "cases": 91,
-     "ms": 3.8
+     "ms": 3.9
     },
     "requirement": {
      "cases": 20,
@@ -197,11 +197,11 @@
     },
     "sequence": {
      "cases": 186,
-     "ms": 8.3
+     "ms": 7.9
     },
     "state": {
      "cases": 119,
-     "ms": 9.5
+     "ms": 8.5
     },
     "swimlane": {
      "cases": 14,
@@ -209,7 +209,7 @@
     },
     "timeline": {
      "cases": 24,
-     "ms": 1.2
+     "ms": 1.1
     },
     "treeView": {
      "cases": 24,
@@ -221,11 +221,11 @@
     },
     "usecase": {
      "cases": 151,
-     "ms": 5.9
+     "ms": 5.8
     },
     "venn": {
      "cases": 25,
-     "ms": 1.6
+     "ms": 1.5
     },
     "wardley": {
      "cases": 39,
@@ -233,56 +233,56 @@
     },
     "xychart": {
      "cases": 71,
-     "ms": 1.6
+     "ms": 1.5
     }
    },
-   "total_ms": 96.5
+   "total_ms": 92.9
   },
   "after": {
    "types": {
     "agentflow": {
      "cases": 238,
-     "ms": 13.5
+     "ms": 11.6
     },
     "architecture": {
      "cases": 26,
-     "ms": 3.2
+     "ms": 2.2
     },
     "block": {
      "cases": 71,
-     "ms": 2.6
+     "ms": 2.2
     },
     "c4": {
      "cases": 56,
-     "ms": 8.0
+     "ms": 2.6
     },
     "class": {
      "cases": 84,
-     "ms": 5.7
+     "ms": 4.5
     },
     "cynefin": {
      "cases": 19,
-     "ms": 2.5
+     "ms": 2.2
     },
     "er": {
      "cases": 142,
-     "ms": 6.4
+     "ms": 5.4
     },
     "eventmodeling": {
      "cases": 24,
-     "ms": 2.8
+     "ms": 2.0
     },
     "flowchart": {
      "cases": 383,
-     "ms": 22.4
+     "ms": 18.7
     },
     "gantt": {
      "cases": 25,
-     "ms": 4.4
+     "ms": 2.0
     },
     "gitGraph": {
      "cases": 94,
-     "ms": 11.0
+     "ms": 9.4
     },
     "info": {
      "cases": 6,
@@ -290,43 +290,43 @@
     },
     "ishikawa": {
      "cases": 4,
-     "ms": 0.2
+     "ms": 0.1
     },
     "journey": {
      "cases": 4,
-     "ms": 0.2
+     "ms": 0.1
     },
     "kanban": {
      "cases": 33,
-     "ms": 1.9
+     "ms": 0.8
     },
     "mindmap": {
      "cases": 39,
-     "ms": 1.2
+     "ms": 0.8
     },
     "packet": {
      "cases": 19,
-     "ms": 0.9
+     "ms": 0.8
     },
     "pie": {
      "cases": 16,
-     "ms": 1.2
+     "ms": 1.0
     },
     "quadrantChart": {
      "cases": 35,
-     "ms": 1.4
+     "ms": 1.1
     },
     "radar": {
      "cases": 14,
-     "ms": 1.7
+     "ms": 1.1
     },
     "railroad": {
      "cases": 91,
-     "ms": 6.4
+     "ms": 5.3
     },
     "requirement": {
      "cases": 20,
-     "ms": 1.5
+     "ms": 1.2
     },
     "sankey": {
      "cases": 14,
@@ -334,66 +334,66 @@
     },
     "sequence": {
      "cases": 186,
-     "ms": 12.3
+     "ms": 8.8
     },
     "state": {
      "cases": 119,
-     "ms": 12.7
+     "ms": 11.1
     },
     "swimlane": {
      "cases": 14,
-     "ms": 2.3
+     "ms": 1.8
     },
     "timeline": {
      "cases": 24,
-     "ms": 2.6
+     "ms": 1.2
     },
     "treeView": {
      "cases": 24,
-     "ms": 1.6
+     "ms": 1.5
     },
     "treemap": {
      "cases": 8,
-     "ms": 1.2
+     "ms": 0.8
     },
     "usecase": {
      "cases": 151,
-     "ms": 8.5
+     "ms": 8.4
     },
     "venn": {
      "cases": 25,
-     "ms": 1.9
+     "ms": 1.8
     },
     "wardley": {
      "cases": 39,
-     "ms": 4.3
+     "ms": 3.6
     },
     "xychart": {
      "cases": 71,
-     "ms": 2.2
+     "ms": 1.9
     }
    },
-   "total_ms": 161.4
+   "total_ms": 117.3
   }
  },
  "compile_s": {
-  "before_c": 46.5,
-  "before_js": 4.7,
-  "after_c": 50.0,
-  "after_js": 5.2
+  "before_c": 44.2,
+  "before_js": 4.8,
+  "after_c": 43.8,
+  "after_js": 5.0
  },
  "bytes": {
-  "before_c": 6783616,
-  "before_js": 9484624,
-  "before_js_gzip": 1285571,
-  "after_c": 7335024,
-  "after_js": 10399404,
-  "after_js_gzip": 1356642
+  "before_c": 6779176,
+  "before_js": 9438801,
+  "before_js_gzip": 1281340,
+  "after_c": 7447720,
+  "after_js": 10535356,
+  "after_js_gzip": 1376530
  },
  "firstMeasure": {
   "before_ms": 101.1,
   "after_ms": 243.9,
-  "note": "the same bench, before the two speed-ups of jsregex and the palette check"
+  "note": "the same bench, before the two speed-ups of jsregex and the palette check, against main at 15997016"
  },
  "paletteTest_us": {
   "bounded": 777,
@@ -409,18 +409,18 @@
  },
  "fuzz": {
   "types": 33,
-  "casesPerType": 1000,
-  "identical": 33000
+  "casesPerType": 300,
+  "identical": 9900
  },
  "test_jsregex": {
-  "regexes": 356,
+  "regexes": 353,
   "literals": 344,
-  "built": 12,
-  "strings": 7908,
+  "built": 9,
+  "strings": 7839,
   "halfEmoji": 3
  },
- "uses": 472,
- "wrapperLines": 625,
+ "uses": 460,
+ "wrapperLines": 821,
  "stress": {
   "note": "Pele's stress tests (tests/**/stress.test.ts at the pin): their texts replayed through nimaki's C build, before and after each fix",
   "texts": 1145,
@@ -436,5 +436,16 @@
   "jsEntities": 8000,
   "js_split_before_ms": 52226,
   "js_split_after_ms": 1890
+ },
+ "js": {
+  "note": "Pele's 32 stress test files (tests/**/stress.test.ts) on the JavaScript build, nim r tools/peletests.nim, main and this branch run one after the other on the same machine; and single drawings timed in Node (build/stress/jsrun.nim)",
+  "speed_main": 27,
+  "speed_first": 84,
+  "speed_after": 43,
+  "mindmapLevels": 3000,
+  "mindmap_before_ms": 14914,
+  "mindmap_after_ms": 2200,
+  "label_before_ms": 3104,
+  "label_after_ms": 366
  }
 }

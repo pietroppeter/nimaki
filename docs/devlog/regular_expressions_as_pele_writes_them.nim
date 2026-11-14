@@ -38,6 +38,7 @@ let
   helpersBefore = before["helpers"].getInt
   helpersAfter = after["helpers"].getInt
   st = data["stress"]
+  js = data["js"]
 var benchCases = 0
 for kind, b in bench["after"]["types"]: benchCases += b["cases"].getInt
 
@@ -60,7 +61,9 @@ nbText: &"""
 - **Slower, and that is the price.** Drawing the whole corpus takes **{ms(totalAfter)} ms**
   instead of {ms(totalBefore)} ms, {times(totalBefore, totalAfter)} times as long; it was
   {times(first["before_ms"].getFloat, first["after_ms"].getFloat)} times before the fixes told
-  below. The programs are a little larger and take a little longer to build.
+  below. In JavaScript the engine costs more: on Pele's stress tests the JavaScript build misses
+  {js["speed_after"].getInt} time bounds where main misses {js["speed_main"].getInt}, and the text of
+  labels stays hand-written for it. The programs are a little larger.
 - **Same syntax, not the same meaning.** nim-regex reads `\s`, `\w`, `.` and the `i` flag in its
   own way. The module translates every pattern into one that means what JavaScript means, and a
   test runs Pele's {tj["regexes"].getInt} patterns against Node on {tj["strings"].getInt.thousands} strings.
@@ -261,8 +264,8 @@ block:
     nbTable t
 
 nbText: &"""
-The types that read their text with a table of tokens (radar, gantt, c4, kanban) pay most, as
-their lexer tries pattern after pattern at each position. Still, {ms(totalAfter)} ms for the
+The types whose lexer tries pattern after pattern at each position (treeView, radar, packet,
+architecture) pay most. Still, {ms(totalAfter)} ms for the
 bench's {benchCases.thousands} diagrams is under a tenth of a millisecond a diagram.
 
 ## What Pele's stress tests found
@@ -294,6 +297,31 @@ JavaScript build a fourth:
   {st["jsEntities"].getInt.thousands} HTML entities took {st["js_split_before_ms"].getInt.thousands} ms there, against well under
   a second in C. The step now reads the length from the first byte: {st["js_split_after_ms"].getInt.thousands} ms.
 
+## In JavaScript, the engine costs more
+
+Pele's stress tests also time each drawing against a bound, and here the JavaScript build of
+this branch, after the fixes above, missed **{js["speed_first"].getInt}** of them where main missed
+{js["speed_main"].getInt}. A profile in Node showed why: nim-regex, compiled to JavaScript, copies
+its small state objects at each character it reads, and a regex that is fast in C costs
+microseconds a character there. Two places paid most:
+
+- **Lexers over the whole text.** A pattern like `/\s+/y` or `/[^"]*/y` (one class, repeated) runs
+  over every character of a diagram. The module now recognizes such a pattern when it translates
+  it, and matches it with its own loop over the class; plain text, such as `/</g`, is found with
+  an ordinary string search. For every other pattern it works out, when it can, the bytes a match
+  can start with (`/[\t ]*accTitle/` starts with a tab, a space or `a`), and does not start the
+  engine at a byte that is not one of them, which is most bytes for a lexer. A mind map of {js["mindmapLevels"].getInt.thousands} levels took
+  {js["mindmap_before_ms"].getInt.thousands} ms and now takes {js["mindmap_after_ms"].getInt.thousands} ms.
+- **The text of every label.** Every label of every diagram goes through the same few functions:
+  breaking it into lines, decoding its entities, escaping its tags, and, once per drawing, the
+  scan of the SVG for the weights it uses. They keep the scanners that main had tuned for
+  JavaScript. A timeline event of tag-like text took {js["label_before_ms"].getInt.thousands} ms with regexes, and takes
+  {js["label_after_ms"].getInt.thousands} ms with the scanners.
+
+With both, the JavaScript build misses **{js["speed_after"].getInt}** time bounds (main: {js["speed_main"].getInt}, in
+the same run on the same machine); the misses that are left are layout-heavy drawings that are
+slow on main too.
+
 ## What is still written by hand
 
 A scanner stays where a regex cannot be faithful, and says why in its comment:
@@ -307,6 +335,8 @@ A scanner stays where a regex cannot be faithful, and says why in its comment:
   state, a run of digits read once), the port keeps the function, as Pele does.
 - **One character.** A regex applied to one character, `/\s/.test(c)`, stays a test on the character.
 - **A limit of the engine.** The directive pattern of `preprocess.nim`, as told above.
+- **The text of every label.** Line breaking, entities, tags, and the weights of the SVG, which
+  run on every drawing: in JavaScript, the engine was too slow there, as told above.
 
 ## A bug the JavaScript build found
 
@@ -325,9 +355,11 @@ expression. The keywords are now one array, as in Pele, and the porting guide li
 - A new release of Pele that changes a pattern is followed by copying the pattern, and the test
   against Node checks the new one.
 - The renderer has one dependency, pinned in `deps.lock`. `sh tools/setup.sh` fetches it.
-- Drawing is {times(totalBefore, totalAfter)} times slower. If speed matters later (a browser
-  page drawing as one types), the next places to look are the lexers made of token tables and the
-  label layout, which run the most patterns.
+- Drawing is {times(totalBefore, totalAfter)} times slower in C. In JavaScript the engine costs
+  more, so a pattern that runs over the whole text, or on every label, is checked with Pele's
+  stress tests (`nim r tools/peletests.nim`) before it is merged. If speed matters later, the next
+  places to look are the lexers made of token tables, and the engine's state objects in JavaScript
+  (a change to propose to nim-regex, not to make here).
 - The shared-scanners step on the roadmap is closed by this one: the scanners that stay are few,
   and each is in the file whose behaviour it ports.
 

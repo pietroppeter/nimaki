@@ -37,7 +37,7 @@ proc main() =
     for r in 0 ..< rounds:
       let start = getMonoTime()
       for source in byType[t]:
-        try: discard render(source, RenderOptions(now: 1_700_000_000_000.0))
+        try: discard render(source, RenderOptions(now: some(1_700_000_000_000.0)))
         except CatchableError: discard
       best = min(best, (getMonoTime() - start).inNanoseconds.float / 1e6)
     total += best

@@ -1,7 +1,10 @@
 ## port-of: src/text/entities.ts
 ## port-status: conformant
-import std/[strutils, tables]
-import ../[js, jsregex]
+## Its patterns stay hand-written scanners (decision 0016): they run on every label of every
+## drawing, and nim-regex compiled to JavaScript costs microseconds a character (Pele's stress
+## tests missed their time bounds with it).
+import std/[strutils, tables, parseutils]
+import ../js
 
 const NAMED =
   "amp:38,lt:60,gt:62,quot:34,apos:39,nbsp:160,shy:173,iexcl:161,cent:162,pound:163,curren:164,yen:165,sect:167," &
@@ -37,7 +40,6 @@ func lookup(name: string): (bool, string) =
 func codePoint(n: float, fallback: string): string =
   if n > 0 and n <= 0x10ffff and (n < 0xd800 or n > 0xdfff): fromCodePoint(int(n)) else: fallback
 
-const RE_ENTITY = jsre"/&(?:#(\d+)|#[xX]([0-9a-fA-F]+)|(\w+));/g"
 const OPEN = "ﬂ°"
 const CLOSE = "¶ß"
 
@@ -58,14 +60,22 @@ func restorePlaceholders(text: string): string =
     start = text.find(OPEN, stop + 1)
   if last == 0: text else: output & text[last .. ^1]
 
-func hexValue(digits: string): float =
-  ## parseInt(digits, 16), which grows past 2^53 instead of overflowing.
-  for c in digits: result = result * 16 + float(parseHexInt($c))
-
-const RE_PLACEHOLDER = jsre"/ﬂ°°?(\w+)¶ß/g"
-
 func writtenCodes*(text: string): string =
-  if CLOSE in text: text.replace(RE_PLACEHOLDER, "#$1;") else: text
+  ## text.replace(/ﬂ°°?(\w+)¶ß/g, '#$1;')
+  if CLOSE notin text: return text
+  var i = 0
+  while i < text.len:
+    if text.continuesWith(OPEN, i):
+      var j = i + OPEN.len
+      if text.continuesWith("°", j): j += "°".len
+      let w = j
+      while j < text.len and isWordChar(text[j]): inc j
+      if j > w and text.continuesWith(CLOSE, j):
+        result.add "#" & text[w ..< j] & ";"
+        i = j + CLOSE.len
+        continue
+    result.add text[i]
+    inc i
 
 func decodeEntities*(text: string): string =
   ## Turns Mermaid's `#35;` / `#quot;` codes (as hidden by encodeEntities) and HTML entities
@@ -73,10 +83,46 @@ func decodeEntities*(text: string): string =
   var text = text
   if CLOSE in text: text = restorePlaceholders(text)
   if '&' in text:
-    text = text.replaceWith(RE_ENTITY, m):
-      if m.has(1): codePoint(jsNumber(m[1]), m[0])
-      elif m.has(2): codePoint(hexValue(m[2]), m[0])
-      else:
-        let (ok, ch) = lookup(m[3])
-        if ok: ch else: m[0]
+    # text.replace(/&(?:#(\d+)|#[xX]([0-9a-fA-F]+)|(\w+));/g, ...)
+    var output = ""
+    var i = 0
+    while i < text.len:
+      if text[i] == '&':
+        var j = i + 1
+        var replaced = false
+        if j < text.len and text[j] == '#':
+          if j + 1 < text.len and text[j + 1] in Digits:
+            var k = j + 1
+            while k < text.len and text[k] in Digits: inc k
+            if k < text.len and text[k] == ';':
+              let m = text[i .. k]
+              output.add codePoint(parseFloat(text[j + 1 ..< k]), m)
+              i = k + 1
+              replaced = true
+          elif j + 1 < text.len and text[j + 1] in {'x', 'X'}:
+            var k = j + 2
+            while k < text.len and text[k] in HexDigits: inc k
+            if k > j + 2 and k < text.len and text[k] == ';':
+              let m = text[i .. k]
+              var n = 0.0
+              for c in text[j + 2 ..< k]:
+                var d: int
+                discard parseHex($c, d)
+                n = n * 16 + float(d)
+              output.add codePoint(n, m)
+              i = k + 1
+              replaced = true
+        else:
+          var k = j
+          while k < text.len and isWordChar(text[k]): inc k
+          if k > j and k < text.len and text[k] == ';':
+            let m = text[i .. k]
+            let (ok, ch) = lookup(text[j ..< k])
+            output.add(if ok: ch else: m)
+            i = k + 1
+            replaced = true
+        if replaced: continue
+      output.add text[i]
+      inc i
+    text = output
   text

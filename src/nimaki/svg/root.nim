@@ -1,9 +1,12 @@
 ## port-of: src/svg/root.ts
 ## port-status: conformant
-import std/[sets, options]
+## Its pattern stays a hand-written scanner (decision 0016): it runs over the whole SVG of every
+## drawing, and nim-regex compiled to JavaScript costs microseconds a character (Pele's stress
+## tests missed their time bounds with it).
+import std/[strutils, sets, options]
 import ../types
 import builder, palette, theme
-import ../js, ../jsregex
+import ../js
 
 const WEIGHTS = [("tw", "title"), ("hw", "heading"), ("w", "bold")]
   ## The weights of bold text, each set only in a diagram that has such text.
@@ -11,7 +14,17 @@ const WEIGHTS = [("tw", "title"), ("hw", "heading"), ("w", "bold")]
 type Accessible* = object
   accTitle*, accDescr*: string   ## "" for undefined
 
-const RE_USED = jsre"/var\(--_(r|tw|hw|w)\)/g"
+func usedNames(content: string): HashSet[string] =
+  ## the names matched by /var\(--_(r|tw|hw|w)\)/g, up to four
+  var p = content.find("var(--_")
+  while p != -1:
+    let at = p + 7
+    for name in ["r", "tw", "hw", "w"]:
+      if content.continuesWith(name & ")", at):
+        result.incl name
+        break
+    if result.len == 4: break
+    p = content.find("var(--_", at)
 
 proc svgDocument*(kind: string, width, height: float, fontSize: float, options: RenderOptions,
                   acc: Accessible, content: string): string =
@@ -25,10 +38,7 @@ proc svgDocument*(kind: string, width, height: float, fontSize: float, options: 
     head.add "<desc id=\"" & prefix & "-desc\">" & escText(acc.accDescr) & "</desc>"
     aria.add " aria-describedby=\"" & prefix & "-desc\""
   let fit = if options.responsive == some(false): "" else: "max-width:100%;height:auto;"
-  var used: HashSet[string]
-  for m in RE_USED.matches(content):
-    used.incl m[1]
-    if used.len == 4: break
+  let used = usedNames(content)
   var weights = if "r" in used: ";--_r:" & RADIUS else: ""
   for (alias, name) in WEIGHTS:
     if alias in used: weights.add ";--_" & alias & ":var(--pele-" & name & "-weight,bold)"

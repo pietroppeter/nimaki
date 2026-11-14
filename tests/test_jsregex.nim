@@ -8,7 +8,6 @@
 ## the port builds from pieces (`new RegExp` in Pele) are checked the same way, as the port builds them.
 import std/[os, osproc, json, random, unittest, unicode, strutils, sets]
 import ../src/nimaki/jsregex
-import ../src/nimaki/text/label {.all.}
 import ../src/nimaki/svg/theme {.all.}
 import ../src/nimaki/preprocess {.all.}
 import ../src/nimaki/diagrams/common/tokens
@@ -53,9 +52,9 @@ proc main() =
   var compiled: seq[JsRegExp]
   var sources: seq[(string, string)]
   for lit in data["literals"]: sources.add (lit["pattern"].getStr, lit["flags"].getStr)
-  # Built from pieces: label's CJK classes, the font family list, the line breaks of preprocess,
+  # Built from pieces: the font family list, the line breaks of preprocess,
   # a keyword, the titles that must not split a longer name, a style property in an edge.
-  for built in [RE_CJK, RE_HINT, RE_PIECE, RE_FAMILIES, RE_LINE_BREAK, keyword("pie").pattern,
+  for built in [RE_FAMILIES, RE_LINE_BREAK, keyword("pie").pattern,
                 keyword("C4Context").pattern, titleBefore(r"[-./\w]*[-\w]").pattern,
                 titleBefore(r"\w").pattern, railroad.title(r"[A-Za-z0-9-]").pattern,
                 railroad.title(r"[\w-]").pattern, newRegExp("[\";]" & "stroke" & ":([^;\"]+);")]:

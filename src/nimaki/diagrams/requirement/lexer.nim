@@ -79,7 +79,7 @@ proc tokenize*(src: string): Tokens =
     state = s
   proc pop() =
     if stack.len > 0: state = stack.pop()
-  proc at(re: JsRegExp, q: int): int = re.matchEnd(src, q)
+  template at(re: JsRegExp, q: int): int = re.matchEnd(src, q)  # not a closure: nim js copies src per call
   proc lineBreak(q: int): int =
     let e = src.find('\n', q)
     if e == -1: n else: e

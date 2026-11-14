@@ -295,7 +295,9 @@ proc readerFor(token: string): Option[Step] =
   of "Z", "ZZ": some(step(MATCH_OFFSET, readOffset))
   else: none(Step)
 
-proc compile(temp: string): Option[seq[Step]] =
+var lastCompiled: tuple[temp: string, steps: Option[seq[Step]], valid: bool]
+
+proc compileNew(temp: string): Option[seq[Step]] =
   # dayjs expands localized tokens through a locale table the English locale does not have, and fails.
   if jsre"/[Ll]/".test(temp.replace(RE_LITERAL, "")): return none(seq[Step])
   let tokens = temp.match(RE_TOKENS)
@@ -305,6 +307,13 @@ proc compile(temp: string): Option[seq[Step]] =
     let reader = readerFor(token)
     steps.add(if reader.isSome: reader.get else: Step(literal: token.replace(jsre"/^\[|\]$/g", "")))
   some(steps)
+
+proc compile(temp: string): Option[seq[Step]] =
+  ## dayjs reads the format again for every date; the steps depend on the format alone, so the
+  ## port keeps those of the last one (a chart parses all its dates with one format).
+  if not lastCompiled.valid or lastCompiled.temp != temp:
+    lastCompiled = (temp, compileNew(temp), true)
+  lastCompiled.steps
 
 proc loose(input: string, temp: string, now: JsDate): JsDate =
   if temp == "x" or temp == "X": return fromTime((if temp == "X": 1000.0 else: 1.0) * jsToNumber(input))

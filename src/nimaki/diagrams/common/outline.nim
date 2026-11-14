@@ -110,7 +110,9 @@ proc tokenize*(src: string, kanban: bool): Tokens =
   template upTo(ch: char): int =
     (let e = src.find(ch, p); if e == -1: n else: e)
 
-  proc at(re: JsRegExp, start: int): int = re.matchEnd(src, start)
+  # A template, not a closure: nim js copies a captured string at every call (porting guide,
+  # Code that JavaScript runs slowly).
+  template at(re: JsRegExp, start: int): int = re.matchEnd(src, start)
 
   while p < n:
     let c = code(src, p)
