@@ -145,7 +145,7 @@ let crossing = """architecture-beta
 var drawn = initOrderedTable[string, RenderResult]()
 var types = initOrderedTable[string, int]()
 for name, text in diagrams:
-  drawn[name] = render(text, RenderOptions(maxWidth: some(phone), now: fixedNow))
+  drawn[name] = render(text, RenderOptions(maxWidth: some(phone), now: some(fixedNow)))
   types.mgetOrPut(drawn[name].diagramType, 0).inc
 var sources: seq[string]
 for text in diagrams.values: sources.add text
@@ -159,7 +159,7 @@ var wide: seq[string]   # the drawings wider than a phone even with maxWidth
 var narrowed = 0        # the drawings that maxWidth changed
 for name, text in diagrams:
   if drawn[name].width > phone: wide.add name
-  if render(text, RenderOptions(now: fixedNow)).svg != drawn[name].svg: inc narrowed
+  if render(text, RenderOptions(now: some(fixedNow))).svg != drawn[name].svg: inc narrowed
 doAssert wide == @["tcp-states", "path"], "the text says which drawings stay wide: " & $wide
 let crossingSvg = render(crossing).svg
 # What nimaki answered when this was written; sankey has been drawn since 14 November.

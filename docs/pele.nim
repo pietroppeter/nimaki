@@ -51,7 +51,7 @@ proc mermaidSvg*(text: string, options: JsonNode = nil): string =
   ## nimaki's drawing of `text`, checked against Pele's: the build fails when they differ.
   ## `options` are Pele's render options, as JSON (`%*{"maxWidth": 390}`); `now` is fixed.
   var o = toOptions(options)
-  o.now = fixedNow
+  o.now = some(fixedNow)
   let r = try: render(text, o)
           except CatchableError as e: raiseAssert "nbMermaid: nimaki cannot draw it: " & e.msg & "\n" & text
   let pele = peleRenders([text], options)[0]

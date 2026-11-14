@@ -94,10 +94,7 @@ runs across line breaks.
 
 nbNote """
 Gantt reads the current time (`Date.now()`) and works in local time. The port takes `now`
-from the options like Pele, and difftest fixes it and runs the oracle with `TZ=UTC`. As in Pele,
-any finite `now` counts, 0 too (1970); the field defaults to NaN, the current time. A field
-default applies to `RenderOptions()`, not to `var o: RenderOptions` or a bare `result`, which
-start at 0: a proc that builds options starts with `result = RenderOptions()`.
+from the options like Pele, and difftest fixes it and runs the oracle with `TZ=UTC`.
 """, nkWarning, "Time"
 
 nbNote """

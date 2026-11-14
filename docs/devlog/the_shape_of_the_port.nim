@@ -426,7 +426,7 @@ nbCode:
   let fromPele = peleRenders(sources)      # one Node process, Pele 1.13.0
   var same, different, described = 0
   for i, source in sources:
-    let nim = render(source, RenderOptions(now: fixedNow)).svg
+    let nim = render(source, RenderOptions(now: some(fixedNow))).svg
     if nim == fromPele[i]["svg"].getStr: inc same else: inc different
     if "<desc" in nim: inc described
   echo withDescription.len, " types × ", awkward.len, " descriptions: ", same, " identical, ",
