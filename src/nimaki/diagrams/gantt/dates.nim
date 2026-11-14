@@ -12,6 +12,7 @@ import std/[options, strutils]
 from std/math import floor, ceil, `mod`
 import ../../js
 import ../../jsdate
+import ../../jsregex
 
 const MONTHS* = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
                  "October", "November", "December"]
@@ -86,15 +87,8 @@ func isoWeek(date: JsDate): float =
 
 const DEFAULT_FORMAT = "YYYY-MM-DDTHH:mm:ssZ"
 
-func bracketEnd(s: string, i: int): int =
-  ## /\[([^\]]+)]/ at i: where it ends, or -1
-  if i >= s.len or s[i] != '[': return -1
-  let close = s.find(']', i + 1)
-  if close <= i + 1: -1 else: close + 1
-
-func runOf(s: string, i: int, c: char, most: int): int =
-  ## c{1,most} at i: how many
-  while result < most and i + result < s.len and s[i + result] == c: inc result
+const RE_ADVANCED = jsre"/\[([^\]]+)]|Q|wo|ww|w|WW|W|zzz|z|gggg|GGGG|Do|X|x|k{1,2}|S/g"
+const RE_FORMAT = jsre"/\[([^\]]+)]|YYYY|YY|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g"
 
 proc isoDate*(date: JsDate): string
 
@@ -105,125 +99,55 @@ proc format*(date: JsDate, temp: string): Option[string] =
   let str = if temp == "": DEFAULT_FORMAT else: temp
   if str == "YYYY-MM-DD": return some(isoDate(date))
   var unsupported = false
-  # str.replace(/\[([^\]]+)]|Q|wo|ww|w|WW|W|zzz|z|gggg|GGGG|Do|X|x|k{1,2}|S/g, ...)
-  var advanced = ""
-  var i = 0
-  template rest(t: string): bool = str.continuesWith(t, i)
-  while i < str.len:
-    let b = bracketEnd(str, i)
-    if b >= 0:
-      advanced.add str[i ..< b]
-      i = b
-      continue
-    if rest("Q"):
-      advanced.add jsString(ceil((date.getMonth + 1) / 3)); i += 1
-    elif rest("wo") or rest("ww"):
-      unsupported = true; advanced.add str[i .. i + 1]; i += 2
-    elif rest("w"):
-      unsupported = true; advanced.add "w"; i += 1
-    elif rest("WW"):
-      advanced.add pad(isoWeek(date), 2); i += 2
-    elif rest("W"):
-      advanced.add jsString(isoWeek(date)); i += 1
-    elif rest("zzz"):
-      unsupported = true; advanced.add "zzz"; i += 3
-    elif rest("z"):
-      unsupported = true; advanced.add "z"; i += 1
-    elif rest("gggg"):
-      unsupported = true; advanced.add "gggg"; i += 4
-    elif rest("GGGG"):
-      advanced.add jsString(weekThursday(date).getFullYear); i += 4
-    elif rest("Do"):
-      advanced.add "[" & ordinal(date.getDate) & "]"; i += 2
-    elif rest("X"):
-      advanced.add jsString(floor(date / 1000)); i += 1
-    elif rest("x"):
-      advanced.add jsString(date); i += 1
-    elif rest("k"):
-      let h = date.getHours
-      let hours = if h == 0: 24.0 else: h
-      if rest("kk"):
-        advanced.add pad(hours, 2); i += 2
-      else:
-        advanced.add jsString(hours); i += 1
-    else:
-      advanced.add str[i]; i += 1
+  let advanced = str.replaceWith(RE_ADVANCED, m):
+    case m[0]
+    of "Q": jsString(ceil((date.getMonth + 1) / 3))
+    of "Do": "[" & ordinal(date.getDate) & "]"
+    of "GGGG": jsString(weekThursday(date).getFullYear)
+    of "W": jsString(isoWeek(date))
+    of "WW": pad(isoWeek(date), 2)
+    of "k": jsString(if date.getHours == 0: 24.0 else: date.getHours)
+    of "kk": pad(if date.getHours == 0: 24.0 else: date.getHours, 2)
+    of "X": jsString(floor(date / 1000))
+    of "x": jsString(date)
+    of "gggg", "wo", "w", "ww", "z", "zzz":
+      unsupported = true
+      m[0]
+    else: m[0]
   if unsupported: return none(string)
   let hours = date.getHours
-  # advanced.replace(/\[([^\]]+)]|YYYY|YY|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g, ...)
-  var output = ""
-  i = 0
-  let s = advanced
-  while i < s.len:
-    let b = bracketEnd(s, i)
-    if b >= 0:
-      output.add s[i + 1 ..< b - 1]
-      i = b
-      continue
-    let c = s[i]
-    case c
-    of 'Y':
-      if s.continuesWith("YYYY", i):
-        output.add pad(date.getFullYear, 4); i += 4
-      elif s.continuesWith("YY", i):
-        let y = jsString(date.getFullYear)
-        output.add(if y.len > 2: y[^2 .. ^1] else: y); i += 2
-      else:
-        output.add c; inc i
-    of 'M':
-      let n = runOf(s, i, 'M', 4)
-      let m = date.getMonth
-      output.add(case n
-        of 1: jsString(m + 1)
-        of 2: pad(m + 1, 2)
-        of 3: MONTHS[int(m)][0 ..< 3]
-        else: MONTHS[int(m)])
-      i += n
-    of 'D':
-      let n = runOf(s, i, 'D', 2)
-      output.add(if n == 1: jsString(date.getDate) else: pad(date.getDate, 2))
-      i += n
-    of 'd':
-      let n = runOf(s, i, 'd', 4)
-      let d = int(date.getDay)
-      output.add(case n
-        of 1: jsString(float(d))
-        of 2: WEEKDAYS[d][0 ..< 2]
-        of 3: WEEKDAYS[d][0 ..< 3]
-        else: WEEKDAYS[d])
-      i += n
-    of 'H':
-      let n = runOf(s, i, 'H', 2)
-      output.add(if n == 1: jsString(hours) else: pad(hours, 2))
-      i += n
-    of 'h':
-      let n = runOf(s, i, 'h', 2)
-      let h12 = (let r = hours mod 12; if r == 0: 12.0 else: r)
-      output.add(if n == 1: jsString(h12) else: pad(h12, 2))
-      i += n
-    of 'a':
-      output.add(if hours < 12: "am" else: "pm"); inc i
-    of 'A':
-      output.add(if hours < 12: "AM" else: "PM"); inc i
-    of 'm':
-      let n = runOf(s, i, 'm', 2)
-      output.add(if n == 1: jsString(date.getMinutes) else: pad(date.getMinutes, 2))
-      i += n
-    of 's':
-      let n = runOf(s, i, 's', 2)
-      output.add(if n == 1: jsString(date.getSeconds) else: pad(date.getSeconds, 2))
-      i += n
-    of 'Z':
-      let n = runOf(s, i, 'Z', 2)
-      output.add(if n == 1: zone(date) else: zone(date).replace(":", ""))
-      i += n
-    of 'S':
-      if s.continuesWith("SSS", i):
-        output.add pad(date.getMilliseconds, 3); i += 3
-      else:
-        output.add c; inc i
+  let h12 = (let r = hours mod 12; if r == 0: 12.0 else: r)
+  let output = advanced.replaceWith(RE_FORMAT, m):
+    if m[1] != "": m[1]
     else:
-      output.add c; inc i
+      case m[0]
+      of "YY":
+        let y = jsString(date.getFullYear)
+        if y.len > 2: y[^2 .. ^1] else: y
+      of "YYYY": pad(date.getFullYear, 4)
+      of "M": jsString(date.getMonth + 1)
+      of "MM": pad(date.getMonth + 1, 2)
+      of "MMM": MONTHS[int(date.getMonth)][0 ..< 3]
+      of "MMMM": MONTHS[int(date.getMonth)]
+      of "D": jsString(date.getDate)
+      of "DD": pad(date.getDate, 2)
+      of "d": jsString(date.getDay)
+      of "dd": WEEKDAYS[int(date.getDay)][0 ..< 2]
+      of "ddd": WEEKDAYS[int(date.getDay)][0 ..< 3]
+      of "dddd": WEEKDAYS[int(date.getDay)]
+      of "H": jsString(hours)
+      of "HH": pad(hours, 2)
+      of "h": jsString(h12)
+      of "hh": pad(h12, 2)
+      of "a": (if hours < 12: "am" else: "pm")
+      of "A": (if hours < 12: "AM" else: "PM")
+      of "m": jsString(date.getMinutes)
+      of "mm": pad(date.getMinutes, 2)
+      of "s": jsString(date.getSeconds)
+      of "ss": pad(date.getSeconds, 2)
+      of "SSS": pad(date.getMilliseconds, 3)
+      of "Z": zone(date)
+      else: zone(date).replace(":", "")
   some(output)
 
 proc isoDate*(date: JsDate): string =
@@ -242,14 +166,12 @@ type
     dayGiven: bool
     afternoon: int  ## -1 unset, 0 false, 1 true
 
-  Matcher = proc (s: string): (int, int) {.noSideEffect.}
-    ## the first match in s: its start and end, or (-1, -1)
   Reader = proc (f: var Fields, input: string): bool {.noSideEffect.}
 
   Step = object
     literal: string
     isReader: bool
-    re: Matcher
+    re: JsRegExp
     read: Reader
 
 func unset(): Fields =
@@ -258,63 +180,18 @@ func unset(): Fields =
 
 func truthy(x: float): bool = x == x and x != 0
 
-func isDigit(s: string, i: int): bool = i < s.len and s[i] in {'0'..'9'}
 
-func search(s: string, at: proc (s: string, i: int): int {.noSideEffect.}): (int, int) =
-  ## The leftmost match of a pattern given as a matcher at each position.
-  var i = 0
-  while i <= s.len:
-    let e = at(s, i)
-    if e >= 0: return (i, e)
-    if i < s.len: i += codePointAt(s, i).size else: inc i
-  (-1, -1)
-
-func digitsExactly(n: int): Matcher =
-  ## /\d{n}/
-  result = proc (s: string): (int, int) =
-    search(s, proc (s: string, i: int): int =
-      for k in 0 ..< n:
-        if not isDigit(s, i + k): return -1
-      i + n)
-
-let MATCH_1 = digitsExactly(1)
-let MATCH_2 = digitsExactly(2)
-let MATCH_3 = digitsExactly(3)
-let MATCH_4 = digitsExactly(4)
-let MATCH_1_TO_2: Matcher = proc (s: string): (int, int) =
-  ## /\d\d?/
-  search(s, proc (s: string, i: int): int =
-    if not isDigit(s, i): -1 elif isDigit(s, i + 1): i + 2 else: i + 1)
-let MATCH_SIGNED: Matcher = proc (s: string): (int, int) =
-  ## /[+-]?\d+/
-  search(s, proc (s: string, i: int): int =
-    var j = i
-    if j < s.len and s[j] in {'+', '-'} and isDigit(s, j + 1): inc j
-    if not isDigit(s, j): return -1
-    while isDigit(s, j): inc j
-    j)
-let MATCH_OFFSET: Matcher = proc (s: string): (int, int) =
-  ## /[+-]\d\d:?(\d\d)?|Z/
-  search(s, proc (s: string, i: int): int =
-    if i < s.len and s[i] in {'+', '-'} and isDigit(s, i + 1) and isDigit(s, i + 2):
-      var j = i + 3
-      if j < s.len and s[j] == ':': inc j
-      if isDigit(s, j) and isDigit(s, j + 1): j += 2
-      return j
-    if i < s.len and s[i] == 'Z': i + 1 else: -1)
-
-func isWordStop(s: string, i: int): bool =
-  ## [-_:/,()\s\d]
-  s[i] in {'-', '_', ':', '/', ',', '(', ')', '0'..'9'} or isJsSpaceAt(s, i)
-
-let MATCH_WORD: Matcher = proc (s: string): (int, int) =
-  ## /\d*[^-_:/,()\s\d]+/
-  search(s, proc (s: string, i: int): int =
-    var j = i
-    while isDigit(s, j): inc j
-    if j >= s.len or isWordStop(s, j): return -1
-    while j < s.len and not isWordStop(s, j): j += codePointAt(s, j).size
-    j)
+const RE_TOKENS =
+  jsre"/(\[[^[]*\])|([-_:/.,()\s]+)|(A|a|Q|YYYY|YY?|ww?|MM?M?M?|Do|DD?|hh?|HH?|mm?|ss?|S{1,3}|z|ZZ?)/g"
+const RE_LITERAL = jsre"/\[[^\]]+]/g"
+const MATCH_1 = jsre"/\d/"
+const MATCH_2 = jsre"/\d\d/"
+const MATCH_3 = jsre"/\d{3}/"
+const MATCH_4 = jsre"/\d{4}/"
+const MATCH_1_TO_2 = jsre"/\d\d?/"
+const MATCH_SIGNED = jsre"/[+-]?\d+/"
+const MATCH_OFFSET = jsre"/[+-]\d\d:?(\d\d)?|Z/"
+const MATCH_WORD = jsre"/\d*[^-_:/,()\s\d]+/"
 
 func num(input: string): float = jsToNumber(input)
 
@@ -335,15 +212,7 @@ let readOffset: Reader = proc (f: var Fields, input: string): bool =
   if input == "Z":
     f.offset = 0
     return true
-  # input.match(/([+-]|\d\d)/g)
-  var parts: seq[string]
-  var i = 0
-  while i < input.len:
-    if input[i] in {'+', '-'}:
-      parts.add $input[i]; inc i
-    elif isDigit(input, i) and isDigit(input, i + 1):
-      parts.add input[i .. i + 1]; i += 2
-    else: inc i
+  let parts = input.match(jsre"/([+-]|\d\d)/g")
   let second = if parts.len > 2: num(parts[2]) else: NaN
   let minutes = num(parts[1]) * 60 + (if truthy(second): second else: 0.0)
   f.offset = if minutes == 0: 0.0 elif parts[0] == "+": -minutes else: minutes
@@ -357,20 +226,16 @@ proc monthName(names: seq[string]): Reader =
     true
 
 proc readDo(f: var Fields, input: string): bool =
-  # input.match(/\d+/)
-  var i = 0
-  while i < input.len and not isDigit(input, i): inc i
-  if i >= input.len: return false
-  var j = i
-  while isDigit(input, j): inc j
+  let digits = jsre"/\d+/".exec(input)
+  if not digits.found: return false
   # dayjs keeps the digits as a string here, so even "0" counts as a day having been given.
-  f.day = num(input[i ..< j])
+  f.day = num(digits[0])
   f.dayGiven = true
   for k in 1 .. 31:
     if ordinal(float(k)) == input: f.day = float(k)
   true
 
-func step(re: Matcher, read: Reader): Step = Step(isReader: true, re: re, read: read)
+func step(re: JsRegExp, read: Reader): Step = Step(isReader: true, re: re, read: read)
 
 proc readerFor(token: string): Option[Step] =
   case token
@@ -408,68 +273,15 @@ proc readerFor(token: string): Option[Step] =
   of "Z", "ZZ": some(step(MATCH_OFFSET, readOffset))
   else: none(Step)
 
-func formatTokenEnd(s: string, i: int): int =
-  ## The end of a match of RE_TOKENS at i, or -1:
-  ## /(\[[^[]*\])|([-_:/.,()\s]+)|(A|a|Q|YYYY|YY?|ww?|MM?M?M?|Do|DD?|hh?|HH?|mm?|ss?|S{1,3}|z|ZZ?)/
-  if s[i] == '[':
-    # [^[]* runs to the next '[' and gives back characters until a ']'
-    var stop = s.find('[', i + 1)
-    if stop == -1: stop = s.len
-    let close = s.rfind(']', start = i + 1, last = stop - 1)
-    if close > i: return close + 1
-  block separators:
-    var j = i
-    while j < s.len:
-      if s[j] in {'-', '_', ':', '/', '.', ',', '(', ')'}: inc j
-      elif isJsSpaceAt(s, j): j += spaceLenAt(s, j)
-      else: break
-    if j > i: return j
-  template at(t: string): bool = s.continuesWith(t, i)
-  case s[i]
-  of 'A', 'a', 'Q', 'z': i + 1
-  of 'Y': (if at("YYYY"): i + 4 elif at("YY"): i + 2 else: i + 1)
-  of 'w', 'h', 'H', 'm', 's', 'D', 'Z':
-    if s[i] == 'D' and at("Do"): i + 2
-    elif i + 1 < s.len and s[i + 1] == s[i]: i + 2
-    else: i + 1
-  of 'M': i + runOf(s, i, 'M', 4)
-  of 'S': i + runOf(s, i, 'S', 3)
-  else: -1
-
-func dropLiterals(s: string): string =
-  ## s.replace(/\[[^\]]+]/g, '')
-  var i = 0
-  while i < s.len:
-    let b = bracketEnd(s, i)
-    if b >= 0:
-      i = b
-      continue
-    result.add s[i]
-    inc i
-
 proc compile(temp: string): Option[seq[Step]] =
   # dayjs expands localized tokens through a locale table the English locale does not have, and fails.
-  let bare = dropLiterals(temp)
-  if 'L' in bare or 'l' in bare: return none(seq[Step])
+  if jsre"/[Ll]/".test(temp.replace(RE_LITERAL, "")): return none(seq[Step])
+  let tokens = temp.match(RE_TOKENS)
+  if tokens.len == 0: return none(seq[Step])
   var steps: seq[Step]
-  var i = 0
-  while i < temp.len:
-    let e = formatTokenEnd(temp, i)
-    if e < 0:
-      i += codePointAt(temp, i).size
-      continue
-    let token = temp[i ..< e]
+  for token in tokens:
     let reader = readerFor(token)
-    if reader.isSome:
-      steps.add reader.get
-    else:
-      # token.replace(/^\[|\]$/g, '')
-      var lit = token
-      if lit.startsWith("["): lit = lit[1 .. ^1]
-      if lit.endsWith("]"): lit = lit[0 ..< lit.len - 1]
-      steps.add Step(literal: lit)
-    i = e
-  if steps.len == 0: return none(seq[Step])
+    steps.add(if reader.isSome: reader.get else: Step(literal: token.replace(jsre"/^\[|\]$/g", "")))
   some(steps)
 
 proc loose(input: string, temp: string, now: JsDate): JsDate =
@@ -484,9 +296,9 @@ proc loose(input: string, temp: string, now: JsDate): JsDate =
       start += utf16Len(step.literal)
       continue
     let slice = substringFrom(rest, start)
-    let (a, b) = step.re(slice)
-    if a < 0: return NaN
-    let matched = slice[a ..< b]
+    let m = step.re.exec(slice)
+    if not m.found: return NaN
+    let matched = m[0]
     if not step.read(f, matched): return NaN
     # dayjs drops the first occurrence of the matched text, wherever it is, and does not move `start`.
     rest = rest.replaceFirst(matched, "")
