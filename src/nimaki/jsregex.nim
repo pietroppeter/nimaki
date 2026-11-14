@@ -24,14 +24,14 @@
 ## class matches half of an emoji there and the whole emoji here; and a capture inside a
 ## repeated group keeps its last value here where JavaScript resets it. `docs/divergences.md`
 ## says where this could show.
-import std/[strutils, unicode]
+import std/[strutils, unicode, tables]
 import regex
 import regex/[nfatype, nfamatch2]
 
 type
   Engine = ref object
-    compiled: bool
     re: Regex2
+    translated: string
 
   JsRegExp* = object
     ## A regular expression with JavaScript's flags. It is translated when it is made (at compile
@@ -42,8 +42,9 @@ type
     flags*: string         ## the flags as Pele writes them (`g`, `i`, `m`, `y`, `u`)
     global*, sticky*: bool
     translated*: string    ## the pattern in the engine's syntax
-    slot: int              ## a literal's place in `literals`, plus one (0: not a literal)
-    own: Regex2            ## the compiled regex of one made at run time (compiled then)
+    slot: int
+      ## Where its engine is: a `jsre` literal's place in `literals` plus one, or minus one less
+      ## the place in `made` of a regex made at run time (0 for none).
 
   JsMatch* = object
     ## The result of `exec`: `found` is false when nothing matched. Group 0 is the whole match.
@@ -139,14 +140,15 @@ func caseClosed(rs: Ranges, pattern: string): Ranges =
 
 func hex(c: int): string = "\\x{" & toHex(c, if c > 0xFFFF: 6 else: 4) & "}"
 
-func classText(rs: Ranges, negated: bool): string =
+func classText(rs: Ranges, negated: bool, raws = ""): string =
   let rs = normalize(rs)
-  if rs.len == 0:
+  if rs.len == 0 and raws == "":
     return if negated: "[\\x{0}-\\x{10FFFF}]" else: "[^\\x{0}-\\x{10FFFF}]"
   result = if negated: "[^" else: "["
   for r in rs:
     result.add hex(r[0])
     if r[1] > r[0]: result.add "-" & hex(r[1])
+  result.add raws
   result.add "]"
 
 func literalText(c: int, ignoreCase: bool, pattern: string): string =
@@ -195,10 +197,12 @@ func readUnicodeEscape(p: string, i: var int, unicodeFlag: bool): int =
   v
 
 type Atom = object
-  ## One thing an escape stands for: a character, or a set of characters.
+  ## One thing an escape stands for: a character, or a set of characters (`ranges`, and
+  ## `raw`: a Unicode category `\p{L}` in the engine's syntax, with the `u` flag).
   isSet: bool
   c: int
   ranges: Ranges
+  raw: string
 
 func setAtom(rs: openArray[(int, int)], negated = false): Atom =
   Atom(isSet: true, ranges: if negated: complement(@rs) else: @rs)
@@ -234,7 +238,21 @@ func readEscape(p: string, i: var int, inClass, unicodeFlag: bool, pattern: stri
   of 'u':
     let v = readUnicodeEscape(p, i, unicodeFlag)
     if v < 0: Atom(c: ord('u')) else: Atom(c: v)
-  of 'c', 'k', 'p', 'P':
+  of 'p', 'P':
+    # \p{L}: a general category, which the engine knows by the same name. (Scripts and binary
+    # properties it does not: Pele uses neither.)
+    if not unicodeFlag or i >= p.len or p[i] != '{':
+      raise newException(JsRegExpError, "\\p without the u flag: /" & pattern & "/")
+    let close = p.find('}', i)
+    let name = p[i + 1 ..< close]
+    if name notin ["L", "Lu", "Ll", "Lt", "Lm", "Lo", "M", "Mn", "Mc", "Me", "N", "Nd", "Nl", "No",
+                   "P", "Pc", "Pd", "Ps", "Pe", "Pi", "Pf", "Po", "S", "Sm", "Sc", "Sk", "So",
+                   "Z", "Zs", "Zl", "Zp", "C", "Cc", "Cf", "Co", "Cn"]:
+      raise newException(JsRegExpError, "a Unicode property the port does not know: \\p{" & name &
+        "} in /" & pattern & "/")
+    i = close + 1
+    Atom(isSet: true, raw: "\\" & ch & "{" & name & "}")
+  of 'c', 'k':
     raise newException(JsRegExpError, "an escape the port does not know: \\" & ch & " in /" &
       pattern & "/")
   else:
@@ -246,7 +264,7 @@ func readEscape(p: string, i: var int, inClass, unicodeFlag: bool, pattern: stri
     Atom(c: int(r))
 
 func readClass(p: string, i: var int, unicodeFlag, ignoreCase: bool,
-               pattern: string): (Ranges, bool) =
+               pattern: string, raws: var string): (Ranges, bool) =
   ## A class `[...]` starting after its `[`; `i` moves past its `]`.
   var negated = false
   if i < p.len and p[i] == '^':
@@ -292,11 +310,15 @@ func readClass(p: string, i: var int, unicodeFlag, ignoreCase: bool,
         rs.add (pending, pending)
         pending = -1
       rs.add atom.ranges
+      raws.add atom.raw
     else:
       addChar(rs, pending, afterDash, atom.c)
   if pending >= 0: rs.add (pending, pending)
   if afterDash: rs.add (ord('-'), ord('-'))
-  if ignoreCase: rs = caseClosed(rs, pattern)
+  if ignoreCase:
+    if raws != "":
+      raise newException(JsRegExpError, "a Unicode category under the i flag: /" & pattern & "/")
+    rs = caseClosed(rs, pattern)
   (rs, negated)
 
 func isQuantifier(p: string, i: int): bool =
@@ -358,7 +380,8 @@ func translate*(pattern, flags: string): string =
         inc i
       else:
         let atom = readEscape(p, i, false, unicodeFlag, pattern)
-        if atom.isSet: result.add classText(withoutSurrogates(atom.ranges), false)
+        if atom.raw != "": result.add atom.raw
+        elif atom.isSet: result.add classText(withoutSurrogates(atom.ranges), false)
         else: result.add literalText(atom.c, ignoreCase, pattern)
     of '.':
       inc i
@@ -366,8 +389,11 @@ func translate*(pattern, flags: string): string =
                  else: classText(withoutSurrogates(complement(@lineEnds)), false))
     of '[':
       inc i
-      let (rs, negated) = readClass(p, i, unicodeFlag, ignoreCase, pattern)
-      if isSurrogateClass(rs, negated, 0xD800, 0xDBFF):
+      var raws = ""
+      let (rs, negated) = readClass(p, i, unicodeFlag, ignoreCase, pattern, raws)
+      if raws != "":
+        result.add classText(withoutSurrogates(rs), negated, raws)
+      elif isSurrogateClass(rs, negated, 0xD800, 0xDBFF):
         highSurrogates = true            # wait for the low half
       elif lastWasHighSurrogates and isSurrogateClass(rs, negated, 0xDC00, 0xDFFF):
         result.add classText(@[(0x10000, maxRune)], false)
@@ -438,6 +464,10 @@ func splitLiteral(lit: string): (string, string) =
 
 var literals: seq[Engine]
   ## The engine of each `jsre` literal, made the first time the literal matches.
+var dynamic: seq[Engine]
+  ## The engine of each pattern made with `newRegExp`, once per pattern and flags: Pele makes
+  ## some in a loop (`new RegExp(`[";]${prop}:...`)`), and JavaScript caches them as this does.
+var dynamicIndex: Table[string, int]
 var slots {.compileTime.} = 0
 
 proc takeSlot(): int {.compileTime.} =
@@ -455,10 +485,19 @@ func made(pattern, flags, translated: string, slot: int): JsRegExp =
   JsRegExp(source: pattern, flags: flags, global: 'g' in flags, sticky: 'y' in flags,
            translated: translated, slot: slot)
 
+proc dynamicSlot(pattern, flags: string): JsRegExp =
+  let key = flags & "/" & pattern
+  let at = dynamicIndex.getOrDefault(key, -1)
+  if at >= 0:
+    let e = dynamic[at]
+    return made(pattern, flags, e.translated, -1 - at)
+  result = made(pattern, flags, translate(pattern, flags), -1 - dynamic.len)
+  dynamic.add Engine(re: compiled(result), translated: result.translated)
+  dynamicIndex[key] = dynamic.high
+
 func newRegExp*(pattern: string, flags = ""): JsRegExp =
-  ## `new RegExp(pattern, flags)`, translated and compiled at run time.
-  result = made(pattern, flags, translate(pattern, flags), 0)
-  result.own = compiled(result)
+  ## `new RegExp(pattern, flags)`, translated and compiled at run time (once per pattern).
+  {.cast(noSideEffect).}: result = dynamicSlot(pattern, flags)
 
 func parseRegExpLiteral*(lit: string): JsRegExp =
   ## `/pattern/flags`, as written in JavaScript, translated at run time.
@@ -477,7 +516,17 @@ template jsre*(lit: static string): JsRegExp =
   const re = literal(lit, takeSlot())
   re
 
-proc literalEngine(re: JsRegExp): Engine =
+func literal*(pattern, flags: string, slot: int): JsRegExp =
+  made(pattern, flags, translate(pattern, flags), slot)
+
+template jsre*(pattern, flags: static string): JsRegExp =
+  ## `new RegExp(pattern, flags)` for a pattern known at compile time (built from constants, as
+  ## Pele builds some with `String.raw`): translated at compile time, like a literal.
+  const re = literal(pattern, flags, takeSlot())
+  re
+
+proc engineOf(re: JsRegExp): Engine =
+  if re.slot < 0: return dynamic[-1 - re.slot]
   if re.slot > literals.len: literals.setLen(re.slot)
   result = literals[re.slot - 1]
   if result == nil:
@@ -487,14 +536,10 @@ proc literalEngine(re: JsRegExp): Engine =
 template withEngine(re: JsRegExp, r, body: untyped): untyped =
   ## `body`, with `r` the compiled regex of `re`. A literal is compiled the first time it
   ## matches (that only fills a cache: what the regex matches does not change).
-  if re.slot > 0:
-    var e: Engine
-    {.cast(noSideEffect).}: e = literalEngine(re)
-    template r: untyped {.inject.} = e.re
-    body
-  else:
-    template r: untyped {.inject.} = re.own
-    body
+  var e: Engine
+  {.cast(noSideEffect).}: e = engineOf(re)
+  template r: untyped {.inject.} = e.re
+  body
 
 func check*(re: JsRegExp): JsRegExp =
   ## Compiles `re` now (the tests do it for every pattern), and returns it.
@@ -513,7 +558,7 @@ func escapeRegExp*(s: string): string =
 
 func isSet*(re: JsRegExp): bool {.inline.} =
   ## Whether `re` holds a regex (a field left at its default does not).
-  re.slot > 0 or re.own.isInitialized
+  re.slot != 0
 
 func found*(m: JsMatch): bool {.inline.} = m.index >= 0
 
@@ -524,6 +569,11 @@ func `[]`*(m: JsMatch, i: int): string {.inline.} =
 func has*(m: JsMatch, i: int): bool {.inline.} =
   ## Whether group `i` took part in the match (`m[i] !== undefined`).
   i < m.defined.len and m.defined[i]
+
+func groupOr*(m: JsMatch, i: int, otherwise: string): string {.inline.} =
+  ## `m?.[i] ?? otherwise`: group `i`, or `otherwise` when there was no match or the group did
+  ## not take part.
+  if m.has(i): m.groups[i] else: otherwise
 
 func noMatch(): JsMatch = JsMatch(index: -1, stop: -1)
 

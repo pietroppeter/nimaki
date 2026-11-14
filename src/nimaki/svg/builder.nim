@@ -3,7 +3,7 @@
 import std/[strutils, math]
 import ../text/[entities, measurer, label, icons]
 import ../text/math as pmath
-import ../js
+import ../js, ../jsregex
 
 func isInvalidXml(c: int): bool =
   ## [\x00-\x08\x0b\x0c\x0e-\x1f\x7f\ud800-\udfff￾￿] (with the u flag: lone surrogates)
@@ -145,46 +145,23 @@ proc labelSvg*(label: Label, cx, cy: float, attrs: string, icons: IconResolver =
     top += h
   "<text" & attrs & " text-anchor=\"middle\" xml:space=\"preserve\">" & body & "</text>" & extra
 
-func attrValue(attrs, name: string): (bool, string) =
-  ## / name="([^"]*)"/.exec(attrs)
-  let key = " " & name & "=\""
-  let at = attrs.find(key)
-  if at == -1: return
-  let stop = attrs.find('"', at + key.len)
-  if stop == -1: return
-  (true, attrs[at + key.len ..< stop])
-
-func styleProp(style, prop: string): (bool, string) =
-  ## /(?:^|;)\s*prop:([^;]*)/.exec(style)
-  var i = 0
-  while i <= style.len:
-    if i == 0 or style[i - 1] == ';':
-      var j = i
-      while true:
-        let n = spaceLenAt(style, j)
-        if n == 0: break
-        j += n
-      if style.continuesWith(prop & ":", j):
-        let start = j + prop.len + 1
-        var stop = style.find(';', start)
-        if stop == -1: stop = style.len
-        return (true, style[start ..< stop])
-    inc i
+const
+  RE_FILL = jsre"""/ fill="([^"]*)"/"""
+  RE_STROKE = jsre"""/ stroke="([^"]*)"/"""
+  RE_STYLE = jsre"""/ style="([^"]*)"/"""
+  RE_STYLE_FILL = jsre"/(?:^|;)\s*fill:([^;]*)/"
+  RE_STYLE_OPACITY = jsre"/(?:^|;)\s*opacity:([^;]*)/"
 
 proc mathLook(attrs: string): MathLook =
   ## Copy only color and opacity to preserve measured math dimensions. Use a solid patch for
   ## the cluster title's outline to hide edges behind math.
-  let (_, style) = attrValue(attrs, "style")
-  let (hasStyleFill, styleFill) = styleProp(style, "fill")
-  let (hasFill, fillAttr) = attrValue(attrs, "fill")
-  let fill = jsTrim(if hasStyleFill: styleFill elif hasFill: fillAttr else: "")
+  let style = RE_STYLE.exec(attrs).groupOr(1, "")
+  let fill = jsTrim(RE_STYLE_FILL.exec(style).groupOr(1, RE_FILL.exec(attrs).groupOr(1, "")))
   if fill == "none":
-    let (hasStroke, stroke) = attrValue(attrs, "stroke")
-    return MathLook(attrs: "", halo: if hasStroke: stroke else: "none", hasHalo: true)
-  let (hasOpacity, opacityRaw) = styleProp(style, "opacity")
-  let opacity = if hasOpacity: jsTrim(opacityRaw) else: ""
+    return MathLook(attrs: "", halo: RE_STROKE.exec(attrs).groupOr(1, "none"), hasHalo: true)
+  let opacity = RE_STYLE_OPACITY.exec(style)
   MathLook(attrs: (if fill == "": "" else: " color=\"" & fill & "\"") &
-                  (if opacity != "": " opacity=\"" & opacity & "\"" else: ""))
+                  (if opacity.found and jsTrim(opacity[1]) != "": " opacity=\"" & jsTrim(opacity[1]) & "\"" else: ""))
 
 proc mathSvg(math: MathMarkup, box: string, size: float, attrs: string): string =
   ## Resolver markup is trusted.

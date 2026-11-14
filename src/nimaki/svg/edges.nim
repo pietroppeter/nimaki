@@ -7,7 +7,7 @@
 import std/[strutils, tables]
 from std/math import PI, floor, sgn, isNaN
 import ../jsmath
-import ../js
+import ../js, ../jsregex
 import ../layout/layered
 import ../text/[label, icons]
 import builder, ink
@@ -450,34 +450,16 @@ proc fillUnder*(d: string, tips: openArray[float], fills: seq[Fill], tokens: seq
       found = true
   if found: FillAt(fill: holder) else: FillAt(none: true)
 
-func hasDecl(s, prop: string): bool =
-  ## /[";]prop:/.test(s)
-  var at = s.find(prop & ":")
-  while at != -1:
-    if at > 0 and s[at - 1] in {'"', ';'}: return true
-    at = s.find(prop & ":", at + 1)
-  false
-
 proc edgeInk*(fill: Fill, line = ""): string =
   ## The fill's ink for an edge on it, or '' for a casing when unknown or when the line style sets a stroke.
-  if hasDecl(line, "stroke"): return ""
+  if jsre"""/[";]stroke:/""".test(line): return ""
   let (ok, color) = ink(fill.shape)
   if ok: color else: ""
 
 proc hollowOn*(markers: string, fill: Fill): string =
   ## Markers with the page color inside them, with the fill's color there instead.
-  # /[";]fill:([^;"]*)/.exec(fill.shape)?.[1].trim()
-  var color = ""
-  let s = fill.shape
-  var at = s.find("fill:")
-  while at != -1:
-    if at > 0 and s[at - 1] in {'"', ';'}:
-      var stop = at + 5
-      while stop < s.len and s[stop] notin {';', '"'}: inc stop
-      color = jsTrim(s[at + 5 ..< stop])
-      break
-    at = s.find("fill:", at + 1)
-  if color != "": markers.replace(" fill=\"var(--_bg)\"", " fill=\"" & color & "\"") else: markers
+  let color = jsTrim(jsre"""/[";]fill:([^;"]*)/""".exec(fill.shape).groupOr(1, ""))
+  if color != "": markers.replace(jsre"""/ fill="var\(--_bg\)"/g""", " fill=\"" & color & "\"") else: markers
 
 type OverFill* = object
   ## undefined (`none`), or the ink: '' for a casing.
@@ -495,60 +477,29 @@ proc overFills*(d: string, tips: openArray[float], fills: seq[Fill], line = "",
 
 const CASE = 4.0
 
-proc declValue(line, prop: string): (bool, string) =
-  ## line.includes(prop) ? new RegExp(`[";]${prop}:([^;"]+);`).exec(line)?.[1].trim() : undefined
-  if prop notin line: return (false, "")
-  var at = line.find(prop & ":")
-  while at != -1:
-    if at > 0 and line[at - 1] in {'"', ';'}:
-      let start = at + prop.len + 1
-      var stop = start
-      while stop < line.len and line[stop] notin {';', '"'}: inc stop
-      if stop > start and stop < line.len and line[stop] == ';':
-        return (true, jsTrim(line[start ..< stop]))
-    at = line.find(prop & ":", at + 1)
-  (false, "")
-
-func isPlainWidth(s: string): bool =
-  ## /^[\d.]+(?:px)?$/
-  var k = 0
-  while k < s.len and s[k] in {'0'..'9', '.'}: inc k
-  k > 0 and (k == s.len or s[k .. ^1] == "px")
-
-func jsParseFloat(s: string): float =
-  ## parseFloat of a string that `isPlainWidth` accepts.
-  var stop = 0
-  var dot = false
-  while stop < s.len and s[stop] in {'0'..'9', '.'}:
-    if s[stop] == '.':
-      if dot: break
-      dot = true
-    inc stop
-  var p = s[0 ..< stop]
-  if p == "." or p == "": return NaN
-  if p.startsWith("."): p = "0" & p
-  if p.endsWith("."): p.add "0"
-  parseFloat(p)
-
 proc casing*(d, markers: string, line = "", thick = false): string =
   ## A wider page-colored stroke under an edge, as faint as it; markers drop their class so
   ## marker styles skip it.
-  let (hasStroke, stroke) = declValue(line, "stroke")
+  proc decl(prop: string): (bool, string) =
+    if prop notin line: return
+    let m = newRegExp("[\";]" & prop & ":([^;\"]+);").exec(line)
+    if m.found: (true, jsTrim(m[1])) else: (false, "")
+  let (hasStroke, stroke) = decl("stroke")
   if hasStroke and (stroke == "none" or stroke == "transparent"): return ""
-  var (hasWidth, width) = declValue(line, "stroke-width")
+  var (hasWidth, width) = decl("stroke-width")
   if thick:
     hasWidth = true
     width = "2.5"
   var attrs = ""
   var style = ""
-  if hasWidth and isPlainWidth(width):
+  if hasWidth and jsre"/^[\d.]+(?:px)?$/".test(width):
     if jsParseFloat(width) != 1: attrs = " stroke-width=\"" & num(jsParseFloat(width) + CASE) & "\""
   elif hasWidth:
     style.add "stroke-width:calc(" & width & " + " & jsString(CASE) & "px);"
   for prop in ["opacity", "stroke-opacity"]:
-    let (has, value) = declValue(line, prop)
+    let (has, value) = decl(prop)
     if has: style.add prop & ":" & value & ";"
-  let body = "<path d=\"" & d & "\"/>" & markers.replace(" class=\"pele-marker\"", "")
+  let body = "<path d=\"" & d & "\"/>" & markers.replace(jsre"""/ class="pele-marker"/g""", "")
   if attrs != "" or style != "":
     "<g" & attrs & (if style != "": " style=\"" & style & "\"" else: "") & ">" & body & "</g>"
   else: body

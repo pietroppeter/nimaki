@@ -192,6 +192,7 @@ proc preprocess*(source: string, steps: Steps = nil): Preprocessed =
 const
   RE_ENTITY = jsre"/#\w+;/g"
   RE_INT = jsre"/^\+?\d+$/"
+let
   RE_LINE_BREAK = newRegExp("[\\n\\r" & "\u2028\u2029" & "]", "g")
 
 proc recording(steps: Steps): int =
