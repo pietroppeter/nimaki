@@ -1,6 +1,6 @@
 {
  "note": "Measured on 14 Nov 2026 in one sandbox, the tree before (main at base, which has the JavaScript speed-ups of PR 73) and after (this branch), alternating runs; the fastest of 4 runs of 5 rounds each (tools/bench.nim), and the faster of 2 clean compiles (tools/bench.nim in C, tools/jsrunner.nim in JavaScript). Lines from tools/census.nim. firstMeasure was taken earlier the same day against an older main (15997016).",
- "commit": "a60ab415915e4137a8fb60f74242563100bfbe83",
+ "commit": "578fc76d9b55b912dc7b18d568a48406e47e5520",
  "base": "2554d1d8c05020517acd2a3b2259474f5ad607c4",
  "lines": {
   "before": {
