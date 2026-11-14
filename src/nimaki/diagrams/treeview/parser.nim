@@ -4,6 +4,7 @@ import std/strutils
 import ../common/[tokens, acc_descr]
 import ../../js
 import ../../util/chars
+import ../../jsregex
 
 const
   # const enum T: the index of each token type in TREEVIEW_TOKENS
@@ -32,7 +33,6 @@ func annotationAt(src: string, at: int): bool =
   (c >= 65 and c <= 90) or (c >= 97 and c <= 122) or c == 95
 
 func matchBareName(src: string, at: int): int =
-  ## /(?!:::|icon\(|##)[^ \t\n\r"'](?:(?![ \t]+:::[ \t]*[A-Za-z_]|[ \t]+icon\(|[ \t]+##)[^\n\r])*/y
   ## The pattern looks ahead from every blank for an annotation, which rescans long runs of
   ## blanks. This looks once per run.
   let first = code(src, at)
@@ -53,65 +53,10 @@ func matchBareName(src: string, at: int): int =
       inc i
   i
 
-let BARE_NAME = TokenType(name: "BARE_NAME", matcher: matchBareName)
-
-func blanksEnd(src: string, at: int): int =
-  ## [ \t]* from at
-  result = at
-  while result < src.len and src[result] in {' ', '\t'}: inc result
-
-func wordsEnd(src: string, at: int): int =
-  ## [\w-]* from at
-  result = at
-  while result < src.len and (isWordChar(src[result]) or src[result] == '-'): inc result
-
-func matchClass(src: string, at: int): int =
-  ## /[ \t]+:::[ \t]*[A-Za-z_][\w-]*/y
-  let i = blanksEnd(src, at)
-  if i == at or not src.continuesWith(":::", i): return -1
-  let j = blanksEnd(src, i + 3)
-  if j >= src.len or src[j] notin {'A'..'Z', 'a'..'z', '_'}: return -1
-  wordsEnd(src, j + 1)
-
-func matchIcon(src: string, at: int): int =
-  ## /[ \t]+icon\([\w-]*(?::[\w-]+)?\)/y
-  let i = blanksEnd(src, at)
-  if i == at or not src.continuesWith("icon(", i): return -1
-  var j = wordsEnd(src, i + 5)
-  if j < src.len and src[j] == ':':
-    let k = wordsEnd(src, j + 1)
-    if k > j + 1: j = k
-  if j < src.len and src[j] == ')': j + 1 else: -1
-
-func matchDesc(src: string, at: int): int =
-  ## /[ \t]+##[^\n\r]*/y
-  let i = blanksEnd(src, at)
-  if i == at or not src.continuesWith("##", i): return -1
-  result = i + 2
-  while result < src.len and src[result] notin {'\n', '\r'}: inc result
-
-func matchBlanks(src: string, at: int): int =
-  ## /[ \t]{1,}/y and /[ \t]+/y
-  let i = blanksEnd(src, at)
-  if i == at: -1 else: i
-
-func matchQuoted(src: string, at: int): int =
-  ## /"[^"]*"|'[^']*'/y
-  if at >= src.len or src[at] notin {'"', '\''}: return -1
-  let close = src.find(src[at], at + 1)
-  if close == -1: -1 else: close + 1
-
-func matchComment(src: string, at: int): int =
-  ## /\%\%[^\n]*/y
-  if not src.continuesWith("%%", at): return -1
-  let stop = src.find('\n', at + 2)
-  if stop == -1: src.len else: stop
-
-func matchNewline(src: string, at: int): int =
-  ## /\r?\n/y
-  if code(src, at) == 10: at + 1
-  elif code(src, at) == 13 and code(src, at + 1) == 10: at + 2
-  else: -1
+let BARE_NAME = TokenType(
+  name: "BARE_NAME",
+  pattern: jsre"""/(?!:::|icon\(|##)[^ \t\n\r"'](?:(?![ \t]+:::[ \t]*[A-Za-z_]|[ \t]+icon\(|[ \t]+##)[^\n\r])*/y""",
+  match: proc (src: string, at: int, previous: int): int = matchBareName(src, at))
 
 proc withLonger(t: TokenType, longer: seq[TokenType]): TokenType =
   ## `{ ...t, longer }`
@@ -124,14 +69,14 @@ let TREEVIEW_TOKENS*: seq[TokenType] = @[
   accDescr(),
   ACC_TITLE,
   titleBefore(r"(?!%%)[^\n\r]"),
-  TokenType(name: "CLASS_ANNOTATION", matcher: matchClass, first: " \t", hasFirst: true),
-  TokenType(name: "ICON_ANNOTATION", matcher: matchIcon, first: " \t", hasFirst: true),
-  TokenType(name: "DESC_ANNOTATION", matcher: matchDesc, first: " \t", hasFirst: true),
-  TokenType(name: "INDENTATION", matcher: matchBlanks, first: " \t", hasFirst: true),
-  TokenType(name: "QUOTED_NAME", matcher: matchQuoted, first: "\"'", hasFirst: true),
-  TokenType(name: "WS", matcher: matchBlanks, hidden: true, first: " \t", hasFirst: true),
-  TokenType(name: "ML_COMMENT", matcher: matchComment, hidden: true, first: "%", hasFirst: true),
-  TokenType(name: "NL", matcher: matchNewline, hidden: true, first: "\r\n", hasFirst: true),
+  TokenType(name: "CLASS_ANNOTATION", pattern: jsre"/[ \t]+:::[ \t]*[A-Za-z_][\w-]*/y", first: " \t", hasFirst: true),
+  TokenType(name: "ICON_ANNOTATION", pattern: jsre"/[ \t]+icon\([\w-]*(?::[\w-]+)?\)/y", first: " \t", hasFirst: true),
+  TokenType(name: "DESC_ANNOTATION", pattern: jsre"/[ \t]+##[^\n\r]*/y", first: " \t", hasFirst: true),
+  TokenType(name: "INDENTATION", pattern: jsre"/[ \t]{1,}/y", first: " \t", hasFirst: true),
+  TokenType(name: "QUOTED_NAME", pattern: jsre"""/"[^"]*"|'[^']*'/y""", first: "\"'", hasFirst: true),
+  TokenType(name: "WS", pattern: jsre"/[ \t]+/y", hidden: true, first: " \t", hasFirst: true),
+  TokenType(name: "ML_COMMENT", pattern: jsre"/\%\%[^\n]*/y", hidden: true, first: "%", hasFirst: true),
+  TokenType(name: "NL", pattern: jsre"/\r?\n/y", hidden: true, first: "\r\n", hasFirst: true),
   BARE_NAME,
 ]
 

@@ -10,6 +10,7 @@ import ../../js
 import ../../util/yaml
 import ../common/[fit_width, literal_label]
 import icons, model
+import ../../jsregex
 
 const
   ICON_GAP = 6.0
@@ -44,17 +45,6 @@ type Row = ref object
   hasLabel, hasDescription: bool
   label, description: Label
   top, height: float
-
-func hasHighlight(cssClass: string): bool =
-  ## cssClass.split(/\s+/).includes('highlight')
-  var i = 0
-  while i <= cssClass.len:
-    var stop = i
-    while stop < cssClass.len and spaceLenAt(cssClass, stop) == 0: inc stop
-    if cssClass[i ..< stop] == "highlight": return true
-    if stop >= cssClass.len: break
-    i = stop + spaceLenAt(cssClass, stop)
-  false
 
 proc draw(model: TreeViewModel, config: Config, options: RenderOptions, tight: bool): Rendered
 
@@ -122,7 +112,7 @@ proc draw(model: TreeViewModel, config: Config, options: RenderOptions, tight: b
         row.description = literalLabel(decodeEntities(node.description), measurer, size, room, Italic)
     let width = if row.hasLabel: row.label.width else: measurer.width(text, size, style)
     if labelX + width > labelRight: labelRight = labelX + width
-    row.highlighted = node.cssClass != "" and hasHighlight(node.cssClass)
+    row.highlighted = node.cssClass != "" and "highlight" in node.cssClass.split(jsre"/\s+/")
     if row.highlighted: anyHighlight = true
     let labelHeight = if row.hasLabel: row.label.height else: 0
     let descriptionHeight = if row.hasDescription: row.description.height else: 0
