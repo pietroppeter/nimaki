@@ -145,7 +145,8 @@ proc merge(target, source: Config): Config =
     else: target.fields[key] = value
   target
 
-proc fromJson(j: JsonNode): YamlValue =
+proc fromJson*(j: JsonNode): YamlValue =
+  ## A JSON value as the YAML value frontmatter would give (used for `config` in options).
   case j.kind
   of JNull: ynull()
   of JBool: ybool(j.bval)

@@ -477,8 +477,8 @@
           "title": "Venn",
           "what": "src/diagrams/venn: 909 lines of TypeScript, 8 corpus cases.",
           "done_when": "difftest: every venn case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Build C ABI and diagrammari proposal",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -488,8 +488,8 @@
           "title": "Xychart",
           "what": "src/diagrams/xychart: 953 lines of TypeScript, 8 corpus cases.",
           "done_when": "difftest: every xychart case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Build C ABI and diagrammari proposal",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -683,9 +683,9 @@
           "what": "A shared library for other languages (diagrammari-py).",
           "done_when": "A Python smoke test renders a pie.",
           "owner": "Build C ABI and diagrammari proposal",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "a-c-abi",
+          "pr": "49"
         },
         {
           "id": "follow-pele",

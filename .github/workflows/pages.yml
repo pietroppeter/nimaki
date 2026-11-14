@@ -126,6 +126,11 @@ jobs:
         run: |
           if [ -f tests/all.nim ]; then nim r tests/all.nim; else echo "no tests/all.nim yet"; fi
 
+      # The C ABI: the shared library, and its smoke test in Python through ctypes (every case
+      # of the corpus, through the library, against Pele in Node)
+      - name: C ABI
+        run: nim r tools/cabi.nim
+
       # compiled and run as two steps, so the timings show which of the two is slow
       - name: Compile the pages
         run: nim c -d:nimibQuiet docs/all.nim
