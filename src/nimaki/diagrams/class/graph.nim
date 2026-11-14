@@ -2,6 +2,7 @@
 ## port-status: draft
 import std/tables
 import db
+import ../../model
 
 type
   NodeShape* = string ## 'rect' | 'classBox' | 'note' | 'interface'
@@ -12,7 +13,7 @@ type
     label*: string
     isGroup*: bool
     shape*: NodeShape
-    parentId*: string     ## "" for undefined
+    parentId* {.undefinedIfEmpty.}: string     ## "" for undefined
     parent*: int
       ## Index of the namespace node this one is drawn in, or -1.
     classNode*: ClassNode ## nil for none
@@ -24,7 +25,7 @@ type
     start*, stop*: string
     source*, target*: int
       ## Indexes into the node list. Ids alone are ambiguous: a class may be named `note0` or `interface0`.
-    label*: string        ## "" for undefined
+    label* {.undefinedIfEmpty.}: string        ## "" for undefined
     arrowTypeStart*, arrowTypeEnd*: EndMarker
     startLabelRight*, endLabelLeft*: string
     pattern*: string      ## 'solid' | 'dashed' | 'dotted'

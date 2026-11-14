@@ -18,6 +18,7 @@ from nimaki/diagrams/architecture/db import ArchitectureDb, ArchNode
 from "nimaki/diagrams/block/db" import BlockDb
 from nimaki/diagrams/c4/db import C4Db, C4Element, C4Rel, C4Attr
 from nimaki/diagrams/class/db import ClassDb
+from nimaki/diagrams/class/types import Relation, NONE
 from nimaki/diagrams/cynefin/model import CynefinModel
 from nimaki/diagrams/er/db import ErDb
 from nimaki/diagrams/eventmodeling/model import EventModelingModel
@@ -255,6 +256,11 @@ proc dump(x: SeqNote, path: var Walk): JsonNode =
   ## Pele's note names one participant, or a pair when it is over two: the port holds a pair.
   %*{"actor": (if x.placement == PLACEMENT_OVER: %x.actor else: %x.actor[0]),
      "placement": x.placement, "message": x.message, "wrap": x.wrap}
+
+proc dump(x: Relation, path: var Walk): JsonNode =
+  ## Pele's ends are a number or 'none', which the port holds as NONE.
+  template side(t: int): JsonNode = (if t == NONE: %"none" else: %t)
+  %*{"type1": side(x.type1), "type2": side(x.type2), "lineType": x.lineType}
 
 proc dump(x: MappingSet, path: var Walk): JsonNode =
   ## Pele's `Set` of mappings, held as a list (a set of references would hash their addresses).
