@@ -33,7 +33,7 @@ nbText: &"""
 - **Pele's own tests agree**: {count("passed")} pass on nimaki (there were {was("passed")}), and
   {count("model")} wait for a model not yet in Pele's shape (there were {was("model")}).
 - **The differences came in five kinds** (the empty text for "none" being the commonest), and each kind now has one way to be fixed, written down
-  as [decision 0017](../../decisions/#0017-models-in-pele-s-shape): an `Option` for a field Pele may leave undefined, a
+  as [decision 0017](../../decisions/#0017-a-model-is-pele-s-field-for-field-or-says-how-it-differs): an `Option` for a field Pele may leave undefined, a
   pragma on a field the port has and Pele does not, a pragma on an object Pele spreads into
   another, a writer of Pele's shape for a value the port holds otherwise on purpose, and a
   renaming for Nim's keywords.
@@ -51,7 +51,7 @@ The referee for models, `tools/parsediff.nim`, says where. Its new option `--all
 difference of every case, which is what it takes to fix a type in one go. Going through the types
 one by one, the same five kinds of difference came back again and again.
 
-## 1. Undefined, or a stand-in
+## Undefined, or a stand-in
 
 TypeScript can say that a field may be missing: `children?: TreemapNode[]`. In a treemap, a
 section has a list of children, which can be empty, and a leaf has none at all. The port had a
@@ -68,7 +68,7 @@ them; Pele's tests did not, and failed on titles of info, journey, radar, timeli
 gitGraph. Changing every title of 33 types to an `Option` would touch every drawing for nothing
 the drawings see, so `tools/models.nim` reads a model's own `title`, `accTitle` and `accDescr`
 as undefined when they are `""`, in every type but usecase (whose Pele starts them as `""`); and
-a third pragma, `{.undefinedIfEmpty.}`, says the same of another text, as the event modeling box's
+a third pragma, `{{.undefinedIfEmpty.}}`, says the same of another text, as the event modeling box's
 `data`. With `--strict` the referee tells an empty text from a missing one, as Pele's tests do,
 and lists what is left of this kind.
 """
@@ -77,10 +77,12 @@ nbCode:
   let tree = TreemapModel(parse("treemap-beta\n\"Fruit\"\n  \"Apple\": 3\n  \"Empty\"\n").model)
   let fruit = tree.roots[0]
   echo fruit.name, ": a leaf? ", fruit.leaf, ", children ", fruit.children.get.len
-  for c in fruit.children.get: echo "  ", c.name, ": a leaf? ", c.leaf, ", children ", c.children
+  for c in fruit.children.get:
+    echo "  ", c.name, ": a leaf? ", c.leaf, ", children ",
+      (if c.children.isNone: "none" else: $c.children.get.len)
 
 nbText: """
-## 2. A field of the port's own
+## A field of the port's own
 
 Some fields Pele does not have at all, because the port added them for itself: an event modeling
 box keeps `order`, its place in the list of boxes, where Pele keys a table by the box itself. Such a
@@ -94,7 +96,7 @@ order* {.portOnly.}: int
 `tools/models.nim` leaves a `portOnly` field out of the model it writes. The pragmas live in a new
 file, `src/nimaki/model.nim`, which says what each means.
 
-## 3. Spread into another
+## Spread into another
 
 JavaScript can *spread* an object into another: `{ ...built, title }` makes one object of the
 fields of `built` and a `title`. Pele's wardley model is made that way, and so is its quadrant
@@ -102,7 +104,7 @@ point, which extends its style. The port keeps the inner object as one field, so
 `{.spread.}`, says to write its fields as the outer object's own. Wardley went from no model the
 same as Pele's to all of them, with that one word.
 
-## 4. A shape of its own, on purpose
+## A shape of its own, on purpose
 
 Some differences are wanted. A railroad diagram's node is, in Pele, one of seven shapes, a
 *union*: a terminal with a `value`, a sequence with `elements`, a choice with `alternatives`, a
@@ -119,7 +121,7 @@ axis and plot (a union of a band axis and a linear one, and a flag for the plot'
 """
 
 nbCode:
-  let rail = dumpModel(parse("railroad-beta\nlist = item (\",\" item)*\n"))
+  let rail = dumpModel(parse("railroad-ebnf-beta\nlist = item , { \",\" , item } ;\n"))
   echo rail["rules"][0]["definition"]
 
 nbText: """
@@ -127,7 +129,7 @@ The writer also learned two things JavaScript does. A pair, which Nim writes as 
 array in JavaScript (the xychart's `["jan", 12]`), and a number without bound is `Infinity` (a
 repetition's `max`).
 
-## 5. Names Nim keeps for itself
+## Names Nim keeps for itself
 
 `type`, `from`, `end` are words of Nim's own, so the port names those fields otherwise (`kind`,
 `start`, `stop`), and `tools/models.nim` renames them back. One type had a real field named `kind`
@@ -137,7 +139,7 @@ The table of renamings for one type now puts it back.
 ## The rule, written down
 
 A later session porting a field would face the same choice: change the model, or change how it is
-written. [Decision 0017](../../decisions/#0017-models-in-pele-s-shape) says which, in that order: an `Option` first, a
+written. [Decision 0017](../../decisions/#0017-a-model-is-pele-s-field-for-field-or-says-how-it-differs) says which, in that order: an `Option` first, a
 pragma for what is the port's own or spread, a writer in `tools/models.nim` only for a shape kept on
 purpose, with its reason.
 """
