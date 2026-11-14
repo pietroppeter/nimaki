@@ -808,7 +808,7 @@
           "id": "models-as-pele",
           "kind": "port",
           "title": "Models as Pele's",
-          "what": "tools/parsediff.nim compares the model nimaki's parse() returns with Pele's: the same for some types, different in shape for the others (a field the port adds, a union held as one object with a kind, a field named otherwise). Bring each type's model to Pele's shape, type by type, so that Pele's tests that read a model can run on the port. docs/data/parsediff.json says where each type stands.",
+          "what": "tools/parsediff.nim compares the model nimaki's parse() returns with Pele's: the same for some types, different in shape for the others (a field the port adds, a union held as one object with a kind, a field named otherwise). Bring each type's model to Pele's shape, type by type, so that Pele's tests that read a model can run on the port. docs/data/parsediff.json says where each type stands. Part 1 (post pele-tests-read-the-models): Pele's tests get parse() and render(model) through the bridge (tests of a type whose models differ are counted as model), and block, mindmap and ishikawa have Pele's models. Next: the other types once the regex step (shared-scanners) has merged; the titles of info, journey, radar and timeline (\"\" for undefined); the class parser's memory in JavaScript on long dotted namespace names.",
           "done_when": "nim r tools/parsediff.nim finds every model the same as Pele's.",
           "owner": "Port class and swimlane",
           "status": "started",

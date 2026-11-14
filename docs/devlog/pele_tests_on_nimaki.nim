@@ -13,7 +13,7 @@ nb.usePost()
 
 let data = parseFile(docsDir / "data" / "peletests.json")
 let counts = data["counts"]
-proc count(k: string): int = counts[k].getInt
+proc count(k: string): int = counts{k}.getInt
 let totals = parseFile(docsDir / "data" / "portmap.json")["totals"]
 let conformantFiles = totals["conformant"]["files"].getInt
 let draftFiles = totals["draft"]["files"].getInt
@@ -106,14 +106,15 @@ block:
     verdict, meaning: string
     tests: int
   let meaning = {"passed": "passes on nimaki too",
-                 "api": "uses parse(), mount() or zoom, which nimaki does not provide",
+                 "api": "uses mount() or zoom, which nimaki does not provide (parse() too, until the post Pele's tests read the models)",
+                 "model": "reads a model of a type whose models are not Pele's yet (since the post Pele's tests read the models)",
                  "unported": "draws a type nimaki does not draw yet",
                  "speed": "draws the same, but misses one of Pele's time limits",
                  "canvas": "tests the canvas measurer, which needs a browser",
                  "known": "a known gap, listed with its reason in tools/peletests/known.txt",
                  "failed": "anything else: an ERROR, and CI fails"}.toTable
   var rows: seq[Row]
-  for k in ["passed", "api", "unported", "speed", "canvas", "known", "failed"]:
+  for k in ["passed", "api", "model", "unported", "speed", "canvas", "known", "failed"]:
     rows.add Row(verdict: k, meaning: meaning[k], tests: count(k))
   let t = tabella(rows, rownameCol = "verdict"):
     tabHeader "Pele's tests on nimaki", "the tests that pass on Pele 1.13.0, by what they do on nimaki"

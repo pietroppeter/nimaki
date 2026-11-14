@@ -434,7 +434,7 @@ proc draw(model: BlockDb, config: Config, options: RenderOptions, tight: bool): 
       nh = if shape == "cyl": max(s.h, label.height + 40) else: s.h
       dy = s.dy
     View(
-      columns: (if kind == kComposite: b.columns else: -1.0),
+      columns: (if kind == kComposite: b.columns.get(-1.0) else: -1.0),
       span: (if kind == kSpace: 1.0 elif b.widthInColumns.isNaN: 1.0 else: b.widthInColumns),
       space: kind == kSpace, head: head, nw: nw, nh: nh,
       blk: b, kind: kind, index: index, shape: shape, label: label, style: style,

@@ -3,9 +3,13 @@
 ## whose `nimakiRender(source, options)` takes Pele's options as JavaScript values, functions
 ## included (a measurer, an icon resolver, a typesetter), and returns Pele's result, or throws
 ## `{peleError: true, message, code, ...}`, which tools/peletests/index.js turns into a PeleError.
-import std/[jsffi, options, tables]
+## `nimakiParse(source, options)` returns the model as Pele's `parse` does, written by
+## tools/models.nim as a JavaScript object (a table is a Map, a set a Set), and
+## `nimakiRenderModel(model, options)` draws one.
+import std/[jsffi, options, tables, json]
 import nimaki
 import nimaki/util/yaml
+import ../models
 
 when not defined(js):
   {.error: "the bridge is compiled with nim js".}
@@ -16,6 +20,7 @@ proc isString(x: JsObject): bool {.importjs: "(typeof # === 'string')".}
 proc isNumber(x: JsObject): bool {.importjs: "(typeof # === 'number')".}
 proc isBool(x: JsObject): bool {.importjs: "(typeof # === 'boolean')".}
 proc isArray(x: JsObject): bool {.importjs: "Array.isArray(#)".}
+proc isObject(x: JsObject): bool {.importjs: "(typeof # === 'object')".}
 proc isDate(x: JsObject): bool {.importjs: "(# instanceof Date)".}
 proc dateValue(x: JsObject): float {.importjs: "#.getTime()".}
 proc keysOf(x: JsObject): seq[cstring] {.importjs: "Object.keys(#)".}
@@ -89,36 +94,112 @@ proc toOptions(o: JsObject): RenderOptions =
 proc orNull(s: string): JsObject =
   if s.len == 0: jsNull else: toJs(cstring(s))
 
+proc newMap(): JsObject {.importjs: "new Map()".}
+proc newSet(): JsObject {.importjs: "new Set()".}
+proc mapSet(m: JsObject, k: cstring, v: JsObject) {.importjs: "#.set(#, #)".}
+proc setAdd(s: JsObject, v: JsObject) {.importjs: "#.add(#)".}
+proc newWeakMap(): JsObject {.importjs: "new WeakMap()".}
+proc weakGet(m, k: JsObject): JsObject {.importjs: "#.get(#)".}
+proc weakSet(m, k, v: JsObject) {.importjs: "#.set(#, #)".}
+
+var parsedModels = newWeakMap()
+  ## the Nim model behind each JavaScript model nimakiParse returned, for nimakiRenderModel
+
+proc newIdTable(): JsObject {.importjs: "new Map()".}
+proc idGet(m: JsObject, k: int): JsObject {.importjs: "#.get(#)".}
+proc idSet(m: JsObject, k: int, v: JsObject) {.importjs: "#.set(#, #)".}
+
+proc toJsValue(j: JsonNode, ids: JsObject): JsObject =
+  ## JSON from tools/models.nim (written with `share`) as Pele's JavaScript: `{"$map": ...}` a
+  ## Map, `{"$set": [...]}` a Set, `{"$ref": n}` the object written with `"$id": n` (the same
+  ## object, cycles included), null left out of an object (Pele's undefined).
+  case j.kind
+  of JNull: result = jsUndefined
+  of JBool: result = toJs(j.getBool)
+  of JInt: result = toJs(j.getInt)
+  of JFloat: result = toJs(j.getFloat)
+  of JString: result = toJs(cstring(j.getStr))
+  of JArray:
+    var items: seq[JsObject]
+    for v in j: items.add toJsValue(v, ids)
+    result = toJs(items)
+  of JObject:
+    if j.len == 1 and j.hasKey("$map"):
+      result = newMap()
+      for k, v in j["$map"]: result.mapSet(cstring(k), toJsValue(v, ids))
+    elif j.len == 1 and j.hasKey("$set"):
+      result = newSet()
+      for v in j["$set"]: result.setAdd(toJsValue(v, ids))
+    elif j.len == 1 and j.hasKey("$ref"):
+      result = ids.idGet(j["$ref"].getInt)
+    else:
+      result = newJsObject()
+      if j.hasKey("$id"): ids.idSet(j["$id"].getInt, result)
+      for k, v in j:
+        if v.kind != JNull and k != "$id": result[cstring(k)] = toJsValue(v, ids)
+
+proc throwPele(e: ref PeleError) =
+  let j = newJsObject()
+  j["peleError"] = true
+  j["message"] = cstring(e.msg)
+  j["code"] = cstring(e.code)
+  j["type"] = orNull(e.diagramType)
+  j["mermaidType"] = orNull(e.mermaidType)
+  j["line"] = e.line
+  j["column"] = e.column
+  j["snippet"] = cstring(e.snippet)
+  jsThrow(j)
+
+proc resultOf(r: RenderResult): JsObject =
+  result = newJsObject()
+  result["type"] = cstring(r.diagramType)
+  result["mermaidType"] = cstring(r.mermaidType)
+  result["svg"] = cstring(r.svg)
+  result["width"] = r.width
+  result["height"] = r.height
+  var list: seq[JsObject]
+  for l in r.links:
+    let j = newJsObject()
+    j["id"] = cstring(l.id)
+    j["href"] = cstring(l.href)
+    j["internal"] = l.internal
+    list.add j
+  result["links"] = toJs(list)
+
+proc nimakiParse(source: cstring, options: JsObject): JsObject {.exportc.} =
+  var m: ParsedModel
+  try:
+    m = parse($source, toOptions(options))
+  except PeleError as e:
+    throwPele(e)
+  try:
+    result = toJsValue(dumpModel(m, share = true, budget = 2_000_000), newIdTable())
+  except:
+    # A model nested thousands deep, or of millions of characters (the stress tests), is deeper
+    # than JavaScript's stack lets the walk go, or larger than its memory holds twice: the test
+    # gets the model without its fields, and can still draw it.
+    result = nil
+  if result == nil or result.isUndef or not result.isObject: result = newJsObject()
+  result["type"] = cstring(m.diagramType)
+  result["mermaidType"] = cstring(m.mermaidType)
+  parsedModels.weakSet(result, toJs(m))
+
+proc nimakiRenderModel(model: JsObject, options: JsObject): JsObject {.exportc.} =
+  ## nil when `model` is not one that nimakiParse returned.
+  let found = parsedModels.weakGet(model)
+  if found.isUndef: return jsNull
+  try:
+    result = resultOf(render(found.to(ParsedModel), toOptions(options)))
+  except PeleError as e:
+    throwPele(e)
+
 proc nimakiRender(source: cstring, options: JsObject): JsObject {.exportc.} =
   try:
-    let r = render($source, toOptions(options))
-    result = newJsObject()
-    result["type"] = cstring(r.diagramType)
-    result["mermaidType"] = cstring(r.mermaidType)
-    result["svg"] = cstring(r.svg)
-    result["width"] = r.width
-    result["height"] = r.height
-    var list: seq[JsObject]
-    for l in r.links:
-      let j = newJsObject()
-      j["id"] = cstring(l.id)
-      j["href"] = cstring(l.href)
-      j["internal"] = l.internal
-      list.add j
-    result["links"] = toJs(list)
+    result = resultOf(render($source, toOptions(options)))
   except PeleError as e:
-    let j = newJsObject()
-    j["peleError"] = true
-    j["message"] = cstring(e.msg)
-    j["code"] = cstring(e.code)
-    j["type"] = orNull(e.diagramType)
-    j["mermaidType"] = orNull(e.mermaidType)
-    j["line"] = e.line
-    j["column"] = e.column
-    j["snippet"] = cstring(e.snippet)
-    jsThrow(j)
+    throwPele(e)
 
 proc nimakiDetectType(text: cstring): JsObject {.exportc.} = orNull(detectType($text))
 proc nimakiSupports(text: cstring): bool {.exportc.} = supports($text)
 
-{.emit: "module.exports = { nimakiRender, nimakiDetectType, nimakiSupports };".}
+{.emit: "module.exports = { nimakiRender, nimakiParse, nimakiRenderModel, nimakiDetectType, nimakiSupports };".}

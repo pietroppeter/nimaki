@@ -9,7 +9,9 @@
 ## then sorted:
 ##
 ## - `passed`: it passes on nimaki too;
-## - `api`: it calls what nimaki does not provide (`parse()`, `mount()`, zoom...);
+## - `api`: it calls what nimaki does not provide (`mount()`, zoom...);
+## - `model`: it read a model with `parse()`, of a type whose models are not all Pele's yet
+##   (docs/data/parsediff.json, by tools/parsediff.nim);
 ## - `unported`: it draws a type nimaki does not draw yet;
 ## - `speed`: only a time bound of Pele's failed (stress tests; the JavaScript build is slower),
 ##   or vitest's own limit of a minute a test;
@@ -29,12 +31,13 @@ import std/[os, osproc, strutils, json, tables, algorithm, parseopt, re, sets, s
 import common
 
 type
-  Kind = enum kPassed = "passed", kApi = "api", kUnported = "unported", kSpeed = "speed",
+  Kind = enum kPassed = "passed", kApi = "api", kModel = "model", kUnported = "unported", kSpeed = "speed",
               kCanvas = "canvas", kKnown = "known", kFailed = "failed"
   Known = object
     file, name, how, reason: string
   Outcome = object
     file, name, status, message, missing: string
+    parsed: bool   ## it read a model with parse()
 
 const peleSkip = ["website", "node_modules", ".git"]
 
@@ -71,6 +74,7 @@ proc outcomes(path: string): seq[Outcome] =
       if a.hasKey("failureMessages") and a["failureMessages"].len > 0:
         o.message = a["failureMessages"][0].getStr
       if a{"meta"}{"nimakiMissing"} != nil: o.missing = a["meta"]["nimakiMissing"].getStr
+      if a{"meta"}{"nimakiParsed"} != nil: o.parsed = true
       result.add o
 
 let speedRe = re"expected [0-9.e+-]+ to be less than [0-9]+"
@@ -91,6 +95,19 @@ proc unportedTypes(): HashSet[string] =
 
 let unported = unportedTypes()
 
+proc modelsNotPeles(): HashSet[string] =
+  ## The types whose models are not all Pele's yet, from tools/parsediff.nim (lower case, as
+  ## the folders of Pele's tests).
+  for t in parseJson(readFile(dataDir / "parsediff.json"))["types"]:
+    if t["different"].getInt > 0:
+      let name = t["type"].getStr
+      result.incl (case name
+                   of "gitGraph": "git"
+                   of "quadrantChart": "quadrant"
+                   else: name.toLowerAscii)
+
+let notPeles = modelsNotPeles()
+
 proc readKnown(): seq[Known] =
   for line in lines(repoDir / "tools" / "peletests" / "known.txt"):
     if line.len == 0 or line.startsWith("#"): continue
@@ -103,6 +120,7 @@ proc kindOf(o: Outcome, known: seq[Known]): Kind =
   for k in known:
     if k.file == o.file and k.name == o.name: return kKnown
   if o.missing.len > 0 or "NotInNimaki" in o.message: kApi
+  elif o.parsed and typeOf(o.file) in notPeles: kModel
   elif "nimaki does not draw" in o.message or typeOf(o.file) in unported: kUnported
   elif o.file == "tests/util/measurer.test.ts" and o.name.startsWith("canvasMeasurer"): kCanvas
   elif o.message.split("\n    at ")[0].find(speedRe) >= 0 or o.message.startsWith("Error: Test timed out"): kSpeed
