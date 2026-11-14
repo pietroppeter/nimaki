@@ -91,7 +91,7 @@ proc draw(model: GitModel, config: Config, options: RenderOptions, direction: Gi
   for commit in model.commits.values: sorted.add commit
   sorted.sort(proc (a, b: GitCommit): int = cmp(a.seq, b.seq))
   for commit in sorted:
-    let labelled = showCommitLabel and commit.kind != CHERRY_PICK and (commit.kind != MERGE or commit.customId)
+    let labelled = showCommitLabel and commit.kind != CHERRY_PICK and (commit.kind != MERGE or commit.customId.get(false))
     var tags: seq[Label]
     for tag in commit.tags:
       let label = plainLabel(tag, measurer, small, 4000)
@@ -276,7 +276,7 @@ proc draw(model: GitModel, config: Config, options: RenderOptions, direction: Gi
     let tags = view.tags
     let x = px(view.m, cross[view.lane])
     let y = py(view.m, cross[view.lane])
-    let kind = if commit.customType != NO_TYPE: commit.customType else: commit.kind
+    let kind = commit.customType.get(commit.kind)
     grow(x - DOT - 1, y - DOT - 1, x + DOT + 1, y + DOT + 1)
     # Merges and cherry-picks carry a message Mermaid makes up; only a written one is worth showing.
     let written = commit.kind < MERGE and commit.message != ""

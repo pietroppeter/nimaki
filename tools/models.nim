@@ -8,7 +8,7 @@
 ##
 ## Used by tools/parsediff.nim, the referee for models, and by tools/peletests/bridge.nim, which
 ## hands these models to Pele's tests; so it compiles with `nim js` too.
-import std/[json, tables, sets, strutils, options, algorithm, macros]
+import std/[json, tables, sets, strutils, options, algorithm, macros, typetraits]
 import nimaki
 import nimaki/util/yaml
 import nimaki/model
@@ -32,7 +32,7 @@ from nimaki/diagrams/packet/model import PacketModel, PacketLabel
 from nimaki/diagrams/pie/model import PieModel
 from nimaki/diagrams/quadrant/db import QuadrantModel
 from nimaki/diagrams/radar/model import RadarModel
-from nimaki/diagrams/railroad/types import RailroadModel
+from nimaki/diagrams/railroad/types import RailroadModel, RailroadNode, NodeKind
 from nimaki/diagrams/requirement/db import RequirementDb
 from nimaki/diagrams/sankey/db import SankeyModel
 from nimaki/diagrams/sequence/db import SeqDb
@@ -87,7 +87,33 @@ proc onPath(w: Walk, p: Mark): bool =
 
 proc dump[T](x: T, path: var Walk): JsonNode
 
-# Where the port holds a value in a shape of its own, for speed, and Pele a plain one.
+# Where the port holds a value in a shape of its own, and Pele another.
+
+proc number(x: float, path: Walk): JsonNode =
+  ## A number as tools/oracle.mjs writes it: NaN is undefined, an infinity "Infinity". For the
+  ## bridge (`share`), the number itself.
+  if path.share: newJFloat(x)
+  elif x != x: newJNull()
+  elif x == Inf: %"Infinity"
+  elif x == -Inf: %"-Infinity"
+  else: %x
+
+proc dump(x: RailroadNode, path: var Walk): JsonNode =
+  ## Pele's union of seven shapes, which the port holds as one object with a kind.
+  if x == nil: return newJNull()
+  var kids = newJArray()
+  for k in x.kids: kids.add dump(k, path)
+  case x.kind
+  of nkTerminal: %*{"type": "terminal", "value": x.text}
+  of nkNonterminal: %*{"type": "nonterminal", "name": x.text}
+  of nkSpecial: %*{"type": "special", "text": x.text}
+  of nkSequence: %*{"type": "sequence", "elements": kids}
+  of nkChoice: %*{"type": "choice", "alternatives": kids}
+  of nkOptional: %*{"type": "optional", "element": (if kids.len > 0: kids[0] else: newJNull())}
+  of nkRepetition:
+    %*{"type": "repetition", "element": (if kids.len > 0: kids[0] else: newJNull()),
+       "min": number(x.min, path), "max": number(x.max, path)}
+
 proc dump(x: PacketLabel, path: var Walk): JsonNode =
   ## A label boxed so that the pieces of a field share it, as JavaScript shares a string.
   if x == nil: newJNull() else: dump(x.text, path)
@@ -180,10 +206,8 @@ proc dump[T](x: T, path: var Walk): JsonNode =
   elif T is bool: %x
   elif T is enum: %enumName($x)
   elif T is SomeNumber:
-    when T is SomeFloat:
-      if x != x:   # NaN: the port's undefined number, or a NaN of Pele's
-        return if path.share: newJFloat(x) else: newJNull()
-    %x.float
+    when T is SomeFloat: number(x.float, path)   # NaN: the port's undefined number
+    else: %x.float
   elif T is char: %($x)
   elif T is Option:
     if x.isSome: dump(x.get, path) else: newJNull()
@@ -198,6 +222,10 @@ proc dump[T](x: T, path: var Walk): JsonNode =
   elif T is seq or T is array:
     var a = newJArray()
     for v in x: a.add dump(v, path)
+    a
+  elif T is tuple and not isNamedTuple(T):
+    var a = newJArray()   # Pele's pair, [label, value]: an array in JavaScript
+    for v in x.fields: a.add dump(v, path)
     a
   elif T is object or T is tuple: dumpFields(x, path)
   else: %($x)

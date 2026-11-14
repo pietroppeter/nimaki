@@ -3,7 +3,8 @@
 ##
 ## Port notes: the union of node shapes is one object with a kind. A sequence's `elements`, a
 ## choice's `alternatives` and the `element` of an optional or a repetition are all `kids`, in
-## the order Pele's `parts` lists them.
+## the order Pele's `parts` lists them (tools/models.nim writes it as Pele's union).
+import std/tables
 
 type
   NodeKind* = enum
@@ -27,3 +28,12 @@ type
     title*, accTitle*, accDescr*: string   ## "" for undefined
     rules*: seq[RailroadRule]
       ## Every rule in source order. A name defined twice appears twice.
+    byName: OrderedTable[string, RailroadRule]
+      ## The rule of each name, the later definition of a name defined twice (Pele's `getRule`).
+
+proc addRule*(model: RailroadModel, rule: RailroadRule) =
+  model.rules.add rule
+  model.byName[rule.name] = rule
+
+proc getRule*(model: RailroadModel, name: string): (bool, RailroadRule) =
+  if name in model.byName: (true, model.byName[name]) else: (false, RailroadRule())
