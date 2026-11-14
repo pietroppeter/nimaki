@@ -1,0 +1,182 @@
+{
+  "pin": "1.13.0",
+  "seed": 5,
+  "copies": 3,
+  "cases": 5919,
+  "identical": 5917,
+  "different": 2,
+  "inserts": [
+    "no-break space",
+    "line separator",
+    "byte order mark",
+    "zero-width space",
+    "ideographic space",
+    "é",
+    "Ω",
+    "mathematical bold A (outside the BMP)",
+    "emoji (outside the BMP)"
+  ],
+  "types": [
+    {
+      "type": "agentflow",
+      "identical": 714,
+      "different": 0
+    },
+    {
+      "type": "architecture",
+      "identical": 78,
+      "different": 0
+    },
+    {
+      "type": "block",
+      "identical": 213,
+      "different": 0
+    },
+    {
+      "type": "c4",
+      "identical": 167,
+      "different": 1
+    },
+    {
+      "type": "class",
+      "identical": 251,
+      "different": 1
+    },
+    {
+      "type": "cynefin",
+      "identical": 57,
+      "different": 0
+    },
+    {
+      "type": "er",
+      "identical": 426,
+      "different": 0
+    },
+    {
+      "type": "eventmodeling",
+      "identical": 72,
+      "different": 0
+    },
+    {
+      "type": "flowchart",
+      "identical": 1149,
+      "different": 0
+    },
+    {
+      "type": "gantt",
+      "identical": 75,
+      "different": 0
+    },
+    {
+      "type": "gitGraph",
+      "identical": 282,
+      "different": 0
+    },
+    {
+      "type": "info",
+      "identical": 18,
+      "different": 0
+    },
+    {
+      "type": "ishikawa",
+      "identical": 12,
+      "different": 0
+    },
+    {
+      "type": "journey",
+      "identical": 12,
+      "different": 0
+    },
+    {
+      "type": "kanban",
+      "identical": 99,
+      "different": 0
+    },
+    {
+      "type": "mindmap",
+      "identical": 117,
+      "different": 0
+    },
+    {
+      "type": "packet",
+      "identical": 57,
+      "different": 0
+    },
+    {
+      "type": "pie",
+      "identical": 48,
+      "different": 0
+    },
+    {
+      "type": "radar",
+      "identical": 42,
+      "different": 0
+    },
+    {
+      "type": "railroad",
+      "identical": 273,
+      "different": 0
+    },
+    {
+      "type": "requirement",
+      "identical": 60,
+      "different": 0
+    },
+    {
+      "type": "sequence",
+      "identical": 558,
+      "different": 0
+    },
+    {
+      "type": "state",
+      "identical": 357,
+      "different": 0
+    },
+    {
+      "type": "swimlane",
+      "identical": 42,
+      "different": 0
+    },
+    {
+      "type": "timeline",
+      "identical": 72,
+      "different": 0
+    },
+    {
+      "type": "treeView",
+      "identical": 72,
+      "different": 0
+    },
+    {
+      "type": "treemap",
+      "identical": 24,
+      "different": 0
+    },
+    {
+      "type": "usecase",
+      "identical": 453,
+      "different": 0
+    },
+    {
+      "type": "wardley",
+      "identical": 117,
+      "different": 0
+    }
+  ],
+  "differences": [
+    {
+      "id": "corpus/class-docs/24#0",
+      "type": "class",
+      "inserted": "line separator",
+      "source": "classDiagram\nclass Shape\n<<interface>> Shape\nShape : noOfVertices\nShape : draw ()\n",
+      "detail": "first difference at byte 82 of 1513: Pele `…pele-class\" viewBox=\"0 0 121 138\" width=\"121\" height=\"138\" s…` nimaki `…pele-class\" viewBox=\"0 0 121 140\" width=\"121\" height=\"140\" s…`"
+    },
+    {
+      "id": "compat/c4/c4NamedAttributes/19#0",
+      "type": "c4",
+      "inserted": "no-break space",
+      "source": "C4Container\nContainer(c, \"C\", $sprite=\"browser\", $link=\"https://x.tes t\")",
+      "detail": "first difference at byte 877 of 1244: Pele `…ransform=\"translate(108,33)\"><rect x=\"-108\" y=\"-33\" width=\"2…` nimaki `…ransform=\"translate(108,33)\"><a href=\"https://x.tes t/\" rel…`"
+    }
+  ]
+}

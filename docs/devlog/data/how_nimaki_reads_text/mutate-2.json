@@ -1,0 +1,217 @@
+{
+  "pin": "1.13.0",
+  "seed": 2,
+  "copies": 3,
+  "cases": 5919,
+  "identical": 5912,
+  "different": 7,
+  "inserts": [
+    "no-break space",
+    "line separator",
+    "byte order mark",
+    "zero-width space",
+    "ideographic space",
+    "é",
+    "Ω",
+    "mathematical bold A (outside the BMP)",
+    "emoji (outside the BMP)"
+  ],
+  "types": [
+    {
+      "type": "agentflow",
+      "identical": 714,
+      "different": 0
+    },
+    {
+      "type": "architecture",
+      "identical": 78,
+      "different": 0
+    },
+    {
+      "type": "block",
+      "identical": 213,
+      "different": 0
+    },
+    {
+      "type": "c4",
+      "identical": 166,
+      "different": 2
+    },
+    {
+      "type": "class",
+      "identical": 251,
+      "different": 1
+    },
+    {
+      "type": "cynefin",
+      "identical": 57,
+      "different": 0
+    },
+    {
+      "type": "er",
+      "identical": 426,
+      "different": 0
+    },
+    {
+      "type": "eventmodeling",
+      "identical": 72,
+      "different": 0
+    },
+    {
+      "type": "flowchart",
+      "identical": 1148,
+      "different": 1
+    },
+    {
+      "type": "gantt",
+      "identical": 73,
+      "different": 2
+    },
+    {
+      "type": "gitGraph",
+      "identical": 282,
+      "different": 0
+    },
+    {
+      "type": "info",
+      "identical": 18,
+      "different": 0
+    },
+    {
+      "type": "ishikawa",
+      "identical": 12,
+      "different": 0
+    },
+    {
+      "type": "journey",
+      "identical": 12,
+      "different": 0
+    },
+    {
+      "type": "kanban",
+      "identical": 98,
+      "different": 1
+    },
+    {
+      "type": "mindmap",
+      "identical": 117,
+      "different": 0
+    },
+    {
+      "type": "packet",
+      "identical": 57,
+      "different": 0
+    },
+    {
+      "type": "pie",
+      "identical": 48,
+      "different": 0
+    },
+    {
+      "type": "radar",
+      "identical": 42,
+      "different": 0
+    },
+    {
+      "type": "railroad",
+      "identical": 273,
+      "different": 0
+    },
+    {
+      "type": "requirement",
+      "identical": 60,
+      "different": 0
+    },
+    {
+      "type": "sequence",
+      "identical": 558,
+      "different": 0
+    },
+    {
+      "type": "state",
+      "identical": 357,
+      "different": 0
+    },
+    {
+      "type": "swimlane",
+      "identical": 42,
+      "different": 0
+    },
+    {
+      "type": "timeline",
+      "identical": 72,
+      "different": 0
+    },
+    {
+      "type": "treeView",
+      "identical": 72,
+      "different": 0
+    },
+    {
+      "type": "treemap",
+      "identical": 24,
+      "different": 0
+    },
+    {
+      "type": "usecase",
+      "identical": 453,
+      "different": 0
+    },
+    {
+      "type": "wardley",
+      "identical": 117,
+      "different": 0
+    }
+  ],
+  "differences": [
+    {
+      "id": "corpus/class-docs/26#0",
+      "type": "class",
+      "inserted": "line separator",
+      "source": "classDiagram\n%% This whole line is a comment classDiagram class Shape <<interface>>\nclass Shape{\n    <<interface>>\n    noOfVertices\n    draw ()\n}\n",
+      "detail": "first difference at byte 82 of 1513: Pele `…pele-class\" viewBox=\"0 0 121 138\" width=\"121\" height=\"138\" s…` nimaki `…pele-class\" viewBox=\"0 0 121 140\" width=\"121\" height=\"140\" s…`"
+    },
+    {
+      "id": "corpus/flowchart-docs/104#2",
+      "type": "flowchart",
+      "inserted": "mathematical bold A (outside the BMP)",
+      "source": "flowchart LR\n    A-->B\n    B-->C\n    C-->D\n    D-->E\n    click A \"https://www.github.com\" _blank\n    click B \"https://www.github.com\" \"Open this in a new tab\" _blank\n    click C href \"https://www.github.com\" _blank\n    click D href \"https://𝐀www.github.com\" \"Open this in a new tab\" _blank\n",
+      "detail": "first difference at byte 2582 of 3111: Pele `…ate(320,32)\"><a href=\"https://awww.github.com/\" target=\"_bla…` nimaki `…ate(320,32)\"><a href=\"https://𝐀www.github.com/\" target=\"_…`"
+    },
+    {
+      "id": "corpus/kanban-docs/2#0",
+      "type": "kanban",
+      "inserted": "ideographic space",
+      "source": "---\nconfig:\n  kanban:\n    ticketBaseUrl: 'https:　//mermaidchart.atlassian.net/browse/#TICKET#'\n---\nkanban\n  Todo\n    [Create Documentation]\n    docs[Create Blog about the new diagram]\n  [In progress]\n    id6[Create renderer so that it works in all cases. We also add some extra text here for testing purposes. And some more just for the extra flare.]\n  id9[Ready for deploy]\n    id8[Design grammar]@{ assigned: 'knsv' }\n  id10[Ready for test]\n    id4[Create parsing tests]@{ ticket: MC-2038, assigned: 'K.Sveidqvist', priority: 'High' }\n    id66[last item]@{ priority: 'Very Low', assigned: 'knsv' }\n  id11[Done]\n    id5[define getData]\n    id2[Title of diagram is more than 100 chars when user duplicates diagram with 100 char]@{ ticket: MC-2036, priority: 'Very High'}\n    id3[Update DB function]@{ ticket: MC-2037, assigned: knsv, priority: 'High' }\n\n  id12[Can't reproduce]\n    id3[Weird flickering in Firefox]\n",
+      "detail": "first difference at byte 4053 of 7158: Pele `…\">Create parsing tests</text><text class=\"pele-ticket\" fill=…` nimaki `…\">Create parsing tests</text><a href=\"https://　//mermaidch…`"
+    },
+    {
+      "id": "compat/c4/c4Person/25#1",
+      "type": "c4",
+      "inserted": "line separator",
+      "source": "C4Context\nPerson(customerA, $link=\"https:// github.com/mermaidjs\")",
+      "detail": "first difference at byte 818 of 1099: Pele `…ransform=\"translate(108,34)\"><rect x=\"-108\" y=\"-8\" width=\"21…` nimaki `…ransform=\"translate(108,34)\"><a href=\"https:// github.com/…`"
+    },
+    {
+      "id": "compat/c4/c4PersonExt/25#0",
+      "type": "c4",
+      "inserted": "no-break space",
+      "source": "C4Context\nPerson_Ext(customerA, $link=\"https://gith ub.com/mermaidjs\")",
+      "detail": "first difference at byte 844 of 1182: Pele `…ransform=\"translate(108,34)\"><rect x=\"-108\" y=\"-8\" width=\"21…` nimaki `…ransform=\"translate(108,34)\"><a href=\"https://gith ub.com/m…`"
+    },
+    {
+      "id": "compat/gantt/gantt/145#0",
+      "type": "gantt",
+      "inserted": "line separator",
+      "source": "gantt\n    dateFormat YYYY-MM-DD\n    section Section\n    A task :${prop}, 2024-10- 01, 3d\n    click ${prop} href \"https://mermaid.js.org/\"\n    ",
+      "detail": "Pele throws semantic `Invalid date:2024-10- 01`, nimaki draws"
+    },
+    {
+      "id": "compat/gantt/gantt/145#2",
+      "type": "gantt",
+      "inserted": "no-break space",
+      "source": "gantt\n    dateFormat YYYY-MM-DD\n    section Section\n    A task :${prop}, 2024-10-01, 3d\n    click ${prop} href \"https://mermaid.js.or g/\"\n    ",
+      "detail": "first difference at byte 1133 of 1820: Pele `…clickable\" data-id=\"${prop}\"><rect x=\"75.35\" y=\"11\" width=\"6…` nimaki `…clickable\" data-id=\"${prop}\"><a href=\"https://mermaid.js.or�…`"
+    }
+  ]
+}

@@ -42,7 +42,10 @@ for await (const line of createInterface({ input: process.stdin, crlfDelay: Infi
     const res = render(c.source, c.options ?? {});
     r = { id: c.id, ok: true, type: res.type, svg: res.svg, width: res.width, height: res.height };
   } catch (e) {
-    r = { id: c.id, ok: false, type: e?.type ?? detectType(c.source), code: e?.code ?? 'internal', message: String(e?.message ?? e) };
+    // detectType throws too when the front matter is not valid YAML; that must not end the run.
+    let type = e?.type;
+    if (type == null) { try { type = detectType(c.source); } catch { type = null; } }
+    r = { id: c.id, ok: false, type, code: e?.code ?? 'internal', message: String(e?.message ?? e) };
   }
   out.push(JSON.stringify(r) + '\n');
   if (out.length >= 64) flush();

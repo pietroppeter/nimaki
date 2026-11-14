@@ -1,0 +1,15 @@
+## port-of: src/diagrams/quadrant/index.ts
+## port-status: draft
+import ../../types
+import ../../preprocess
+import db, parser, render
+
+let quadrantChart* = Diagram(
+  diagramType: "quadrantChart",
+  parse: proc (source: string, config: Config, title: string, lineOffset: int,
+               limits: ParseLimits): RootRef =
+    let db = QuadrantDb(title: title)
+    parseQuadrant(source, db)
+    db,
+  render: proc (model: RootRef, config: Config, options: RenderOptions): Rendered =
+    renderQuadrant(QuadrantModel(model), config, options))

@@ -1,0 +1,14 @@
+{
+  "about": "Written by tests/cabi/smoke.py (nim r tools/cabi.nim): the last run of the C ABI's smoke test. Do not edit by hand.",
+  "pele": "1.13.0",
+  "cases": 2172,
+  "identical": 2025,
+  "different": 0,
+  "unsupported": 147,
+  "msPerCase": 0.144,
+  "msPerPie": 0.112,
+  "bytes": 5434776,
+  "platform": "Linux x86_64",
+  "python": "3.13.18",
+  "errors": 0
+}

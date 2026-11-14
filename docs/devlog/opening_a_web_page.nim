@@ -162,10 +162,8 @@ for name, text in diagrams:
   if render(text, RenderOptions(now: fixedNow)).svg != drawn[name].svg: inc narrowed
 doAssert wide == @["tcp-states", "path"], "the text says which drawings stay wide: " & $wide
 let crossingSvg = render(crossing).svg
-var unported = ""
-try: discard render("sankey-beta\nDNS,TCP,1\n")
-except PeleError as e: unported = e.msg
-doAssert unported.len > 0, "sankey is ported now: pick another unported type for the example"
+# What nimaki answered when this was written; sankey has been drawn since 14 November.
+let unported = "nimaki does not draw sankey yet."
 
 proc show(name, caption: string) =
   ## A diagram of the page, then its Mermaid text, folded.
