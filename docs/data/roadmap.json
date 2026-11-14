@@ -294,8 +294,8 @@
           "title": "A proposal for diagrammari",
           "what": "How diagrammari could use nimaki instead of Node for the ported types, written as a proposal (diagrammari is not changed from here).",
           "done_when": "A devlog post with the proposal.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Build C ABI and diagrammari proposal",
+          "status": "started",
           "post": "",
           "pr": ""
         }
@@ -477,8 +477,8 @@
           "title": "Venn",
           "what": "src/diagrams/venn: 909 lines of TypeScript, 8 corpus cases.",
           "done_when": "difftest: every venn case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Build C ABI and diagrammari proposal",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -488,8 +488,8 @@
           "title": "Xychart",
           "what": "src/diagrams/xychart: 953 lines of TypeScript, 8 corpus cases.",
           "done_when": "difftest: every xychart case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Build C ABI and diagrammari proposal",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -629,12 +629,12 @@
           "id": "labels-check",
           "kind": "tooling",
           "title": "Check the label features against Pele",
-          "what": "Markdown, icons, math and line wrapping in labels (src/text) were ported with pie and left draft. Targeted corpus cases and a label fuzzer compare them with Pele across the types that use them; wanted differences go to the divergences page.",
+          "what": "Markdown, icons, math and line wrapping in labels (src/text) were ported with pie and left draft. Targeted corpus cases and a label fuzzer compare them with Pele across the types that use them; wanted differences go to the divergences page. Left for the next start: the second reading of src/text (decision 0005), which moves those files from draft to verified.",
           "done_when": "A label fuzz run in CI finds no differences, and the text files move from draft to verified.",
           "owner": "Verify labels and Pele's test suites",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "what-a-label-holds",
+          "pr": "48"
         },
         {
           "id": "pele-tests",
@@ -642,8 +642,8 @@
           "title": "Run Pele's own test suites",
           "what": "Pele's tests at the pin (tests/compat, tests/render, tests/layout and the per-type tests) hold inputs and expectations beyond the difftest corpus. Their inputs go through the port and the oracle, and their checks are ported where they test the port's own functions.",
           "done_when": "Every input of those suites gives the same result in nimaki as in Pele, or a divergence says why; the files they cover move from draft to verified.",
-          "owner": "Verify labels and Pele's test suites",
-          "status": "started",
+          "owner": "",
+          "status": "planned",
           "post": "",
           "pr": ""
         }
@@ -712,9 +712,9 @@
           "what": "A tour of nimaki's Nim code as it stands on main: how the files map to Pele's, the path of one diagram through render(), the shared parts every type leans on, and what the tour uncovered.",
           "done_when": "A devlog post whose numbers come from the code on main; findings filed as notes or roadmap steps.",
           "owner": "Write articles explaining nimaki code",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "the-shape-of-the-port",
+          "pr": "47"
         },
         {
           "id": "code-articles",
@@ -734,9 +734,9 @@
           "what": "The first article that uses diagrams drawn by nimaki to understand a domain: what happens between typing an address and reading the page (URL, DNS, TCP, TLS, HTTP, CDN), with as many diagram types as the domain calls for, and what using the library taught: missing API, rough edges, anything that differs from Pele.",
           "done_when": "An article on the site whose every diagram is drawn by nimaki and checked against Pele when the page is built; its lessons are notes or steps on this roadmap.",
           "owner": "Write domain articles with diagrams",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "opening-a-web-page",
+          "pr": "45"
         },
         {
           "id": "domain-articles",
@@ -746,6 +746,39 @@
           "done_when": "Never: it recurs while the port goes on.",
           "owner": "Write domain articles with diagrams",
           "status": "started",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "mermaid-block",
+          "kind": "tooling",
+          "title": "A Mermaid block for the pages, checked against Pele",
+          "what": "Found by the first domain article: every page that draws writes its own few lines to render Mermaid text with nimaki, show the SVG and fold the text under it. One block in docs/blocks.nim (say nbMermaid text, caption, options) would do it everywhere, and could ask Pele for the same drawing at build time, so each diagram on the site is also a small test.",
+          "done_when": "The block exists, the posts that draw use it, and a difference from Pele fails the build.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "shared-scanners",
+          "kind": "tooling",
+          "title": "The patterns Pele uses most, written once",
+          "what": "The regular expressions the port wrote as scanners in several places (/\\n\\s+/g in 23 files, /^default\\s?/, a JavaScript integer, an identifier...: tools/census.nim lists them) become one module beside js.nim, each tested once against Node; the call sites stay one line, as in the TypeScript. Found by the article The shape of the port.",
+          "done_when": "tools/census.nim finds no pattern written more than once, or each repeat has a reason; difftest and fuzz unchanged.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "second-reading",
+          "kind": "plan",
+          "title": "Past draft: verified and conformant",
+          "what": "Every ported file still says port-status: draft. Decision 0005 defines verified as a second reading against the TypeScript and conformant as Pele's tests passing, while labels-check and pele-tests move files to verified through tests. One new decision says what moves a file past draft; then the files the other steps do not cover are moved, starting with what most code depends on (js.nim, the measurer, the SVG builder, the layered layout). Waiting on Pietro's choice (asked in The shape of the port).",
+          "done_when": "A decision, and the port map showing files past draft.",
+          "owner": "",
+          "status": "planned",
           "post": "",
           "pr": ""
         }

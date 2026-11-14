@@ -232,6 +232,14 @@
       "different": 0,
       "rendered": 3916,
       "errors": 1084
+    },
+    "labels": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 3662,
+      "errors": 1338
     }
   }
 }

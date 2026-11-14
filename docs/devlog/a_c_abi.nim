@@ -1,4 +1,4 @@
-## devlog: 13 Nov 2026 M | A C ABI | nimaki is now also a shared library that any language able to call C can load, and from Python it draws every ported case of the corpus as Pele does.
+## devlog: 13 Nov 2026 N | A C ABI | nimaki is now also a shared library that any language able to call C can load, and from Python it draws every ported case of the corpus as Pele does.
 ## kind: tooling
 import std/[strformat, strutils, json]
 import nimib
