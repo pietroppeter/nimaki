@@ -160,6 +160,12 @@ jobs:
       - name: Links
         run: nim r -d:ssl tools/links.nim ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && '--external' || '' }}
 
+      # Once a week: has Pele released past the pin? A red weekly run is the signal to follow it
+      # (tools/followpele.nim prints the files a new release touches and their Nim ports).
+      - name: Pele newer than the pin
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: nim r tools/followpele.nim --fail
+
       - name: No HTML, styles or colours in the pages
         run: nim r tools/drift.nim --fail --allow:docs/theme.nim --allow:docs/blocks.nim --allow:docs/review.nim docs/
 

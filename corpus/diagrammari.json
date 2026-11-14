@@ -2,20 +2,22 @@
   "about": "The Mermaid text of diagrammari, built by tools/corpus_diagrammari.nim from diagrammari at the pin (reference/DIAGRAMMARI). Do not edit by hand.",
   "repo": "https://github.com/pietroppeter/diagrammari",
   "commit": "eb7d1c5702de5d5ddb8e6047af0202936995a648",
-  "count": 34,
+  "count": 116,
+  "ran": true,
+  "fromRun": 82,
   "byType": {
     "er": 1,
-    "flowchart": 14,
-    "gantt": 1,
+    "flowchart": 29,
+    "gantt": 2,
     "ishikawa": 1,
-    "mindmap": 2,
-    "pie": 4,
+    "mindmap": 3,
+    "pie": 6,
     "railroad": 1,
-    "sankey": 1,
-    "sequence": 5,
+    "sankey": 2,
+    "sequence": 60,
     "state": 1,
-    "timeline": 2,
-    "venn": 1
+    "timeline": 8,
+    "venn": 2
   },
   "cases": [
     {
@@ -221,6 +223,498 @@
       "type": "flowchart",
       "from": "tests/test_render.nim:18",
       "source": "flowchart LR\n  accTitle: Two nodes\n  a --> b"
+    },
+    {
+      "id": "diagrammari/run:tests#2",
+      "type": "sequence",
+      "from": "run:tests#2",
+      "source": "sequenceDiagram\n  a->>b: hi"
+    },
+    {
+      "id": "diagrammari/run:tests#3",
+      "type": "pie",
+      "from": "run:tests#3",
+      "source": "pie\n  title p\n  \"a\" : 1"
+    },
+    {
+      "id": "diagrammari/run:tests#4",
+      "type": "timeline",
+      "from": "run:tests#4",
+      "source": "timeline\n    1 : x"
+    },
+    {
+      "id": "diagrammari/run:tests#5",
+      "type": "mindmap",
+      "from": "run:tests#5",
+      "source": "mindmap\n  root\n    a\n    b"
+    },
+    {
+      "id": "diagrammari/run:tests#6",
+      "type": "gantt",
+      "from": "run:tests#6",
+      "source": "gantt\n  title g\n  dateFormat YYYY-MM-DD\n  a : 2026-01-01, 3d"
+    },
+    {
+      "id": "diagrammari/run:tests#7",
+      "type": "sankey",
+      "from": "run:tests#7",
+      "source": "sankey\n  a,b,10\n  a,c,5"
+    },
+    {
+      "id": "diagrammari/run:tests#8",
+      "type": "venn",
+      "from": "run:tests#8",
+      "source": "venn-beta\n  set A\n  set B\n  union A,B"
+    },
+    {
+      "id": "diagrammari/run:tests#12",
+      "type": "flowchart",
+      "from": "run:tests#12",
+      "source": "flowchart LR\n  a --> b\n  b --> c\n  c --> d\n  d --> e\n  e --> f\n  f --> g"
+    },
+    {
+      "id": "diagrammari/run:tests#18",
+      "type": "flowchart",
+      "from": "run:tests#18",
+      "source": "flowchart TB\n  a --> b"
+    },
+    {
+      "id": "diagrammari/run:specs#10",
+      "type": "flowchart",
+      "from": "run:specs#10",
+      "source": "flowchart LR\n  a --> ["
+    },
+    {
+      "id": "diagrammari/run:specs#12",
+      "type": "flowchart",
+      "from": "run:specs#12",
+      "source": "flowchart LR\n  a --> b\n  b --> c\n  c --> d\n  d --> e\n  e --> f"
+    },
+    {
+      "id": "diagrammari/run:pages#1",
+      "type": "flowchart",
+      "from": "run:pages#1",
+      "source": "flowchart LR\n  nim([\"Nim code\"])\n  text[\"Mermaid text\"]\n  pele{{\"Pele\"}}\n  svg(\"SVG\")\n  md[\"GitHub draws it\"]\n  nim --> text\n  text -->|\"in Node, at build time\"| pele\n  pele --> svg\n  text -.->|\"in a README\"| md"
+    },
+    {
+      "id": "diagrammari/run:pages#5",
+      "type": "flowchart",
+      "from": "run:pages#5",
+      "source": "flowchart LR\n  a[Mermaid text] --> b([SVG])\n  a -. a README .-> c(GitHub draws it)"
+    },
+    {
+      "id": "diagrammari/run:pages#15",
+      "type": "sequence",
+      "from": "run:pages#15",
+      "source": "sequenceDiagram\n  a->>b: message 1\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#16",
+      "type": "sequence",
+      "from": "run:pages#16",
+      "source": "sequenceDiagram\n  a->>b: message 2\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#17",
+      "type": "sequence",
+      "from": "run:pages#17",
+      "source": "sequenceDiagram\n  a->>b: message 3\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#18",
+      "type": "sequence",
+      "from": "run:pages#18",
+      "source": "sequenceDiagram\n  a->>b: message 4\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#19",
+      "type": "sequence",
+      "from": "run:pages#19",
+      "source": "sequenceDiagram\n  a->>b: message 5\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#20",
+      "type": "sequence",
+      "from": "run:pages#20",
+      "source": "sequenceDiagram\n  a->>b: message 6\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#21",
+      "type": "sequence",
+      "from": "run:pages#21",
+      "source": "sequenceDiagram\n  a->>b: message 7\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#22",
+      "type": "sequence",
+      "from": "run:pages#22",
+      "source": "sequenceDiagram\n  a->>b: message 8\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#23",
+      "type": "sequence",
+      "from": "run:pages#23",
+      "source": "sequenceDiagram\n  a->>b: message 9\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#24",
+      "type": "sequence",
+      "from": "run:pages#24",
+      "source": "sequenceDiagram\n  a->>b: message 10\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#25",
+      "type": "sequence",
+      "from": "run:pages#25",
+      "source": "sequenceDiagram\n  a->>b: message 11\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#26",
+      "type": "sequence",
+      "from": "run:pages#26",
+      "source": "sequenceDiagram\n  a->>b: message 12\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#27",
+      "type": "sequence",
+      "from": "run:pages#27",
+      "source": "sequenceDiagram\n  a->>b: message 13\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#28",
+      "type": "sequence",
+      "from": "run:pages#28",
+      "source": "sequenceDiagram\n  a->>b: message 14\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#29",
+      "type": "sequence",
+      "from": "run:pages#29",
+      "source": "sequenceDiagram\n  a->>b: message 15\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#30",
+      "type": "sequence",
+      "from": "run:pages#30",
+      "source": "sequenceDiagram\n  a->>b: message 16\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#31",
+      "type": "sequence",
+      "from": "run:pages#31",
+      "source": "sequenceDiagram\n  a->>b: message 17\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#32",
+      "type": "sequence",
+      "from": "run:pages#32",
+      "source": "sequenceDiagram\n  a->>b: message 18\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#33",
+      "type": "sequence",
+      "from": "run:pages#33",
+      "source": "sequenceDiagram\n  a->>b: message 19\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#34",
+      "type": "sequence",
+      "from": "run:pages#34",
+      "source": "sequenceDiagram\n  a->>b: message 20\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#35",
+      "type": "sequence",
+      "from": "run:pages#35",
+      "source": "sequenceDiagram\n  a->>b: message 21\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#36",
+      "type": "sequence",
+      "from": "run:pages#36",
+      "source": "sequenceDiagram\n  a->>b: message 22\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#37",
+      "type": "sequence",
+      "from": "run:pages#37",
+      "source": "sequenceDiagram\n  a->>b: message 23\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#38",
+      "type": "sequence",
+      "from": "run:pages#38",
+      "source": "sequenceDiagram\n  a->>b: message 24\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#39",
+      "type": "sequence",
+      "from": "run:pages#39",
+      "source": "sequenceDiagram\n  a->>b: message 25\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#40",
+      "type": "sequence",
+      "from": "run:pages#40",
+      "source": "sequenceDiagram\n  a->>b: message 26\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#41",
+      "type": "sequence",
+      "from": "run:pages#41",
+      "source": "sequenceDiagram\n  a->>b: message 27\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#42",
+      "type": "sequence",
+      "from": "run:pages#42",
+      "source": "sequenceDiagram\n  a->>b: message 28\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#43",
+      "type": "sequence",
+      "from": "run:pages#43",
+      "source": "sequenceDiagram\n  a->>b: message 29\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#44",
+      "type": "sequence",
+      "from": "run:pages#44",
+      "source": "sequenceDiagram\n  a->>b: message 30\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#45",
+      "type": "sequence",
+      "from": "run:pages#45",
+      "source": "sequenceDiagram\n  a->>b: message 31\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#46",
+      "type": "sequence",
+      "from": "run:pages#46",
+      "source": "sequenceDiagram\n  a->>b: message 32\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#47",
+      "type": "sequence",
+      "from": "run:pages#47",
+      "source": "sequenceDiagram\n  a->>b: message 33\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#48",
+      "type": "sequence",
+      "from": "run:pages#48",
+      "source": "sequenceDiagram\n  a->>b: message 34\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#49",
+      "type": "sequence",
+      "from": "run:pages#49",
+      "source": "sequenceDiagram\n  a->>b: message 35\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#50",
+      "type": "sequence",
+      "from": "run:pages#50",
+      "source": "sequenceDiagram\n  a->>b: message 36\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#51",
+      "type": "sequence",
+      "from": "run:pages#51",
+      "source": "sequenceDiagram\n  a->>b: message 37\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#52",
+      "type": "sequence",
+      "from": "run:pages#52",
+      "source": "sequenceDiagram\n  a->>b: message 38\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#53",
+      "type": "sequence",
+      "from": "run:pages#53",
+      "source": "sequenceDiagram\n  a->>b: message 39\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#54",
+      "type": "sequence",
+      "from": "run:pages#54",
+      "source": "sequenceDiagram\n  a->>b: message 40\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#55",
+      "type": "sequence",
+      "from": "run:pages#55",
+      "source": "sequenceDiagram\n  a->>b: message 41\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#56",
+      "type": "sequence",
+      "from": "run:pages#56",
+      "source": "sequenceDiagram\n  a->>b: message 42\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#57",
+      "type": "sequence",
+      "from": "run:pages#57",
+      "source": "sequenceDiagram\n  a->>b: message 43\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#58",
+      "type": "sequence",
+      "from": "run:pages#58",
+      "source": "sequenceDiagram\n  a->>b: message 44\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#59",
+      "type": "sequence",
+      "from": "run:pages#59",
+      "source": "sequenceDiagram\n  a->>b: message 45\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#60",
+      "type": "sequence",
+      "from": "run:pages#60",
+      "source": "sequenceDiagram\n  a->>b: message 46\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#61",
+      "type": "sequence",
+      "from": "run:pages#61",
+      "source": "sequenceDiagram\n  a->>b: message 47\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#62",
+      "type": "sequence",
+      "from": "run:pages#62",
+      "source": "sequenceDiagram\n  a->>b: message 48\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#63",
+      "type": "sequence",
+      "from": "run:pages#63",
+      "source": "sequenceDiagram\n  a->>b: message 49\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#64",
+      "type": "sequence",
+      "from": "run:pages#64",
+      "source": "sequenceDiagram\n  a->>b: message 50\n  b-->>a: reply"
+    },
+    {
+      "id": "diagrammari/run:pages#67",
+      "type": "flowchart",
+      "from": "run:pages#67",
+      "source": "flowchart LR\n  a[\"Mermaid text\"]\n  b(\"SVG\")\n  a -->|\"Pele\"| b"
+    },
+    {
+      "id": "diagrammari/run:pages#69",
+      "type": "flowchart",
+      "from": "run:pages#69",
+      "source": "flowchart LR\n  s0[\"read Pele\"]\n  s1[\"write verbs\"]\n  s0 --> s1\n  s2[\"write specs\"]\n  s1 --> s2\n  s3([\"show Pietro\"])\n  s2 --> s3"
+    },
+    {
+      "id": "diagrammari/run:pages#71",
+      "type": "sequence",
+      "from": "run:pages#71",
+      "source": "sequenceDiagram\n  participant you as You\n  participant pele as Pele\n  you->>pele: some text\n  alt it reads\n    pele-->>you: a drawing\n  else it does not\n    pele-->>you: where it failed\n  end"
+    },
+    {
+      "id": "diagrammari/run:pages#73",
+      "type": "pie",
+      "from": "run:pages#73",
+      "source": "pie showData\n  title Lines of code\n  \"Pele (TypeScript)\" : 52973\n  \"mari (Nim)\" : 1009"
+    },
+    {
+      "id": "diagrammari/run:pages#75",
+      "type": "timeline",
+      "from": "run:pages#75",
+      "source": "timeline\n  title Diagrams as text\n    1982 : pic\n    1991 : Graphviz\n    2014 : Mermaid\n    2026 : Pele"
+    },
+    {
+      "id": "diagrammari/run:pages#79",
+      "type": "timeline",
+      "from": "run:pages#79",
+      "source": "timeline\n  title Charts of data\n    1765 : Priestley#58; A Chart of Biography\n    1786 : Playfair#58; line and bar charts\n    1801 : Playfair#58; the pie chart\n    1858 : Nightingale#58; the rose diagram\n    1869 : Minard#58; Napoleon's march"
+    },
+    {
+      "id": "diagrammari/run:pages#81",
+      "type": "timeline",
+      "from": "run:pages#81",
+      "source": "timeline\n  title Logic and work\n    1768 : Euler#58; circles for logic\n    1880 : Venn#58; diagrams of propositions\n    1896 : Adamiecki#58; the harmonogram\n    1898 : Sankey#58; a steam engine\n    1921 : the Gilbreths#58; process charts"
+    },
+    {
+      "id": "diagrammari/run:pages#83",
+      "type": "timeline",
+      "from": "run:pages#83",
+      "source": "timeline\n  title Computing\n    1947 : Goldstine and von Neumann#58; flow diagrams\n    1974 : Wirth#58; syntax diagrams\n    1976 : Chen#58; entity-relationship\n    1981 : Sugiyama#58; layered drawing\n    1987 : Harel#58; statecharts"
+    },
+    {
+      "id": "diagrammari/run:pages#85",
+      "type": "timeline",
+      "from": "run:pages#85",
+      "source": "timeline\n  title Text to diagrams\n    1982 : Kernighan#58; pic\n    1991 : Graphviz#58; dot\n    2009 : PlantUML\n    2014 : Mermaid\n    2026 : Pele"
+    },
+    {
+      "id": "diagrammari/run:pages#95",
+      "type": "flowchart",
+      "from": "run:pages#95",
+      "source": "---\ntitle: One best way to mail a letter\n---\nflowchart TD\n  write(\"Write the letter\")\n  check{\"Is it right?\"}\n  walk>\"Walk to the post box\"]\n  wait([\"Wait for collection\"])\n  write --> check\n  check -->|\"no\"| write\n  check -->|\"yes\"| walk\n  walk --> wait"
+    },
+    {
+      "id": "diagrammari/run:pages#101",
+      "type": "flowchart",
+      "from": "run:pages#101",
+      "source": "---\ntitle: The Sugiyama scheme\n---\nflowchart LR\n  cycles[\"1. break cycles\"]\n  ranks[\"2. put nodes on ranks\"]\n  order[\"3. order ranks to cross less\"]\n  place[\"4. place nodes and route lines\"]\n  cycles --> ranks\n  ranks --> order\n  order --> place"
+    },
+    {
+      "id": "diagrammari/run:pages#105",
+      "type": "sequence",
+      "from": "run:pages#105",
+      "source": "sequenceDiagram\n  participant a as Caller\n  participant x as Exchange\n  participant b as Callee\n  a->>x: off hook\n  x-->>a: dial tone\n  a->>x: digits\n  x->>b: ring\n  b-->>x: answer\n  x-->>a: connected"
+    },
+    {
+      "id": "diagrammari/run:pages#111",
+      "type": "sequence",
+      "from": "run:pages#111",
+      "source": "sequenceDiagram\n  autonumber\n  actor you as You\n  participant nim as Nim, mari\n  participant node as Pele in Node\n  you->>nim: verbs, or Mermaid text\n  note right of nim: a Diagram#58; kind and text\n  nim->>+node: the text, as one line of JSON\n  note right of node: started once, reused for every diagram\n  alt it parses\n    node-->>-nim: SVG\n  else it does not\n    node-->>nim: code, line, column\n  end\n  nim-->>you: a figure in the page"
+    },
+    {
+      "id": "diagrammari/run:pages#113",
+      "type": "flowchart",
+      "from": "run:pages#113",
+      "source": "---\ntitle: Inside Pele\n---\nflowchart LR\n  text([\"Mermaid text\"])\n  pre[\"preprocess\"]\n  detect{\"detect the kind\"}\n  parse[\"parse\"]\n  model[(\"model\")]\n  layout[\"layout\"]\n  svg(\"SVG\")\n  text --> pre\n  pre --> detect\n  detect --> parse\n  parse --> model\n  model --> layout\n  layout --> svg\n  model -.->|\"again at a new width\"| svg"
+    },
+    {
+      "id": "diagrammari/run:pages#135",
+      "type": "flowchart",
+      "from": "run:pages#135",
+      "source": "flowchart TD\n  mermaid([Mermaid text]) --> pele[Pele]\n  nim([Nim]) --> lib{{diagrams lib}}\n  pele --> lib\n  nim --> nimib[nimib]\n  lib --> nimib\n  nimib --> nimibook[nimibook]\n  nimib --> nblog[nblog]\n  nimib --> tabelline[tabelline]\n  lib --> nimibook\n  lib --> nblog\n  tabelline -.-> nblog"
+    },
+    {
+      "id": "diagrammari/run:pages#136",
+      "type": "flowchart",
+      "from": "run:pages#136",
+      "source": "flowchart LR\n  Mermaid --> Pele\n  Pele --> Enzo\n  Enzo --> Mari\n  Mari --> diagrammari"
+    },
+    {
+      "id": "diagrammari/run:pages#141",
+      "type": "sequence",
+      "from": "run:pages#141",
+      "source": "sequenceDiagram\n  participant nim as diagrammari\n  participant node as Node + Pele\n  nim->>node: {source, options}\n  node-->>nim: {svg, width, height} or {code, line, column}"
+    },
+    {
+      "id": "diagrammari/run:pages#143",
+      "type": "flowchart",
+      "from": "run:pages#143",
+      "source": "flowchart LR\n  text([Mermaid text]) --> lib[\"libmari (Nim)\"]\n  lib -->|Pele in QuickJS| svg[SVG]\n  svg --> ed{{editor in the browser}}\n  ed -->|layer JSON| py[Python]\n  py --> lib\n  lib -->|layer applied| out([your SVG])"
+    },
+    {
+      "id": "diagrammari/run:pages#144",
+      "type": "flowchart",
+      "from": "run:pages#144",
+      "source": "flowchart TD\n  text([Mermaid text]) --> lib[\"libmari (Nim)\"]\n  lib -->|Pele in QuickJS| svg[SVG]\n  svg --> ed{{editor in the browser}}\n  ed -->|layer JSON| py[Python]\n  py --> lib\n  lib -->|layer applied| out([your SVG])"
     }
   ]
 }

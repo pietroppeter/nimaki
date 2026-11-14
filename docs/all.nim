@@ -3,7 +3,7 @@
 ## initialised, in import order. A new page or post adds its name here (posts: one per line,
 ## sorted, so two branches adding a post rarely conflict).
 {.warning[UnusedImport]: off.}
-import index, roadmap, coverage, agents, decisions, porting
+import index, roadmap, coverage, agents, decisions, porting, playground
 import devlog/index as devlogIndex
 import devlog/a_stage_for_a_port
 import devlog/actors_and_use_cases
@@ -17,7 +17,10 @@ import devlog/git_graphs
 import devlog/railroad_diagrams
 import devlog/gantt_charts
 import devlog/diagrammari_as_a_corpus
+import devlog/diagrammari_at_work
+import devlog/following_pele
 import devlog/nimaki_in_javascript
+import devlog/drawn_in_your_browser
 import devlog/how_pele_is_built
 import devlog/lanes_and_handoffs
 import devlog/layered_layout_and_flowchart
