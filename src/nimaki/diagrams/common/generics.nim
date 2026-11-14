@@ -1,6 +1,7 @@
 ## port-of: src/diagrams/common/generics.ts
 ## port-status: draft
 import std/strutils
+import ../../jsregex
 
 func tildes(text: string): int = text.count('~')
 
@@ -24,15 +25,7 @@ func pairTildes(text: string): string =
 func parseGenericTypes*(input: string): string =
   ## Turns `List~int~` into `List<int>`, with the quirks of Mermaid's parseGenericTypes around commas.
   if '~' notin input: return input
-  # input.split(/(,)/): the pieces and the commas between them
-  var sets: seq[string]
-  var start = 0
-  for i in 0 ..< input.len:
-    if input[i] == ',':
-      sets.add input[start ..< i]
-      sets.add ","
-      start = i + 1
-  sets.add input[start ..< input.len]
+  let sets = input.split(jsre"/(,)/")
   var output: seq[string]
   var i = 0
   while i < sets.len:
