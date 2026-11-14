@@ -2,7 +2,6 @@
 ## port-status: draft
 import std/[options, tables]
 import ../../errors
-import ../../js
 import parser
 import ../../jsregex
 

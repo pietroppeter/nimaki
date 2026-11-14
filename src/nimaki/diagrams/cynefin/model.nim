@@ -3,7 +3,6 @@
 ##
 ## Pele's `DomainBlock` and `Transition` inputs of `CynefinDb` are the parser's AST types.
 import std/tables
-import ../../js
 import parser
 import ../../jsregex
 

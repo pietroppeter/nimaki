@@ -6,7 +6,6 @@
 ## id is never empty), and an optional number is a float with NO_TYPE for undefined.
 import std/[algorithm, strutils, tables]
 import ../../errors
-import ../../js
 import ../../preprocess
 import ../../util/yaml
 import parser

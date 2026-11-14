@@ -1,7 +1,6 @@
 ## port-of: src/diagrams/treemap/model.ts
 ## port-status: draft
 import std/[strutils, tables, options]
-import ../../js
 import parser
 import ../../jsregex
 

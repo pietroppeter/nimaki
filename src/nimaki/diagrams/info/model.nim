@@ -1,6 +1,5 @@
 ## port-of: src/diagrams/info/model.ts
 ## port-status: draft
-import ../../js
 import parser
 import ../../jsregex
 

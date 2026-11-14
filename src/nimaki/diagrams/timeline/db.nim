@@ -1,7 +1,6 @@
 ## port-of: src/diagrams/timeline/db.ts
 ## port-status: draft
 import ../../errors
-import ../../js
 import ../../jsregex
 
 type

@@ -9,6 +9,7 @@ import ../../js
 import ../../util/chars
 import ../common/scan
 import tokens
+import ../../jsregex
 
 type Tokens* = object
   types*: seq[int]
@@ -23,6 +24,11 @@ const
   S_acc_descr = 4
   S_acc_descr_multiline = 5
   LONGEST_KEYWORD = 22
+  RE_ACC_TITLE = jsre"/accTitle\s*:\s*/iy"
+  RE_ACC_DESCR = jsre"/accDescr\s*:\s*/iy"
+  RE_ACC_DESCR_ML = jsre"/accDescr\s*\{\s*/iy"
+  RE_DIRECTION = jsre"/direction\s+(?:(TB)|(BT)|(RL)|LR)/gi"
+  RE_LINE_END = jsre"/[\n\r\u2028\u2029]/g"
 
 func isStop(c: char): bool =
   ## Characters that end an unquoted string: `:,{<>-=` and line breaks.
@@ -35,12 +41,6 @@ func wordCI(src, w: string, q: int): bool =
     let c = if q + i < src.len: ord(src[q + i]) else: -1
     if c != a and not (a >= 97 and a <= 122 and c == a - 32): return false
   true
-
-func isLineEndAt(src: string, q: int): bool =
-  ## [\n\r  ] at byte q
-  let c = src[q]
-  c == '\n' or c == '\r' or
-    (c == '\xE2' and q + 2 < src.len and src[q + 1] == '\x80' and (src[q + 2] == '\xA8' or src[q + 2] == '\xA9'))
 
 # Produces the token stream of Mermaid's requirement lexer. Its rules are tried in order and
 # the first match wins, so a line that holds a direction statement anywhere is one token.
@@ -57,32 +57,17 @@ proc tokenize*(src: string): Tokens =
   template step(q: int): int = q + sizeAt(src, q)
   template byteAt(q: int): int = (if q < n: ord(src[q]) else: -1)
 
-  # Where each kind of direction statement starts and where its keyword ends, found in one pass:
-  # /direction\s+(?:(TB)|(BT)|(RL)|LR)/gi
+  # Where each kind of direction statement starts and where its keyword ends, found in one pass.
   var dirStarts: array[4, seq[int]]
   var dirEnds: array[4, seq[int]]
   var dirSeen = [0, 0, 0, 0]
   var anyDir = false
   var lineEnd = -1
-  block:
-    var q = 0
-    while q + 9 <= n:
-      if wordCI(src, "direction", q):
-        var j = q + 9
-        if isSpace(cc(j)):
-          while isSpace(cc(j)): j = step(j)
-          var kind = -1
-          for k, d in ["tb", "bt", "rl", "lr"]:
-            if wordCI(src, d, j):
-              kind = k
-              break
-          if kind >= 0:
-            dirStarts[kind].add q
-            dirEnds[kind].add j + 2
-            anyDir = true
-            q = j + 2
-            continue
-      inc q
+  for m in RE_DIRECTION.matches(src):
+    let kind = if m.has(1): 0 elif m.has(2): 1 elif m.has(3): 2 else: 3
+    dirStarts[kind].add m.index
+    dirEnds[kind].add m.stop
+    anyDir = true
 
   proc emit(t, s, e: int) =
     types.add t
@@ -94,15 +79,7 @@ proc tokenize*(src: string): Tokens =
     state = s
   proc pop() =
     if stack.len > 0: state = stack.pop()
-  proc accAt(q: int, word: string, open: char): int =
-    ## /accTitle\s*:\s*/iy and its kin: the end of the match, or -1
-    if not wordCI(src, word, q): return -1
-    var e = q + word.len
-    while isSpace(cc(e)): e = step(e)
-    if byteAt(e) != ord(open): return -1
-    e = e + 1
-    while isSpace(cc(e)): e = step(e)
-    e
+  proc at(re: JsRegExp, q: int): int = re.matchEnd(src, q)
   proc lineBreak(q: int): int =
     let e = src.find('\n', q)
     if e == -1: n else: e
@@ -110,13 +87,8 @@ proc tokenize*(src: string): Tokens =
   # `.*direction\s+XX[^\n]*`: the last such statement that starts on this line decides the token.
   proc direction(): bool =
     if lineEnd < p:
-      lineEnd = n
-      var q = p
-      while q < n:
-        if isLineEndAt(src, q):
-          lineEnd = q
-          break
-        inc q
+      let m = RE_LINE_END.exec(src, p)
+      lineEnd = if m.found: m.index else: n
       for k in 0 ..< 4:
         var j = dirSeen[k]
         while j < dirStarts[k].len and dirStarts[k][j] <= lineEnd: inc j
@@ -141,17 +113,17 @@ proc tokenize*(src: string): Tokens =
         emit(T_title, p, q)
         return true
     if lower == 97 and (byteAt(p + 1) or 32) == 99 and (byteAt(p + 2) or 32) == 99:
-      var e = accAt(p, "acctitle", ':')
+      var e = at(RE_ACC_TITLE, p)
       if e >= 0:
         push(S_acc_title)
         emit(T_acc_title, p, e)
         return true
-      e = accAt(p, "accdescr", ':')
+      e = at(RE_ACC_DESCR, p)
       if e >= 0:
         push(S_acc_descr)
         emit(T_acc_descr, p, e)
         return true
-      e = accAt(p, "accdescr", '{')
+      e = at(RE_ACC_DESCR_ML, p)
       if e >= 0:
         push(S_acc_descr_multiline)
         p = e

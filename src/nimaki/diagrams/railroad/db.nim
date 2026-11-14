@@ -5,7 +5,6 @@
 ## in the drawing reads; here the model is the rule list alone.
 import std/strutils except unescape
 import ../../errors
-import ../../js
 import types, common, ir, ebnf, abnf, peg
 import ../../jsregex
 
