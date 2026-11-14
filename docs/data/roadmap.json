@@ -642,8 +642,8 @@
           "title": "Run Pele's own test suites",
           "what": "Pele's tests at the pin (tests/compat, tests/render, tests/layout and the per-type tests) hold inputs and expectations beyond the difftest corpus. Their inputs go through the port and the oracle, and their checks are ported where they test the port's own functions.",
           "done_when": "Every input of those suites gives the same result in nimaki as in Pele, or a divergence says why; the files they cover move from draft to verified.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Verify labels and Pele's test suites",
+          "status": "started",
           "post": "",
           "pr": ""
         }
