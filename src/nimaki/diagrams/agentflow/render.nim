@@ -1,6 +1,6 @@
 ## port-of: src/diagrams/agentflow/render.ts
 ## port-status: draft
-import std/[options, strutils, tables]
+import std/[options, tables]
 from std/math import ceil
 import ../../js
 import ../../layout/[compound, layered]
@@ -58,29 +58,6 @@ type NodeView = object
   w, h: float
   dy: float
   loops: int
-
-func hasInternalLink(s: string): bool =
-  ## / internal-link(?: |$)/.test(s)
-  var at = s.find(" internal-link")
-  while at >= 0:
-    let e = at + " internal-link".len
-    if e == s.len or s[e] == ' ': return true
-    at = s.find(" internal-link", at + 1)
-  false
-
-func withoutFlowClasses(s: string): string =
-  ## s.replace(/edge-thickness-normal|edge-pattern-solid|flowchart-link/g, '')
-  var i = 0
-  while i < s.len:
-    var matched = false
-    for w in ["edge-thickness-normal", "edge-pattern-solid", "flowchart-link"]:
-      if s.continuesWith(w, i):
-        i += w.len
-        matched = true
-        break
-    if not matched:
-      result.add s[i]
-      inc i
 
 proc dot(x, y: float): string =
   "M" & num(x - 1.75) & "," & num(y) & "a1.75,1.75 0 1 0 3.5,0a1.75,1.75 0 1 0 -3.5,0Z"
@@ -342,7 +319,7 @@ proc draw(db: AgentflowDb, config: Config, options: RenderOptions, turned: bool)
 
     let ink = if view.shape == COLLAPSED or shapeFilled(view.shape): inkFill(view.style.shape, view.style.text) else: ""
     var text = labelSvg(view.label, 0, view.dy, " class=\"pele-label\"" & ink & view.style.text, icons)
-    let internal = hasInternalLink(classes & " ")
+    let internal = jsre"/ internal-link(?: |$)/".test(classes & " ")
     if internal and node.label != "" and options.links != some(false):
       # The label is a note name, but it still ends up in an href, so it gets the same check as a URL.
       let name = decodeEntities(node.label)
@@ -373,7 +350,7 @@ proc draw(db: AgentflowDb, config: Config, options: RenderOptions, turned: bool)
       elif styled and style.stroke != "": esc(style.stroke)
       else: "var(--_l)"
     let kind = if edge.thickness == "dotted": "reference" elif endType == "arrow_cross": "failure" else: "sequence"
-    let classes = classNames(withoutFlowClasses(edge.classes))
+    let classes = classNames(edge.classes.replace(jsre"/edge-thickness-normal|edge-pattern-solid|flowchart-link/g", ""))
     if not over.none and over.ink == "": casings.add edgeCasing(path, "none", endType, style.line)
     edgesOut.add "<g class=\"pele-edge pele-edge-" & kind & classes & "\" data-id=\"" & escText(edge.id) & "\"" &
       (if overInk: " stroke=\"" & over.ink & "\"" else: "") & style.line & ">" &

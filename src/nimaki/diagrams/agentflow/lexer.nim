@@ -11,6 +11,7 @@ import std/strutils
 import ../../js
 import ../../util/[chars, unicode]
 import tokens
+import ../../jsregex
 
 type Tokens* = object
   types*: seq[int]
@@ -60,85 +61,25 @@ func spaces(src: string, i: int): int =
   while j < src.len and isSpace(cu(src, j)): j += charLen(src, j)
   j
 
-func reWordSpaces(src: string, p: int, w: string, colon: char, plus: bool): int =
-  ## /w\s*:\s*/y (colon ':'), /w\s*\{\s*/y (colon '{'), /w\s+/y (plus)
-  if not src.continuesWith(w, p): return -1
-  var j = p + w.len
-  if plus:
-    let k = spaces(src, j)
-    return if k > j: k else: -1
-  j = spaces(src, j)
-  if j >= src.len or src[j] != colon: return -1
-  spaces(src, j + 1)
-
-func reNodir(src: string, p: int): int =
-  ## /(?:\r?\n)*\s*\n/y: a run of whitespace, to its last line break
-  let stop = spaces(src, p)
-  var j = stop - 1
-  while j >= p:
-    if src[j] == '\n': return j + 1
-    dec j
-  -1
-
-func isWordAt(src: string, i: int): bool = isWord(cu(src, i))
-
-func reDir(src: string, p: int): int =
-  ## /\s*(?:LR|RL|TB|BT|TD|BR)\b/y
-  let j = spaces(src, p)
-  if j + 2 > src.len: return -1
-  if src[j ..< j + 2] notin ["LR", "RL", "TB", "BT", "TD", "BR"]: return -1
-  if isWordAt(src, j + 2): return -1
-  j + 2
-
-func reDirSym(src: string, p: int): int =
-  ## /\s*[<>^]/y
-  let j = spaces(src, p)
-  if j < src.len and src[j] in {'<', '>', '^'}: j + 1 else: -1
-
-func reDirV(src: string, p: int): int =
-  ## /\s*v\b/y
-  let j = spaces(src, p)
-  if j < src.len and src[j] == 'v' and not isWordAt(src, j + 1): j + 1 else: -1
-
-func lineTerminatorFrom(src: string, p: int): int =
-  ## The first of [\n\r  ] at or after p, or the end.
-  var j = p
-  while j < src.len:
-    if isLineEnd(cu(src, j)): return j
-    j += charLen(src, j)
-  src.len
-
-func reDirection(src: string, p: int, name: string): int =
-  ## /.*direction\s+NAME[^\n]*/y: the last `direction` on the line that `.*` can reach.
-  let limit = lineTerminatorFrom(src, p)
-  var k = limit
-  while k >= p:
-    if src.continuesWith("direction", k):
-      let j = k + 9
-      let s = spaces(src, j)
-      if s > j and src.continuesWith(name, s):
-        var e = s + name.len
-        while e < src.len and src[e] != '\n': inc e
-        return e
-    dec k
-  -1
-
-func reEmptyCall(src: string, p: int): int =
-  ## /\(\s*\)/y
-  if p >= src.len or src[p] != '(': return -1
-  let j = spaces(src, p + 1)
-  if j < src.len and src[j] == ')': j + 1 else: -1
-
-func brs(s: string): string =
-  ## s.replace(/\n\s*/g, '<br/>')
-  var i = 0
-  while i < s.len:
-    if s[i] == '\n':
-      result.add "<br/>"
-      i = spaces(s, i + 1)
-    else:
-      result.add s[i]
-      inc i
+const RE_ACC_TITLE = jsre"/accTitle\s*:\s*/y"
+const RE_ACC_DESCR = jsre"/accDescr\s*:\s*/y"
+const RE_ACC_DESCR_ML = jsre"/accDescr\s*\{\s*/y"
+const RE_CALL = jsre"/call\s+/y"
+const RE_CLICK = jsre"/click\s+/y"
+const RE_NODIR = jsre"/(?:\r?\n)*\s*\n/y"
+const RE_DIR = jsre"/\s*(?:LR|RL|TB|BT|TD|BR)\b/y"
+const RE_DIR_SYM = jsre"/\s*[<>^]/y"
+const RE_DIR_V = jsre"/\s*v\b/y"
+const RE_DIRECTION = [
+  jsre"/.*direction\s+TB[^\n]*/y",
+  jsre"/.*direction\s+BT[^\n]*/y",
+  jsre"/.*direction\s+RL[^\n]*/y",
+  jsre"/.*direction\s+LR[^\n]*/y",
+  jsre"/.*direction\s+TD[^\n]*/y",
+]
+const RE_LINE_END = jsre"/[\n\r\u2028\u2029]/g"
+const RE_EMPTY_CALL = jsre"/\(\s*\)/y"
+const RE_BR = jsre"/\n\s*/g"
 
 proc tokenize*(src: string): Tokens =
   let n = src.len
@@ -395,17 +336,17 @@ proc tokenize*(src: string): Tokens =
     case c
     of 97:
       if src.continuesWith("acc", p):
-        e = reWordSpaces(src, p, "accTitle", ':', false)
+        e = RE_ACC_TITLE.matchEnd(src, p)
         if e >= 0:
           push(S_acc_title)
           emit(T_acc_title, e)
           return true
-        e = reWordSpaces(src, p, "accDescr", ':', false)
+        e = RE_ACC_DESCR.matchEnd(src, p)
         if e >= 0:
           push(S_acc_descr)
           emit(T_acc_descr, e)
           return true
-        e = reWordSpaces(src, p, "accDescr", '{', false)
+        e = RE_ACC_DESCR_ML.matchEnd(src, p)
         if e >= 0:
           push(S_acc_descr_multiline)
           advance(e)
@@ -422,7 +363,7 @@ proc tokenize*(src: string): Tokens =
         emitText(T_SHAPE_DATA, "", p + 2)
         return true
     of 99:
-      e = reWordSpaces(src, p, "call", '\0', true)
+      e = RE_CALL.matchEnd(src, p)
       if e >= 0:
         push(S_callbackname)
         advance(e)
@@ -433,7 +374,7 @@ proc tokenize*(src: string): Tokens =
       if kw("class"):
         emitFlat(T_CLASS, p + 5)
         return true
-      e = reWordSpaces(src, p, "click", '\0', true)
+      e = RE_CLICK.matchEnd(src, p)
       if e >= 0:
         push(S_click)
         advance(e)
@@ -486,10 +427,12 @@ proc tokenize*(src: string): Tokens =
     if dirNext != -1 and p >= dirFailed:
       if dirNext < p: dirNext = src.find("direction", p)
       if dirNext != -1:
-        if lineEnd < p: lineEnd = lineTerminatorFrom(src, p)
+        if lineEnd < p:
+          let m = RE_LINE_END.exec(src, p)
+          lineEnd = if m.found: m.index else: n
         if dirNext < lineEnd:
-          for i, name in ["TB", "BT", "RL", "LR", "TD"]:
-            e = reDirection(src, p, name)
+          for i in 0 ..< 5:
+            e = RE_DIRECTION[i].matchEnd(src, p)
             if e >= 0:
               emit(T_direction_tb + i, e)
               return true
@@ -684,14 +627,14 @@ proc tokenize*(src: string): Tokens =
       if c == 34:
         quote()
       else:
-        var e = reNodir(src, p)
+        var e = RE_NODIR.matchEnd(src, p)
         if e >= 0:
           pop()
           emit(T_NODIR, e)
         else:
-          e = reDir(src, p)
-          if e < 0: e = reDirSym(src, p)
-          if e < 0: e = reDirV(src, p)
+          e = RE_DIR.matchEnd(src, p)
+          if e < 0: e = RE_DIR_SYM.matchEnd(src, p)
+          if e < 0: e = RE_DIR_V.matchEnd(src, p)
           if e >= 0:
             pop()
             emit(T_DIR, e)
@@ -836,7 +779,7 @@ proc tokenize*(src: string): Tokens =
 
     of S_callbackname:
       if c == 40:
-        let e = reEmptyCall(src, p)
+        let e = RE_EMPTY_CALL.matchEnd(src, p)
         pop()
         if e >= 0:
           advance(e)
@@ -881,7 +824,7 @@ proc tokenize*(src: string): Tokens =
       else:
         var e = src.find('"', p)
         if e == -1: e = n
-        emitText(T_SHAPE_DATA, brs(src[p ..< e]), e)
+        emitText(T_SHAPE_DATA, src[p ..< e].replace(RE_BR, "<br/>"), e)
 
     else: discard
 
