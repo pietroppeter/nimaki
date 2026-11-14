@@ -13,7 +13,7 @@
       "unsupported": 0
     }
   },
-  "bytes": 10521575,
+  "bytes": 10536908,
   "fuzz": {
     "pie": {
       "seed": 1,
@@ -88,9 +88,9 @@
       "different": 0
     },
     "state": {
-      "seed": 23,
-      "cases": 600,
-      "identical": 600,
+      "seed": 1,
+      "cases": 2000,
+      "identical": 2000,
       "different": 0
     },
     "ishikawa": {
