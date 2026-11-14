@@ -23,7 +23,10 @@ type by type, and end with a mixture nobody can read.
    stand-in value with a flag. This is the first choice, whenever the readers of the field are few.
 2. **The type says what is the port's own**, with the pragmas of `src/nimaki/model.nim`:
    `{.portOnly.}` for a field Pele's model does not have (left out of the JSON), `{.spread.}` for
-   an object whose fields Pele's model has as its own.
+   an object whose fields Pele's model has as its own, `{.undefinedIfEmpty.}` for a text that is
+   `""` where Pele's is undefined. A model's own `title`, `accTitle` and `accDescr` are read so in
+   every type whose Pele never holds them as `""` (all but usecase), without the pragma: changing
+   them to `Option` in 33 types would touch every drawing for nothing a drawing shows.
 3. **Where the port holds a value in a shape of its own on purpose** (a union as one object with a
    kind, which Nim cannot write with the same field name in two branches; a boxed string shared for
    speed; a label with a "defined" flag read in many places), `tools/models.nim` has a `dump`
@@ -31,8 +34,9 @@ type by type, and end with a mixture nobody can read.
 4. **Names**: a field named after a Nim keyword (`kind` or `typ` for `type`, `stop` for `end`,
    `start` for `from`) is renamed by `tools/models.nim`, by the general table or the table of one
    type.
-5. The referee compares values; an empty text and a missing one are the same to it. Pele's tests
-   see the difference: where one fails on it, the field becomes an `Option`.
+5. The referee compares values; an empty text and a missing one are the same to it, unless it runs
+   with `--strict`. Pele's tests see the difference: where one fails on it, the field becomes an
+   `Option` or gets `{.undefinedIfEmpty.}`.
 
 ## Consequences
 

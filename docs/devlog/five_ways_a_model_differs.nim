@@ -32,7 +32,7 @@ nbText: &"""
   {modelData["same"].getInt} are, and {modelData["different"].getInt} differ.
 - **Pele's own tests agree**: {count("passed")} pass on nimaki (there were {was("passed")}), and
   {count("model")} wait for a model not yet in Pele's shape (there were {was("model")}).
-- **The differences came in five kinds**, and each kind now has one way to be fixed, written down
+- **The differences came in five kinds** (the empty text for "none" being the commonest), and each kind now has one way to be fixed, written down
   as [decision 0017](../../decisions/#0017-models-in-pele-s-shape): an `Option` for a field Pele may leave undefined, a
   pragma on a field the port has and Pele does not, a pragma on an object Pele spreads into
   another, a writer of Pele's shape for a value the port holds otherwise on purpose, and a
@@ -61,6 +61,16 @@ Nim has a type for "a value, or none": `Option`. The treemap's `children` is now
 `Option[seq[TreemapNode]]`, `none` for a leaf, and `leaf` is no longer a field but a function that
 asks `children.isNone`. The same change went to venn's labels, wardley's pipeline flags and
 gitGraph's `customType` and `customId`, which held -1 or `false` for "not given".
+
+The most common stand-in is the empty text. Most models of the port hold a title as `""` when
+there is none, where Pele's is undefined. The referee reads the two as the same, and so it missed
+them; Pele's tests did not, and failed on titles of info, journey, radar, timeline, railroad and
+gitGraph. Changing every title of 33 types to an `Option` would touch every drawing for nothing
+the drawings see, so `tools/models.nim` reads a model's own `title`, `accTitle` and `accDescr`
+as undefined when they are `""`, in every type but usecase (whose Pele starts them as `""`); and
+a third pragma, `{.undefinedIfEmpty.}`, says the same of another text, as the event modeling box's
+`data`. With `--strict` the referee tells an empty text from a missing one, as Pele's tests do,
+and lists what is left of this kind.
 """
 
 nbCode:
@@ -133,7 +143,10 @@ purpose, with its reason.
 """
 
 nbNote """
-- `src/nimaki/model.nim`: the pragmas `portOnly` and `spread`.
+- `src/nimaki/model.nim`: the pragmas `portOnly`, `spread` and `undefinedIfEmpty`.
+- The bridge to Pele's tests now turns a JavaScript string into the port's as the port reads one
+  from JSON, a lone surrogate kept as its bytes (Nim's own conversion joined it to the next
+  character); and a field of the model left empty is there, undefined, as in a class of Pele's.
 - `tools/models.nim`: the writers of Pele's shape (railroad node, packet label, quadrant label,
   xychart axis and plot), pairs as arrays, `Infinity`, YAML and JSON values read from the text
   (flowchart's metadata and edge animation) as plain objects.
