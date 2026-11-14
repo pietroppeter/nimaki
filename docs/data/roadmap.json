@@ -702,11 +702,11 @@
           "id": "follow-pele",
           "kind": "tooling",
           "title": "Following Pele",
-          "what": "A routine that diffs a new Pele release against the pin and ports the changes.",
+          "what": "A routine that diffs a new Pele release against the pin and ports the changes. The tool is ready (tools/followpele.nim, run weekly in CI with --fail); the pin waits for Pele's next release.",
           "done_when": "The pin moves once, with a post.",
-          "owner": "",
-          "status": "planned",
-          "post": "",
+          "owner": "Port class and swimlane",
+          "status": "started",
+          "post": "following-pele",
           "pr": ""
         }
       ]
