@@ -154,11 +154,9 @@ for name, r in drawn:
 doAssert wide == @["handoff"], "the text says which drawings stay wide: " & $wide
 let widest = toSeq(wideOnes.values).max
 
-proc show(name, caption: string) =
-  ## A diagram of the page, then its Mermaid text, folded.
-  nbSvg drawn[name].svg, caption
-  nbFold "The Mermaid text of this diagram":
-    nbText &"```mermaid\n{diagrams[name].strip}\n```\n"
+template show(name, caption: string) =
+  ## A diagram of the page, checked against Pele, then its Mermaid text, folded (`nbMermaid`).
+  nbMermaid diagrams[name], caption, %*{"maxWidth": phone}
 
 nbText: &"""
 The [first article](../opening-a-web-page/) followed a web page from address to screen. This one

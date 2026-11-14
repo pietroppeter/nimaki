@@ -147,9 +147,10 @@ nbSave
 - Nim code that can run, runs (`nbCode`), so the page proves itself. Numbers in the text come
   from code or a data file, not typed by hand. Code in other languages is a fence with its
   language (`ts`, `js`, `mermaid`, `sh`, `json`, `rust`, `python`), highlighted at build time.
-- Diagrams in a post can be drawn by Pele itself, run in Node at build time (`peleSvg` in
-  `docs/pele.nim`), and, once ported,
-  by nimaki: `nbSvg(svgText, caption)` shows SVG text inline.
+- A diagram in a page or a post is drawn with `nbMermaid(text, caption, options)` (in
+  `docs/pele.nim`): nimaki draws it, Pele draws it too at build time, and the build fails when
+  the two are not the same bytes; its Mermaid text is folded under it. `peleSvg` gives Pele's
+  own drawing, and `nbSvg(svgText, caption)` shows any SVG text inline.
 - Say what was checked and what was not. A claim about Pele, Mermaid, a tool or a person links
   its source. If a source could not be read, say so.
 
