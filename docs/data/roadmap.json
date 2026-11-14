@@ -489,9 +489,9 @@
           "what": "src/diagrams/xychart: 953 lines of TypeScript, 8 corpus cases.",
           "done_when": "difftest: every xychart case identical.",
           "owner": "Build C ABI and diagrammari proposal",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "charts-on-two-axes",
+          "pr": "56"
         },
         {
           "id": "wardley",

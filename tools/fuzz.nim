@@ -1183,6 +1183,76 @@ proc radarSource(g: var Gen): string =
     elif r < 0.985: result.add "\n"
     else: result.add "  " & g.pick(["axis", "curve x{}", "ticks x", "graticule square", "max 3, min 1", "showLegend true, ticks 3", "accDescr {", "curve y{1, 2", "titlex"]) & "\n"
 
+const xyNumbers = ["0", "1", "5", "10", "2.5", "-3", "+4", ".5", "-.25", "100", "1000", "7000",
+                   "0.001", "33.3", "-100", "12", "99999", "1.5", "42", "3"]
+const xyWords = ["jan", "feb", "mar", "apr", "Sales", "Revenue (in $)", "Q1", "Q2", "x_1", "a+b", "#1",
+                 "A&B", "2024", "rate*2", "one.two", "a-b", "y=x"]
+
+proc xyNumber(g: var Gen): string =
+  if g.chance(0.03): g.pick(["1.", "1e3", "x", "--1", "1.2.3", ""]) else: g.pick(xyNumbers)
+
+proc xyText(g: var Gen): string =
+  ## A word run, or a quoted string (a quote inside ends it).
+  if g.chance(0.5): "\"" & g.pick(labels).replace("\"", "") & "\"" else: g.pick(xyWords)
+
+proc xyValues(g: var Gen, n: int, labelled: bool): string =
+  result = "["
+  for k in 0 ..< n:
+    result.add (if k > 0: g.pick([", ", ",", " , "]) else: "") & g.xyNumber()
+    if labelled and g.chance(0.4): result.add " \"" & g.pick(labels).replace("\"", "") & "\""
+  result.add "]"
+
+proc xychartSource(g: var Gen): string =
+  if g.chance(0.4):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(labels) & "\n"
+    result.add "config:\n  xyChart:\n"
+    for key in ["width", "height", "showDataLabel", "showTitle", "showLegend", "chartOrientation"]:
+      if g.chance(0.2):
+        result.add "    " & key & ": " & g.pick(["0", "200", "500", "900", "true", "false", "horizontal", "vertical", "x", "5000", "-1"]) & "\n"
+    for axisKey in ["xAxis", "yAxis"]:
+      if g.chance(0.2):
+        result.add "    " & axisKey & ":\n"
+        for key in ["showTitle", "showLabel", "showTick", "showAxisLine"]:
+          if g.chance(0.4): result.add "      " & key & ": " & g.pick(["true", "false"]) & "\n"
+    result.add "---\n"
+  result.add(if g.chance(0.03): g.pick(["xychart-betax", "XYchart", "xy-chart"])
+             else: g.pick(["xychart-beta", "xychart", "xychart-beta horizontal", "xychart horizontal", "xychart-beta vertical"]))
+  result.add "\n"
+  var nCats = 0
+  for i in 0 ..< g.rng.rand(1 .. 6):
+    let r = g.rng.rand(1.0)
+    if r < 0.12: result.add "  title " & g.xyText() & "\n"
+    elif r < 0.3:
+      result.add "  x-axis"
+      if g.chance(0.6): result.add " " & g.xyText()
+      if g.chance(0.6):
+        nCats = g.rng.rand(1 .. 8)
+        result.add " ["
+        for k in 0 ..< nCats: result.add (if k > 0: g.pick([", ", ","]) else: "") & g.xyText()
+        result.add "]"
+      elif g.chance(0.6): result.add " " & g.xyNumber() & " --> " & g.xyNumber()
+      result.add "\n"
+    elif r < 0.42:
+      result.add "  y-axis"
+      if g.chance(0.6): result.add " " & g.xyText()
+      if g.chance(0.6): result.add " " & g.xyNumber() & " --> " & g.xyNumber()
+      result.add "\n"
+    elif r < 0.85:
+      let line = g.chance(0.5)
+      result.add "  " & (if line: "line" else: "bar")
+      if g.chance(0.5): result.add " " & g.xyText()
+      let n = if nCats > 0 and g.chance(0.7): nCats else: g.rng.rand(1 .. 10)
+      result.add " " & g.xyValues(n, line or g.chance(0.1)) & "\n"
+    elif r < 0.9: result.add "  accTitle: " & g.pick(labels) & "\n"
+    elif r < 0.93: result.add "  accDescr {\n    " & g.pick(labels) & "\n  }\n"
+    elif r < 0.96: result.add "  %% " & g.pick(labels) & "\n"
+    elif r < 0.98: result.add "\n"
+    else: result.add "  " & g.pick(["line", "bar []", "x-axis [", "y-axis 1 -->", "title", "pie", "line [1, 2", "bar \"a\" [1 2]"]) & "\n"
+  if g.chance(0.5):
+    let line = g.chance(0.5)
+    result.add "  " & (if line: "line" else: "bar") & " " & g.xyValues(if nCats > 0: nCats else: g.rng.rand(1 .. 10), line) & "\n"
+
 const treemapValues = ["10", "25", "1", "0", "100", "3.5", "1,000", "2_5", "1000000", "0.01", "7", "42", "12.", "99999999", "1e3"]
 const treemapOdd = ["1.2.3", ".", ",5", "_"]
 
@@ -2032,7 +2102,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad", "gantt", "wardley", "architecture", "c4", "block", "agentflow", "mindmap", "kanban", "eventmodeling", "labels", "sankey", "quadrantChart"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad, gantt, wardley, architecture, c4, block, agentflow, mindmap, kanban, eventmodeling, labels, sankey, quadrantChart", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad", "gantt", "wardley", "architecture", "c4", "block", "agentflow", "mindmap", "kanban", "eventmodeling", "labels", "xychart", "sankey", "quadrantChart"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad, gantt, wardley, architecture, c4, block, agentflow, mindmap, kanban, eventmodeling, labels, xychart, sankey, quadrantChart", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -2066,6 +2136,7 @@ proc main() =
                                                           of "c4": g.c4Source()
                                                           of "block": g.blockSource()
                                                           of "radar": g.radarSource()
+                                                          of "xychart": g.xychartSource()
                                                           of "treemap": g.treemapSource()
                                                           of "er": g.erSource()
                                                           of "requirement": g.requirementSource()

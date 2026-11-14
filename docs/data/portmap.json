@@ -3,12 +3,12 @@
   "code": 47594,
   "totals": {
     "todo": {
-      "files": 58,
-      "code": 3055
+      "files": 50,
+      "code": 2094
     },
     "draft": {
-      "files": 233,
-      "code": 44539
+      "files": 241,
+      "code": 45500
     },
     "verified": {
       "files": 0,
@@ -74,8 +74,8 @@
     },
     {
       "component": "diagrams/common",
-      "todo": 8,
-      "draft": 888,
+      "todo": 0,
+      "draft": 896,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -306,8 +306,8 @@
     },
     {
       "component": "diagrams/xychart",
-      "todo": 953,
-      "draft": 0,
+      "todo": 0,
+      "draft": 953,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -833,8 +833,10 @@
       "component": "diagrams/common",
       "lines": 11,
       "code": 8,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/common/caseless.nim"
+      ]
     },
     {
       "path": "src/diagrams/common/fit-text.ts",
@@ -2525,56 +2527,70 @@
       "component": "diagrams/xychart",
       "lines": 134,
       "code": 108,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/xychart/db.nim"
+      ]
     },
     {
       "path": "src/diagrams/xychart/index.ts",
       "component": "diagrams/xychart",
       "lines": 17,
       "code": 15,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/xychart/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/xychart/lexer.ts",
       "component": "diagrams/xychart",
       "lines": 288,
       "code": 268,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/xychart/lexer.nim"
+      ]
     },
     {
       "path": "src/diagrams/xychart/parser.ts",
       "component": "diagrams/xychart",
       "lines": 114,
       "code": 102,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/xychart/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/xychart/render.ts",
       "component": "diagrams/xychart",
       "lines": 415,
       "code": 366,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/xychart/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/xychart/ticks.ts",
       "component": "diagrams/xychart",
       "lines": 30,
       "code": 22,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/xychart/ticks.nim"
+      ]
     },
     {
       "path": "src/diagrams/xychart/tokens.ts",
       "component": "diagrams/xychart",
       "lines": 74,
       "code": 72,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/xychart/tokens.nim"
+      ]
     },
     {
       "path": "src/entries/agentflow.ts",

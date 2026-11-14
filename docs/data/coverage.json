@@ -475,19 +475,19 @@
       "corpus": 8,
       "parse": {
         "code": 565,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 22,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 366,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/xychart/",
+      "post": "charts-on-two-axes",
+      "notes": "Bars and lines on a band or linear axis; nice ticks, Liang-Barsky clipping; JS-safe."
     },
     {
       "id": "wardley",
