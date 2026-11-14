@@ -1,6 +1,6 @@
 ## JavaScript's regular expressions, in Nim. Not a port of a file of Pele: Pele writes about
 ## five hundred regular expression literals, and this module lets the port write the same ones,
-## character for character, with the same meaning (decision 0015).
+## character for character, with the same meaning (decision 0016).
 ##
 ## The engine is nitely's `regex` package (pure Nim, linear time, also under `nim js`). Its
 ## syntax is close to JavaScript's, but not its meaning, so a pattern is first translated, once,
@@ -706,12 +706,20 @@ func nextIndex(s: string, i: int): int =
 iterator matches*(re: JsRegExp, s: string): JsMatch =
   ## The matches of a `g` regex, as `s.matchAll(re)` (or a `while (m = re.exec(s))` loop) finds
   ## them; for a sticky regex they must follow each other from 0.
-  var at = 0
-  while at <= s.len:
-    let m = exec(re, s, at)
-    if not m.found: break
-    yield m
-    at = if m.stop == m.index: nextIndex(s, m.stop) else: m.stop
+  if re.sticky or re.atStart or re.prefix.len > 0:
+    var at = 0
+    while at <= s.len:
+      let m = exec(re, s, at)
+      if not m.found: break
+      yield m
+      at = if m.stop == m.index: nextIndex(s, m.stop) else: m.stop
+  else:
+    # The engine's own walk over every match. Its `find` from a position runs on while matches
+    # follow each other, to return only the first, so a loop of `find`s took time in the square
+    # of the text (Pele's stress tests: 3,000 comment lines took seconds).
+    withEngine(re, r):
+      for m in findAll(s, r):
+        yield toJsMatch(s, m)
 
 func matchAll*(s: string, re: JsRegExp): seq[JsMatch] =
   ## `[...s.matchAll(re)]`.

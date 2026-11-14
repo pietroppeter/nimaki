@@ -20,10 +20,26 @@ type
 
 const
   RE_COMMENT = jsre"/^\s*%%(?!{)[^\n]+\n?/gm"
-  RE_DIRECTIVE = jsre"/%{2}{\s*(?:(\w+)\s*:|(\w+))\s*(?:(\w+)|((?:(?!}%{2}).|\r?\n)*))?\s*(?:}%{2})?/gi"
   RE_HTML_TAG = jsre"/<(\w+)([^>]*)>/g"
   RE_ATTR = jsre"""/="([^"]*)"/g"""
 const UNSAFE_KEYS = ["__proto__", "constructor", "prototype"].toHashSet
+
+func isLineTerminatorAt(s: string, i: int): bool =
+  ## [\n\r  ] at byte i
+  if i >= s.len: return false
+  if s[i] in {'\n', '\r'}: return true
+  s.continuesWith(" ", i) or s.continuesWith(" ", i)
+
+proc removeSpans(text: string, spans: seq[(int, int)], steps: Steps): string =
+  if steps != nil:
+    var edits: seq[Edit]
+    for (a, b) in spans: edits.add (a, b, 0)
+    steps[].add edits
+  var last = 0
+  for (a, b) in spans:
+    result.add text[last ..< a]
+    last = b
+  result.add text[last .. ^1]
 
 proc removeAll(text: string, re: JsRegExp, steps: Steps): string =
   if steps != nil: steps[].add replacements(text, re, 0)
@@ -121,20 +137,80 @@ proc fromJson*(j: JsonNode): YamlValue =
     for k, v in j.fields: m.fields[k] = fromJson(v)
     m
 
+type DirectiveMatch = object
+  first, last: int
+  kind: string           ## match[1] ?? match[2]
+  hasArgs: bool          ## match[4] !== undefined
+  args: string
+
+proc matchDirective(s: string, p: int): (bool, DirectiveMatch) =
+  ## /%{2}{\s*(?:(\w+)\s*:|(\w+))\s*(?:(\w+)|((?:(?!}%{2}).|\r?\n)*))?\s*(?:}%{2})?/i at p.
+  ## A scanner, not the regex (decision 0016): the engine keeps the capture of the repeated
+  ## group for every character it reads, and stops (a RangeDefect past 32,767 of them) on a
+  ## long unclosed directive, which Pele's stress tests write.
+  if not s.continuesWith("%%{", p): return
+  var i = p + 3
+  # A template, not a closure: a closure that captures `s` copies it at every call (nim js
+  # copies the whole source, which made 12,000 unclosed directives take seconds).
+  template spaces(at: var int) =
+    while true:
+      let n = spaceLenAt(s, at)
+      if n == 0: break
+      at += n
+  spaces(i)
+  if i >= s.len or not isWordChar(s[i]): return
+  let w0 = i
+  while i < s.len and isWordChar(s[i]): inc i
+  var m = DirectiveMatch(first: p, kind: s[w0 ..< i])
+  var j = i
+  spaces(j)
+  if j < s.len and s[j] == ':': i = j + 1
+  spaces(i)
+  if i < s.len and isWordChar(s[i]):
+    while i < s.len and isWordChar(s[i]): inc i
+  else:
+    let a0 = i
+    while i < s.len:
+      if s.continuesWith("}%%", i): break
+      if s[i] == '\n': inc i
+      elif s[i] == '\r':
+        if i + 1 < s.len and s[i + 1] == '\n': i += 2
+        else: break
+      elif s.isLineTerminatorAt(i): break
+      else: i += codePointAt(s, i).size
+    m.hasArgs = true
+    m.args = s[a0 ..< i]
+  spaces(i)
+  if s.continuesWith("}%%", i): i += 3
+  m.last = i
+  (true, m)
+
+proc directiveMatches(s: string): seq[DirectiveMatch] =
+  var p = s.find("%%{")
+  while p != -1:
+    let (ok, m) = matchDirective(s, p)
+    if ok:
+      result.add m
+      p = s.find("%%{", max(m.last, p + 1))
+    else:
+      p = s.find("%%{", p + 1)
+
 proc directives(text: string, config: Config, steps: Steps): string =
   if "%%{" notin text: return text
   let normalized = jsTrim(text).replace(jsre"/'/g", "\"")
-  for match in RE_DIRECTIVE.matches(normalized):
-    let kind = if match.has(1): match[1] else: match[2]
+  for match in directiveMatches(normalized):
+    let kind = match.kind
     if kind == "wrap":
       config.fields["wrap"] = ybool(true)
-    elif (kind == "init" or kind == "initialize") and match[4] != "":
+    elif (kind == "init" or kind == "initialize") and match.hasArgs and match.args != "":
       try:
-        let args = fromJson(jsonParse(jsTrim(match[4])))
+        let args = fromJson(jsonParse(jsTrim(match.args)))
         if isRecord(args): discard merge(config, args)
       except CatchableError:
         discard # Mermaid ignores an init directive whose body is not valid JSON.
-  removeAll(text, RE_DIRECTIVE, steps)
+  var spans: seq[(int, int)]
+  for m in directiveMatches(text): spans.add (m.first, m.last)
+  removeSpans(text, spans, steps)
 
 proc preprocess*(source: string, steps: Steps = nil): Preprocessed =
   ## `steps` maps normalized source to `withComments`.

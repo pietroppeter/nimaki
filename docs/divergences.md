@@ -6,7 +6,7 @@ Anything not listed here must be identical, byte for byte.
 
 `render` and `detectType` read a byte that is not UTF-8 as U+FFFD, the replacement character, as
 the browser's `TextDecoder` does
-([decision 0015](#0015-regular-expressions-as-pele-writes-them-on-nim-regex)). A JavaScript
+([decision 0016](#0016-regular-expressions-as-pele-writes-them-on-nim-regex)). A JavaScript
 string cannot hold such a byte, so there is no Pele behaviour to copy; the nearest thing, a lone
 surrogate, is dropped by Pele's `esc`, and is dropped by nimaki's too.
 

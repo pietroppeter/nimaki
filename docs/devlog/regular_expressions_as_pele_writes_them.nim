@@ -132,7 +132,7 @@ file that needed it. By this morning the port held **{helpersBefore}** such func
 `/\n\s+/g` alone was written by hand in 23 files. The post
 [*The shape of the port*](../the-shape-of-the-port/) proposed gathering them in one shared
 module. Pietro asked for something else: use the pure Nim regex package, "a dependency, but a
-good one". [Decision 0015](../../decisions/#0015-regular-expressions-as-pele-writes-them-on-nim-regex)
+good one". [Decision 0016](../../decisions/#0016-regular-expressions-as-pele-writes-them-on-nim-regex)
 records it.
 
 ## Same syntax, another meaning
@@ -308,7 +308,7 @@ expression. The keywords are now one array, as in Pele, and the porting guide li
   [`corpus/regexes.json`](https://github.com/pietroppeter/nimaki/blob/{commit}/corpus/regexes.json)
   (Pele's regexes, listed by `tools/pele_regexes.mjs`); the numbers of this post,
   [`regular_expressions/numbers.json`](https://github.com/pietroppeter/nimaki/tree/main/docs/devlog/data/regular_expressions).
-- [Decision 0015](../../decisions/#0015-regular-expressions-as-pele-writes-them-on-nim-regex),
+- [Decision 0016](../../decisions/#0016-regular-expressions-as-pele-writes-them-on-nim-regex),
   and the divergences it brings, on the same page.
 - [nim-regex](https://github.com/nitely/nim-regex) and
   [nim-unicodedb](https://github.com/nitely/nim-unicodedb), by nitely, at the commits of `deps.lock`.

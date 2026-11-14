@@ -92,6 +92,28 @@ const RE_FORMAT = jsre"/\[([^\]]+)]|YYYY|YY|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a
 
 proc isoDate*(date: JsDate): string
 
+type MatchCache = tuple[text: string, matches: seq[JsMatch], valid: bool]
+
+var lastAdvanced, lastFormat: MatchCache
+  ## The matches of the last format string, kept: a chart formats every day of its range with
+  ## one format, and a long one (Pele's stress tests write 12,000 characters) would be read
+  ## again for each day. The matches depend on the text alone, so the output is the same.
+
+proc matchesIn(re: JsRegExp, text: string, cache: var MatchCache): seq[JsMatch] =
+  if not cache.valid or cache.text != text: cache = (text, text.matchAll(re), true)
+  cache.matches
+
+template replaceEach(text: string, matches: seq[JsMatch], m, by: untyped): string =
+  ## `text.replace(re, (m) => by)`, from the matches of `re` in `text`.
+  var output = ""
+  var last = 0
+  for m in matches:
+    output.add text[last ..< m.index]
+    output.add by
+    last = m.stop
+  output.add text[last .. ^1]
+  output
+
 proc format*(date: JsDate, temp: string): Option[string] =
   ## Returns none for the week-of-year and time zone name tokens, which need dayjs plugins Mermaid
   ## does not load and so fail there.
@@ -99,7 +121,7 @@ proc format*(date: JsDate, temp: string): Option[string] =
   let str = if temp == "": DEFAULT_FORMAT else: temp
   if str == "YYYY-MM-DD": return some(isoDate(date))
   var unsupported = false
-  let advanced = str.replaceWith(RE_ADVANCED, m):
+  let advanced = str.replaceEach(RE_ADVANCED.matchesIn(str, lastAdvanced), m):
     case m[0]
     of "Q": jsString(ceil((date.getMonth + 1) / 3))
     of "Do": "[" & ordinal(date.getDate) & "]"
@@ -117,7 +139,7 @@ proc format*(date: JsDate, temp: string): Option[string] =
   if unsupported: return none(string)
   let hours = date.getHours
   let h12 = (let r = hours mod 12; if r == 0: 12.0 else: r)
-  let output = advanced.replaceWith(RE_FORMAT, m):
+  let output = advanced.replaceEach(RE_FORMAT.matchesIn(advanced, lastFormat), m):
     if m[1] != "": m[1]
     else:
       case m[0]

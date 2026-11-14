@@ -6,7 +6,7 @@
 ## checked against Mermaid's generated lexers by the tests.
 ##
 ## A token type's pattern is Pele's sticky regular expression, written as Pele writes it
-## (`jsregex.nim`, decision 0015).
+## (`jsregex.nim`, decision 0016).
 import std/strutils
 import ../../errors
 import ../../js

@@ -85,7 +85,7 @@ nbNote """
 Pele's source has about 500 regular expression literals (344 distinct ones, listed in
 `corpus/regexes.json`). The port writes them as Pele does, through `src/nimaki/jsregex.nim` on
 nitely's pure Nim `regex` package
-([decision 0015](../decisions/#0015-regular-expressions-as-pele-writes-them-on-nim-regex)):
+([decision 0016](../decisions/#0016-regular-expressions-as-pele-writes-them-on-nim-regex)):
 `const RE_TITLE = jsre"/title([\t ][^\n\r]*|)/"`, then `RE_TITLE.exec(text)`,
 `s.replace(re, "$1")`, `s.split(re)`. The wrapper translates each literal at compile time into
 the package's syntax with JavaScript's meaning (`\s`, `\w`, `.`, `^` and `$` under `m`, the `i`

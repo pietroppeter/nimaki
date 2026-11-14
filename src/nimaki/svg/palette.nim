@@ -29,7 +29,7 @@ func record(value: YamlValue): YamlValue = (if isRecord(value): value else: ymap
 const
   RE_CHARS = jsre"/^[\w\s#%.,+\-/()]+$/"
     ## Pele's is /^[\w\s#%.,+\-/()]{1,200}$/; the bound is checked apart, in UTF-16 units, as nim-regex
-    ## spells a bounded repeat out, one state per turn, and took 0.8 ms a test (decision 0015).
+    ## spells a bounded repeat out, one state per turn, and took 0.8 ms a test (decision 0016).
   RE_FUNCTION = jsre"/([\w-]*)\s*\(/g"
   RE_VAR = jsre"/var\(\s*([\w-]*)/gi"
 
