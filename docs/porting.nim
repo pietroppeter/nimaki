@@ -43,9 +43,10 @@ nbText: """
 5. **Comments come along.** They are part of the program we are porting; Pele comments only the
    non-obvious, so each one matters.
 6. **Only the standard library** in `src/`. A new dependency needs a decision record.
-7. **Three states.** `draft` when translated, `verified` when a second pass with fresh eyes has
-   read it against the TypeScript, `conformant` when difftest agrees on its part
-   ([decision 0005](../decisions/#0005-every-file-goes-through-translate-verify-conform)).
+7. **Draft, then conformant.** `draft` when translated, `conformant` when difftest and the fuzzer
+   agree on its part and Pele's tests that reach it pass on the port
+   ([decision 0014](../decisions/#0014-tests-and-fuzzing-make-a-file-conformant-without-a-second-reading));
+   `verified`, a second reading against the TypeScript, is no longer required.
 8. **Check, then claim.** A part is `done` on the [coverage map](../coverage/) only when
    `nim r tools/difftest.nim <type>` reports every case identical.
 9. **It also compiles to JavaScript.** `nim js` must build the same renderer, and
@@ -109,7 +110,9 @@ with its own algorithm; Nim calls the C library. On 100,000 seeded inputs they d
 last bit 0.6% (`log10`) to 40% (`hypot`) of the time, and never after `num()`'s rounding, but a
 bit can still flip a comparison in a layout. Call them through one module of ours (`jsmath`), so
 a port of V8's versions can replace Nim's in one place when difftest finds a case. `sqrt` is exact
-in both.
+in both. Venn's layout, which iterates, found the cases: since then the C build computes `hypot`
+as V8 does, and `sin`, `cos`, `acos`, `atan`, `atan2` with a port of V8's fdlibm (`fdlibm.nim`),
+identical to Node on 200,000 inputs.
 """, nkWarning, "Math functions"
 
 nbNote """

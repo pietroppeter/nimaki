@@ -2,14 +2,14 @@
   "about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand. `cases` and the counts beside it are Pele's corpus; `diagrammari` counts diagrammari's.",
   "pin": "1.13.0",
   "cases": 2118,
-  "identical": 2022,
+  "identical": 2118,
   "different": 0,
-  "unsupported": 96,
+  "unsupported": 0,
   "diagrammari": {
     "cases": 34,
-    "identical": 33,
+    "identical": 34,
     "different": 0,
-    "unsupported": 1
+    "unsupported": 0
   },
   "types": [
     {
@@ -322,14 +322,14 @@
       "type": "venn",
       "coverage": "venn",
       "cases": 25,
-      "identical": 0,
+      "identical": 25,
       "different": 0,
-      "unsupported": 25,
+      "unsupported": 0,
       "diagrammari": {
         "cases": 1,
-        "identical": 0,
+        "identical": 1,
         "different": 0,
-        "unsupported": 1
+        "unsupported": 0
       }
     },
     {
@@ -344,9 +344,9 @@
       "type": "xychart",
       "coverage": "xychart",
       "cases": 71,
-      "identical": 0,
+      "identical": 71,
       "different": 0,
-      "unsupported": 71
+      "unsupported": 0
     }
   ]
 }

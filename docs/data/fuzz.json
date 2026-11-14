@@ -256,6 +256,22 @@
       "different": 0,
       "rendered": 3895,
       "errors": 1105
+    },
+    "xychart": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 1983,
+      "errors": 3017
+    },
+    "venn": {
+      "seed": 1,
+      "cases": 5000,
+      "identical": 5000,
+      "different": 0,
+      "rendered": 2104,
+      "errors": 2896
     }
   }
 }
