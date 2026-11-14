@@ -82,15 +82,23 @@ every run of `tests/test_js.nim`; `num()` is in `src/nimaki/svg/builder.nim`.
 """, nkNim, "Numbers are JavaScript numbers"
 
 nbNote """
-Pele's source has about 480 regular expression literals, 122 of them sticky (counted in
-*How Pele is built*); lookahead is used, lookbehind never. `std/re` needs PCRE at run time and differs
-from JavaScript's engine in details (`\s`, Unicode classes, `lastIndex`, sticky `y` flags).
-The default is a hand-written scanner with the same behaviour; a regex package needs a decision
-record first. The core and pie needed about 60 of them, all written as scanners: each one says
-in a comment the pattern it answers as. Watch the patterns that backtrack (`[OPEN]*[CJK]` in
-`label.ts`, `\s+$` with the `m` flag in `accDescrValue`) and `^\s*` with the `m` flag, which
-runs across line breaks.
-""", nkWarning, "Regular expressions"
+Pele's source has about 500 regular expression literals (344 distinct ones, listed in
+`corpus/regexes.json`). The port writes them as Pele does, through `src/nimaki/jsregex.nim` on
+nitely's pure Nim `regex` package
+([decision 0016](../decisions/#0016-regular-expressions-as-pele-writes-them-on-nim-regex)):
+`const RE_TITLE = jsre"/title([\t ][^\n\r]*|)/"`, then `RE_TITLE.exec(text)`,
+`s.replace(re, "$1")`, `s.split(re)`. The wrapper translates each literal at compile time into
+the package's syntax with JavaScript's meaning (`\s`, `\w`, `.`, `^` and `$` under `m`, the `i`
+flag), and a pattern it cannot translate faithfully stops the build. What it cannot change:
+JavaScript matches UTF-16 code units, so a `.` there can take half of an emoji, and here takes
+it whole (`docs/divergences.md`). A pattern that holds `"` is written between triple quotes, as
+`\"` ends a raw string. A regex applied to one character (`/\s/.test(c)`) stays a test on the
+character. A hand-written scanner stays only where a regex cannot be faithful (a lone surrogate,
+a count in UTF-16 units) or where it runs on every label of every drawing (`text/label.nim`,
+`text/entities.nim`, `diagrams/common/fit.nim`, `svg/root.nim`: the engine compiled to JavaScript
+costs microseconds a character), and says why in its comment. A pattern that is one class
+repeated (`/\s+/y`) or plain text (`/</g`) is matched by the wrapper itself, without the engine.
+""", nkNim, "Regular expressions"
 
 nbNote """
 Gantt reads the current time (`Date.now()`) and works in local time. The port takes `now`
@@ -149,7 +157,8 @@ g.b`, loses its field in JavaScript: use `choose(down, g.a, g.b)` of `layout/lay
 JavaScript: key the `Table` by the `ref` itself, with `proc hash(n: Node): Hash =
 hash(cast[pointer](n))`, which is the address in C and an id in JavaScript. And an `if`
 expression whose branch is a constant array made a `seq` (`if s.len > 0: s else: @DEFAULTS`)
-loses that branch: assign it in an `if` statement. Last, a JavaScript number is a double: a product
+loses that branch: assign it in an `if` statement. A `case` expression whose branch is one (`of 'a':
+@KEYWORDS_A`) fails in JavaScript too: loop over one constant array instead, as the gantt lexer does. Last, a JavaScript number is a double: a product
 of two 32-bit numbers can pass 2^53 and lose its low bits before Nim masks it (the JavaScript build
 of Nim 2.2.4, which CI used until decision 0015, does). Multiply in 16-bit halves, as `imul` in
 `diagrams/cynefin/boundaries.nim` does.
@@ -215,8 +224,11 @@ filled it in; later steps add to it.
 | `x | 0`, `x ^ y`, `x >>> n` on a float (ToInt32 first) | ECMAScript ToInt32 (drop the fraction, wrap modulo 2^32; NaN and infinity give 0), then casts between `int32` and `uint32`, as in `cynefin/boundaries.nim` |
 | `list.sort((a, b) => ...)` | `algorithm.sort` with the same comparator: both are stable |
 | `withPalette(p, () => ...)` (a module global set for a call) | set the global, `try` the call, restore it in `finally` |
-| a sticky regex `re.lastIndex = p; re.test(s)` | a matcher `proc (s: string, p: int): int` returning the end, or -1, with the pattern in a comment |
-| `s.replace(re, ...)` with `/g` | a loop that copies `s` and writes the replacement at each match |
+| a sticky regex `re.lastIndex = p; re.test(s) ? re.lastIndex : -1` | `re.matchEnd(s, p)`: the end of the match, or -1 |
+| `re.lastIndex = p; m = re.exec(s)` with `g` or `y` | `let m = re.exec(s, p)`: `m.found`, `m.index`, `m.stop` (the next `lastIndex`), `m[1]`, `m.has(1)` |
+| a `RegExp` built at run time, `new RegExp(source, flags)` | `newRegExp(source, flags)`; one built from constants is `jsre(source, flags)`, translated at compile time |
+| `s.replace(re, (m, a) => ...)` | `s.replace(re, proc (m: JsMatch): string = ...)`, or the template `s.replaceWith(re, m): expr` where a `func` must stay a `func` |
+| `s.replace(re, "$1")`, `s.split(re)`, `s.match(re)` | the same calls on a `jsre` (`$1`, `$&` and `$$` as in JavaScript) |
 | `s.length` that is compared or printed | `utf16Len(s)` |
 | `for (...) s.charCodeAt(i)` over a whole string | `for c in codeUnits(s)` |
 | `s.trim()`, `trimStart()`, `trimEnd()` | `jsTrim`, `jsTrimStart`, `jsTrimEnd` (JavaScript's whitespace, wider than Nim's) |
@@ -230,7 +242,8 @@ filled it in; later steps add to it.
 | `names.sort()` with no comparator, `a < b` on strings | `sort(names, jsCompare)`: UTF-16 code unit order |
 | `s.substring(n)` that drops a keyword and its space | `substringFrom(s, n)`: counts UTF-16 code units, not bytes |
 | `src.charCodeAt(p)` in a lexer, then `p++` | `codeAt(src, p)`, then `p += sizeAt(src, p)` (`common/scan.nim`) |
-| `text.match(/.../g)` that cuts text into pieces | an iterator or a proc returning `seq[string]`, the pattern in a comment (`units` in `fit.nim`) |
+| `for (const m of s.matchAll(re))`, a loop over `re.exec(s)` with `g` | `for m in re.matches(s)` |
+| `lastIndex - 1` after a match of one character | `m.index`: offsets are bytes, and the character can be longer than one |
 | a value that is a number or `undefined` (`seriesOf`) | an `int` with a named sentinel (`NO_SERIES = -1`) when no real value can be negative |
 | a local arrow function that reads a `let` changed later (`eventTextW`) | a `template`, so it reads the current value |
 | `a.rank - b.rank \|\| a.seq - b.seq` in a comparator | `(a.rank - b.rank).orElse(a.seq - b.seq)` (`orElse` of `layout/layered.nim`) |

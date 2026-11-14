@@ -11,6 +11,7 @@ import ../../js
 import ../../jsmath
 import ../../jsdate
 import dates
+import ../../jsregex
 
 const
   SECOND = 1000.0
@@ -190,18 +191,15 @@ func autoTicks*(start, stop, count: float): seq[float] =
     cal = every(AUTO[k][0], AUTO[k][1], 0)
   range(cal, start, stop, 4 * count + 8).get(@[])
 
+const RE_INTERVAL = jsre"/^([1-9]\d*)(millisecond|second|minute|hour|day|week|month)$/"
 const WEEK_STARTS = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
-const INTERVAL_UNITS = ["millisecond", "second", "minute", "hour", "day", "week", "month"]
 
 func intervalTicks*(interval: string, weekday: string, start, stop: float, limit: float): Option[seq[float]] =
   ## Ticks for a `tickInterval` such as `1week`, or none when it is not one or asks for more than `limit`.
-  # /^([1-9]\d*)(millisecond|second|minute|hour|day|week|month)$/
-  if interval.len == 0 or interval[0] notin {'1'..'9'}: return none(seq[float])
-  var j = 1
-  while j < interval.len and interval[j] in {'0'..'9'}: inc j
-  let unit = interval[j .. ^1]
-  if unit notin INTERVAL_UNITS: return none(seq[float])
-  let step = jsToNumber(interval[0 ..< j])
+  let m = RE_INTERVAL.exec(interval)
+  if not m.found: return none(seq[float])
+  let step = jsToNumber(m[1])
+  let unit = m[2]
   let cal = every(unit, step, float(max(0, WEEK_STARTS.find(weekday))))
   if (stop - start) / (min(step, cal.cycle) * cal.ms) > limit: return none(seq[float])
   range(cal, start, stop, limit)

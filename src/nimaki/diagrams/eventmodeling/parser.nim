@@ -1,16 +1,10 @@
 ## port-of: src/diagrams/eventmodeling/parser.ts
 ## port-status: conformant
-import std/[sets, strutils]
+import std/sets
 import ../common/[tokens, acc_descr]
-import ../../js
+import ../../jsregex
 
-func matchId(s: string, at: int): int =
-  ## /[_a-zA-Z][\w_]*/y
-  if at >= s.len or s[at] notin {'_', 'a'..'z', 'A'..'Z'}: return -1
-  result = at + 1
-  while result < s.len and isWordChar(s[result]): inc result
-
-let EM_ID = TokenType(name: "EM_ID", pattern: matchId)
+let EM_ID = TokenType(name: "EM_ID", pattern: jsre"/[_a-zA-Z][\w_]*/y")
 
 proc word(text: string): TokenType =
   ## Langium gives every keyword that is also an identifier the identifier as a longer alternative.
@@ -33,74 +27,6 @@ const WORDS = [
   "text", "data", "note", "when", "then", "rmo", "cmd", "evt", "pcr", "uri",
 ]
 
-func matchFrameId(s: string, at: int): int =
-  ## /\d{1,3}/y
-  var i = at
-  while i < s.len and i < at + 3 and s[i] in {'0'..'9'}: inc i
-  if i > at: i else: -1
-
-func lineStop(s: string, at: int): int =
-  ## Where `.*` from `at` stops: before \n, \r, U+2028 or U+2029, or at the end.
-  var i = at
-  while i < s.len:
-    let c = s[i]
-    if c == '\n' or c == '\r': break
-    if c == '\xE2' and i + 2 < s.len and s[i + 1] == '\x80' and s[i + 2] in {'\xA8', '\xA9'}: break
-    inc i
-  i
-
-func matchInline(s: string, at: int): int =
-  ## /\{(.*)\}|"(.*)"|'(.*)'/y: from the opener to the last closer on its line.
-  if at >= s.len: return -1
-  let closer = case s[at]
-    of '{': '}'
-    of '"': '"'
-    of '\'': '\''
-    else: return -1
-  let stop = lineStop(s, at + 1)
-  var i = stop - 1
-  while i > at and s[i] != closer: dec i
-  if i > at: i + 1 else: -1
-
-func matchBlock(s: string, at: int): int =
-  ## /\{[\t ]*\r?\n(?:[\S\s]*?\r?\n)?\}(?:\r?\n|(?!\S))/y: the first `}` that starts a line, after a
-  ## line break that ends the opening line.
-  if at >= s.len or s[at] != '{': return -1
-  var i = at + 1
-  while i < s.len and s[i] in {'\t', ' '}: inc i
-  if i < s.len and s[i] == '\r': inc i
-  if i >= s.len or s[i] != '\n': return -1
-  var p = i + 1
-  while p < s.len:
-    if s[p] == '}' and s[p - 1] == '\n':
-      let q = p + 1
-      if q < s.len and s[q] == '\n': return q + 1
-      if q + 1 < s.len and s[q] == '\r' and s[q + 1] == '\n': return q + 2
-      if q >= s.len or isJsSpaceAt(s, q): return q
-    inc p
-  -1
-
-func matchWs(s: string, at: int): int =
-  ## /\s+/y
-  var i = at
-  while true:
-    let n = spaceLenAt(s, i)
-    if n == 0: break
-    i += n
-  if i > at: i else: -1
-
-func matchMlComment(s: string, at: int): int =
-  ## /\/\*[\s\S]*?\*\//y
-  if not s.continuesWith("/*", at): return -1
-  let close = s.find("*/", at + 2)
-  if close == -1: -1 else: close + 2
-
-func matchSlComment(s: string, at: int): int =
-  ## /\/\/[^\n\r]*/y
-  if not s.continuesWith("//", at): return -1
-  result = at + 2
-  while result < s.len and s[result] notin {'\n', '\r'}: inc result
-
 proc buildTokens(): seq[TokenType] =
   result.add keyword("eventmodeling").withLonger(@[EM_ID])
   for w in WORDS: result.add word(w)
@@ -115,18 +41,18 @@ proc buildTokens(): seq[TokenType] =
   result.add sign("`")
   result.add sign(".")
   result.add EM_ID
-  result.add TokenType(name: "EM_FID", pattern: matchFrameId)
-  result.add TokenType(name: "EM_DATA_INLINE", pattern: matchInline)
-  result.add TokenType(name: "EM_DATA_BLOCK", pattern: matchBlock)
+  result.add TokenType(name: "EM_FID", pattern: jsre"/\d{1,3}/y")
+  result.add TokenType(name: "EM_DATA_INLINE", pattern: jsre"""/\{(.*)\}|"(.*)"|'(.*)'/y""")
+  result.add TokenType(name: "EM_DATA_BLOCK", pattern: jsre"/\{[\t ]*\r?\n(?:[\S\s]*?\r?\n)?\}(?:\r?\n|(?!\S))/y")
   result.add accDescr("EM_ACC_DESCR")
   result.add ACC_TITLE.renamed("EM_ACC_TITLE")
-  result.add titleBefore(proc (s: string, i: int): bool {.noSideEffect.} = i < s.len and isWordChar(s[i])).renamed("EM_TITLE")
-  result.add TokenType(name: "EM_WS", pattern: matchWs, hidden: true)
+  result.add titleBefore(r"\w").renamed("EM_TITLE")
+  result.add TokenType(name: "EM_WS", pattern: jsre"/\s+/y", hidden: true)
   result.add YAML.renamed("EM_YAML")
   result.add DIRECTIVE.renamed("EM_DIRECTIVE")
   result.add SINGLE_LINE_COMMENT.renamed("EM_SINGLE_LINE_COMMENT")
-  result.add TokenType(name: "EM_ML_COMMENT", pattern: matchMlComment, hidden: true)
-  result.add TokenType(name: "EM_SL_COMMENT", pattern: matchSlComment, hidden: true)
+  result.add TokenType(name: "EM_ML_COMMENT", pattern: jsre"/\/\*[\s\S]*?\*\//y", hidden: true)
+  result.add TokenType(name: "EM_SL_COMMENT", pattern: jsre"/\/\/[^\n\r]*/y", hidden: true)
 
 let EVENTMODELING_TOKENS*: seq[TokenType] = buildTokens()
 

@@ -1,7 +1,7 @@
 ## port-of: src/diagrams/cynefin/parser.ts
 ## port-status: conformant
-import std/strutils
 import ../common/tokens
+import ../../jsregex
 
 const
   # const enum T: the index of each token type in CYNEFIN_TOKENS
@@ -16,18 +16,12 @@ const
   T_string = 8
   T_newline = 9
 
-func matchDomain(s: string, p: int): int =
-  ## /complex|complicated|clear|chaotic|confusion/y
-  for w in ["complex", "complicated", "clear", "chaotic", "confusion"]:
-    if s.continuesWith(w, p): return p + w.len
-  -1
-
 let CYNEFIN_TOKENS*: seq[TokenType] = @[
   TokenType(name: "cynefin-beta:", literal: "cynefin-beta:"),
   keyword("cynefin-beta"),
   TokenType(name: "-->", literal: "-->"),
   TokenType(name: ":", literal: ":"),
-  TokenType(name: "DOMAIN_NAME", pattern: matchDomain, first: "c", hasFirst: true),
+  TokenType(name: "DOMAIN_NAME", pattern: jsre"/complex|complicated|clear|chaotic|confusion/y", first: "c", hasFirst: true),
   ACC_DESCR,
   ACC_TITLE,
   TITLE,

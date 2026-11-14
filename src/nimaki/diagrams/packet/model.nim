@@ -7,6 +7,7 @@ import ../../js
 import ../../preprocess
 import ../../util/yaml
 import parser
+import ../../jsregex
 
 type
   PacketLabel* = ref object
@@ -37,19 +38,7 @@ proc invalid(message: string): ref PeleError =
   newPeleError(message, "semantic", ErrorInfo(diagramType: "packet"))
 
 func collapseIndents(s: string): string =
-  ## s.replace(/\n\s+/g, '\n')
-  var i = 0
-  while i < s.len:
-    if s[i] == '\n' and spaceLenAt(s, i + 1) > 0:
-      result.add '\n'
-      i += 1
-      while true:
-        let n = spaceLenAt(s, i)
-        if n == 0: break
-        i += n
-      continue
-    result.add s[i]
-    inc i
+  s.replace(jsre"/\n\s+/g", "\n")
 
 proc buildPacket*(ast: PacketAst, config: Config, title: string): PacketModel =
   let bitsPerRow = floor(packetOption(config, "bitsPerRow", 32, 1, 4096))
@@ -98,7 +87,7 @@ proc buildPacket*(ast: PacketAst, config: Config, title: string): PacketModel =
 
   PacketModel(
     title: if ast.title != "": ast.title else: title,
-    accTitle: if ast.accTitle != "": jsTrimStart(ast.accTitle) else: "",   # replace(/^\s+/g, '')
+    accTitle: if ast.accTitle != "": ast.accTitle.replace(jsre"/^\s+/g", "") else: "",
     accDescr: if ast.accDescr != "": collapseIndents(ast.accDescr) else: "",
     bitsPerRow: bitsPerRow,
     rows: rows)

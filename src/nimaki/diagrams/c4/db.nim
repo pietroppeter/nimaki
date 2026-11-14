@@ -6,8 +6,7 @@
 ## undefined; every reader treats undefined and "" alike. Named arguments that set no known field
 ## (`extra` in Pele) are not kept, as nothing reads them.
 import std/[options, tables, strutils]
-import ../../js
-import ../../util/chars
+import ../../jsregex
 
 type
   C4Attr* = object
@@ -125,26 +124,7 @@ proc setC4Type*(db: C4Db, typ: string) = db.c4Type = typ
 proc setTitle*(db: C4Db, title: string) = db.title = title
 
 proc setAccDescription*(db: C4Db, descr: string) =
-  ## descr.replace(/\n\s+/g, '\n')
-  var s = ""
-  var i = 0
-  while i < descr.len:
-    if descr[i] == '\n':
-      var j = i + 1
-      var any = false
-      while j < descr.len and isSpace(codePointAt(descr, j).rune):
-        j += codePointAt(descr, j).size
-        any = true
-      if any:
-        s.add '\n'
-        i = j
-      else:
-        s.add '\n'
-        inc i
-    else:
-      s.add descr[i]
-      inc i
-  db.accDescr = s
+  db.accDescr = descr.replace(jsre"/\n\s+/g", "\n")
 
 proc element(list: var seq[C4Element], index: var Table[string, C4Element], alias: C4Attr,
              title: Option[C4Attr], uids: var int): C4Element =

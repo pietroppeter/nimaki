@@ -5,6 +5,7 @@ import ../../errors
 import ../../js
 import ../common/tokens
 import parser
+import ../../jsregex
 
 type
   EntityKind* = string   ## "ui" | "processor" | "command" | "readmodel" | "event"
@@ -84,7 +85,7 @@ func blockText(raw: string): string =
   let inner = if open != -1 and close > open: raw[open + 1 ..< close]
               elif open == -1 and raw.len >= 2: raw[1 ..< raw.len - 1]   # the quotes are one byte each
               else: ""
-  var lines = inner.replace("\r", "").split('\n')
+  var lines = inner.replace(jsre"/\r/g", "").split('\n')
   while lines.len > 0 and jsTrim(lines[0]) == "": lines.delete(0)
   while lines.len > 0 and jsTrim(lines[^1]) == "": discard lines.pop()
   var indent = high(int)
@@ -96,19 +97,7 @@ func blockText(raw: string): string =
   output.join("\n")
 
 func collapseIndents(s: string): string =
-  ## s.replace(/\n\s+/g, '\n')
-  var i = 0
-  while i < s.len:
-    if s[i] == '\n' and spaceLenAt(s, i + 1) > 0:
-      result.add '\n'
-      i += 1
-      while true:
-        let n = spaceLenAt(s, i)
-        if n == 0: break
-        i += n
-      continue
-    result.add s[i]
-    inc i
+  s.replace(jsre"/\n\s+/g", "\n")
 
 proc buildEventModel*(ast: EventModelAst, title: string): EventModelingModel =
   var ids = initHashSet[string]()
@@ -187,7 +176,7 @@ proc buildEventModel*(ast: EventModelAst, title: string): EventModelingModel =
   let titled = if ast.title != "": titleValue(ast.title) else: ""
   EventModelingModel(
     title: if titled != "": titled else: title,
-    accTitle: if ast.accTitle != "": jsTrimStart(accTitleValue(ast.accTitle)) else: "",
+    accTitle: if ast.accTitle != "": accTitleValue(ast.accTitle).replace(jsre"/^\s+/g", "") else: "",
     accDescr: if ast.accDescr != "": collapseIndents(accDescrValue(ast.accDescr)) else: "",
     boxes: boxes,
     lanes: lanes,

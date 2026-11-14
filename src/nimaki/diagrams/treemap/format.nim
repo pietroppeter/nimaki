@@ -2,6 +2,7 @@
 ## port-status: conformant
 import std/strutils
 import ../../js
+import ../../jsregex
 
 # The parts of d3-format's specifier that treemap values use: an optional `$`, `,` for thousands
 # separators, a precision, and a type of `f`, `%`, `d`, `e` or none. Fill, alignment and width are
@@ -42,7 +43,8 @@ func restOfSpec(s: string, at: int, m: var Spec): bool =
 
 func matchSpec(s: string, m: var Spec): bool =
   ## RE_SPEC: /^(?:.?[<>=^])?([-+( ])?(\$)?0?\d*(,)?(?:\.(\d+))?(~)?([a-zA-Z%])?$/, trying the
-  ## fill and alignment in the order the regular expression does.
+  ## fill and alignment in the order the regular expression does. A scanner, as the regex here
+  ## would take a character past U+FFFF as the fill, where Pele's `.` takes half of it and fails.
   const ALIGN = {'<', '>', '=', '^'}
   if s.len > 0:
     let (cp, size) = codePointAt(s, 0)
@@ -57,14 +59,6 @@ func group(digits: string): string =
     let part = digits[max(0, i - 3) ..< i]
     result = part & (if result != "": "," & result else: "")
     i -= 3
-
-func dropTrailingZeros(body: string): string =
-  ## body.replace(/\.?0+$/, '')
-  var j = body.len
-  while j > 0 and body[j - 1] == '0': dec j
-  if j == body.len: return body
-  if j > 0 and body[j - 1] == '.': dec j
-  body[0 ..< j]
 
 proc formatter*(spec: string): proc (value: float): string =
   var m: Spec
@@ -90,7 +84,7 @@ proc formatter*(spec: string): proc (value: float): string =
     elif kind == "e": body = toExponential(abs, if hasPrecision: precision else: 6)
     else: body = jsString(jsToNumber(toPrecision(abs, max(1, if hasPrecision: precision else: 12))))
 
-    if tilde and '.' in body and 'e' notin body: body = dropTrailingZeros(body)
+    if tilde and '.' in body and 'e' notin body: body = body.replace(jsre"/\.?0+$/", "")
     if comma and 'e' notin body:
       let dot = body.find('.')
       body = if dot == -1: group(body) else: group(body[0 ..< dot]) & body[dot .. ^1]

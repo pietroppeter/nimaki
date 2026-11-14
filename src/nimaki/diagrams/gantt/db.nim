@@ -10,6 +10,7 @@ import ../../js
 import ../../jsdate
 import ../../util/url
 import dates, types
+import ../../jsregex
 
 export types
 
@@ -29,56 +30,21 @@ proc clock*(now: Option[float]): float =
   ## The time an option gives, or the current time when it gives none.
   clock(if now.isSome: now.get else: NaN)
 
-func isNumericFormat(s: string): bool =
-  ## /^[YMDHhmsSZXx\-/.:, T]*$/
-  for c in s:
-    if c notin {'Y', 'M', 'D', 'H', 'h', 'm', 's', 'S', 'Z', 'X', 'x', '-', '/', '.', ':', ',', ' ', 'T'}: return false
-  true
-
-func allDigits(s: string): bool =
-  ## /^\d+$/
-  if s.len == 0: return false
-  for c in s:
-    if c notin {'0'..'9'}: return false
-  true
+const RE_NUMERIC_FORMAT = jsre"/^[YMDHhmsSZXx\-/.:, T]*$/"
+const RE_TAG = jsre"/^\s*(active|done|crit|milestone|vert)\s*$/"
+const RE_AFTER = jsre"/^after\s+([\d\w- ]+)/"
+const RE_UNTIL = jsre"/^until\s+([\d\w- ]+)/"
+const RE_DURATION = jsre"/^(\d+(?:\.\d+)?)([Mdhmswy]|ms)$/"
+const RE_TOKEN_SPLIT = jsre"/[\s,]+/"
+const RE_DIGITS = jsre"/^\d+$/"
 
 proc parseDuration*(str: string): (float, Unit) =
-  ## /^(\d+(?:\.\d+)?)([Mdhmswy]|ms)$/ on the trimmed text
-  let s = jsTrim(str)
-  var i = 0
-  while i < s.len and s[i] in {'0'..'9'}: inc i
-  if i == 0: return (NaN, "ms")
-  var j = i
-  if j < s.len and s[j] == '.':
-    var k = j + 1
-    while k < s.len and s[k] in {'0'..'9'}: inc k
-    if k > j + 1: j = k
-  let unit = s[j .. ^1]
-  if unit notin ["M", "d", "h", "m", "s", "w", "y", "ms"]: return (NaN, "ms")
-  (jsParseFloat(s[0 ..< j]), unit)
-
-func splitTokens(txt: string): seq[string] =
-  ## txt.split(/[\s,]+/)
-  var cur = ""
-  var i = 0
-  var sep = false
-  while i < txt.len:
-    let n = spaceLenAt(txt, i)
-    if n > 0 or txt[i] == ',':
-      if not sep:
-        result.add cur
-        cur = ""
-        sep = true
-      i += max(n, 1)
-    else:
-      sep = false
-      cur.add txt[i]
-      inc i
-  result.add cur
+  let statement = RE_DURATION.exec(jsTrim(str))
+  if statement.found: (jsParseFloat(statement[1]), statement[2]) else: (NaN, "ms")
 
 proc mergeTokens(existing: seq[string], txt: string): seq[string] =
   result = existing
-  for token in splitTokens(unicode.toLower(txt)):
+  for token in unicode.toLower(txt).split(RE_TOKEN_SPLIT):
     if token != "" and token notin result: result.add token
 
 type
@@ -128,22 +94,10 @@ proc setExcludes*(db: GanttDb, txt: string) = db.excludes = mergeTokens(db.exclu
 proc setWeekday*(db: GanttDb, txt: string) = db.weekday = txt
 proc setWeekend*(db: GanttDb, startDay: string) = db.weekend = startDay
 proc setDiagramTitle*(db: GanttDb, txt: string) = db.title = txt
-proc setAccTitle*(db: GanttDb, txt: string) = db.accTitle = jsTrimStart(txt)
+proc setAccTitle*(db: GanttDb, txt: string) = db.accTitle = txt.replace(jsre"/^\s+/g", "")
 
 func dropBreakSpaces(text: string): string =
-  ## text.replace(/\n\s+/g, '\n')
-  var i = 0
-  while i < text.len:
-    if text[i] == '\n':
-      result.add '\n'
-      inc i
-      while i < text.len:
-        let n = spaceLenAt(text, i)
-        if n == 0: break
-        i += n
-      continue
-    result.add text[i]
-    inc i
+  text.replace(jsre"/\n\s+/g", "\n")
 
 proc setAccDescription*(db: GanttDb, txt: string) = db.accDescr = dropBreakSpaces(txt)
 
@@ -151,21 +105,15 @@ proc addSection*(db: GanttDb, txt: string) =
   db.currentSection = txt
   db.sections.add txt
 
-func tagOf(s: string): string =
-  ## /^\s*(active|done|crit|milestone|vert)\s*$/: the tag, or ""
-  let t = jsTrim(s)
-  # jsTrim drops what \s matches at both ends, so the rest must be the tag itself
-  if t in ["active", "done", "crit", "milestone", "vert"]: t else: ""
-
 proc addTask*(db: GanttDb, descr: string, dataStr: string) =
   var data = (if dataStr.startsWith(":"): dataStr[1 .. ^1] else: dataStr).split(',')
   let task = GanttTask(task: descr, section: db.currentSection, order: -1,
                        prevTaskId: db.lastTaskId, hasPrev: db.hasLastTask,
                        raw: GanttRaw(data: dataStr))
   while data.len > 0:
-    let tag = tagOf(data[0])
-    if tag == "": break
-    case tag
+    let m = RE_TAG.exec(data[0])
+    if not m.found: break
+    case m[1]
     of "active": task.active = true
     of "done": task.done = true
     of "crit": task.crit = true
@@ -241,35 +189,16 @@ proc references(db: GanttDb, list: string): seq[GanttTask] =
     if id == "": continue
     if id in db.byId: result.add db.byId[id]
 
-func referenceList(str, keyword: string): (bool, string) =
-  ## /^keyword\s+([\d\w- ]+)/: the list after the keyword
-  if not str.startsWith(keyword): return (false, "")
-  var i = keyword.len
-  let blank = i
-  while i < str.len:
-    let n = spaceLenAt(str, i)
-    if n == 0: break
-    i += n
-  if i == blank: return (false, "")
-  # \s+ gives back blanks when the list would otherwise be empty; a space is in the list anyway
-  var j = i
-  while j < str.len and (isWordChar(str[j]) or str[j] in {'-', ' '}): inc j
-  if j > i: return (true, str[i ..< j])
-  # Otherwise \s+ gives back its run down to the last space in it, which the list then is.
-  var k = i - 1
-  while k > blank and str[k] != ' ': dec k
-  if k > blank: return (true, " ")
-  (false, "")
-
 proc getStartDate(db: GanttDb, raw: string): (bool, JsDate) =
   let str = jsTrim(raw)
   let temp = jsTrim(db.dateFormat)
-  if (temp == "x" or temp == "X") and allDigits(str):
+  if (temp == "x" or temp == "X") and RE_DIGITS.test(str):
     let date = fromTime(jsToNumber(str))
     if not date.isValid: raise semantic("Invalid date:" & str)
     return (true, date)
-  let (isAfter, list) = referenceList(str, "after")
-  if isAfter:
+  let after = RE_AFTER.exec(str)
+  if after.found:
+    let list = after[1]
     var latest: GanttTask = nil
     for task in db.references(list):
       if latest == nil or task.endTime > latest.endTime: latest = task
@@ -285,8 +214,9 @@ proc getStartDate(db: GanttDb, raw: string): (bool, JsDate) =
 
 proc getEndDate(db: GanttDb, startTime: JsDate, raw: string): (bool, JsDate) =
   let str = jsTrim(raw)
-  let (isUntil, list) = referenceList(str, "until")
-  if isUntil:
+  let until = RE_UNTIL.exec(str)
+  if until.found:
+    let list = until[1]
     var earliest: GanttTask = nil
     for task in db.references(list):
       if earliest == nil or task.startTime < earliest.startTime: earliest = task
@@ -369,7 +299,7 @@ proc getTasks*(db: GanttDb, now: float): seq[GanttTask] =
                            WEEKDAYS[day].toLowerAscii in db.excludeSet
   # A date written with only these tokens and separators can never read as a weekday name, so when
   # nothing else is excluded or included there is no need to format each day.
-  db.datedTokens = db.includes.len > 0 or not isNumericFormat(jsTrim(db.dateFormat))
+  db.datedTokens = db.includes.len > 0 or not RE_NUMERIC_FORMAT.test(jsTrim(db.dateFormat))
   for token in db.excludes:
     if token != "weekends" and token notin ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]:
       db.datedTokens = true

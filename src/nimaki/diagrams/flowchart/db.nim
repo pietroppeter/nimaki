@@ -6,6 +6,7 @@ import ../../errors
 import ../../js
 import ../../util/[url, yaml]
 import shapes, types
+import ../../jsregex
 
 type
   FlowDbOptions* = object
@@ -256,7 +257,7 @@ proc updateLink*(db: FlowDb, positions: seq[string], styleIn: seq[string]) =
     edge.style = style
 
 proc addClass*(db: FlowDb, ids: string, styles: seq[string]) =
-  let style = styles.join(",").replace("\\,", "§§§").replace(",", ";").replace("§§§", ",").split(';')
+  let style = styles.join(",").replace(jsre"/\\,/g", "§§§").replace(jsre"/,/g", ";").replace(jsre"/§§§/g", ",").split(';')
   for id in ids.split(','):
     var classNode = db.classes.getOrDefault(id, nil)
     if classNode == nil:
@@ -299,29 +300,10 @@ proc setClickEvent*(db: FlowDb, ids: string, functionName = "", functionArgs = "
   db.setClass(ids, "clickable")
 
 proc setAccTitle*(db: FlowDb, text: string) =
-  db.accTitle = text.jsTrimStart  # text.replace(/^\s+/g, '')
+  db.accTitle = text.replace(jsre"/^\s+/g", "")
 
 proc setAccDescription*(db: FlowDb, text: string) =
-  # text.replace(/\n\s+/g, '\n')
-  var s = ""
-  var i = 0
-  while i < text.len:
-    if text[i] == '\n' and isJsSpaceAt(text, i + 1):
-      s.add '\n'
-      inc i
-      while i < text.len and isJsSpaceAt(text, i): i += spaceLenAt(text, i)
-    else:
-      s.add text[i]
-      inc i
-  db.accDescr = s
-
-proc hasSpace(s: string): bool =
-  ## /\s/.test(s)
-  var i = 0
-  while i < s.len:
-    if isJsSpaceAt(s, i): return true
-    inc i
-  false
+  db.accDescr = text.replace(jsre"/\n\s+/g", "\n")
 
 proc addSubGraph*(db: FlowDb, idText: Option[FlowText], list: seq[DocItem],
                   titleText: Option[FlowText], sameText: bool): string =
@@ -329,7 +311,7 @@ proc addSubGraph*(db: FlowDb, idText: Option[FlowText], list: seq[DocItem],
   var hasId = idText.isSome
   var id = if hasId: idText.get.text.jsTrim else: ""
   var title = if titleText.isSome: titleText.get.text else: ""
-  if idText.isSome and sameText and hasSpace(title): hasId = false
+  if idText.isSome and sameText and jsre"/\s/".test(title): hasId = false
 
   var seen = initHashSet[string]()
   var nodeList: seq[string]

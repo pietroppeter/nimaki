@@ -7,6 +7,7 @@ import std/[options, tables]
 import ../../errors
 import ../../js
 import db, lexer, tokens, types
+import ../../jsregex
 
 const ID: set[uint8] = {
   T_NUM.uint8,
@@ -80,33 +81,10 @@ const STATEMENT_START =
 func noItems(): DocItem = DocItem(kind: dkList)
 
 # Mermaid trims whitespace between a closing brace and the end of its line before parsing.
-proc braceTrail(source: string): seq[Edit] =
-  ## The matches of /}\s*\n/g: a brace, then the whitespace after it up to its last line feed.
-  var p = 0
-  while p < source.len:
-    if source[p] == '}':
-      var q = p + 1
-      var last = -1
-      while q < source.len and isJsSpaceAt(source, q):
-        if source[q] == '\n': last = q
-        q += spaceLenAt(source, q)
-      if last >= 0:
-        result.add (p, last + 1, 2)
-        p = last + 1
-        continue
-    inc p
-
-proc replaceBraceTrail(source: string, edits: seq[Edit]): string =
-  var at = 0
-  for (first, last, length) in edits:
-    result.add source[at ..< first]
-    result.add "}\n"
-    at = last
-  result.add source[at .. ^1]
+const RE_BRACE_TRAIL = jsre"/}\s*\n/g"
 
 proc parseFlowchart*(source: string, db: FlowDb) =
-  let edits = if '}' in source: braceTrail(source) else: @[]
-  let src = if '}' in source: replaceBraceTrail(source, edits) else: source
+  let src = if '}' in source: source.replace(RE_BRACE_TRAIL, "}\n") else: source
   let tokens = tokenize(src)
   let types = tokens.types
   let texts = tokens.texts
@@ -116,7 +94,7 @@ proc parseFlowchart*(source: string, db: FlowDb) =
 
   proc fail(expected: string) =
     let t = types[i]
-    let at = if src == source: starts[i] else: inputOffset(@[edits], starts[i])
+    let at = if src == source: starts[i] else: inputOffset(@[replacements(source, RE_BRACE_TRAIL, 2)], starts[i])
     if t == T_ERROR: raise syntaxError("flowchart", source, at, "", true)
     raise syntaxError("flowchart", source, at, "Expecting " & expected & ", got '" & TOKEN_NAMES[t] & "'")
 

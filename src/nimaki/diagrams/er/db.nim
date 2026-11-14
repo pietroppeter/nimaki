@@ -3,6 +3,7 @@
 import std/[sets, strutils, tables]
 import ../../js
 import types
+import ../../jsregex
 
 func labelType(kind: string): string =
   if kind == "markdown" or kind == "string" or kind == "text": kind else: "markdown"
@@ -93,18 +94,7 @@ proc addSubGraph*(db: ErDb, idText: string, list: seq[DocItem], titleText: strin
   id
 
 proc setAccTitle*(db: ErDb, text: string) =
-  db.accTitle = text.jsTrimStart  # text.replace(/^\s+/g, '')
+  db.accTitle = text.replace(jsre"/^\s+/g", "")
 
 proc setAccDescription*(db: ErDb, text: string) =
-  # text.replace(/\n\s+/g, '\n')
-  var s = ""
-  var i = 0
-  while i < text.len:
-    if text[i] == '\n' and isJsSpaceAt(text, i + 1):
-      s.add '\n'
-      inc i
-      while i < text.len and isJsSpaceAt(text, i): i += spaceLenAt(text, i)
-    else:
-      s.add text[i]
-      inc i
-  db.accDescr = s
+  db.accDescr = text.replace(jsre"/\n\s+/g", "\n")

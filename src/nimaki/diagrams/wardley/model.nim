@@ -4,6 +4,7 @@ import std/[options, strutils]
 import ../../errors
 import ../../js
 import builder, parser
+import ../../jsregex
 
 type
   WardleyModel* = ref object of RootObj
@@ -115,25 +116,13 @@ proc populate*(ast: WardleyAst, db: WardleyBuilder) =
     db.addDeaccelerator(WardleyForce(name: deaccelerator.name, x: at.x, y: at.y))
 
 func dropBreakSpaces(text: string): string =
-  ## text.replace(/\n\s+/g, '\n')
-  var i = 0
-  while i < text.len:
-    if text[i] == '\n' and spaceLenAt(text, i + 1) > 0:
-      result.add '\n'
-      i += 1
-      while true:
-        let n = spaceLenAt(text, i)
-        if n == 0: break
-        i += n
-    else:
-      result.add text[i]
-      inc i
+  text.replace(jsre"/\n\s+/g", "\n")
 
 proc buildWardley*(ast: WardleyAst, title: string): WardleyModel =
   let db = WardleyBuilder()
   populate(ast, db)
   WardleyModel(
     title: (if ast.title != "": ast.title else: title),
-    accTitle: (if ast.accTitle != "": jsTrimStart(ast.accTitle) else: ""),
+    accTitle: (if ast.accTitle != "": ast.accTitle.replace(jsre"/^\s+/g", "") else: ""),
     accDescr: (if ast.accDescr != "": dropBreakSpaces(ast.accDescr) else: ""),
     built: db.build())

@@ -5,31 +5,20 @@
 ## in the drawing reads; here the model is the rule list alone.
 import std/strutils except unescape
 import ../../errors
-import ../../js
 import types, common, ir, ebnf, abnf, peg
+import ../../jsregex
 
 func dropBreakSpaces(text: string): string =
-  ## text.replace(/\n\s+/g, '\n')
-  var i = 0
-  while i < text.len:
-    if text[i] == '\n':
-      let j = spaces(text, i + 1)
-      result.add '\n'
-      i = j
-      continue
-    result.add text[i]
-    inc i
+  text.replace(jsre"/\n\s+/g", "\n")
+
+const RE_KEYWORD = jsre"/^\s*railroad-(ebnf-|abnf-|peg-)?beta/i"
 
 proc notationOf*(source: string): (bool, Notation) =
-  ## /^\s*railroad-(ebnf-|abnf-|peg-)?beta/i. Mermaid has a detector per keyword, each matching
-  ## without regard to case.
-  var i = spaces(source, 0)
-  if not source.toLowerAscii.continuesWith("railroad-", i): return (false, "")
-  i += 9
-  let rest = source.toLowerAscii
-  for (infix, notation) in [("ebnf-", "ebnf"), ("abnf-", "abnf"), ("peg-", "peg")]:
-    if rest.continuesWith(infix & "beta", i): return (true, notation)
-  if rest.continuesWith("beta", i): (true, "railroad") else: (false, "")
+  ## Mermaid has a detector per keyword, each matching without regard to case.
+  let m = RE_KEYWORD.exec(source)
+  if not m.found: return (false, "")
+  let infix = m[1].toLowerAscii
+  (true, if infix == "ebnf-": "ebnf" elif infix == "abnf-": "abnf" elif infix == "peg-": "peg" else: "railroad")
 
 proc grammar(source: string, notation: Notation): (Grammar, seq[RailroadRule]) =
   case notation
@@ -51,7 +40,7 @@ proc populate*(db: RailroadModel, source: string, notation: Notation) =
   let (ast, rules) = grammar(source, notation)
   db.notation = notation
   if ast.accDescr != "": db.accDescr = dropBreakSpaces(ast.accDescr)
-  if ast.accTitle != "": db.accTitle = jsTrimStart(ast.accTitle)
+  if ast.accTitle != "": db.accTitle = ast.accTitle.replace(jsre"/^\s+/g", "")
   if ast.title != "": db.title = ast.title
   for rule in rules: db.rules.add rule
 

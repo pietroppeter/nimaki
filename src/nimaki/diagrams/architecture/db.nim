@@ -2,8 +2,8 @@
 ## port-status: conformant
 import std/[tables, sets, options]
 import ../../errors
-import ../../js
 import parser
+import ../../jsregex
 
 type
   ArchNode* = object
@@ -89,24 +89,12 @@ proc addLayoutHint*(db: ArchitectureDb, hint: ArchLayoutHint) =
   db.layoutHints.add hint
 
 func dropBreakSpaces(text: string): string =
-  ## text.replace(/\n\s+/g, '\n')
-  var i = 0
-  while i < text.len:
-    if text[i] == '\n' and spaceLenAt(text, i + 1) > 0:
-      result.add '\n'
-      i += 1
-      while true:
-        let n = spaceLenAt(text, i)
-        if n == 0: break
-        i += n
-    else:
-      result.add text[i]
-      inc i
+  text.replace(jsre"/\n\s+/g", "\n")
 
 proc populate*(ast: ArchitectureAst, db: ArchitectureDb) =
   ## Mermaid's populateDb: every group, then services, junctions, edges, and alignments.
   if ast.accDescr != "": db.accDescr = dropBreakSpaces(ast.accDescr)
-  if ast.accTitle != "": db.accTitle = jsTrimStart(ast.accTitle)
+  if ast.accTitle != "": db.accTitle = ast.accTitle.replace(jsre"/^\s+/g", "")
   if ast.title != "": db.title = ast.title
   for group in ast.groups: db.addGroup(group)
   for service in ast.services: db.addService(service)

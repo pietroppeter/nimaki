@@ -12,6 +12,7 @@ import ../../types
 import ../../util/yaml
 import ../common/fit_width
 import common, types
+import ../../jsregex
 
 type
   Kind = enum
@@ -44,16 +45,13 @@ proc option(config: Config, key: string, fallback, max: float): float =
   let value = config["railroad"][key]
   if value != nil and value.kind == yNumber and value.n >= 0: min(value.n, max) else: fallback
 
+const RE_CONTROL = jsre"/[\n\r\t]/g"
+
 proc shown(text: string): string =
   ## Text is literal here: a terminal such as "<br>" or "*" is itself, not markup. Mermaid's `#35;`
   ## codes still stand for characters, and escapes that would be invisible are written out.
-  let s = if "¶ß" in text: decodeEntities(text.replace("&", "&amp;")) else: text
-  for c in s:
-    case c
-    of '\n': result.add "\\n"
-    of '\r': result.add "\\r"
-    of '\t': result.add "\\t"
-    else: result.add c
+  let s = if "¶ß" in text: decodeEntities(text.replace(jsre"/&/g", "&amp;")) else: text
+  s.replaceWith(RE_CONTROL, m): (if m[0] == "\n": "\\n" elif m[0] == "\r": "\\r" else: "\\t")
 
 proc reverse[T](list: var seq[T], start: int) =
   var i = start
@@ -87,13 +85,6 @@ func bypass(kid: Box, m: Metrics): Box =
   let reach = max(kid.up + m.sep, 2 * m.arc)
   Box(kind: Bypass, width: kid.width + 4 * m.arc, up: reach, down: kid.down, kids: @[kid], reach: reach)
 
-func allSpaces(text: string): bool =
-  ## /^ +$/
-  if text == "": return false
-  for c in text:
-    if c != ' ': return false
-  true
-
 proc rowOf(row: seq[Box], width: float): Box =
   var up, down = 0.0
   for kid in row:
@@ -123,7 +114,7 @@ proc measure(root: RailroadNode, m: Metrics, room = Inf): Box =
     case node.kind
     of nkTerminal:
       let text = shown(node.text)
-      leaf(Terminal, (if allSpaces(text): "␣".repeat(text.len) else: text), "", Mono, m)
+      leaf(Terminal, (if jsre"/^ +$/".test(text): "␣".repeat(text.len) else: text), "", Mono, m)
     of nkNonterminal:
       leaf(NonTerminal, shown(node.text), node.text, 0, m)
     of nkSpecial:

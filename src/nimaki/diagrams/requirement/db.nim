@@ -4,6 +4,7 @@ import std/[strutils, tables]
 import ../../errors
 import ../../js
 import types
+import ../../jsregex
 
 const
   RT_REQUIREMENT* = "Requirement"  ## RequirementType.REQUIREMENT (a bare REQUIREMENT would be the type `Requirement` in Nim)
@@ -127,18 +128,7 @@ proc defineClass*(db: RequirementDb, ids, style: seq[string]) =
       if id in element.classes: db.copy(element.cssStyles, split)
 
 proc setAccTitle*(db: RequirementDb, text: string) =
-  db.accTitle = text.jsTrimStart  # text.replace(/^\s+/g, '')
+  db.accTitle = text.replace(jsre"/^\s+/g", "")
 
 proc setAccDescription*(db: RequirementDb, text: string) =
-  # text.replace(/\n\s+/g, '\n')
-  var s = ""
-  var i = 0
-  while i < text.len:
-    if text[i] == '\n' and isJsSpaceAt(text, i + 1):
-      s.add '\n'
-      inc i
-      while i < text.len and isJsSpaceAt(text, i): i += spaceLenAt(text, i)
-    else:
-      s.add text[i]
-      inc i
-  db.accDescr = s
+  db.accDescr = text.replace(jsre"/\n\s+/g", "\n")

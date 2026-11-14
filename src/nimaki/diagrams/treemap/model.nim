@@ -1,8 +1,8 @@
 ## port-of: src/diagrams/treemap/model.ts
 ## port-status: conformant
 import std/[strutils, tables, options]
-import ../../js
 import parser
+import ../../jsregex
 
 type
   TreemapNode* = ref object
@@ -42,19 +42,7 @@ proc buildHierarchy*(items: seq[TreemapItem]): seq[TreemapNode] =
     if not item.leaf: stack.add (node, item.level)
 
 func collapseIndents(s: string): string =
-  ## s.replace(/\n\s+/g, '\n')
-  var i = 0
-  while i < s.len:
-    if s[i] == '\n' and spaceLenAt(s, i + 1) > 0:
-      result.add '\n'
-      i += 1
-      while true:
-        let n = spaceLenAt(s, i)
-        if n == 0: break
-        i += n
-      continue
-    result.add s[i]
-    inc i
+  s.replace(jsre"/\n\s+/g", "\n")
 
 proc buildTreemap*(ast: TreemapAst, title: string): TreemapModel =
   var classes = initOrderedTable[string, seq[string]]()
@@ -62,7 +50,7 @@ proc buildTreemap*(ast: TreemapAst, title: string): TreemapModel =
     if not row.classDef: continue
     if row.className notin classes: classes[row.className] = @[]
     # An escaped comma stays in the value; the others separate declarations.
-    let text = row.styleText.replace("\\,", "§§§").replace(",", ";").replace("§§§", ",")
+    let text = row.styleText.replace(jsre"/\\,/g", "§§§").replace(jsre"/,/g", ";").replace(jsre"/§§§/g", ",")
     for style in text.split(';'): classes[row.className].add style
 
   var items: seq[TreemapItem]
@@ -80,7 +68,7 @@ proc buildTreemap*(ast: TreemapAst, title: string): TreemapModel =
 
   TreemapModel(
     title: if ast.title != "": ast.title else: title,
-    accTitle: if ast.accTitle != "": jsTrimStart(ast.accTitle) else: "",   # replace(/^\s+/g, '')
+    accTitle: if ast.accTitle != "": ast.accTitle.replace(jsre"/^\s+/g", "") else: "",
     accDescr: if ast.accDescr != "": collapseIndents(ast.accDescr) else: "",
     roots: buildHierarchy(items),
     classes: classes)

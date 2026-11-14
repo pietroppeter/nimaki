@@ -8,6 +8,7 @@ import ../../errors
 import ../../js
 import ../../util/chars
 import scan
+import ../../jsregex
 
 export Tokens
 
@@ -71,30 +72,14 @@ const
 
 func code(src: string, i: int): int = (if i >= 0 and i < src.len: ord(src[i]) else: -1)
 
-func spaceEnd(src: string, p: int): int =
-  ## RE_SPACE: /\s+/y, where it ends, or -1.
-  var i = p
-  while true:
-    let n = spaceLenAt(src, i)
-    if n == 0: break
-    i += n
-  if i > p: i else: -1
-
-func lineEndAt(src: string, p: int): int =
-  ## RE_LINE: /.+/y, where it ends, or -1. `.` is any character but \n, \r, U+2028 and U+2029.
-  var i = p
-  while i < src.len:
-    let c = src[i]
-    if c == '\n' or c == '\r': break
-    if c == '\xE2' and i + 2 < src.len and src[i + 1] == '\x80' and src[i + 2] in {'\xA8', '\xA9'}: break
-    inc i
-  if i > p: i else: -1
-
-func runNotOf(src: string, p: int, stops: set[char]): int =
-  ## /[^stops]+/y, for stops in ASCII, where it ends, or -1.
-  var i = p
-  while i < src.len and src[i] notin stops: inc i
-  if i > p: i else: -1
+const RE_SPACE = jsre"/\s+/y"
+const RE_LINE = jsre"/.+/y"
+const RE_ID = jsre"/[^([\n){}]+/y"
+const RE_ID_KANBAN = jsre"/[^([\n){}@]+/y"
+const RE_DESCR = jsre"/[^)\](}]+/y"
+const RE_MD = jsre"""/[^`"]+/y"""
+const RE_DATA = jsre"""/[^}^"]+/y"""
+const RE_BR = jsre"/\n\s*/g"
 
 func letters(src: string, p: int, word: string): bool =
   ## Jison's case-insensitive flag folds ASCII letters only.
@@ -102,28 +87,13 @@ func letters(src: string, p: int, word: string): bool =
     if (code(src, p + k) or 32) != ord(word[k]): return false
   true
 
-func replaceBreaks(s: string): string =
-  ## s.replace(/\n\s*/g, '<br/>')
-  var i = 0
-  while i < s.len:
-    if s[i] == '\n':
-      result.add "<br/>"
-      inc i
-      while true:
-        let n = spaceLenAt(s, i)
-        if n == 0: break
-        i += n
-    else:
-      result.add s[i]
-      inc i
-
 proc tokenize*(src: string, kanban: bool): Tokens =
   let n = src.len
   var types: seq[int]
   var texts: seq[string]
   var starts: seq[int]
   let keyword = if kanban: "kanban" else: "mindmap"
-  let idStops = if kanban: {'(', '[', '\n', ')', '{', '}', '@'} else: {'(', '[', '\n', ')', '{', '}'}
+  let reId = if kanban: RE_ID_KANBAN else: RE_ID
   var state = S_INITIAL
   var p = 0
   var nextBreak = -1
@@ -140,17 +110,21 @@ proc tokenize*(src: string, kanban: bool): Tokens =
   template upTo(ch: char): int =
     (let e = src.find(ch, p); if e == -1: n else: e)
 
+  # A template, not a closure: nim js copies a captured string at every call (porting guide,
+  # Code that JavaScript runs slowly).
+  template at(re: JsRegExp, start: int): int = re.matchEnd(src, start)
+
   while p < n:
     let c = code(src, p)
     let d = code(src, p + 1)
     var e: int
     if state == S_INITIAL:
-      let w = max(spaceEnd(src, p), p)
+      let w = if c <= 32 or c >= 160: max(at(RE_SPACE, p), p) else: p
       if kanban and c == 64 and d == 123:
         put(T_SHAPE_DATA, "", p + 2)
         state = S_DATA
       elif code(src, w) == 37 and code(src, w + 1) == 37:
-        emit(T_SPACELINE, lineEndAt(src, w), S_INITIAL)
+        emit(T_SPACELINE, at(RE_LINE, w), S_INITIAL)
       elif w > p:
         if nextBreak < p: nextBreak = upTo('\n')
         if nextBreak >= w: emit(T_SPACELIST, w, S_INITIAL)
@@ -171,7 +145,7 @@ proc tokenize*(src: string, kanban: bool): Tokens =
       elif c == 41 or c == 40 or c == 91:
         emit(T_NODE_DSTART, p + 1, S_NODE)
       else:
-        e = runNotOf(src, p, idStops)
+        e = at(reId, p)
         if e != -1: emit(T_NODE_ID, e, S_INITIAL)
         else: break
     elif state == S_NODE:
@@ -186,7 +160,7 @@ proc tokenize*(src: string, kanban: bool): Tokens =
         emit(T_NODE_DEND, p + 2, S_INITIAL)
       else:
         # A lone closing brace takes the rest of its line as text.
-        emit(T_NODE_DESCR, (if c == 125: lineEndAt(src, p) else: runNotOf(src, p, {')', ']', '(', '}'})), S_NODE)
+        emit(T_NODE_DESCR, at(if c == 125: RE_LINE else: RE_DESCR, p), S_NODE)
     elif state == S_NSTR:
       if c == 34:
         inc p
@@ -198,11 +172,11 @@ proc tokenize*(src: string, kanban: bool): Tokens =
         p += 2
         state = S_NODE
       else:
-        e = runNotOf(src, p, {'`', '"'})
+        e = at(RE_MD, p)
         if e != -1: emit(T_NODE_DESCR, e, S_NSTR2)
         else: break
     elif state == S_CLASS:
-      e = lineEndAt(src, p)
+      e = at(RE_LINE, p)
       if e != -1: emit(T_CLASS, e, S_INITIAL)
       elif c == 10:
         inc p
@@ -221,14 +195,14 @@ proc tokenize*(src: string, kanban: bool): Tokens =
         inc p
         state = S_INITIAL
       else:
-        e = runNotOf(src, p, {'}', '^', '"'})
+        e = at(RE_DATA, p)
         if e != -1: emit(T_SHAPE_DATA, e, S_DATA)
         else: break
     elif c == 34:
       emit(T_SHAPE_DATA, p + 1, S_DATA)
     else:
       e = upTo('"')
-      put(T_SHAPE_DATA, replaceBreaks(src[p ..< e]), e)
+      put(T_SHAPE_DATA, src[p ..< e].replace(RE_BR, "<br/>"), e)
 
   if p < n:
     put(T_ERROR, "", p)

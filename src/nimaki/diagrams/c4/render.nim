@@ -11,6 +11,7 @@ import ../../util/url
 import ../../js
 import ../common/[fit_width, literal_label]
 import db, layout, route
+import ../../jsregex
 
 const
   PAIR_SHIFT = 7.0
@@ -34,7 +35,7 @@ proc link(body, url, id: string, links: var seq[LinkInfo], options: RenderOption
   # what a browser would.
   var address = url
   if "¶ß" in url:
-    address = url.replace("ﬂ°°", "#").replace("ﬂ°", "#").replace("¶ß", ";")
+    address = url.replace(jsre"/\ufb02\u00b0\u00b0?/g", "#").replace(jsre"/\u00b6\u00df/g", ";")
   linked(body, sanitizeUrl(address), id, links, options)
 
 proc draw(db: C4Db, options: RenderOptions, tight: bool, gap = NARROW_GAP): (Rendered, int)

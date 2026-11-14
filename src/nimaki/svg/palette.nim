@@ -3,7 +3,7 @@
 import std/[strutils, sets, tables]
 import ../util/yaml
 import builder, ink
-import ../js
+import ../js, ../jsregex
 
 type PaletteSpec = tuple[prefix: string, first: int, repeat: bool]
 
@@ -26,58 +26,19 @@ const FUNCTIONS = toHashSet(["rgb", "rgba", "hsl", "hsla", "hwb", "lab", "lch", 
 
 func record(value: YamlValue): YamlValue = (if isRecord(value): value else: ymap())
 
-func charsOk(color: string): bool =
-  ## /^[\w\s#%.,+\-/()]{1,200}$/
-  let n = utf16Len(color)
-  if n < 1 or n > 200: return false
-  var i = 0
-  while i < color.len:
-    let s = spaceLenAt(color, i)
-    if s > 0:
-      i += s
-      continue
-    if not (isWordChar(color[i]) or color[i] in {'#', '%', '.', ',', '+', '-', '/', '(', ')'}): return false
-    inc i
-  true
-
-func functionNames(color: string): seq[string] =
-  ## the names of /([\w-]*)\s*\(/g
-  var p = 0
-  while p < color.len:
-    var j = p
-    while j < color.len and (isWordChar(color[j]) or color[j] == '-'): inc j
-    var k = j
-    while true:
-      let n = spaceLenAt(color, k)
-      if n == 0: break
-      k += n
-    if k < color.len and color[k] == '(':
-      result.add color[p ..< j]
-      p = k + 1
-    else:
-      inc p
-
-func varNames(color: string): seq[string] =
-  ## the names of /var\(\s*([\w-]*)/gi
-  let lower = color.toLowerAscii
-  var p = lower.find("var(")
-  while p != -1:
-    var j = p + 4
-    while true:
-      let n = spaceLenAt(color, j)
-      if n == 0: break
-      j += n
-    let start = j
-    while j < color.len and (isWordChar(color[j]) or color[j] == '-'): inc j
-    result.add color[start ..< j]
-    p = lower.find("var(", j)
+const
+  RE_CHARS = jsre"/^[\w\s#%.,+\-/()]+$/"
+    ## Pele's is /^[\w\s#%.,+\-/()]{1,200}$/; the bound is checked apart, in UTF-16 units, as nim-regex
+    ## spells a bounded repeat out, one state per turn, and took 0.8 ms a test (decision 0016).
+  RE_FUNCTION = jsre"/([\w-]*)\s*\(/g"
+  RE_VAR = jsre"/var\(\s*([\w-]*)/gi"
 
 func safeColor(value: YamlValue): (bool, string) =
   ## A color that can't load a resource, end its declaration or read the page's own variables.
   ## Values outside functions are checked as colors, so a typo keeps the theme color.
   if value == nil or value.kind != yString: return
   let color = jsTrim(value.s)
-  if not charsOk(color): return
+  if not (RE_CHARS.test(color) and utf16Len(color) <= 200): return
   if '(' notin color: return (if plainColor(color): (true, color) else: (false, ""))
   var depth = 0
   for c in color:
@@ -86,10 +47,10 @@ func safeColor(value: YamlValue): (bool, string) =
       dec depth
       if depth < 0: return
   if depth != 0: return
-  for name in functionNames(color):
-    if name.toLowerAscii notin FUNCTIONS: return
-  for name in varNames(color):
-    if not name.startsWith("--pele-"): return
+  for m in RE_FUNCTION.matches(color):
+    if m[1].toLowerAscii notin FUNCTIONS: return
+  for m in RE_VAR.matches(color):
+    if not m[1].startsWith("--pele-"): return
   (true, color)
 
 func splitList(value: string): seq[string] =

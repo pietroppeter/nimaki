@@ -1,5 +1,8 @@
 ## port-of: src/svg/root.ts
 ## port-status: conformant
+## Its pattern stays a hand-written scanner (decision 0016): it runs over the whole SVG of every
+## drawing, and nim-regex compiled to JavaScript costs microseconds a character (Pele's stress
+## tests missed their time bounds with it).
 import std/[strutils, sets, options]
 import ../types
 import builder, palette, theme

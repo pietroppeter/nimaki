@@ -3,6 +3,7 @@
 import std/[strutils, options]
 import ../../js
 import ../common/tokens
+import ../../jsregex
 
 const
   # const enum T: the index of each token type in ARCHITECTURE_TOKENS
@@ -29,77 +30,7 @@ const
   T_icon = 24
   T_label = 25
 
-func isWord(s: string, i: int): bool = i < s.len and s[i] in {'A' .. 'Z', 'a' .. 'z', '0' .. '9', '_'}
-
-func matchId(s: string, p: int): int =
-  ## /[\w]([-\w]*\w)?/y
-  if not isWord(s, p): return -1
-  var i = p + 1
-  var last = p + 1
-  while i < s.len and (isWord(s, i) or s[i] == '-'):
-    inc i
-    if isWord(s, i - 1): last = i
-  last
-
-func titleRest(s: string, i: int): bool {.noSideEffect.} =
-  ## [-\w]*\w at i
-  var j = i
-  while j < s.len and (isWord(s, j) or s[j] == '-'):
-    if isWord(s, j): return true
-    inc j
-  false
-
-func matchDirection(s: string, p: int): int =
-  ## /L|R|T|B/y
-  if p < s.len and s[p] in {'L', 'R', 'T', 'B'}: p + 1 else: -1
-
-func matchArrowGroup(s: string, p: int): int =
-  ## /\{group\}/y
-  if s.continuesWith("{group}", p): p + 7 else: -1
-
-func matchInto(s: string, p: int): int =
-  ## /<|>/y
-  if p < s.len and s[p] in {'<', '>'}: p + 1 else: -1
-
-func matchIcon(s: string, p: int): int =
-  ## /\([\w-:]+\)/y
-  if p >= s.len or s[p] != '(': return -1
-  var i = p + 1
-  while isWord(s, i) or (i < s.len and s[i] in {'-', ':'}): inc i
-  if i > p + 1 and i < s.len and s[i] == ')': i + 1 else: -1
-
-func lineTerminatorLen(s: string, i: int): int =
-  ## The bytes of a line terminator (\n, \r, U+2028, U+2029) at i, or 0.
-  if i >= s.len: return 0
-  if s[i] in {'\n', '\r'}: return 1
-  if s.continuesWith(" ", i) or s.continuesWith(" ", i): return 3
-  0
-
-func quotedEnd(s: string, p: int, q: char): int =
-  ## q([^q\\]|\\.)*q from p: where it ends, or -1.
-  if p >= s.len or s[p] != q: return -1
-  var i = p + 1
-  while i < s.len:
-    let c = s[i]
-    if c == q: return i + 1
-    if c == '\\':
-      if i + 1 >= s.len or lineTerminatorLen(s, i + 1) > 0: return -1
-      i += 1 + codePointAt(s, i + 1).size
-    else:
-      i += codePointAt(s, i).size
-  -1
-
-func matchLabel(s: string, p: int): int =
-  ## /\[(?:"([^"\\]|\\.)*"|'([^'\\]|\\.)*'|[^\[\]\r\n]+)\]/y
-  if p >= s.len or s[p] != '[': return -1
-  for q in ['"', '\'']:
-    let stop = quotedEnd(s, p + 1, q)
-    if stop >= 0 and stop < s.len and s[stop] == ']': return stop + 1
-  var i = p + 1
-  while i < s.len and s[i] notin {'[', ']', '\r', '\n'}: inc i
-  if i > p + 1 and i < s.len and s[i] == ']': i + 1 else: -1
-
-let ID = TokenType(name: "ID", pattern: matchId)
+let ID = TokenType(name: "ID", pattern: jsre"/[\w]([-\w]*\w)?/y")
 
 proc word(text: string): TokenType =
   TokenType(name: text, literal: text, longer: @[ID])
@@ -118,12 +49,12 @@ let ARCHITECTURE_TOKENS*: seq[TokenType] = @[
   word("in"),
   TokenType(name: ":", literal: ":"),
   TokenType(name: "-", literal: "-", longer: @[YAML]),
-  TokenType(name: "ARROW_DIRECTION", pattern: matchDirection),
-  TokenType(name: "ARROW_GROUP", pattern: matchArrowGroup),
-  TokenType(name: "ARROW_INTO", pattern: matchInto),
+  TokenType(name: "ARROW_DIRECTION", pattern: jsre"/L|R|T|B/y"),
+  TokenType(name: "ARROW_GROUP", pattern: jsre"/\{group\}/y"),
+  TokenType(name: "ARROW_INTO", pattern: jsre"/<|>/y"),
   ACC_DESCR,
   ACC_TITLE,
-  titleBefore(titleRest),
+  titleBefore(r"[-\w]*\w"),
   STRING,
   ID,
   NEWLINE,
@@ -131,8 +62,8 @@ let ARCHITECTURE_TOKENS*: seq[TokenType] = @[
   YAML,
   DIRECTIVE,
   SINGLE_LINE_COMMENT,
-  TokenType(name: "ARCH_ICON", pattern: matchIcon),
-  TokenType(name: "ARCH_TITLE", pattern: matchLabel),
+  TokenType(name: "ARCH_ICON", pattern: jsre"/\([\w-:]+\)/y"),
+  TokenType(name: "ARCH_TITLE", pattern: jsre"""/\[(?:"([^"\\]|\\.)*"|'([^'\\]|\\.)*'|[^\[\]\r\n]+)\]/y"""),
 ]
 
 type
@@ -171,16 +102,12 @@ type
     edges*: seq[EdgeAst]
     alignments*: seq[AlignmentAst]
 
-func unescapeQuotes(s: string): string =
-  ## .replace(/\\"/g, '"').replace(/\\'/g, "'")
-  s.replace("\\\"", "\"").replace("\\'", "'")
-
 func labelValue(text: string): string =
   ## Mermaid's ArchitectureValueConverter for ARCH_TITLE.
   var result0 = jsTrim(text[1 .. ^2])
   if result0.len >= 1 and ((result0.startsWith("\"") and result0.endsWith("\"")) or
                            (result0.startsWith("'") and result0.endsWith("'"))):
-    result0 = unescapeQuotes(if result0.len >= 2: result0[1 .. ^2] else: "")
+    result0 = (if result0.len >= 2: result0[1 .. ^2] else: "").replace(jsre"""/\\"/g""", "\"").replace(jsre"/\\'/g", "'")
   jsTrim(result0)
 
 proc parseArchitecture*(src: string): ArchitectureAst =

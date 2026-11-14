@@ -312,6 +312,20 @@ func codePointAt*(s: string, i: int): tuple[rune: int, size: int] =
   result.rune = cp
   result.size = n
 
+func wellFormed*(s: string): string =
+  ## `s` with each byte that does not start a valid UTF-8 sequence read as U+FFFD, as TextDecoder
+  ## reads it: what the renderer works on (decision 0016). `s` itself when it is valid.
+  var i = 0
+  while i < s.len:
+    let (cp, size) = codePointAt(s, i)
+    if cp == 0xFFFD and not s.continuesWith("\uFFFD", i): break
+    i += size
+  if i == s.len: return s
+  result = s[0 ..< i]
+  while i < s.len:
+    let (cp, size) = codePointAt(s, i)
+    if cp == 0xFFFD: result.add "\uFFFD" else: result.add s[i ..< i + size]
+    i += size
 iterator codePoints*(s: string): string =
   ## `Array.from(s)`: one item per code point, as UTF-8. Use it instead of `unicode.runes`, which
   ## nim js compiles to a copy of the whole string at every byte it reads, so a long label took

@@ -1,5 +1,8 @@
 ## port-of: src/text/label.ts
 ## port-status: conformant
+## Its patterns stay hand-written scanners (decision 0016): they run on every label of every
+## drawing, and nim-regex compiled to JavaScript costs microseconds a character (Pele's stress
+## tests missed their time bounds with it).
 ##
 ## Labels are measured and broken into lines here. The regular expressions are scanners
 ## (porting guide); each one names the pattern it answers as.

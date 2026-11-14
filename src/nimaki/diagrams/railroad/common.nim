@@ -7,27 +7,16 @@
 ##
 ## Port notes: the four syntax trees are one node type here, `Part`, whose `kind` is the
 ## TypeScript `$type` and whose `kids` are what Pele's `parts` finds in it: an EBNF term's base
-## and then the right side of each exception, in order. A sticky regular expression is a matcher
-## with its pattern in a comment, as everywhere in the port.
+## and then the right side of each exception, in order.
 import std/strutils except unescape
 import ../common/tokens except ACC_TITLE, ACC_DESCR
 import ../../js
 import types
+import ../../jsregex
 
 export tokens except ACC_TITLE, ACC_DESCR
 
 const LETTERS* = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-
-func lineEnd(s: string, i: int): int =
-  ## [^\n\r]* from i
-  result = i
-  while result < s.len and s[result] notin {'\n', '\r'}: inc result
-
-func toCommentOrLineEnd(s: string, i: int): int =
-  ## [^\n\r]*?(?=%%)|[^\n\r]*: up to the first `%%` of the line, or its end.
-  let stop = lineEnd(s, i)
-  let at = s.find("%%", i)
-  if at != -1 and at < stop: at else: stop
 
 func blanks(s: string, i: int): int =
   ## [\t ]* from i
@@ -63,27 +52,15 @@ proc accDescrScanner(): Scanner =
     if close == -1: unclosed = i
     if close == -1: -1 else: close + 1
 
-proc title*(rest: proc (c: char): bool {.noSideEffect.}): TokenType =
-  ## `rest` matches a name suffix so `title` does not split longer names:
-  ## /title(?:[\t ][^\n\r]*?(?=%%)|[\t ][^\n\r]*|(?!rest))/y
-  let m = proc (s: string, p: int): int {.noSideEffect.} =
-    if not s.continuesWith("title", p): return -1
-    let j = p + 5
-    if j < s.len and s[j] in {'\t', ' '}: return toCommentOrLineEnd(s, j + 1)
-    if j < s.len and rest(s[j]): -1 else: j
-  TokenType(name: "TITLE", pattern: m, first: "t", hasFirst: true)
-
-func wordRest*(c: char): bool = isWordChar(c) or c == '-'   ## [\w-]
-
-func matchAccTitle(s: string, p: int): int =
-  ## /accTitle[\t ]*:(?:[^\n\r]*?(?=%%)|[^\n\r]*)/y
-  if not s.continuesWith("accTitle", p): return -1
-  let i = blanks(s, p + 8)
-  if i < s.len and s[i] == ':': toCommentOrLineEnd(s, i + 1) else: -1
-
-let ACC_TITLE* = TokenType(name: "ACC_TITLE", pattern: matchAccTitle, first: "a", hasFirst: true)
-let ACC_DESCR* = TokenType(name: "ACC_DESCR", scanner: accDescrScanner, first: "a", hasFirst: true)
-  ## /accDescr(?:[\t ]*:([^\n\r]*?(?=%%)|[^\n\r]*)|\s*{([^}]*)})/y, read by the scanner
+proc title*(rest: string): TokenType =
+  ## `rest` matches a name suffix so `title` does not split longer names.
+  TokenType(name: "TITLE", pattern: newRegExp(r"title(?:[\t ][^\n\r]*?(?=%%)|[\t ][^\n\r]*|(?!" & rest & "))", "y"),
+            first: "t", hasFirst: true)
+let ACC_TITLE* = TokenType(name: "ACC_TITLE", pattern: jsre"/accTitle[\t ]*:(?:[^\n\r]*?(?=%%)|[^\n\r]*)/y",
+                           first: "a", hasFirst: true)
+let ACC_DESCR* = TokenType(name: "ACC_DESCR",
+                           pattern: jsre"/accDescr(?:[\t ]*:([^\n\r]*?(?=%%)|[^\n\r]*)|\s*{([^}]*)})/y",
+                           first: "a", hasFirst: true, scanner: accDescrScanner)
 
 proc literal*(name: string, longer: seq[TokenType] = @[]): TokenType =
   TokenType(name: name, literal: name, longer: longer)
@@ -93,41 +70,11 @@ proc opening*(word: string, name: TokenType): TokenType =
   result = keyword(word)
   result.longer = @[name]
 
-func matchIdentifier(s: string, p: int): int =
-  ## /[A-Z_a-z][\w-]*/y
-  if p >= s.len or s[p] notin {'A'..'Z', 'a'..'z', '_'}: return -1
-  result = p + 1
-  while result < s.len and wordRest(s[result]): inc result
-
 proc identifier*(name: string): TokenType =
-  TokenType(name: name, pattern: matchIdentifier, first: LETTERS & "_", hasFirst: true)
+  TokenType(name: name, pattern: jsre"/[A-Z_a-z][\w-]*/y", first: LETTERS & "_", hasFirst: true)
 
 proc quoted*(name: string): TokenType =
-  ## /"([^"\\]|\\.)*"|'([^'\\]|\\.)*'/y
-  TokenType(name: name, pattern: STRING.pattern, first: "\"'", hasFirst: true)
-
-proc between*(name, open, close: string, first: string): TokenType =
-  ## A hidden comment from `open` to the first `close` after it: /open[\s\S]*?close/y, with
-  ## `open` as its opener.
-  let m = proc (s: string, p: int): int {.noSideEffect.} =
-    if not s.continuesWith(open, p): return -1
-    let at = s.find(close, p + open.len)
-    if at == -1: -1 else: at + close.len
-  let o = proc (s: string, p: int): int {.noSideEffect.} =
-    if s.continuesWith(open, p): p + open.len else: -1
-  TokenType(name: name, pattern: m, hidden: true, first: first, hasFirst: true, opener: o)
-
-proc lineComment*(name: string, start: char): TokenType =
-  ## /start[^\n\r]*/y, hidden
-  let m = proc (s: string, p: int): int {.noSideEffect.} =
-    if p < s.len and s[p] == start: lineEnd(s, p + 1) else: -1
-  TokenType(name: name, pattern: m, hidden: true, first: $start, hasFirst: true)
-
-func matchBlankRun(s: string, p: int): int =
-  ## /[\t \r\n]+/y
-  var i = p
-  while i < s.len and s[i] in {'\t', ' ', '\r', '\n'}: inc i
-  if i > p: i else: -1
+  TokenType(name: name, pattern: jsre"""/"([^"\\]|\\.)*"|'([^'\\]|\\.)*'/y""", first: "\"'", hasFirst: true)
 
 proc renamed(t: TokenType, name: string): TokenType =
   ## `{ ...t, name }`
@@ -138,7 +85,7 @@ proc renamed(t: TokenType, name: string): TokenType =
 proc hiddenTokens*(prefix: string): seq[TokenType] =
   ## Whitespace, front matter, directive, and `%%` comment, in the order every railroad grammar lists them.
   @[
-    TokenType(name: prefix & "_WHITESPACE", pattern: matchBlankRun, hidden: true, first: "\t \r\n", hasFirst: true),
+    TokenType(name: prefix & "_WHITESPACE", pattern: jsre"/[\t \r\n]+/y", hidden: true, first: "\t \r\n", hasFirst: true),
     YAML.renamed(prefix & "_YAML"),
     DIRECTIVE.renamed(prefix & "_DIRECTIVE"),
     SINGLE_LINE_COMMENT.renamed(prefix & "_SINGLE_LINE_COMMENT"),

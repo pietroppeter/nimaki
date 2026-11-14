@@ -1,7 +1,10 @@
 ## port-of: src/util/url.ts
 ## port-status: draft
 ##
-## Port notes: the regular expressions are scanners, each with its pattern in a comment.
+## Port notes: the regular expressions that clean a URL (`unwrap`) are scanners, each with its
+## pattern in a comment, because they must see the lone surrogate that a decoded entity like
+## `&#55296;` makes in JavaScript: here it is a byte that is not UTF-8 ("\xff"), which a regex
+## cannot read (decision 0016). The other patterns are Pele's (`jsregex.nim`).
 ## `decodeURIComponent` and `new URL()` are written here: the URL parser covers what a link in
 ## a diagram needs (the WHATWG rules for http and https: scheme and host in lower case, default
 ## ports dropped, dot segments resolved, the percent-encode sets of path, query and fragment,
@@ -9,11 +12,15 @@
 import std/[strutils, options]
 from std/math import trunc, pow, `mod`
 import ../js
+import ../jsregex
 import ../svg/builder
 import ../text/entities
 import ../types
 
-const BLANK = "about:blank"
+const
+  BLANK = "about:blank"
+  RE_INVALID_PROTOCOL = jsre"/^([^\w]*)(javascript|data|vbscript)/im"
+  RE_SCHEME = jsre"/^.+(:|&colon;)/gim"
 
 func isCtrl(cp: int): bool =
   ## /[\u0000-\u001F\u007F-\u009F -‍﻿\uD800-\uDFFF￾￿]/u
@@ -204,49 +211,6 @@ proc unwrap(url: string, percent: bool): Option[string] =
     if not (hasCtrl(output) or hasEntity(output) or hasCtrlEntity(output) or hasWsEscape(output)): break
   some(output)
 
-func isLineTerminator(s: string, i: int): (bool, int) =
-  let (cp, size) = codePointAt(s, i)
-  (cp == 10 or cp == 13 or cp == 0x2028 or cp == 0x2029, size)
-
-func schemeMatch(s: string): (bool, string) =
-  ## s.match(/^.+(:|&colon;)/gim)?.[0]: on the first line that has one, from the line's start to
-  ## its last `:` or `&colon;` after at least one character.
-  var start = 0
-  while start <= s.len:
-    # The end of this line.
-    var stop = start
-    while stop < s.len:
-      let (term, _) = isLineTerminator(s, stop)
-      if term: break
-      stop += codePointAt(s, stop)[1]
-    # Greedy `.+` backtracks from the end of the line: the colon that starts last wins.
-    var lastEnd = -1
-    var q = start + 1
-    while q < stop:
-      if s[q] == ':': lastEnd = q + 1
-      elif q + 7 <= stop and cmpIgnoreCase(s[q ..< q + 7], "&colon;") == 0: lastEnd = q + 7
-      inc q
-    if lastEnd >= 0: return (true, s[start ..< lastEnd])
-    if stop >= s.len: break
-    start = stop + isLineTerminator(s, stop)[1]
-  (false, "")
-
-func invalidProtocol(s: string): bool =
-  ## /^([^\w]*)(javascript|data|vbscript)/im
-  var starts = @[0]
-  var i = 0
-  while i < s.len:
-    let (term, size) = isLineTerminator(s, i)
-    if term: starts.add i + size
-    i += size
-  for start in starts:
-    var j = start
-    while j < s.len and not isWordByte(s[j]): inc j
-    for word in ["javascript", "data", "vbscript"]:
-      if s.continuesWith(word, j) or (j < s.len and cmpIgnoreCase(s[j ..< min(s.len, j + word.len)], word) == 0):
-        return true
-  false
-
 # ---------------------------------------------------------------------------------------------
 # new URL(s).toString() for http and https
 
@@ -410,13 +374,13 @@ proc sanitizeUrl*(url: string): string =
   let kept = keptOpt.get
   if decoded[0] == '.' or decoded[0] == '/': return kept
 
-  let (hasScheme, scheme) = schemeMatch(jsTrimStart(decoded))
-  if not hasScheme: return kept
+  let scheme = jsTrimStart(decoded).match(RE_SCHEME)
+  if scheme.len == 0: return kept
 
-  let protocol = jsTrim(scheme.toLowerAscii)
-  if invalidProtocol(protocol): return BLANK
+  let protocol = jsTrim(scheme[0].toLowerAscii)
+  if RE_INVALID_PROTOCOL.test(protocol): return BLANK
 
-  let normalized = jsTrimStart(kept).replace('\\', '/')
+  let normalized = jsTrimStart(kept).replace(jsre"/\\/g", "/")
   if protocol == "mailto:" or "://" in protocol: return normalized
 
   if protocol == "http:" or protocol == "https:":
@@ -432,18 +396,15 @@ proc safeUrl*(url: string): string =
 const
   LINK_SCHEMES = @["http", "https", "mailto", "tel"]
   IMAGE_SCHEMES = @["http", "https"]
+  RE_SCHEME_NAME = jsre"/^([a-z][a-z0-9+.-]*):/i"
+  RE_NETWORK_PATH = jsre"/^[\\/]{2}/"
 
 proc allowed(url: string, schemes: seq[string]): bool =
   ## Stricter than Mermaid, which lets any scheme but three through: a diagram in a shared note
   ## could otherwise open a local file, a network share, or another application.
-  # /^[\\/]{2}/
-  if url.len >= 2 and url[0] in {'\\', '/'} and url[1] in {'\\', '/'}: return false
-  # /^([a-z][a-z0-9+.-]*):/i
-  if url.len == 0 or url[0] notin {'a'..'z', 'A'..'Z'}: return true
-  var j = 1
-  while j < url.len and url[j] in {'a'..'z', 'A'..'Z', '0'..'9', '+', '.', '-'}: inc j
-  if j >= url.len or url[j] != ':': return true
-  url[0 ..< j].toLowerAscii in schemes
+  if RE_NETWORK_PATH.test(url): return false
+  let scheme = RE_SCHEME_NAME.exec(url)
+  not scheme.found or scheme[1].toLowerAscii in schemes
 
 proc allow(url: string, schemes: seq[string]): Option[string] =
   ## The decoded URL is checked too, for an app that decodes the href before opening it.

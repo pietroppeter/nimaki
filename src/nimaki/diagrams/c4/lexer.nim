@@ -7,6 +7,7 @@
 import std/[strutils, tables]
 import ../../js
 import ../../util/chars
+import ../../jsregex
 import tokens
 
 type Tokens* = object
@@ -47,7 +48,15 @@ let KEYWORDS = {
   "UpdateLayoutConfig": T_UPDATE_LAYOUT_CONFIG,
 }.toTable
 
-const DIRECTIONS = ["TB", "BT", "RL", "LR"]
+const RE_DIRECTION = [
+  jsre"/.*direction\s+TB[^\n]*/y",
+  jsre"/.*direction\s+BT[^\n]*/y",
+  jsre"/.*direction\s+RL[^\n]*/y",
+  jsre"/.*direction\s+LR[^\n]*/y",
+]
+const RE_LINE_END = jsre"/[\n\r\u2028\u2029]/g"
+# Consume line breaks too: the grammar rejects blank statements.
+const RE_BARE_TITLE = jsre"/title[^\S\r\n]*(?=[\r\n]|$)\s*/y"
 
 func cu(src: string, i: int): int =
   ## charCodeAt: the character at byte i (a character past U+FFFF reads as its high surrogate).
@@ -57,39 +66,6 @@ func cu(src: string, i: int): int =
 
 func sizeAt(src: string, i: int): int =
   if i >= src.len: 1 else: codePointAt(src, i).size
-
-func lineEndFrom(src: string, p: int): int =
-  ## The first line terminator (\n, \r, U+2028, U+2029) at or after p, or the end.
-  var i = p
-  while i < src.len:
-    if src[i] in {'\n', '\r'}: return i
-    if src.continuesWith(" ", i) or src.continuesWith(" ", i): return i
-    inc i
-  src.len
-
-func matchDirection(src: string, p, lineEnd: int, word: string): int =
-  ## /.*direction\s+WORD[^\n]*/y at p: `.*` is greedy, so the last `direction` of the line that
-  ## is followed by spaces and the word is the one taken.
-  var found = -1
-  var o = src.find("direction", p)
-  while o != -1 and o < lineEnd:
-    var q = o + 9
-    let start = q
-    while q < src.len and isSpace(cu(src, q)): q += sizeAt(src, q)
-    if q > start and src.continuesWith(word, q): found = q + word.len
-    o = src.find("direction", o + 1)
-  if found < 0: return -1
-  let nl = src.find('\n', found)
-  if nl == -1: src.len else: nl
-
-func matchBareTitle(src: string, p: int): int =
-  ## /title[^\S\r\n]*(?=[\r\n]|$)\s*/y
-  if not src.continuesWith("title", p): return -1
-  var q = p + 5
-  while q < src.len and src[q] notin {'\r', '\n'} and isSpace(cu(src, q)): q += sizeAt(src, q)
-  if q < src.len and src[q] notin {'\r', '\n'}: return -1
-  while q < src.len and isSpace(cu(src, q)): q += sizeAt(src, q)
-  q
 
 proc tokenize*(src: string): Tokens =
   ## Follows the lexer Jison compiles from c4Diagram.jison: its rule order, its start conditions,
@@ -142,11 +118,13 @@ proc tokenize*(src: string): Tokens =
       if dirNext != -1 and p >= dirFailed:
         if dirNext < p: dirNext = src.find("direction", p)
         if dirNext != -1:
-          if lineEnd < p: lineEnd = lineEndFrom(src, p)
+          if lineEnd < p:
+            let m = RE_LINE_END.exec(src, p)
+            lineEnd = if m.found: m.index else: n
           if dirNext < lineEnd:
             var matched = false
             for i in 0 ..< 4:
-              let stop = matchDirection(src, p, lineEnd, DIRECTIONS[i])
+              let stop = RE_DIRECTION[i].matchEnd(src, p)
               if stop >= 0:
                 emit(T_direction_tb + i, p, stop)
                 matched = true
@@ -155,7 +133,7 @@ proc tokenize*(src: string): Tokens =
             # No direction statement starts anywhere in the rest of this line either.
             dirFailed = lineEnd
       if c == ord('t'):
-        let stop = matchBareTitle(src, p)
+        let stop = RE_BARE_TITLE.matchEnd(src, p)
         if stop >= 0:
           p = stop
           continue

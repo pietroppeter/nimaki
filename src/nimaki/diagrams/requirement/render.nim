@@ -1,6 +1,6 @@
 ## port-of: src/diagrams/requirement/render.ts
 ## port-status: conformant
-import std/[algorithm, options, strutils, tables]
+import std/[algorithm, options, tables]
 from std/math import ceil
 import ../../js
 import ../../layout/[compound, layered]
@@ -10,6 +10,7 @@ import ../../text/[label, measurer]
 import ../../types
 import ../common/fit_width
 import db, graph
+import ../../jsregex
 
 const
   NODE_SEP = 40.0
@@ -140,11 +141,6 @@ proc spreadEnds(cnodes: seq[CNode], cedges: seq[CEdge], views: seq[NodeView]) =
       if vertical: cedges[list[j].edge].route[list[j].at + 1] = cnodes[node].y + offset
       else: cedges[list[j].edge].route[list[j].at] = cnodes[node].x + offset
 
-func stripDefault(s: string): string =
-  ## s.replace(/^default\s?/, '')
-  if not s.startsWith("default"): return s
-  if isJsSpaceAt(s, 7): s.substr(7 + spaceLenAt(s, 7)) else: s.substr(7)
-
 proc draw(model: RequirementDb, options: RenderOptions, turned: bool): Rendered
 
 proc renderRequirement*(model: RequirementDb, config: Config, options: RenderOptions): Rendered =
@@ -270,7 +266,7 @@ proc draw(model: RequirementDb, options: RenderOptions, turned: bool): Rendered 
         y += row.height + ROW_GAP
       body.add "<g class=\"pele-fields\" font-size=\"" & jsString(view.rows[0].key.size) & "\">" & rows & "</g>"
     nodesOut.add "<g class=\"pele-node " & (if view.node.requirement != nil: "pele-requirement" else: "pele-element") &
-      classNames(stripDefault(view.node.cssClasses)) & "\" data-id=\"" & escText(view.node.id) &
+      classNames(view.node.cssClasses.replace(jsre"/^default\s?/", "")) & "\" data-id=\"" & escText(view.node.id) &
       "\" transform=\"translate(" & num(cnodes[i].x + ox) & "," & num(cnodes[i].y + oy) & ")\">" & body & "</g>"
 
   var edgesOut = ""

@@ -3,6 +3,7 @@
 ##
 ## `railroad-beta`: Mermaid's own notation, one constructor call per node.
 import common, types
+import ../../jsregex
 
 const
   # const enum T: the index of each token type in IR_TOKENS
@@ -42,13 +43,14 @@ let IR_TOKENS*: seq[TokenType] = @[
   literal("("),
   literal(","),
   literal(")"),
-  title(wordRest),
+  title(r"[\w-]"),
   ACC_TITLE,
   ACC_DESCR,
   ID,
   quoted("RR_STRING"),
 ] & hiddenTokens("RR") & @[
-  between("RR_BLOCK_COMMENT", "/*", "*/", "/"),
+  TokenType(name: "RR_BLOCK_COMMENT", pattern: jsre"/\/\*[\s\S]*?\*\//y", hidden: true, first: "/", hasFirst: true,
+            opener: jsre"/\/\*/y"),
 ]
 
 proc argument(r: Reader): string =

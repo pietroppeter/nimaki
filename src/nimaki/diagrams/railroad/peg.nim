@@ -3,6 +3,7 @@
 ##
 ## `railroad-peg-beta`: parsing expression grammars.
 import common, types
+import ../../jsregex
 
 const
   # const enum T: the index of each token type in PEG_TOKENS
@@ -37,13 +38,13 @@ let PEG_TOKENS*: seq[TokenType] = @[
   literal("("),
   literal(")"),
   literal("."),
-  title(wordRest),
+  title(r"[\w-]"),
   ACC_TITLE,
   ACC_DESCR,
   ID,
   quoted("PEG_STRING"),
 ] & hiddenTokens("PEG") & @[
-  lineComment("PEG_LINE_COMMENT", '#'),
+  TokenType(name: "PEG_LINE_COMMENT", pattern: jsre"/#[^\n\r]*/y", hidden: true, first: "#", hasFirst: true),
 ]
 
 type Frame = ref object

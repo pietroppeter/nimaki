@@ -9,6 +9,7 @@ import ../../svg/[builder, ink, root, theme]
 import ../../text/[label, measurer]
 import ../../types
 import db, layout, types as vennTypes
+import ../../jsregex
 
 const
   RADIUS = 100.0
@@ -179,8 +180,7 @@ proc renderVenn*(model: VennDb, config: Config, options: RenderOptions): Rendere
   # when the style sets an opacity.
   proc under(region: Region): string =
     if region.across: return ""
-    var fill = if region.sets.len == 1 and ("\"fill-opacity:" in region.style.shape or
-                                            ";fill-opacity:" in region.style.shape): region.style.shape
+    var fill = if region.sets.len == 1 and jsre"""/[";]fill-opacity:/""".test(region.style.shape): region.style.shape
                else: ""
     for other in painted:
       var all = true
