@@ -9,6 +9,7 @@ import ../../errors
 import ../../js
 import ../../util/yaml
 import colors, types
+import ../../jsregex
 
 type
   SeqDbOptions* = object
@@ -92,21 +93,7 @@ proc setAccTitle*(db: SeqDb, text: string) =
   db.accTitle = jsTrimStart(text)
 
 proc setAccDescription*(db: SeqDb, text: string) =
-  ## text.replace(/\n\s+/g, '\n')
-  var output = ""
-  var i = 0
-  while i < text.len:
-    if text[i] == '\n' and spaceLenAt(text, i + 1) > 0:
-      output.add '\n'
-      i += 1
-      while true:
-        let n = spaceLenAt(text, i)
-        if n == 0: break
-        i += n
-    else:
-      output.add text[i]
-      inc i
-  db.accDescr = output
+  db.accDescr = text.replace(jsre"/\n\s+/g", "\n")
 
 proc setDiagramTitle*(db: SeqDb, text: string) =
   db.title = text

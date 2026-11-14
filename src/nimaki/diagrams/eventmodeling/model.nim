@@ -5,6 +5,7 @@ import ../../errors
 import ../../js
 import ../common/tokens
 import parser
+import ../../jsregex
 
 type
   EntityKind* = string   ## "ui" | "processor" | "command" | "readmodel" | "event"
@@ -96,19 +97,7 @@ func blockText(raw: string): string =
   output.join("\n")
 
 func collapseIndents(s: string): string =
-  ## s.replace(/\n\s+/g, '\n')
-  var i = 0
-  while i < s.len:
-    if s[i] == '\n' and spaceLenAt(s, i + 1) > 0:
-      result.add '\n'
-      i += 1
-      while true:
-        let n = spaceLenAt(s, i)
-        if n == 0: break
-        i += n
-      continue
-    result.add s[i]
-    inc i
+  s.replace(jsre"/\n\s+/g", "\n")
 
 proc buildEventModel*(ast: EventModelAst, title: string): EventModelingModel =
   var ids = initHashSet[string]()

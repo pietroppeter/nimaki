@@ -5,6 +5,7 @@ import ../../js
 import ../../text/entities
 import ../../util/url
 import members, types
+import ../../jsregex
 export types
 
 const
@@ -168,19 +169,7 @@ proc setDirection*(db: ClassDb, dir: string) = db.direction = dir
 proc setAccTitle*(db: ClassDb, text: string) = db.accTitle = jsTrimStart(text)
 
 proc setAccDescription*(db: ClassDb, text: string) =
-  ## text.replace(/\n\s+/g, '\n')
-  var output = ""
-  var i = 0
-  while i < text.len:
-    if text[i] == '\n':
-      var j = i + 1
-      while j < text.len and isJsSpaceAt(text, j): j += codePointAt(text, j).size
-      output.add '\n'
-      i = j
-    else:
-      output.add text[i]
-      inc i
-  db.accDescr = output
+  db.accDescr = text.replace(jsre"/\n\s+/g", "\n")
 
 proc addNamespace*(db: ClassDb, id: string, label = ""): string =
   ## `label` "" for undefined.

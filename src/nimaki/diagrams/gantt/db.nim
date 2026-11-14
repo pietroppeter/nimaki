@@ -10,6 +10,7 @@ import ../../js
 import ../../jsdate
 import ../../util/url
 import dates, types
+import ../../jsregex
 
 export types
 
@@ -127,19 +128,7 @@ proc setDiagramTitle*(db: GanttDb, txt: string) = db.title = txt
 proc setAccTitle*(db: GanttDb, txt: string) = db.accTitle = jsTrimStart(txt)
 
 func dropBreakSpaces(text: string): string =
-  ## text.replace(/\n\s+/g, '\n')
-  var i = 0
-  while i < text.len:
-    if text[i] == '\n':
-      result.add '\n'
-      inc i
-      while i < text.len:
-        let n = spaceLenAt(text, i)
-        if n == 0: break
-        i += n
-      continue
-    result.add text[i]
-    inc i
+  text.replace(jsre"/\n\s+/g", "\n")
 
 proc setAccDescription*(db: GanttDb, txt: string) = db.accDescr = dropBreakSpaces(txt)
 

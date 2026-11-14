@@ -4,6 +4,7 @@ import std/[strutils, tables]
 import ../../errors
 import ../../js
 import box_drawing, parser
+import ../../jsregex
 
 type
   NodeType* = string   ## "file" | "directory"
@@ -94,19 +95,7 @@ proc readTreeView*(source: string): TreeViewAst =
       snippet: if error.snippet != "": written.snippet else: ""))
 
 func collapseIndents(s: string): string =
-  ## s.replace(/\n\s+/g, '\n')
-  var i = 0
-  while i < s.len:
-    if s[i] == '\n' and spaceLenAt(s, i + 1) > 0:
-      result.add '\n'
-      i += 1
-      while true:
-        let n = spaceLenAt(s, i)
-        if n == 0: break
-        i += n
-      continue
-    result.add s[i]
-    inc i
+  s.replace(jsre"/\n\s+/g", "\n")
 
 proc buildTreeView*(ast: TreeViewAst, title: string): TreeViewModel =
   let db = newTreeViewDb()

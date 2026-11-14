@@ -10,6 +10,7 @@ import ../../js
 import ../../preprocess
 import ../../util/yaml
 import parser
+import ../../jsregex
 
 const
   NORMAL* = 0
@@ -53,17 +54,7 @@ func typeCode(name: CommitTypeName): int =
   if name == "REVERSE": REVERSE elif name == "HIGHLIGHT": HIGHLIGHT else: NORMAL
 
 func collapseIndents(text: string): string =
-  ## text.replace(/\n\s+/g, '\n')
-  var i = 0
-  while i < text.len:
-    if text[i] == '\n':
-      var j = i + 1
-      while j < text.len and isJsSpaceAt(text, j): j += codePointAt(text, j).size
-      result.add '\n'
-      i = j
-    else:
-      result.add text[i]
-      inc i
+  text.replace(jsre"/\n\s+/g", "\n")
 
 proc buildGit*(ast: GitGraphAst, config: Config, title: string): GitModel =
   let git = config["gitGraph"]

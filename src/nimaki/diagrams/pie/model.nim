@@ -4,6 +4,7 @@ import std/tables
 import ../../errors
 import ../../js
 import parser
+import ../../jsregex
 
 type PieModel* = ref object of RootObj
   title*, accTitle*, accDescr*: string   ## "" for undefined
@@ -15,19 +16,7 @@ func dropLeadingSpaces(s: string): string =
   jsTrimStart(s)
 
 func collapseIndents(s: string): string =
-  ## s.replace(/\n\s+/g, '\n')
-  var i = 0
-  while i < s.len:
-    if s[i] == '\n' and spaceLenAt(s, i + 1) > 0:
-      result.add '\n'
-      i += 1
-      while true:
-        let n = spaceLenAt(s, i)
-        if n == 0: break
-        i += n
-      continue
-    result.add s[i]
-    inc i
+  s.replace(jsre"/\n\s+/g", "\n")
 
 proc buildPie*(ast: PieAst, title: string): PieModel =
   var sections = initOrderedTable[string, float]()

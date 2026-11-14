@@ -3,6 +3,7 @@
 import std/[options, tables, strutils]
 import ../../errors
 import ../../js
+import ../../jsregex
 
 type
   QuadrantText* = object
@@ -99,15 +100,6 @@ proc setDiagramTitle*(db: QuadrantDb, text: string) = db.title = text
 proc setAccTitle*(db: QuadrantDb, text: string) = db.accTitle = jsTrimStart(text)   # replace(/^\s+/g, '')
 
 func collapseIndents(s: string): string =
-  ## s.replace(/\n\s+/g, '\n')
-  var i = 0
-  while i < s.len:
-    if s[i] == '\n' and spaceLenAt(s, i + 1) > 0:
-      result.add '\n'
-      i += 1
-      while spaceLenAt(s, i) > 0: i += spaceLenAt(s, i)
-    else:
-      result.add s[i]
-      inc i
+  s.replace(jsre"/\n\s+/g", "\n")
 
 proc setAccDescription*(db: QuadrantDb, text: string) = db.accDescr = collapseIndents(text)

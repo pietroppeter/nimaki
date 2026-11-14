@@ -7,18 +7,10 @@ import std/strutils except unescape
 import ../../errors
 import ../../js
 import types, common, ir, ebnf, abnf, peg
+import ../../jsregex
 
 func dropBreakSpaces(text: string): string =
-  ## text.replace(/\n\s+/g, '\n')
-  var i = 0
-  while i < text.len:
-    if text[i] == '\n':
-      let j = spaces(text, i + 1)
-      result.add '\n'
-      i = j
-      continue
-    result.add text[i]
-    inc i
+  text.replace(jsre"/\n\s+/g", "\n")
 
 proc notationOf*(source: string): (bool, Notation) =
   ## /^\s*railroad-(ebnf-|abnf-|peg-)?beta/i. Mermaid has a detector per keyword, each matching

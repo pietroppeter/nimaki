@@ -5,6 +5,7 @@
 import std/tables
 import ../../js
 import parser
+import ../../jsregex
 
 type
   CynefinDomain* = object
@@ -23,19 +24,7 @@ type
     transitions*: seq[CynefinTransition]
 
 func dropBreakSpaces(text: string): string =
-  ## text.replace(/\n\s+/g, '\n')
-  var i = 0
-  while i < text.len:
-    if text[i] == '\n' and spaceLenAt(text, i + 1) > 0:
-      result.add '\n'
-      i += 1
-      while true:
-        let n = spaceLenAt(text, i)
-        if n == 0: break
-        i += n
-    else:
-      result.add text[i]
-      inc i
+  text.replace(jsre"/\n\s+/g", "\n")
 
 proc buildCynefin*(ast: CynefinAst, title: string): CynefinModel =
   result = CynefinModel(

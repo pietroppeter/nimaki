@@ -2,6 +2,7 @@
 ## port-status: draft
 import std/[algorithm, sets, strutils]
 import ../../js
+import ../../jsregex
 
 type
   JourneyTask* = object
@@ -38,21 +39,7 @@ proc setAccTitle*(db: JourneyDb, text: string) =
   db.accTitle = jsTrimStart(text)
 
 proc setAccDescription*(db: JourneyDb, text: string) =
-  ## text.replace(/\n\s+/g, '\n')
-  var output = ""
-  var i = 0
-  while i < text.len:
-    if text[i] == '\n' and spaceLenAt(text, i + 1) > 0:
-      output.add '\n'
-      i += 1
-      while true:
-        let n = spaceLenAt(text, i)
-        if n == 0: break
-        i += n
-      continue
-    output.add text[i]
-    inc i
-  db.accDescr = output
+  db.accDescr = text.replace(jsre"/\n\s+/g", "\n")
 
 proc addSection*(db: JourneyDb, text: string) =
   db.currentSection = text

@@ -5,6 +5,7 @@
 ## for a value of a series: a value read from the text is never NaN.
 import std/math
 import ../../js
+import ../../jsregex
 
 type
   XyText* = object
@@ -106,15 +107,4 @@ proc setAccTitle*(db: XyChartDb, text: string) =
   db.accTitle = jsTrimStart(text)
 
 proc setAccDescription*(db: XyChartDb, text: string) =
-  ## text.replace(/\n\s+/g, '\n')
-  var s = ""
-  var i = 0
-  while i < text.len:
-    if text[i] == '\n' and i + 1 < text.len and isJsSpaceAt(text, i + 1):
-      s.add '\n'
-      i += 1
-      while i < text.len and isJsSpaceAt(text, i): i += spaceLenAt(text, i)
-    else:
-      s.add text[i]
-      inc i
-  db.accDescr = s
+  db.accDescr = text.replace(jsre"/\n\s+/g", "\n")

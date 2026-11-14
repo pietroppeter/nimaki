@@ -1,6 +1,6 @@
 ## port-of: src/svg/theme.ts
 ## port-status: draft
-import std/[strutils, tables, unicode]
+import std/[strutils, tables]
 import builder
 import ../js, ../jsregex
 

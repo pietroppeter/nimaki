@@ -10,6 +10,7 @@ import ../../errors
 import ../../js
 import ../../util/[url, yaml]
 import shapes, types
+import ../../jsregex
 
 type
   AgentflowDbOptions* = object
@@ -462,18 +463,7 @@ proc setAccTitle*(db: AgentflowDb, text: string) =
   db.accTitle = text.jsTrimStart
 
 proc setAccDescription*(db: AgentflowDb, text: string) =
-  # text.replace(/\n\s+/g, '\n')
-  var s = ""
-  var i = 0
-  while i < text.len:
-    if text[i] == '\n' and i + 1 < text.len and isJsSpaceAt(text, i + 1):
-      s.add '\n'
-      inc i
-      while i < text.len and isJsSpaceAt(text, i): i += spaceLenAt(text, i)
-    else:
-      s.add text[i]
-      inc i
-  db.accDescr = s
+  db.accDescr = text.replace(jsre"/\n\s+/g", "\n")
 
 proc addSubGraph*(db: AgentflowDb, idText: Option[FlowText], list: seq[DocItem],
                   titleText: Option[FlowText]): string =
