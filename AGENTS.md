@@ -81,7 +81,7 @@ coding agents*, so a change here is reviewed like any page. It is adapted from
 - `nim r tests/all.nim` runs the tests. `nim r docs/all.nim` builds every page. The HTML is not
   committed: CI builds it and deploys `docs/` to GitHub Pages from `main`.
 - The renderer (`src/`) needs Nim's standard library and one dependency, nitely's pure Nim
-  `regex` (with its tables, `unicodedb`), pinned in `deps.lock` (decision 0015). nimib and
+  `regex` (with its tables, `unicodedb`), pinned in `deps.lock` (decision 0016). nimib and
   tabelline are for the pages.
 - To change a dependency, change its commit in `deps.lock` (and `nim.cfg` for a new one), rerun
   the setup, build the pages.

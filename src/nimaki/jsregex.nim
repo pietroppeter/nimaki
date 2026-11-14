@@ -700,8 +700,12 @@ func search*(s: string, re: JsRegExp): int =
 func nextIndex(s: string, i: int): int =
   ## One character on, after an empty match (JavaScript steps one code unit: here one code
   ## point, which differs only inside a character outside the BMP).
+  ## The length is read from the lead byte here, not with `unicode.runeLenAt`: in the JavaScript
+  ## build that call copied the whole string each time, which made `split` quadratic.
   if i >= s.len: return i + 1
-  i + max(1, runeLenAt(s, i))
+  let b = ord(s[i])
+  let n = if b < 0xC0: 1 elif b < 0xE0: 2 elif b < 0xF0: 3 elif b < 0xF8: 4 else: 1
+  i + min(n, s.len - i)
 
 iterator matches*(re: JsRegExp, s: string): JsMatch =
   ## The matches of a `g` regex, as `s.matchAll(re)` (or a `while (m = re.exec(s))` loop) finds

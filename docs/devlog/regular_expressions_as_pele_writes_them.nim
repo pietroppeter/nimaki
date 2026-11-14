@@ -37,6 +37,7 @@ let
   linesCut = before["nim"].getInt - after["nim"].getInt
   helpersBefore = before["helpers"].getInt
   helpersAfter = after["helpers"].getInt
+  st = data["stress"]
 var benchCases = 0
 for kind, b in bench["after"]["types"]: benchCases += b["cases"].getInt
 
@@ -264,6 +265,35 @@ The types that read their text with a table of tokens (radar, gantt, c4, kanban)
 their lexer tries pattern after pattern at each position. Still, {ms(totalAfter)} ms for the
 bench's {benchCases.thousands} diagrams is under a tenth of a millisecond a diagram.
 
+## What Pele's stress tests found
+
+The corpus holds ordinary diagrams. Pele also has *stress tests*: texts written to be hard, such
+as {st["commentLines"].getInt.thousands} comment lines in a row, an unclosed directive tens of thousands of
+characters long, a date format of {st["ganttFormatChars"].getInt.thousands} characters. Each one checks that
+Pele stays quick, and since today nimaki's JavaScript build runs them too. On the branch of this
+post they did not finish. Their {st["texts"].getInt.thousands} texts (from {st["files"].getInt} files),
+replayed through the C build before and after the change, showed three causes, and the
+JavaScript build a fourth:
+
+- **A search that reads on.** The engine's `find` from a position does not stop at the first
+  match: while matches follow each other it collects them all, and returns the first. A loop that
+  calls it once per match, as `replace` with `g` did, read the rest of the text at every match:
+  {st["commentLines"].getInt.thousands} comment lines took {st["comment_before_ms"].getInt.thousands} ms.
+  The loops now walk the engine's own list of every match once: {st["comment_after_ms"].getInt} ms.
+- **A limit of the engine.** Pele's directive pattern, `%%{{init: ...}}%%`, keeps what it reads in a
+  group around a repeat. The engine stores that group for every character it reads, numbered with
+  16 bits, and stops the program past {st["captureLimit"].getInt.thousands}. The directive keeps its
+  hand-written scanner, with that reason in its comment.
+- **The same work each day.** gantt formats every day of a chart with the chart's format, and
+  the format is read with a regex each time, as in Pele. A long format made it slow: {st["ganttTasks"].getInt}
+  long tasks took {st["gantt_before_ms"].getInt.thousands} ms. The port now keeps the matches of the last
+  format, which depend on its text alone: {st["gantt_after_ms"].getInt} ms.
+- **A slow step in JavaScript.** `split` tries the pattern at each position, and after a miss it
+  steps one character on. It measured that character with `unicode.runeLenAt`, which in the
+  JavaScript build cost as much as the whole text each time: a timeline event of
+  {st["jsEntities"].getInt.thousands} HTML entities took {st["js_split_before_ms"].getInt.thousands} ms there, against well under
+  a second in C. The step now reads the length from the first byte: {st["js_split_after_ms"].getInt.thousands} ms.
+
 ## What is still written by hand
 
 A scanner stays where a regex cannot be faithful, and says why in its comment:
@@ -276,6 +306,7 @@ A scanner stays where a regex cannot be faithful, and says why in its comment:
 - **Pele's own scanners.** Where Pele itself writes a function beside a pattern (a token that keeps
   state, a run of digits read once), the port keeps the function, as Pele does.
 - **One character.** A regex applied to one character, `/\s/.test(c)`, stays a test on the character.
+- **A limit of the engine.** The directive pattern of `preprocess.nim`, as told above.
 
 ## A bug the JavaScript build found
 
