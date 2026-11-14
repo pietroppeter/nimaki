@@ -16,9 +16,9 @@ proc count(k: string): int = tests{k}.getInt
 let before = parseJson(execCmdEx("git show 7d194091f2fc422cf5abb6154973f17baa032229:docs/data/peletests.json",
                                  workingDir = docsDir / "..").output)["counts"]
 proc was(k: string): int = before{k}.getInt
-let models = parseFile(docsDir / "data" / "parsediff.json")
+let modelData = parseFile(docsDir / "data" / "parsediff.json")
 var whole: seq[string]
-for t in models["types"]:
+for t in modelData["types"]:
   if t["different"].getInt == 0 and t["same"].getInt > 0: whole.add t["type"].getStr
 var knownModel = 0
 for line in lines(docsDir / ".." / "tools" / "peletests" / "known.txt"):
@@ -73,7 +73,8 @@ the bridge share it. The bridge then turns the JSON into JavaScript values: a Ni
 
 One thing JSON cannot say is that two places hold *the same* object. In a block diagram, the
 block `a` is in the list `blocks` and also in the table `byId`, which finds a block by its name:
-in Pele's model, and in nimaki's, it is one object in two places. Written out in full, it would
+in Pele's model, and in nimaki's, it is one object in two places (three, with the children of
+the diagram's `root`). Written out in full, it would
 be two copies, and a model where everything points at everything (a namespace inside a
 namespace inside a namespace, four thousand deep, in one of Pele's stress tests) grows with the
 square of its size. So, for the bridge, the writing gives each object a number the first time it
@@ -83,8 +84,10 @@ meets it, and writes a reference to that number every other time:
 nbCode:
   let m = parse("block-beta\n  a b\n")
   let j = dumpModel(m, share = true)
-  echo "blocks[0]: id ", j["blocks"][0]["id"], ", number ", j["blocks"][0]["$id"]
-  echo "byId.a:    ", j["byId"]["$map"]["a"]
+  let first = j["root"]["children"][0]
+  echo "root.children[0]: id ", first["id"], ", number ", first["$id"]
+  echo "blocks[0]:        ", j["blocks"][0]
+  echo "byId.a:           ", j["byId"]["$map"]["a"]
 
 nbText: """
 The bridge reads `{"$ref": n}` as the object numbered `n`, so the JavaScript model has one block
@@ -148,9 +151,9 @@ bytes as Pele's, in C and in JavaScript.
 """
 
 nbCode:
-  let blocks = BlockDb(parse("block-beta\n  columns 2\n  a\n  block:g\n    b\n  end\n").model)
-  echo "root columns: ", blocks.root.columns
-  for b in blocks.blocks: echo b.id, ": columns ", b.columns, ", colorIndex ", b.colorIndex
+  let diagram = BlockDb(parse("block-beta\n  columns 2\n  a\n  block:g\n    b\n  end\n").model)
+  echo "root columns: ", diagram.root.columns
+  for b in diagram.blocks: echo b.id, ": columns ", b.columns, ", colorIndex ", b.colorIndex
 
 nbText: &"""
 The referee also learned one name: `typ`, the usual Nim spelling of a field Pele calls `type`
