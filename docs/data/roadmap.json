@@ -664,8 +664,8 @@
           "title": "Pele's time bounds in the JavaScript build",
           "what": "About a hundred of Pele's stress tests (107 on 14 November 2026; the count moves a little from run to run) draw the same in nimaki's JavaScript build but miss Pele's time bound (most by less than twice; the worst, agentflow flows that each name the next, venn styles, nested class namespaces, by 9 to 12 times). The C build is fast on the ones measured. The porting guide's note Code that JavaScript runs slowly lists the causes found so far; build/peletests/report.txt lists the tests (nim r tools/peletests.nim).",
           "done_when": "nim r tools/peletests.nim reports no speed, and tools/peletests/known.txt is empty.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Speed up the JavaScript build",
+          "status": "started",
           "post": "",
           "pr": ""
         }
