@@ -6,7 +6,7 @@
 ## checked against Mermaid's generated lexers by the tests.
 ##
 ## A token type's pattern is Pele's sticky regular expression, written as Pele writes it
-## (`jsregex.nim`, decision 0014). A type not yet moved to it still has a `matcher`: a proc that
+## (`jsregex.nim`, decision 0015). A type not yet moved to it still has a `matcher`: a proc that
 ## answers, at a byte position, where the match ends (or -1), and names the pattern it answers as.
 import std/strutils
 import ../../errors

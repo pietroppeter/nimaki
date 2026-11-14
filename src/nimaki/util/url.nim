@@ -4,7 +4,7 @@
 ## Port notes: the regular expressions that clean a URL (`unwrap`) are scanners, each with its
 ## pattern in a comment, because they must see the lone surrogate that a decoded entity like
 ## `&#55296;` makes in JavaScript: here it is a byte that is not UTF-8 ("\xff"), which a regex
-## cannot read (decision 0014). The other patterns are Pele's (`jsregex.nim`).
+## cannot read (decision 0015). The other patterns are Pele's (`jsregex.nim`).
 ## `decodeURIComponent` and `new URL()` are written here: the URL parser covers what a link in
 ## a diagram needs (the WHATWG rules for http and https: scheme and host in lower case, default
 ## ports dropped, dot segments resolved, the percent-encode sets of path, query and fragment,

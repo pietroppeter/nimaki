@@ -1,6 +1,6 @@
 ## JavaScript's regular expressions, in Nim. Not a port of a file of Pele: Pele writes about
 ## five hundred regular expression literals, and this module lets the port write the same ones,
-## character for character, with the same meaning (decision 0014).
+## character for character, with the same meaning (decision 0015).
 ##
 ## The engine is nitely's `regex` package (pure Nim, linear time, also under `nim js`). Its
 ## syntax is close to JavaScript's, but not its meaning, so a pattern is first translated, once,
