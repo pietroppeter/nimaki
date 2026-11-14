@@ -1,6 +1,6 @@
 ## port-of: src/diagrams/usecase/db.ts
 ## port-status: conformant
-import std/[algorithm, sets, tables]
+import std/[algorithm, options, sets, tables]
 import ../../errors
 import json, lexer, types
 import ../../jsregex
@@ -73,6 +73,7 @@ type
     target*: string
     span*: Span
     properties*: seq[DraftProperty]
+    statement*: GraphStatement
 
   DraftClass* = object
     targets*: seq[(string, Span)]
@@ -99,6 +100,9 @@ type
     classDefs*: seq[DraftClassDef]
     direction*: string       ## "" for undefined
     accTitle*, accDescription*: string
+
+
+func labelType(label: DraftLabel): LabelType = (if label.markdown: ltMarkdown else: ltText)
 
 proc emptyDrafts*(): Drafts = Drafts()
 
@@ -166,7 +170,8 @@ proc inferKind(properties: seq[DraftProperty]): string =
 proc dropIndentation(s: string): string =
   s.replace(jsre"/\n\s+/g", "\n")
 
-proc resolveUsecase*(src: string, drafts: Drafts, headerSpan: Span, title: string): UsecaseModel =
+proc resolveUsecase*(src: string, drafts: Drafts, headerSpan: Span, statements: seq[GraphStatement],
+                     title: string): UsecaseModel =
   ## Resolves what the parser read into a model, once the whole diagram is read: which ids are
   ## actors, use cases, boundaries, JSON nodes or edges, in what order they appear, and whether
   ## the statements about them agree. Ports Mermaid's UsecaseModelBuilder, with its messages.
@@ -257,7 +262,7 @@ proc resolveUsecase*(src: string, drafts: Drafts, headerSpan: Span, title: strin
       let actor = Actor(
         id: state.id,
         label: state.label.text,
-        markdown: state.label.markdown,
+        labelType: labelType(state.label),
         business: state.business == 1,
         classes: state.classes,
         kind: if state.hasIcon and state.icon != "": "icon"
@@ -274,7 +279,7 @@ proc resolveUsecase*(src: string, drafts: Drafts, headerSpan: Span, title: strin
       model.useCases[state.id] = UseCase(
         id: state.id,
         label: state.label.text,
-        markdown: state.label.markdown,
+        labelType: labelType(state.label),
         business: state.business == 1,
         classes: state.classes,
         shape: if state.shape != "": state.shape else: "ellipse",
@@ -396,7 +401,7 @@ proc resolveUsecase*(src: string, drafts: Drafts, headerSpan: Span, title: strin
   boundaryOrder.sort(proc (a, b: BoundaryState): int = cmp(order(a.draft.id), order(b.draft.id)))
   for state in boundaryOrder:
     model.systemBoundaries[state.draft.id] = SystemBoundary(id: state.draft.id, label: state.draft.label.text,
-                                                            markdown: state.draft.label.markdown, kind: "rect")
+                                                            labelType: labelType(state.draft.label), kind: "rect")
   var jsons = drafts.jsons
   jsons.sort(proc (a, b: DraftJson): int = cmp(order(a.id), order(b.id)))
   for draft in jsons:
@@ -439,7 +444,7 @@ proc resolveUsecase*(src: string, drafts: Drafts, headerSpan: Span, title: strin
     )
     if draft.hasLabel:
       relationship.label = draft.label.text
-      relationship.labelMarkdown = draft.label.markdown
+      relationship.labelType = some labelType(draft.label)
     model.relationships.add relationship
     edges[id] = relationship
 
@@ -464,6 +469,12 @@ proc resolveUsecase*(src: string, drafts: Drafts, headerSpan: Span, title: strin
     if kind == "actor" or kind == "usecase":
       elementMetadata(elements[target], properties, true)
       continue
+    if kind == "edge":
+      let statement = metadata.statement
+      statement.statementKind = "edgeMetadata"
+      statement.edges = some @[EdgeOccurrence(id: target, span: statement.span, idSpan: some metadata.span,
+                                              metadata: statement.metadata)]
+      statement.nodes = none(seq[NodeOccurrence])
     let boundary = boundaries.getOrDefault(target)
     let edge = edges.getOrDefault(target)
     for property in properties:
@@ -512,7 +523,7 @@ proc resolveUsecase*(src: string, drafts: Drafts, headerSpan: Span, title: strin
     let id = "note-" & $notes
     inc notes
     model.notes[id] = UsecaseNote(id: id, target: draft.target, label: draft.label.text,
-                                  markdown: draft.label.markdown)
+                                  labelType: labelType(draft.label))
 
   for definition in drafts.classDefs:
     let styles = SharedStyles(items: definition.styles)
@@ -532,4 +543,5 @@ proc resolveUsecase*(src: string, drafts: Drafts, headerSpan: Span, title: strin
   model.accDescr = dropIndentation(drafts.accDescription)
   model.source = src
   model.headerSpan = headerSpan
+  model.statements = statements
   model

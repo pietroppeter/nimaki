@@ -1,6 +1,6 @@
 ## port-of: src/diagrams/usecase/graph.ts
 ## port-status: conformant
-import std/[strutils, tables]
+import std/[options, strutils, tables]
 import ../../js
 import json, types
 
@@ -144,7 +144,7 @@ proc buildUsecaseGraph*(model: UsecaseModel): UsecaseGraph =
                   if actor.business: "usecase-business" else: ""]
     names.add actor.classes
     nodes.add UsecaseGraphNode(
-      id: actor.id, label: actor.label, markdown: actor.markdown, shape: ACTOR_SHAPES[actor.kind],
+      id: actor.id, label: actor.label, markdown: actor.labelType == ltMarkdown, shape: ACTOR_SHAPES[actor.kind],
       padding: 10, cssClasses: classList(names), cssStyles: actor.styles,
       cssCompiledStyles: compiled(actor.classes), actorType: actor.kind, business: actor.business,
       icon: actor.icon, stereotype: actor.stereotype, parentId: actor.parentId)
@@ -154,14 +154,14 @@ proc buildUsecaseGraph*(model: UsecaseModel): UsecaseGraph =
                   if useCase.business: "usecase-business" else: ""]
     names.add useCase.classes
     nodes.add UsecaseGraphNode(
-      id: useCase.id, label: useCase.label, markdown: useCase.markdown,
+      id: useCase.id, label: useCase.label, markdown: useCase.labelType == ltMarkdown,
       shape: if not ellipse: "rect" elif useCase.business: "usecaseBusiness" else: "usecaseEllipse",
       padding: if ellipse: 20 else: 10, cssClasses: classList(names), cssStyles: useCase.styles,
       cssCompiledStyles: compiled(useCase.classes), business: useCase.business, stereotype: useCase.stereotype,
       parentId: useCase.parentId)
   for note in model.notes.values:
     nodes.add UsecaseGraphNode(
-      id: note.id, label: note.label, markdown: note.markdown, shape: "note", padding: 10,
+      id: note.id, label: note.label, markdown: note.labelType == ltMarkdown, shape: "note", padding: 10,
       cssClasses: "default usecase-note", cssCompiledStyles: compiled(@[]), noteTarget: note.target)
   for json in model.jsonNodes.values:
     nodes.add UsecaseGraphNode(
@@ -171,7 +171,7 @@ proc buildUsecaseGraph*(model: UsecaseModel): UsecaseGraph =
       jsonRows: flattenJsonRows(json.value, json.propertyOrder))
   for boundary in model.systemBoundaries.values:
     nodes.add UsecaseGraphNode(
-      id: boundary.id, label: boundary.label, markdown: boundary.markdown, shape: "usecaseSystemBoundary",
+      id: boundary.id, label: boundary.label, markdown: boundary.labelType == ltMarkdown, shape: "usecaseSystemBoundary",
       isGroup: true, padding: 20,
       cssClasses: classList(@["default", "system-boundary", "system-boundary-" & boundary.kind] & boundary.classes),
       cssStyles: boundary.styles, cssCompiledStyles: compiled(boundary.classes), boundaryType: boundary.kind)
@@ -195,7 +195,7 @@ proc buildUsecaseGraph*(model: UsecaseModel): UsecaseGraph =
       edge.label = relationship.kind
     elif relationship.kind == "association":
       edge.label = relationship.label
-      edge.labelMarkdown = relationship.labelMarkdown
+      edge.labelMarkdown = relationship.labelType == some ltMarkdown
     edges.add edge
   for note in model.notes.values:
     edges.add UsecaseGraphEdge(

@@ -41,7 +41,8 @@ from nimaki/diagrams/state/db import StateDb
 from nimaki/diagrams/timeline/db import TimelineModel
 from nimaki/diagrams/treemap/model import TreemapModel
 from nimaki/diagrams/treeview/model import TreeViewModel
-from nimaki/diagrams/usecase/types import UsecaseModel
+from nimaki/diagrams/usecase/types import UsecaseModel, SharedStyles
+from nimaki/diagrams/usecase/json import JsonValue, JsonKind
 from nimaki/diagrams/venn/db import VennDb
 from nimaki/diagrams/wardley/model import WardleyModel
 from nimaki/diagrams/xychart/db import XyChartDb, Axis, Plot
@@ -158,6 +159,25 @@ proc dump(x: RailroadNode, path: var Walk): JsonNode =
     %*{"type": "repetition", "element": (if kids.len > 0: kids[0] else: newJNull()),
        "min": number(x.min, path), "max": number(x.max, path)}
 
+proc dump(x: SharedStyles, path: var Walk): JsonNode =
+  ## Pele's list of a classDef's styles, boxed so that the ids of one classDef share it.
+  if x == nil: newJNull() else: %x.items
+
+proc dump(x: JsonValue, path: var Walk): JsonNode =
+  ## A value of `JSON.parse`, which the port holds as a union with its keys in order.
+  if x == nil: return newJNull()
+  case x.kind
+  of jNull: result = newJNull()
+  of jBool: result = %x.b
+  of jNumber: result = number(x.n, path)
+  of jString: result = %x.s
+  of jArray:
+    result = newJArray()
+    for v in x.items: result.add dump(v, path)
+  of jObject:
+    result = newJObject()
+    for k, key in x.keys: result[key] = dump(x.values[k], path)
+
 proc dump(x: PacketLabel, path: var Walk): JsonNode =
   ## A label boxed so that the pieces of a field share it, as JavaScript shares a string.
   if x == nil: newJNull() else: %x.text
@@ -176,8 +196,10 @@ const renamed = {"kind": "type", "typ": "type", "stop": "end"}.toTable
 const renamedIn* = {"sequence": {"start": "from"}.toTable,
                     "cynefin": {"start": "from"}.toTable,
                     "eventmodeling": {"type": "kind"}.toTable,
-                    "architecture": {"parent": "in"}.toTable}.toTable
-  ## (eventmodeling's `kind` is Pele's own `kind`, which the general rule would rename.)
+                    "architecture": {"parent": "in"}.toTable,
+                    "usecase": {"statementKind": "kind"}.toTable}.toTable
+  ## (eventmodeling's `kind` is Pele's own `kind`, which the general rule would rename; usecase
+  ## has Pele's `type` and, in its statements, Pele's `kind`.)
   ## The same, for one diagram type only (`start` is a field of its own in other types).
 
 proc rename*(j: JsonNode, names: Table[string, string]): JsonNode =
