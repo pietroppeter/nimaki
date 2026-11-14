@@ -67,7 +67,7 @@ func matchExact(s: string, p: int): int =
   let i = digitRun(s, p)
   if i > p: i else: -1
 
-let NAME = TokenType(name: "ABNF_RULENAME", pattern: matchName, first: LETTERS, hasFirst: true)
+let NAME = TokenType(name: "ABNF_RULENAME", matcher: matchName, first: LETTERS, hasFirst: true)
 let COMMENT = lineComment("ABNF_COMMENT", ';')
 
 let ABNF_TOKENS*: seq[TokenType] = @[
@@ -84,10 +84,10 @@ let ABNF_TOKENS*: seq[TokenType] = @[
   ACC_TITLE,
   ACC_DESCR,
   NAME,
-  TokenType(name: "ABNF_STRING", pattern: matchAbnfString, first: "\"", hasFirst: true),
-  TokenType(name: "ABNF_NUMVAL", pattern: matchNumVal, first: "%", hasFirst: true),
-  TokenType(name: "ABNF_REPEAT", pattern: matchRepeat, first: DIGITS & "*", hasFirst: true),
-  TokenType(name: "ABNF_EXACT_REPEAT", pattern: matchExact, first: DIGITS, hasFirst: true),
+  TokenType(name: "ABNF_STRING", matcher: matchAbnfString, first: "\"", hasFirst: true),
+  TokenType(name: "ABNF_NUMVAL", matcher: matchNumVal, first: "%", hasFirst: true),
+  TokenType(name: "ABNF_REPEAT", matcher: matchRepeat, first: DIGITS & "*", hasFirst: true),
+  TokenType(name: "ABNF_EXACT_REPEAT", matcher: matchExact, first: DIGITS, hasFirst: true),
 ] & hiddenTokens("ABNF") & @[COMMENT]
 
 type Frame = ref object

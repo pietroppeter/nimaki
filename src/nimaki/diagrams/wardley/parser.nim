@@ -111,7 +111,7 @@ proc word(name, text: string): TokenType =
   ## A sticky pattern of the text alone: it does not need a word boundary after it.
   let m = proc (s: string, p: int): int {.noSideEffect.} =
     if s.continuesWith(text, p): p + text.len else: -1
-  TokenType(name: name, pattern: m, first: text[0 .. 0], hasFirst: true)
+  TokenType(name: name, matcher: m, first: text[0 .. 0], hasFirst: true)
 
 func namePart(s: string, i: int): int =
   ## (?:[A-Za-z0-9_()&]|-(?!>))* from i
@@ -159,8 +159,8 @@ func matchId(s: string, p: int): int =
     if isWord(s, i - 1): last = i
   last
 
-let ARROW = TokenType(name: "ARROW", pattern: matchArrow, first: "-", hasFirst: true)
-let LINK_ARROW = TokenType(name: "LINK_ARROW", pattern: matchLinkArrow, first: "->+", hasFirst: true)
+let ARROW = TokenType(name: "ARROW", matcher: matchArrow, first: "-", hasFirst: true)
+let LINK_ARROW = TokenType(name: "LINK_ARROW", matcher: matchLinkArrow, first: "->+", hasFirst: true)
 
 let WARDLEY_TOKENS*: seq[TokenType] = @[
   TokenType(name: "[", literal: "["),
@@ -175,10 +175,10 @@ let WARDLEY_TOKENS*: seq[TokenType] = @[
   TokenType(name: "}", literal: "}"),
   TokenType(name: "WARDLEY_NUMBER", first: "0123456789", hasFirst: true, scanner: numberScanner),
   ARROW,
-  TokenType(name: "LINK_PORT", pattern: matchLinkPort, first: "+", hasFirst: true),
+  TokenType(name: "LINK_PORT", matcher: matchLinkPort, first: "+", hasFirst: true),
   LINK_ARROW,
-  TokenType(name: "LINK_LABEL", pattern: matchLinkLabel, first: ";", hasFirst: true),
-  TokenType(name: "STRATEGY", pattern: matchStrategy, first: "bom", hasFirst: true),
+  TokenType(name: "LINK_LABEL", matcher: matchLinkLabel, first: ";", hasFirst: true),
+  TokenType(name: "STRATEGY", matcher: matchStrategy, first: "bom", hasFirst: true),
   word("KW_WARDLEY", "wardley-beta"),
   word("KW_SIZE", "size"),
   word("KW_EVOLUTION", "evolution"),
@@ -193,15 +193,15 @@ let WARDLEY_TOKENS*: seq[TokenType] = @[
   word("KW_ANNOTATION", "annotation"),
   word("KW_ACCELERATOR", "accelerator"),
   word("KW_DEACCELERATOR", "deaccelerator"),
-  TokenType(name: "NAME_WITH_SPACES", pattern: matchNameWithSpaces,
+  TokenType(name: "NAME_WITH_SPACES", matcher: matchNameWithSpaces,
             first: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", hasFirst: true),
-  TokenType(name: "WS", pattern: matchWs, hidden: true, first: "\t ", hasFirst: true),
+  TokenType(name: "WS", matcher: matchWs, hidden: true, first: "\t ", hasFirst: true),
   accDescr(),
   ACC_TITLE,
   TITLE,
-  TokenType(name: "INT", pattern: matchInt, first: "0123456789", hasFirst: true),
+  TokenType(name: "INT", matcher: matchInt, first: "0123456789", hasFirst: true),
   STRING,
-  TokenType(name: "ID", pattern: matchId, first: "_0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+  TokenType(name: "ID", matcher: matchId, first: "_0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
             hasFirst: true),
   NEWLINE,
   WHITESPACE,

@@ -40,7 +40,7 @@ let PACKET_TOKENS*: seq[TokenType] = @[
   ACC_DESCR,
   ACC_TITLE,
   TITLE,
-  TokenType(name: "INT", pattern: matchInt, first: "0123456789", hasFirst: true),
+  TokenType(name: "INT", matcher: matchInt, first: "0123456789", hasFirst: true),
   STRING,
   NEWLINE,
   WHITESPACE,

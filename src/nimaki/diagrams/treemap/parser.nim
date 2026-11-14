@@ -114,19 +114,19 @@ func matchString(s: string, p: int): int =
 let TREEMAP_TOKENS*: seq[TokenType] = @[
   ACC_DESCR,
   ACC_TITLE,
-  titleBefore(proc (s: string, i: int): bool {.noSideEffect.} = i < s.len and isWordChar(s[i])),   # \w
-  TokenType(name: "TREEMAP_KEYWORD", pattern: matchKeyword),
-  TokenType(name: "CLASS_DEF", pattern: matchClassDef),
-  TokenType(name: "STYLE_SEPARATOR", pattern: matchLiteral(":::")),
-  TokenType(name: "SEPARATOR", pattern: matchLiteral(":")),
-  TokenType(name: "COMMA", pattern: matchLiteral(",")),
-  TokenType(name: "INDENTATION", pattern: matchBlanks),
-  TokenType(name: "WS", pattern: matchBlanks, hidden: true),
-  TokenType(name: "ML_COMMENT", pattern: matchComment, hidden: true),
-  TokenType(name: "NL", pattern: matchNewline, hidden: true),
-  TokenType(name: "ID2", pattern: matchId),
-  TokenType(name: "NUMBER2", pattern: matchNumber),
-  TokenType(name: "STRING2", pattern: matchString),
+  titleBefore(r"\w"),
+  TokenType(name: "TREEMAP_KEYWORD", matcher: matchKeyword),
+  TokenType(name: "CLASS_DEF", matcher: matchClassDef),
+  TokenType(name: "STYLE_SEPARATOR", matcher: matchLiteral(":::")),
+  TokenType(name: "SEPARATOR", matcher: matchLiteral(":")),
+  TokenType(name: "COMMA", matcher: matchLiteral(",")),
+  TokenType(name: "INDENTATION", matcher: matchBlanks),
+  TokenType(name: "WS", matcher: matchBlanks, hidden: true),
+  TokenType(name: "ML_COMMENT", matcher: matchComment, hidden: true),
+  TokenType(name: "NL", matcher: matchNewline, hidden: true),
+  TokenType(name: "ID2", matcher: matchId),
+  TokenType(name: "NUMBER2", matcher: matchNumber),
+  TokenType(name: "STRING2", matcher: matchString),
 ]
 
 type

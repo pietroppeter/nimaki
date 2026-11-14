@@ -1,0 +1,2603 @@
+{
+ "about": "Every regex literal of Pele's src/ (distinct pattern and flags, with where each is written) and every new RegExp call; built by tools/pele_regexes.mjs.",
+ "pin": "3a2f075ee0c3d914f0fad3545fc0f193693975ac",
+ "literals": [
+  {
+   "pattern": "^\\s*flowchart-elk",
+   "flags": "",
+   "at": [
+    "src/detect.ts:38"
+   ]
+  },
+  {
+   "pattern": "^\\s*mindmap",
+   "flags": "",
+   "at": [
+    "src/detect.ts:39"
+   ]
+  },
+  {
+   "pattern": "^\\s*architecture",
+   "flags": "",
+   "at": [
+    "src/detect.ts:40"
+   ]
+  },
+  {
+   "pattern": "^\\s*agentflow-beta\\b",
+   "flags": "",
+   "at": [
+    "src/detect.ts:41"
+   ]
+  },
+  {
+   "pattern": "^\\s*(?:C4Context|C4Container|C4Component|C4Dynamic|C4Deployment)",
+   "flags": "",
+   "at": [
+    "src/detect.ts:42"
+   ]
+  },
+  {
+   "pattern": "^\\s*kanban",
+   "flags": "",
+   "at": [
+    "src/detect.ts:43"
+   ]
+  },
+  {
+   "pattern": "^\\s*classDiagram",
+   "flags": "",
+   "at": [
+    "src/detect.ts:44"
+   ]
+  },
+  {
+   "pattern": "^\\s*erDiagram",
+   "flags": "",
+   "at": [
+    "src/detect.ts:45"
+   ]
+  },
+  {
+   "pattern": "^\\s*gantt",
+   "flags": "",
+   "at": [
+    "src/detect.ts:46"
+   ]
+  },
+  {
+   "pattern": "^\\s*info",
+   "flags": "",
+   "at": [
+    "src/detect.ts:47"
+   ]
+  },
+  {
+   "pattern": "^\\s*pie",
+   "flags": "",
+   "at": [
+    "src/detect.ts:48"
+   ]
+  },
+  {
+   "pattern": "^\\s*requirement(Diagram)?",
+   "flags": "",
+   "at": [
+    "src/detect.ts:49"
+   ]
+  },
+  {
+   "pattern": "^\\s*sequenceDiagram",
+   "flags": "",
+   "at": [
+    "src/detect.ts:50"
+   ]
+  },
+  {
+   "pattern": "^\\s*swimlane-beta\\b",
+   "flags": "",
+   "at": [
+    "src/detect.ts:51"
+   ]
+  },
+  {
+   "pattern": "^\\s*(graph|flowchart)",
+   "flags": "",
+   "at": [
+    "src/detect.ts:52"
+   ]
+  },
+  {
+   "pattern": "^\\s*timeline",
+   "flags": "",
+   "at": [
+    "src/detect.ts:53"
+   ]
+  },
+  {
+   "pattern": "^\\s*gitGraph",
+   "flags": "",
+   "at": [
+    "src/detect.ts:54"
+   ]
+  },
+  {
+   "pattern": "^\\s*stateDiagram",
+   "flags": "",
+   "at": [
+    "src/detect.ts:55"
+   ]
+  },
+  {
+   "pattern": "^\\s*journey",
+   "flags": "",
+   "at": [
+    "src/detect.ts:56"
+   ]
+  },
+  {
+   "pattern": "^\\s*quadrantChart",
+   "flags": "",
+   "at": [
+    "src/detect.ts:57"
+   ]
+  },
+  {
+   "pattern": "^\\s*sankey(-beta)?",
+   "flags": "",
+   "at": [
+    "src/detect.ts:58"
+   ]
+  },
+  {
+   "pattern": "^\\s*packet(-beta)?",
+   "flags": "",
+   "at": [
+    "src/detect.ts:59"
+   ]
+  },
+  {
+   "pattern": "^\\s*xychart(-beta)?",
+   "flags": "",
+   "at": [
+    "src/detect.ts:60"
+   ]
+  },
+  {
+   "pattern": "^\\s*block(-beta)?",
+   "flags": "",
+   "at": [
+    "src/detect.ts:61"
+   ]
+  },
+  {
+   "pattern": "^\\s*eventmodeling",
+   "flags": "",
+   "at": [
+    "src/detect.ts:62"
+   ]
+  },
+  {
+   "pattern": "^\\s*treeView-beta",
+   "flags": "",
+   "at": [
+    "src/detect.ts:63"
+   ]
+  },
+  {
+   "pattern": "^\\s*radar-beta",
+   "flags": "",
+   "at": [
+    "src/detect.ts:64"
+   ]
+  },
+  {
+   "pattern": "^\\s*ishikawa(-beta)?\\b",
+   "flags": "i",
+   "at": [
+    "src/detect.ts:65"
+   ]
+  },
+  {
+   "pattern": "^\\s*treemap",
+   "flags": "",
+   "at": [
+    "src/detect.ts:66"
+   ]
+  },
+  {
+   "pattern": "^\\s*railroad-beta",
+   "flags": "i",
+   "at": [
+    "src/detect.ts:67"
+   ]
+  },
+  {
+   "pattern": "^\\s*railroad-ebnf-beta",
+   "flags": "i",
+   "at": [
+    "src/detect.ts:68"
+   ]
+  },
+  {
+   "pattern": "^\\s*railroad-abnf-beta",
+   "flags": "i",
+   "at": [
+    "src/detect.ts:69"
+   ]
+  },
+  {
+   "pattern": "^\\s*railroad-peg-beta",
+   "flags": "i",
+   "at": [
+    "src/detect.ts:70"
+   ]
+  },
+  {
+   "pattern": "^\\s*venn-beta",
+   "flags": "",
+   "at": [
+    "src/detect.ts:71"
+   ]
+  },
+  {
+   "pattern": "^\\s*wardley-beta",
+   "flags": "i",
+   "at": [
+    "src/detect.ts:72"
+   ]
+  },
+  {
+   "pattern": "^\\s*cynefin-beta(?:[\\s:]|$)",
+   "flags": "",
+   "at": [
+    "src/detect.ts:73"
+   ]
+  },
+  {
+   "pattern": "^\\s*usecase-beta(?:\\s|$)",
+   "flags": "",
+   "at": [
+    "src/detect.ts:74"
+   ]
+  },
+  {
+   "pattern": ":\\s*[>|][\\d+-]*\\s*$",
+   "flags": "",
+   "at": [
+    "src/diagrams/agentflow/db.ts:108"
+   ]
+  },
+  {
+   "pattern": ",([\\t ]*)$",
+   "flags": "",
+   "at": [
+    "src/diagrams/agentflow/db.ts:109"
+   ]
+  },
+  {
+   "pattern": "\\\\,",
+   "flags": "g",
+   "at": [
+    "src/diagrams/agentflow/db.ts:469",
+    "src/diagrams/flowchart/db.ts:311",
+    "src/diagrams/treemap/model.ts:56"
+   ]
+  },
+  {
+   "pattern": ",",
+   "flags": "g",
+   "at": [
+    "src/diagrams/agentflow/db.ts:469",
+    "src/diagrams/flowchart/db.ts:311",
+    "src/diagrams/treemap/model.ts:56",
+    "src/diagrams/treemap/parser.ts:129"
+   ]
+  },
+  {
+   "pattern": "§§§",
+   "flags": "g",
+   "at": [
+    "src/diagrams/agentflow/db.ts:469",
+    "src/diagrams/flowchart/db.ts:311",
+    "src/diagrams/treemap/model.ts:56"
+   ]
+  },
+  {
+   "pattern": "^\\s+",
+   "flags": "g",
+   "at": [
+    "src/diagrams/agentflow/db.ts:524",
+    "src/diagrams/architecture/db.ts:140",
+    "src/diagrams/class/db.ts:209",
+    "src/diagrams/cynefin/model.ts:69",
+    "src/diagrams/er/db.ts:135",
+    "src/diagrams/eventmodeling/model.ts:181",
+    "src/diagrams/flowchart/db.ts:366",
+    "src/diagrams/gantt/db.ts:128",
+    "src/diagrams/git/db.ts:261",
+    "src/diagrams/info/model.ts:14",
+    "src/diagrams/journey/db.ts:41",
+    "src/diagrams/packet/model.ts:80",
+    "src/diagrams/pie/model.ts:28",
+    "src/diagrams/quadrant/db.ts:142",
+    "src/diagrams/radar/model.ts:72",
+    "src/diagrams/railroad/db.ts:22",
+    "src/diagrams/requirement/db.ts:174",
+    "src/diagrams/sequence/db.ts:92",
+    "src/diagrams/state/db.ts:203",
+    "src/diagrams/timeline/db.ts:43",
+    "src/diagrams/treemap/model.ts:78",
+    "src/diagrams/treeview/model.ts:94",
+    "src/diagrams/wardley/model.ts:159",
+    "src/diagrams/xychart/db.ts:127"
+   ]
+  },
+  {
+   "pattern": "\\n\\s+",
+   "flags": "g",
+   "at": [
+    "src/diagrams/agentflow/db.ts:528",
+    "src/diagrams/architecture/db.ts:139",
+    "src/diagrams/c4/db.ts:85",
+    "src/diagrams/class/db.ts:213",
+    "src/diagrams/cynefin/model.ts:70",
+    "src/diagrams/er/db.ts:139",
+    "src/diagrams/eventmodeling/model.ts:182",
+    "src/diagrams/flowchart/db.ts:370",
+    "src/diagrams/gantt/db.ts:132",
+    "src/diagrams/git/db.ts:262",
+    "src/diagrams/info/model.ts:15",
+    "src/diagrams/journey/db.ts:45",
+    "src/diagrams/packet/model.ts:81",
+    "src/diagrams/pie/model.ts:29",
+    "src/diagrams/quadrant/db.ts:146",
+    "src/diagrams/radar/model.ts:73",
+    "src/diagrams/railroad/db.ts:26",
+    "src/diagrams/requirement/db.ts:178",
+    "src/diagrams/sequence/db.ts:96",
+    "src/diagrams/state/db.ts:207",
+    "src/diagrams/timeline/db.ts:47",
+    "src/diagrams/treemap/model.ts:79",
+    "src/diagrams/treeview/model.ts:95",
+    "src/diagrams/usecase/db.ts:583",
+    "src/diagrams/wardley/model.ts:160",
+    "src/diagrams/xychart/db.ts:131"
+   ]
+  },
+  {
+   "pattern": "\\s",
+   "flags": "",
+   "at": [
+    "src/diagrams/agentflow/db.ts:539",
+    "src/diagrams/common/literal-label.ts:5",
+    "src/diagrams/flowchart/db.ts:380",
+    "src/diagrams/railroad/common.ts:21",
+    "src/preprocess.ts:43",
+    "src/util/yaml.ts:181",
+    "src/util/yaml.ts:261"
+   ]
+  },
+  {
+   "pattern": "accTitle\\s*:\\s*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/agentflow/lexer.ts:38",
+    "src/diagrams/flowchart/lexer.ts:37"
+   ]
+  },
+  {
+   "pattern": "accDescr\\s*:\\s*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/agentflow/lexer.ts:39",
+    "src/diagrams/flowchart/lexer.ts:38"
+   ]
+  },
+  {
+   "pattern": "accDescr\\s*\\{\\s*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/agentflow/lexer.ts:40",
+    "src/diagrams/flowchart/lexer.ts:39"
+   ]
+  },
+  {
+   "pattern": "call\\s+",
+   "flags": "y",
+   "at": [
+    "src/diagrams/agentflow/lexer.ts:41",
+    "src/diagrams/flowchart/lexer.ts:40"
+   ]
+  },
+  {
+   "pattern": "click\\s+",
+   "flags": "y",
+   "at": [
+    "src/diagrams/agentflow/lexer.ts:42",
+    "src/diagrams/flowchart/lexer.ts:41"
+   ]
+  },
+  {
+   "pattern": "(?:\\r?\\n)*\\s*\\n",
+   "flags": "y",
+   "at": [
+    "src/diagrams/agentflow/lexer.ts:43",
+    "src/diagrams/flowchart/lexer.ts:42"
+   ]
+  },
+  {
+   "pattern": "\\s*(?:LR|RL|TB|BT|TD|BR)\\b",
+   "flags": "y",
+   "at": [
+    "src/diagrams/agentflow/lexer.ts:44",
+    "src/diagrams/flowchart/lexer.ts:43"
+   ]
+  },
+  {
+   "pattern": "\\s*[<>^]",
+   "flags": "y",
+   "at": [
+    "src/diagrams/agentflow/lexer.ts:45",
+    "src/diagrams/flowchart/lexer.ts:44"
+   ]
+  },
+  {
+   "pattern": "\\s*v\\b",
+   "flags": "y",
+   "at": [
+    "src/diagrams/agentflow/lexer.ts:46",
+    "src/diagrams/flowchart/lexer.ts:45"
+   ]
+  },
+  {
+   "pattern": ".*direction\\s+TB[^\\n]*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/agentflow/lexer.ts:48",
+    "src/diagrams/c4/lexer.ts:75",
+    "src/diagrams/class/lexer.ts:45",
+    "src/diagrams/flowchart/lexer.ts:47"
+   ]
+  },
+  {
+   "pattern": ".*direction\\s+BT[^\\n]*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/agentflow/lexer.ts:49",
+    "src/diagrams/c4/lexer.ts:76",
+    "src/diagrams/class/lexer.ts:46",
+    "src/diagrams/flowchart/lexer.ts:48"
+   ]
+  },
+  {
+   "pattern": ".*direction\\s+RL[^\\n]*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/agentflow/lexer.ts:50",
+    "src/diagrams/c4/lexer.ts:77",
+    "src/diagrams/class/lexer.ts:47",
+    "src/diagrams/flowchart/lexer.ts:49"
+   ]
+  },
+  {
+   "pattern": ".*direction\\s+LR[^\\n]*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/agentflow/lexer.ts:51",
+    "src/diagrams/c4/lexer.ts:78",
+    "src/diagrams/class/lexer.ts:48",
+    "src/diagrams/flowchart/lexer.ts:50"
+   ]
+  },
+  {
+   "pattern": ".*direction\\s+TD[^\\n]*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/agentflow/lexer.ts:52",
+    "src/diagrams/flowchart/lexer.ts:51"
+   ]
+  },
+  {
+   "pattern": "[\\n\\r\\u2028\\u2029]",
+   "flags": "g",
+   "at": [
+    "src/diagrams/agentflow/lexer.ts:54",
+    "src/diagrams/c4/lexer.ts:80",
+    "src/diagrams/class/lexer.ts:50",
+    "src/diagrams/er/lexer.ts:47",
+    "src/diagrams/flowchart/lexer.ts:53",
+    "src/diagrams/requirement/lexer.ts:23",
+    "src/diagrams/state/lexer.ts:37"
+   ]
+  },
+  {
+   "pattern": "\\(\\s*\\)",
+   "flags": "y",
+   "at": [
+    "src/diagrams/agentflow/lexer.ts:55",
+    "src/diagrams/flowchart/lexer.ts:63",
+    "src/diagrams/gantt/lexer.ts:27"
+   ]
+  },
+  {
+   "pattern": "\\n\\s*",
+   "flags": "g",
+   "at": [
+    "src/diagrams/agentflow/lexer.ts:56",
+    "src/diagrams/common/outline.ts:107",
+    "src/diagrams/flowchart/lexer.ts:64"
+   ]
+  },
+  {
+   "pattern": "}[^\\S\\n]*\\n",
+   "flags": "g",
+   "at": [
+    "src/diagrams/agentflow/parser.ts:96"
+   ]
+  },
+  {
+   "pattern": "^default\\s?",
+   "flags": "",
+   "at": [
+    "src/diagrams/agentflow/render.ts:290",
+    "src/diagrams/class/render.ts:589",
+    "src/diagrams/er/render.ts:328",
+    "src/diagrams/flowchart/render.ts:219",
+    "src/diagrams/requirement/render.ts:303",
+    "src/diagrams/usecase/render.ts:349"
+   ]
+  },
+  {
+   "pattern": " internal-link(?: |$)",
+   "flags": "",
+   "at": [
+    "src/diagrams/agentflow/render.ts:333",
+    "src/diagrams/er/render.ts:354",
+    "src/diagrams/flowchart/render.ts:282"
+   ]
+  },
+  {
+   "pattern": "edge-thickness-normal|edge-pattern-solid|flowchart-link",
+   "flags": "g",
+   "at": [
+    "src/diagrams/agentflow/render.ts:362",
+    "src/diagrams/flowchart/render.ts:338"
+   ]
+  },
+  {
+   "pattern": "\\\\\"",
+   "flags": "g",
+   "at": [
+    "src/diagrams/architecture/parser.ts:146"
+   ]
+  },
+  {
+   "pattern": "\\\\'",
+   "flags": "g",
+   "at": [
+    "src/diagrams/architecture/parser.ts:146"
+   ]
+  },
+  {
+   "pattern": "[\\w]([-\\w]*\\w)?",
+   "flags": "y",
+   "at": [
+    "src/diagrams/architecture/parser.ts:49",
+    "src/diagrams/radar/parser.ts:96",
+    "src/diagrams/wardley/parser.ts:131"
+   ]
+  },
+  {
+   "pattern": "L|R|T|B",
+   "flags": "y",
+   "at": [
+    "src/diagrams/architecture/parser.ts:69"
+   ]
+  },
+  {
+   "pattern": "\\{group\\}",
+   "flags": "y",
+   "at": [
+    "src/diagrams/architecture/parser.ts:70"
+   ]
+  },
+  {
+   "pattern": "<|>",
+   "flags": "y",
+   "at": [
+    "src/diagrams/architecture/parser.ts:71"
+   ]
+  },
+  {
+   "pattern": "\\([\\w-:]+\\)",
+   "flags": "y",
+   "at": [
+    "src/diagrams/architecture/parser.ts:82"
+   ]
+  },
+  {
+   "pattern": "\\[(?:\"([^\"\\\\]|\\\\.)*\"|'([^'\\\\]|\\\\.)*'|[^\\[\\]\\r\\n]+)\\]",
+   "flags": "y",
+   "at": [
+    "src/diagrams/architecture/parser.ts:83"
+   ]
+  },
+  {
+   "pattern": "_",
+   "flags": "g",
+   "at": [
+    "src/diagrams/c4/layout.ts:79"
+   ]
+  },
+  {
+   "pattern": "title[^\\S\\r\\n]*(?=[\\r\\n]|$)\\s*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/c4/lexer.ts:82"
+   ]
+  },
+  {
+   "pattern": "\\ufb02\\u00b0\\u00b0?",
+   "flags": "g",
+   "at": [
+    "src/diagrams/c4/render.ts:41"
+   ]
+  },
+  {
+   "pattern": "\\u00b6\\u00df",
+   "flags": "g",
+   "at": [
+    "src/diagrams/c4/render.ts:41"
+   ]
+  },
+  {
+   "pattern": "<",
+   "flags": "g",
+   "at": [
+    "src/diagrams/class/render.ts:220",
+    "src/diagrams/er/render.ts:127"
+   ]
+  },
+  {
+   "pattern": ">",
+   "flags": "g",
+   "at": [
+    "src/diagrams/class/render.ts:220",
+    "src/diagrams/er/render.ts:127"
+   ]
+  },
+  {
+   "pattern": "[\";]font-family:",
+   "flags": "",
+   "at": [
+    "src/diagrams/class/render.ts:98",
+    "src/diagrams/er/render.ts:203"
+   ]
+  },
+  {
+   "pattern": "[\\t ]*accDescr(?:[\\t ]*:(?:[^\\n\\r]*?(?=%%)|[^\\n\\r]*)|\\s*({))",
+   "flags": "y",
+   "at": [
+    "src/diagrams/common/accDescr.ts:3"
+   ]
+  },
+  {
+   "pattern": "<(?!br\\s*\\/?>)",
+   "flags": "gi",
+   "at": [
+    "src/diagrams/common/fit.ts:4"
+   ]
+  },
+  {
+   "pattern": ":fa-",
+   "flags": "g",
+   "at": [
+    "src/diagrams/common/fit.ts:5"
+   ]
+  },
+  {
+   "pattern": "<br\\s*\\/?>|ﬂ°°?\\w+¶ß|&#?\\w+;|[\\ud800-\\udbff][\\udc00-\\udfff]|[\\s\\S]",
+   "flags": "gi",
+   "at": [
+    "src/diagrams/common/fit.ts:7"
+   ]
+  },
+  {
+   "pattern": "(,)",
+   "flags": "",
+   "at": [
+    "src/diagrams/common/generics.ts:25"
+   ]
+  },
+  {
+   "pattern": "\\s+",
+   "flags": "y",
+   "at": [
+    "src/diagrams/common/outline.ts:100",
+    "src/diagrams/eventmodeling/parser.ts:35"
+   ]
+  },
+  {
+   "pattern": ".+",
+   "flags": "y",
+   "at": [
+    "src/diagrams/common/outline.ts:101"
+   ]
+  },
+  {
+   "pattern": "[^([\\n){}]+",
+   "flags": "y",
+   "at": [
+    "src/diagrams/common/outline.ts:102"
+   ]
+  },
+  {
+   "pattern": "[^([\\n){}@]+",
+   "flags": "y",
+   "at": [
+    "src/diagrams/common/outline.ts:103"
+   ]
+  },
+  {
+   "pattern": "[^)\\](}]+",
+   "flags": "y",
+   "at": [
+    "src/diagrams/common/outline.ts:104"
+   ]
+  },
+  {
+   "pattern": "[^`\"]+",
+   "flags": "y",
+   "at": [
+    "src/diagrams/common/outline.ts:105"
+   ]
+  },
+  {
+   "pattern": "[^}^\"]+",
+   "flags": "y",
+   "at": [
+    "src/diagrams/common/outline.ts:106"
+   ]
+  },
+  {
+   "pattern": "[\\t ]*accDescr(?:[\\t ]*:([^\\n\\r]*?(?=%%)|[^\\n\\r]*)|\\s*{([^}]*)})",
+   "flags": "y",
+   "at": [
+    "src/diagrams/common/tokens.ts:127"
+   ]
+  },
+  {
+   "pattern": "[\\t ]*accTitle[\\t ]*:(?:[^\\n\\r]*?(?=%%)|[^\\n\\r]*)",
+   "flags": "y",
+   "at": [
+    "src/diagrams/common/tokens.ts:132"
+   ]
+  },
+  {
+   "pattern": "[\\t ]*title(?:[\\t ][^\\n\\r]*?(?=%%)|[\\t ][^\\n\\r]*|)",
+   "flags": "y",
+   "at": [
+    "src/diagrams/common/tokens.ts:137"
+   ]
+  },
+  {
+   "pattern": "\"([^\"\\\\]|\\\\.)*\"|'([^'\\\\]|\\\\.)*'",
+   "flags": "y",
+   "at": [
+    "src/diagrams/common/tokens.ts:144",
+    "src/diagrams/railroad/common.ts:76"
+   ]
+  },
+  {
+   "pattern": "\\r?\\n",
+   "flags": "y",
+   "at": [
+    "src/diagrams/common/tokens.ts:145",
+    "src/diagrams/treemap/parser.ts:46",
+    "src/diagrams/treeview/parser.ts:81"
+   ]
+  },
+  {
+   "pattern": "[\\t ]+",
+   "flags": "y",
+   "at": [
+    "src/diagrams/common/tokens.ts:146"
+   ]
+  },
+  {
+   "pattern": "---[\\t ]*\\r?\\n(?:[\\S\\s]*?\\r?\\n)?---(?:\\r?\\n|(?!\\S))",
+   "flags": "y",
+   "at": [
+    "src/diagrams/common/tokens.ts:149"
+   ]
+  },
+  {
+   "pattern": "---[\\t ]*\\r?\\n",
+   "flags": "y",
+   "at": [
+    "src/diagrams/common/tokens.ts:151"
+   ]
+  },
+  {
+   "pattern": "[\\t ]*%%{[\\S\\s]*?}%%(?:\\r?\\n|(?!\\S))",
+   "flags": "y",
+   "at": [
+    "src/diagrams/common/tokens.ts:156"
+   ]
+  },
+  {
+   "pattern": "[\\t ]*%%{",
+   "flags": "y",
+   "at": [
+    "src/diagrams/common/tokens.ts:158"
+   ]
+  },
+  {
+   "pattern": "[\\t ]*%%[^\\n\\r]*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/common/tokens.ts:163"
+   ]
+  },
+  {
+   "pattern": "[.*+?^${}()|[\\]\\\\]",
+   "flags": "g",
+   "at": [
+    "src/diagrams/common/tokens.ts:172"
+   ]
+  },
+  {
+   "pattern": "accDescr(?:[\\t ]*:([^\\n\\r]*)|\\s*{([^}]*)})",
+   "flags": "",
+   "at": [
+    "src/diagrams/common/tokens.ts:177"
+   ]
+  },
+  {
+   "pattern": "accTitle[\\t ]*:([^\\n\\r]*)",
+   "flags": "",
+   "at": [
+    "src/diagrams/common/tokens.ts:178"
+   ]
+  },
+  {
+   "pattern": "title([\\t ][^\\n\\r]*|)",
+   "flags": "",
+   "at": [
+    "src/diagrams/common/tokens.ts:179"
+   ]
+  },
+  {
+   "pattern": "[\\t ]{2,}",
+   "flags": "gm",
+   "at": [
+    "src/diagrams/common/tokens.ts:182",
+    "src/diagrams/common/tokens.ts:199"
+   ]
+  },
+  {
+   "pattern": "^\\s*",
+   "flags": "gm",
+   "at": [
+    "src/diagrams/common/tokens.ts:197"
+   ]
+  },
+  {
+   "pattern": "\\s+$",
+   "flags": "gm",
+   "at": [
+    "src/diagrams/common/tokens.ts:198"
+   ]
+  },
+  {
+   "pattern": "[\\n\\r]{2,}",
+   "flags": "gm",
+   "at": [
+    "src/diagrams/common/tokens.ts:200"
+   ]
+  },
+  {
+   "pattern": "complex|complicated|clear|chaotic|confusion",
+   "flags": "y",
+   "at": [
+    "src/diagrams/cynefin/parser.ts:39"
+   ]
+  },
+  {
+   "pattern": "accTitle\\s*:\\s*",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/er/lexer.ts:37",
+    "src/diagrams/gantt/lexer.ts:21",
+    "src/diagrams/requirement/lexer.ts:19"
+   ]
+  },
+  {
+   "pattern": "accDescr\\s*:\\s*",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/er/lexer.ts:38",
+    "src/diagrams/gantt/lexer.ts:22",
+    "src/diagrams/requirement/lexer.ts:20"
+   ]
+  },
+  {
+   "pattern": "accDescr\\s*\\{\\s*",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/er/lexer.ts:39",
+    "src/diagrams/gantt/lexer.ts:23",
+    "src/diagrams/requirement/lexer.ts:21"
+   ]
+  },
+  {
+   "pattern": ".*direction\\s+TB[^\\n]*",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/er/lexer.ts:41"
+   ]
+  },
+  {
+   "pattern": ".*direction\\s+BT[^\\n]*",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/er/lexer.ts:42"
+   ]
+  },
+  {
+   "pattern": ".*direction\\s+RL[^\\n]*",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/er/lexer.ts:43"
+   ]
+  },
+  {
+   "pattern": ".*direction\\s+LR[^\\n]*",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/er/lexer.ts:44"
+   ]
+  },
+  {
+   "pattern": "direction",
+   "flags": "gi",
+   "at": [
+    "src/diagrams/er/lexer.ts:46",
+    "src/diagrams/state/lexer.ts:35"
+   ]
+  },
+  {
+   "pattern": "\\r",
+   "flags": "g",
+   "at": [
+    "src/diagrams/eventmodeling/model.ts:91"
+   ]
+  },
+  {
+   "pattern": "\\d{1,3}",
+   "flags": "y",
+   "at": [
+    "src/diagrams/eventmodeling/parser.ts:29"
+   ]
+  },
+  {
+   "pattern": "\\{(.*)\\}|\"(.*)\"|'(.*)'",
+   "flags": "y",
+   "at": [
+    "src/diagrams/eventmodeling/parser.ts:30"
+   ]
+  },
+  {
+   "pattern": "\\{[\\t ]*\\r?\\n(?:[\\S\\s]*?\\r?\\n)?\\}(?:\\r?\\n|(?!\\S))",
+   "flags": "y",
+   "at": [
+    "src/diagrams/eventmodeling/parser.ts:31"
+   ]
+  },
+  {
+   "pattern": "\\/\\*[\\s\\S]*?\\*\\/",
+   "flags": "y",
+   "at": [
+    "src/diagrams/eventmodeling/parser.ts:39",
+    "src/diagrams/railroad/ebnf.ts:101",
+    "src/diagrams/railroad/ir.ts:73"
+   ]
+  },
+  {
+   "pattern": "[_a-zA-Z][\\w_]*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/eventmodeling/parser.ts:4"
+   ]
+  },
+  {
+   "pattern": "\\/\\/[^\\n\\r]*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/eventmodeling/parser.ts:40"
+   ]
+  },
+  {
+   "pattern": "\\s*[xo<]?--+[-xo>]\\s*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/flowchart/lexer.ts:54"
+   ]
+  },
+  {
+   "pattern": "\\s*[xo<]?--\\s*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/flowchart/lexer.ts:55"
+   ]
+  },
+  {
+   "pattern": "\\s*[xo<]?==+[=xo>]\\s*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/flowchart/lexer.ts:56"
+   ]
+  },
+  {
+   "pattern": "\\s*[xo<]?==\\s*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/flowchart/lexer.ts:57"
+   ]
+  },
+  {
+   "pattern": "\\s*[xo<]?-?\\.+-[xo>]?\\s*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/flowchart/lexer.ts:58"
+   ]
+  },
+  {
+   "pattern": "\\s*[xo<]?-\\.\\s*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/flowchart/lexer.ts:59"
+   ]
+  },
+  {
+   "pattern": "\\s*~~~+\\s*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/flowchart/lexer.ts:60"
+   ]
+  },
+  {
+   "pattern": "(?:\\r?\\n)+",
+   "flags": "y",
+   "at": [
+    "src/diagrams/flowchart/lexer.ts:61"
+   ]
+  },
+  {
+   "pattern": "[^\\S\\n\\r]+",
+   "flags": "y",
+   "at": [
+    "src/diagrams/flowchart/lexer.ts:62"
+   ]
+  },
+  {
+   "pattern": "}\\s*\\n",
+   "flags": "g",
+   "at": [
+    "src/diagrams/flowchart/parser.ts:82"
+   ]
+  },
+  {
+   "pattern": "^step",
+   "flags": "",
+   "at": [
+    "src/diagrams/flowchart/render.ts:184"
+   ]
+  },
+  {
+   "pattern": "^([1-9]\\d*)(millisecond|second|minute|hour|day|week|month)$",
+   "flags": "",
+   "at": [
+    "src/diagrams/gantt/axis.ts:212"
+   ]
+  },
+  {
+   "pattern": "\\[([^\\]]+)]|Q|wo|ww|w|WW|W|zzz|z|gggg|GGGG|Do|X|x|k{1,2}|S",
+   "flags": "g",
+   "at": [
+    "src/diagrams/gantt/dates.ts:113"
+   ]
+  },
+  {
+   "pattern": "\\[([^\\]]+)]|YYYY|YY|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS",
+   "flags": "g",
+   "at": [
+    "src/diagrams/gantt/dates.ts:114"
+   ]
+  },
+  {
+   "pattern": "(\\[[^[]*\\])|([-_:/.,()\\s]+)|(A|a|Q|YYYY|YY?|ww?|MM?M?M?|Do|DD?|hh?|HH?|mm?|ss?|S{1,3}|z|ZZ?)",
+   "flags": "g",
+   "at": [
+    "src/diagrams/gantt/dates.ts:240"
+   ]
+  },
+  {
+   "pattern": "\\[[^\\]]+]",
+   "flags": "g",
+   "at": [
+    "src/diagrams/gantt/dates.ts:241"
+   ]
+  },
+  {
+   "pattern": "\\d",
+   "flags": "",
+   "at": [
+    "src/diagrams/gantt/dates.ts:242"
+   ]
+  },
+  {
+   "pattern": "\\d\\d",
+   "flags": "",
+   "at": [
+    "src/diagrams/gantt/dates.ts:243"
+   ]
+  },
+  {
+   "pattern": "\\d{3}",
+   "flags": "",
+   "at": [
+    "src/diagrams/gantt/dates.ts:244"
+   ]
+  },
+  {
+   "pattern": "\\d{4}",
+   "flags": "",
+   "at": [
+    "src/diagrams/gantt/dates.ts:245"
+   ]
+  },
+  {
+   "pattern": "\\d\\d?",
+   "flags": "",
+   "at": [
+    "src/diagrams/gantt/dates.ts:246"
+   ]
+  },
+  {
+   "pattern": "[+-]?\\d+",
+   "flags": "",
+   "at": [
+    "src/diagrams/gantt/dates.ts:247"
+   ]
+  },
+  {
+   "pattern": "[+-]\\d\\d:?(\\d\\d)?|Z",
+   "flags": "",
+   "at": [
+    "src/diagrams/gantt/dates.ts:248"
+   ]
+  },
+  {
+   "pattern": "\\d*[^-_:/,()\\s\\d]+",
+   "flags": "",
+   "at": [
+    "src/diagrams/gantt/dates.ts:249"
+   ]
+  },
+  {
+   "pattern": "([+-]|\\d\\d)",
+   "flags": "g",
+   "at": [
+    "src/diagrams/gantt/dates.ts:263"
+   ]
+  },
+  {
+   "pattern": "\\d+",
+   "flags": "",
+   "at": [
+    "src/diagrams/gantt/dates.ts:300"
+   ]
+  },
+  {
+   "pattern": "[Ll]",
+   "flags": "",
+   "at": [
+    "src/diagrams/gantt/dates.ts:331"
+   ]
+  },
+  {
+   "pattern": "^\\[|\\]$",
+   "flags": "g",
+   "at": [
+    "src/diagrams/gantt/dates.ts:334"
+   ]
+  },
+  {
+   "pattern": "^[YMDHhmsSZXx\\-/.:, T]*$",
+   "flags": "",
+   "at": [
+    "src/diagrams/gantt/db.ts:12"
+   ]
+  },
+  {
+   "pattern": "^\\s*(active|done|crit|milestone|vert)\\s*$",
+   "flags": "",
+   "at": [
+    "src/diagrams/gantt/db.ts:13"
+   ]
+  },
+  {
+   "pattern": "^after\\s+([\\d\\w- ]+)",
+   "flags": "",
+   "at": [
+    "src/diagrams/gantt/db.ts:14"
+   ]
+  },
+  {
+   "pattern": "^until\\s+([\\d\\w- ]+)",
+   "flags": "",
+   "at": [
+    "src/diagrams/gantt/db.ts:15"
+   ]
+  },
+  {
+   "pattern": "^(\\d+(?:\\.\\d+)?)([Mdhmswy]|ms)$",
+   "flags": "",
+   "at": [
+    "src/diagrams/gantt/db.ts:16"
+   ]
+  },
+  {
+   "pattern": "[\\s,]+",
+   "flags": "",
+   "at": [
+    "src/diagrams/gantt/db.ts:17"
+   ]
+  },
+  {
+   "pattern": "^\\d+$",
+   "flags": "",
+   "at": [
+    "src/diagrams/gantt/db.ts:18",
+    "src/diagrams/quadrant/db.ts:37"
+   ]
+  },
+  {
+   "pattern": "href\\s+\"",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/gantt/lexer.ts:24"
+   ]
+  },
+  {
+   "pattern": "call\\s+",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/gantt/lexer.ts:25"
+   ]
+  },
+  {
+   "pattern": "click\\s+",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/gantt/lexer.ts:26"
+   ]
+  },
+  {
+   "pattern": "weekday\\s+(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\\b",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/gantt/lexer.ts:28"
+   ]
+  },
+  {
+   "pattern": "weekend\\s+(?:(friday)|saturday)\\b",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/gantt/lexer.ts:30"
+   ]
+  },
+  {
+   "pattern": "\\d\\d\\d\\d-\\d\\d-\\d\\d\\b",
+   "flags": "y",
+   "at": [
+    "src/diagrams/gantt/lexer.ts:31"
+   ]
+  },
+  {
+   "pattern": "title[^\\S\\r\\n]*(?=[\\r\\n]|$)",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/gantt/lexer.ts:32"
+   ]
+  },
+  {
+   "pattern": "axisFormat\\s[^#\\n;]+",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/gantt/lexer.ts:36"
+   ]
+  },
+  {
+   "pattern": "accDescription\\s[^#\\n;]+",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/gantt/lexer.ts:36"
+   ]
+  },
+  {
+   "pattern": "gantt\\b",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/gantt/lexer.ts:37"
+   ]
+  },
+  {
+   "pattern": "dateFormat\\s[^#\\n;]+",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/gantt/lexer.ts:38"
+   ]
+  },
+  {
+   "pattern": "inclusiveEndDates\\b",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/gantt/lexer.ts:39"
+   ]
+  },
+  {
+   "pattern": "includes\\s[^#\\n;]+",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/gantt/lexer.ts:39"
+   ]
+  },
+  {
+   "pattern": "topAxis\\b",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/gantt/lexer.ts:43"
+   ]
+  },
+  {
+   "pattern": "tickInterval\\s[^#\\n;]+",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/gantt/lexer.ts:44"
+   ]
+  },
+  {
+   "pattern": "todayMarker\\s[^\\n;]+",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/gantt/lexer.ts:45"
+   ]
+  },
+  {
+   "pattern": "title[^\\S\\r\\n][^\\n]+",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/gantt/lexer.ts:46"
+   ]
+  },
+  {
+   "pattern": "excludes\\s[^#\\n;]+",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/gantt/lexer.ts:49"
+   ]
+  },
+  {
+   "pattern": "section\\s[^\\n]+",
+   "flags": "iy",
+   "at": [
+    "src/diagrams/gantt/lexer.ts:50"
+   ]
+  },
+  {
+   "pattern": "<br\\s*\\/?>",
+   "flags": "gi",
+   "at": [
+    "src/diagrams/gantt/render.ts:18"
+   ]
+  },
+  {
+   "pattern": "\\w([-\\./\\w]*[-\\w])?",
+   "flags": "y",
+   "at": [
+    "src/diagrams/git/parser.ts:52"
+   ]
+  },
+  {
+   "pattern": "[\\t ]*accDescr\\s*{",
+   "flags": "y",
+   "at": [
+    "src/diagrams/git/parser.ts:84",
+    "src/diagrams/radar/parser.ts:81"
+   ]
+  },
+  {
+   "pattern": "0|[1-9][0-9]*(?!\\.)",
+   "flags": "y",
+   "at": [
+    "src/diagrams/git/parser.ts:87",
+    "src/diagrams/packet/parser.ts:45",
+    "src/diagrams/wardley/parser.ts:129"
+   ]
+  },
+  {
+   "pattern": "(?:-?[0-9]+\\.[0-9]+(?!\\.))|(?:-?(0|[1-9][0-9]*)(?!\\.))",
+   "flags": "y",
+   "at": [
+    "src/diagrams/pie/parser.ts:71"
+   ]
+  },
+  {
+   "pattern": "^#?([\\dA-Fa-f]{6}|[\\dA-Fa-f]{3})$",
+   "flags": "",
+   "at": [
+    "src/diagrams/quadrant/db.ts:38"
+   ]
+  },
+  {
+   "pattern": "^\\d+px$",
+   "flags": "",
+   "at": [
+    "src/diagrams/quadrant/db.ts:39"
+   ]
+  },
+  {
+   "pattern": "circle|polygon",
+   "flags": "y",
+   "at": [
+    "src/diagrams/radar/parser.ts:130",
+    "src/diagrams/radar/parser.ts:130"
+   ]
+  },
+  {
+   "pattern": "true|false",
+   "flags": "y",
+   "at": [
+    "src/diagrams/radar/parser.ts:131",
+    "src/diagrams/radar/parser.ts:131"
+   ]
+  },
+  {
+   "pattern": "(?:[0-9]+\\.[0-9]+(?!\\.))|(?:0|[1-9][0-9]*(?!\\.))",
+   "flags": "y",
+   "at": [
+    "src/diagrams/radar/parser.ts:135"
+   ]
+  },
+  {
+   "pattern": "[-\\w]*\\w",
+   "flags": "y",
+   "at": [
+    "src/diagrams/radar/parser.ts:97"
+   ]
+  },
+  {
+   "pattern": "[A-Za-z][A-Za-z0-9-]*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/railroad/abnf.ts:44"
+   ]
+  },
+  {
+   "pattern": ";[^\\n\\r]*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/railroad/abnf.ts:45"
+   ]
+  },
+  {
+   "pattern": "\"[^\"]*\"",
+   "flags": "y",
+   "at": [
+    "src/diagrams/railroad/abnf.ts:61"
+   ]
+  },
+  {
+   "pattern": "%[xXdDbB][0-9A-Fa-f]+(?:-[0-9A-Fa-f]+|\\.[0-9A-Fa-f]+)*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/railroad/abnf.ts:62"
+   ]
+  },
+  {
+   "pattern": "[0-9]*\\*[0-9]*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/railroad/abnf.ts:63"
+   ]
+  },
+  {
+   "pattern": "[0-9]+",
+   "flags": "y",
+   "at": [
+    "src/diagrams/railroad/abnf.ts:64"
+   ]
+  },
+  {
+   "pattern": "accTitle[\\t ]*:(?:[^\\n\\r]*?(?=%%)|[^\\n\\r]*)",
+   "flags": "y",
+   "at": [
+    "src/diagrams/railroad/common.ts:54"
+   ]
+  },
+  {
+   "pattern": "accDescr(?:[\\t ]*:([^\\n\\r]*?(?=%%)|[^\\n\\r]*)|\\s*{([^}]*)})",
+   "flags": "y",
+   "at": [
+    "src/diagrams/railroad/common.ts:57"
+   ]
+  },
+  {
+   "pattern": "[A-Z_a-z][\\w-]*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/railroad/common.ts:72"
+   ]
+  },
+  {
+   "pattern": "[\\t \\r\\n]+",
+   "flags": "y",
+   "at": [
+    "src/diagrams/railroad/common.ts:82"
+   ]
+  },
+  {
+   "pattern": "^\\s*railroad-(ebnf-|abnf-|peg-)?beta",
+   "flags": "i",
+   "at": [
+    "src/diagrams/railroad/db.ts:40"
+   ]
+  },
+  {
+   "pattern": "\\/\\*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/railroad/ebnf.ts:101",
+    "src/diagrams/railroad/ir.ts:73"
+   ]
+  },
+  {
+   "pattern": "\\?(?=[^?;]*[^?\\s;][^?;]*\\?)[^?;]*\\?",
+   "flags": "y",
+   "at": [
+    "src/diagrams/railroad/ebnf.ts:70"
+   ]
+  },
+  {
+   "pattern": "\\(\\*[\\s\\S]*?\\*\\)",
+   "flags": "y",
+   "at": [
+    "src/diagrams/railroad/ebnf.ts:75"
+   ]
+  },
+  {
+   "pattern": "\\(\\*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/railroad/ebnf.ts:75"
+   ]
+  },
+  {
+   "pattern": "#[^\\n\\r]*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/railroad/peg.ts:68"
+   ]
+  },
+  {
+   "pattern": "^ +$",
+   "flags": "",
+   "at": [
+    "src/diagrams/railroad/render.ts:122"
+   ]
+  },
+  {
+   "pattern": "[\\n\\r\\t]",
+   "flags": "g",
+   "at": [
+    "src/diagrams/railroad/render.ts:62"
+   ]
+  },
+  {
+   "pattern": "&",
+   "flags": "g",
+   "at": [
+    "src/diagrams/railroad/render.ts:67"
+   ]
+  },
+  {
+   "pattern": "direction\\s+(?:(TB)|(BT)|(RL)|LR)",
+   "flags": "gi",
+   "at": [
+    "src/diagrams/requirement/lexer.ts:22"
+   ]
+  },
+  {
+   "pattern": "[\\n\\r]+",
+   "flags": "g",
+   "at": [
+    "src/diagrams/sankey/parser.ts:6"
+   ]
+  },
+  {
+   "pattern": "[\\x00-\\x08\\x0b\\x0c\\x0e-\\x1f\\ud800-\\udfff\\ufffe\\uffff]",
+   "flags": "u",
+   "at": [
+    "src/diagrams/sankey/parser.ts:7"
+   ]
+  },
+  {
+   "pattern": "^ style=\"fill:(.*);\"$",
+   "flags": "",
+   "at": [
+    "src/diagrams/sankey/render.ts:115"
+   ]
+  },
+  {
+   "pattern": "^[\\w-]+$",
+   "flags": "",
+   "at": [
+    "src/diagrams/sankey/render.ts:204"
+   ]
+  },
+  {
+   "pattern": "^[+-]?(?:\\d+(?:\\.\\d+)?|\\.\\d+)(?:e[+-]?\\d+)?(%|deg|grad|rad|turn)?$",
+   "flags": "i",
+   "at": [
+    "src/diagrams/sequence/colors.ts:27",
+    "src/svg/ink.ts:16"
+   ]
+  },
+  {
+   "pattern": "\\s+",
+   "flags": "",
+   "at": [
+    "src/diagrams/sequence/colors.ts:65",
+    "src/diagrams/treeview/render.ts:100",
+    "src/svg/ink.ts:44"
+   ]
+  },
+  {
+   "pattern": "^:?wrap:",
+   "flags": "",
+   "at": [
+    "src/diagrams/sequence/db.ts:24"
+   ]
+  },
+  {
+   "pattern": "^:?nowrap:",
+   "flags": "",
+   "at": [
+    "src/diagrams/sequence/db.ts:25"
+   ]
+  },
+  {
+   "pattern": "^:?(?:no)?wrap:",
+   "flags": "",
+   "at": [
+    "src/diagrams/sequence/db.ts:26"
+   ]
+  },
+  {
+   "pattern": "^(?:rgba?|hsla?)\\s*\\(",
+   "flags": "",
+   "at": [
+    "src/diagrams/sequence/db.ts:27"
+   ]
+  },
+  {
+   "pattern": "[\\r\\u2028\\u2029]",
+   "flags": "",
+   "at": [
+    "src/diagrams/sequence/db.ts:28"
+   ]
+  },
+  {
+   "pattern": "^\\w*",
+   "flags": "",
+   "at": [
+    "src/diagrams/sequence/db.ts:29"
+   ]
+  },
+  {
+   "pattern": ";",
+   "flags": "g",
+   "at": [
+    "src/diagrams/state/db.ts:68"
+   ]
+  },
+  {
+   "pattern": "<<(?:fork|join|choice)>>|\\[\\[(?:fork|join|choice)\\]\\]",
+   "flags": "gi",
+   "at": [
+    "src/diagrams/state/lexer.ts:36"
+   ]
+  },
+  {
+   "pattern": "%%",
+   "flags": "g",
+   "at": [
+    "src/diagrams/state/lexer.ts:38"
+   ]
+  },
+  {
+   "pattern": "\\{",
+   "flags": "g",
+   "at": [
+    "src/diagrams/state/lexer.ts:39"
+   ]
+  },
+  {
+   "pattern": "(?:^| )statediagram-(?:state|cluster-alt|cluster|note)(?= |$)",
+   "flags": "g",
+   "at": [
+    "src/diagrams/state/render.ts:33"
+   ]
+  },
+  {
+   "pattern": "\\.?0+$",
+   "flags": "",
+   "at": [
+    "src/diagrams/treemap/format.ts:32"
+   ]
+  },
+  {
+   "pattern": "^(?:.?[<>=^])?([-+( ])?(\\$)?0?\\d*(,)?(?:\\.(\\d+))?(~)?([a-zA-Z%])?$",
+   "flags": "",
+   "at": [
+    "src/diagrams/treemap/format.ts:4"
+   ]
+  },
+  {
+   "pattern": "treemap-beta|treemap",
+   "flags": "y",
+   "at": [
+    "src/diagrams/treemap/parser.ts:38"
+   ]
+  },
+  {
+   "pattern": "classDef\\s+([a-zA-Z_][a-zA-Z0-9_]+)(?:\\s+([^;\\r\\n]*))?(?:;)?",
+   "flags": "y",
+   "at": [
+    "src/diagrams/treemap/parser.ts:39"
+   ]
+  },
+  {
+   "pattern": ":::",
+   "flags": "y",
+   "at": [
+    "src/diagrams/treemap/parser.ts:40"
+   ]
+  },
+  {
+   "pattern": ":",
+   "flags": "y",
+   "at": [
+    "src/diagrams/treemap/parser.ts:41"
+   ]
+  },
+  {
+   "pattern": ",",
+   "flags": "y",
+   "at": [
+    "src/diagrams/treemap/parser.ts:42"
+   ]
+  },
+  {
+   "pattern": "[ \\t]{1,}",
+   "flags": "y",
+   "at": [
+    "src/diagrams/treemap/parser.ts:43",
+    "src/diagrams/treeview/parser.ts:77"
+   ]
+  },
+  {
+   "pattern": "[ \\t]+",
+   "flags": "y",
+   "at": [
+    "src/diagrams/treemap/parser.ts:44",
+    "src/diagrams/treeview/parser.ts:79",
+    "src/diagrams/wardley/parser.ts:125"
+   ]
+  },
+  {
+   "pattern": "\\%\\%[^\\n]*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/treemap/parser.ts:45",
+    "src/diagrams/treeview/parser.ts:80"
+   ]
+  },
+  {
+   "pattern": "[a-zA-Z_][a-zA-Z0-9_]*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/treemap/parser.ts:47"
+   ]
+  },
+  {
+   "pattern": "[0-9_\\.\\,]+",
+   "flags": "y",
+   "at": [
+    "src/diagrams/treemap/parser.ts:48"
+   ]
+  },
+  {
+   "pattern": "\"[^\"]*\"|'[^']*'",
+   "flags": "y",
+   "at": [
+    "src/diagrams/treemap/parser.ts:49",
+    "src/diagrams/treeview/parser.ts:78"
+   ]
+  },
+  {
+   "pattern": "classDef\\s+([A-Z_a-z]\\w+)(?:\\s+([^\\n\\r;]*))?;?",
+   "flags": "",
+   "at": [
+    "src/diagrams/treemap/parser.ts:52"
+   ]
+  },
+  {
+   "pattern": "[\";]fill:",
+   "flags": "",
+   "at": [
+    "src/diagrams/treemap/render.ts:125",
+    "src/svg/theme.ts:18"
+   ]
+  },
+  {
+   "pattern": "^[\\s─━│┃└┗├┣]+$",
+   "flags": "",
+   "at": [
+    "src/diagrams/treeview/boxDrawing.ts:10"
+   ]
+  },
+  {
+   "pattern": "^\\s*(title[\\t ]|accTitle[\\t ]*:|accDescr[\\t ]*[:{])",
+   "flags": "",
+   "at": [
+    "src/diagrams/treeview/boxDrawing.ts:11"
+   ]
+  },
+  {
+   "pattern": "^\\s+",
+   "flags": "",
+   "at": [
+    "src/diagrams/treeview/boxDrawing.ts:118"
+   ]
+  },
+  {
+   "pattern": "^\\s*%%",
+   "flags": "",
+   "at": [
+    "src/diagrams/treeview/boxDrawing.ts:12"
+   ]
+  },
+  {
+   "pattern": "\\bline\\s+(\\d+)\\b",
+   "flags": "gi",
+   "at": [
+    "src/diagrams/treeview/boxDrawing.ts:36"
+   ]
+  },
+  {
+   "pattern": "[─━│┃└┗├┣]",
+   "flags": "",
+   "at": [
+    "src/diagrams/treeview/boxDrawing.ts:6"
+   ]
+  },
+  {
+   "pattern": "[└┗├┣]",
+   "flags": "",
+   "at": [
+    "src/diagrams/treeview/boxDrawing.ts:7"
+   ]
+  },
+  {
+   "pattern": "[─━]",
+   "flags": "",
+   "at": [
+    "src/diagrams/treeview/boxDrawing.ts:8"
+   ]
+  },
+  {
+   "pattern": "\\t",
+   "flags": "g",
+   "at": [
+    "src/diagrams/treeview/boxDrawing.ts:81",
+    "src/diagrams/treeview/boxDrawing.ts:102"
+   ]
+  },
+  {
+   "pattern": "^[\\s│┃]+$",
+   "flags": "",
+   "at": [
+    "src/diagrams/treeview/boxDrawing.ts:9"
+   ]
+  },
+  {
+   "pattern": "(?!:::|icon\\(|##)[^ \\t\\n\\r\"'](?:(?![ \\t]+:::[ \\t]*[A-Za-z_]|[ \\t]+icon\\(|[ \\t]+##)[^\\n\\r])*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/treeview/parser.ts:65"
+   ]
+  },
+  {
+   "pattern": "[ \\t]+:::[ \\t]*[A-Za-z_][\\w-]*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/treeview/parser.ts:74"
+   ]
+  },
+  {
+   "pattern": "[ \\t]+icon\\([\\w-]*(?::[\\w-]+)?\\)",
+   "flags": "y",
+   "at": [
+    "src/diagrams/treeview/parser.ts:75"
+   ]
+  },
+  {
+   "pattern": "[ \\t]+##[^\\n\\r]*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/treeview/parser.ts:76"
+   ]
+  },
+  {
+   "pattern": "\\bposition (\\d+)\\b",
+   "flags": "",
+   "at": [
+    "src/diagrams/usecase/json.ts:199"
+   ]
+  },
+  {
+   "pattern": "\\bline (\\d+) column (\\d+)\\b",
+   "flags": "",
+   "at": [
+    "src/diagrams/usecase/json.ts:201"
+   ]
+  },
+  {
+   "pattern": "unexpected end|end of json input",
+   "flags": "i",
+   "at": [
+    "src/diagrams/usecase/json.ts:207"
+   ]
+  },
+  {
+   "pattern": "^[\\dA-Fa-f]{4}$",
+   "flags": "",
+   "at": [
+    "src/diagrams/usecase/json.ts:77"
+   ]
+  },
+  {
+   "pattern": "\\W",
+   "flags": "g",
+   "at": [
+    "src/diagrams/usecase/parser.ts:177"
+   ]
+  },
+  {
+   "pattern": "\\w",
+   "flags": "",
+   "at": [
+    "src/diagrams/usecase/parser.ts:603",
+    "src/text/label.ts:212",
+    "src/text/label.ts:212"
+   ]
+  },
+  {
+   "pattern": "^default relationship relationship-\\S+\\s?",
+   "flags": "",
+   "at": [
+    "src/diagrams/usecase/render.ts:521"
+   ]
+  },
+  {
+   "pattern": "[&<>\\\\]",
+   "flags": "g",
+   "at": [
+    "src/diagrams/usecase/render.ts:64"
+   ]
+  },
+  {
+   "pattern": "[\";]fill-opacity:",
+   "flags": "",
+   "at": [
+    "src/diagrams/venn/render.ts:172"
+   ]
+  },
+  {
+   "pattern": "[0-9]+\\.[0-9]+",
+   "flags": "y",
+   "at": [
+    "src/diagrams/wardley/parser.ts:100"
+   ]
+  },
+  {
+   "pattern": "\\+<>|\\+>|\\+<",
+   "flags": "y",
+   "at": [
+    "src/diagrams/wardley/parser.ts:102"
+   ]
+  },
+  {
+   "pattern": ";[^\\n\\r]+",
+   "flags": "y",
+   "at": [
+    "src/diagrams/wardley/parser.ts:104"
+   ]
+  },
+  {
+   "pattern": "build|buy|outsource|market",
+   "flags": "y",
+   "at": [
+    "src/diagrams/wardley/parser.ts:105"
+   ]
+  },
+  {
+   "pattern": "(?!title\\s|accTitle|accDescr)[A-Za-z](?:[A-Za-z0-9_()&]|-(?!>))*(?:[ \\t]+[A-Za-z(](?:[A-Za-z0-9_()&]|-(?!>))*)*",
+   "flags": "y",
+   "at": [
+    "src/diagrams/wardley/parser.ts:122"
+   ]
+  },
+  {
+   "pattern": "->",
+   "flags": "y",
+   "at": [
+    "src/diagrams/wardley/parser.ts:85"
+   ]
+  },
+  {
+   "pattern": "-->|-\\.->|>|\\+'[^']*'<>|\\+'[^']*'<|\\+'[^']*'>",
+   "flags": "y",
+   "at": [
+    "src/diagrams/wardley/parser.ts:86"
+   ]
+  },
+  {
+   "pattern": "'",
+   "flags": "g",
+   "at": [
+    "src/preprocess.ts:116"
+   ]
+  },
+  {
+   "pattern": "^\\s*%%(?!{)[^\\n]+\\n?",
+   "flags": "gm",
+   "at": [
+    "src/preprocess.ts:16"
+   ]
+  },
+  {
+   "pattern": "%{2}{\\s*(?:(\\w+)\\s*:|(\\w+))\\s*(?:(\\w+)|((?:(?!}%{2}).|\\r?\\n)*))?\\s*(?:}%{2})?",
+   "flags": "gi",
+   "at": [
+    "src/preprocess.ts:17"
+   ]
+  },
+  {
+   "pattern": "<(\\w+)([^>]*)>",
+   "flags": "g",
+   "at": [
+    "src/preprocess.ts:18"
+   ]
+  },
+  {
+   "pattern": "#\\w+;",
+   "flags": "g",
+   "at": [
+    "src/preprocess.ts:185"
+   ]
+  },
+  {
+   "pattern": "^\\+?\\d+$",
+   "flags": "",
+   "at": [
+    "src/preprocess.ts:186"
+   ]
+  },
+  {
+   "pattern": "=\"([^\"]*)\"",
+   "flags": "g",
+   "at": [
+    "src/preprocess.ts:19"
+   ]
+  },
+  {
+   "pattern": "\\r\\n?",
+   "flags": "g",
+   "at": [
+    "src/preprocess.ts:35",
+    "src/text/label.ts:388",
+    "src/util/yaml.ts:27"
+   ]
+  },
+  {
+   "pattern": " fill=\"([^\"]*)\"",
+   "flags": "",
+   "at": [
+    "src/svg/builder.ts:108"
+   ]
+  },
+  {
+   "pattern": " stroke=\"([^\"]*)\"",
+   "flags": "",
+   "at": [
+    "src/svg/builder.ts:109"
+   ]
+  },
+  {
+   "pattern": " style=\"([^\"]*)\"",
+   "flags": "",
+   "at": [
+    "src/svg/builder.ts:110"
+   ]
+  },
+  {
+   "pattern": "(?:^|;)\\s*fill:([^;]*)",
+   "flags": "",
+   "at": [
+    "src/svg/builder.ts:111"
+   ]
+  },
+  {
+   "pattern": "(?:^|;)\\s*opacity:([^;]*)",
+   "flags": "",
+   "at": [
+    "src/svg/builder.ts:112"
+   ]
+  },
+  {
+   "pattern": "[\\x00-\\x08\\x0b\\x0c\\x0e-\\x1f\\x7f\\ud800-\\udfff\\ufffe\\uffff]",
+   "flags": "u",
+   "at": [
+    "src/svg/builder.ts:13"
+   ]
+  },
+  {
+   "pattern": "[&<>\"\\x00-\\x08\\x0b\\x0c\\x0e-\\x1f\\x7f\\ud800-\\udfff\\ufffe\\uffff]",
+   "flags": "u",
+   "at": [
+    "src/svg/builder.ts:8"
+   ]
+  },
+  {
+   "pattern": "[&<>\"]|[\\x00-\\x08\\x0b\\x0c\\x0e-\\x1f\\x7f\\ud800-\\udfff\\ufffe\\uffff]+",
+   "flags": "gu",
+   "at": [
+    "src/svg/builder.ts:9"
+   ]
+  },
+  {
+   "pattern": "[\";]stroke:",
+   "flags": "",
+   "at": [
+    "src/svg/edges.ts:443"
+   ]
+  },
+  {
+   "pattern": "[\";]fill:([^;\"]*)",
+   "flags": "",
+   "at": [
+    "src/svg/edges.ts:448",
+    "src/svg/ink.ts:12"
+   ]
+  },
+  {
+   "pattern": " fill=\"var\\(--_bg\\)\"",
+   "flags": "g",
+   "at": [
+    "src/svg/edges.ts:449"
+   ]
+  },
+  {
+   "pattern": "^[\\d.]+(?:px)?$",
+   "flags": "",
+   "at": [
+    "src/svg/edges.ts:468"
+   ]
+  },
+  {
+   "pattern": " class=\"pele-marker\"",
+   "flags": "g",
+   "at": [
+    "src/svg/edges.ts:477"
+   ]
+  },
+  {
+   "pattern": "[\";](?:fill-)?opacity:([^;\"]*)",
+   "flags": "g",
+   "at": [
+    "src/svg/ink.ts:13"
+   ]
+  },
+  {
+   "pattern": "^#(?:[\\da-f]{3,4}|[\\da-f]{6}|[\\da-f]{8})$",
+   "flags": "i",
+   "at": [
+    "src/svg/ink.ts:14"
+   ]
+  },
+  {
+   "pattern": "^(rgba?|hsla?)\\(([^()]*)\\)$",
+   "flags": "i",
+   "at": [
+    "src/svg/ink.ts:15"
+   ]
+  },
+  {
+   "pattern": "\\s*,\\s*",
+   "flags": "",
+   "at": [
+    "src/svg/ink.ts:44"
+   ]
+  },
+  {
+   "pattern": ".",
+   "flags": "g",
+   "at": [
+    "src/svg/ink.ts:66"
+   ]
+  },
+  {
+   "pattern": "^[\\w\\s#%.,+\\-/()]{1,200}$",
+   "flags": "",
+   "at": [
+    "src/svg/palette.ts:20"
+   ]
+  },
+  {
+   "pattern": "([\\w-]*)\\s*\\(",
+   "flags": "g",
+   "at": [
+    "src/svg/palette.ts:21"
+   ]
+  },
+  {
+   "pattern": "var\\(\\s*([\\w-]*)",
+   "flags": "gi",
+   "at": [
+    "src/svg/palette.ts:22"
+   ]
+  },
+  {
+   "pattern": "var\\(--_(r|tw|hw|w)\\)",
+   "flags": "g",
+   "at": [
+    "src/svg/root.ts:13"
+   ]
+  },
+  {
+   "pattern": "!important",
+   "flags": "gi",
+   "at": [
+    "src/svg/theme.ts:109"
+   ]
+  },
+  {
+   "pattern": "^[\\d.]+(px)?$",
+   "flags": "",
+   "at": [
+    "src/svg/theme.ts:126"
+   ]
+  },
+  {
+   "pattern": "[^\\w-]+",
+   "flags": "g",
+   "at": [
+    "src/svg/theme.ts:138"
+   ]
+  },
+  {
+   "pattern": "url\\s*\\(|expression\\s*\\(|javascript:|[<>{};\\\\]|@import|image-set|\\/\\*",
+   "flags": "i",
+   "at": [
+    "src/svg/theme.ts:76"
+   ]
+  },
+  {
+   "pattern": "&(?:#(\\d+)|#[xX]([0-9a-fA-F]+)|(\\w+));",
+   "flags": "g",
+   "at": [
+    "src/text/entities.ts:39"
+   ]
+  },
+  {
+   "pattern": "ﬂ°°?(\\w+)¶ß",
+   "flags": "g",
+   "at": [
+    "src/text/entities.ts:62"
+   ]
+  },
+  {
+   "pattern": "<br\\s*\\/?>|\\\\n|\\n",
+   "flags": "gi",
+   "at": [
+    "src/text/label.ts:30"
+   ]
+  },
+  {
+   "pattern": "<\\/?([a-zA-Z][\\w-]*)(?:\\s[^<>]*)?\\/?>",
+   "flags": "y",
+   "at": [
+    "src/text/label.ts:31"
+   ]
+  },
+  {
+   "pattern": "(fa[bklrs]?):fa-([\\w-]+)",
+   "flags": "g",
+   "at": [
+    "src/text/label.ts:32"
+   ]
+  },
+  {
+   "pattern": "[<\\\\\\n*_]|fa[bklrs]?:fa-",
+   "flags": "",
+   "at": [
+    "src/text/label.ts:33"
+   ]
+  },
+  {
+   "pattern": "\\$\\$(.+?)\\$\\$",
+   "flags": "g",
+   "at": [
+    "src/text/label.ts:79"
+   ]
+  },
+  {
+   "pattern": "[\\ue000-\\uf8ff]",
+   "flags": "",
+   "at": [
+    "src/text/label.ts:80"
+   ]
+  },
+  {
+   "pattern": "([\\ue000-\\uf8ff])",
+   "flags": "",
+   "at": [
+    "src/text/label.ts:81"
+   ]
+  },
+  {
+   "pattern": "^.+(:|&colon;)",
+   "flags": "gim",
+   "at": [
+    "src/util/url.ts:10"
+   ]
+  },
+  {
+   "pattern": "(\\\\|%5[cC])((%(6[eE]|72|74))|[nrt])",
+   "flags": "g",
+   "at": [
+    "src/util/url.ts:11"
+   ]
+  },
+  {
+   "pattern": "[\\t\\n\\r]",
+   "flags": "g",
+   "at": [
+    "src/util/url.ts:116"
+   ]
+  },
+  {
+   "pattern": "^[\\x00-\\x20]+",
+   "flags": "",
+   "at": [
+    "src/util/url.ts:116"
+   ]
+  },
+  {
+   "pattern": "\\\\",
+   "flags": "g",
+   "at": [
+    "src/util/url.ts:57"
+   ]
+  },
+  {
+   "pattern": "^([^\\w]*)(javascript|data|vbscript)",
+   "flags": "im",
+   "at": [
+    "src/util/url.ts:6"
+   ]
+  },
+  {
+   "pattern": "&#(\\w+)(^\\w|;)?",
+   "flags": "g",
+   "at": [
+    "src/util/url.ts:7"
+   ]
+  },
+  {
+   "pattern": "&(newline|tab);",
+   "flags": "gi",
+   "at": [
+    "src/util/url.ts:8"
+   ]
+  },
+  {
+   "pattern": "^([a-z][a-z0-9+.-]*):",
+   "flags": "i",
+   "at": [
+    "src/util/url.ts:81"
+   ]
+  },
+  {
+   "pattern": "^[\\\\/]{2}",
+   "flags": "",
+   "at": [
+    "src/util/url.ts:82"
+   ]
+  },
+  {
+   "pattern": "[\\u0000-\\u001F\\u007F-\\u009F -‍﻿\\uD800-\\uDFFF\\uFFFE\\uFFFF]",
+   "flags": "gimu",
+   "at": [
+    "src/util/url.ts:9"
+   ]
+  },
+  {
+   "pattern": "^[-+]?\\.(?:inf|Inf|INF)$",
+   "flags": "",
+   "at": [
+    "src/util/yaml.ts:109"
+   ]
+  },
+  {
+   "pattern": "^\\.(?:nan|NaN|NAN)$",
+   "flags": "",
+   "at": [
+    "src/util/yaml.ts:110"
+   ]
+  },
+  {
+   "pattern": "\\n+",
+   "flags": "g",
+   "at": [
+    "src/util/yaml.ts:149"
+   ]
+  },
+  {
+   "pattern": "\\\\\\n[ \\t]*",
+   "flags": "g",
+   "at": [
+    "src/util/yaml.ts:155"
+   ]
+  },
+  {
+   "pattern": "''",
+   "flags": "g",
+   "at": [
+    "src/util/yaml.ts:255"
+   ]
+  },
+  {
+   "pattern": "[\\s,[\\]{}]",
+   "flags": "",
+   "at": [
+    "src/util/yaml.ts:260"
+   ]
+  },
+  {
+   "pattern": "[1-9]",
+   "flags": "",
+   "at": [
+    "src/util/yaml.ts:289"
+   ]
+  },
+  {
+   "pattern": "^[ \\t]",
+   "flags": "",
+   "at": [
+    "src/util/yaml.ts:321",
+    "src/util/yaml.ts:321"
+   ]
+  },
+  {
+   "pattern": "^[|>][-+0-9]*\\s*(?:#.*)?$",
+   "flags": "",
+   "at": [
+    "src/util/yaml.ts:337"
+   ]
+  },
+  {
+   "pattern": "^[-+]?(?:0|[1-9][0-9]*)$",
+   "flags": "",
+   "at": [
+    "src/util/yaml.ts:47"
+   ]
+  },
+  {
+   "pattern": "^[-+]?0x[0-9a-fA-F]+$",
+   "flags": "",
+   "at": [
+    "src/util/yaml.ts:48"
+   ]
+  },
+  {
+   "pattern": "^[-+]?0o[0-7]+$",
+   "flags": "",
+   "at": [
+    "src/util/yaml.ts:49"
+   ]
+  },
+  {
+   "pattern": "^[-+]?0b[01]+$",
+   "flags": "",
+   "at": [
+    "src/util/yaml.ts:50"
+   ]
+  },
+  {
+   "pattern": "^[-+]?(?:[0-9][0-9]*(?:\\.[0-9]*)?|\\.[0-9]+)(?:[eE][-+]?[0-9]+)?$",
+   "flags": "",
+   "at": [
+    "src/util/yaml.ts:51"
+   ]
+  },
+  {
+   "pattern": "[\\s#:,[\\]{}&*!|>'\"%@`]",
+   "flags": "",
+   "at": [
+    "src/util/yaml.ts:52"
+   ]
+  }
+ ],
+ "dynamic": [
+  {
+   "at": "src/diagrams/common/tokens.ts:142",
+   "code": "new RegExp(String.raw`[\\t ]*title(?:[\\t ][^\\n\\r]*?(?=%%)|[\\t ][^\\n\\r]*|(?!${rest}))`, 'y')"
+  },
+  {
+   "at": "src/diagrams/common/tokens.ts:172",
+   "code": "new RegExp(word.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&') + '(?:(?=%%)|(?!\\\\S))', 'y')"
+  },
+  {
+   "at": "src/diagrams/railroad/common.ts:52",
+   "code": "new RegExp(String.raw`title(?:[\\t ][^\\n\\r]*?(?=%%)|[\\t ][^\\n\\r]*|(?!${rest}))`, 'y')"
+  },
+  {
+   "at": "src/diagrams/wardley/parser.ts:87",
+   "code": "new RegExp(text, 'y')"
+  },
+  {
+   "at": "src/preprocess.ts:187",
+   "code": "new RegExp('[\\\\n\\\\r' + String.fromCharCode(0x2028, 0x2029) + ']', 'g')"
+  },
+  {
+   "at": "src/svg/edges.ts:462",
+   "code": "new RegExp(`[\";]${prop}:([^;\"]+);`)"
+  },
+  {
+   "at": "src/svg/theme.ts:33",
+   "code": "new RegExp(String.raw`^\\s*${FAMILY}(?:\\s*,\\s*${FAMILY})*\\s*$`, 'u')"
+  },
+  {
+   "at": "src/text/label.ts:67",
+   "code": "new RegExp(`[${CJK}]`)"
+  },
+  {
+   "at": "src/text/label.ts:70",
+   "code": "new RegExp(`[${HINT}]`)"
+  },
+  {
+   "at": "src/text/label.ts:71",
+   "code": "new RegExp(\n  `\\\\s*(?:[${OPEN}]*[${CJK}][${CLOSE}]*|[^\\\\s${CJK}${HINT}]+[${HINT}]*[${CLOSE}]*|[${HINT}]+)\\\\s*|\\\\s+`,\n  'g'\n)"
+  },
+  {
+   "at": "src/util/url.ts:109",
+   "code": "new RegExp(RE_INVALID_XML.source, 'gu')"
+  }
+ ]
+}

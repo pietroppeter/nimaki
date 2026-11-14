@@ -53,7 +53,7 @@ func matchBareName(src: string, at: int): int =
       inc i
   i
 
-let BARE_NAME = TokenType(name: "BARE_NAME", pattern: matchBareName)
+let BARE_NAME = TokenType(name: "BARE_NAME", matcher: matchBareName)
 
 func blanksEnd(src: string, at: int): int =
   ## [ \t]* from at
@@ -119,23 +119,19 @@ proc withLonger(t: TokenType, longer: seq[TokenType]): TokenType =
   result[] = t[]
   result.longer = longer
 
-func titleRest(s: string, i: int): bool =
-  ## (?!%%)[^\n\r]
-  i < s.len and s[i] notin {'\n', '\r'} and not s.continuesWith("%%", i)
-
 let TREEVIEW_TOKENS*: seq[TokenType] = @[
   keyword("treeView-beta").withLonger(@[BARE_NAME]),
   accDescr(),
   ACC_TITLE,
-  titleBefore(titleRest),
-  TokenType(name: "CLASS_ANNOTATION", pattern: matchClass, first: " \t", hasFirst: true),
-  TokenType(name: "ICON_ANNOTATION", pattern: matchIcon, first: " \t", hasFirst: true),
-  TokenType(name: "DESC_ANNOTATION", pattern: matchDesc, first: " \t", hasFirst: true),
-  TokenType(name: "INDENTATION", pattern: matchBlanks, first: " \t", hasFirst: true),
-  TokenType(name: "QUOTED_NAME", pattern: matchQuoted, first: "\"'", hasFirst: true),
-  TokenType(name: "WS", pattern: matchBlanks, hidden: true, first: " \t", hasFirst: true),
-  TokenType(name: "ML_COMMENT", pattern: matchComment, hidden: true, first: "%", hasFirst: true),
-  TokenType(name: "NL", pattern: matchNewline, hidden: true, first: "\r\n", hasFirst: true),
+  titleBefore(r"(?!%%)[^\n\r]"),
+  TokenType(name: "CLASS_ANNOTATION", matcher: matchClass, first: " \t", hasFirst: true),
+  TokenType(name: "ICON_ANNOTATION", matcher: matchIcon, first: " \t", hasFirst: true),
+  TokenType(name: "DESC_ANNOTATION", matcher: matchDesc, first: " \t", hasFirst: true),
+  TokenType(name: "INDENTATION", matcher: matchBlanks, first: " \t", hasFirst: true),
+  TokenType(name: "QUOTED_NAME", matcher: matchQuoted, first: "\"'", hasFirst: true),
+  TokenType(name: "WS", matcher: matchBlanks, hidden: true, first: " \t", hasFirst: true),
+  TokenType(name: "ML_COMMENT", matcher: matchComment, hidden: true, first: "%", hasFirst: true),
+  TokenType(name: "NL", matcher: matchNewline, hidden: true, first: "\r\n", hasFirst: true),
   BARE_NAME,
 ]
 

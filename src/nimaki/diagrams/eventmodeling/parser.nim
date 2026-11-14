@@ -10,7 +10,7 @@ func matchId(s: string, at: int): int =
   result = at + 1
   while result < s.len and isWordChar(s[result]): inc result
 
-let EM_ID = TokenType(name: "EM_ID", pattern: matchId)
+let EM_ID = TokenType(name: "EM_ID", matcher: matchId)
 
 proc word(text: string): TokenType =
   ## Langium gives every keyword that is also an identifier the identifier as a longer alternative.
@@ -115,18 +115,18 @@ proc buildTokens(): seq[TokenType] =
   result.add sign("`")
   result.add sign(".")
   result.add EM_ID
-  result.add TokenType(name: "EM_FID", pattern: matchFrameId)
-  result.add TokenType(name: "EM_DATA_INLINE", pattern: matchInline)
-  result.add TokenType(name: "EM_DATA_BLOCK", pattern: matchBlock)
+  result.add TokenType(name: "EM_FID", matcher: matchFrameId)
+  result.add TokenType(name: "EM_DATA_INLINE", matcher: matchInline)
+  result.add TokenType(name: "EM_DATA_BLOCK", matcher: matchBlock)
   result.add accDescr("EM_ACC_DESCR")
   result.add ACC_TITLE.renamed("EM_ACC_TITLE")
-  result.add titleBefore(proc (s: string, i: int): bool {.noSideEffect.} = i < s.len and isWordChar(s[i])).renamed("EM_TITLE")
-  result.add TokenType(name: "EM_WS", pattern: matchWs, hidden: true)
+  result.add titleBefore(r"\w").renamed("EM_TITLE")
+  result.add TokenType(name: "EM_WS", matcher: matchWs, hidden: true)
   result.add YAML.renamed("EM_YAML")
   result.add DIRECTIVE.renamed("EM_DIRECTIVE")
   result.add SINGLE_LINE_COMMENT.renamed("EM_SINGLE_LINE_COMMENT")
-  result.add TokenType(name: "EM_ML_COMMENT", pattern: matchMlComment, hidden: true)
-  result.add TokenType(name: "EM_SL_COMMENT", pattern: matchSlComment, hidden: true)
+  result.add TokenType(name: "EM_ML_COMMENT", matcher: matchMlComment, hidden: true)
+  result.add TokenType(name: "EM_SL_COMMENT", matcher: matchSlComment, hidden: true)
 
 let EVENTMODELING_TOKENS*: seq[TokenType] = buildTokens()
 

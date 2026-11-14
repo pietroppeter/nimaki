@@ -27,7 +27,7 @@ let CYNEFIN_TOKENS*: seq[TokenType] = @[
   keyword("cynefin-beta"),
   TokenType(name: "-->", literal: "-->"),
   TokenType(name: ":", literal: ":"),
-  TokenType(name: "DOMAIN_NAME", pattern: matchDomain, first: "c", hasFirst: true),
+  TokenType(name: "DOMAIN_NAME", matcher: matchDomain, first: "c", hasFirst: true),
   ACC_DESCR,
   ACC_TITLE,
   TITLE,

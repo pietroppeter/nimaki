@@ -71,7 +71,7 @@ proc title*(rest: proc (c: char): bool {.noSideEffect.}): TokenType =
     let j = p + 5
     if j < s.len and s[j] in {'\t', ' '}: return toCommentOrLineEnd(s, j + 1)
     if j < s.len and rest(s[j]): -1 else: j
-  TokenType(name: "TITLE", pattern: m, first: "t", hasFirst: true)
+  TokenType(name: "TITLE", matcher: m, first: "t", hasFirst: true)
 
 func wordRest*(c: char): bool = isWordChar(c) or c == '-'   ## [\w-]
 
@@ -81,7 +81,7 @@ func matchAccTitle(s: string, p: int): int =
   let i = blanks(s, p + 8)
   if i < s.len and s[i] == ':': toCommentOrLineEnd(s, i + 1) else: -1
 
-let ACC_TITLE* = TokenType(name: "ACC_TITLE", pattern: matchAccTitle, first: "a", hasFirst: true)
+let ACC_TITLE* = TokenType(name: "ACC_TITLE", matcher: matchAccTitle, first: "a", hasFirst: true)
 let ACC_DESCR* = TokenType(name: "ACC_DESCR", scanner: accDescrScanner, first: "a", hasFirst: true)
   ## /accDescr(?:[\t ]*:([^\n\r]*?(?=%%)|[^\n\r]*)|\s*{([^}]*)})/y, read by the scanner
 
@@ -100,7 +100,7 @@ func matchIdentifier(s: string, p: int): int =
   while result < s.len and wordRest(s[result]): inc result
 
 proc identifier*(name: string): TokenType =
-  TokenType(name: name, pattern: matchIdentifier, first: LETTERS & "_", hasFirst: true)
+  TokenType(name: name, matcher: matchIdentifier, first: LETTERS & "_", hasFirst: true)
 
 proc quoted*(name: string): TokenType =
   ## /"([^"\\]|\\.)*"|'([^'\\]|\\.)*'/y
@@ -115,13 +115,13 @@ proc between*(name, open, close: string, first: string): TokenType =
     if at == -1: -1 else: at + close.len
   let o = proc (s: string, p: int): int {.noSideEffect.} =
     if s.continuesWith(open, p): p + open.len else: -1
-  TokenType(name: name, pattern: m, hidden: true, first: first, hasFirst: true, opener: o)
+  TokenType(name: name, matcher: m, hidden: true, first: first, hasFirst: true, openMatcher: o)
 
 proc lineComment*(name: string, start: char): TokenType =
   ## /start[^\n\r]*/y, hidden
   let m = proc (s: string, p: int): int {.noSideEffect.} =
     if p < s.len and s[p] == start: lineEnd(s, p + 1) else: -1
-  TokenType(name: name, pattern: m, hidden: true, first: $start, hasFirst: true)
+  TokenType(name: name, matcher: m, hidden: true, first: $start, hasFirst: true)
 
 func matchBlankRun(s: string, p: int): int =
   ## /[\t \r\n]+/y
@@ -138,7 +138,7 @@ proc renamed(t: TokenType, name: string): TokenType =
 proc hiddenTokens*(prefix: string): seq[TokenType] =
   ## Whitespace, front matter, directive, and `%%` comment, in the order every railroad grammar lists them.
   @[
-    TokenType(name: prefix & "_WHITESPACE", pattern: matchBlankRun, hidden: true, first: "\t \r\n", hasFirst: true),
+    TokenType(name: prefix & "_WHITESPACE", matcher: matchBlankRun, hidden: true, first: "\t \r\n", hasFirst: true),
     YAML.renamed(prefix & "_YAML"),
     DIRECTIVE.renamed(prefix & "_DIRECTIVE"),
     SINGLE_LINE_COMMENT.renamed(prefix & "_SINGLE_LINE_COMMENT"),

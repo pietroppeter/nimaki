@@ -1,6 +1,7 @@
 ## port-of: src/diagrams/radar/parser.ts
 ## port-status: draft
 import std/strutils
+import ../../jsregex
 import ../common/tokens
 import ../../js
 
@@ -82,7 +83,8 @@ proc accDescrScanner(): Scanner =
     if stop >= 0:
       if lastBrace == -2: lastBrace = src.rfind('}')
       if stop > lastBrace: return -1
-    ACC_DESCR.pattern(src, at)
+    let m = ACC_DESCR.pattern.exec(src, at)
+    if m.found: m.stop else: -1
 
 func nameRestEnd(s: string, at: int): int =
   ## RE_NAME_REST: /[-\w]*\w/y, where it ends, or -1.
@@ -97,7 +99,7 @@ func matchId(s: string, at: int): int =
   let rest = nameRestEnd(s, at + 1)
   if rest > 0: rest else: at + 1
 
-let ID = TokenType(name: "ID", pattern: matchId)
+let ID = TokenType(name: "ID", matcher: matchId)
 
 proc optionValue(words: seq[string], option: int): Scanner =
   ## Gives way to a longer name, except right after its option, as in `graticule polygonaxis`.
@@ -146,7 +148,7 @@ let RADAR_TOKENS*: seq[TokenType] = @[
   TokenType(name: "BOOLEAN", match: optionValue(@["true", "false"], T_showLegend)),
   ACC_DESCR.withScanner(accDescrScanner),
   ACC_TITLE,
-  titleBefore(proc (s: string, i: int): bool {.noSideEffect.} = nameRestEnd(s, i) >= 0),   # [-\w]*\w
+  titleBefore(r"[-\w]*\w"),
   TokenType(name: "NUMBER", scanner: numberScanner, first: "0123456789", hasFirst: true),
   STRING,
   ID,

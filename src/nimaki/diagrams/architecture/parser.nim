@@ -41,14 +41,6 @@ func matchId(s: string, p: int): int =
     if isWord(s, i - 1): last = i
   last
 
-func titleRest(s: string, i: int): bool {.noSideEffect.} =
-  ## [-\w]*\w at i
-  var j = i
-  while j < s.len and (isWord(s, j) or s[j] == '-'):
-    if isWord(s, j): return true
-    inc j
-  false
-
 func matchDirection(s: string, p: int): int =
   ## /L|R|T|B/y
   if p < s.len and s[p] in {'L', 'R', 'T', 'B'}: p + 1 else: -1
@@ -99,7 +91,7 @@ func matchLabel(s: string, p: int): int =
   while i < s.len and s[i] notin {'[', ']', '\r', '\n'}: inc i
   if i > p + 1 and i < s.len and s[i] == ']': i + 1 else: -1
 
-let ID = TokenType(name: "ID", pattern: matchId)
+let ID = TokenType(name: "ID", matcher: matchId)
 
 proc word(text: string): TokenType =
   TokenType(name: text, literal: text, longer: @[ID])
@@ -118,12 +110,12 @@ let ARCHITECTURE_TOKENS*: seq[TokenType] = @[
   word("in"),
   TokenType(name: ":", literal: ":"),
   TokenType(name: "-", literal: "-", longer: @[YAML]),
-  TokenType(name: "ARROW_DIRECTION", pattern: matchDirection),
-  TokenType(name: "ARROW_GROUP", pattern: matchArrowGroup),
-  TokenType(name: "ARROW_INTO", pattern: matchInto),
+  TokenType(name: "ARROW_DIRECTION", matcher: matchDirection),
+  TokenType(name: "ARROW_GROUP", matcher: matchArrowGroup),
+  TokenType(name: "ARROW_INTO", matcher: matchInto),
   ACC_DESCR,
   ACC_TITLE,
-  titleBefore(titleRest),
+  titleBefore(r"[-\w]*\w"),
   STRING,
   ID,
   NEWLINE,
@@ -131,8 +123,8 @@ let ARCHITECTURE_TOKENS*: seq[TokenType] = @[
   YAML,
   DIRECTIVE,
   SINGLE_LINE_COMMENT,
-  TokenType(name: "ARCH_ICON", pattern: matchIcon),
-  TokenType(name: "ARCH_TITLE", pattern: matchLabel),
+  TokenType(name: "ARCH_ICON", matcher: matchIcon),
+  TokenType(name: "ARCH_TITLE", matcher: matchLabel),
 ]
 
 type
