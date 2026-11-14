@@ -82,20 +82,20 @@
       "errors": 996
     },
     "class": {
-      "seed": 1,
-      "cases": 5000,
-      "identical": 5000,
+      "seed": 23,
+      "cases": 600,
+      "identical": 600,
       "different": 0,
-      "rendered": 3732,
-      "errors": 1268
+      "rendered": 85,
+      "errors": 515
     },
     "state": {
-      "seed": 1,
-      "cases": 5000,
-      "identical": 5000,
+      "seed": 23,
+      "cases": 600,
+      "identical": 600,
       "different": 0,
-      "rendered": 3814,
-      "errors": 1186
+      "rendered": 470,
+      "errors": 130
     },
     "gitGraph": {
       "seed": 1,
@@ -146,12 +146,12 @@
       "errors": 1986
     },
     "gantt": {
-      "seed": 1,
-      "cases": 5000,
-      "identical": 5000,
+      "seed": 23,
+      "cases": 600,
+      "identical": 600,
       "different": 0,
-      "rendered": 3401,
-      "errors": 1599
+      "rendered": 406,
+      "errors": 194
     },
     "ishikawa": {
       "seed": 1,
@@ -234,12 +234,12 @@
       "errors": 1084
     },
     "labels": {
-      "seed": 1,
-      "cases": 5000,
-      "identical": 5000,
+      "seed": 23,
+      "cases": 600,
+      "identical": 600,
       "different": 0,
-      "rendered": 3662,
-      "errors": 1338
+      "rendered": 440,
+      "errors": 160
     },
     "sankey": {
       "seed": 1,
