@@ -1034,6 +1034,112 @@ proc radarNumber(g: var Gen): string =
 proc radarLabel(g: var Gen): string =
   if g.chance(0.4): "[\"" & g.pick(labels) & "\"]" else: ""
 
+const sankeyNames = ["Coal", "Gas", "Electricity grid", "Losses", "Homes", "Industry", "Bio-conversion",
+                     "Solar", "Ünï", "日本", "A&amp;B", "x &lt; y", "Long name for a node that goes on", "#", "a b"]
+
+proc sankeyField(g: var Gen, name: string, bad: bool): string =
+  let r = g.rng.rand(1.0)
+  if bad and g.chance(0.5): g.pick(["", " ", "&#1;", "a\x01b", "\"unclosed", "x\"y", "&#xfffe;"])
+  elif r < 0.75: g.pick(["", " ", "  "]) & name & g.pick(["", "", " "])
+  elif r < 0.9: "\"" & name & "\""
+  elif r < 0.96: "\"" & name & " \"\"quoted\"\", too\""
+  else: "\"" & name & ",\nwith a break\""
+
+proc sankeySource(g: var Gen): string =
+  if g.chance(0.4):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(labels) & "\n"
+    result.add "config:\n  sankey:\n"
+    for key in ["width", "height", "nodeWidth", "nodePadding"]:
+      if g.chance(0.2): result.add "    " & key & ": " & g.pick(["0", "1", "5", "20", "200", "300", "800", "-1", "x", "20000"]) & "\n"
+    if g.chance(0.2): result.add "    showValues: " & g.pick(["false", "true", "0", "'no'"]) & "\n"
+    if g.chance(0.15): result.add "    prefix: " & g.pick(["'$'", "'&euro;'", "1", "''"]) & "\n"
+    if g.chance(0.15): result.add "    suffix: " & g.pick(["' TWh'", "'%'", "'&lt;'"]) & "\n"
+    if g.chance(0.2): result.add "    labelStyle: " & g.pick(["outlined", "plain", "x"]) & "\n"
+    if g.chance(0.25): result.add "    nodeAlignment: " & g.pick(["left", "right", "center", "justify", "x"]) & "\n"
+    if g.chance(0.25): result.add "    linkColor: " & g.pick(["gradient", "source", "target", "'#ff0000'", "red", "'url(x)'", "1"]) & "\n"
+    if g.chance(0.15):
+      result.add "    nodeColors:\n"
+      for k in 0 ..< g.rng.rand(1 .. 3):
+        result.add "      " & g.pick(["Coal", "Gas", "Losses", "Homes", "Solar"]) & ": " & g.pick(["'#123456'", "red", "'rgb(1,2,3)'", "'&#59;x'", "1"]) & "\n"
+    result.add "    useMaxWidth: true\n---\n"
+  result.add(if g.chance(0.03): g.pick(["sankey-betax", "Sankey", "SANKEY-BETA", "sankeyx"])
+             else: g.pick(["sankey", "sankey-beta", "sankey", "sankey "]))
+  result.add(if g.chance(0.03): "" else: "\n")
+  if g.chance(0.3): result.add "\n"
+  let pool = g.rng.rand(2 .. sankeyNames.len)
+  let cyclic = g.chance(0.04)
+  # Most cases are valid, so that they reach the layout; one in five has one error somewhere.
+  let rows = if g.chance(0.04): 0 else: g.rng.rand(1 .. 14)
+  let wrong = if g.chance(0.2): g.rng.rand(0 .. rows) else: -1
+  for i in 0 ..< rows:
+    let bad = i == wrong
+    let r = g.rng.rand(1.0)
+    if r < 0.9 or bad:
+      var a = g.rng.rand(0 .. pool - 2)
+      var b = g.rng.rand(a + 1 .. pool - 1)
+      if cyclic and g.chance(0.3): swap(a, b)
+      let value = if bad and g.chance(0.4): g.pick(["-5", "x", "12abc", "Infinity", "\"7\"", "", "1e400", " 4 "])
+                  else: g.pick(["1", "10", "0.597", "26.862", "124.729", "280.322", "1e3", "0", "3.14159", "100000", "-2", "\"5\""])
+      result.add g.sankeyField(sankeyNames[a], bad) & "," & g.sankeyField(sankeyNames[b], bad and g.chance(0.3)) &
+        (if bad and g.chance(0.1): "" else: "," & value)
+      if bad and g.chance(0.2): result.add g.pick([",x", " extra", "\"q\""])
+    elif r < 0.95: result.add "%% " & g.pick(labels)
+    else: result.add g.pick(["", " ", "\t"])
+    result.add(if g.chance(0.05): "\r\n" else: "\n")
+
+const quadrantTexts = ["Low Reach", "High Reach", "We should expand", "Re-evaluate", "Campaign A", "Plan", "Do",
+                       "\"Important ❤\"", "\"`**bold** text`\"", "Ünï 日本", "a & b", "x_y.z", "100%", "Long label that runs on for a while"]
+
+proc quadrantCoord(g: var Gen, bad: bool): string =
+  if bad: g.pick(["1.5", "-0.1", "2", "0.", "x", ".5", "0x5", "0e3"])
+  else: g.pick(["0", "1", "0.5", "0.30", "0.45", "0.0", "0.999", "0.05", "0.75", "0.123"])
+
+proc quadrantStyle(g: var Gen, bad: bool): string =
+  if bad: g.pick(["radius: x", "color: #zz", "stroke-width: 3", "size: 4", "radius", "color: #12345"])
+  else: g.pick(["radius: 12", "radius: 3", "color: #ff3300", "color: 0f3", "stroke-color: #10f0f0",
+                "stroke-width: 5px", "stroke-width: 0px", "radius: 400"])
+
+proc quadrantSource(g: var Gen): string =
+  if g.chance(0.3):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(labels) & "\n"
+    result.add "config:\n  quadrantChart:\n"
+    for key in ["chartWidth", "chartHeight", "quadrantPadding", "titlePadding", "pointRadius", "pointTextPadding",
+                "xAxisLabelPadding", "quadrantTextTopPadding", "titleFontSize", "quadrantLabelFontSize",
+                "xAxisLabelFontSize", "pointLabelFontSize"]:
+      if g.chance(0.12): result.add "    " & key & ": " & g.pick(["0", "2", "8", "12", "30", "200", "300", "800", "-1", "x", "5000"]) & "\n"
+    if g.chance(0.2): result.add "    xAxisPosition: " & g.pick(["top", "bottom"]) & "\n"
+    if g.chance(0.2): result.add "    yAxisPosition: " & g.pick(["left", "right"]) & "\n"
+    result.add "    useMaxWidth: true\n---\n"
+  result.add(if g.chance(0.03): g.pick(["quadrantchartx", "quadrant", "QuadrantChart"]) else: "quadrantChart")
+  result.add "\n"
+  let wrong = if g.chance(0.2): g.rng.rand(0 .. 14) else: -1
+  let indent = g.pick(["", "  ", "    ", "\t"])
+  for i in 0 ..< g.rng.rand(0 .. 14):
+    let bad = i == wrong
+    let r = g.rng.rand(1.0)
+    var line = ""
+    if r < 0.08: line = "title " & g.pick(labels)
+    elif r < 0.16: line = "x-axis " & g.pick(quadrantTexts) & (if g.chance(0.7): " --> " & (if g.chance(0.9): g.pick(quadrantTexts) else: "") else: "")
+    elif r < 0.24: line = "y-axis " & g.pick(quadrantTexts) & (if g.chance(0.7): g.pick([" --> ", " ---> "]) & g.pick(quadrantTexts) else: "")
+    elif r < 0.4: line = "quadrant-" & $g.rng.rand(1 .. 4) & " " & g.pick(quadrantTexts)
+    elif r < 0.85:
+      line = g.pick(quadrantTexts) & (if g.chance(0.2): ":::" & g.pick(["class1", "ab", "x", "a_b"]) else: "") &
+        g.pick([": [", ":[", " : [ "]) & g.quadrantCoord(bad and g.chance(0.5)) & g.pick([", ", ","]) &
+        g.quadrantCoord(bad and g.chance(0.3)) & g.pick(["]", " ]"])
+      if g.chance(0.3):
+        for k in 0 ..< g.rng.rand(1 .. 3): line.add (if k == 0: " " else: ", ") & g.quadrantStyle(bad and k == 0)
+    elif r < 0.9:
+      line = "classDef " & g.pick(["class1", "ab", "x"]) & " " & g.quadrantStyle(bad)
+      if g.chance(0.5): line.add ", " & g.quadrantStyle(false)
+    elif r < 0.93: line = g.pick(["accTitle: ", "accDescr: "]) & g.pick(labels)
+    elif r < 0.95: line = "accDescr {\n  " & g.pick(labels) & "\n}"
+    elif r < 0.98: line = "%% " & g.pick(labels)
+    if bad and r >= 0.4 and g.chance(0.5): line.add g.pick(["(", " ]", "@x", ") y"])
+    result.add indent & line
+    result.add(if g.chance(0.05): g.pick([";", "\r\n"]) else: "\n")
+
 proc radarSource(g: var Gen): string =
   if g.chance(0.3):
     result.add "---\n"
@@ -1076,6 +1182,76 @@ proc radarSource(g: var Gen): string =
     elif r < 0.96: result.add "  %% " & g.pick(labels) & "\n"
     elif r < 0.985: result.add "\n"
     else: result.add "  " & g.pick(["axis", "curve x{}", "ticks x", "graticule square", "max 3, min 1", "showLegend true, ticks 3", "accDescr {", "curve y{1, 2", "titlex"]) & "\n"
+
+const xyNumbers = ["0", "1", "5", "10", "2.5", "-3", "+4", ".5", "-.25", "100", "1000", "7000",
+                   "0.001", "33.3", "-100", "12", "99999", "1.5", "42", "3"]
+const xyWords = ["jan", "feb", "mar", "apr", "Sales", "Revenue (in $)", "Q1", "Q2", "x_1", "a+b", "#1",
+                 "A&B", "2024", "rate*2", "one.two", "a-b", "y=x"]
+
+proc xyNumber(g: var Gen): string =
+  if g.chance(0.03): g.pick(["1.", "1e3", "x", "--1", "1.2.3", ""]) else: g.pick(xyNumbers)
+
+proc xyText(g: var Gen): string =
+  ## A word run, or a quoted string (a quote inside ends it).
+  if g.chance(0.5): "\"" & g.pick(labels).replace("\"", "") & "\"" else: g.pick(xyWords)
+
+proc xyValues(g: var Gen, n: int, labelled: bool): string =
+  result = "["
+  for k in 0 ..< n:
+    result.add (if k > 0: g.pick([", ", ",", " , "]) else: "") & g.xyNumber()
+    if labelled and g.chance(0.4): result.add " \"" & g.pick(labels).replace("\"", "") & "\""
+  result.add "]"
+
+proc xychartSource(g: var Gen): string =
+  if g.chance(0.4):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(labels) & "\n"
+    result.add "config:\n  xyChart:\n"
+    for key in ["width", "height", "showDataLabel", "showTitle", "showLegend", "chartOrientation"]:
+      if g.chance(0.2):
+        result.add "    " & key & ": " & g.pick(["0", "200", "500", "900", "true", "false", "horizontal", "vertical", "x", "5000", "-1"]) & "\n"
+    for axisKey in ["xAxis", "yAxis"]:
+      if g.chance(0.2):
+        result.add "    " & axisKey & ":\n"
+        for key in ["showTitle", "showLabel", "showTick", "showAxisLine"]:
+          if g.chance(0.4): result.add "      " & key & ": " & g.pick(["true", "false"]) & "\n"
+    result.add "---\n"
+  result.add(if g.chance(0.03): g.pick(["xychart-betax", "XYchart", "xy-chart"])
+             else: g.pick(["xychart-beta", "xychart", "xychart-beta horizontal", "xychart horizontal", "xychart-beta vertical"]))
+  result.add "\n"
+  var nCats = 0
+  for i in 0 ..< g.rng.rand(1 .. 6):
+    let r = g.rng.rand(1.0)
+    if r < 0.12: result.add "  title " & g.xyText() & "\n"
+    elif r < 0.3:
+      result.add "  x-axis"
+      if g.chance(0.6): result.add " " & g.xyText()
+      if g.chance(0.6):
+        nCats = g.rng.rand(1 .. 8)
+        result.add " ["
+        for k in 0 ..< nCats: result.add (if k > 0: g.pick([", ", ","]) else: "") & g.xyText()
+        result.add "]"
+      elif g.chance(0.6): result.add " " & g.xyNumber() & " --> " & g.xyNumber()
+      result.add "\n"
+    elif r < 0.42:
+      result.add "  y-axis"
+      if g.chance(0.6): result.add " " & g.xyText()
+      if g.chance(0.6): result.add " " & g.xyNumber() & " --> " & g.xyNumber()
+      result.add "\n"
+    elif r < 0.85:
+      let line = g.chance(0.5)
+      result.add "  " & (if line: "line" else: "bar")
+      if g.chance(0.5): result.add " " & g.xyText()
+      let n = if nCats > 0 and g.chance(0.7): nCats else: g.rng.rand(1 .. 10)
+      result.add " " & g.xyValues(n, line or g.chance(0.1)) & "\n"
+    elif r < 0.9: result.add "  accTitle: " & g.pick(labels) & "\n"
+    elif r < 0.93: result.add "  accDescr {\n    " & g.pick(labels) & "\n  }\n"
+    elif r < 0.96: result.add "  %% " & g.pick(labels) & "\n"
+    elif r < 0.98: result.add "\n"
+    else: result.add "  " & g.pick(["line", "bar []", "x-axis [", "y-axis 1 -->", "title", "pie", "line [1, 2", "bar \"a\" [1 2]"]) & "\n"
+  if g.chance(0.5):
+    let line = g.chance(0.5)
+    result.add "  " & (if line: "line" else: "bar") & " " & g.xyValues(if nCats > 0: nCats else: g.rng.rand(1 .. 10), line) & "\n"
 
 const treemapValues = ["10", "25", "1", "0", "100", "3.5", "1,000", "2_5", "1000000", "0.01", "7", "42", "12.", "99999999", "1e3"]
 const treemapOdd = ["1.2.3", ".", ",5", "_"]
@@ -1926,7 +2102,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad", "gantt", "wardley", "architecture", "c4", "block", "agentflow", "mindmap", "kanban", "eventmodeling", "labels"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad, gantt, wardley, architecture, c4, block, agentflow, mindmap, kanban, eventmodeling, labels", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad", "gantt", "wardley", "architecture", "c4", "block", "agentflow", "mindmap", "kanban", "eventmodeling", "labels", "xychart", "sankey", "quadrantChart"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad, gantt, wardley, architecture, c4, block, agentflow, mindmap, kanban, eventmodeling, labels, xychart, sankey, quadrantChart", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -1960,6 +2136,7 @@ proc main() =
                                                           of "c4": g.c4Source()
                                                           of "block": g.blockSource()
                                                           of "radar": g.radarSource()
+                                                          of "xychart": g.xychartSource()
                                                           of "treemap": g.treemapSource()
                                                           of "er": g.erSource()
                                                           of "requirement": g.requirementSource()
@@ -1969,6 +2146,8 @@ proc main() =
                                                           of "treeView": g.treeViewSource()
                                                           of "mindmap": g.mindmapSource()
                                                           of "kanban": g.kanbanSource()
+                                                          of "sankey": g.sankeySource()
+                                                          of "quadrantChart": g.quadrantSource()
                                                           else: g.eventmodelingSource()), "options": opts}
   let dir = buildDir / "fuzz"
   createDir dir

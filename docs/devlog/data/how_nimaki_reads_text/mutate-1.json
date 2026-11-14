@@ -1,0 +1,224 @@
+{
+  "pin": "1.13.0",
+  "seed": 1,
+  "copies": 3,
+  "cases": 5919,
+  "identical": 5911,
+  "different": 8,
+  "inserts": [
+    "no-break space",
+    "line separator",
+    "byte order mark",
+    "zero-width space",
+    "ideographic space",
+    "é",
+    "Ω",
+    "mathematical bold A (outside the BMP)",
+    "emoji (outside the BMP)"
+  ],
+  "types": [
+    {
+      "type": "agentflow",
+      "identical": 714,
+      "different": 0
+    },
+    {
+      "type": "architecture",
+      "identical": 78,
+      "different": 0
+    },
+    {
+      "type": "block",
+      "identical": 213,
+      "different": 0
+    },
+    {
+      "type": "c4",
+      "identical": 166,
+      "different": 2
+    },
+    {
+      "type": "class",
+      "identical": 249,
+      "different": 3
+    },
+    {
+      "type": "cynefin",
+      "identical": 57,
+      "different": 0
+    },
+    {
+      "type": "er",
+      "identical": 426,
+      "different": 0
+    },
+    {
+      "type": "eventmodeling",
+      "identical": 72,
+      "different": 0
+    },
+    {
+      "type": "flowchart",
+      "identical": 1148,
+      "different": 1
+    },
+    {
+      "type": "gantt",
+      "identical": 74,
+      "different": 1
+    },
+    {
+      "type": "gitGraph",
+      "identical": 282,
+      "different": 0
+    },
+    {
+      "type": "info",
+      "identical": 18,
+      "different": 0
+    },
+    {
+      "type": "ishikawa",
+      "identical": 12,
+      "different": 0
+    },
+    {
+      "type": "journey",
+      "identical": 12,
+      "different": 0
+    },
+    {
+      "type": "kanban",
+      "identical": 98,
+      "different": 1
+    },
+    {
+      "type": "mindmap",
+      "identical": 117,
+      "different": 0
+    },
+    {
+      "type": "packet",
+      "identical": 57,
+      "different": 0
+    },
+    {
+      "type": "pie",
+      "identical": 48,
+      "different": 0
+    },
+    {
+      "type": "radar",
+      "identical": 42,
+      "different": 0
+    },
+    {
+      "type": "railroad",
+      "identical": 273,
+      "different": 0
+    },
+    {
+      "type": "requirement",
+      "identical": 60,
+      "different": 0
+    },
+    {
+      "type": "sequence",
+      "identical": 558,
+      "different": 0
+    },
+    {
+      "type": "state",
+      "identical": 357,
+      "different": 0
+    },
+    {
+      "type": "swimlane",
+      "identical": 42,
+      "different": 0
+    },
+    {
+      "type": "timeline",
+      "identical": 72,
+      "different": 0
+    },
+    {
+      "type": "treeView",
+      "identical": 72,
+      "different": 0
+    },
+    {
+      "type": "treemap",
+      "identical": 24,
+      "different": 0
+    },
+    {
+      "type": "usecase",
+      "identical": 453,
+      "different": 0
+    },
+    {
+      "type": "wardley",
+      "identical": 117,
+      "different": 0
+    }
+  ],
+  "differences": [
+    {
+      "id": "corpus/class-docs/29#1",
+      "type": "class",
+      "inserted": "mathematical bold A (outside the BMP)",
+      "source": "classDiagram\nclass Shape\nlink Shape \"https://www.github.com\" \"This is a tooltip for a link\"\nclass Shape2\nclick Shape2 href \"https://www.gith𝐀ub.com\" \"This is a tooltip for a link\"\n",
+      "detail": "first difference at byte 1417 of 1859: Pele `…38)\"><a href=\"https://www.githaub.com/\" target=\"_blank\" rel=…` nimaki `…38)\"><a href=\"https://www.gith𝐀ub.com/\" target=\"_blank\" r…`"
+    },
+    {
+      "id": "corpus/class-docs/31#0",
+      "type": "class",
+      "inserted": "line separator",
+      "source": "classDiagram\n    class Class01\n    class Class02\n    callback Class01 \"callbackFunction\" \"Callback tooltip\"\n    link Class02 \"https://www.github.com\" \"This is a link\"\n    class Class03\n    class Class04\n    click Class03 call callbackFunction() \"Callback tooltip\"\n    click Class04 href \"https://www.github.co m\" \"This is a link\"\n",
+      "detail": "first difference at byte 2321 of 2704: Pele `…sform=\"translate(423.68,38)\"><title>This is a link</title><r…` nimaki `…sform=\"translate(423.68,38)\"><a href=\"https://www.github.co�…`"
+    },
+    {
+      "id": "corpus/flowchart-docs/104#0",
+      "type": "flowchart",
+      "inserted": "é",
+      "source": "flowchart LR\n    A-->B\n    B-->C\n    C-->D\n    D-->E\n    click A \"https://www.géithub.com\" _blank\n    click B \"https://www.github.com\" \"Open this in a new tab\" _blank\n    click C href \"https://www.github.com\" _blank\n    click D href \"https://www.github.com\" \"Open this in a new tab\" _blank\n",
+      "detail": "first difference at byte 1550 of 3118: Pele `…(32,32)\"><a href=\"https://www.xn--github-bva.com/\" target=\"_…` nimaki `…(32,32)\"><a href=\"https://www.géithub.com/\" target=\"_blank\"…`"
+    },
+    {
+      "id": "corpus/kanban-docs/2#2",
+      "type": "kanban",
+      "inserted": "no-break space",
+      "source": "---\nconfig:\n  kanban:\n    ticketBaseUrl: 'https://mermaidchart.atlassian.ne t/browse/#TICKET#'\n---\nkanban\n  Todo\n    [Create Documentation]\n    docs[Create Blog about the new diagram]\n  [In progress]\n    id6[Create renderer so that it works in all cases. We also add some extra text here for testing purposes. And some more just for the extra flare.]\n  id9[Ready for deploy]\n    id8[Design grammar]@{ assigned: 'knsv' }\n  id10[Ready for test]\n    id4[Create parsing tests]@{ ticket: MC-2038, assigned: 'K.Sveidqvist', priority: 'High' }\n    id66[last item]@{ priority: 'Very Low', assigned: 'knsv' }\n  id11[Done]\n    id5[define getData]\n    id2[Title of diagram is more than 100 chars when user duplicates diagram with 100 char]@{ ticket: MC-2036, priority: 'Very High'}\n    id3[Update DB function]@{ ticket: MC-2037, assigned: knsv, priority: 'High' }\n\n  id12[Can't reproduce]\n    id3[Weird flickering in Firefox]\n",
+      "detail": "first difference at byte 4053 of 7158: Pele `…\">Create parsing tests</text><text class=\"pele-ticket\" fill=…` nimaki `…\">Create parsing tests</text><a href=\"https://mermaidchart.a…`"
+    },
+    {
+      "id": "compat/c4/c4Person/25#2",
+      "type": "c4",
+      "inserted": "emoji (outside the BMP)",
+      "source": "C4Context\nPerson(customerA, $link=\"https:😀//github.com/mermaidjs\")",
+      "detail": "first difference at byte 834 of 1167: Pele `…ate(108,34)\"><a href=\"https://xn--e28h//github.com/mermaidjs…` nimaki `…ate(108,34)\"><a href=\"https://😀//github.com/mermaidjs\" re…`"
+    },
+    {
+      "id": "compat/c4/c4PersonExt/25#1",
+      "type": "c4",
+      "inserted": "emoji (outside the BMP)",
+      "source": "C4Context\nPerson_Ext(customerA, $link=\"https://git😀hub.com/mermaidjs\")",
+      "detail": "first difference at byte 860 of 1250: Pele `…ate(108,34)\"><a href=\"https://xn--github-5v74e.com/mermaidjs…` nimaki `…ate(108,34)\"><a href=\"https://git😀hub.com/mermaidjs\" rel=…`"
+    },
+    {
+      "id": "compat/class/classDiagram/21#2",
+      "type": "class",
+      "inserted": "line separator",
+      "source": "      classDiagram\n        namespace Company.Project.Module.SubModule {\n          class Report {\n            +generatePDF(data: List)\n            +generateCSV (data: List)\n          }\n        }\n        namespace Company.Project.Module {\n          class Admin {\n            +generateReport()\n          }\n        }\n        Admin --> Report : generates",
+      "detail": "first difference at byte 78 of 3746: Pele `…ele pele-class\" viewBox=\"0 0 367 546\" width=\"367\" height=\"54…` nimaki `…ele pele-class\" viewBox=\"0 0 358 544\" width=\"358\" height=\"54…`"
+    },
+    {
+      "id": "compat/gantt/gantt/145#1",
+      "type": "gantt",
+      "inserted": "é",
+      "source": "gantt\n    dateFormat YYYY-MM-DD\n    section Section\n    A task :${prop}, 2024-10-01, 3d\n    click ${prop} href \"https://meérmaid.js.org/\"\n    ",
+      "detail": "first difference at byte 1149 of 1881: Pele `…id=\"${prop}\"><a href=\"https://xn--mermaid-cya.js.org/\" rel=\"…` nimaki `…id=\"${prop}\"><a href=\"https://meérmaid.js.org/\" rel=\"noopen…`"
+    }
+  ]
+}

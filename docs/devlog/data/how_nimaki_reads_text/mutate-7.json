@@ -1,0 +1,189 @@
+{
+  "pin": "1.13.0",
+  "seed": 7,
+  "copies": 3,
+  "cases": 5919,
+  "identical": 5916,
+  "different": 3,
+  "inserts": [
+    "no-break space",
+    "line separator",
+    "byte order mark",
+    "zero-width space",
+    "ideographic space",
+    "é",
+    "Ω",
+    "mathematical bold A (outside the BMP)",
+    "emoji (outside the BMP)"
+  ],
+  "types": [
+    {
+      "type": "agentflow",
+      "identical": 714,
+      "different": 0
+    },
+    {
+      "type": "architecture",
+      "identical": 78,
+      "different": 0
+    },
+    {
+      "type": "block",
+      "identical": 213,
+      "different": 0
+    },
+    {
+      "type": "c4",
+      "identical": 168,
+      "different": 0
+    },
+    {
+      "type": "class",
+      "identical": 250,
+      "different": 2
+    },
+    {
+      "type": "cynefin",
+      "identical": 57,
+      "different": 0
+    },
+    {
+      "type": "er",
+      "identical": 426,
+      "different": 0
+    },
+    {
+      "type": "eventmodeling",
+      "identical": 72,
+      "different": 0
+    },
+    {
+      "type": "flowchart",
+      "identical": 1148,
+      "different": 1
+    },
+    {
+      "type": "gantt",
+      "identical": 75,
+      "different": 0
+    },
+    {
+      "type": "gitGraph",
+      "identical": 282,
+      "different": 0
+    },
+    {
+      "type": "info",
+      "identical": 18,
+      "different": 0
+    },
+    {
+      "type": "ishikawa",
+      "identical": 12,
+      "different": 0
+    },
+    {
+      "type": "journey",
+      "identical": 12,
+      "different": 0
+    },
+    {
+      "type": "kanban",
+      "identical": 99,
+      "different": 0
+    },
+    {
+      "type": "mindmap",
+      "identical": 117,
+      "different": 0
+    },
+    {
+      "type": "packet",
+      "identical": 57,
+      "different": 0
+    },
+    {
+      "type": "pie",
+      "identical": 48,
+      "different": 0
+    },
+    {
+      "type": "radar",
+      "identical": 42,
+      "different": 0
+    },
+    {
+      "type": "railroad",
+      "identical": 273,
+      "different": 0
+    },
+    {
+      "type": "requirement",
+      "identical": 60,
+      "different": 0
+    },
+    {
+      "type": "sequence",
+      "identical": 558,
+      "different": 0
+    },
+    {
+      "type": "state",
+      "identical": 357,
+      "different": 0
+    },
+    {
+      "type": "swimlane",
+      "identical": 42,
+      "different": 0
+    },
+    {
+      "type": "timeline",
+      "identical": 72,
+      "different": 0
+    },
+    {
+      "type": "treeView",
+      "identical": 72,
+      "different": 0
+    },
+    {
+      "type": "treemap",
+      "identical": 24,
+      "different": 0
+    },
+    {
+      "type": "usecase",
+      "identical": 453,
+      "different": 0
+    },
+    {
+      "type": "wardley",
+      "identical": 117,
+      "different": 0
+    }
+  ],
+  "differences": [
+    {
+      "id": "corpus/class-docs/29#0",
+      "type": "class",
+      "inserted": "Ω",
+      "source": "classDiagram\nclass Shape\nlink Shape \"https:/Ω/www.github.com\" \"This is a tooltip for a link\"\nclass Shape2\nclick Shape2 href \"https://www.github.com\" \"This is a tooltip for a link\"\n",
+      "detail": "first difference at byte 862 of 1865: Pele `…e(44.01,38)\"><a href=\"https://xn--bya/www.github.com\" target…` nimaki `…e(44.01,38)\"><a href=\"https://Ω/www.github.com\" target=\"_bl…`"
+    },
+    {
+      "id": "corpus/class-docs/29#2",
+      "type": "class",
+      "inserted": "Ω",
+      "source": "classDiagram\nclass Shape\nlink Shape \"https://www.github.cΩom\" \"This is a tooltip for a link\"\nclass Shape2\nclick Shape2 href \"https://www.github.com\" \"This is a tooltip for a link\"\n",
+      "detail": "first difference at byte 873 of 1866: Pele `…\"><a href=\"https://www.github.xn--com-f0c/\" target=\"_blank\" …` nimaki `…\"><a href=\"https://www.github.cΩom/\" target=\"_blank\" rel=\"n…`"
+    },
+    {
+      "id": "corpus/flowchart-docs/69#1",
+      "type": "flowchart",
+      "inserted": "emoji (outside the BMP)",
+      "source": "flowchart TD\n  %% My image with a constrained aspect ratio\n  A@{ img: \"https://m😀ermaid.js.org/favicon.svg\", label: \"My example image label\", pos: \"t\", h: 60, constraint: \"on\" }\n",
+      "detail": "first difference at byte 808 of 1027: Pele `….25,53)\"><image href=\"https://xn--mermaid-7o25f.js.org/favic…` nimaki `….25,53)\"><image href=\"https://m😀ermaid.js.org/favicon.svg…`"
+    }
+  ]
+}
