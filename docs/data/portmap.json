@@ -3,12 +3,12 @@
   "code": 47594,
   "totals": {
     "todo": {
-      "files": 62,
-      "code": 3756
+      "files": 50,
+      "code": 2094
     },
     "draft": {
-      "files": 229,
-      "code": 43838
+      "files": 241,
+      "code": 45500
     },
     "verified": {
       "files": 0,
@@ -186,8 +186,8 @@
     },
     {
       "component": "diagrams/quadrant",
-      "todo": 876,
-      "draft": 0,
+      "todo": 0,
+      "draft": 876,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -226,8 +226,8 @@
     },
     {
       "component": "diagrams/sankey",
-      "todo": 786,
-      "draft": 0,
+      "todo": 0,
+      "draft": 786,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -1643,48 +1643,60 @@
       "component": "diagrams/quadrant",
       "lines": 149,
       "code": 123,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/quadrant/db.nim"
+      ]
     },
     {
       "path": "src/diagrams/quadrant/index.ts",
       "component": "diagrams/quadrant",
       "lines": 16,
       "code": 14,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/quadrant/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/quadrant/lexer.ts",
       "component": "diagrams/quadrant",
       "lines": 362,
       "code": 333,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/quadrant/lexer.nim"
+      ]
     },
     {
       "path": "src/diagrams/quadrant/parser.ts",
       "component": "diagrams/quadrant",
       "lines": 142,
       "code": 130,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/quadrant/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/quadrant/render.ts",
       "component": "diagrams/quadrant",
       "lines": 221,
       "code": 188,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/quadrant/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/quadrant/tokens.ts",
       "component": "diagrams/quadrant",
       "lines": 90,
       "code": 88,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/quadrant/tokens.nim"
+      ]
     },
     {
       "path": "src/diagrams/radar/index.ts",
@@ -1909,48 +1921,60 @@
       "component": "diagrams/sankey",
       "lines": 45,
       "code": 38,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/sankey/db.nim"
+      ]
     },
     {
       "path": "src/diagrams/sankey/index.ts",
       "component": "diagrams/sankey",
       "lines": 16,
       "code": 14,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/sankey/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/sankey/layout.ts",
       "component": "diagrams/sankey",
       "lines": 303,
       "code": 266,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/sankey/layout.nim"
+      ]
     },
     {
       "path": "src/diagrams/sankey/lexer.ts",
       "component": "diagrams/sankey",
       "lines": 127,
       "code": 114,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/sankey/lexer.nim"
+      ]
     },
     {
       "path": "src/diagrams/sankey/parser.ts",
       "component": "diagrams/sankey",
       "lines": 143,
       "code": 125,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/sankey/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/sankey/render.ts",
       "component": "diagrams/sankey",
       "lines": 263,
       "code": 229,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/sankey/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/sequence/actors.ts",

@@ -3,17 +3,17 @@
   "difftest": {
     "pin": "1.13.0",
     "cases": 2118,
-    "identical": 1973,
+    "identical": 2022,
     "different": 0,
-    "unsupported": 145,
+    "unsupported": 96,
     "diagrammari": {
       "cases": 34,
-      "identical": 32,
+      "identical": 33,
       "different": 0,
-      "unsupported": 2
+      "unsupported": 1
     }
   },
-  "bytes": 8814028,
+  "bytes": 9107993,
   "fuzz": {
     "pie": {
       "seed": 1,
