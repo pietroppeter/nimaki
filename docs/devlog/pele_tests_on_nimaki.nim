@@ -193,6 +193,17 @@ nbText: &"""
 These four patterns are now in the [porting guide](../../porting/), in a note called *Code
 that JavaScript runs slowly*.
 
+## And one from the compiler
+
+The first CI run of this pull request failed 44 tests that passed in the sandbox, all with
+JavaScript's *Maximum call stack size exceeded*. CI installed Nim 2.2.4; the sandbox has a newer
+build of Nim 2.2. In 2.2.4, adding one string to another compiles to `a.push.apply(a, b)`, which
+hands every byte of `b` to a function as a separate argument, and past about a hundred thousand
+bytes, the size of a large diagram's SVG, the stack runs out. Nim 2.2.14, the latest release,
+adds them in a loop. CI now uses it
+([decision 0015](../../decisions/#0015-ci-builds-with-the-latest-nim-2-2-release)), after the
+whole referee passed with it here.
+
 ## What is still slow
 
 {count("speed")} of Pele's stress tests still draw the same in JavaScript but take longer than
@@ -238,6 +249,8 @@ line separator), and the text measurer, whose canvas half is not ported. The por
   the port is fixed.
 - New code that cuts a string into characters uses `codePoints`, and the porting guide warns about
   the other three patterns.
+- CI builds with Nim 2.2.14 (decision 0015); the JavaScript build needs it, or a later 2.2, to
+  draw large diagrams.
 
 ## Sources
 

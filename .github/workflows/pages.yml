@@ -34,7 +34,7 @@ jobs:
 
       - uses: jiro4989/setup-nim-action@v2
         with:
-          nim-version: "2.2.4"
+          nim-version: "2.2.14"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       # Node runs the oracle: the pinned Pele npm package (reference/PIN)
@@ -59,8 +59,8 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/.cache/nim
-          key: nimcache-2.2.4-${{ hashFiles('src/**/*.nim', 'docs/**/*.nim', 'tests/**/*.nim', 'tools/*.nim', '*.nims', 'nim.cfg', 'deps.lock') }}
-          restore-keys: nimcache-2.2.4-
+          key: nimcache-2.2.14-${{ hashFiles('src/**/*.nim', 'docs/**/*.nim', 'tests/**/*.nim', 'tools/*.nim', '*.nims', 'nim.cfg', 'deps.lock') }}
+          restore-keys: nimcache-2.2.14-
 
       # every `port-of:` header names a file of Pele at the pin
       - name: Port map
