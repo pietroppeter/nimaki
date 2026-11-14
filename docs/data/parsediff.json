@@ -2,8 +2,8 @@
   "about": "Pele's parse() against nimaki's, on corpus/cases.json, by tools/parsediff.nim. Do not edit by hand.",
   "pin": "1.13.0",
   "cases": 2118,
-  "same": 598,
-  "different": 1147,
+  "same": 589,
+  "different": 1156,
   "error": 373,
   "unsupported": 0,
   "types": [
@@ -121,8 +121,8 @@
     },
     {
       "type": "packet",
-      "same": 11,
-      "different": 0,
+      "same": 2,
+      "different": 9,
       "error": 8,
       "unsupported": 0
     },

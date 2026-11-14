@@ -160,7 +160,8 @@ nbText: """
 - diagrammari, and any program, can read a diagram without drawing it, through `parse`.
 - The roadmap has a new step, *Models as Pele's*: bring each type's model to Pele's shape, type
   by type, until `tools/parsediff.nim` finds every model the same. Then Pele's tests that read
-  models can run on the port.
+  models can run on the port: `tools/peletests.nim`, which runs Pele's suites on nimaki, counts
+  them apart today (as *api*), because its bridge to nimaki does not offer `parse()` yet.
 
 ## Sources
 
