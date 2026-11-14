@@ -1034,6 +1034,60 @@ proc radarNumber(g: var Gen): string =
 proc radarLabel(g: var Gen): string =
   if g.chance(0.4): "[\"" & g.pick(labels) & "\"]" else: ""
 
+const sankeyNames = ["Coal", "Gas", "Electricity grid", "Losses", "Homes", "Industry", "Bio-conversion",
+                     "Solar", "Ünï", "日本", "A&amp;B", "x &lt; y", "Long name for a node that goes on", "#", "a b"]
+
+proc sankeyField(g: var Gen, name: string, bad: bool): string =
+  let r = g.rng.rand(1.0)
+  if bad and g.chance(0.5): g.pick(["", " ", "&#1;", "a\x01b", "\"unclosed", "x\"y", "&#xfffe;"])
+  elif r < 0.75: g.pick(["", " ", "  "]) & name & g.pick(["", "", " "])
+  elif r < 0.9: "\"" & name & "\""
+  elif r < 0.96: "\"" & name & " \"\"quoted\"\", too\""
+  else: "\"" & name & ",\nwith a break\""
+
+proc sankeySource(g: var Gen): string =
+  if g.chance(0.4):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(labels) & "\n"
+    result.add "config:\n  sankey:\n"
+    for key in ["width", "height", "nodeWidth", "nodePadding"]:
+      if g.chance(0.2): result.add "    " & key & ": " & g.pick(["0", "1", "5", "20", "200", "300", "800", "-1", "x", "20000"]) & "\n"
+    if g.chance(0.2): result.add "    showValues: " & g.pick(["false", "true", "0", "'no'"]) & "\n"
+    if g.chance(0.15): result.add "    prefix: " & g.pick(["'$'", "'&euro;'", "1", "''"]) & "\n"
+    if g.chance(0.15): result.add "    suffix: " & g.pick(["' TWh'", "'%'", "'&lt;'"]) & "\n"
+    if g.chance(0.2): result.add "    labelStyle: " & g.pick(["outlined", "plain", "x"]) & "\n"
+    if g.chance(0.25): result.add "    nodeAlignment: " & g.pick(["left", "right", "center", "justify", "x"]) & "\n"
+    if g.chance(0.25): result.add "    linkColor: " & g.pick(["gradient", "source", "target", "'#ff0000'", "red", "'url(x)'", "1"]) & "\n"
+    if g.chance(0.15):
+      result.add "    nodeColors:\n"
+      for k in 0 ..< g.rng.rand(1 .. 3):
+        result.add "      " & g.pick(["Coal", "Gas", "Losses", "Homes", "Solar"]) & ": " & g.pick(["'#123456'", "red", "'rgb(1,2,3)'", "'&#59;x'", "1"]) & "\n"
+    result.add "    useMaxWidth: true\n---\n"
+  result.add(if g.chance(0.03): g.pick(["sankey-betax", "Sankey", "SANKEY-BETA", "sankeyx"])
+             else: g.pick(["sankey", "sankey-beta", "sankey", "sankey "]))
+  result.add(if g.chance(0.03): "" else: "\n")
+  if g.chance(0.3): result.add "\n"
+  let pool = g.rng.rand(2 .. sankeyNames.len)
+  let cyclic = g.chance(0.04)
+  # Most cases are valid, so that they reach the layout; one in five has one error somewhere.
+  let rows = if g.chance(0.04): 0 else: g.rng.rand(1 .. 14)
+  let wrong = if g.chance(0.2): g.rng.rand(0 .. rows) else: -1
+  for i in 0 ..< rows:
+    let bad = i == wrong
+    let r = g.rng.rand(1.0)
+    if r < 0.9 or bad:
+      var a = g.rng.rand(0 .. pool - 2)
+      var b = g.rng.rand(a + 1 .. pool - 1)
+      if cyclic and g.chance(0.3): swap(a, b)
+      let value = if bad and g.chance(0.4): g.pick(["-5", "x", "12abc", "Infinity", "\"7\"", "", "1e400", " 4 "])
+                  else: g.pick(["1", "10", "0.597", "26.862", "124.729", "280.322", "1e3", "0", "3.14159", "100000", "-2", "\"5\""])
+      result.add g.sankeyField(sankeyNames[a], bad) & "," & g.sankeyField(sankeyNames[b], bad and g.chance(0.3)) &
+        (if bad and g.chance(0.1): "" else: "," & value)
+      if bad and g.chance(0.2): result.add g.pick([",x", " extra", "\"q\""])
+    elif r < 0.95: result.add "%% " & g.pick(labels)
+    else: result.add g.pick(["", " ", "\t"])
+    result.add(if g.chance(0.05): "\r\n" else: "\n")
+
 proc radarSource(g: var Gen): string =
   if g.chance(0.3):
     result.add "---\n"
@@ -1926,7 +1980,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad", "gantt", "wardley", "architecture", "c4", "block", "agentflow", "mindmap", "kanban", "eventmodeling", "labels"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad, gantt, wardley, architecture, c4, block, agentflow, mindmap, kanban, eventmodeling, labels", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad", "gantt", "wardley", "architecture", "c4", "block", "agentflow", "mindmap", "kanban", "eventmodeling", "labels", "sankey"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad, gantt, wardley, architecture, c4, block, agentflow, mindmap, kanban, eventmodeling, labels, sankey", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -1969,6 +2023,7 @@ proc main() =
                                                           of "treeView": g.treeViewSource()
                                                           of "mindmap": g.mindmapSource()
                                                           of "kanban": g.kanbanSource()
+                                                          of "sankey": g.sankeySource()
                                                           else: g.eventmodelingSource()), "options": opts}
   let dir = buildDir / "fuzz"
   createDir dir
