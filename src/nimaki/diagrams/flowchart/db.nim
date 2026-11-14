@@ -257,7 +257,7 @@ proc updateLink*(db: FlowDb, positions: seq[string], styleIn: seq[string]) =
     edge.style = style
 
 proc addClass*(db: FlowDb, ids: string, styles: seq[string]) =
-  let style = styles.join(",").replace("\\,", "§§§").replace(",", ";").replace("§§§", ",").split(';')
+  let style = styles.join(",").replace(jsre"/\\,/g", "§§§").replace(jsre"/,/g", ";").replace(jsre"/§§§/g", ",").split(';')
   for id in ids.split(','):
     var classNode = db.classes.getOrDefault(id, nil)
     if classNode == nil:
@@ -305,21 +305,13 @@ proc setAccTitle*(db: FlowDb, text: string) =
 proc setAccDescription*(db: FlowDb, text: string) =
   db.accDescr = text.replace(jsre"/\n\s+/g", "\n")
 
-proc hasSpace(s: string): bool =
-  ## /\s/.test(s)
-  var i = 0
-  while i < s.len:
-    if isJsSpaceAt(s, i): return true
-    inc i
-  false
-
 proc addSubGraph*(db: FlowDb, idText: Option[FlowText], list: seq[DocItem],
                   titleText: Option[FlowText], sameText: bool): string =
   ## `sameText` is Pele's `idText === titleText`: the header gave no separate title.
   var hasId = idText.isSome
   var id = if hasId: idText.get.text.jsTrim else: ""
   var title = if titleText.isSome: titleText.get.text else: ""
-  if idText.isSome and sameText and hasSpace(title): hasId = false
+  if idText.isSome and sameText and jsre"/\s/".test(title): hasId = false
 
   var seen = initHashSet[string]()
   var nodeList: seq[string]
