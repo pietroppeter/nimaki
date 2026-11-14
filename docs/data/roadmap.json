@@ -800,9 +800,9 @@
           "what": "Replaces the idea of one module of shared scanners (Pietro, 14 Nov 2026): the port uses nitely's pure Nim regex package instead of hand-written scanners, so a pattern repeated in 23 files becomes the one line Pele has. One wrapper module, src/nimaki/jsregex.nim, gives the JavaScript behaviour (\\s, \\w, \\d, the m flag, lastIndex and sticky matching, replace and split) on top of it, tested against Node; a pilot on one or two types measures lines, compile time, speed and the nim js build, then the other types are converted one by one, after the last four types land. A pattern that cannot be a faithful regex stays hand-written, once, in a shared module. A new decision record supersedes the scanner rule of the porting guide.",
           "done_when": "Every type converted (or each remaining scanner has a reason and lives in one shared place); difftest native and --js and fuzz unchanged; a post with the numbers.",
           "owner": "Replace hand-written scanners with regex",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "regular-expressions-as-pele-writes-them",
+          "pr": "62"
         },
         {
           "id": "second-reading",
