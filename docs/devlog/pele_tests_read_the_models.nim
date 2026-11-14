@@ -1,4 +1,4 @@
-## devlog: 14 Nov 2026 L | Pele's tests read the models | Pele's own tests can now call parse() on nimaki and read the model it returns: more of them pass, the rest wait for their type's model, and three types' models became Pele's.
+## devlog: 14 Nov 2026 N | Pele's tests read the models | Pele's own tests can now call parse() on nimaki and read the model it returns: more of them pass, the rest wait for their type's model, and three types' models became Pele's.
 ## kind: port
 import std/[strformat, strutils, json, osproc, os, tables, options]
 import nimib
@@ -198,8 +198,9 @@ nbNote &"""
 """, nkDone, "Checked"
 
 nbNote """
-- The other types: most of their files are being changed by the step that writes the scanners
-  with regular expressions, so they wait for it, to keep the two steps apart.
+- The other types: most of their files were being changed by the step that writes the scanners
+  with regular expressions (the post *Regular expressions as Pele writes them*), so they waited
+  for it, to keep the two steps apart. It has merged: they are the next part of this step.
 - A test that reads a model of a type the referee calls the same, and fails for a reason the
   referee does not see (as the titles), shows only when Pele's tests run.
 """, nkWarning, "Not checked yet"
