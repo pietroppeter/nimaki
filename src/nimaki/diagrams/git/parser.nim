@@ -35,29 +35,7 @@ const
   T_newline = 26
   T_reference = 31
 
-func isRefChar(c: char): bool = isWordChar(c) or c in {'-', '.', '/'}
-
-func matchReference(s: string, p: int): int =
-  ## /\w([-\./\w]*[-\w])?/y
-  if p >= s.len or not isWordChar(s[p]): return -1
-  var e = p + 1
-  while e < s.len and isRefChar(s[e]): inc e
-  while e > p + 1 and s[e - 1] in {'.', '/'}: dec e
-  e
-
-func matchInt(s: string, p: int): int =
-  ## /0|[1-9][0-9]*(?!\.)/y: a 0 alone, or a run of digits not followed by a dot (the run
-  ## gives back its last digit when a dot follows).
-  if p >= s.len: return -1
-  if s[p] == '0': return p + 1
-  if s[p] notin {'1'..'9'}: return -1
-  var e = p + 1
-  while e < s.len and s[e] in {'0'..'9'}: inc e
-  if e < s.len and s[e] == '.':
-    if e - 1 > p: e - 1 else: -1
-  else: e
-
-let REFERENCE = TokenType(name: "REFERENCE", matcher: matchReference)
+let REFERENCE = TokenType(name: "REFERENCE", pattern: jsre"/\w([-\./\w]*[-\w])?/y")
 let NAME = @[REFERENCE]
 
 proc word(name: string): TokenType =
@@ -101,7 +79,7 @@ let GIT_TOKENS*: seq[TokenType] = block:
     accDescr,
     ACC_TITLE,
     titleBefore(r"[-./\w]*[-\w]"),
-    TokenType(name: "INT", matcher: matchInt, first: "0123456789", hasFirst: true),
+    TokenType(name: "INT", pattern: jsre"/0|[1-9][0-9]*(?!\.)/y", first: "0123456789", hasFirst: true),
     STRING,
     NEWLINE,
     WHITESPACE,

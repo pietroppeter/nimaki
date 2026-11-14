@@ -2,6 +2,7 @@
 ## port-status: draft
 import std/options
 import ../common/tokens
+import ../../jsregex
 import ../../js
 
 const
@@ -18,18 +19,6 @@ const
   T_string = 9
   T_newline = 10
 
-func matchInt(s: string, p: int): int =
-  ## /0|[1-9][0-9]*(?!\.)/y: a 0 alone, or a run of digits not followed by a dot (the run
-  ## gives back its last digit when a dot follows).
-  if p >= s.len: return -1
-  if s[p] == '0': return p + 1
-  if s[p] notin {'1'..'9'}: return -1
-  var e = p + 1
-  while e < s.len and s[e] in {'0'..'9'}: inc e
-  if e < s.len and s[e] == '.':
-    if e - 1 > p: e - 1 else: -1
-  else: e
-
 let PACKET_TOKENS*: seq[TokenType] = @[
   TokenType(name: "packet-beta", literal: "packet-beta"),
   keyword("packet"),
@@ -40,7 +29,7 @@ let PACKET_TOKENS*: seq[TokenType] = @[
   ACC_DESCR,
   ACC_TITLE,
   TITLE,
-  TokenType(name: "INT", matcher: matchInt, first: "0123456789", hasFirst: true),
+  TokenType(name: "INT", pattern: jsre"/0|[1-9][0-9]*(?!\.)/y", first: "0123456789", hasFirst: true),
   STRING,
   NEWLINE,
   WHITESPACE,
