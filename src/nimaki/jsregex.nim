@@ -29,17 +29,21 @@ import regex
 import regex/[nfatype, nfamatch2]
 
 type
-  JsRegExp* = ref object
+  Engine = ref object
+    compiled: bool
+    re: Regex2
+
+  JsRegExp* = object
     ## A regular expression with JavaScript's flags. It is translated when it is made (at compile
-    ## time for `jsre`) and compiled for the engine the first time it matches: a compiled regex
-    ## is large, so the program carries only the patterns, and each run compiles only the ones it
-    ## uses.
+    ## time for `jsre`, so a literal can be a `const`) and compiled for the engine the first time
+    ## it matches: a compiled regex is large, so the program carries only the patterns, and each
+    ## run compiles only the ones it uses.
     source*: string        ## the pattern as Pele writes it
     flags*: string         ## the flags as Pele writes them (`g`, `i`, `m`, `y`, `u`)
     global*, sticky*: bool
     translated*: string    ## the pattern in the engine's syntax
-    compiled: bool
-    re: Regex2
+    slot: int              ## a literal's place in `literals`, plus one (0: not a literal)
+    own: Regex2            ## the compiled regex of one made at run time (compiled then)
 
   JsMatch* = object
     ## The result of `exec`: `found` is false when nothing matched. Group 0 is the whole match.
@@ -432,49 +436,69 @@ func splitLiteral(lit: string): (string, string) =
   if close == 0: raise newException(JsRegExpError, "a regex literal ends with /flags: " & lit)
   (lit[1 ..< close], lit[close + 1 .. ^1])
 
-func made(pattern, flags, translated: string): JsRegExp =
+var literals: seq[Engine]
+  ## The engine of each `jsre` literal, made the first time the literal matches.
+var slots {.compileTime.} = 0
+
+proc takeSlot(): int {.compileTime.} =
+  inc slots
+  slots
+
+proc compiled(re: JsRegExp): Regex2 =
+  try:
+    re2(re.translated, {regexAscii})
+  except RegexError as e:
+    raise newException(JsRegExpError, "/" & re.source & "/" & re.flags & " -> " &
+      re.translated & ": " & e.msg)
+
+func made(pattern, flags, translated: string, slot: int): JsRegExp =
   JsRegExp(source: pattern, flags: flags, global: 'g' in flags, sticky: 'y' in flags,
-           translated: translated)
+           translated: translated, slot: slot)
 
 func newRegExp*(pattern: string, flags = ""): JsRegExp =
-  ## `new RegExp(pattern, flags)`, translated at run time.
-  made(pattern, flags, translate(pattern, flags))
+  ## `new RegExp(pattern, flags)`, translated and compiled at run time.
+  result = made(pattern, flags, translate(pattern, flags), 0)
+  result.own = compiled(result)
 
 func parseRegExpLiteral*(lit: string): JsRegExp =
   ## `/pattern/flags`, as written in JavaScript, translated at run time.
   let (pattern, flags) = splitLiteral(lit)
   newRegExp(pattern, flags)
 
-func translateLiteral*(lit: string): (string, string, string) =
-  ## The pattern, flags and translation of a literal (for `jsre`, at compile time).
+func literal*(lit: string, slot: int): JsRegExp =
+  ## A literal translated for `jsre` (at compile time), with its slot.
   let (pattern, flags) = splitLiteral(lit)
-  (pattern, flags, translate(pattern, flags))
+  made(pattern, flags, translate(pattern, flags), slot)
 
 template jsre*(lit: static string): JsRegExp =
   ## A JavaScript regex literal, translated at compile time (a pattern the port cannot
-  ## translate faithfully stops the build): `jsre"/\n\s+/g"` (a raw string: a backslash is
-  ## itself; write `""` for a quote). Each literal is made once, when the program starts.
-  const parts = translateLiteral(lit)
-  let made {.global.} = made(parts[0], parts[1], parts[2])
-  made
+  ## translate faithfully stops the build): `const RE = jsre"/\n\s+/g"` (a raw string: a
+  ## backslash is itself; write `""` for a quote, or use `jsre"""..."""`).
+  const re = literal(lit, takeSlot())
+  re
 
-proc compileNow(re: JsRegExp) =
-  try:
-    re.re = re2(re.translated, {regexAscii})
-  except RegexError as e:
-    raise newException(JsRegExpError, "/" & re.source & "/" & re.flags & " -> " & re.translated &
-      ": " & e.msg)
-  re.compiled = true
+proc literalEngine(re: JsRegExp): Engine =
+  if re.slot > literals.len: literals.setLen(re.slot)
+  result = literals[re.slot - 1]
+  if result == nil:
+    result = Engine(re: compiled(re))
+    literals[re.slot - 1] = result
 
-template ready(re: JsRegExp) =
-  ## Compiles `re` now if this is its first match. (Compiling only fills the regex's own cache:
-  ## what it matches does not change.)
-  if not re.compiled:
-    {.cast(noSideEffect).}: compileNow(re)
+template withEngine(re: JsRegExp, r, body: untyped): untyped =
+  ## `body`, with `r` the compiled regex of `re`. A literal is compiled the first time it
+  ## matches (that only fills a cache: what the regex matches does not change).
+  if re.slot > 0:
+    var e: Engine
+    {.cast(noSideEffect).}: e = literalEngine(re)
+    template r: untyped {.inject.} = e.re
+    body
+  else:
+    template r: untyped {.inject.} = re.own
+    body
 
 func check*(re: JsRegExp): JsRegExp =
   ## Compiles `re` now (the tests do it for every pattern), and returns it.
-  ready(re)
+  withEngine(re, r): discard r.isInitialized
   re
 
 func escapeRegExp*(s: string): string =
@@ -489,7 +513,7 @@ func escapeRegExp*(s: string): string =
 
 func isSet*(re: JsRegExp): bool {.inline.} =
   ## Whether `re` holds a regex (a field left at its default does not).
-  not re.isNil
+  re.slot > 0 or re.own.isInitialized
 
 func found*(m: JsMatch): bool {.inline.} = m.index >= 0
 
@@ -519,16 +543,16 @@ func toJsMatch(s: string, m: RegexMatch2): JsMatch =
 func matchHere(re: JsRegExp, s: string, at: int): JsMatch =
   ## The match that starts exactly at `at` (a sticky match), if any.
   var m: RegexMatch2
-  ready(re)
-  if at <= s.len and matchImpl(s, re.re.toRegex, m, at, {mfAnchored}): toJsMatch(s, m)
-  else: noMatch()
+  if at > s.len: return noMatch()
+  withEngine(re, r):
+    result = if matchImpl(s, r.toRegex, m, at, {mfAnchored}): toJsMatch(s, m) else: noMatch()
 
 func searchFrom(re: JsRegExp, s: string, at: int): JsMatch =
   ## The first match that starts at `at` or later.
   var m: RegexMatch2
-  ready(re)
-  if at <= s.len and find(s, re.re, m, at): toJsMatch(s, m)
-  else: noMatch()
+  if at > s.len: return noMatch()
+  withEngine(re, r):
+    result = if find(s, r, m, at): toJsMatch(s, m) else: noMatch()
 
 func exec*(re: JsRegExp, s: string, lastIndex = 0): JsMatch =
   ## `re.lastIndex = lastIndex; re.exec(s)`: anchored at `lastIndex` for a sticky regex, the
@@ -541,12 +565,13 @@ func matchEnd*(re: JsRegExp, s: string, lastIndex = 0): int =
   ## match, without reading its groups (what a lexer needs, and quicker).
   var m: RegexMatch2
   if lastIndex > s.len: return -1
-  ready(re)
-  if re.sticky:
-    if matchImpl(s, re.re.toRegex, m, lastIndex, {mfAnchored, mfNoCaptures}): m.boundaries.b + 1
-    else: -1
-  elif find(s, re.re, m, lastIndex): m.boundaries.b + 1
-  else: -1
+  withEngine(re, r):
+    result =
+      if re.sticky:
+        if matchImpl(s, r.toRegex, m, lastIndex, {mfAnchored, mfNoCaptures}): m.boundaries.b + 1
+        else: -1
+      elif find(s, r, m, lastIndex): m.boundaries.b + 1
+      else: -1
 
 func test*(re: JsRegExp, s: string, lastIndex = 0): bool =
   ## `re.test(s)`.
@@ -606,27 +631,33 @@ func expand(by: string, s: string, m: JsMatch): string =
     result.add c
     inc i
 
-func replaceImpl(s: string, re: JsRegExp, by: proc (m: JsMatch): string {.noSideEffect.}): string =
+template replaceWith(s: string, re: JsRegExp, m, by: untyped): string =
+  ## `s` with each match (every one with `g`, the first otherwise) replaced by `by`, an
+  ## expression of the match `m`.
+  var output = ""
   var last = 0
   if not re.global:
     let m = exec(re, s)
-    if not m.found: return s
-    return s[0 ..< m.index] & by(m) & s[m.stop .. ^1]
-  for m in re.matches(s):
-    result.add s[last ..< m.index]
-    result.add by(m)
-    last = m.stop
-  result.add s[last .. ^1]
+    if m.found:
+      output = s[0 ..< m.index] & by & s[m.stop .. ^1]
+    else:
+      output = s
+  else:
+    for m in re.matches(s):
+      output.add s[last ..< m.index]
+      output.add by
+      last = m.stop
+    output.add s[last .. ^1]
+  output
 
 func replace*(s: string, re: JsRegExp, by: string): string =
   ## `s.replace(re, by)` (every match with `g`, the first otherwise), with `$&`, `$1`... in `by`.
-  if '$' notin by:
-    return replaceImpl(s, re, func (m: JsMatch): string = by)
-  replaceImpl(s, re, func (m: JsMatch): string = expand(by, s, m))
+  if '$' notin by: replaceWith(s, re, m, by)
+  else: replaceWith(s, re, m, expand(by, s, m))
 
-func replace*(s: string, re: JsRegExp, by: proc (m: JsMatch): string {.noSideEffect.}): string =
-  ## `s.replace(re, (match, p1, p2...) => ...)`: the function gets the whole match.
-  replaceImpl(s, re, by)
+proc replace*(s: string, re: JsRegExp, by: proc (m: JsMatch): string): string =
+  ## `s.replace(re, (match, p1, p2..., offset) => ...)`: the function gets the whole match.
+  replaceWith(s, re, m, by(m))
 
 func split*(s: string, re: JsRegExp, limit = -1): seq[string] =
   ## `s.split(re, limit)`, as the specification's `@@split` does it: a match anchored at each

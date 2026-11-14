@@ -13,7 +13,7 @@
       "unsupported": 1
     }
   },
-  "bytes": 9107993,
+  "bytes": 10226648,
   "fuzz": {
     "pie": {
       "seed": 1,

@@ -157,7 +157,7 @@ proc keyword*(word: string): TokenType =
   TokenType(name: word, pattern: newRegExp(escapeRegExp(word) & r"(?:(?=%%)|(?!\S))", "y"),
             first: word[0 .. 0], hasFirst: true)
 
-let
+const
   RE_ACC_DESCR = jsre"/accDescr(?:[\t ]*:([^\n\r]*)|\s*{([^}]*)})/"
   RE_ACC_TITLE = jsre"/accTitle[\t ]*:([^\n\r]*)/"
   RE_TITLE = jsre"/title([\t ][^\n\r]*|)/"

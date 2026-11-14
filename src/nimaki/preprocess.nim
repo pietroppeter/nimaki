@@ -1,10 +1,7 @@
 ## port-of: src/preprocess.ts
 ## port-status: draft
-##
-## The regular expressions of preprocess.ts are hand-written scanners here (porting guide:
-## regular expressions); each one names the pattern it answers as.
 import std/[strutils, json, tables, sets]
-import errors, js
+import errors, js, jsregex
 import util/yaml
 
 type
@@ -21,64 +18,30 @@ type
   Steps* = ref seq[seq[Edit]]
     ## The edits of each step, recorded only when a source position is needed (nil otherwise).
 
+const
+  RE_COMMENT = jsre"/^\s*%%(?!{)[^\n]+\n?/gm"
+  RE_DIRECTIVE = jsre"/%{2}{\s*(?:(\w+)\s*:|(\w+))\s*(?:(\w+)|((?:(?!}%{2}).|\r?\n)*))?\s*(?:}%{2})?/gi"
+  RE_HTML_TAG = jsre"/<(\w+)([^>]*)>/g"
+  RE_ATTR = jsre"""/="([^"]*)"/g"""
 const UNSAFE_KEYS = ["__proto__", "constructor", "prototype"].toHashSet
 
-func isLineTerminatorAt(s: string, i: int): bool =
-  ## [\n\r  ] at byte i
-  if i >= s.len: return false
-  if s[i] in {'\n', '\r'}: return true
-  s.continuesWith(" ", i) or s.continuesWith(" ", i)
+func replacements(text: string, re: JsRegExp, length: int): seq[Edit] =
+  ## `replacements` of errors.ts: where each match is, and the length that replaces it.
+  for m in re.matches(text): result.add (m.index, m.stop, length)
 
-func matchComment(text: string, p: int): int =
-  ## /^\s*%%(?!{)[^\n]+\n?/m at p (where ^ holds): the end of the match, or -1.
-  var i = p
-  while true:
-    let n = spaceLenAt(text, i)
-    if n == 0: break
-    i += n
-  if not text.continuesWith("%%", i): return -1
-  i += 2
-  if i < text.len and text[i] == '{': return -1
-  let first = i
-  while i < text.len and text[i] != '\n': inc i
-  if i == first: return -1
-  if i < text.len: inc i
-  i
-
-proc commentSpans(text: string): seq[(int, int)] =
-  ## The matches of RE_COMMENT, left to right.
-  var p = 0
-  while p <= text.len:
-    let lineStart = p == 0 or text.isLineTerminatorAt(prevRuneStart(text, p))
-    if lineStart and p < text.len:
-      let stop = matchComment(text, p)
-      if stop > p:
-        result.add (p, stop)
-        p = stop
-        continue
-    if p >= text.len: break
-    p += codePointAt(text, p).size
-
-proc removeSpans(text: string, spans: seq[(int, int)], steps: Steps): string =
-  if steps != nil:
-    var edits: seq[Edit]
-    for (a, b) in spans: edits.add (a, b, 0)
-    steps[].add edits
-  var last = 0
-  for (a, b) in spans:
-    result.add text[last ..< a]
-    last = b
-  result.add text[last .. ^1]
+proc removeAll(text: string, re: JsRegExp, steps: Steps): string =
+  if steps != nil: steps[].add replacements(text, re, 0)
+  text.replace(re, "")
 
 proc cleanupComments*(text: string, steps: Steps = nil): string =
   var text = text
-  if "%%" in text: text = removeSpans(text, commentSpans(text), steps)
+  if "%%" in text: text = removeAll(text, RE_COMMENT, steps)
   let trimmed = jsTrimStart(text)
   if steps != nil: steps[].add @[(0, text.len - trimmed.len, 0)]
   trimmed
 
 func normalizeLineBreaks*(text: string): string =
-  if '\r' in text: text.replace("\r\n", "\n").replace("\r", "\n") else: text
+  if '\r' in text: text.replace(jsre"/\r\n?/g", "\n") else: text
 
 func isLineBreak(text: string, i: int): bool = i < text.len and text[i] in {'\n', '\r'}
 
@@ -162,103 +125,20 @@ proc fromJson*(j: JsonNode): YamlValue =
     for k, v in j.fields: m.fields[k] = fromJson(v)
     m
 
-type DirectiveMatch = object
-  first, last: int
-  kind: string           ## match[1] ?? match[2]
-  hasArgs: bool          ## match[4] !== undefined
-  args: string
-
-proc matchDirective(s: string, p: int): (bool, DirectiveMatch) =
-  ## /%{2}{\s*(?:(\w+)\s*:|(\w+))\s*(?:(\w+)|((?:(?!}%{2}).|\r?\n)*))?\s*(?:}%{2})?/i at p.
-  if not s.continuesWith("%%{", p): return
-  var i = p + 3
-  proc spaces(i: var int) =
-    while true:
-      let n = spaceLenAt(s, i)
-      if n == 0: break
-      i += n
-  spaces(i)
-  if i >= s.len or not isWordChar(s[i]): return
-  let w0 = i
-  while i < s.len and isWordChar(s[i]): inc i
-  var m = DirectiveMatch(first: p, kind: s[w0 ..< i])
-  var j = i
-  spaces(j)
-  if j < s.len and s[j] == ':': i = j + 1
-  spaces(i)
-  if i < s.len and isWordChar(s[i]):
-    while i < s.len and isWordChar(s[i]): inc i
-  else:
-    let a0 = i
-    while i < s.len:
-      if s.continuesWith("}%%", i): break
-      if s[i] == '\n': inc i
-      elif s[i] == '\r':
-        if i + 1 < s.len and s[i + 1] == '\n': i += 2
-        else: break
-      elif s.isLineTerminatorAt(i): break
-      else: i += codePointAt(s, i).size
-    m.hasArgs = true
-    m.args = s[a0 ..< i]
-  spaces(i)
-  if s.continuesWith("}%%", i): i += 3
-  m.last = i
-  (true, m)
-
-proc directiveMatches(s: string): seq[DirectiveMatch] =
-  var p = s.find("%%{")
-  while p != -1:
-    let (ok, m) = matchDirective(s, p)
-    if ok:
-      result.add m
-      p = s.find("%%{", max(m.last, p + 1))
-    else:
-      p = s.find("%%{", p + 1)
-
 proc directives(text: string, config: Config, steps: Steps): string =
   if "%%{" notin text: return text
   let normalized = jsTrim(text).replace('\'', '"')
-  for match in directiveMatches(normalized):
-    let kind = match.kind
+  for match in RE_DIRECTIVE.matches(normalized):
+    let kind = if match.has(1): match[1] else: match[2]
     if kind == "wrap":
       config.fields["wrap"] = ybool(true)
-    elif (kind == "init" or kind == "initialize") and match.hasArgs and match.args != "":
+    elif (kind == "init" or kind == "initialize") and match[4] != "":
       try:
-        let args = fromJson(jsonParse(jsTrim(match.args)))
+        let args = fromJson(jsonParse(jsTrim(match[4])))
         if isRecord(args): discard merge(config, args)
       except CatchableError:
         discard # Mermaid ignores an init directive whose body is not valid JSON.
-  var spans: seq[(int, int)]
-  for m in directiveMatches(text): spans.add (m.first, m.last)
-  removeSpans(text, spans, steps)
-
-proc htmlTags(text: string): string =
-  ## text.replace(/<(\w+)([^>]*)>/g, (_m, tag, attrs) => '<' + tag + attrs.replace(/="([^"]*)"/g, "='$1'") + '>')
-  var i = 0
-  while i < text.len:
-    if text[i] == '<' and i + 1 < text.len and isWordChar(text[i + 1]):
-      var j = i + 1
-      while j < text.len and isWordChar(text[j]): inc j
-      let tag = text[i + 1 ..< j]
-      let close = text.find('>', j)
-      if close != -1:
-        let attrs = text[j ..< close]
-        var out2 = ""
-        var k = 0
-        while k < attrs.len:
-          if attrs.continuesWith("=\"", k):
-            let q = attrs.find('"', k + 2)
-            if q != -1:
-              out2.add "='" & attrs[k + 2 ..< q] & "'"
-              k = q + 1
-              continue
-          out2.add attrs[k]
-          inc k
-        result.add "<" & tag & out2 & ">"
-        i = close + 1
-        continue
-    result.add text[i]
-    inc i
+  removeAll(text, RE_DIRECTIVE, steps)
 
 proc preprocess*(source: string, steps: Steps = nil): Preprocessed =
   ## `steps` maps normalized source to `withComments`.
@@ -266,7 +146,8 @@ proc preprocess*(source: string, steps: Steps = nil): Preprocessed =
   # A tag needs a closing bracket, so nothing after the last one can match.
   let lastClose = if '<' in text: text.rfind('>') else: -1
   if lastClose > 0:
-    text = htmlTags(text[0 .. lastClose]) & text[lastClose + 1 .. ^1]
+    text = text[0 .. lastClose].replace(RE_HTML_TAG, func (m: JsMatch): string =
+      "<" & m[1] & m[2].replace(RE_ATTR, "='$1'") & ">") & text[lastClose + 1 .. ^1]
 
   let config = ymap()
   var title = ""
@@ -308,6 +189,11 @@ proc preprocess*(source: string, steps: Steps = nil): Preprocessed =
   Preprocessed(text: cleanupComments(text), title: title, config: config, withComments: text,
                lineOffset: lineOffset)
 
+const
+  RE_ENTITY = jsre"/#\w+;/g"
+  RE_INT = jsre"/^\+?\d+$/"
+  RE_LINE_BREAK = newRegExp("[\\n\\r" & "\u2028\u2029" & "]", "g")
+
 proc recording(steps: Steps): int =
   ## Starts the edits of a new step; returns its index (-1 when not recording).
   if steps == nil: return -1
@@ -325,9 +211,8 @@ proc dropColorSemicolons(text: string, keyword: string, steps: Steps): string =
   var output = ""
   var last = 0
   while start != -1:
-    var lineEnd = start
-    while lineEnd < text.len and not text.isLineTerminatorAt(lineEnd):
-      lineEnd += codePointAt(text, lineEnd).size
+    let stop = RE_LINE_BREAK.matchEnd(text, start)
+    let lineEnd = if stop >= 0: stop - 1 else: text.len
     var afterColon = false
     var hash = -1
     var j = start + keyword.len
@@ -357,18 +242,7 @@ proc encodeEntities*(text: string, steps: Steps = nil): string =
   if '#' notin text: return text
   let text = dropColorSemicolons(dropColorSemicolons(text, "style", steps), "classDef", steps)
   let edits = recording(steps)
-  # text.replace(/#\w+;/g, ...)
-  var i = 0
-  while i < text.len:
-    if text[i] == '#':
-      var j = i + 1
-      while j < text.len and isWordChar(text[j]): inc j
-      if j > i + 1 and j < text.len and text[j] == ';':
-        let inner = text[i + 1 ..< j]
-        let code = (if inner.allCharsInSet(Digits): "ﬂ°°" else: "ﬂ°") & inner & "¶ß"
-        if edits >= 0: steps[edits].add (i, j + 1, code.len)
-        result.add code
-        i = j + 1
-        continue
-    result.add text[i]
-    inc i
+  text.replace(RE_ENTITY, proc (m: JsMatch): string =
+    let inner = m[0][1 ..< m[0].len - 1]
+    result = (if RE_INT.test(inner): "ﬂ°°" else: "ﬂ°") & inner & "¶ß"
+    if edits >= 0: steps[edits].add (m.index, m.stop, result.len))
