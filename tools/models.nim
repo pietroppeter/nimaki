@@ -39,6 +39,7 @@ from nimaki/diagrams/requirement/db import RequirementDb
 from nimaki/diagrams/sankey/db import SankeyModel
 from nimaki/diagrams/sequence/db import SeqDb
 from nimaki/diagrams/state/db import StateDb
+from nimaki/diagrams/state/types import Stmt, StmtKind, DescrKind
 from nimaki/diagrams/timeline/db import TimelineModel
 from nimaki/diagrams/treemap/model import TreemapModel
 from nimaki/diagrams/treeview/model import TreeViewModel
@@ -196,6 +197,40 @@ proc dump(x: C4Rel, path: var Walk): JsonNode =
   result["to"] = %x.to
   if x.offsetX == x.offsetX: result["offsetX"] = number(x.offsetX, path)
   if x.offsetY == x.offsetY: result["offsetY"] = number(x.offsetY, path)
+
+proc dump(x: Stmt, path: var Walk): JsonNode =
+  ## Pele's union of statements (and a bare string), which the port holds as one object with a
+  ## tag, shared and changed in place; flags beside it say which optional fields Pele's has.
+  if x == nil: return newJNull()
+  template list(xs: seq[Stmt]): JsonNode =
+    (var a = newJArray(); (for s in xs: a.add dump(s, path)); a)
+  case x.stmt
+  of skText: result = %x.text
+  of skState:
+    result = %*{"stmt": "state", "id": x.id}
+    if x.kind != "": result["type"] = %x.kind
+    case x.descr
+    of dkNone: discard
+    of dkText: result["description"] = %x.description
+    of dkList: result["description"] = %x.descriptionList
+    if x.record:
+      result["descriptions"] = %x.descriptions
+      result["styles"] = %x.styles
+      result["textStyles"] = %x.textStyles
+    if x.hasDoc: result["doc"] = list(x.doc)
+    if x.hasNote: result["note"] = %*{"position": x.note.position, "text": x.note.text}
+    if x.start.isSome: result["start"] = %x.start.get
+    if x.hasClasses: result["classes"] = %x.classes
+  of skRelation:
+    result = %*{"stmt": "relation", "state1": dump(x.state1, path), "state2": dump(x.state2, path)}
+    if x.relDescription.isSome: result["description"] = %x.relDescription.get
+  of skClassDef: result = %*{"stmt": "classDef", "id": x.id, "classes": x.classesText}
+  of skStyle: result = %*{"stmt": "style", "id": x.id, "styleClass": x.styleClass}
+  of skApplyClass: result = %*{"stmt": "applyClass", "id": x.id, "styleClass": x.styleClass}
+  of skDir: result = %*{"stmt": "dir", "value": x.value}
+  of skClick:
+    result = %*{"stmt": "click", "id": dump(x.clickId, path), "url": x.url, "tooltip": x.tooltip}
+  of skRoot: result = %*{"stmt": "root", "id": x.id, "doc": list(x.doc)}
 
 proc dump(x: MappingSet, path: var Walk): JsonNode =
   ## Pele's `Set` of mappings, held as a list (a set of references would hash their addresses).

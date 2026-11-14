@@ -4,6 +4,7 @@ import std/[options, strutils, tables]
 import ../../errors
 import ../../js
 import types
+import ../../model
 
 type
   StateNode* = ref object
@@ -16,14 +17,14 @@ type
     cssClasses*: string
     cssCompiledStyles*: seq[string]
     cssStyles*: seq[string]
-    kind*: string                ## Pele's `type` ("" for undefined)
+    kind* {.undefinedIfEmpty.}: string                ## Pele's `type` ("" for undefined)
     isGroup*: bool
     parentId*: Option[string]
-    dir*: string
+    dir* {.undefinedIfEmpty.}: string
       ## The direction inside a composite: its last `direction` statement, or TB ("" for undefined).
     position*: Option[string]
     noteFor*: Option[string]
-    hasColorIndex*: bool         ## whether the object has a `colorIndex` key (for Object.assign)
+    hasColorIndex* {.portOnly.}: bool         ## whether the object has a `colorIndex` key (for Object.assign)
     colorIndex*: Option[int]
 
   # Labels are markdown throughout, as in Mermaid.
@@ -33,7 +34,7 @@ type
     stop*: string                ## Pele's `end`
     label*: string
     classes*: string
-    dashed*: bool                ## `pattern: 'dashed'`
+    pattern* {.undefinedIfEmpty.}: string   ## dashed, or "" for undefined
 
   StateGraph* = object
     nodes*: seq[StateNode]
@@ -206,7 +207,7 @@ proc buildStateGraph*(rootDoc: seq[Stmt], states: OrderedTable[string, Stmt],
     let start = if left: noteNode.id else: id
     let to = if left: id else: noteNode.id
     edges.add StateEdge(id: start & "-" & to, start: start, stop: to, label: "", classes: "transition note-edge",
-                        dashed: true)
+                        pattern: "dashed")
 
   var stack = @[Frame(item: nil, doc: rootDoc, at: 0, alt: true)]
   while stack.len > 0:
