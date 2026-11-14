@@ -723,9 +723,9 @@
           "what": "The second article on the port's code: how its diagram types turn text into tokens, the families of lexer they use (Jison's rules ported by hand, the shared tokenizer, stateful lexers), what they share and what each copies, with runnable examples.",
           "done_when": "A devlog post whose numbers come from the code on main; findings filed as roadmap steps or notes.",
           "owner": "Write articles explaining nimaki code",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "how-nimaki-reads-text",
+          "pr": "58"
         },
         {
           "id": "code-articles",
@@ -799,6 +799,17 @@
           "title": "Past draft: verified and conformant",
           "what": "Every ported file still says port-status: draft. Decision 0005 defines verified as a second reading against the TypeScript and conformant as Pele's tests passing, while labels-check and pele-tests move files to verified through tests. One new decision says what moves a file past draft; then the files the other steps do not cover are moved, starting with what most code depends on (js.nim, the measurer, the SVG builder, the layered layout). Waiting on Pietro's choice (asked in The shape of the port).",
           "done_when": "A decision, and the port map showing files past draft.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "reading-fixes",
+          "kind": "port",
+          "title": "Odd characters: the differences tools/mutate.nim found",
+          "what": "tools/mutate.nim slips one unusual character into each corpus case; 28 of 41,433 answers differ from Pele, from four places past the lexers: util/yaml.nim counts indentation in bytes, not UTF-16 units (leading(); one line); util/url.nim keeps hosts outside ASCII as written, where new URL() maps them with IDNA or refuses them (NBSP, U+3000, U+2028), so links differ or Pele drops them (port IDNA's mapping, or a divergence entry); a line separator in a class member changes the box size (not traced); a gantt date with a line separator parses in jsdate.nim and not in Pele. The cases are in docs/devlog/data/how_nimaki_reads_text/mutate-N.json. Found by the article How nimaki reads text.",
+          "done_when": "nim r tools/mutate.nim finds no difference on seeds 1 to 7, and it runs in CI.",
           "owner": "",
           "status": "planned",
           "post": "",

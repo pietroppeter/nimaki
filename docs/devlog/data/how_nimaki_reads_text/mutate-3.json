@@ -1,0 +1,167 @@
+{
+  "pin": "1.13.0",
+  "seed": 3,
+  "copies": 3,
+  "cases": 5919,
+  "identical": 5919,
+  "different": 0,
+  "inserts": [
+    "no-break space",
+    "line separator",
+    "byte order mark",
+    "zero-width space",
+    "ideographic space",
+    "é",
+    "Ω",
+    "mathematical bold A (outside the BMP)",
+    "emoji (outside the BMP)"
+  ],
+  "types": [
+    {
+      "type": "agentflow",
+      "identical": 714,
+      "different": 0
+    },
+    {
+      "type": "architecture",
+      "identical": 78,
+      "different": 0
+    },
+    {
+      "type": "block",
+      "identical": 213,
+      "different": 0
+    },
+    {
+      "type": "c4",
+      "identical": 168,
+      "different": 0
+    },
+    {
+      "type": "class",
+      "identical": 252,
+      "different": 0
+    },
+    {
+      "type": "cynefin",
+      "identical": 57,
+      "different": 0
+    },
+    {
+      "type": "er",
+      "identical": 426,
+      "different": 0
+    },
+    {
+      "type": "eventmodeling",
+      "identical": 72,
+      "different": 0
+    },
+    {
+      "type": "flowchart",
+      "identical": 1149,
+      "different": 0
+    },
+    {
+      "type": "gantt",
+      "identical": 75,
+      "different": 0
+    },
+    {
+      "type": "gitGraph",
+      "identical": 282,
+      "different": 0
+    },
+    {
+      "type": "info",
+      "identical": 18,
+      "different": 0
+    },
+    {
+      "type": "ishikawa",
+      "identical": 12,
+      "different": 0
+    },
+    {
+      "type": "journey",
+      "identical": 12,
+      "different": 0
+    },
+    {
+      "type": "kanban",
+      "identical": 99,
+      "different": 0
+    },
+    {
+      "type": "mindmap",
+      "identical": 117,
+      "different": 0
+    },
+    {
+      "type": "packet",
+      "identical": 57,
+      "different": 0
+    },
+    {
+      "type": "pie",
+      "identical": 48,
+      "different": 0
+    },
+    {
+      "type": "radar",
+      "identical": 42,
+      "different": 0
+    },
+    {
+      "type": "railroad",
+      "identical": 273,
+      "different": 0
+    },
+    {
+      "type": "requirement",
+      "identical": 60,
+      "different": 0
+    },
+    {
+      "type": "sequence",
+      "identical": 558,
+      "different": 0
+    },
+    {
+      "type": "state",
+      "identical": 357,
+      "different": 0
+    },
+    {
+      "type": "swimlane",
+      "identical": 42,
+      "different": 0
+    },
+    {
+      "type": "timeline",
+      "identical": 72,
+      "different": 0
+    },
+    {
+      "type": "treeView",
+      "identical": 72,
+      "different": 0
+    },
+    {
+      "type": "treemap",
+      "identical": 24,
+      "different": 0
+    },
+    {
+      "type": "usecase",
+      "identical": 453,
+      "different": 0
+    },
+    {
+      "type": "wardley",
+      "identical": 117,
+      "different": 0
+    }
+  ],
+  "differences": []
+}

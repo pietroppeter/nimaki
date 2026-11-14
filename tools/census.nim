@@ -113,6 +113,37 @@ func regexIn(doc: string): tuple[found: bool, pattern, flags: string] =
       i = j
     inc i
 
+proc lexers(files: seq[NimFile]): JsonNode =
+  ## How each diagram type reads its text: `table` (the shared tokenizer of
+  ## diagrams/common/tokens.nim, driven by a table of token types), `jison` (a lexer.nim of its
+  ## own, Jison's compiled rules written by hand), `outline` (the indentation reader of
+  ## diagrams/common/outline.nim), or `borrowed` (another type's parser). For each: the lines of
+  ## code of its lexer.nim and tokens.nim, and the start conditions its lexer declares (`S_...`).
+  result = newJArray()
+  var types: OrderedTable[string, seq[NimFile]]
+  for f in files:
+    if f.area.startsWith("diagrams/") and f.area != "diagrams/common":
+      types.mgetOrPut(f.area.split('/')[1], @[]).add f
+  var names = toSeq(types.keys)
+  names.sort
+  for t in names:
+    var family = "borrowed"
+    var code, states = 0
+    for f in types[t]:
+      let base = f.path.split('/')[^1]
+      if base in ["lexer.nim", "tokens.nim"]: code += f.code
+      if base == "lexer.nim":
+        family = "jison"
+        for line in readFile(srcRoot / "nimaki" / f.path).splitLines:
+          let l = line.strip
+          if l.startsWith("S_") and " = " in l and l.split(" = ")[1].strip.allCharsInSet(Digits): inc states
+    if family != "jison":
+      for f in types[t]:
+        for d in f.imports:
+          if d == "diagrams/common/tokens.nim": family = "table"
+          elif d == "diagrams/common/outline.nim" and family != "table": family = "outline"
+    result.add %*{"type": t, "family": family, "code": code, "states": states}
+
 proc census(refDir: string): JsonNode =
   var files: seq[NimFile]
   for abs in walkDirRec(srcRoot):
@@ -232,7 +263,7 @@ proc census(refDir: string): JsonNode =
      "files": files.len, "statuses": statusJson, "areas": areas, "withoutOrigin": noOrigin,
      "shared": shared, "betweenTypes": crossing, "upward": upward,
      "regexHelpers": helperCount, "regexes": regexes,
-     "tests": {"files": testFiles, "code": testCode}}
+     "tests": {"files": testFiles, "code": testCode}, "lexers": lexers(files)}
 
 proc main() =
   var refArg, outArg: string
