@@ -1,0 +1,97 @@
+{
+ "about": "Milliseconds vitest reports for one of Pele's stress tests run alone on the JavaScript build, before (main at 3eb7cd3, just after the regular expressions) and after this round, on the 4-core sandbox, 14 November 2026. Measured with timings.sh beside this file, on tests.tsv; run to run they vary by a tenth or so.",
+ "tests": [
+  {
+   "file": "tests/class/stress.test.ts",
+   "test": "class diagram worst cases 2,000 nested namespaces, rendered",
+   "before": 16472,
+   "beforeStatus": "failed",
+   "after": 4902,
+   "afterStatus": "failed"
+  },
+  {
+   "file": "tests/class/stress.test.ts",
+   "test": "class diagram worst cases namespace name of 3,000 parts, rendered",
+   "before": 11914,
+   "beforeStatus": "failed",
+   "after": 3715,
+   "afterStatus": "failed"
+  },
+  {
+   "file": "tests/class/stress.test.ts",
+   "test": "class diagram worst cases 1,600 classDefs applied to 1,600 classes",
+   "before": 10997,
+   "beforeStatus": "failed",
+   "after": 4637,
+   "afterStatus": "failed"
+  },
+  {
+   "file": "tests/class/stress.test.ts",
+   "test": "class diagram worst cases a classDef of 5,000 declarations on 800 classes, each with a style of its own",
+   "before": 5052,
+   "beforeStatus": "failed",
+   "after": 5336,
+   "afterStatus": "failed"
+  },
+  {
+   "file": "tests/gantt/stress.test.ts",
+   "test": "gantt worst cases 12,000 excluded dates over long tasks",
+   "before": 9485,
+   "beforeStatus": "failed",
+   "after": 4019,
+   "afterStatus": "failed"
+  },
+  {
+   "file": "tests/gantt/stress.test.ts",
+   "test": "gantt worst cases a custom format checked for every excluded day",
+   "before": 12796,
+   "beforeStatus": "failed",
+   "after": 4536,
+   "afterStatus": "failed"
+  },
+  {
+   "file": "tests/gantt/stress.test.ts",
+   "test": "gantt worst cases a date format of 25,000 tokens",
+   "before": 4409,
+   "beforeStatus": "failed",
+   "after": 4218,
+   "afterStatus": "failed"
+  },
+  {
+   "file": "tests/state/stress.test.ts",
+   "test": "state diagram worst cases the same class statement and transitions 1,500 times",
+   "before": 5570,
+   "beforeStatus": "failed",
+   "after": 4809,
+   "afterStatus": "failed"
+  },
+  {
+   "file": "tests/venn/stress.test.ts",
+   "test": "venn worst cases one union of 300 sets",
+   "before": 4776,
+   "beforeStatus": "failed",
+   "after": 1621,
+   "afterStatus": "passed"
+  }
+ ],
+ "countsBefore": {
+  "passed": 6593,
+  "api": 339,
+  "unported": 0,
+  "speed": 57,
+  "canvas": 1,
+  "known": 2,
+  "failed": 0
+ },
+ "aboutCountsBefore": "nim r tools/peletests.nim on main at 3eb7cd3 in this sandbox, four files at a time.",
+ "countsAfter": {
+  "passed": 6616,
+  "api": 339,
+  "unported": 0,
+  "speed": 34,
+  "canvas": 1,
+  "known": 2,
+  "failed": 0
+ },
+ "aboutCountsAfter": "nim r tools/peletests.nim on this round's branch before it merged main's model tests (post 14 Nov N), in this sandbox, four files at a time."
+}
