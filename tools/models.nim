@@ -13,6 +13,7 @@ import nimaki
 import nimaki/util/yaml
 import nimaki/model
 from nimaki/diagrams/agentflow/db import AgentflowDb
+from nimaki/diagrams/agentflow/types import MappingSet
 from nimaki/diagrams/architecture/db import ArchitectureDb, ArchNode
 from "nimaki/diagrams/block/db" import BlockDb
 from nimaki/diagrams/c4/db import C4Db
@@ -158,6 +159,16 @@ proc dump(x: RailroadNode, path: var Walk): JsonNode =
   of nkRepetition:
     %*{"type": "repetition", "element": (if kids.len > 0: kids[0] else: newJNull()),
        "min": number(x.min, path), "max": number(x.max, path)}
+
+proc dump(x: MappingSet, path: var Walk): JsonNode =
+  ## Pele's `Set` of mappings, held as a list (a set of references would hash their addresses).
+  var s = newJArray()
+  for m in x.items:
+    let p = m.position
+    s.add %*{"id": m.id, "type": m.kind,
+             "position": {"startLine": p.startLine, "startColumn": p.startColumn, "endLine": p.endLine,
+                          "endColumn": p.endColumn, "startIndex": p.startIndex, "endIndex": p.endIndex}}
+  %*{"$set": s}
 
 proc dump(x: SharedStyles, path: var Walk): JsonNode =
   ## Pele's list of a classDef's styles, boxed so that the ids of one classDef share it.
