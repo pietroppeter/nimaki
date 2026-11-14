@@ -85,7 +85,7 @@ func blockText(raw: string): string =
   let inner = if open != -1 and close > open: raw[open + 1 ..< close]
               elif open == -1 and raw.len >= 2: raw[1 ..< raw.len - 1]   # the quotes are one byte each
               else: ""
-  var lines = inner.replace("\r", "").split('\n')
+  var lines = inner.replace(jsre"/\r/g", "").split('\n')
   while lines.len > 0 and jsTrim(lines[0]) == "": lines.delete(0)
   while lines.len > 0 and jsTrim(lines[^1]) == "": discard lines.pop()
   var indent = high(int)

@@ -120,7 +120,7 @@ proc extract*(db: StateDb, doc: seq[Stmt]) =
       db.addStyleClass(item.id.jsTrim, item.classesText)
     of skStyle:
       var styles: seq[string]
-      for s in item.styleClass.split(','): styles.add s.replace(";", "").jsTrim
+      for s in item.styleClass.split(','): styles.add s.replace(jsre"/;/g", "").jsTrim
       for state in db.named(item.id.jsTrim): state.styles = styles
     of skApplyClass:
       db.setCssClass(item.id.jsTrim, item.styleClass)

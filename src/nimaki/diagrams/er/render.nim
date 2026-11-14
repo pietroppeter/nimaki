@@ -68,15 +68,6 @@ type
     band: float
     at: float
 
-func hasInternalLink(s: string): bool =
-  ## / internal-link(?: |$)/.test(s)
-  var at = s.find(" internal-link")
-  while at >= 0:
-    let e = at + " internal-link".len
-    if e == s.len or s[e] == ' ': return true
-    at = s.find(" internal-link", at + 1)
-  false
-
 # Writes a measured label starting at x, with the baseline of its first line at y.
 proc textLeft(label: Label, x, y: float, attrs: string, icons: IconResolver, mono = 0): string =
   let lines = label.lines
@@ -122,7 +113,7 @@ proc textLeft(label: Label, x, y: float, attrs: string, icons: IconResolver, mon
 # does not take `<int>` for a tag.
 func cellText(raw: string): string =
   let converted = parseGenericTypes(raw)
-  if converted == raw: raw else: converted.replace("<", "&lt;").replace(">", "&gt;")
+  if converted == raw: raw else: converted.replace(jsre"/</g", "&lt;").replace(jsre"/>/g", "&gt;")
 
 proc draw(db: ErDb, config: Config, options: RenderOptions, turned: bool): Rendered
 
@@ -397,7 +388,7 @@ proc draw(db: ErDb, config: Config, options: RenderOptions, turned: bool): Rende
     var name = labelSvg(view.label, 0, if view.rows.len > 0: y0 + view.headH / 2 else: 0,
                         " class=\"pele-label\"" & color & text, icons)
     let display = decodeEntities(if node.alias != "": node.alias else: node.label)
-    if hasInternalLink(classes & " ") and name != "" and options.links != some(false):
+    if jsre"/ internal-link(?: |$)/".test(classes & " ") and name != "" and options.links != some(false):
       # The name ends up in an href, so it gets the same check as a URL.
       let safe = internalLink(display, options)
       let target = esc(display)
