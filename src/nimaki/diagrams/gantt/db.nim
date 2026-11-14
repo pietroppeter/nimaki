@@ -6,6 +6,7 @@
 import std/[options, sets, strutils, tables, times, unicode]
 from std/math import floor
 import ../../errors
+import ../../model
 import ../../js
 import ../../jsdate
 import ../../util/url
@@ -68,12 +69,13 @@ type
     currentSection: string
     taskCount: int
     lastOrder: int
-    lastTaskId: string
-    hasLastTask: bool
+    lastTaskId {.undefinedIfEmpty.}: string
+    hasLastTask {.portOnly.}: bool
     now: float
     work: float
     includeSet, excludeSet: HashSet[string]
-    excludedDays: array[7, bool]
+    excludedDays {.portOnly.}: array[7, bool]
+      ## Seven days here; in Pele a list, empty until the tasks are scheduled.
     datedTokens: bool
 
 proc newGanttDb*(): GanttDb =

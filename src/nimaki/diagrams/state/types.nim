@@ -39,6 +39,9 @@ type
     classes*: seq[string]
     styles*: seq[string]
     textStyles*: seq[string]
+    record*: bool
+      ## Made by `addState`: Pele's record of a state, which has `descriptions`, `styles` and
+      ## `textStyles`, where a statement of the parser has none.
     state1*, state2*: Stmt       ## skRelation
     relDescription*: Option[string]
     classesText*: string         ## skClassDef `classes`

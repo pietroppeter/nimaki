@@ -2,8 +2,7 @@
 ## port-status: conformant
 ##
 ## Pele's `T.END` (the end of the tokens) is `T_STOP`; `T_end` is the keyword that closes a block.
-## The `Uint8Array` tables of token types are sets. Pele also records where each statement sits
-## (`add...Mapping`), for editors; nothing drawn reads it, so the port leaves it out.
+## The `Uint8Array` tables of token types are sets.
 import std/[options, tables]
 import ../../errors
 import ../../js
@@ -173,13 +172,16 @@ proc parseAgentflow*(source: string, db: AgentflowDb, raw = false) =
     s
 
   proc attach(id, data: string, a, b: int) =
-    db.addVertex(id, metadata = some(data), metadataLoc = some(span(a, b)))
+    let loc = some(span(a, b))
+    db.addVertex(id, metadata = some(data), metadataLoc = loc)
+    db.extendVertexMapping(id, loc)
 
   proc attachData(id: string, frame: Frame) =
     if frame.data.isNone: return
     db.addVertex(id, metadata = frame.data, metadataLoc = some(span(frame.dataFrom, frame.dataTo)))
 
   proc vertex(): string =
+    let start = i
     let id = idString()
     var label: FlowText
     var typ = ""
@@ -276,6 +278,7 @@ proc parseAgentflow*(source: string, db: AgentflowDb, raw = false) =
     if props.isSome: db.addVertex(id, some(label), typ, props = props)
     elif typ != "": db.addVertex(id, some(label), typ)
     else: db.addVertex(id)
+    db.addVertexMapping(id, typ, some(span(start, i - 1)))
     id
 
   proc styledVertex(): string =
@@ -337,6 +340,7 @@ proc parseAgentflow*(source: string, db: AgentflowDb, raw = false) =
     fail("'LINK', 'START_LINK'")
 
   proc vertexStatement(): seq[string] =
+    let start = i
     var stmt = node()
     if pendingData.isSome: attach(stmt[^1], pendingData.get, dataFrom, dataTo)
     var nodes = stmt
@@ -347,6 +351,7 @@ proc parseAgentflow*(source: string, db: AgentflowDb, raw = false) =
       let next = node()
       if pendingData.isSome: attach(next[^1], pendingData.get, dataFrom, dataTo)
       db.addLink(stmt, next, some(info))
+      db.addEdgeMapping(next, some(span(start, i - 1)))
       nodes = next & nodes
       stmt = next
 
@@ -501,9 +506,11 @@ proc parseAgentflow*(source: string, db: AgentflowDb, raw = false) =
       let at = i
       inc i
       let frame = header(at)
+      let sep = i
       inc i
       let id = db.addConnector(frame.id.get, frame.title.get)
       attachData(id, frame)
+      db.addConnectorMapping(frame.id, some(span(frame.at, frame.at)), some(span(sep, sep)))
       DocItem(kind: dkString, s: id)
     of T_direction_tb, T_direction_bt, T_direction_rl, T_direction_lr, T_direction_td:
       inc i
@@ -540,6 +547,7 @@ proc parseAgentflow*(source: string, db: AgentflowDb, raw = false) =
       if t == T_end:
         if open.len == 0: break
         let frame = open.pop()
+        let stop = i
         inc i
         if frame.global:
           db.addGlobal(list)
@@ -548,6 +556,7 @@ proc parseAgentflow*(source: string, db: AgentflowDb, raw = false) =
           continue
         let id = db.addSubGraph(frame.id, list, frame.title)
         attachData(id, frame)
+        db.addSubgraphMapping(frame.id, some(span(frame.at, frame.at)), some(span(stop, stop)))
         list = frame.list
         collect = frame.collect
         if collect: list.add DocItem(kind: dkString, s: id)

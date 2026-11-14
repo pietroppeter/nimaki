@@ -3,10 +3,11 @@
 ##
 ## As in the flowchart's types: a string that may be undefined and is never `""` when set is a
 ## `string` with `""` for undefined; an edge's length is `NO_LENGTH` when undefined. Pele's
-## element mappings, diagnostics and semantic model are for tools that read the text, and
-## nothing drawn reads them: the port leaves them out.
+## element mappings and diagnostics are for tools that read the text, and nothing drawn reads
+## them; they are kept, as Pele's model has them. The semantic model is `semanticModel` in db.nim.
 import std/[options, tables]
 import ../../util/yaml
+import ../../model
 
 type
   LabelType* = string  ## 'text' | 'string' | 'markdown'
@@ -19,34 +20,57 @@ type
     ## A source span as Jison reports it: lines start at 1, columns (UTF-16 code units) at 0.
     firstLine*, firstColumn*, lastLine*, lastColumn*: int
 
+  ElementPosition* = ref object
+    startLine*, startColumn*, endLine*, endColumn*: int
+    startIndex*, endIndex*: int    ## always 0: Mermaid builds its parser without ranges
+
+  ElementMapping* = ref object
+    ## Where a statement sits in the source.
+    id*: string
+    kind*: string                  ## type: vertex, edge, subgraph, connector or attachment
+    position*: ElementPosition
+
+  Diagnostic* = ref object
+    id*: string                    ## SHAPE_UNSUPPORTED, SHAPE_REMOVED, CONTAINMENT_VIOLATION...
+    severity*: string              ## warning or error
+    message*: string
+    nodeId* {.undefinedIfEmpty.}: string
+    edgeId* {.undefinedIfEmpty.}: string
+    position*: ElementPosition     ## nil for undefined
+
+  MappingSet* = object
+    ## Pele's `Set` of mappings, held as a list: a set of references would hash their addresses,
+    ## which the JavaScript build does not have.
+    items*: seq[ElementMapping]
+
   AgentNode* = ref object
     id*: string
     text*: Option[string]
     labelType*: LabelType
-    kind*: string              ## Pele's `type`, "" for undefined
+    kind* {.undefinedIfEmpty.}: string              ## Pele's `type`, "" for undefined
     styles*: seq[string]
     classes*: seq[string]
-    dir*: string               ## "" for undefined
-    props*: Table[string, string]
-    link*: string              ## "" for undefined
-    linkTarget*: string
+    dir* {.undefinedIfEmpty.}: string               ## "" for undefined
+    props*: Option[Table[string, string]]   ## none for a connector that no statement names as a node
+    link* {.undefinedIfEmpty.}: string              ## "" for undefined
+    linkTarget* {.undefinedIfEmpty.}: string
     metadata*: YamlValue       ## nil for undefined
-    isConnector*: bool
+    isConnector*: Option[bool]   ## some(true) for a connector, none otherwise
 
   AgentEdge* = ref object
     start*: string
     stop*: string
-    kind*: string              ## "" for undefined
+    kind* {.undefinedIfEmpty.}: string              ## "" for undefined
     text*: string
     labelType*: LabelType
-    stroke*: string            ## "" for undefined
-    edgeSemantic*: string      ## "" for undefined
+    stroke* {.undefinedIfEmpty.}: string            ## "" for undefined
+    edgeSemantic* {.undefinedIfEmpty.}: string      ## "" for undefined
     length*: int               ## NO_LENGTH for undefined
-    style*: seq[string]
+    style*: Option[seq[string]]   ## none until a linkStyle sets it
     classes*: seq[string]
     id*: string
     isUserDefinedId*: bool
-    interpolate*: string       ## "" for undefined
+    interpolate* {.undefinedIfEmpty.}: string       ## "" for undefined
     animate*: YamlValue        ## nil for undefined
     animation*: YamlValue
     metadata*: YamlValue
@@ -61,17 +85,18 @@ type
     nodes*: seq[string]
     title*: string
     classes*: seq[string]
-    dir*: string               ## "" for undefined
+    dir* {.undefinedIfEmpty.}: string               ## "" for undefined
     labelType*: LabelType
+    kind*: string              ## type: always flow
     metadata*: YamlValue       ## nil for undefined
 
   LinkInfo* = object
     kind*: string
     stroke*: string
     length*: int               ## NO_LENGTH for undefined
-    edgeSemantic*: string      ## "" for undefined
+    edgeSemantic* {.undefinedIfEmpty.}: string      ## "" for undefined
     text*: Option[FlowText]
-    id*: string                ## "" for undefined
+    id* {.undefinedIfEmpty.}: string                ## "" for undefined
 
   DocKind* = enum dkString, dkList, dkDir
   DocItem* = object

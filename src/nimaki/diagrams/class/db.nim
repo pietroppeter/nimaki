@@ -1,6 +1,6 @@
 ## port-of: src/diagrams/class/db.ts
 ## port-status: draft
-import std/[strutils, tables]
+import std/[options, sets, strutils, tables]
 import ../../js
 import ../../text/entities
 import ../../util/url
@@ -32,10 +32,15 @@ type ClassDb* = ref object of RootObj
   accTitle*: string   ## "" for undefined
   accDescr*: string   ## "" for undefined
   namespaceStack: seq[string]
-  withCssClass: OrderedTable[string, seq[ClassNode]]
-    ## Pele's Map<string, Set<ClassNode>>: each seq holds a class once, in the order added.
+  withCssClass: OrderedTable[string, OrderedSet[ClassNode]]
+  lineType*: tuple[LINE, DOTTED_LINE: int]
+    ## Pele's `readonly lineType = LINE_TYPE`, a table of constants kept on the model.
+  relationType*: tuple[AGGREGATION, EXTENSION, COMPOSITION, DEPENDENCY, LOLLIPOP: int]
+    ## Pele's `readonly relationType = RELATION_TYPE`.
 
-proc newClassDb*(): ClassDb = ClassDb(direction: "TB")
+proc newClassDb*(): ClassDb =
+  ClassDb(direction: "TB", lineType: (LINE, DOTTED_LINE),
+          relationType: (AGGREGATION, EXTENSION, COMPOSITION, DEPENDENCY, LOLLIPOP))
 
 func splitName(id: string): tuple[className, kind: string] =
   let at = id.find('~')
@@ -48,9 +53,8 @@ func lookupId(id: string): string =
   splitName(if c >= 48 and c <= 57: DOM_ID_PREFIX & id else: id).className
 
 proc tag(db: ClassDb, node: ClassNode, cssClass: string) =
-  if cssClass in db.withCssClass:
-    if node notin db.withCssClass[cssClass]: db.withCssClass[cssClass].add node
-  else: db.withCssClass[cssClass] = @[node]
+  if cssClass in db.withCssClass: db.withCssClass[cssClass].incl node
+  else: db.withCssClass[cssClass] = toOrderedSet([node])
 
 proc addClass*(db: ClassDb, id: string) =
   let (className, kind) = splitName(id)
@@ -161,7 +165,7 @@ proc setClickEvent*(db: ClassDb, ids: string) =
   ## Callbacks are never executed; the class is only marked clickable, as in Mermaid's strict mode.
   for id in ids.split(','):
     let key = splitName(id).className
-    if key in db.classes: db.classes[key].haveCallback = true
+    if key in db.classes: db.classes[key].haveCallback = some(true)
   db.setCssClass(ids, "clickable")
 
 proc setDirection*(db: ClassDb, dir: string) = db.direction = dir

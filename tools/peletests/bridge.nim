@@ -10,6 +10,10 @@ import std/[jsffi, options, tables, json]
 import nimaki
 import nimaki/util/yaml
 import ../models
+from nimaki/diagrams/agentflow/db import AgentflowDb, vertexKind, semanticModel
+from nimaki/diagrams/agentflow/types import AgentNode
+from nimaki/diagrams/gantt/db import GanttDb, getTasks
+from nimaki/diagrams/state/db import StateDb, direction
 
 when not defined(js):
   {.error: "the bridge is compiled with nim js".}
@@ -214,7 +218,33 @@ proc nimakiParse(source: cstring, options: JsObject): JsObject {.exportc.} =
   if result == nil or result.isUndef or not result.isObject: result = newJsObject()
   result["type"] = cstring(m.diagramType)
   result["mermaidType"] = cstring(m.mermaidType)
+  # Pele's `direction` getter.
+  if m.diagramType == "state": result["direction"] = cstring(StateDb(m.model).direction)
   parsedModels.weakSet(result, toJs(m))
+
+proc newDate(ms: float): JsObject {.importjs: "new Date(#)".}
+
+proc nimakiModelCall(model: JsObject, name: cstring, arg: JsObject): JsObject {.exportc.} =
+  ## A method of Pele's model (`getTasks`, `semanticModel`, `vertexKind`), run on the nimaki model
+  ## `model` was written from. tools/peletests/index.mjs puts these on the models.
+  let found = parsedModels.weakGet(model)
+  if found.isUndef: return jsUndefined
+  let m = found.to(ParsedModel)
+  case $name
+  of "getTasks":
+    let now = if arg.isDate: arg.dateValue elif arg.isNumber: arg.num else: 0.0
+    result = toJsValue(dumpValue(GanttDb(m.model).getTasks(now)), newIdTable())
+    # Pele's dates are Date objects; the model's JSON holds their time.
+    for i in 0 ..< result["length"].to(int):
+      let task = result[i]
+      for k in ["startTime", "endTime", "renderEndTime"]:
+        if task[k].isNumber: task[k] = newDate(task[k].num)
+  of "semanticModel":
+    result = toJsValue(dumpValue(AgentflowDb(m.model).semanticModel()), newIdTable())
+  of "vertexKind":
+    let kind = if arg.isUndef or arg["type"].isUndef: "" else: arg["type"].str
+    result = toJs(cstring(AgentflowDb(m.model).vertexKind(AgentNode(kind: kind))))
+  else: result = jsUndefined
 
 proc nimakiRenderModel(model: JsObject, options: JsObject): JsObject {.exportc.} =
   ## nil when `model` is not one that nimakiParse returned.
@@ -234,4 +264,4 @@ proc nimakiRender(source: cstring, options: JsObject): JsObject {.exportc.} =
 proc nimakiDetectType(text: cstring): JsObject {.exportc.} = orNull(detectType(wtf8(text)))
 proc nimakiSupports(text: cstring): bool {.exportc.} = supports(wtf8(text))
 
-{.emit: "module.exports = { nimakiRender, nimakiParse, nimakiRenderModel, nimakiDetectType, nimakiSupports };".}
+{.emit: "module.exports = { nimakiRender, nimakiParse, nimakiRenderModel, nimakiModelCall, nimakiDetectType, nimakiSupports };".}

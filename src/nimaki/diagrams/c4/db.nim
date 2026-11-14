@@ -4,9 +4,10 @@
 ## Also holds the types of src/diagrams/c4/types.ts. An element's optional text fields (type,
 ## descr, techn, sprite, tags, link, the colours...) are kept in `fields`, where a missing key is
 ## undefined; every reader treats undefined and "" alike. Named arguments that set no known field
-## (`extra` in Pele) are not kept, as nothing reads them.
+## are kept aside in `extra`, as in Pele. tools/models.nim writes these objects in Pele's shape.
 import std/[options, tables, strutils]
 import ../../jsregex
+import ../../model
 
 type
   C4Attr* = object
@@ -22,13 +23,15 @@ type
     aliasAttr*, labelAttr*: Option[C4Attr]
     parent*: C4Element
     fields*: Table[string, string]
-    kind*: string
-    nodeType*: string
+    extra*: OrderedTable[string, string]
+    kind*: string                ## "" for a boundary, which has none
+    nodeType*: string            ## "" for undefined
 
   C4Rel* = ref object
     typ*, start*, to*, label*: string
     fromAttr*, toAttr*, labelAttr*: Option[C4Attr]
     fields*: Table[string, string]
+    extra*: OrderedTable[string, string]
     offsetX*, offsetY*: float   ## NaN for undefined
 
   C4Db* = ref object of RootObj
@@ -43,7 +46,7 @@ type
     relIndex: Table[string, Table[string, C4Rel]]
     current: C4Element
     stack: seq[C4Element]
-    uids: int
+    uids {.portOnly.}: int   ## the last `uid` given
 
 const
   ELEMENT_FIELDS = ["label", "type", "descr", "techn", "sprite", "tags", "link", "bgColor",
@@ -85,6 +88,7 @@ proc named(target: C4Element, attr: C4Attr) =
   if attr.key in ELEMENT_FIELDS:
     if attr.key == "label": target.label = attr.value
     else: target.fields[attr.key] = attr.value
+  else: target.extra[attr.key] = attr.value
 
 proc named(target: C4Rel, attr: C4Attr) =
   if attr.key == "offsetX": target.offsetX = jsParseInt(attr.value)
@@ -92,6 +96,7 @@ proc named(target: C4Rel, attr: C4Attr) =
   elif attr.key in REL_FIELDS:
     if attr.key == "label": target.label = attr.value
     else: target.fields[attr.key] = attr.value
+  else: target.extra[attr.key] = attr.value
 
 proc put(target: C4Element | C4Rel, field: string, attr: Option[C4Attr]) =
   ## A positional argument fills the field of its slot; a named one, the field it names.

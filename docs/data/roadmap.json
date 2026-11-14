@@ -808,12 +808,12 @@
           "id": "models-as-pele",
           "kind": "port",
           "title": "Models as Pele's",
-          "what": "tools/parsediff.nim compares the model nimaki's parse() returns with Pele's: the same for some types, different in shape for the others (a field the port adds, a union held as one object with a kind, a field named otherwise). Bring each type's model to Pele's shape, type by type, so that Pele's tests that read a model can run on the port. docs/data/parsediff.json says where each type stands. Part 1 (post pele-tests-read-the-models): Pele's tests get parse() and render(model) through the bridge (tests of a type whose models differ are counted as model), and block, mindmap and ishikawa have Pele's models. Still open: the class parser's memory in JavaScript on long dotted namespace names. Part 2 (post five-ways-a-model-differs, decision 0018): treemap, venn, flowchart, cynefin, packet, eventmodeling, wardley, sankey, railroad, gitGraph, quadrant and xychart, and the titles Pele leaves undefined (\"\" in the port). Next: agentflow, architecture, c4, class, gantt, sequence, state, usecase.",
+          "what": "tools/parsediff.nim compares the model nimaki's parse() returns with Pele's: the same for some types, different in shape for the others (a field the port adds, a union held as one object with a kind, a field named otherwise). Bring each type's model to Pele's shape, type by type, so that Pele's tests that read a model can run on the port. docs/data/parsediff.json says where each type stands. Part 1 (post pele-tests-read-the-models): Pele's tests get parse() and render(model) through the bridge (tests of a type whose models differ are counted as model), and block, mindmap and ishikawa have Pele's models. Still open: the class parser's memory in JavaScript on long dotted namespace names. Part 2 (post five-ways-a-model-differs, decision 0018): treemap, venn, flowchart, cynefin, packet, eventmodeling, wardley, sankey, railroad, gitGraph, quadrant and xychart, and the titles Pele leaves undefined (\"\" in the port). Part 3 (post where-each-statement-sits): agentflow, architecture, c4, class, gantt, sequence, state and usecase; usecase's statement positions and agentflow's element mappings and diagnostics are ported, so every model of the corpus is Pele's. Left: parsediff --strict still tells some empty texts from missing ones in the earlier types.",
           "done_when": "nim r tools/parsediff.nim finds every model the same as Pele's.",
           "owner": "Port class and swimlane",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "where-each-statement-sits",
+          "pr": "78"
         },
         {
           "id": "mermaid-block",

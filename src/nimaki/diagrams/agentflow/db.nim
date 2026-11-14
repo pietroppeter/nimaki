@@ -1,8 +1,8 @@
 ## port-of: src/diagrams/agentflow/db.ts
 ## port-status: conformant
 ##
-## Left out, because nothing drawn reads them: the semantic model, the element mappings and the
-## diagnostics (Pele's `log` option is never set by the entry point). Metadata is a YAML record,
+## Pele's `log` option, which hears the diagnostics, is never set by the entry point, and is left
+## out. Metadata is a YAML record,
 ## nil for undefined; `Object.assign` of a list or a string adds its indexes as keys, as in Pele.
 import std/[algorithm, options, sets, strutils, tables, unicode]
 from std/math import isNaN
@@ -10,13 +10,14 @@ import ../../errors
 import ../../js
 import ../../util/[url, yaml]
 import shapes, types
+import ../../model
 import ../../jsregex
 
 type
   AgentflowDbOptions* = object
     maxEdges*: Option[int]
     inheritDir*: bool
-    direction*: string         ## "" for undefined
+    direction* {.undefinedIfEmpty.}: string         ## "" for undefined
     lineOffset*: int
     source*: Option[string]
 
@@ -204,20 +205,22 @@ proc destructEndLink(raw: string): tuple[kind, stroke: string, length: int] =
   (t, stroke, length)
 
 type AgentflowDb* = ref object of RootObj
-  direction*: string           ## "" for undefined
+  direction* {.undefinedIfEmpty.}: string           ## "" for undefined
   nodes*: OrderedTable[string, AgentNode]
   edges*: seq[AgentEdge]
   subgraphs*: seq[AgentSubgraph]
   connectors*: OrderedTable[string, AgentNode]
   classes*: Table[string, AgentClassDef]
   tooltips*: Table[string, string]
-  defaultEdgeStyle*: seq[string]  ## empty for undefined (only copied from)
-  defaultInterpolate*: string     ## "" for undefined
+  defaultEdgeStyle*: Option[seq[string]]
+  defaultInterpolate* {.undefinedIfEmpty.}: string     ## "" for undefined
   title*: string
   accTitle*: string
   accDescr*: string
+  mappings*: seq[ElementMapping]  ## where each statement sits, in the order they were read
+  diagnostics*: seq[Diagnostic]
   lineOffset*: int
-  graph*: RootRef               ## the drawn graph, built once (Pele keeps it in a WeakMap)
+  graph* {.portOnly.}: RootRef  ## the drawn graph, built once (Pele keeps it in a WeakMap)
 
   subgraphLookup: Table[string, AgentSubgraph]
   globalNodes: HashSet[string]
@@ -225,6 +228,9 @@ type AgentflowDb* = ref object of RootObj
   edgeById: Table[string, AgentEdge]
   pairCount: Table[string, int]
   subCount: int
+  bareMappings: MappingSet
+  firstMapping: OrderedTable[string, ElementMapping]
+  reported: OrderedTable[string, seq[Diagnostic]]
   options: AgentflowDbOptions
 
 proc newAgentflowDb*(options = AgentflowDbOptions()): AgentflowDb =
@@ -320,8 +326,9 @@ proc addVertex*(db: AgentflowDb, id: string, textObj = none(FlowText), typ = "",
   if typ != "": vertex.kind = typ
   if style.isSome:
     for s in style.get: vertex.styles.add s
-  if props.isSome:
-    for k, v in props.get: vertex.props[k] = v
+  if vertex.props.isNone: vertex.props = some(props.get(initTable[string, string]()))
+  elif props.isSome:
+    for k, v in props.get: vertex.props.get[k] = v
 
   if not hasDoc: return
   vertex.metadata = merge(vertex.metadata, doc)
@@ -393,14 +400,14 @@ proc updateLink*(db: AgentflowDb, positions: seq[string], styleIn: seq[string]) 
   var style = styleIn
   for pos in positions:
     if pos == "default":
-      db.defaultEdgeStyle = style
+      db.defaultEdgeStyle = some(style)
       continue
     let edge = db.edgeAt(pos)
     var anyFill = false
     for s in style:
       if s.startsWith("fill"): anyFill = true
     if style.len > 0 and not anyFill: style.add "fill:none"
-    edge.style = style
+    edge.style = some(style)
 
 proc addClass*(db: AgentflowDb, ids: string, styles: seq[string]) =
   let style = styles.join(",").replace(jsre"/\\,/g", "§§§").replace(jsre"/,/g", ";").replace(jsre"/§§§/g", ",").split(';')
@@ -490,7 +497,7 @@ proc addSubGraph*(db: AgentflowDb, idText: Option[FlowText], list: seq[DocItem],
     if title.jsTrim != "": existing.title = title.jsTrim
     if dir != "": existing.dir = dir
     return id
-  let subgraph = AgentSubgraph(id: id, nodes: nodes, title: title.jsTrim, dir: dir,
+  let subgraph = AgentSubgraph(id: id, nodes: nodes, title: title.jsTrim, dir: dir, kind: "flow",
                                labelType: labelType(if titleText.isSome: titleText.get.kind else: ""))
   db.subgraphs.add subgraph
   db.subgraphLookup[id] = subgraph
@@ -524,7 +531,7 @@ proc addConnector*(db: AgentflowDb, textObj: FlowText, titleObj: FlowText): stri
   let title = titleObj.text.jsTrim
   let connector = db.connectors.getOrDefault(id, nil)
   if connector == nil:
-    let created = AgentNode(id: id, labelType: "text", isConnector: true,
+    let created = AgentNode(id: id, labelType: "text", isConnector: some(true),
                             text: some(if title.len > 0: title else: id))
     db.connectors[id] = created
     db.nodes[id] = created
@@ -540,6 +547,161 @@ proc destructLink*(db: AgentflowDb, stop: string, start = ""): LinkInfo =
     if stroke != info.stroke: return LinkInfo(kind: "INVALID", stroke: "INVALID", length: NO_LENGTH)
   LinkInfo(kind: info.kind, stroke: info.stroke, length: info.length,
            edgeSemantic: edgeSemanticOf(info.kind, info.stroke))
+
+proc position(db: AgentflowDb, loc: Option[Loc]): ElementPosition =
+  let startLine = if loc.isSome: loc.get.firstLine else: 0
+  let startColumn = if loc.isSome: loc.get.firstColumn else: 0
+  ElementPosition(startLine: startLine + db.lineOffset, startColumn: startColumn,
+                  endLine: (if loc.isSome: loc.get.lastLine else: startLine) + db.lineOffset,
+                  endColumn: if loc.isSome: loc.get.lastColumn else: startColumn)
+
+proc pushMapping(db: AgentflowDb, id, kind: string, position: ElementPosition): ElementMapping =
+  result = ElementMapping(id: id, kind: kind, position: position)
+  db.mappings.add result
+  if id notin db.firstMapping: db.firstMapping[id] = result
+
+proc addVertexMapping*(db: AgentflowDb, id: string, shape: string, loc: Option[Loc]) =
+  ## `shape` "" is undefined.
+  if id == "": return
+  let mapping = db.pushMapping(id, "vertex", db.position(loc))
+  # A bare reference becomes an attachment if a metadata block follows it.
+  if shape == "": db.bareMappings.items.add mapping
+
+proc extendVertexMapping*(db: AgentflowDb, id: string, loc: Option[Loc]) =
+  ## Widens a node's span over the metadata block that follows it.
+  if id == "" or loc.isNone: return
+  let stop = db.position(loc)
+  for i in countdown(db.mappings.high, 0):
+    let m = db.mappings[i]
+    if m.kind != "vertex" or m.id != id: continue
+    let bare = db.bareMappings.items.find(m)
+    if bare >= 0:
+      db.bareMappings.items.delete bare
+      m.kind = "attachment"
+    let p = m.position
+    if stop.endLine > p.endLine or (stop.endLine == p.endLine and stop.endColumn > p.endColumn):
+      p.endLine = stop.endLine
+      p.endColumn = stop.endColumn
+    return
+  discard db.pushMapping(id, "attachment", stop)
+
+proc addEdgeMapping*(db: AgentflowDb, toNodes: seq[string], loc: Option[Loc]) =
+  var ids: seq[string]
+  for n in toNodes:
+    if n != "": ids.add n
+  discard db.pushMapping(if ids.len > 0: ids.join(">") else: "edge", "edge", db.position(loc))
+
+proc blockMapping(db: AgentflowDb, id, kind: string, startLoc, endLoc: Option[Loc]) =
+  if id == "": return
+  let start = db.position(startLoc)
+  let stop = if endLoc.isSome: db.position(endLoc) else: start
+  discard db.pushMapping(id, kind, ElementPosition(startLine: start.startLine, startColumn: start.startColumn,
+                                                   endLine: stop.endLine, endColumn: stop.endColumn))
+
+proc addSubgraphMapping*(db: AgentflowDb, id: Option[FlowText], startLoc, endLoc: Option[Loc]) =
+  db.blockMapping(if id.isSome: id.get.text else: "", "subgraph", startLoc, endLoc)
+
+proc addConnectorMapping*(db: AgentflowDb, textObj: Option[FlowText], startLoc, endLoc: Option[Loc]) =
+  db.blockMapping(if textObj.isSome: textObj.get.text.jsTrim else: "", "connector", startLoc, endLoc)
+
+proc emit(db: AgentflowDb, id, severity, message: string, nodeId, edgeId: string) =
+  let anchor = if nodeId != "": nodeId else: edgeId
+  let diagnostic = Diagnostic(id: id, severity: severity, message: message)
+  if nodeId != "": diagnostic.nodeId = nodeId
+  elif edgeId != "": diagnostic.edgeId = edgeId
+  if anchor != "" and anchor in db.firstMapping: diagnostic.position = db.firstMapping[anchor].position
+  # The graph may be built more than once; each finding is recorded once.
+  if anchor notin db.reported:
+    db.reported[anchor] = @[diagnostic]
+  else:
+    for d in db.reported[anchor]:
+      if d.id == id and d.severity == severity and d.message == message and d.nodeId == diagnostic.nodeId and
+         d.edgeId == diagnostic.edgeId:
+        return
+    db.reported[anchor].add diagnostic
+  db.diagnostics.add diagnostic
+
+proc emitWarning*(db: AgentflowDb, id, message: string, nodeId = "", edgeId = "") =
+  db.emit(id, "warning", message, nodeId, edgeId)
+
+proc emitError*(db: AgentflowDb, id, message: string, nodeId = "", edgeId = "") =
+  db.emit(id, "error", message, nodeId, edgeId)
+
+type
+  SemanticVertex* = object
+    id*: string
+    label*: Option[string]
+    shape*: Option[string]
+    vertexKind*: Option[string]
+    metadata*: YamlValue         ## nil for undefined
+
+  SemanticEdge* = object
+    start*, stop*: string
+    id*, label*, kind*, stroke*, edgeSemantic*: Option[string]
+    length*: Option[int]
+    metadata*: YamlValue
+
+  SemanticSubgraph* = object
+    id*: string
+    kind*, title*: Option[string]
+    nodes*: seq[string]
+    metadata*: YamlValue
+    direction*: Option[string]
+
+  SemanticConnector* = object
+    id*: string
+    title*: Option[string]
+    metadata*: YamlValue
+
+  SemanticModel* = object
+    ## The diagram with presentation-only controls left out, for tools that read what it means.
+    direction*: Option[string]
+    vertices*: seq[SemanticVertex]
+    edges*: seq[SemanticEdge]
+    subGraphs*: seq[SemanticSubgraph]
+    connectors*: seq[SemanticConnector]
+    diagnostics*: seq[Diagnostic]
+
+const PRESENTATION_KEYS = ["shape", "view", "icon", "img", "form", "pos", "w", "h", "class", "style",
+                           "labelType"]
+
+proc semanticMetadata(metadata: YamlValue): YamlValue =
+  if metadata == nil or metadata.kind != yMap: return nil
+  var any = false
+  result = ymap()
+  for key, value in metadata.fields:
+    if key in PRESENTATION_KEYS: continue
+    result.fields[key] = value
+    any = true
+  if not any: result = nil
+
+proc opt(s: string): Option[string] = (if s != "": some(s) else: none(string))
+
+proc vertexKind*(db: AgentflowDb, vertex: AgentNode): string
+
+proc semanticModel*(db: AgentflowDb): SemanticModel =
+  for id, v in db.nodes:
+    if id in db.subgraphLookup: continue
+    let metadata = semanticMetadata(v.metadata)
+    if v.isConnector == some(true):
+      var connector = SemanticConnector(id: id, metadata: metadata)
+      if v.text.isSome and v.text.get != id: connector.title = v.text
+      result.connectors.add connector
+      continue
+    let shape = resolveShapeAlias(v.kind)
+    result.vertices.add SemanticVertex(id: id, label: v.text, shape: opt(shape),
+                                       vertexKind: some(db.vertexKind(v)), metadata: metadata)
+  for e in db.edges:
+    var edge = SemanticEdge(start: e.start, stop: e.stop, id: opt(e.id), label: opt(e.text), kind: opt(e.kind),
+                            stroke: opt(e.stroke), edgeSemantic: opt(e.edgeSemantic))
+    if e.length != NO_LENGTH: edge.length = some(e.length)
+    if e.metadata != nil and e.metadata.kind == yMap and e.metadata.fields.len > 0: edge.metadata = e.metadata
+    result.edges.add edge
+  for sg in db.subgraphs:
+    result.subGraphs.add SemanticSubgraph(id: sg.id, nodes: sg.nodes, kind: opt(sg.kind), title: some(sg.title),
+                                          direction: opt(sg.dir), metadata: semanticMetadata(sg.metadata))
+  result.diagnostics = db.diagnostics
+  result.direction = opt(db.direction)
 
 proc subgraph*(db: AgentflowDb, id: string): AgentSubgraph =
   ## nil when there is none.
