@@ -42,31 +42,21 @@ const RE_WEEKEND = jsre"/weekend\s+(?:(friday)|saturday)\b/iy"
 const RE_DATE = jsre"/\d\d\d\d-\d\d-\d\d\b/y"
 const RE_BARE_TITLE = jsre"/title[^\S\r\n]*(?=[\r\n]|$)/iy"
 
-# Statements that start with a keyword, grouped by the keyword's first letter and kept in the grammar's rule order.
-const
-  KEYWORDS_A = [(jsre"/axisFormat\s[^#\n;]+/iy", T_axisFormat), (jsre"/accDescription\s[^#\n;]+/iy", T_accDescription)]
-  KEYWORDS_G = [(jsre"/gantt\b/iy", T_gantt)]
-  KEYWORDS_D = [(jsre"/dateFormat\s[^#\n;]+/iy", T_dateFormat)]
-  KEYWORDS_I = [(jsre"/inclusiveEndDates\b/iy", T_inclusiveEndDates), (jsre"/includes\s[^#\n;]+/iy", T_includes)]
-  KEYWORDS_T = [
-    (jsre"/topAxis\b/iy", T_topAxis),
-    (jsre"/tickInterval\s[^#\n;]+/iy", T_tickInterval),
-    (jsre"/todayMarker\s[^\n;]+/iy", T_todayMarker),
-    (jsre"/title[^\S\r\n][^\n]+/iy", T_title),
-  ]
-  KEYWORDS_E = [(jsre"/excludes\s[^#\n;]+/iy", T_excludes)]
-  KEYWORDS_S = [(jsre"/section\s[^\n]+/iy", T_section)]
-
-func keywords(c: char): seq[(JsRegExp, int)] =
-  case c
-  of 'a': @KEYWORDS_A
-  of 'g': @KEYWORDS_G
-  of 'd': @KEYWORDS_D
-  of 'i': @KEYWORDS_I
-  of 't': @KEYWORDS_T
-  of 'e': @KEYWORDS_E
-  of 's': @KEYWORDS_S
-  else: @[]
+# Statements that start with a keyword, with the keyword's first letter, kept in the grammar's rule order.
+const KEYWORDS = [
+  ('a', jsre"/axisFormat\s[^#\n;]+/iy", T_axisFormat),
+  ('a', jsre"/accDescription\s[^#\n;]+/iy", T_accDescription),
+  ('g', jsre"/gantt\b/iy", T_gantt),
+  ('d', jsre"/dateFormat\s[^#\n;]+/iy", T_dateFormat),
+  ('i', jsre"/inclusiveEndDates\b/iy", T_inclusiveEndDates),
+  ('i', jsre"/includes\s[^#\n;]+/iy", T_includes),
+  ('t', jsre"/topAxis\b/iy", T_topAxis),
+  ('t', jsre"/tickInterval\s[^#\n;]+/iy", T_tickInterval),
+  ('t', jsre"/todayMarker\s[^\n;]+/iy", T_todayMarker),
+  ('t', jsre"/title[^\S\r\n][^\n]+/iy", T_title),
+  ('e', jsre"/excludes\s[^#\n;]+/iy", T_excludes),
+  ('s', jsre"/section\s[^\n]+/iy", T_section),
+]
 
 proc tokenize*(src: string): Tokens =
   let n = src.len
@@ -132,8 +122,9 @@ proc tokenize*(src: string): Tokens =
         emit(if m.has(1): T_weekend_friday else: T_weekend_saturday, p, m.stop)
         return true
     else: discard
-    for (re, kind) in keywords(toLowerAscii(c)):
-      if (e = at(re); e >= 0):
+    let lower = toLowerAscii(c)
+    for (first, re, kind) in KEYWORDS:
+      if first == lower and (e = at(re); e >= 0):
         emit(kind, p, e)
         return true
     false
