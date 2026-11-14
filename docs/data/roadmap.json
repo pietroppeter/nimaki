@@ -295,9 +295,9 @@
           "what": "How diagrammari could use nimaki instead of Node for the ported types, written as a proposal (diagrammari is not changed from here).",
           "done_when": "A devlog post with the proposal.",
           "owner": "Build C ABI and diagrammari proposal",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "a-proposal-for-diagrammari",
+          "pr": "63"
         }
       ]
     },
