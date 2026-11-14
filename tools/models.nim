@@ -170,6 +170,9 @@ proc dumpFields[T: object | tuple](x: T, path: var Walk): JsonNode =
       discard   # functions are left out, as JSON leaves them out
     elif value.hasCustomPragma(portOnly):
       discard   # a field of the port's own (src/nimaki/model.nim)
+    elif value.hasCustomPragma(undefinedIfEmpty):
+      # "" for Pele's undefined (src/nimaki/model.nim)
+      result[renamed.getOrDefault(name, name)] = (if value.len > 0: dump(value, path) else: newJNull())
     elif value.hasCustomPragma(spread):
       let inner = dump(value, path)
       if inner.kind == JObject:
@@ -289,27 +292,32 @@ proc dumpModel*(m: ParsedModel, share = false, budget = 0): JsonNode =
   of "xychart": asT(XyChartDb)
   else: newJNull()
   if m.diagramType in renamedIn: result = rename(result, renamedIn[m.diagramType])
+  if result.kind == JObject and m.diagramType != "usecase":   # usecase's Pele starts them as ""
+    for k in ["title", "accTitle", "accDescr"]:
+      # "" for undefined in every model (src/nimaki/model.nim)
+      if result{k} != nil and result[k].kind == JString and result[k].getStr == "": result[k] = newJNull()
 
 
-proc normal*(j: JsonNode): JsonNode =
-  ## What is compared: keys with null or "" dropped, numbers as floats, sets sorted.
+proc normal*(j: JsonNode, strict = false): JsonNode =
+  ## What is compared: keys with null or "" dropped, numbers as floats, sets sorted. With
+  ## `strict`, "" is kept: an empty text and a missing one differ, as they do to Pele's tests.
   case j.kind
   of JInt: result = %j.getInt.float
   of JFloat: result = j
   of JObject:
-    if j.len == 1 and j.hasKey("$map"): return normal(j["$map"])   # a Map reads as an object
+    if j.len == 1 and j.hasKey("$map"): return normal(j["$map"], strict)   # a Map reads as an object
     if j.len == 1 and j.hasKey("$set"):
       var items: seq[JsonNode]
-      for v in j["$set"]: items.add normal(v)
+      for v in j["$set"]: items.add normal(v, strict)
       items.sort(proc (a, b: JsonNode): int = cmp($a, $b))
       return %*{"$set": items}
     result = newJObject()
     for k, v in j:
-      if v.kind == JNull or (v.kind == JString and v.getStr == ""): continue
-      let n = normal(v)
+      if v.kind == JNull or (not strict and v.kind == JString and v.getStr == ""): continue
+      let n = normal(v, strict)
       if n.kind in {JArray, JObject} and n.len == 0: continue   # an empty list is a missing one
       result[k] = n
   of JArray:
     result = newJArray()
-    for v in j: result.add normal(v)
+    for v in j: result.add normal(v, strict)
   else: result = j

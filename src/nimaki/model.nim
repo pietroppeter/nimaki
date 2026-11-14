@@ -9,5 +9,10 @@
 ## - `{.spread.}`: an object whose fields Pele's model has as its own (`{ ...built, title }`).
 ##   tools/models.nim writes them in the model.
 
+## - `{.undefinedIfEmpty.}`: a text that is "" where Pele's is undefined. tools/models.nim leaves
+##   it out when it is "". (The model's own `title`, `accTitle` and `accDescr` are read so in
+##   every type but usecase, without the pragma: elsewhere Pele leaves them undefined, never "".)
+
 template portOnly*() {.pragma.}
+template undefinedIfEmpty*() {.pragma.}
 template spread*() {.pragma.}

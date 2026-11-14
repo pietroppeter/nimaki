@@ -29,7 +29,7 @@ type
     namespace*: string   ## "" for undefined
     reset*: bool
     lane*: EmLane
-    data*: string
+    data* {.undefinedIfEmpty.}: string
       ## Example data from the frame or from the data block it refers to; "" for none.
     dataType*: string
     order* {.portOnly.}: int

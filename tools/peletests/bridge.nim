@@ -29,7 +29,37 @@ proc call2(f: JsObject, a: cstring, b: float): JsObject {.importjs: "#(#, #)".}
 proc callWidth(m: JsObject, text: cstring, size: float, style: int): float {.importjs: "#.width(#, #, #)".}
 proc jsThrow(x: JsObject) {.importjs: "throw #".}
 
-proc str(x: JsObject): string = $x.to(cstring)
+proc jsLen(s: cstring): int {.importjs: "#.length".}
+proc unitAt(s: cstring, i: int): int {.importjs: "#.charCodeAt(#)".}
+
+proc wtf8(s: cstring): string =
+  ## A JavaScript string as the port's: UTF-8, a lone surrogate kept as its three bytes, as the
+  ## port reads one from JSON (decision 0011). Nim's own `$` pairs a lone surrogate with the next
+  ## character.
+  let n = s.jsLen
+  result = newStringOfCap(n)
+  var i = 0
+  while i < n:
+    var c = s.unitAt(i)
+    inc i
+    if c in 0xD800 .. 0xDBFF and i < n and s.unitAt(i) in 0xDC00 .. 0xDFFF:
+      c = 0x10000 + ((c - 0xD800) shl 10) + (s.unitAt(i) - 0xDC00)
+      inc i
+    if c < 0x80: result.add char(c)
+    elif c < 0x800:
+      result.add char(0xC0 or (c shr 6))
+      result.add char(0x80 or (c and 0x3F))
+    elif c < 0x10000:
+      result.add char(0xE0 or (c shr 12))
+      result.add char(0x80 or ((c shr 6) and 0x3F))
+      result.add char(0x80 or (c and 0x3F))
+    else:
+      result.add char(0xF0 or (c shr 18))
+      result.add char(0x80 or ((c shr 12) and 0x3F))
+      result.add char(0x80 or ((c shr 6) and 0x3F))
+      result.add char(0x80 or (c and 0x3F))
+
+proc str(x: JsObject): string = wtf8(x.to(cstring))
 proc num(x: JsObject): float = x.to(float)
 
 proc toYaml(x: JsObject): YamlValue =
@@ -112,7 +142,7 @@ proc idSet(m: JsObject, k: int, v: JsObject) {.importjs: "#.set(#, #)".}
 proc toJsValue(j: JsonNode, ids: JsObject): JsObject =
   ## JSON from tools/models.nim (written with `share`) as Pele's JavaScript: `{"$map": ...}` a
   ## Map, `{"$set": [...]}` a Set, `{"$ref": n}` the object written with `"$id": n` (the same
-  ## object, cycles included), null left out of an object (Pele's undefined).
+  ## object, cycles included), null as undefined (Pele's undefined).
   case j.kind
   of JNull: result = jsUndefined
   of JBool: result = toJs(j.getBool)
@@ -136,7 +166,9 @@ proc toJsValue(j: JsonNode, ids: JsObject): JsObject =
       result = newJsObject()
       if j.hasKey("$id"): ids.idSet(j["$id"].getInt, result)
       for k, v in j:
-        if v.kind != JNull and k != "$id": result[cstring(k)] = toJsValue(v, ids)
+        # A field the model has but leaves empty is there, undefined, as a field Pele's class
+        # declares and does not set: `toEqual` reads it as missing, `toMatchObject` finds it.
+        if k != "$id": result[cstring(k)] = toJsValue(v, ids)
 
 proc throwPele(e: ref PeleError) =
   let j = newJsObject()
@@ -169,7 +201,7 @@ proc resultOf(r: RenderResult): JsObject =
 proc nimakiParse(source: cstring, options: JsObject): JsObject {.exportc.} =
   var m: ParsedModel
   try:
-    m = parse($source, toOptions(options))
+    m = parse(wtf8(source), toOptions(options))
   except PeleError as e:
     throwPele(e)
   try:
@@ -195,11 +227,11 @@ proc nimakiRenderModel(model: JsObject, options: JsObject): JsObject {.exportc.}
 
 proc nimakiRender(source: cstring, options: JsObject): JsObject {.exportc.} =
   try:
-    result = resultOf(render($source, toOptions(options)))
+    result = resultOf(render(wtf8(source), toOptions(options)))
   except PeleError as e:
     throwPele(e)
 
-proc nimakiDetectType(text: cstring): JsObject {.exportc.} = orNull(detectType($text))
-proc nimakiSupports(text: cstring): bool {.exportc.} = supports($text)
+proc nimakiDetectType(text: cstring): JsObject {.exportc.} = orNull(detectType(wtf8(text)))
+proc nimakiSupports(text: cstring): bool {.exportc.} = supports(wtf8(text))
 
 {.emit: "module.exports = { nimakiRender, nimakiParse, nimakiRenderModel, nimakiDetectType, nimakiSupports };".}
