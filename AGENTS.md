@@ -75,12 +75,14 @@ coding agents*, so a change here is reviewed like any page. It is adapted from
 ## Setup
 
 - In a fresh checkout or sandbox, run `sh tools/setup.sh` first. It installs what is missing
-  (Nim from GitHub nightlies, PCRE for the pages), clones the docs' dependencies at the commits
+  (Nim from GitHub nightlies, PCRE for the pages), clones the dependencies at the commits
   of `deps.lock` into `deps/` (not committed; `nim.cfg` puts them on the path) and fetches the
   pinned Pele (`reference/fetch.sh`; Node 20 or later must be installed). Safe to rerun.
 - `nim r tests/all.nim` runs the tests. `nim r docs/all.nim` builds every page. The HTML is not
   committed: CI builds it and deploys `docs/` to GitHub Pages from `main`.
-- The renderer (`src/`) needs only Nim's standard library. nimib and tabelline are for the pages.
+- The renderer (`src/`) needs Nim's standard library and one dependency, nitely's pure Nim
+  `regex` (with its tables, `unicodedb`), pinned in `deps.lock` (decision 0015). nimib and
+  tabelline are for the pages.
 - To change a dependency, change its commit in `deps.lock` (and `nim.cfg` for a new one), rerun
   the setup, build the pages.
 - Network: GitHub, registry.npmjs.org and the Nim nightlies are enough. If a step needs another
