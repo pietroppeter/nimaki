@@ -791,7 +791,7 @@
           "owner": "Port class and swimlane",
           "status": "done",
           "post": "every-drawing-a-test",
-          "pr": ""
+          "pr": "69"
         },
         {
           "id": "shared-scanners",
