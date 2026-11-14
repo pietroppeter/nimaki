@@ -10,6 +10,7 @@ import std/strutils
 import ../../util/chars
 import ../common/scan
 import tokens
+import ../../jsregex
 
 type Tokens* = object
   types*: seq[int]
@@ -55,19 +56,21 @@ func isAttr(c, kind: int): bool =
   elif c < 128: (CLASS[c] and kind) != 0
   else: c >= 0xc0 or c == 0xb5
 
-func lineEndCode(src: string, q: int): bool =
-  ## [\n\r  ] at byte q
-  let c = src[q]
-  c == '\n' or c == '\r' or
-    (c == '\xE2' and q + 2 < src.len and src[q + 1] == '\x80' and (src[q + 2] == '\xA8' or src[q + 2] == '\xA9'))
+const RE_ACC_TITLE = jsre"/accTitle\s*:\s*/iy"
+const RE_ACC_DESCR = jsre"/accDescr\s*:\s*/iy"
+const RE_ACC_DESCR_ML = jsre"/accDescr\s*\{\s*/iy"
+const RE_DIRECTION = [
+  jsre"/.*direction\s+TB[^\n]*/iy",
+  jsre"/.*direction\s+BT[^\n]*/iy",
+  jsre"/.*direction\s+RL[^\n]*/iy",
+  jsre"/.*direction\s+LR[^\n]*/iy",
+]
+const RE_DIR_WORD = jsre"/direction/gi"
+const RE_LINE_END = jsre"/[\n\r\u2028\u2029]/g"
 
 func nextLineEnd(src: string, q: int): int =
-  ## /[\n\r  ]/g from q, or the end
-  var i = max(q, 0)
-  while i < src.len:
-    if lineEndCode(src, i): return i
-    inc i
-  src.len
+  let m = RE_LINE_END.exec(src, q)
+  if m.found: m.index else: src.len
 
 func wordCI(src, w: string, q: int): bool =
   ## Case-insensitive match of a lowercase ASCII word, as the /i flag gives.
@@ -76,31 +79,6 @@ func wordCI(src, w: string, q: int): bool =
     let c = if q + i < src.len: ord(src[q + i]) else: -1
     if c != a and not (a >= 97 and a <= 122 and c == a - 32): return false
   true
-
-func searchDirectionWord(src: string, q: int): int =
-  ## /direction/gi: the start of the next match, or -1
-  var i = max(q, 0)
-  while i + 9 <= src.len:
-    if wordCI(src, "direction", i): return i
-    inc i
-  -1
-
-func directionAt(src: string, p: int, dir: string): int =
-  ## /.*direction\s+DIR[^\n]*/iy at p: the end of the match, or -1. `.*` is greedy, so the last
-  ## `direction` before the first line terminator that fits is the one that matches.
-  let le = nextLineEnd(src, p)
-  var i = le - 9
-  if i + 9 > src.len: i = src.len - 9
-  while i >= p:
-    if wordCI(src, "direction", i):
-      var j = i + 9
-      if isSpace(codeAt(src, j)):
-        while isSpace(codeAt(src, j)): j += sizeAt(src, j)
-        if wordCI(src, dir, j):
-          let at = src.find('\n', j + dir.len)
-          return if at == -1: src.len else: at
-    dec i
-  -1
 
 proc tokenize*(src: string): Tokens =
   let n = src.len
@@ -141,13 +119,13 @@ proc tokenize*(src: string): Tokens =
   proc direction(): bool =
     if dirNext == -1: return false
     if dirNext < p:
-      dirNext = searchDirectionWord(src, p)
+      dirNext = RE_DIR_WORD.exec(src, p).index
       if dirNext == -1: return false
     if p < dirFailed: return false
     if lineEnd < p: lineEnd = nextLineEnd(src, p)
     if dirNext >= lineEnd: return false
-    for i, dir in ["tb", "bt", "rl", "lr"]:
-      let e = directionAt(src, p, dir)
+    for i in 0 ..< 4:
+      let e = RE_DIRECTION[i].matchEnd(src, p)
       if e >= 0:
         emit(T_direction_tb + i, p, e)
         return true
@@ -271,29 +249,19 @@ proc tokenize*(src: string): Tokens =
     else:
       false
 
-  proc accAt(q: int, word: string, open: char): int =
-    ## /accTitle\s*:\s*/iy and its kin: the end of the match, or -1
-    if not wordCI(src, word, q): return -1
-    var e = q + word.len
-    while isSpace(cc(e)): e = step(e)
-    if byteAt(e) != ord(open): return -1
-    e = e + 1
-    while isSpace(cc(e)): e = step(e)
-    e
-
   proc initial(c: int) =
     if (c == 97 or c == 65) and kw("acc"):
-      var e = accAt(p, "acctitle", ':')
+      var e = RE_ACC_TITLE.matchEnd(src, p)
       if e >= 0:
         state = S_acc_title
         emit(T_acc_title, p, e)
         return
-      e = accAt(p, "accdescr", ':')
+      e = RE_ACC_DESCR.matchEnd(src, p)
       if e >= 0:
         state = S_acc_descr
         emit(T_acc_descr, p, e)
         return
-      e = accAt(p, "accdescr", '{')
+      e = RE_ACC_DESCR_ML.matchEnd(src, p)
       if e >= 0:
         state = S_acc_descr_multiline
         p = e

@@ -1,6 +1,6 @@
 ## port-of: src/diagrams/state/render.ts
 ## port-status: draft
-import std/[algorithm, options, strutils, tables]
+import std/[algorithm, options, tables]
 from std/math import ceil
 import ../../js
 import ../../jsmath
@@ -12,6 +12,7 @@ import ../../types
 import ../../util/[url, yaml]
 import ../common/fit_width
 import db, graph
+import ../../jsregex
 
 const
   NODE_SEP = 40.0
@@ -57,26 +58,7 @@ const CLASSES: array[kState .. kComposite, string] = [
   "pele-cluster pele-state-composite",
 ]
 
-func withoutMermaidClasses(s: string): string =
-  ## s.replace(/(?:^| )statediagram-(?:state|cluster-alt|cluster|note)(?= |$)/g, '')
-  const names = ["state", "cluster-alt", "cluster", "note"]
-  proc matchAt(s: string, p: int): int =
-    if not s.continuesWith("statediagram-", p): return -1
-    let q = p + "statediagram-".len
-    for name in names:
-      let e = q + name.len
-      if s.continuesWith(name, q) and (e == s.len or s[e] == ' '): return e
-    -1
-  var i = 0
-  while i < s.len:
-    var e = -1
-    if i == 0: e = matchAt(s, 0)
-    if e < 0 and s[i] == ' ': e = matchAt(s, i + 1)
-    if e >= 0:
-      i = e
-    else:
-      result.add s[i]
-      inc i
+const MERMAID_CLASSES = jsre"/(?:^| )statediagram-(?:state|cluster-alt|cluster|note)(?= |$)/g"
 
 type View = ref object
   node: StateNode            ## nil for the unseen helpers the layout needs
@@ -525,7 +507,7 @@ proc draw(db: StateDb, config: Config, options: RenderOptions, turned: bool): Re
       let tooltip = decodeEntities(unquote(link.tooltip))
       if tooltip != "": body = "<title>" & esc(tooltip) & "</title>" & body
       body = linked(body, safeUrl(unquote(link.url)), node.id, links, options, " target=\"_blank\"")
-    let open = "<g class=\"" & CLASSES[view.kind] & classNames(withoutMermaidClasses(node.cssClasses)) &
+    let open = "<g class=\"" & CLASSES[view.kind] & classNames(node.cssClasses.replace(MERMAID_CLASSES, "")) &
       "\" data-id=\"" & escText(node.id) & "\""
     if view.kind == kComposite: clusters.add open & ">" & body & "</g>"
     elif view.kind == kNote:
