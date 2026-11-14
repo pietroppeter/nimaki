@@ -25,7 +25,7 @@ text in, which nimaki draws as you type. It draws {drawn.len} of Pele's 33 types
 let options = """{"now": 1767225600000}"""   # the referee's fixed now, so that both drawings agree
 
 proc live(source, caption: string) =
-  let svg = render(source, RenderOptions(now: fixedNow)).svg
+  let svg = mermaidSvg(source)   # nimaki's drawing, checked against Pele's at build time
   nbLive source, svg, caption, options
 
 nbText: """
@@ -44,7 +44,8 @@ nbPlayground """flowchart LR
 nbText: """
 ## Drawn twice
 
-Each drawing below came with the page, made by nimaki compiled to C when the site was built.
+Each drawing below came with the page, made by nimaki compiled to C when the site was built
+(and checked then against Pele's, byte for byte).
 When the page opens, nimaki compiled to JavaScript draws the same text again and puts its own
 drawing in place. The line under each says whether the two are the same, byte for byte.
 """
