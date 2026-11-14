@@ -123,7 +123,7 @@ nbText: &"""
 """
 
 nbCode:
-  let svg = render(stateCase, RenderOptions(now: fixedNow)).svg
+  let svg = render(stateCase, RenderOptions(now: some(fixedNow))).svg
   echo "identical to Pele's: ", svg == peleSvg(stateCase)
 
 nbSvg svg, "A diagram's life in diagrammari, from its explainer: drawn by nimaki, the same bytes as Pele's."

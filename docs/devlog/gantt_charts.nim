@@ -60,7 +60,7 @@ nbText: &"""
 
 nbCode:
   # The referee's fixed now, 1 January 2026, so that the today line and Pele's agree.
-  let ganttSvg = render(ganttText, RenderOptions(now: fixedNow)).svg
+  let ganttSvg = render(ganttText, RenderOptions(now: some(fixedNow))).svg
   echo "identical to Pele's: ", ganttSvg == peleSvg(ganttText)
 
 nbSvg ganttSvg, "A small plan, drawn by nimaki; Pele draws the same bytes. The grey bands are the excluded weekends, and the line is today, 1 January 2026, the fixed now of the referee."
@@ -121,7 +121,7 @@ narrower chart, with fewer ticks:
 """
 
 nbCode:
-  let narrow = render(ganttText, RenderOptions(maxWidth: some(390.0), now: fixedNow))
+  let narrow = render(ganttText, RenderOptions(maxWidth: some(390.0), now: some(fixedNow)))
   echo "width ", narrow.width, ", identical to Pele's: ", narrow.svg == peleSvg(ganttText, %*{"maxWidth": 390})
 
 nbSvg narrow.svg, "The same plan for a phone."

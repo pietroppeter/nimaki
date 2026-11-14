@@ -6,3 +6,4 @@ import test_jsdate
 import test_detect
 import test_layout
 import test_jsregex
+import test_parse

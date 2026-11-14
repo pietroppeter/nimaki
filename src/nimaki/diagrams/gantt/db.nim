@@ -23,8 +23,12 @@ const
   FORMAT_STEP = 400
 
 proc clock*(now: float): float =
-  ## The one place the current time is read.
-  if now != 0 and now == now and now != Inf and now != -Inf: now else: floor(epochTime() * 1000)
+  ## The one place the current time is read: `Number.isFinite(given) ? given : Date.now()`.
+  if now == now and now != Inf and now != -Inf: now else: floor(epochTime() * 1000)
+
+proc clock*(now: Option[float]): float =
+  ## The time an option gives, or the current time when it gives none.
+  clock(if now.isSome: now.get else: NaN)
 
 const RE_NUMERIC_FORMAT = jsre"/^[YMDHhmsSZXx\-/.:, T]*$/"
 const RE_TAG = jsre"/^\s*(active|done|crit|milestone|vert)\s*$/"

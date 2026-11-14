@@ -69,7 +69,7 @@ nbCode:
   proc nimakiSvg(source: string, narrow: bool): string =
     var o = RenderOptions(autoDirection: some(true), responsive: some(true),
                           idPrefix: some("dg-"),
-                          now: fixedNow)  # the same "now" as Pele's run, for the gantt chart
+                          now: some(fixedNow))  # the same "now" as Pele's run, for the gantt chart
     if narrow: o.maxWidth = some(420.0)
     try: render(source, o).svg except PeleError as e: "error " & e.code
   for narrow in [false, true]:

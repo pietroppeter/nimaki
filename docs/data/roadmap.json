@@ -662,10 +662,10 @@
           "id": "js-speed",
           "kind": "port",
           "title": "Pele's time bounds in the JavaScript build",
-          "what": "About a hundred of Pele's stress tests (107 on 14 November 2026; the count moves a little from run to run) draw the same in nimaki's JavaScript build but miss Pele's time bound (most by less than twice; the worst, agentflow flows that each name the next, venn styles, nested class namespaces, by 9 to 12 times). The C build is fast on the ones measured. The porting guide's note Code that JavaScript runs slowly lists the causes found so far; build/peletests/report.txt lists the tests (nim r tools/peletests.nim).",
+          "what": "About a hundred of Pele's stress tests (107 on 14 November 2026) drew the same in nimaki's JavaScript build but missed Pele's time bound. First round (post Faster in JavaScript): eight patterns that copy in nim js fixed outside lexer code, 33 left on a quiet run (the count moves a little from run to run). Next, once the regular expressions (PR 62) are on main: measure again, then key the tables of long strings (class namespaces and classDefs, gantt excluded days) by something short, and the lexers. The porting guide's note Code that JavaScript runs slowly lists the causes; nim r tools/peletests.nim lists the tests in build/peletests/report.txt.",
           "done_when": "nim r tools/peletests.nim reports no speed, and tools/peletests/known.txt is empty.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Speed up the JavaScript build",
+          "status": "started",
           "post": "",
           "pr": ""
         }
@@ -789,6 +789,28 @@
           "what": "A recurring step: when a batch of new types or features lands, another article on a new domain, preferring the types no article has drawn yet. Each article is its own step in this phase, claimed here first; the thread proposes the next domains after each one.",
           "done_when": "Never: it recurs while the port goes on.",
           "owner": "Write domain articles with diagrams",
+          "status": "started",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "public-parse",
+          "kind": "port",
+          "title": "parse(), as Pele exports it",
+          "what": "Pele's API has parse(text, options), which returns the diagram's model, and render(model, options), which draws a model that parse() returned. nimaki's entry point gets both, and a referee compares nimaki's models with Pele's, so that Pele's tests that read a model can run on the port. Picked by the coordinator; the diagrammari proposal needs it.",
+          "done_when": "nimaki exports parse() and render(model); tools/parsediff.nim compares the models of the corpus with Pele's and says, per type, how many are the same.",
+          "owner": "Port class and swimlane",
+          "status": "done",
+          "post": "the-model-in-between",
+          "pr": "70"
+        },
+        {
+          "id": "models-as-pele",
+          "kind": "port",
+          "title": "Models as Pele's",
+          "what": "tools/parsediff.nim compares the model nimaki's parse() returns with Pele's: the same for some types, different in shape for the others (a field the port adds, a union held as one object with a kind, a field named otherwise). Bring each type's model to Pele's shape, type by type, so that Pele's tests that read a model can run on the port. docs/data/parsediff.json says where each type stands.",
+          "done_when": "nim r tools/parsediff.nim finds every model the same as Pele's.",
+          "owner": "Port class and swimlane",
           "status": "started",
           "post": "",
           "pr": ""

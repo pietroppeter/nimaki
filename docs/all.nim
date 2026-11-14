@@ -20,6 +20,7 @@ import devlog/diagrammari_as_a_corpus
 import devlog/diagrammari_at_work
 import devlog/following_pele
 import devlog/every_drawing_a_test
+import devlog/the_model_in_between
 import devlog/nimaki_in_javascript
 import devlog/drawn_in_your_browser
 import devlog/how_pele_is_built
@@ -51,3 +52,4 @@ import devlog/circles_that_overlap
 import devlog/a_proposal_for_diagrammari
 import devlog/regular_expressions_as_pele_writes_them
 import devlog/pele_tests_on_nimaki
+import devlog/faster_in_javascript

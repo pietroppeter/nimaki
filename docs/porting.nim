@@ -164,13 +164,24 @@ of Nim 2.2.4, which CI used until decision 0015, does). Multiply in 16-bit halve
 nbNote """
 Some Nim runs in JavaScript, gives the same SVG, and is far slower, because a Nim string compiled
 to JavaScript is an array of bytes, and copying it copies every byte, where a JavaScript string is
-shared. Pele's stress tests (`nim r tools/peletests.nim`) found four cases, on 14 November 2026. `for r
+shared. Pele's stress tests (`nim r tools/peletests.nim`) found four cases on 14 November 2026. `for r
 in s.runes` copies `s` at every byte it reads: use `codePoints(s)` of `js.nim`. A closure that
 captures a long string copies it at each call: write the helper as a `template`. A label given to
 each of thousands of pieces is thousands of copies: share it in a `ref object`
 (`PacketLabel`, `SharedStyles`); not a `ref string`, which nim js gets wrong. And a `Table` keyed
 by a long string hashes all of it at each lookup, where JavaScript caches a string's hash: key it
-by something short. Last, a compiler matter: Nim 2.2.4 appends a string to another with
+by something short. The step js-speed found more, the same day. A closure copies every parameter
+it captures, a `seq` as much as a string, each time the closure is made: a helper inside a proc
+called once a node, capturing a list of every edge, copied that list once a node (`fill` in
+`layout/layered.nim` is a template now). `let src = lx.src` copies the field; read it through a
+`template src: string = lx.src`. `return (a, b)` copies the tuple field by field through its type
+information: in a function called once a character (`codePointAt`), set `result.a` and `result.b`
+instead. `x = move y` still copies into an existing `x`, and `pop` copies what it removes: a stack
+of long lists holds `ref object`s (`Statements` in `diagrams/block/parser.nim`). A list rebuilt
+at each mention of a state, `a = a & b`, is `a.add b`, and the fields of a value about to be
+dropped are taken with `move`. And a `HashSet[int]` hashes by
+multiplying 64-bit integers by hand: a small dense set is a `seq` of marks
+(`inheritCrossedDirections` in `layout/compound.nim`). Last, a compiler matter: Nim 2.2.4 appends a string to another with
 `push.apply`, which overflows JavaScript's stack past about 100 KB; CI builds with 2.2.14
 ([decision 0015](../decisions/#0015-ci-builds-with-the-latest-nim-2-2-release)), which does not.
 """, nkWarning, "Code that JavaScript runs slowly"
