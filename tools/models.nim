@@ -16,7 +16,7 @@ from nimaki/diagrams/agentflow/db import AgentflowDb
 from nimaki/diagrams/agentflow/types import MappingSet
 from nimaki/diagrams/architecture/db import ArchitectureDb, ArchNode
 from "nimaki/diagrams/block/db" import BlockDb
-from nimaki/diagrams/c4/db import C4Db
+from nimaki/diagrams/c4/db import C4Db, C4Element, C4Rel, C4Attr
 from nimaki/diagrams/class/db import ClassDb
 from nimaki/diagrams/cynefin/model import CynefinModel
 from nimaki/diagrams/er/db import ErDb
@@ -159,6 +159,43 @@ proc dump(x: RailroadNode, path: var Walk): JsonNode =
   of nkRepetition:
     %*{"type": "repetition", "element": (if kids.len > 0: kids[0] else: newJNull()),
        "min": number(x.min, path), "max": number(x.max, path)}
+
+proc c4Common(x: C4Element | C4Rel, path: var Walk): JsonNode =
+  ## What an element and a relationship share; their optional texts are held in a table.
+  template attr(a: Option[C4Attr]): JsonNode =
+    (if a.isSome and a.get.isNamed: %*{"key": a.get.key, "value": a.get.value} else: newJNull())
+  result = %*{"label": x.label, "labelAttr": attr(x.labelAttr)}
+  for k, v in x.fields: result[k] = %v
+  if x.extra.len > 0:
+    var m = newJObject()
+    for k, v in x.extra: m[k] = %v
+    result["extra"] = %*{"$map": m}
+  when x is C4Element:
+    result["alias"] = %x.alias
+    result["aliasAttr"] = attr(x.aliasAttr)
+  else:
+    result["fromAttr"] = attr(x.fromAttr)
+    result["toAttr"] = attr(x.toAttr)
+
+proc dump(x: C4Element, path: var Walk): JsonNode =
+  ## Pele's shape or boundary: its optional texts held in a table, and a `uid` of the port's
+  ## own, so that tables can key elements by identity in either backend.
+  if x == nil: return newJNull()
+  result = c4Common(x, path)
+  result["parent"] = dump(x.parent, path)
+  if x.kind != "": result["kind"] = %x.kind
+  if x.nodeType != "": result["nodeType"] = %x.nodeType
+
+proc dump(x: C4Rel, path: var Walk): JsonNode =
+  ## Pele's relationship: its optional texts held in a table; `typ` and `start` are Pele's
+  ## `type` and `from`.
+  if x == nil: return newJNull()
+  result = c4Common(x, path)
+  result["type"] = %x.typ
+  result["from"] = %x.start
+  result["to"] = %x.to
+  if x.offsetX == x.offsetX: result["offsetX"] = number(x.offsetX, path)
+  if x.offsetY == x.offsetY: result["offsetY"] = number(x.offsetY, path)
 
 proc dump(x: MappingSet, path: var Walk): JsonNode =
   ## Pele's `Set` of mappings, held as a list (a set of references would hash their addresses).
