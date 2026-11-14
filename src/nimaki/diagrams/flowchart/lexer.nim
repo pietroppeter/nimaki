@@ -6,12 +6,12 @@
 ## is its code point, and one outside the Basic Multilingual Plane reads as its high surrogate
 ## (which is neither a letter nor a space). Past the end it is -1 (JavaScript's NaN). Where the
 ## TypeScript steps one code unit past a character that may not be ASCII, the port steps past
-## the whole character. Each sticky regular expression is a matcher returning the end of its
-## match, or -1, with its pattern in a comment.
+## the whole character.
 import std/strutils
 import ../../js
 import ../../util/[chars, unicode]
 import tokens
+import ../../jsregex
 
 type Tokens* = object
   types*: seq[int]
@@ -61,152 +61,34 @@ func spaces(src: string, i: int): int =
   while j < src.len and isSpace(cu(src, j)): j += charLen(src, j)
   j
 
-func word(src: string, i: int, w: string): bool = src.continuesWith(w, i)
-
-func reWordSpaces(src: string, p: int, w: string, colon: char, plus: bool): int =
-  ## /w\s*:\s*/y (colon ':'), /w\s*\{\s*/y (colon '{'), /w\s+/y (plus, colon '\0')
-  if not word(src, p, w): return -1
-  var j = p + w.len
-  if plus:
-    let k = spaces(src, j)
-    return if k > j: k else: -1
-  j = spaces(src, j)
-  if j >= src.len or src[j] != colon: return -1
-  spaces(src, j + 1)
-
-func reNodir(src: string, p: int): int =
-  ## /(?:\r?\n)*\s*\n/y: a run of whitespace, to its last line break
-  let stop = spaces(src, p)
-  var j = stop - 1
-  while j >= p:
-    if src[j] == '\n': return j + 1
-    dec j
-  -1
-
-func isWordAt(src: string, i: int): bool = isWord(cu(src, i))
-
-func reDir(src: string, p: int): int =
-  ## /\s*(?:LR|RL|TB|BT|TD|BR)\b/y
-  let j = spaces(src, p)
-  if j + 2 > src.len: return -1
-  let two = src[j ..< j + 2]
-  if two notin ["LR", "RL", "TB", "BT", "TD", "BR"]: return -1
-  if isWordAt(src, j + 2): return -1
-  j + 2
-
-func reDirSym(src: string, p: int): int =
-  ## /\s*[<>^]/y
-  let j = spaces(src, p)
-  if j < src.len and src[j] in {'<', '>', '^'}: j + 1 else: -1
-
-func reDirV(src: string, p: int): int =
-  ## /\s*v\b/y
-  let j = spaces(src, p)
-  if j < src.len and src[j] == 'v' and not isWordAt(src, j + 1): j + 1 else: -1
-
-func lineTerminatorFrom(src: string, p: int): int =
-  ## The first of [\n\r  ] at or after p, or the end.
-  var j = p
-  while j < src.len:
-    if isLineEnd(cu(src, j)): return j
-    j += charLen(src, j)
-  src.len
-
-func reDirection(src: string, p: int, name: string): int =
-  ## /.*direction\s+NAME[^\n]*/y: the last `direction` on the line that `.*` can reach.
-  let limit = lineTerminatorFrom(src, p)
-  var k = limit
-  while k >= p:
-    if word(src, k, "direction"):
-      let j = k + 9
-      let s = spaces(src, j)
-      if s > j and word(src, s, name):
-        var e = s + name.len
-        while e < src.len and src[e] != '\n': inc e
-        return e
-    dec k
-  -1
-
-func skipPrefix(src: string, j: int, prefix: set[char]): int =
-  if j < src.len and src[j] in prefix: j + 1 else: j
-
-func reRun(src: string, p: int, ch: char, ends: set[char]): int =
-  ## /\s*[xo<]?CC+[Cxo>]\s*/y for CC = `--` or `==`, with `ends` the characters of [Cxo>]
-  let j0 = spaces(src, p)
-  for j in [skipPrefix(src, j0, {'x', 'o', '<'}), j0]:
-    var k = j
-    while k < src.len and src[k] == ch: inc k
-    let count = k - j
-    if count >= 2:
-      if k < src.len and src[k] in ends - {ch}: return spaces(src, k + 1)
-      if count >= 3: return spaces(src, k)
-    if j == j0: break
-  -1
-
-func reStart(src: string, p: int, open: string): int =
-  ## /\s*[xo<]?--\s*/y, /\s*[xo<]?==\s*/y, /\s*[xo<]?-\.\s*/y
-  let j0 = spaces(src, p)
-  for j in [skipPrefix(src, j0, {'x', 'o', '<'}), j0]:
-    if word(src, j, open): return spaces(src, j + open.len)
-    if j == j0: break
-  -1
-
-func reDotted(src: string, p: int): int =
-  ## /\s*[xo<]?-?\.+-[xo>]?\s*/y
-  let j0 = spaces(src, p)
-  for j in [skipPrefix(src, j0, {'x', 'o', '<'}), j0]:
-    var k = j
-    if k < src.len and src[k] == '-': inc k
-    let dots = k
-    while k < src.len and src[k] == '.': inc k
-    if k > dots and k < src.len and src[k] == '-':
-      inc k
-      if k < src.len and src[k] in {'x', 'o', '>'}: inc k
-      return spaces(src, k)
-    if j == j0: break
-  -1
-
-func reInvis(src: string, p: int): int =
-  ## /\s*~~~+\s*/y
-  let j = spaces(src, p)
-  var k = j
-  while k < src.len and src[k] == '~': inc k
-  if k - j >= 3: spaces(src, k) else: -1
-
-func reNewline(src: string, p: int): int =
-  ## /(?:\r?\n)+/y
-  var j = p
-  while true:
-    if j < src.len and src[j] == '\n': inc j
-    elif j + 1 < src.len and src[j] == '\r' and src[j + 1] == '\n': j += 2
-    else: break
-  if j > p: j else: -1
-
-func reSpace(src: string, p: int): int =
-  ## /[^\S\n\r]+/y
-  var j = p
-  while j < src.len:
-    let c = cu(src, j)
-    if not isSpace(c) or c == 10 or c == 13: break
-    j += charLen(src, j)
-  if j > p: j else: -1
-
-func reEmptyCall(src: string, p: int): int =
-  ## /\(\s*\)/y
-  if p >= src.len or src[p] != '(': return -1
-  let j = spaces(src, p + 1)
-  if j < src.len and src[j] == ')': j + 1 else: -1
-
-func replaceBreaks(s: string): string =
-  ## s.replace(/\n\s*/g, '<br/>')
-  var i = 0
-  while i < s.len:
-    if s[i] == '\n':
-      result.add "<br/>"
-      i = spaces(s, i + 1)
-      continue
-    result.add s[i]
-    inc i
+const RE_ACC_TITLE = jsre"/accTitle\s*:\s*/y"
+const RE_ACC_DESCR = jsre"/accDescr\s*:\s*/y"
+const RE_ACC_DESCR_ML = jsre"/accDescr\s*\{\s*/y"
+const RE_CALL = jsre"/call\s+/y"
+const RE_CLICK = jsre"/click\s+/y"
+const RE_NODIR = jsre"/(?:\r?\n)*\s*\n/y"
+const RE_DIR = jsre"/\s*(?:LR|RL|TB|BT|TD|BR)\b/y"
+const RE_DIR_SYM = jsre"/\s*[<>^]/y"
+const RE_DIR_V = jsre"/\s*v\b/y"
+const RE_DIRECTION = [
+  jsre"/.*direction\s+TB[^\n]*/y",
+  jsre"/.*direction\s+BT[^\n]*/y",
+  jsre"/.*direction\s+RL[^\n]*/y",
+  jsre"/.*direction\s+LR[^\n]*/y",
+  jsre"/.*direction\s+TD[^\n]*/y",
+]
+const RE_LINE_END = jsre"/[\n\r\u2028\u2029]/g"
+const RE_LINK = jsre"/\s*[xo<]?--+[-xo>]\s*/y"
+const RE_START_LINK = jsre"/\s*[xo<]?--\s*/y"
+const RE_THICK_LINK = jsre"/\s*[xo<]?==+[=xo>]\s*/y"
+const RE_THICK_START = jsre"/\s*[xo<]?==\s*/y"
+const RE_DOTTED_LINK = jsre"/\s*[xo<]?-?\.+-[xo>]?\s*/y"
+const RE_DOTTED_START = jsre"/\s*[xo<]?-\.\s*/y"
+const RE_INVIS_LINK = jsre"/\s*~~~+\s*/y"
+const RE_NEWLINE = jsre"/(?:\r?\n)+/y"
+const RE_SPACE = jsre"/[^\S\n\r]+/y"
+const RE_EMPTY_CALL = jsre"/\(\s*\)/y"
+const RE_BR = jsre"/\n\s*/g"
 
 proc tokenize*(src: string): Tokens =
   let n = src.len
@@ -270,7 +152,7 @@ proc tokenize*(src: string): Tokens =
 
   proc invisLink(): bool =
     if not invisAhead(p): return false
-    let e = reInvis(src, p)
+    let e = RE_INVIS_LINK.matchEnd(src, p)
     if e < 0: return false
     emit(T_LINK, p, e)
     true
@@ -344,36 +226,36 @@ proc tokenize*(src: string): Tokens =
     let d = linkChar(p)
     var e: int
     if d == 45:
-      e = reRun(src, p, '-', {'-', 'x', 'o', '>'})
+      e = RE_LINK.matchEnd(src, p)
       if e >= 0:
         emit(T_LINK, p, e)
         return true
-      e = reStart(src, p, "--")
+      e = RE_START_LINK.matchEnd(src, p)
       if e >= 0:
         push(S_edgeText)
         emit(T_START_LINK, p, e)
         return true
-      e = reDotted(src, p)
+      e = RE_DOTTED_LINK.matchEnd(src, p)
       if e >= 0:
         emit(T_LINK, p, e)
         return true
-      e = reStart(src, p, "-.")
+      e = RE_DOTTED_START.matchEnd(src, p)
       if e >= 0:
         push(S_dottedEdgeText)
         emit(T_START_LINK, p, e)
         return true
     elif d == 61:
-      e = reRun(src, p, '=', {'=', 'x', 'o', '>'})
+      e = RE_THICK_LINK.matchEnd(src, p)
       if e >= 0:
         emit(T_LINK, p, e)
         return true
-      e = reStart(src, p, "==")
+      e = RE_THICK_START.matchEnd(src, p)
       if e >= 0:
         push(S_thickEdgeText)
         emit(T_START_LINK, p, e)
         return true
     elif d == 46:
-      e = reDotted(src, p)
+      e = RE_DOTTED_LINK.matchEnd(src, p)
       if e >= 0:
         emit(T_LINK, p, e)
         return true
@@ -384,17 +266,17 @@ proc tokenize*(src: string): Tokens =
     case c
     of 97:
       if src.continuesWith("acc", p):
-        e = reWordSpaces(src, p, "accTitle", ':', false)
+        e = RE_ACC_TITLE.matchEnd(src, p)
         if e >= 0:
           push(S_acc_title)
           emit(T_acc_title, p, e)
           return true
-        e = reWordSpaces(src, p, "accDescr", ':', false)
+        e = RE_ACC_DESCR.matchEnd(src, p)
         if e >= 0:
           push(S_acc_descr)
           emit(T_acc_descr, p, e)
           return true
-        e = reWordSpaces(src, p, "accDescr", '{', false)
+        e = RE_ACC_DESCR_ML.matchEnd(src, p)
         if e >= 0:
           push(S_acc_descr_multiline)
           p = e
@@ -408,7 +290,7 @@ proc tokenize*(src: string): Tokens =
         p += 2
         return true
     of 99:
-      e = reWordSpaces(src, p, "call", '\0', true)
+      e = RE_CALL.matchEnd(src, p)
       if e >= 0:
         push(S_callbackname)
         p = e
@@ -419,7 +301,7 @@ proc tokenize*(src: string): Tokens =
       if kw("class"):
         emit(T_CLASS, p, p + 5)
         return true
-      e = reWordSpaces(src, p, "click", '\0', true)
+      e = RE_CLICK.matchEnd(src, p)
       if e >= 0:
         push(S_click)
         p = e
@@ -488,12 +370,11 @@ proc tokenize*(src: string): Tokens =
       if dirNext < p: dirNext = src.find("direction", p)
       if dirNext != -1:
         if lineEnd < p:
-          let t = lineTerminatorFrom(src, p)
-          lineEnd = t
+          let m = RE_LINE_END.exec(src, p)
+          lineEnd = if m.found: m.index else: n
         if dirNext < lineEnd:
-          const NAMES = ["TB", "BT", "RL", "LR", "TD"]
           for i in 0 ..< 5:
-            e = reDirection(src, p, NAMES[i])
+            e = RE_DIRECTION[i].matchEnd(src, p)
             if e >= 0:
               emit(T_direction_tb + i, p, e)
               return true
@@ -599,11 +480,11 @@ proc tokenize*(src: string): Tokens =
 
     if isSpace(c):
       if link(c): return true
-      e = reNewline(src, p)
+      e = RE_NEWLINE.matchEnd(src, p)
       if e >= 0:
         emit(T_NEWLINE, p, e)
         return true
-      e = reSpace(src, p)
+      e = RE_SPACE.matchEnd(src, p)
       if e >= 0:
         emit(T_SPACE, p, e)
         return true
@@ -617,9 +498,9 @@ proc tokenize*(src: string): Tokens =
 
   proc linkAt(kind: int, q: int): int =
     case kind
-    of 0: reRun(src, q, '-', {'-', 'x', 'o', '>'})
-    of 1: reRun(src, q, '=', {'=', 'x', 'o', '>'})
-    else: reDotted(src, q)
+    of 0: RE_LINK.matchEnd(src, q)
+    of 1: RE_THICK_LINK.matchEnd(src, q)
+    else: RE_DOTTED_LINK.matchEnd(src, q)
 
   proc edgeText(c: int, linkRe: int, a, b: int): bool =
     if c == 34:
@@ -717,10 +598,10 @@ proc tokenize*(src: string): Tokens =
       var e: int
       if c == 34:
         quote()
-      elif (e = reNodir(src, p); e >= 0):
+      elif (e = RE_NODIR.matchEnd(src, p); e >= 0):
         pop()
         emit(T_NODIR, p, e)
-      elif (e = reDir(src, p); e >= 0) or (e = reDirSym(src, p); e >= 0) or (e = reDirV(src, p); e >= 0):
+      elif (e = RE_DIR.matchEnd(src, p); e >= 0) or (e = RE_DIR_SYM.matchEnd(src, p); e >= 0) or (e = RE_DIR_V.matchEnd(src, p); e >= 0):
         pop()
         emit(T_DIR, p, e)
       else:
@@ -779,7 +660,7 @@ proc tokenize*(src: string): Tokens =
           let ch = c0(q)
           if ch == 34 or ch == 40 or ch == 41 or ch == 91 or ch == 93 or ch == 123 or ch == 125: break
           if (ch == 45 or ch == 47) and c0(q + 1) == 41: break
-          if (ch == 126 or isSpace(ch)) and invisAhead(q) and reInvis(src, q) >= 0: break
+          if (ch == 126 or isSpace(ch)) and invisAhead(q) and RE_INVIS_LINK.matchEnd(src, q) >= 0: break
           inc q
         emit(T_TEXT, p, q)
 
@@ -854,7 +735,7 @@ proc tokenize*(src: string): Tokens =
 
     of S_callbackname:
       if c == 40:
-        let e = reEmptyCall(src, p)
+        let e = RE_EMPTY_CALL.matchEnd(src, p)
         pop()
         if e >= 0:
           p = e
@@ -900,7 +781,7 @@ proc tokenize*(src: string): Tokens =
         var e = src.find('"', p)
         if e == -1: e = n
         types.add T_SHAPE_DATA
-        texts.add replaceBreaks(src[p ..< e])
+        texts.add src[p ..< e].replace(RE_BR, "<br/>")
         starts.add p
         p = e
     else: discard
