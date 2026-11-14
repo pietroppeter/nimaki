@@ -91,7 +91,7 @@ nitely's pure Nim `regex` package
 the package's syntax with JavaScript's meaning (`\s`, `\w`, `.`, `^` and `$` under `m`, the `i`
 flag), and a pattern it cannot translate faithfully stops the build. What it cannot change:
 JavaScript matches UTF-16 code units, so a `.` there can take half of an emoji, and here takes
-it whole (`docs/divergences.md`). A pattern that holds `"` is written `jsre"""/.../"""`, as
+it whole (`docs/divergences.md`). A pattern that holds `"` is written between triple quotes, as
 `\"` ends a raw string. A regex applied to one character (`/\s/.test(c)`) stays a test on the
 character. A hand-written scanner stays only where a regex cannot be faithful (a lone surrogate,
 a count in UTF-16 units), and says why in its comment.
