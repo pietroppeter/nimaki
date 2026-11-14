@@ -18,6 +18,7 @@ import devlog/railroad_diagrams
 import devlog/gantt_charts
 import devlog/diagrammari_as_a_corpus
 import devlog/diagrammari_at_work
+import devlog/following_pele
 import devlog/nimaki_in_javascript
 import devlog/drawn_in_your_browser
 import devlog/how_pele_is_built
