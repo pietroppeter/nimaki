@@ -1,0 +1,242 @@
+{
+  "about": "Pele's parse() against nimaki's, on corpus/cases.json, by tools/parsediff.nim. Do not edit by hand.",
+  "pin": "1.13.0",
+  "cases": 2118,
+  "same": 598,
+  "different": 1147,
+  "error": 373,
+  "unsupported": 0,
+  "types": [
+    {
+      "type": "agentflow",
+      "same": 0,
+      "different": 180,
+      "error": 58,
+      "unsupported": 0
+    },
+    {
+      "type": "architecture",
+      "same": 5,
+      "different": 15,
+      "error": 6,
+      "unsupported": 0
+    },
+    {
+      "type": "block",
+      "same": 0,
+      "different": 61,
+      "error": 10,
+      "unsupported": 0
+    },
+    {
+      "type": "c4",
+      "same": 0,
+      "different": 30,
+      "error": 26,
+      "unsupported": 0
+    },
+    {
+      "type": "class",
+      "same": 0,
+      "different": 77,
+      "error": 7,
+      "unsupported": 0
+    },
+    {
+      "type": "cynefin",
+      "same": 2,
+      "different": 17,
+      "error": 0,
+      "unsupported": 0
+    },
+    {
+      "type": "er",
+      "same": 99,
+      "different": 0,
+      "error": 43,
+      "unsupported": 0
+    },
+    {
+      "type": "eventmodeling",
+      "same": 0,
+      "different": 21,
+      "error": 3,
+      "unsupported": 0
+    },
+    {
+      "type": "flowchart",
+      "same": 327,
+      "different": 7,
+      "error": 49,
+      "unsupported": 0
+    },
+    {
+      "type": "gantt",
+      "same": 0,
+      "different": 22,
+      "error": 3,
+      "unsupported": 0
+    },
+    {
+      "type": "gitGraph",
+      "same": 3,
+      "different": 78,
+      "error": 13,
+      "unsupported": 0
+    },
+    {
+      "type": "info",
+      "same": 4,
+      "different": 0,
+      "error": 2,
+      "unsupported": 0
+    },
+    {
+      "type": "ishikawa",
+      "same": 0,
+      "different": 4,
+      "error": 0,
+      "unsupported": 0
+    },
+    {
+      "type": "journey",
+      "same": 4,
+      "different": 0,
+      "error": 0,
+      "unsupported": 0
+    },
+    {
+      "type": "kanban",
+      "same": 32,
+      "different": 0,
+      "error": 1,
+      "unsupported": 0
+    },
+    {
+      "type": "mindmap",
+      "same": 0,
+      "different": 37,
+      "error": 2,
+      "unsupported": 0
+    },
+    {
+      "type": "packet",
+      "same": 11,
+      "different": 0,
+      "error": 8,
+      "unsupported": 0
+    },
+    {
+      "type": "pie",
+      "same": 14,
+      "different": 0,
+      "error": 2,
+      "unsupported": 0
+    },
+    {
+      "type": "quadrantChart",
+      "same": 0,
+      "different": 34,
+      "error": 1,
+      "unsupported": 0
+    },
+    {
+      "type": "radar",
+      "same": 13,
+      "different": 0,
+      "error": 1,
+      "unsupported": 0
+    },
+    {
+      "type": "railroad",
+      "same": 1,
+      "different": 77,
+      "error": 13,
+      "unsupported": 0
+    },
+    {
+      "type": "requirement",
+      "same": 11,
+      "different": 0,
+      "error": 9,
+      "unsupported": 0
+    },
+    {
+      "type": "sankey",
+      "same": 0,
+      "different": 10,
+      "error": 4,
+      "unsupported": 0
+    },
+    {
+      "type": "sequence",
+      "same": 7,
+      "different": 172,
+      "error": 7,
+      "unsupported": 0
+    },
+    {
+      "type": "state",
+      "same": 2,
+      "different": 111,
+      "error": 6,
+      "unsupported": 0
+    },
+    {
+      "type": "swimlane",
+      "same": 14,
+      "different": 0,
+      "error": 0,
+      "unsupported": 0
+    },
+    {
+      "type": "timeline",
+      "same": 24,
+      "different": 0,
+      "error": 0,
+      "unsupported": 0
+    },
+    {
+      "type": "treeView",
+      "same": 24,
+      "different": 0,
+      "error": 0,
+      "unsupported": 0
+    },
+    {
+      "type": "treemap",
+      "same": 0,
+      "different": 8,
+      "error": 0,
+      "unsupported": 0
+    },
+    {
+      "type": "usecase",
+      "same": 0,
+      "different": 75,
+      "error": 76,
+      "unsupported": 0
+    },
+    {
+      "type": "venn",
+      "same": 0,
+      "different": 22,
+      "error": 3,
+      "unsupported": 0
+    },
+    {
+      "type": "wardley",
+      "same": 1,
+      "different": 38,
+      "error": 0,
+      "unsupported": 0
+    },
+    {
+      "type": "xychart",
+      "same": 0,
+      "different": 51,
+      "error": 20,
+      "unsupported": 0
+    }
+  ]
+}
