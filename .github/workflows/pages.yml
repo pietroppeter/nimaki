@@ -119,6 +119,7 @@ jobs:
           nim r tools/fuzz.nim treemap --cases:5000
           nim r tools/fuzz.nim treeView --cases:5000
           nim r tools/fuzz.nim xychart --cases:5000
+          nim r tools/fuzz.nim venn --cases:5000
           nim r tools/fuzz.nim mindmap --cases:5000
           nim r tools/fuzz.nim kanban --cases:5000
           nim r tools/fuzz.nim eventmodeling --cases:5000

@@ -109,7 +109,9 @@ with its own algorithm; Nim calls the C library. On 100,000 seeded inputs they d
 last bit 0.6% (`log10`) to 40% (`hypot`) of the time, and never after `num()`'s rounding, but a
 bit can still flip a comparison in a layout. Call them through one module of ours (`jsmath`), so
 a port of V8's versions can replace Nim's in one place when difftest finds a case. `sqrt` is exact
-in both.
+in both. Venn's layout, which iterates, found the cases: since then the C build computes `hypot`
+as V8 does, and `sin`, `cos`, `acos`, `atan`, `atan2` with a port of V8's fdlibm (`fdlibm.nim`),
+identical to Node on 200,000 inputs.
 """, nkWarning, "Math functions"
 
 nbNote """
