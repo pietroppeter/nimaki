@@ -1,19 +1,19 @@
 ## port-of: src/diagrams/sankey/parser.ts
 ## port-status: draft
 ##
-## Edits and error offsets are in bytes. Every regular expression is a scanner here, with the
-## pattern in its comment.
+## Edits and error offsets are in bytes.
 import std/[strutils, math]
 import ../../errors
 import ../../js
+import ../../jsregex
 import ../../text/entities
 import db, lexer
 
-func isLineBreak(c: int): bool = c == 10 or c == 13
+const RE_LINE_BREAKS = jsre"/[\n\r]+/g"
 
 func isInvalidXml(s: string): bool =
-  ## RE_INVALID_XML.test(s): /[\x00-\x08\x0b\x0c\x0e-\x1f\ud800-\udfff￾￿]/u. A byte
-  ## that is not valid UTF-8 counts as a lone surrogate.
+  ## RE_INVALID_XML.test(s): /[\x00-\x08\x0b\x0c\x0e-\x1f\ud800-\udfff\ufffe\uffff]/u. A
+  ## scanner, as it must see a lone surrogate: a byte that is not valid UTF-8 counts as one.
   var i = 0
   while i < s.len:
     let (c, size) = codePointAt(s, i)
@@ -80,25 +80,12 @@ func trimRows(text: string, edits: var seq[Edit]): string =
 proc prepare(text: string, steps: var seq[seq[Edit]], track: bool): string =
   var edits: seq[Edit]
   let rows = trimRows(text, edits)
-  # rows.replace(/[\n\r]+/g, '\n'), and the edits of that replacement
-  var collapsed = ""
-  var breaks: seq[Edit]
-  var i = 0
-  while i < rows.len:
-    if isLineBreak(ord(rows[i])):
-      var j = i
-      while j < rows.len and isLineBreak(ord(rows[j])): inc j
-      breaks.add (i, j, 1)
-      collapsed.add '\n'
-      i = j
-    else:
-      collapsed.add rows[i]
-      inc i
+  let collapsed = rows.replace(RE_LINE_BREAKS, "\n")
   result = jsTrim(collapsed)
   if track:
     let lead = collapsed.len - jsTrimStart(collapsed).len
     steps.add edits
-    steps.add breaks
+    steps.add replacements(rows, RE_LINE_BREAKS, 1)
     steps.add @[(0, lead, 0), (lead + result.len, collapsed.len, 0)]
 
 proc prepareTextForParsing*(text: string): string =

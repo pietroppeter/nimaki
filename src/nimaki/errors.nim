@@ -4,7 +4,7 @@
 ## Offsets here are byte offsets in UTF-8 text; `locate` turns the column into UTF-16 code units,
 ## as JavaScript counts it (decision 0011).
 import std/strutils
-import js
+import js, jsregex
 
 type
   PeleError* = object of CatchableError
@@ -36,6 +36,9 @@ proc newPeleError*(message, code, diagramType: string): ref PeleError =
 type
   Edit* = tuple[first, last, length: int]
     ## Input range [first, last) replaced by `length` output bytes (`[from, to, length]`).
+
+func replacements*(text: string, re: JsRegExp, length: int): seq[Edit] =
+  for m in re.matches(text): result.add (m.index, m.stop, length)
 
 func stepInput(edits: seq[Edit], at: int): int =
   var shift = 0

@@ -25,10 +25,6 @@ const
   RE_ATTR = jsre"""/="([^"]*)"/g"""
 const UNSAFE_KEYS = ["__proto__", "constructor", "prototype"].toHashSet
 
-func replacements(text: string, re: JsRegExp, length: int): seq[Edit] =
-  ## `replacements` of errors.ts: where each match is, and the length that replaces it.
-  for m in re.matches(text): result.add (m.index, m.stop, length)
-
 proc removeAll(text: string, re: JsRegExp, steps: Steps): string =
   if steps != nil: steps[].add replacements(text, re, 0)
   text.replace(re, "")

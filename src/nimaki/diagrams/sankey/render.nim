@@ -1,6 +1,6 @@
 ## port-of: src/diagrams/sankey/render.ts
 ## port-status: draft
-import std/[options, tables, strutils]
+import std/[options, tables]
 from std/math import ceil, floor, classify, FloatClass
 import ../../preprocess
 import ../../svg/[builder, root, theme]
@@ -10,6 +10,7 @@ import ../../js
 import ../../util/yaml
 import ../common/fit_width
 import db, layout
+import ../../jsregex
 
 const
   LABEL_GAP = 6.0
@@ -66,22 +67,6 @@ func rounded(value: float): float =
 proc fillStyle(color: YamlValue): string =
   ## A colour from the configuration, as an inline style that overrides the series colour.
   if color != nil and color.kind == yString: resolveStyle(@["fill:" & color.s]).shape else: ""
-
-func fillOf(style: string): (bool, string) =
-  ## /^ style="fill:(.*);"$/.exec(style)?.[1]
-  const head = " style=\"fill:"
-  const tail = ";\""
-  if not (style.startsWith(head) and style.endsWith(tail)) or style.len < head.len + tail.len: return (false, "")
-  let inner = style[head.len ..< style.len - tail.len]
-  if '\n' in inner or '\r' in inner or " " in inner or " " in inner: return (false, "")
-  (true, inner)
-
-func isIdPrefix(s: string): bool =
-  ## /^[\w-]+$/
-  if s.len == 0: return false
-  for c in s:
-    if not (c in {'a'..'z', 'A'..'Z', '0'..'9', '_', '-'}): return false
-  true
 
 proc draw(model: SankeyModel, conf: Config, options: RenderOptions, chartWidth, natural: float): Rendered
 
@@ -149,8 +134,8 @@ proc draw(model: SankeyModel, conf: Config, options: RenderOptions, chartWidth, 
   proc nodeStyle(i: int): string = custom.getOrDefault(model.nodes[i].id, "")
   # Match the whole fill to preserve semicolons in escaped entities.
   proc nodeColor(i: int): string =
-    let (found, fill) = fillOf(nodeStyle(i))
-    if found: fill else: seriesColor(i)
+    let m = jsre"""/^ style="fill:(.*);"$/""".exec(nodeStyle(i))
+    if m.found: m[1] else: seriesColor(i)
 
   # Labels sit beside the bars, on the side that faces the middle of the chart unless that
   # side is crowded.
@@ -246,7 +231,7 @@ proc draw(model: SankeyModel, conf: Config, options: RenderOptions, chartWidth, 
   # Without an idPrefix diagrams share gradient ids, and Chrome then uses a hidden or differently
   # themed copy's gradient. Other characters would end the url() and void the whole fill.
   let idPrefix = options.idPrefix.get("")
-  let gradient = linkColor == "gradient" and isIdPrefix(idPrefix)
+  let gradient = linkColor == "gradient" and jsre"/^[\w-]+$/".test(idPrefix)
   var gradients = initOrderedTable[string, string]()
   var linksOut = ""
   for link in links:
