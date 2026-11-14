@@ -182,9 +182,13 @@ information: in a function called once a character (`codePointAt`), set `result.
 instead. `x = move y` still copies into an existing `x`, and `pop` copies what it removes: a stack
 of long lists holds `ref object`s (`Statements` in `diagrams/block/parser.nim`). A list rebuilt
 at each mention of a state, `a = a & b`, is `a.add b`, and the fields of a value about to be
-dropped are taken with `move`. And a `HashSet[int]` hashes by
-multiplying 64-bit integers by hand: a small dense set is a `seq` of marks
-(`inheritCrossedDirections` in `layout/compound.nim`). Last, a compiler matter: Nim 2.2.4 appends a string to another with
+dropped are handed over with `moveField` of `js.nim`. Hashing was slow too: Nim's default hashes
+multiply 64-bit integers, which JavaScript does by hand, so `nim.cfg` picks murmur for strings and
+the number itself for integers, in both builds
+([decision 0017](../decisions/#0017-one-fast-hash-for-both-builds)); a small dense set of
+integers is still faster as a `seq` of marks (`inheritCrossedDirections` in
+`layout/compound.nim`). And a JavaScript built-in beats its port: `jsString`, Number::toString,
+calls the engine's `String(x)` in the JavaScript build. Last, a compiler matter: Nim 2.2.4 appends a string to another with
 `push.apply`, which overflows JavaScript's stack past about 100 KB; CI builds with 2.2.14
 ([decision 0015](../decisions/#0015-ci-builds-with-the-latest-nim-2-2-release)), which does not.
 """, nkWarning, "Code that JavaScript runs slowly"

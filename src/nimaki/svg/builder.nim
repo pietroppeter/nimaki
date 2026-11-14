@@ -10,15 +10,17 @@ func isInvalidXml(c: int): bool =
   (c >= 0 and c <= 8) or c == 0x0b or c == 0x0c or (c >= 0x0e and c <= 0x1f) or c == 0x7f or
     (c >= 0xd800 and c <= 0xdfff) or c == 0xfffe or c == 0xffff
 
-func invalidAt(s: string, i: int): (bool, int) =
+func invalidAt(s: string, i: int): tuple[bad: bool, size: int] =
   ## Whether an invalid XML character starts at byte i, and its length. A byte that is not
   ## valid UTF-8 counts as one (JavaScript strings cannot hold one; a lone surrogate is the
   ## nearest thing, and it is dropped). This stays a scanner (decision 0016): Pele's regexes
   ## find lone surrogates, which here are bytes that are not UTF-8, and no regex over code points
   ## can match those.
+  # The fields are set one by one: nim js copies a tuple literal through its type information,
+  # and this runs once a character of every text drawn.
   let (cp, size) = codePointAt(s, i)
-  if cp == 0xFFFD and not s.continuesWith("�", i): return (true, size)
-  (isInvalidXml(cp), size)
+  result.size = size
+  result.bad = (cp == 0xFFFD and not s.continuesWith("�", i)) or isInvalidXml(cp)
 
 func hasInvalidXml*(text: string): bool =
   ## RE_INVALID_XML.test(text). Removing these characters in esc() can make validated values
@@ -40,10 +42,14 @@ func esc*(text: string): string =
     of '>': result.add "&gt;"
     of '"': result.add "&quot;"
     else:
-      let (bad, size) = invalidAt(text, i)
-      if not bad: result.add text[i ..< i + size]
-      i += size
-      continue
+      if c >= ' ' and c < '\x7f':
+        result.add c
+      else:
+        let (bad, size) = invalidAt(text, i)
+        if not bad:
+          for k in i ..< i + size: result.add text[k]
+        i += size
+        continue
     inc i
 
 proc escText*(text: string): string =

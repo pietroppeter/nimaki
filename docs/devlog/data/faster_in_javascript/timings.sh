@@ -14,7 +14,7 @@ while IFS='	' read -r key file name; do
   TZ=UTC NIMAKI_SHIM="$repo/tools/peletests/index.mjs" NIMAKI_SETUP="$repo/tools/peletests/setup.mjs" \
     NIMAKI_BRIDGE="$bridge" npx vitest run -c vitest.nimaki.config.mjs "$file" -t "$name" \
     --reporter=json --outputFile="$report" > /dev/null 2>&1
-  row=$(node -e "const j = require('$report');
+  row=$(node -e "const j = JSON.parse(require('fs').readFileSync('$report', 'utf8'));
     for (const f of j.testResults) for (const a of f.assertionResults)
       if (a.status !== 'skipped') { console.log(JSON.stringify({ file: '$file', test: a.fullName,
         ms: Math.round(a.duration), status: a.status })); process.exit(); }")

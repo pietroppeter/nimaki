@@ -1,0 +1,9 @@
+clsns	tests/class/stress.test.ts	2,000 nested namespaces, rendered
+clspart	tests/class/stress.test.ts	namespace name of 3,000 parts, rendered
+classdef	tests/class/stress.test.ts	1,600 classDefs applied to 1,600 classes
+classdef5	tests/class/stress.test.ts	a classDef of 5,000 declarations on 800 classes, each with a style of its own
+gexcl	tests/gantt/stress.test.ts	12,000 excluded dates over long tasks
+gcustom	tests/gantt/stress.test.ts	a custom format checked for every excluded day
+gfmt	tests/gantt/stress.test.ts	a date format of 25,000 tokens
+stcls	tests/state/stress.test.ts	the same class statement and transitions 1,500 times
+venn300	tests/venn/stress.test.ts	one union of 300 sets
