@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/c4/tokens.ts
-## port-status: draft
+## port-status: conformant
 
 const
   T_STOP* = 0

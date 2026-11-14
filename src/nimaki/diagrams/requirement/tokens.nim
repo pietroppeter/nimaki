@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/requirement/tokens.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## `const enum T` is `T_name` constants (the porting guide's names table).
 import std/tables

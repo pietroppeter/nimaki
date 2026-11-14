@@ -1,5 +1,5 @@
 ## port-of: src/svg/ink.ts
-## port-status: draft
+## port-status: conformant
 import std/[strutils, sets, tables]
 from std/math import PI, isNaN, `mod`
 import ../jsmath

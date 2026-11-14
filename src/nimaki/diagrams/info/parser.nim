@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/info/parser.ts
-## port-status: draft
+## port-status: conformant
 import ../common/tokens
 
 const

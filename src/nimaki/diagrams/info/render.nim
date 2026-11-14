@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/info/render.ts
-## port-status: draft
+## port-status: conformant
 import std/options
 from std/math import ceil
 import ../../preprocess

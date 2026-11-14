@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/common/outline.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## The indented outline grammar that Mermaid's mindmap and kanban diagrams share.
 ## Kanban adds `@{ ... }` metadata after a node and keeps `@` out of node ids.

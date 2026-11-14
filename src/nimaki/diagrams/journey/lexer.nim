@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/journey/lexer.ts
-## port-status: draft
+## port-status: conformant
 import ../../util/chars
 import ../common/scan
 

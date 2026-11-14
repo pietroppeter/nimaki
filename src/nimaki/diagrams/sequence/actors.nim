@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/sequence/actors.ts
-## port-status: draft
+## port-status: conformant
 import std/sets
 import ../../js
 import ../../svg/[builder, theme]

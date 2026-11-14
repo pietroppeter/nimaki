@@ -1,5 +1,5 @@
 ## port-of: src/svg/title.ts
-## port-status: draft
+## port-status: conformant
 import std/math
 import ../text/[label, measurer]
 import ../text/math as pmath

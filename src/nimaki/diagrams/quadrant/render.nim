@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/quadrant/render.ts
-## port-status: draft
+## port-status: conformant
 import std/[options, tables, strutils, algorithm]
 from std/math import classify, FloatClass
 import ../../preprocess

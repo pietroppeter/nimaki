@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/architecture/parser.ts
-## port-status: draft
+## port-status: conformant
 import std/[strutils, options]
 import ../../js
 import ../common/tokens

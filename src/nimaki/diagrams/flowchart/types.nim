@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/flowchart/types.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## A field that may be `undefined` and is never `""` when set is a `string` with `""` for
 ## undefined; a number that may be undefined is NaN, or `NO_LENGTH` for an edge's length.

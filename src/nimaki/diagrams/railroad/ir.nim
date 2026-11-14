@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/railroad/ir.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## `railroad-beta`: Mermaid's own notation, one constructor call per node.
 import common, types

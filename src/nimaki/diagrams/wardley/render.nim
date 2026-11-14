@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/wardley/render.ts
-## port-status: draft
+## port-status: conformant
 import std/[options, tables, sets, algorithm]
 from std/math import ceil, PI
 import ../../preprocess

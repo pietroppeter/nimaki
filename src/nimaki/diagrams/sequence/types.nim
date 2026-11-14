@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/sequence/types.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## `const enum LINETYPE` and `PLACEMENT` are `LINETYPE_name` and `PLACEMENT_name` constants. A
 ## message kind that is `undefined` is `NO_TYPE`. The statement list Mermaid's grammar builds

@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/er/types.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## `type` is `kind` (the porting guide's names table). Cardinality and Identification stay
 ## strings, as Pele's string unions are.

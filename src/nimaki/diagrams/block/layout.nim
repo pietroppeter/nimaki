@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/block/layout.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Pele's gap lists can have holes (`gaps[at] = ...` past the end), read as 0: here a hole is NaN.
 import std/math

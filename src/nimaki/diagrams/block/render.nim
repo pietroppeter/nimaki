@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/block/render.ts
-## port-status: draft
+## port-status: conformant
 import std/[options, strutils, tables, sets]
 from std/math import ceil, floor, isNaN, PI, `mod`
 import ../../preprocess

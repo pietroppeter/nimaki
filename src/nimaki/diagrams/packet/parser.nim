@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/packet/parser.ts
-## port-status: draft
+## port-status: conformant
 import std/options
 import ../common/tokens
 import ../../js

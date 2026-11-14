@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/treeview/index.ts
-## port-status: draft
+## port-status: conformant
 import ../../types
 import ../../preprocess
 import model, render

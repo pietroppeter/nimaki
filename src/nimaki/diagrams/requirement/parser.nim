@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/requirement/parser.ts
-## port-status: draft
+## port-status: conformant
 import std/strutils
 import ../../errors
 import ../../js

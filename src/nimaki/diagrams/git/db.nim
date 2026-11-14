@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/git/db.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Port notes: Pele's `GitDbParseProvider` (the calls Mermaid's parser makes on its database) is
 ## a set of closures in `buildGit`, called directly. A branch head that is `null` is "" (a commit

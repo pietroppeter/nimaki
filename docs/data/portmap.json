@@ -7,16 +7,16 @@
       "code": 1185
     },
     "draft": {
-      "files": 248,
-      "code": 46409
+      "files": 22,
+      "code": 4718
     },
     "verified": {
       "files": 0,
       "code": 0
     },
     "conformant": {
-      "files": 0,
-      "code": 0
+      "files": 226,
+      "code": 41691
     },
     "skip": {
       "files": 0,
@@ -27,41 +27,41 @@
     {
       "component": "api",
       "todo": 958,
-      "draft": 607,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 607,
       "skip": 0
     },
     {
       "component": "diagrams/agentflow",
       "todo": 23,
-      "draft": 3442,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 3442,
       "skip": 0
     },
     {
       "component": "diagrams/architecture",
       "todo": 0,
-      "draft": 1247,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 1247,
       "skip": 0
     },
     {
       "component": "diagrams/block",
       "todo": 39,
-      "draft": 1918,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 1918,
       "skip": 0
     },
     {
       "component": "diagrams/c4",
       "todo": 63,
-      "draft": 1825,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 1825,
       "skip": 0
     },
     {
@@ -75,41 +75,41 @@
     {
       "component": "diagrams/common",
       "todo": 0,
-      "draft": 896,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 896,
       "skip": 0
     },
     {
       "component": "diagrams/cynefin",
       "todo": 0,
-      "draft": 539,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 539,
       "skip": 0
     },
     {
       "component": "diagrams/er",
       "todo": 0,
-      "draft": 1660,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 1660,
       "skip": 0
     },
     {
       "component": "diagrams/eventmodeling",
       "todo": 0,
-      "draft": 720,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 720,
       "skip": 0
     },
     {
       "component": "diagrams/flowchart",
       "todo": 0,
-      "draft": 2863,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 2863,
       "skip": 0
     },
     {
@@ -123,89 +123,89 @@
     {
       "component": "diagrams/git",
       "todo": 0,
-      "draft": 826,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 826,
       "skip": 0
     },
     {
       "component": "diagrams/info",
       "todo": 0,
-      "draft": 108,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 108,
       "skip": 0
     },
     {
       "component": "diagrams/ishikawa",
       "todo": 0,
-      "draft": 419,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 419,
       "skip": 0
     },
     {
       "component": "diagrams/journey",
       "todo": 0,
-      "draft": 467,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 467,
       "skip": 0
     },
     {
       "component": "diagrams/kanban",
       "todo": 0,
-      "draft": 366,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 366,
       "skip": 0
     },
     {
       "component": "diagrams/mindmap",
       "todo": 0,
-      "draft": 336,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 336,
       "skip": 0
     },
     {
       "component": "diagrams/packet",
       "todo": 0,
-      "draft": 328,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 328,
       "skip": 0
     },
     {
       "component": "diagrams/pie",
       "todo": 0,
-      "draft": 328,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 328,
       "skip": 0
     },
     {
       "component": "diagrams/quadrant",
       "todo": 0,
-      "draft": 876,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 876,
       "skip": 0
     },
     {
       "component": "diagrams/radar",
       "todo": 0,
-      "draft": 500,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 500,
       "skip": 0
     },
     {
       "component": "diagrams/railroad",
       "todo": 0,
-      "draft": 1491,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 1491,
       "skip": 0
     },
     {
@@ -219,97 +219,97 @@
     {
       "component": "diagrams/requirement",
       "todo": 0,
-      "draft": 1294,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 1294,
       "skip": 0
     },
     {
       "component": "diagrams/sankey",
       "todo": 0,
-      "draft": 786,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 786,
       "skip": 0
     },
     {
       "component": "diagrams/sequence",
       "todo": 0,
-      "draft": 2611,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 2611,
       "skip": 0
     },
     {
       "component": "diagrams/state",
       "todo": 0,
-      "draft": 2097,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 2097,
       "skip": 0
     },
     {
       "component": "diagrams/swimlane",
       "todo": 0,
-      "draft": 69,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 69,
       "skip": 0
     },
     {
       "component": "diagrams/timeline",
       "todo": 0,
-      "draft": 475,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 475,
       "skip": 0
     },
     {
       "component": "diagrams/treemap",
       "todo": 0,
-      "draft": 504,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 504,
       "skip": 0
     },
     {
       "component": "diagrams/treeview",
       "todo": 0,
-      "draft": 582,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 582,
       "skip": 0
     },
     {
       "component": "diagrams/usecase",
       "todo": 0,
-      "draft": 2821,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 2821,
       "skip": 0
     },
     {
       "component": "diagrams/venn",
       "todo": 0,
-      "draft": 909,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 909,
       "skip": 0
     },
     {
       "component": "diagrams/wardley",
       "todo": 0,
-      "draft": 1092,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 1092,
       "skip": 0
     },
     {
       "component": "diagrams/xychart",
       "todo": 0,
-      "draft": 953,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 953,
       "skip": 0
     },
     {
@@ -323,33 +323,33 @@
     {
       "component": "layout",
       "todo": 0,
-      "draft": 3386,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 3386,
       "skip": 0
     },
     {
       "component": "svg",
       "todo": 0,
-      "draft": 1751,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 1751,
       "skip": 0
     },
     {
       "component": "text",
       "todo": 0,
-      "draft": 675,
+      "draft": 136,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 539,
       "skip": 0
     },
     {
       "component": "util",
       "todo": 0,
-      "draft": 592,
+      "draft": 532,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 60,
       "skip": 0
     }
   ],
@@ -359,7 +359,7 @@
       "component": "api",
       "lines": 196,
       "code": 160,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/core.nim"
       ]
@@ -369,7 +369,7 @@
       "component": "api",
       "lines": 93,
       "code": 85,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/detect.nim"
       ]
@@ -379,7 +379,7 @@
       "component": "diagrams/agentflow",
       "lines": 51,
       "code": 38,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/agentflow/colorSlots.nim"
       ]
@@ -389,7 +389,7 @@
       "component": "diagrams/agentflow",
       "lines": 828,
       "code": 736,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/agentflow/db.nim"
       ]
@@ -407,7 +407,7 @@
       "component": "diagrams/agentflow",
       "lines": 264,
       "code": 234,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/agentflow/graph.nim"
       ]
@@ -417,7 +417,7 @@
       "component": "diagrams/agentflow",
       "lines": 27,
       "code": 24,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/agentflow/index.nim"
       ]
@@ -427,7 +427,7 @@
       "component": "diagrams/agentflow",
       "lines": 1016,
       "code": 962,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/agentflow/lexer.nim"
       ]
@@ -437,7 +437,7 @@
       "component": "diagrams/agentflow",
       "lines": 703,
       "code": 658,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/agentflow/parser.nim"
       ]
@@ -447,7 +447,7 @@
       "component": "diagrams/agentflow",
       "lines": 417,
       "code": 375,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/agentflow/render.nim"
       ]
@@ -457,7 +457,7 @@
       "component": "diagrams/agentflow",
       "lines": 101,
       "code": 88,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/agentflow/shapes.nim"
       ]
@@ -467,7 +467,7 @@
       "component": "diagrams/agentflow",
       "lines": 166,
       "code": 164,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/agentflow/tokens.nim"
       ]
@@ -477,7 +477,7 @@
       "component": "diagrams/agentflow",
       "lines": 190,
       "code": 163,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/agentflow/types.nim"
       ]
@@ -487,7 +487,7 @@
       "component": "diagrams/architecture",
       "lines": 148,
       "code": 129,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/architecture/db.nim"
       ]
@@ -497,7 +497,7 @@
       "component": "diagrams/architecture",
       "lines": 15,
       "code": 11,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/architecture/icons.nim"
       ]
@@ -507,7 +507,7 @@
       "component": "diagrams/architecture",
       "lines": 16,
       "code": 14,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/architecture/index.nim"
       ]
@@ -517,7 +517,7 @@
       "component": "diagrams/architecture",
       "lines": 380,
       "code": 339,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/architecture/layout.nim"
       ]
@@ -527,7 +527,7 @@
       "component": "diagrams/architecture",
       "lines": 241,
       "code": 222,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/architecture/parser.nim"
       ]
@@ -537,7 +537,7 @@
       "component": "diagrams/architecture",
       "lines": 575,
       "code": 532,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/architecture/render.nim"
       ]
@@ -547,7 +547,7 @@
       "component": "diagrams/block",
       "lines": 128,
       "code": 114,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/block/arrows.nim"
       ]
@@ -557,7 +557,7 @@
       "component": "diagrams/block",
       "lines": 247,
       "code": 218,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/block/db.nim"
       ]
@@ -567,7 +567,7 @@
       "component": "diagrams/block",
       "lines": 17,
       "code": 15,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/block/index.nim"
       ]
@@ -577,7 +577,7 @@
       "component": "diagrams/block",
       "lines": 141,
       "code": 121,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/block/layout.nim"
       ]
@@ -587,7 +587,7 @@
       "component": "diagrams/block",
       "lines": 506,
       "code": 465,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/block/lexer.nim"
       ]
@@ -597,7 +597,7 @@
       "component": "diagrams/block",
       "lines": 189,
       "code": 174,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/block/parser.nim"
       ]
@@ -607,7 +607,7 @@
       "component": "diagrams/block",
       "lines": 801,
       "code": 731,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/block/render.nim"
       ]
@@ -617,7 +617,7 @@
       "component": "diagrams/block",
       "lines": 82,
       "code": 80,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/block/tokens.nim"
       ]
@@ -635,7 +635,7 @@
       "component": "diagrams/c4",
       "lines": 247,
       "code": 205,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/c4/db.nim"
       ]
@@ -645,7 +645,7 @@
       "component": "diagrams/c4",
       "lines": 16,
       "code": 14,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/c4/index.nim"
       ]
@@ -655,7 +655,7 @@
       "component": "diagrams/c4",
       "lines": 220,
       "code": 195,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/c4/layout.nim"
       ]
@@ -665,7 +665,7 @@
       "component": "diagrams/c4",
       "lines": 342,
       "code": 311,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/c4/lexer.nim"
       ]
@@ -675,7 +675,7 @@
       "component": "diagrams/c4",
       "lines": 205,
       "code": 183,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/c4/parser.nim"
       ]
@@ -685,7 +685,7 @@
       "component": "diagrams/c4",
       "lines": 311,
       "code": 283,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/c4/render.nim"
       ]
@@ -695,7 +695,7 @@
       "component": "diagrams/c4",
       "lines": 567,
       "code": 500,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/c4/route.nim"
       ]
@@ -705,7 +705,7 @@
       "component": "diagrams/c4",
       "lines": 136,
       "code": 134,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/c4/tokens.nim"
       ]
@@ -823,7 +823,7 @@
       "component": "diagrams/common",
       "lines": 27,
       "code": 19,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/common/acc_descr.nim"
       ]
@@ -833,7 +833,7 @@
       "component": "diagrams/common",
       "lines": 11,
       "code": 8,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/common/caseless.nim"
       ]
@@ -843,7 +843,7 @@
       "component": "diagrams/common",
       "lines": 44,
       "code": 36,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/common/fit_text.nim"
       ]
@@ -853,7 +853,7 @@
       "component": "diagrams/common",
       "lines": 67,
       "code": 48,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/common/fit_width.nim"
       ]
@@ -863,7 +863,7 @@
       "component": "diagrams/common",
       "lines": 53,
       "code": 45,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/common/fit.nim"
       ]
@@ -873,7 +873,7 @@
       "component": "diagrams/common",
       "lines": 38,
       "code": 33,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/common/generics.nim"
       ]
@@ -883,7 +883,7 @@
       "component": "diagrams/common",
       "lines": 11,
       "code": 8,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/common/icon.nim"
       ]
@@ -893,7 +893,7 @@
       "component": "diagrams/common",
       "lines": 102,
       "code": 92,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/common/literal_label.nim"
       ]
@@ -903,7 +903,7 @@
       "component": "diagrams/common",
       "lines": 340,
       "code": 309,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/common/outline.nim"
       ]
@@ -913,7 +913,7 @@
       "component": "diagrams/common",
       "lines": 86,
       "code": 70,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/common/scan.nim"
       ]
@@ -923,7 +923,7 @@
       "component": "diagrams/common",
       "lines": 277,
       "code": 228,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/common/tokens.nim"
       ]
@@ -933,7 +933,7 @@
       "component": "diagrams/cynefin",
       "lines": 101,
       "code": 77,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/cynefin/boundaries.nim"
       ]
@@ -943,7 +943,7 @@
       "component": "diagrams/cynefin",
       "lines": 11,
       "code": 9,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/cynefin/index.nim"
       ]
@@ -953,7 +953,7 @@
       "component": "diagrams/cynefin",
       "lines": 75,
       "code": 61,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/cynefin/model.nim"
       ]
@@ -963,7 +963,7 @@
       "component": "diagrams/cynefin",
       "lines": 132,
       "code": 122,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/cynefin/parser.nim"
       ]
@@ -973,7 +973,7 @@
       "component": "diagrams/cynefin",
       "lines": 300,
       "code": 270,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/cynefin/render.nim"
       ]
@@ -983,7 +983,7 @@
       "component": "diagrams/er",
       "lines": 142,
       "code": 127,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/er/db.nim"
       ]
@@ -993,7 +993,7 @@
       "component": "diagrams/er",
       "lines": 114,
       "code": 98,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/er/graph.nim"
       ]
@@ -1003,7 +1003,7 @@
       "component": "diagrams/er",
       "lines": 17,
       "code": 15,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/er/index.nim"
       ]
@@ -1013,7 +1013,7 @@
       "component": "diagrams/er",
       "lines": 472,
       "code": 442,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/er/lexer.nim"
       ]
@@ -1023,7 +1023,7 @@
       "component": "diagrams/er",
       "lines": 36,
       "code": 28,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/er/markers.nim"
       ]
@@ -1033,7 +1033,7 @@
       "component": "diagrams/er",
       "lines": 297,
       "code": 270,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/er/parser.nim"
       ]
@@ -1043,7 +1043,7 @@
       "component": "diagrams/er",
       "lines": 583,
       "code": 525,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/er/render.nim"
       ]
@@ -1053,7 +1053,7 @@
       "component": "diagrams/er",
       "lines": 99,
       "code": 96,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/er/tokens.nim"
       ]
@@ -1063,7 +1063,7 @@
       "component": "diagrams/er",
       "lines": 72,
       "code": 59,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/er/types.nim"
       ]
@@ -1073,7 +1073,7 @@
       "component": "diagrams/eventmodeling",
       "lines": 12,
       "code": 10,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/eventmodeling/index.nim"
       ]
@@ -1083,7 +1083,7 @@
       "component": "diagrams/eventmodeling",
       "lines": 196,
       "code": 167,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/eventmodeling/model.nim"
       ]
@@ -1093,7 +1093,7 @@
       "component": "diagrams/eventmodeling",
       "lines": 230,
       "code": 210,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/eventmodeling/parser.nim"
       ]
@@ -1103,7 +1103,7 @@
       "component": "diagrams/eventmodeling",
       "lines": 368,
       "code": 333,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/eventmodeling/render.nim"
       ]
@@ -1113,7 +1113,7 @@
       "component": "diagrams/flowchart",
       "lines": 459,
       "code": 416,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/flowchart/db.nim"
       ]
@@ -1123,7 +1123,7 @@
       "component": "diagrams/flowchart",
       "lines": 272,
       "code": 251,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/flowchart/graph.nim"
       ]
@@ -1133,7 +1133,7 @@
       "component": "diagrams/flowchart",
       "lines": 19,
       "code": 17,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/flowchart/index.nim"
       ]
@@ -1143,7 +1143,7 @@
       "component": "diagrams/flowchart",
       "lines": 956,
       "code": 912,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/flowchart/lexer.nim"
       ]
@@ -1153,7 +1153,7 @@
       "component": "diagrams/flowchart",
       "lines": 624,
       "code": 588,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/flowchart/parser.nim"
       ]
@@ -1163,7 +1163,7 @@
       "component": "diagrams/flowchart",
       "lines": 372,
       "code": 343,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/flowchart/render.nim"
       ]
@@ -1173,7 +1173,7 @@
       "component": "diagrams/flowchart",
       "lines": 110,
       "code": 101,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/flowchart/shapes.nim"
       ]
@@ -1183,7 +1183,7 @@
       "component": "diagrams/flowchart",
       "lines": 160,
       "code": 158,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/flowchart/tokens.nim"
       ]
@@ -1193,7 +1193,7 @@
       "component": "diagrams/flowchart",
       "lines": 87,
       "code": 77,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/flowchart/types.nim"
       ]
@@ -1293,7 +1293,7 @@
       "component": "diagrams/git",
       "lines": 272,
       "code": 238,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/git/db.nim"
       ]
@@ -1303,7 +1303,7 @@
       "component": "diagrams/git",
       "lines": 11,
       "code": 9,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/git/index.nim"
       ]
@@ -1313,7 +1313,7 @@
       "component": "diagrams/git",
       "lines": 257,
       "code": 236,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/git/parser.nim"
       ]
@@ -1323,7 +1323,7 @@
       "component": "diagrams/git",
       "lines": 387,
       "code": 343,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/git/render.nim"
       ]
@@ -1333,7 +1333,7 @@
       "component": "diagrams/info",
       "lines": 11,
       "code": 9,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/info/index.nim"
       ]
@@ -1343,7 +1343,7 @@
       "component": "diagrams/info",
       "lines": 18,
       "code": 15,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/info/model.nim"
       ]
@@ -1353,7 +1353,7 @@
       "component": "diagrams/info",
       "lines": 68,
       "code": 62,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/info/parser.nim"
       ]
@@ -1363,7 +1363,7 @@
       "component": "diagrams/info",
       "lines": 28,
       "code": 22,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/info/render.nim"
       ]
@@ -1373,7 +1373,7 @@
       "component": "diagrams/ishikawa",
       "lines": 28,
       "code": 22,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/ishikawa/db.nim"
       ]
@@ -1383,7 +1383,7 @@
       "component": "diagrams/ishikawa",
       "lines": 16,
       "code": 14,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/ishikawa/index.nim"
       ]
@@ -1393,7 +1393,7 @@
       "component": "diagrams/ishikawa",
       "lines": 93,
       "code": 81,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/ishikawa/lexer.nim"
       ]
@@ -1403,7 +1403,7 @@
       "component": "diagrams/ishikawa",
       "lines": 45,
       "code": 35,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/ishikawa/parser.nim"
       ]
@@ -1413,7 +1413,7 @@
       "component": "diagrams/ishikawa",
       "lines": 293,
       "code": 258,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/ishikawa/render.nim"
       ]
@@ -1423,7 +1423,7 @@
       "component": "diagrams/ishikawa",
       "lines": 12,
       "code": 9,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/ishikawa/types.nim"
       ]
@@ -1433,7 +1433,7 @@
       "component": "diagrams/journey",
       "lines": 64,
       "code": 49,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/journey/db.nim"
       ]
@@ -1443,7 +1443,7 @@
       "component": "diagrams/journey",
       "lines": 16,
       "code": 14,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/journey/index.nim"
       ]
@@ -1453,7 +1453,7 @@
       "component": "diagrams/journey",
       "lines": 126,
       "code": 113,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/journey/lexer.nim"
       ]
@@ -1463,7 +1463,7 @@
       "component": "diagrams/journey",
       "lines": 49,
       "code": 43,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/journey/parser.nim"
       ]
@@ -1473,7 +1473,7 @@
       "component": "diagrams/journey",
       "lines": 271,
       "code": 248,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/journey/render.nim"
       ]
@@ -1483,7 +1483,7 @@
       "component": "diagrams/kanban",
       "lines": 90,
       "code": 77,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/kanban/db.nim"
       ]
@@ -1493,7 +1493,7 @@
       "component": "diagrams/kanban",
       "lines": 17,
       "code": 15,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/kanban/index.nim"
       ]
@@ -1503,7 +1503,7 @@
       "component": "diagrams/kanban",
       "lines": 10,
       "code": 7,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/kanban/parser.nim"
       ]
@@ -1513,7 +1513,7 @@
       "component": "diagrams/kanban",
       "lines": 293,
       "code": 267,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/kanban/render.nim"
       ]
@@ -1523,7 +1523,7 @@
       "component": "diagrams/mindmap",
       "lines": 70,
       "code": 56,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/mindmap/db.nim"
       ]
@@ -1533,7 +1533,7 @@
       "component": "diagrams/mindmap",
       "lines": 17,
       "code": 15,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/mindmap/index.nim"
       ]
@@ -1543,7 +1543,7 @@
       "component": "diagrams/mindmap",
       "lines": 10,
       "code": 7,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/mindmap/parser.nim"
       ]
@@ -1553,7 +1553,7 @@
       "component": "diagrams/mindmap",
       "lines": 305,
       "code": 258,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/mindmap/render.nim"
       ]
@@ -1563,7 +1563,7 @@
       "component": "diagrams/packet",
       "lines": 11,
       "code": 9,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/packet/index.nim"
       ]
@@ -1573,7 +1573,7 @@
       "component": "diagrams/packet",
       "lines": 86,
       "code": 75,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/packet/model.nim"
       ]
@@ -1583,7 +1583,7 @@
       "component": "diagrams/packet",
       "lines": 120,
       "code": 111,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/packet/parser.nim"
       ]
@@ -1593,7 +1593,7 @@
       "component": "diagrams/packet",
       "lines": 149,
       "code": 133,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/packet/render.nim"
       ]
@@ -1603,7 +1603,7 @@
       "component": "diagrams/pie",
       "lines": 11,
       "code": 9,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/pie/index.nim"
       ]
@@ -1613,7 +1613,7 @@
       "component": "diagrams/pie",
       "lines": 34,
       "code": 31,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/pie/model.nim"
       ]
@@ -1623,7 +1623,7 @@
       "component": "diagrams/pie",
       "lines": 136,
       "code": 125,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/pie/parser.nim"
       ]
@@ -1633,7 +1633,7 @@
       "component": "diagrams/pie",
       "lines": 183,
       "code": 163,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/pie/render.nim"
       ]
@@ -1643,7 +1643,7 @@
       "component": "diagrams/quadrant",
       "lines": 149,
       "code": 123,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/quadrant/db.nim"
       ]
@@ -1653,7 +1653,7 @@
       "component": "diagrams/quadrant",
       "lines": 16,
       "code": 14,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/quadrant/index.nim"
       ]
@@ -1663,7 +1663,7 @@
       "component": "diagrams/quadrant",
       "lines": 362,
       "code": 333,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/quadrant/lexer.nim"
       ]
@@ -1673,7 +1673,7 @@
       "component": "diagrams/quadrant",
       "lines": 142,
       "code": 130,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/quadrant/parser.nim"
       ]
@@ -1683,7 +1683,7 @@
       "component": "diagrams/quadrant",
       "lines": 221,
       "code": 188,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/quadrant/render.nim"
       ]
@@ -1693,7 +1693,7 @@
       "component": "diagrams/quadrant",
       "lines": 90,
       "code": 88,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/quadrant/tokens.nim"
       ]
@@ -1703,7 +1703,7 @@
       "component": "diagrams/radar",
       "lines": 11,
       "code": 9,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/radar/index.nim"
       ]
@@ -1713,7 +1713,7 @@
       "component": "diagrams/radar",
       "lines": 79,
       "code": 68,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/radar/model.nim"
       ]
@@ -1723,7 +1723,7 @@
       "component": "diagrams/radar",
       "lines": 298,
       "code": 265,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/radar/parser.nim"
       ]
@@ -1733,7 +1733,7 @@
       "component": "diagrams/radar",
       "lines": 184,
       "code": 158,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/radar/render.nim"
       ]
@@ -1743,7 +1743,7 @@
       "component": "diagrams/railroad",
       "lines": 212,
       "code": 190,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/railroad/abnf.nim"
       ]
@@ -1753,7 +1753,7 @@
       "component": "diagrams/railroad",
       "lines": 215,
       "code": 178,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/railroad/common.nim"
       ]
@@ -1763,7 +1763,7 @@
       "component": "diagrams/railroad",
       "lines": 95,
       "code": 79,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/railroad/db.nim"
       ]
@@ -1773,7 +1773,7 @@
       "component": "diagrams/railroad",
       "lines": 275,
       "code": 248,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/railroad/ebnf.nim"
       ]
@@ -1783,7 +1783,7 @@
       "component": "diagrams/railroad",
       "lines": 10,
       "code": 8,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/railroad/index.nim"
       ]
@@ -1793,7 +1793,7 @@
       "component": "diagrams/railroad",
       "lines": 188,
       "code": 173,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/railroad/ir.nim"
       ]
@@ -1803,7 +1803,7 @@
       "component": "diagrams/railroad",
       "lines": 224,
       "code": 200,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/railroad/peg.nim"
       ]
@@ -1813,7 +1813,7 @@
       "component": "diagrams/railroad",
       "lines": 430,
       "code": 394,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/railroad/render.nim"
       ]
@@ -1823,7 +1823,7 @@
       "component": "diagrams/railroad",
       "lines": 28,
       "code": 21,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/railroad/types.nim"
       ]
@@ -1841,7 +1841,7 @@
       "component": "diagrams/requirement",
       "lines": 181,
       "code": 152,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/requirement/db.nim"
       ]
@@ -1851,7 +1851,7 @@
       "component": "diagrams/requirement",
       "lines": 57,
       "code": 51,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/requirement/graph.nim"
       ]
@@ -1861,7 +1861,7 @@
       "component": "diagrams/requirement",
       "lines": 17,
       "code": 15,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/requirement/index.nim"
       ]
@@ -1871,7 +1871,7 @@
       "component": "diagrams/requirement",
       "lines": 310,
       "code": 288,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/requirement/lexer.nim"
       ]
@@ -1881,7 +1881,7 @@
       "component": "diagrams/requirement",
       "lines": 260,
       "code": 240,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/requirement/parser.nim"
       ]
@@ -1891,7 +1891,7 @@
       "component": "diagrams/requirement",
       "lines": 383,
       "code": 351,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/requirement/render.nim"
       ]
@@ -1901,7 +1901,7 @@
       "component": "diagrams/requirement",
       "lines": 163,
       "code": 159,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/requirement/tokens.nim"
       ]
@@ -1911,7 +1911,7 @@
       "component": "diagrams/requirement",
       "lines": 43,
       "code": 38,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/requirement/types.nim"
       ]
@@ -1921,7 +1921,7 @@
       "component": "diagrams/sankey",
       "lines": 45,
       "code": 38,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/sankey/db.nim"
       ]
@@ -1931,7 +1931,7 @@
       "component": "diagrams/sankey",
       "lines": 16,
       "code": 14,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/sankey/index.nim"
       ]
@@ -1941,7 +1941,7 @@
       "component": "diagrams/sankey",
       "lines": 303,
       "code": 266,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/sankey/layout.nim"
       ]
@@ -1951,7 +1951,7 @@
       "component": "diagrams/sankey",
       "lines": 127,
       "code": 114,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/sankey/lexer.nim"
       ]
@@ -1961,7 +1961,7 @@
       "component": "diagrams/sankey",
       "lines": 143,
       "code": 125,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/sankey/parser.nim"
       ]
@@ -1971,7 +1971,7 @@
       "component": "diagrams/sankey",
       "lines": 263,
       "code": 229,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/sankey/render.nim"
       ]
@@ -1981,7 +1981,7 @@
       "component": "diagrams/sequence",
       "lines": 116,
       "code": 104,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/sequence/actors.nim"
       ]
@@ -1991,7 +1991,7 @@
       "component": "diagrams/sequence",
       "lines": 87,
       "code": 76,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/sequence/colors.nim"
       ]
@@ -2001,7 +2001,7 @@
       "component": "diagrams/sequence",
       "lines": 417,
       "code": 378,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/sequence/db.nim"
       ]
@@ -2011,7 +2011,7 @@
       "component": "diagrams/sequence",
       "lines": 22,
       "code": 20,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/sequence/index.nim"
       ]
@@ -2021,7 +2021,7 @@
       "component": "diagrams/sequence",
       "lines": 471,
       "code": 445,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/sequence/lexer.nim"
       ]
@@ -2031,7 +2031,7 @@
       "component": "diagrams/sequence",
       "lines": 427,
       "code": 403,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/sequence/parser.nim"
       ]
@@ -2041,7 +2041,7 @@
       "component": "diagrams/sequence",
       "lines": 940,
       "code": 874,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/sequence/render.nim"
       ]
@@ -2051,7 +2051,7 @@
       "component": "diagrams/sequence",
       "lines": 165,
       "code": 162,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/sequence/tokens.nim"
       ]
@@ -2061,7 +2061,7 @@
       "component": "diagrams/sequence",
       "lines": 164,
       "code": 149,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/sequence/types.nim"
       ]
@@ -2071,7 +2071,7 @@
       "component": "diagrams/state",
       "lines": 225,
       "code": 188,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/state/db.nim"
       ]
@@ -2081,7 +2081,7 @@
       "component": "diagrams/state",
       "lines": 235,
       "code": 209,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/state/graph.nim"
       ]
@@ -2091,7 +2091,7 @@
       "component": "diagrams/state",
       "lines": 17,
       "code": 15,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/state/index.nim"
       ]
@@ -2101,7 +2101,7 @@
       "component": "diagrams/state",
       "lines": 691,
       "code": 646,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/state/lexer.nim"
       ]
@@ -2111,7 +2111,7 @@
       "component": "diagrams/state",
       "lines": 223,
       "code": 213,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/state/parser.nim"
       ]
@@ -2121,7 +2121,7 @@
       "component": "diagrams/state",
       "lines": 706,
       "code": 641,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/state/render.nim"
       ]
@@ -2131,7 +2131,7 @@
       "component": "diagrams/state",
       "lines": 104,
       "code": 102,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/state/tokens.nim"
       ]
@@ -2141,7 +2141,7 @@
       "component": "diagrams/state",
       "lines": 98,
       "code": 83,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/state/types.nim"
       ]
@@ -2151,7 +2151,7 @@
       "component": "diagrams/swimlane",
       "lines": 81,
       "code": 69,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/swimlane/index.nim"
       ]
@@ -2161,7 +2161,7 @@
       "component": "diagrams/timeline",
       "lines": 75,
       "code": 58,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/timeline/db.nim"
       ]
@@ -2171,7 +2171,7 @@
       "component": "diagrams/timeline",
       "lines": 16,
       "code": 14,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/timeline/index.nim"
       ]
@@ -2181,7 +2181,7 @@
       "component": "diagrams/timeline",
       "lines": 135,
       "code": 123,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/timeline/lexer.nim"
       ]
@@ -2191,7 +2191,7 @@
       "component": "diagrams/timeline",
       "lines": 55,
       "code": 49,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/timeline/parser.nim"
       ]
@@ -2201,7 +2201,7 @@
       "component": "diagrams/timeline",
       "lines": 250,
       "code": 231,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/timeline/render.nim"
       ]
@@ -2211,7 +2211,7 @@
       "component": "diagrams/treemap",
       "lines": 40,
       "code": 31,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/treemap/format.nim"
       ]
@@ -2221,7 +2221,7 @@
       "component": "diagrams/treemap",
       "lines": 11,
       "code": 9,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/treemap/index.nim"
       ]
@@ -2231,7 +2231,7 @@
       "component": "diagrams/treemap",
       "lines": 137,
       "code": 119,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/treemap/layout.nim"
       ]
@@ -2241,7 +2241,7 @@
       "component": "diagrams/treemap",
       "lines": 84,
       "code": 72,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/treemap/model.nim"
       ]
@@ -2251,7 +2251,7 @@
       "component": "diagrams/treemap",
       "lines": 141,
       "code": 123,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/treemap/parser.nim"
       ]
@@ -2261,7 +2261,7 @@
       "component": "diagrams/treemap",
       "lines": 171,
       "code": 150,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/treemap/render.nim"
       ]
@@ -2271,7 +2271,7 @@
       "component": "diagrams/treeview",
       "lines": 130,
       "code": 107,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/treeview/box_drawing.nim"
       ]
@@ -2281,7 +2281,7 @@
       "component": "diagrams/treeview",
       "lines": 73,
       "code": 56,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/treeview/icons.nim"
       ]
@@ -2291,7 +2291,7 @@
       "component": "diagrams/treeview",
       "lines": 10,
       "code": 8,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/treeview/index.nim"
       ]
@@ -2301,7 +2301,7 @@
       "component": "diagrams/treeview",
       "lines": 100,
       "code": 86,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/treeview/model.nim"
       ]
@@ -2311,7 +2311,7 @@
       "component": "diagrams/treeview",
       "lines": 161,
       "code": 147,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/treeview/parser.nim"
       ]
@@ -2321,7 +2321,7 @@
       "component": "diagrams/treeview",
       "lines": 195,
       "code": 178,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/treeview/render.nim"
       ]
@@ -2331,7 +2331,7 @@
       "component": "diagrams/usecase",
       "lines": 589,
       "code": 530,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/usecase/db.nim"
       ]
@@ -2341,7 +2341,7 @@
       "component": "diagrams/usecase",
       "lines": 311,
       "code": 284,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/usecase/graph.nim"
       ]
@@ -2351,7 +2351,7 @@
       "component": "diagrams/usecase",
       "lines": 12,
       "code": 10,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/usecase/index.nim"
       ]
@@ -2361,7 +2361,7 @@
       "component": "diagrams/usecase",
       "lines": 250,
       "code": 226,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/usecase/json.nim"
       ]
@@ -2371,7 +2371,7 @@
       "component": "diagrams/usecase",
       "lines": 381,
       "code": 352,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/usecase/lexer.nim"
       ]
@@ -2381,7 +2381,7 @@
       "component": "diagrams/usecase",
       "lines": 706,
       "code": 635,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/usecase/parser.nim"
       ]
@@ -2391,7 +2391,7 @@
       "component": "diagrams/usecase",
       "lines": 589,
       "code": 538,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/usecase/render.nim"
       ]
@@ -2401,7 +2401,7 @@
       "component": "diagrams/usecase",
       "lines": 77,
       "code": 73,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/usecase/tokens.nim"
       ]
@@ -2411,7 +2411,7 @@
       "component": "diagrams/usecase",
       "lines": 193,
       "code": 173,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/usecase/types.nim"
       ]
@@ -2421,7 +2421,7 @@
       "component": "diagrams/venn",
       "lines": 66,
       "code": 51,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/venn/db.nim"
       ]
@@ -2431,7 +2431,7 @@
       "component": "diagrams/venn",
       "lines": 16,
       "code": 14,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/venn/index.nim"
       ]
@@ -2441,7 +2441,7 @@
       "component": "diagrams/venn",
       "lines": 347,
       "code": 304,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/venn/layout.nim"
       ]
@@ -2451,7 +2451,7 @@
       "component": "diagrams/venn",
       "lines": 257,
       "code": 232,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/venn/lexer.nim"
       ]
@@ -2461,7 +2461,7 @@
       "component": "diagrams/venn",
       "lines": 113,
       "code": 96,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/venn/parser.nim"
       ]
@@ -2471,7 +2471,7 @@
       "component": "diagrams/venn",
       "lines": 220,
       "code": 191,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/venn/render.nim"
       ]
@@ -2481,7 +2481,7 @@
       "component": "diagrams/venn",
       "lines": 28,
       "code": 21,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/venn/types.nim"
       ]
@@ -2491,7 +2491,7 @@
       "component": "diagrams/wardley",
       "lines": 194,
       "code": 161,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/wardley/builder.nim"
       ]
@@ -2501,7 +2501,7 @@
       "component": "diagrams/wardley",
       "lines": 12,
       "code": 10,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/wardley/index.nim"
       ]
@@ -2511,7 +2511,7 @@
       "component": "diagrams/wardley",
       "lines": 164,
       "code": 142,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/wardley/model.nim"
       ]
@@ -2521,7 +2521,7 @@
       "component": "diagrams/wardley",
       "lines": 409,
       "code": 391,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/wardley/parser.nim"
       ]
@@ -2531,7 +2531,7 @@
       "component": "diagrams/wardley",
       "lines": 424,
       "code": 388,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/wardley/render.nim"
       ]
@@ -2541,7 +2541,7 @@
       "component": "diagrams/xychart",
       "lines": 134,
       "code": 108,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/xychart/db.nim"
       ]
@@ -2551,7 +2551,7 @@
       "component": "diagrams/xychart",
       "lines": 17,
       "code": 15,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/xychart/index.nim"
       ]
@@ -2561,7 +2561,7 @@
       "component": "diagrams/xychart",
       "lines": 288,
       "code": 268,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/xychart/lexer.nim"
       ]
@@ -2571,7 +2571,7 @@
       "component": "diagrams/xychart",
       "lines": 114,
       "code": 102,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/xychart/parser.nim"
       ]
@@ -2581,7 +2581,7 @@
       "component": "diagrams/xychart",
       "lines": 415,
       "code": 366,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/xychart/render.nim"
       ]
@@ -2591,7 +2591,7 @@
       "component": "diagrams/xychart",
       "lines": 30,
       "code": 22,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/xychart/ticks.nim"
       ]
@@ -2601,7 +2601,7 @@
       "component": "diagrams/xychart",
       "lines": 74,
       "code": 72,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/xychart/tokens.nim"
       ]
@@ -2875,7 +2875,7 @@
       "component": "api",
       "lines": 109,
       "code": 92,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/errors.nim"
       ]
@@ -2893,7 +2893,7 @@
       "component": "layout",
       "lines": 73,
       "code": 67,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/layout/components.nim"
       ]
@@ -2903,7 +2903,7 @@
       "component": "layout",
       "lines": 945,
       "code": 869,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/layout/compound.nim"
       ]
@@ -2913,7 +2913,7 @@
       "component": "layout",
       "lines": 630,
       "code": 560,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/layout/lanes.nim"
       ]
@@ -2923,7 +2923,7 @@
       "component": "layout",
       "lines": 2228,
       "code": 1890,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/layout/layered.nim"
       ]
@@ -2957,7 +2957,7 @@
       "component": "api",
       "lines": 248,
       "code": 212,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/preprocess.nim"
       ]
@@ -2967,7 +2967,7 @@
       "component": "svg",
       "lines": 180,
       "code": 145,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/svg/builder.nim"
       ]
@@ -2977,7 +2977,7 @@
       "component": "svg",
       "lines": 73,
       "code": 60,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/svg/cluster.nim"
       ]
@@ -2987,7 +2987,7 @@
       "component": "svg",
       "lines": 550,
       "code": 475,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/svg/edges.nim"
       ]
@@ -2997,7 +2997,7 @@
       "component": "svg",
       "lines": 132,
       "code": 107,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/svg/ink.nim"
       ]
@@ -3007,7 +3007,7 @@
       "component": "svg",
       "lines": 139,
       "code": 115,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/svg/palette.nim"
       ]
@@ -3017,7 +3017,7 @@
       "component": "svg",
       "lines": 57,
       "code": 51,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/svg/root.nim"
       ]
@@ -3027,7 +3027,7 @@
       "component": "svg",
       "lines": 690,
       "code": 646,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/svg/shapes.nim"
       ]
@@ -3037,7 +3037,7 @@
       "component": "svg",
       "lines": 152,
       "code": 119,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/svg/theme.nim"
       ]
@@ -3047,7 +3047,7 @@
       "component": "svg",
       "lines": 39,
       "code": 33,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/svg/title.nim"
       ]
@@ -3057,7 +3057,7 @@
       "component": "text",
       "lines": 80,
       "code": 68,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/text/entities.nim"
       ]
@@ -3067,7 +3067,7 @@
       "component": "text",
       "lines": 30,
       "code": 24,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/text/icons.nim"
       ]
@@ -3077,7 +3077,7 @@
       "component": "text",
       "lines": 446,
       "code": 400,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/text/label.nim"
       ]
@@ -3087,7 +3087,7 @@
       "component": "text",
       "lines": 51,
       "code": 43,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/text/math.nim"
       ]
@@ -3107,7 +3107,7 @@
       "component": "text",
       "lines": 7,
       "code": 4,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/text/metrics.nim"
       ]
@@ -3117,7 +3117,7 @@
       "component": "api",
       "lines": 88,
       "code": 58,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/types.nim"
       ]
@@ -3127,7 +3127,7 @@
       "component": "util",
       "lines": 45,
       "code": 32,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/util/chars.nim"
       ]
@@ -3137,7 +3137,7 @@
       "component": "util",
       "lines": 32,
       "code": 28,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/util/unicode.nim"
       ]

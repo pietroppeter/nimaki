@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/venn/db.ts
-## port-status: draft
+## port-status: conformant
 import std/[algorithm, sets, strutils, tables]
 import ../../errors
 import ../../js

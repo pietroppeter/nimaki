@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/treeview/icons.ts
-## port-status: draft
+## port-status: conformant
 import std/[strutils, tables]
 
 from std/unicode import nil

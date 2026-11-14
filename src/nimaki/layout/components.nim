@@ -1,5 +1,5 @@
 ## port-of: src/layout/components.ts
-## port-status: draft
+## port-status: conformant
 import std/[options, tables]
 import compound
 

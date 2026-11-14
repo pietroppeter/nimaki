@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/state/graph.ts
-## port-status: draft
+## port-status: conformant
 import std/[options, strutils, tables]
 import ../../errors
 import ../../js

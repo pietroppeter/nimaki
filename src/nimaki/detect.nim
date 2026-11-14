@@ -1,5 +1,5 @@
 ## port-of: src/detect.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Each detector `/^\s*word.../` is a prefix test after the leading `\s`; `tail` says what
 ## must follow the word (Pele's `\b`, `(?:\s|$)` and the like).

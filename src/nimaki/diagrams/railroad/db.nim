@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/railroad/db.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Port notes: Pele's `RailroadDb` keeps a map from names to rules for `getRule`, which nothing
 ## in the drawing reads; here the model is the rule list alone.

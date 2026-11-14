@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/er/markers.ts
-## port-status: draft
+## port-status: conformant
 import ../../svg/builder
 
 const MARKER_LENGTH* = 18.0

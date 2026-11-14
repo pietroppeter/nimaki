@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/flowchart/db.ts
-## port-status: draft
+## port-status: conformant
 import std/[options, sets, strutils, tables, unicode]
 from std/math import isNaN
 import ../../errors
@@ -108,7 +108,7 @@ proc yamlNumber(v: YamlValue): float =
   of yNull: 0.0
   of yBool: (if v.b: 1.0 else: 0.0)
   of yNumber: v.n
-  of yString: jsNumber(v.s)
+  of yString: jsToNumber(v.s)
   of ySeq: (if v.items.len == 0: 0.0 elif v.items.len == 1: yamlNumber(ystr(jsStr(v.items[0]))) else: NaN)
   of yMap: NaN
 

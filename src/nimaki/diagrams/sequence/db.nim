@@ -1,10 +1,9 @@
 ## port-of: src/diagrams/sequence/db.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## `JSON.parse` of the actor menus is `jsonParse` of `js.nim`, which is as strict as JavaScript's
 ## (`std/json`'s `parseJson` also reads comments and trailing commas). Values are `JsonNode`.
 import std/[options, strutils, tables, json]
-from std/unicode import runes, `$`
 import ../../errors
 import ../../js
 import ../../util/yaml
@@ -216,8 +215,8 @@ proc entries(value: JsonNode): seq[(string, JsonNode)] =
   case value.kind
   of JString:
     var i = 0
-    for r in value.str.runes:
-      result.add (jsString(i), newJString($r))
+    for c in codePoints(value.str):
+      result.add (jsString(i), newJString(c))
       inc i
   of JObject:
     for k, v in value.fields: result.add (k, v)

@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/ishikawa/types.ts
-## port-status: draft
+## port-status: conformant
 
 type
   IshikawaNode* = ref object

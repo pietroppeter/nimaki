@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/railroad/render.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Port notes: Pele keys the width budgets by node object in a Map; here by the node (a ref, which hashes by identity).
 import std/[options, strutils, tables, hashes]

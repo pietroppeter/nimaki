@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/architecture/render.ts
-## port-status: draft
+## port-status: conformant
 import std/[options, tables, algorithm]
 from std/math import ceil, floor
 import ../../preprocess

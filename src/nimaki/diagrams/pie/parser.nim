@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/pie/parser.ts
-## port-status: draft
+## port-status: conformant
 import ../common/tokens
 import ../../js
 

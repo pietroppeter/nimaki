@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/pie/render.ts
-## port-status: draft
+## port-status: conformant
 import std/[tables, options]
 from std/math import PI, ceil
 import ../../jsmath

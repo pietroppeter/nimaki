@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/packet/model.ts
-## port-status: draft
+## port-status: conformant
 import std/options
 from std/math import floor
 import ../../errors
@@ -9,12 +9,18 @@ import ../../util/yaml
 import parser
 
 type
+  PacketLabel* = ref object
+    ## Shared by the pieces of one field, as a JavaScript string is: a field split over 10,000
+    ## rows would otherwise copy its label 10,000 times, which the JavaScript build cannot hold.
+    ## (A ref object: nim js gets `ref string` wrong.)
+    text*: string
+
   PacketBlock* = object
     start*: float
     stop*: float
     bits*: float
       ## As Mermaid counts it: one less than the width for the pieces of a field split across rows.
-    label*: string
+    label*: PacketLabel
 
   PacketModel* = ref object of RootObj
     title*, accTitle*, accDescr*: string   ## "" for undefined
@@ -53,6 +59,7 @@ proc buildPacket*(ast: PacketAst, config: Config, title: string): PacketModel =
   var row = 1.0
 
   for blk in ast.blocks:
+    let label = PacketLabel(text: blk.label)
     var start = blk.start
     var stop = blk.stop
     var bits = blk.bits
@@ -75,13 +82,13 @@ proc buildPacket*(ast: PacketAst, config: Config, title: string): PacketModel =
     while float(word.len) <= bitsPerRow + 1 and rows.len < MAX_ROWS:
       let rowEnd = row * bitsPerRow - 1
       if e <= rowEnd:
-        word.add PacketBlock(start: s, stop: e, bits: b, label: blk.label)
+        word.add PacketBlock(start: s, stop: e, bits: b, label: label)
         if e == rowEnd:
           rows.add word
           word = @[]
           row += 1
         break
-      word.add PacketBlock(start: s, stop: rowEnd, bits: rowEnd - s, label: blk.label)
+      word.add PacketBlock(start: s, stop: rowEnd, bits: rowEnd - s, label: label)
       rows.add word
       word = @[]
       row += 1

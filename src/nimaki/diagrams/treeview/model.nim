@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/treeview/model.ts
-## port-status: draft
+## port-status: conformant
 import std/[strutils, tables]
 import ../../errors
 import ../../js
