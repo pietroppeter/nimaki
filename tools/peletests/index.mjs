@@ -1,8 +1,8 @@
 // Pele's public API (src/index.ts at the pin), drawn by nimaki: tools/peletests.nim points Pele's
 // test suites here instead of Pele's own src/index.js. `render`, `detectType` and `supports`
 // call nimaki's JavaScript build (bridge.nim); the text measurer stays Pele's, as in difftest.
-// What nimaki does not provide (parse, mount, zoom) throws, and the tests that use it are
-// counted apart.
+// `parse` returns nimaki's model, written as Pele's (tools/models.nim), and `render` draws it.
+// What nimaki does not provide (mount, zoom) throws, and the tests that use it are counted apart.
 import { createRequire } from 'node:module';
 import { PeleError } from 'PELE_SRC/errors.js';
 export { PeleError };
@@ -22,14 +22,27 @@ export class NotInNimaki extends Error {
   }
 }
 
-export function render(source, options = {}) {
-  if (typeof source !== 'string') throw new TypeError('render() takes diagram text or a model that parse() returned.');
+function call(f) {
   try {
-    return bridge.nimakiRender(source, options);
+    return f();
   } catch (e) {
     if (e && e.peleError) throw new PeleError(e.message, e.code, e);
     throw e;
   }
+}
+
+export function render(source, options = {}) {
+  if (typeof source === 'string') return call(() => bridge.nimakiRender(source, options));
+  const drawn = source && typeof source === 'object' ? call(() => bridge.nimakiRenderModel(source, options)) : null;
+  if (drawn === null) throw new TypeError('render() takes diagram text or a model that parse() returned.');
+  return drawn;
+}
+
+// Read by setup.mjs: the test read a model, which is Pele's in shape only where
+// tools/parsediff.nim says so.
+export function parse(source, options = {}) {
+  globalThis.__nimakiParsed = true;
+  return call(() => bridge.nimakiParse(source, options));
 }
 
 export function detectType(text) {
@@ -40,7 +53,6 @@ export function supports(text) {
   return bridge.nimakiSupports(text);
 }
 
-export function parse() { throw new NotInNimaki('parse()'); }
 export function mount() { throw new NotInNimaki('mount()'); }
 export function enableZoom() { throw new NotInNimaki('enableZoom()'); }
 export function register() { throw new NotInNimaki('register()'); }

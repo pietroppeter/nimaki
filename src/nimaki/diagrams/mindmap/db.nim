@@ -1,5 +1,6 @@
 ## port-of: src/diagrams/mindmap/db.ts
 ## port-status: conformant
+import std/options
 import ../../errors
 import ../common/outline
 
@@ -12,9 +13,9 @@ type
     kind*: int                ## Pele's `type`: Mermaid's node type
     children*: seq[MindmapNode]
     isRoot*: bool
-    section*: int
+    section*: Option[int]
       ## Index of the first-level branch the node belongs to, wrapping after eleven as in
-      ## Mermaid. 0 for the root, which has none (Pele's `section ?? 0` everywhere it is read).
+      ## Mermaid. None for the root, which has none (read as 0, Pele's `section ?? 0`).
     class*: string            ## "" for undefined
     icon*: string             ## "" for undefined
 
@@ -45,7 +46,7 @@ proc addNode*(db: MindmapDb, level: int, id, descr: string, kind: int) =
                        "semantic", ErrorInfo(diagramType: "mindmap"))
   let node = MindmapNode(id: db.nodes.len, nodeId: id, level: level, descr: descr, kind: kind, isRoot: isRoot)
   if parent != nil:
-    node.section = if parent.isRoot: parent.children.len mod SECTIONS else: parent.section
+    node.section = if parent.isRoot: some(parent.children.len mod SECTIONS) else: parent.section
     parent.children.add node
   db.open.setLen depth
   db.open.add node

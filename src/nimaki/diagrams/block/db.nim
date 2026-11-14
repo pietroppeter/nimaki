@@ -3,10 +3,11 @@
 ##
 ## Also holds the types of src/diagrams/block/types.ts. A Block's optional strings are "" for
 ## undefined, which every reader treats as Pele does; `widthInColumns` is NaN for undefined, and
-## `hasId` is false for a composite whose header was a link statement. Pele's `children` holds
+## `columns` and `colorIndex` are options, as Pele's are optional. A composite whose header was a
+## link statement has no id ("") until `setHierarchy` gives it one. Pele's `children` holds
 ## statements until `setHierarchy` turns them into blocks: here those are `statements` and
 ## `children`.
-import std/[tables, sets, strutils]
+import std/[tables, sets, strutils, options]
 from std/math import isNaN
 import ../../errors
 import ../../js
@@ -14,16 +15,15 @@ import ../../js
 type
   Block* = ref object
     id*: string
-    hasId*: bool
     typ*, label*: string
     statements*: seq[Statement]
     children*: seq[Block]
-    columns*: float           ## -1 for undefined
+    columns*: Option[float]   ## set on the root (-1) and on a composite that says how many
     widthInColumns*: float    ## NaN for undefined
     width*: float             ## cells a `space` statement asked for
     directions*: seq[string]
     classes*, styles*: seq[string]
-    colorIndex*: int
+    colorIndex*: Option[int]  ## a composite's, in the order they were met
     start*, stop*, arrowTypeStart*, arrowTypeEnd*, thickness*, pattern*: string
     css*, styleClass*, stylesStr*: string
 
@@ -52,7 +52,7 @@ const MAX_SPACES = 100000.0
 func one*(b: Block): Statement = Statement(blocks: @[b])
 
 proc newBlock*(id = "", typ = ""): Block =
-  Block(id: id, hasId: true, typ: typ, columns: -1, widthInColumns: NaN, width: NaN)
+  Block(id: id, typ: typ, widthInColumns: NaN, width: NaN)
 
 proc copy(b: Block): Block =
   new result
@@ -60,6 +60,7 @@ proc copy(b: Block): Block =
 
 proc newBlockDb*(): BlockDb =
   let root = newBlock("root", "composite")
+  root.columns = some(-1.0)
   BlockDb(root: root)
 
 func typeStr2Type*(typeStr: string): string =
@@ -118,7 +119,7 @@ proc frame(statements: seq[Statement], parent: Block): Frame =
   var columns = -1.0
   for b in list:
     if b.typ == "column-setting":
-      columns = b.columns
+      columns = b.columns.get(-1.0)
       break
   Frame(list: list, at: 0, parent: parent, columns: columns)
 
@@ -175,7 +176,7 @@ proc setHierarchy*(db: BlockDb, statements: seq[Statement]) =
       if b.stylesStr != "": db.addStyle2Node(b.id, b.stylesStr)
       continue
     of "column-setting":
-      stack[top].parent.columns = b.columns
+      stack[top].parent.columns = some(b.columns.get(-1.0))
       continue
     of "edge":
       let count = db.edgeCount.getOrDefault(b.id) + 1
@@ -186,9 +187,8 @@ proc setHierarchy*(db: BlockDb, statements: seq[Statement]) =
     else: discard
 
     # A composite whose header was a link statement has no id of its own.
-    if not b.hasId:
+    if b.id == "":
       b.id = db.generateId()
-      b.hasId = true
     if b.label == "": b.label = (if b.typ == "composite": "" else: b.id)
     let known = db.byId.getOrDefault(b.id)
     var fresh = known == nil
@@ -203,7 +203,7 @@ proc setHierarchy*(db: BlockDb, statements: seq[Statement]) =
         b.classes = known.classes
         b.styles = known.styles
       if b.typ == "composite":
-        b.colorIndex = db.colors
+        b.colorIndex = some(db.colors)
         inc db.colors
       db.byId[b.id] = b
 

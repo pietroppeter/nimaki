@@ -2,8 +2,8 @@
   "about": "Pele's parse() against nimaki's, on corpus/cases.json, by tools/parsediff.nim. Do not edit by hand.",
   "pin": "1.13.0",
   "cases": 2118,
-  "same": 589,
-  "different": 1156,
+  "same": 691,
+  "different": 1054,
   "error": 373,
   "unsupported": 0,
   "types": [
@@ -23,8 +23,8 @@
     },
     {
       "type": "block",
-      "same": 0,
-      "different": 61,
+      "same": 61,
+      "different": 0,
       "error": 10,
       "unsupported": 0
     },
@@ -93,8 +93,8 @@
     },
     {
       "type": "ishikawa",
-      "same": 0,
-      "different": 4,
+      "same": 4,
+      "different": 0,
       "error": 0,
       "unsupported": 0
     },
@@ -114,8 +114,8 @@
     },
     {
       "type": "mindmap",
-      "same": 0,
-      "different": 37,
+      "same": 37,
+      "different": 0,
       "error": 2,
       "unsupported": 0
     },
