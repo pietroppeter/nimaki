@@ -122,6 +122,7 @@ jobs:
           nim r tools/fuzz.nim kanban --cases:5000
           nim r tools/fuzz.nim eventmodeling --cases:5000
           nim r tools/fuzz.nim sankey --cases:5000
+          nim r tools/fuzz.nim quadrantChart --cases:5000
 
       - name: Tests
         run: |

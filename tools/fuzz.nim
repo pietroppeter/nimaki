@@ -1088,6 +1088,58 @@ proc sankeySource(g: var Gen): string =
     else: result.add g.pick(["", " ", "\t"])
     result.add(if g.chance(0.05): "\r\n" else: "\n")
 
+const quadrantTexts = ["Low Reach", "High Reach", "We should expand", "Re-evaluate", "Campaign A", "Plan", "Do",
+                       "\"Important ❤\"", "\"`**bold** text`\"", "Ünï 日本", "a & b", "x_y.z", "100%", "Long label that runs on for a while"]
+
+proc quadrantCoord(g: var Gen, bad: bool): string =
+  if bad: g.pick(["1.5", "-0.1", "2", "0.", "x", ".5", "0x5", "0e3"])
+  else: g.pick(["0", "1", "0.5", "0.30", "0.45", "0.0", "0.999", "0.05", "0.75", "0.123"])
+
+proc quadrantStyle(g: var Gen, bad: bool): string =
+  if bad: g.pick(["radius: x", "color: #zz", "stroke-width: 3", "size: 4", "radius", "color: #12345"])
+  else: g.pick(["radius: 12", "radius: 3", "color: #ff3300", "color: 0f3", "stroke-color: #10f0f0",
+                "stroke-width: 5px", "stroke-width: 0px", "radius: 400"])
+
+proc quadrantSource(g: var Gen): string =
+  if g.chance(0.3):
+    result.add "---\n"
+    if g.chance(0.3): result.add "title: " & g.pick(labels) & "\n"
+    result.add "config:\n  quadrantChart:\n"
+    for key in ["chartWidth", "chartHeight", "quadrantPadding", "titlePadding", "pointRadius", "pointTextPadding",
+                "xAxisLabelPadding", "quadrantTextTopPadding", "titleFontSize", "quadrantLabelFontSize",
+                "xAxisLabelFontSize", "pointLabelFontSize"]:
+      if g.chance(0.12): result.add "    " & key & ": " & g.pick(["0", "2", "8", "12", "30", "200", "300", "800", "-1", "x", "5000"]) & "\n"
+    if g.chance(0.2): result.add "    xAxisPosition: " & g.pick(["top", "bottom"]) & "\n"
+    if g.chance(0.2): result.add "    yAxisPosition: " & g.pick(["left", "right"]) & "\n"
+    result.add "    useMaxWidth: true\n---\n"
+  result.add(if g.chance(0.03): g.pick(["quadrantchartx", "quadrant", "QuadrantChart"]) else: "quadrantChart")
+  result.add "\n"
+  let wrong = if g.chance(0.2): g.rng.rand(0 .. 14) else: -1
+  let indent = g.pick(["", "  ", "    ", "\t"])
+  for i in 0 ..< g.rng.rand(0 .. 14):
+    let bad = i == wrong
+    let r = g.rng.rand(1.0)
+    var line = ""
+    if r < 0.08: line = "title " & g.pick(labels)
+    elif r < 0.16: line = "x-axis " & g.pick(quadrantTexts) & (if g.chance(0.7): " --> " & (if g.chance(0.9): g.pick(quadrantTexts) else: "") else: "")
+    elif r < 0.24: line = "y-axis " & g.pick(quadrantTexts) & (if g.chance(0.7): g.pick([" --> ", " ---> "]) & g.pick(quadrantTexts) else: "")
+    elif r < 0.4: line = "quadrant-" & $g.rng.rand(1 .. 4) & " " & g.pick(quadrantTexts)
+    elif r < 0.85:
+      line = g.pick(quadrantTexts) & (if g.chance(0.2): ":::" & g.pick(["class1", "ab", "x", "a_b"]) else: "") &
+        g.pick([": [", ":[", " : [ "]) & g.quadrantCoord(bad and g.chance(0.5)) & g.pick([", ", ","]) &
+        g.quadrantCoord(bad and g.chance(0.3)) & g.pick(["]", " ]"])
+      if g.chance(0.3):
+        for k in 0 ..< g.rng.rand(1 .. 3): line.add (if k == 0: " " else: ", ") & g.quadrantStyle(bad and k == 0)
+    elif r < 0.9:
+      line = "classDef " & g.pick(["class1", "ab", "x"]) & " " & g.quadrantStyle(bad)
+      if g.chance(0.5): line.add ", " & g.quadrantStyle(false)
+    elif r < 0.93: line = g.pick(["accTitle: ", "accDescr: "]) & g.pick(labels)
+    elif r < 0.95: line = "accDescr {\n  " & g.pick(labels) & "\n}"
+    elif r < 0.98: line = "%% " & g.pick(labels)
+    if bad and r >= 0.4 and g.chance(0.5): line.add g.pick(["(", " ]", "@x", ") y"])
+    result.add indent & line
+    result.add(if g.chance(0.05): g.pick([";", "\r\n"]) else: "\n")
+
 proc radarSource(g: var Gen): string =
   if g.chance(0.3):
     result.add "---\n"
@@ -1980,7 +2032,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad", "gantt", "wardley", "architecture", "c4", "block", "agentflow", "mindmap", "kanban", "eventmodeling", "labels", "sankey"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad, gantt, wardley, architecture, c4, block, agentflow, mindmap, kanban, eventmodeling, labels, sankey", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad", "gantt", "wardley", "architecture", "c4", "block", "agentflow", "mindmap", "kanban", "eventmodeling", "labels", "sankey", "quadrantChart"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad, gantt, wardley, architecture, c4, block, agentflow, mindmap, kanban, eventmodeling, labels, sankey, quadrantChart", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -2024,6 +2076,7 @@ proc main() =
                                                           of "mindmap": g.mindmapSource()
                                                           of "kanban": g.kanbanSource()
                                                           of "sankey": g.sankeySource()
+                                                          of "quadrantChart": g.quadrantSource()
                                                           else: g.eventmodelingSource()), "options": opts}
   let dir = buildDir / "fuzz"
   createDir dir
