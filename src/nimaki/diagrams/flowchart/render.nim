@@ -12,6 +12,7 @@ import ../../util/[url, yaml]
 import ../common/fit_width
 import db, graph, types
 import shapes as flowShapes
+import ../../jsregex
 
 const
   NODE_SEP = 40.0
@@ -58,11 +59,6 @@ proc renderFlowchart*(db: FlowDb, config: Config, options: RenderOptions, varian
   let fitted = proc (down: bool): Rendered =
     tighten(options, proc (tight: bool): Rendered = draw(db, config, options, variant, down, tight))
   if runsAcross(db.direction): turnToFit(options, fitted) else: fitted(false)
-
-func stripDefault(s: string): string =
-  ## s.replace(/^default\s?/, '')
-  if not s.startsWith("default"): return s
-  if isJsSpaceAt(s, 7): s.substr(7 + spaceLenAt(s, 7)) else: s.substr(7)
 
 func hasInternalLink(s: string): bool =
   ## / internal-link(?: |$)/.test(s)
@@ -240,7 +236,7 @@ proc draw(db: FlowDb, config: Config, options: RenderOptions, variant: FlowVaria
     let node = view.node
     let x = c.x
     let y = c.y
-    let classes = classNames(stripDefault(node.cssClasses))
+    let classes = classNames(node.cssClasses.replace(jsre"/^default\s?/", ""))
     let id = escText(node.id)
     if c.isGroup and variant != nil and variant.drawGroup != nil and c.parent < 0:
       if paints(view.style.shape) and variant.filledBox != nil:

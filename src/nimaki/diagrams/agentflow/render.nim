@@ -12,6 +12,7 @@ import ../../util/[url, yaml]
 import ../common/fit_width
 import ../flowchart/shapes as flowShapes
 import colorSlots, db, graph, types
+import ../../jsregex
 
 const
   PALETTE* = 8  ## the number of series tokens, which is the palette Mermaid's slot rules apply to
@@ -57,11 +58,6 @@ type NodeView = object
   w, h: float
   dy: float
   loops: int
-
-func stripDefault(s: string): string =
-  ## s.replace(/^default\s?/, '')
-  if not s.startsWith("default"): return s
-  if s.len > 7 and isJsSpaceAt(s, 7): s.substr(7 + spaceLenAt(s, 7)) else: s.substr(7)
 
 func hasInternalLink(s: string): bool =
   ## / internal-link(?: |$)/.test(s)
@@ -305,7 +301,7 @@ proc draw(db: AgentflowDb, config: Config, options: RenderOptions, turned: bool)
     let node = view.node
     let x = c.x
     let y = c.y
-    let classes = classNames(stripDefault(node.cssClasses))
+    let classes = classNames(node.cssClasses.replace(jsre"/^default\s?/", ""))
     let id = escText(node.id)
     let slotOf = if node.colorIndex >= 0: node.colorIndex else: KIND_COUNT
     if c.isGroup:

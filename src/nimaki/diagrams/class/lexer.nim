@@ -10,6 +10,7 @@ import std/strutils
 import ../../js
 import ../../util/[chars, unicode]
 import tokens
+import ../../jsregex
 
 type Tokens* = object
   types*: seq[int]
@@ -36,7 +37,13 @@ const AT_END = [
   T_EOF, T_STR, T_EOF, T_GENERICTYPE, T_CALLBACK_NAME, T_CALLBACK_ARGS, T_acc_title_value,
   T_acc_descr_value, T_acc_descr_multiline_value, T_EOF, T_EOF_IN_STRUCT, T_EOF, T_EOF_IN_STRUCT]
 
-const DIRECTIONS = ["TB", "BT", "RL", "LR"]
+const RE_DIRECTION = [
+  jsre"/.*direction\s+TB[^\n]*/y",
+  jsre"/.*direction\s+BT[^\n]*/y",
+  jsre"/.*direction\s+RL[^\n]*/y",
+  jsre"/.*direction\s+LR[^\n]*/y",
+]
+const RE_LINE_END = jsre"/[\n\r\u2028\u2029]/g"
 
 func cu(src: string, i: int): int =
   if i < 0 or i >= src.len: return -1
@@ -54,28 +61,6 @@ func spacesFrom(src: string, i: int): int =
   var j = i
   while j < src.len and isSpace(cu(src, j)): j += charLen(src, j)
   j
-
-func lineEndFrom(src: string, p: int): int =
-  ## RE_LINE_END = /[\n\r  ]/g from p: the first line terminator, or the end.
-  var j = p
-  while j < src.len:
-    if isLineEnd(cu(src, j)): return j
-    j += charLen(src, j)
-  src.len
-
-func directionEnd(src: string, p, lineEnd, which: int): int =
-  ## /.*direction\s+TB[^\n]*/y (or BT, RL, LR) at p: the end of the match, or -1. The greedy
-  ## `.*` cannot pass a line terminator, so `direction` starts before the line ends, and the last
-  ## start that works is the one matched; `[^\n]*` then runs to the next line feed.
-  var at = src.rfind("direction", 0, lineEnd - 1)
-  while at >= p:
-    let s = at + "direction".len
-    let t = spacesFrom(src, s)
-    if t > s and src.continuesWith(DIRECTIONS[which], t):
-      let e = src.find('\n', t + 2)
-      return if e == -1: src.len else: e
-    at = if at > 0: src.rfind("direction", 0, at - 1) else: -1
-  -1
 
 proc tokenize*(src: string): Tokens =
   let n = src.len
@@ -207,10 +192,12 @@ proc tokenize*(src: string): Tokens =
     if dirNext == -1 or p < dirFailed: return false
     if dirNext < p: dirNext = src.find("direction", p)
     if dirNext == -1: return false
-    if lineEnd < p: lineEnd = lineEndFrom(src, p)
+    if lineEnd < p:
+      let m = RE_LINE_END.exec(src, p)
+      lineEnd = if m.found: m.index else: n
     if dirNext >= lineEnd: return false
     for i in 0 ..< 4:
-      let e = directionEnd(src, p, lineEnd, i)
+      let e = RE_DIRECTION[i].matchEnd(src, p)
       if e >= 0: return emit(T_direction_tb + i, p, e)
     # No direction statement starts anywhere in the rest of this line either.
     dirFailed = lineEnd
