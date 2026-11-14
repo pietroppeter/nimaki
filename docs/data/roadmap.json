@@ -447,7 +447,7 @@
           "owner": "Port diagrams that need no layered layout",
           "status": "done",
           "post": "flows-and-quadrants",
-          "pr": ""
+          "pr": "59"
         },
         {
           "id": "git",
@@ -469,7 +469,7 @@
           "owner": "Port diagrams that need no layered layout",
           "status": "done",
           "post": "flows-and-quadrants",
-          "pr": ""
+          "pr": "59"
         },
         {
           "id": "venn",
