@@ -22,6 +22,7 @@ import devlog/how_pele_is_built
 import devlog/lanes_and_handoffs
 import devlog/layered_layout_and_flowchart
 import devlog/mindmap_kanban_eventmodeling
+import devlog/flows_and_quadrants
 import devlog/pele_origins
 import devlog/pomice
 import devlog/radar_treemap_treeview
@@ -38,4 +39,6 @@ import devlog/fishbones_and_domains
 import devlog/maps_and_clouds
 import devlog/boxes_in_boxes
 import devlog/a_c_abi
+import devlog/how_nimaki_reads_text
 import devlog/opening_a_web_page
+import devlog/a_kitchen_on_friday_night

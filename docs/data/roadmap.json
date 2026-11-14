@@ -445,9 +445,9 @@
           "what": "src/diagrams/sankey: 786 lines of TypeScript, 8 corpus cases.",
           "done_when": "difftest: every sankey case identical.",
           "owner": "Port diagrams that need no layered layout",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "flows-and-quadrants",
+          "pr": "59"
         },
         {
           "id": "git",
@@ -467,9 +467,9 @@
           "what": "src/diagrams/quadrant: 876 lines of TypeScript, 3 corpus cases.",
           "done_when": "difftest: every quadrant case identical.",
           "owner": "Port diagrams that need no layered layout",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "flows-and-quadrants",
+          "pr": "59"
         },
         {
           "id": "venn",
@@ -723,9 +723,9 @@
           "what": "The second article on the port's code: how its diagram types turn text into tokens, the families of lexer they use (Jison's rules ported by hand, the shared tokenizer, stateful lexers), what they share and what each copies, with runnable examples.",
           "done_when": "A devlog post whose numbers come from the code on main; findings filed as roadmap steps or notes.",
           "owner": "Write articles explaining nimaki code",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "how-nimaki-reads-text",
+          "pr": "58"
         },
         {
           "id": "code-articles",
@@ -756,9 +756,9 @@
           "what": "The second domain article: how a restaurant kitchen runs a service, drawn with the types no article has used yet, most of them newly ported (mindmap, kanban, eventmodeling, swimlane, journey, ishikawa), plus a gantt of courses timed backwards. Every diagram drawn by nimaki and checked against Pele at build time; what the library teaches becomes notes or steps.",
           "done_when": "An article on the site whose every diagram is drawn by nimaki and identical to Pele's; its lessons are notes or steps on this roadmap.",
           "owner": "Write domain articles with diagrams",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "a-kitchen-on-friday-night",
+          "pr": "55"
         },
         {
           "id": "domain-articles",
@@ -775,7 +775,7 @@
           "id": "mermaid-block",
           "kind": "tooling",
           "title": "A Mermaid block for the pages, checked against Pele",
-          "what": "Found by the first domain article: every page that draws writes its own few lines to render Mermaid text with nimaki, show the SVG and fold the text under it. One block in docs/blocks.nim (say nbMermaid text, caption, options) would do it everywhere, and could ask Pele for the same drawing at build time, so each diagram on the site is also a small test.",
+          "what": "Found by the first domain article, and wanted again by the second: every page that draws writes its own few lines to render Mermaid text with nimaki, show the SVG and fold the text under it. One block in docs/blocks.nim (say nbMermaid text, caption, options) would do it everywhere, and could ask Pele for the same drawing at build time, so each diagram on the site is also a small test.",
           "done_when": "The block exists, the posts that draw use it, and a difference from Pele fails the build.",
           "owner": "",
           "status": "planned",
@@ -799,6 +799,17 @@
           "title": "Past draft: verified and conformant",
           "what": "Every ported file still says port-status: draft. Decision 0005 defines verified as a second reading against the TypeScript and conformant as Pele's tests passing, while labels-check and pele-tests move files to verified through tests. One new decision says what moves a file past draft; then the files the other steps do not cover are moved, starting with what most code depends on (js.nim, the measurer, the SVG builder, the layered layout). Waiting on Pietro's choice (asked in The shape of the port).",
           "done_when": "A decision, and the port map showing files past draft.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "reading-fixes",
+          "kind": "port",
+          "title": "Odd characters: the differences tools/mutate.nim found",
+          "what": "tools/mutate.nim slips one unusual character into each corpus case; 28 of 41,433 answers differ from Pele, from four places past the lexers: util/yaml.nim counts indentation in bytes, not UTF-16 units (leading(); one line); util/url.nim keeps hosts outside ASCII as written, where new URL() maps them with IDNA or refuses them (NBSP, U+3000, U+2028), so links differ or Pele drops them (port IDNA's mapping, or a divergence entry); a line separator in a class member changes the box size (not traced); a gantt date with a line separator parses in jsdate.nim and not in Pele. The cases are in docs/devlog/data/how_nimaki_reads_text/mutate-N.json. Found by the article How nimaki reads text.",
+          "done_when": "nim r tools/mutate.nim finds no difference on seeds 1 to 7, and it runs in CI.",
           "owner": "",
           "status": "planned",
           "post": "",

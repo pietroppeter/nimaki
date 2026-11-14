@@ -391,19 +391,19 @@
       "corpus": 8,
       "parse": {
         "code": 291,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 266,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 229,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/sankey/",
+      "post": "flows-and-quadrants",
+      "notes": "Identical to Pele on the 15 corpus cases (C and JavaScript builds) and on 5,000 generated inputs in CI (tools/fuzz.nim sankey); 25,000 more across seeds before merging."
     },
     {
       "id": "git",
@@ -433,19 +433,19 @@
       "corpus": 3,
       "parse": {
         "code": 688,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 0,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 188,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/quadrant/",
+      "post": "flows-and-quadrants",
+      "notes": "Identical to Pele on the 35 corpus cases (C and JavaScript builds) and on 5,000 generated inputs in CI (tools/fuzz.nim quadrantChart); 25,000 more across seeds before merging."
     },
     {
       "id": "venn",
