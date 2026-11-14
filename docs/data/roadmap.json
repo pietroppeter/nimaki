@@ -278,6 +278,17 @@
           "pr": "35"
         },
         {
+          "id": "corpus-diagrammari-run",
+          "kind": "tooling",
+          "title": "diagrammari's diagrams, run",
+          "what": "Run diagrammari's tests, spec examples and pages, and add the Mermaid text its builders send to Pele to the diagrammari corpus.",
+          "done_when": "corpus/diagrammari.json holds the texts found by running it; difftest runs on them.",
+          "owner": "Port class and swimlane",
+          "status": "done",
+          "post": "diagrammari-at-work",
+          "pr": ""
+        },
+        {
           "id": "fuzz",
           "kind": "tooling",
           "title": "Differential fuzzing",

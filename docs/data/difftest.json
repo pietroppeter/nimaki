@@ -6,8 +6,8 @@
   "different": 0,
   "unsupported": 0,
   "diagrammari": {
-    "cases": 34,
-    "identical": 34,
+    "cases": 116,
+    "identical": 116,
     "different": 0,
     "unsupported": 0
   },
@@ -90,8 +90,8 @@
       "different": 0,
       "unsupported": 0,
       "diagrammari": {
-        "cases": 14,
-        "identical": 14,
+        "cases": 29,
+        "identical": 29,
         "different": 0,
         "unsupported": 0
       }
@@ -104,8 +104,8 @@
       "different": 0,
       "unsupported": 0,
       "diagrammari": {
-        "cases": 1,
-        "identical": 1,
+        "cases": 2,
+        "identical": 2,
         "different": 0,
         "unsupported": 0
       }
@@ -164,8 +164,8 @@
       "different": 0,
       "unsupported": 0,
       "diagrammari": {
-        "cases": 2,
-        "identical": 2,
+        "cases": 3,
+        "identical": 3,
         "different": 0,
         "unsupported": 0
       }
@@ -186,8 +186,8 @@
       "different": 0,
       "unsupported": 0,
       "diagrammari": {
-        "cases": 4,
-        "identical": 4,
+        "cases": 6,
+        "identical": 6,
         "different": 0,
         "unsupported": 0
       }
@@ -238,8 +238,8 @@
       "different": 0,
       "unsupported": 0,
       "diagrammari": {
-        "cases": 1,
-        "identical": 1,
+        "cases": 2,
+        "identical": 2,
         "different": 0,
         "unsupported": 0
       }
@@ -252,8 +252,8 @@
       "different": 0,
       "unsupported": 0,
       "diagrammari": {
-        "cases": 5,
-        "identical": 5,
+        "cases": 60,
+        "identical": 60,
         "different": 0,
         "unsupported": 0
       }
@@ -288,8 +288,8 @@
       "different": 0,
       "unsupported": 0,
       "diagrammari": {
-        "cases": 2,
-        "identical": 2,
+        "cases": 8,
+        "identical": 8,
         "different": 0,
         "unsupported": 0
       }
@@ -326,8 +326,8 @@
       "different": 0,
       "unsupported": 0,
       "diagrammari": {
-        "cases": 1,
-        "identical": 1,
+        "cases": 2,
+        "identical": 2,
         "different": 0,
         "unsupported": 0
       }

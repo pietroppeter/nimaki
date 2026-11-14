@@ -3,7 +3,7 @@
 ## diagrammari (`import mari`, https://github.com/pietroppeter/diagrammari) makes diagrams in Nim
 ## and has Pele draw them. It is nimaki's first user, so what it writes is what nimaki must draw
 ## first. This tool reads a checkout of diagrammari at the commit in reference/DIAGRAMMARI and
-## collects its Mermaid text, without running any of its code:
+## collects its Mermaid text in two ways. Without running any of its code, it reads:
 ##
 ## - the examples of its specs (`openspec/specs/*/spec.md`): a ```nim block followed by a ```text
 ##   block with what it prints, checked by diagrammari's own CI. When that text is a diagram,
@@ -12,15 +12,22 @@
 ## - every string literal given to `diagram`, `mermaid` or `nbDiagram` in its Nim files, with the
 ##   indentation removed as `diagram` removes it. Literals built with `&` or `fmt` are skipped.
 ##
+## Then it runs diagrammari (Pietro allowed it on 14 November 2026), in a copy of the checkout:
+## its setup, its tests, its spec examples and its pages, with `$MARI_NODE` set to a small script
+## that writes down every request diagrammari sends to Pele before passing it to Node. Those
+## requests hold the text diagrammari's builders and macros write, which reading cannot find.
+## `--static` skips the run. Nothing in the checkout is changed.
+##
 ## A text is a case when nimaki's `detectType` (Pele's, ported) finds a diagram type in it. Each
 ## distinct text is one case. The cases go to corpus/diagrammari.json, in the format of
 ## corpus/cases.json, and tools/difftest.nim runs them together with Pele's.
 ##
 ##   nim r tools/corpus_diagrammari.nim                 # from reference/diagrammari
 ##   nim r tools/corpus_diagrammari.nim --ref:PATH      # or $DIAGRAMMARI_REF
+##   nim r tools/corpus_diagrammari.nim --static        # read only, run nothing
 ##
 ## Rebuilt only when reference/DIAGRAMMARI moves (`reference/fetch.sh diagrammari` fetches it).
-import std/[os, strutils, json, tables, algorithm, parseopt, sets]
+import std/[os, osproc, strutils, json, tables, algorithm, parseopt, sets]
 import common
 import nimaki
 
@@ -139,13 +146,54 @@ proc literals(path, rel: string): seq[Found] =
         if q < text.len and text[q] == '"':
           result.add Found(source: asDiagram(unescapeNim(text[p + 1 ..< q])), origin: rel & ":" & $line)
 
+const runs* = [
+  ("tests", "nim r --hints:off tests/all.nim"),
+  ("specs", "nim r --hints:off tools/specexamples.nim"),
+  ("pages", "nim r --hints:off -d:release docs/all.nim")]
+
+proc ranTexts(dir: string): seq[Found] =
+  ## The texts diagrammari sends to Pele when its tests, spec examples and pages run, in a copy
+  ## of the checkout. `$MARI_NODE` (src/mari/pele.nim) names the Node that draws: here a script
+  ## that appends each request (one JSON line: source and options) to a log, then runs Node.
+  let node = findExe("node")
+  if node.len == 0: quit "ERROR Node is needed to run diagrammari (or pass --static)", 2
+  let work = getTempDir() / "nimaki-diagrammari-run"
+  removeDir work
+  copyDir dir, work
+  removeDir work / "deps"
+  let shim = work / "node-log.sh"
+  writeFile shim, "#!/bin/sh\ntee -a \"$MARI_LOG\" | exec " & quoteShell(node) & " \"$@\"\n"
+  setFilePermissions shim, {fpUserRead, fpUserWrite, fpUserExec}
+  let setup = execCmdEx("sh tools/setup.sh", workingDir = work)
+  if setup.exitCode != 0:
+    echo "ERROR diagrammari's setup failed:\n", setup.output
+    return
+  putEnv "PATH", getHomeDir() / ".local" / "bin" & PathSep & getEnv("PATH")
+  putEnv "MARI_NODE", shim
+  for (label, cmd) in runs:
+    let log = work / label & ".log"
+    putEnv "MARI_LOG", log
+    let r = execCmdEx(cmd, workingDir = work)
+    if r.exitCode != 0: echo "ERROR diagrammari's ", label, " failed (", cmd, "); its texts are kept"
+    if not fileExists(log): continue
+    var n = 0
+    for line in lines(log):
+      if line.strip.len == 0: continue
+      inc n
+      result.add Found(source: parseJson(line)["source"].getStr, origin: "run:" & label & "#" & $n)
+    echo "  ran ", label.alignLeft(6), align($n, 5), " requests to Pele"
+  delEnv "MARI_NODE"
+  delEnv "MARI_LOG"
+
 proc main() =
   var refArg: string
+  var readOnly = false
   for kind, key, val in getopt():
     case kind
     of cmdLongOption, cmdShortOption:
       case key
       of "ref": refArg = val
+      of "static": readOnly = true
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: quit "ERROR unexpected argument " & key, 2
     of cmdEnd: discard
@@ -166,11 +214,14 @@ proc main() =
     if p.startsWith("openspec/specs/") and p.endsWith("/spec.md"): found.add specOutputs(full, p)
     if p.endsWith(".md"): found.add mermaidFences(full, p)
     if p.endsWith(".nim"): found.add literals(full, p)
+  let read = found.len
+  if not readOnly: found.add ranTexts(dir)
 
   var seen: HashSet[string]
   var cases = newJArray()
   var byType: OrderedTable[string, int]
   var perFile: CountTable[string]
+  var fromRun = 0
   var skipped = 0
   for f in found:
     let t = detectType(f.source)
@@ -179,8 +230,8 @@ proc main() =
       continue
     if f.source in seen: continue
     seen.incl f.source
-    let file = f.origin.split(':')[0]
-    perFile.inc file
+    if f.origin.startsWith("run:"): inc fromRun
+    else: perFile.inc f.origin.split(':')[0]
     cases.add %*{"id": "diagrammari/" & f.origin, "type": t, "from": f.origin, "source": f.source}
     byType[t] = byType.getOrDefault(t) + 1
   byType.sort(proc (a, b: (string, int)): int = cmp(a[0], b[0]))
@@ -192,11 +243,13 @@ proc main() =
   createDir repoDir / "corpus"
   writeFile repoDir / "corpus" / "diagrammari.json", (%*{
     "about": "The Mermaid text of diagrammari, built by tools/corpus_diagrammari.nim from diagrammari at the pin (reference/DIAGRAMMARI). Do not edit by hand.",
-    "repo": pin.getOrDefault("REPO"), "commit": commit, "count": cases.len, "byType": types,
+    "repo": pin.getOrDefault("REPO"), "commit": commit, "count": cases.len, "ran": not readOnly,
+    "fromRun": fromRun, "byType": types,
     "cases": cases}).pretty & "\n"
   for t, n in byType: echo "  ", t.alignLeft(14), align($n, 4)
   echo "corpus: diagrammari ", commit[0 ..< min(7, commit.len)], ", ", cases.len, " cases of ", byType.len,
-    " types, from ", perFile.len, " files (", found.len, " texts read, ", skipped, " not a diagram, ",
+    " types: ", cases.len - fromRun, " read from ", perFile.len, " files, ", fromRun, " found only by running it (",
+    read, " texts read, ", found.len - read, " requests, ", skipped, " not a diagram, ",
     found.len - skipped - cases.len, " repeated)"
 
 when isMainModule:
