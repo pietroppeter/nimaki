@@ -6,6 +6,7 @@
 ## (`SeqItem`: a statement, a string, or a list of items) is a variant `ref object`. JSON values
 ## of the actor menus are `JsonNode` of `std/json`.
 import std/[options, tables, json]
+import ../../model
 
 export options, tables, json
 
@@ -91,8 +92,8 @@ type
     name*: string
     description*: string
     wrap*: bool
-    prevActor*: string                 ## "" for undefined (an id is never empty)
-    nextActor*: string
+    prevActor* {.undefinedIfEmpty.}: string                 ## "" for undefined (an id is never empty)
+    nextActor* {.undefinedIfEmpty.}: string
     links*: OrderedTable[string, JsonNode]
     properties*: OrderedTable[string, JsonNode]
     details*: Option[string]
