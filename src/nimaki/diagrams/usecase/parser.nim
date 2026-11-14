@@ -142,6 +142,7 @@ proc tokenLabel(q: Parser, k: int): DraftLabel =
 
 proc generatedId(label: string): string =
   ## label.replace(/\W/g, '_'): one `_` for each UTF-16 code unit that is not a word character.
+  ## A scanner, as a regex here reads a character past U+FFFF as one, where Pele writes two `_`.
   var i = 0
   while i < label.len:
     if isWordChar(label[i]):
