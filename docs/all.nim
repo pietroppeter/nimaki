@@ -38,4 +38,5 @@ import devlog/fishbones_and_domains
 import devlog/maps_and_clouds
 import devlog/boxes_in_boxes
 import devlog/a_c_abi
+import devlog/how_nimaki_reads_text
 import devlog/opening_a_web_page
