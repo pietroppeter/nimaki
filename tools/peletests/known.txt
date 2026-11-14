@@ -5,7 +5,5 @@
 tests/usecase/stress.test.ts	use case worst cases JSON nested 12,000 objects deep	skip	JavaScript build: the JSON reader keeps one pointer string per nesting level (O(depth²) characters), which exhausts the heap; the C build draws it in 0.5 s
 tests/usecase/stress.test.ts	use case worst cases JSON nested 20,000 arrays deep	skip	JavaScript build: the same as 12,000 objects deep
 tests/class/stress.test.ts	class diagram worst cases namespace name of 12,000 parts	skip	JavaScript build: parse() keeps each namespace's full name, O(parts²) characters, which in Nim's JavaScript strings (one number a character) exhausts the heap; found when parse() came to the bridge
-tests/render/info.test.ts	info rendering writes accessible names and exposes the model	known	model: the title is "" where Pele's is undefined (models-as-pele; tools/parsediff.nim reads the two as the same)
-tests/render/journey.test.ts	journey rendering treats a bare title as no title	known	model: the title is "" where Pele's is undefined (models-as-pele)
-tests/render/radar.test.ts	radar rendering reads names that start with circle, polygon, true, false or title	known	model: the title is "" where Pele's is undefined (models-as-pele)
-tests/render/timeline.test.ts	timeline rendering treats a bare title as no title	known	model: the title is "" where Pele's is undefined (models-as-pele)
+tests/render/sankey.test.ts	sankey rendering rejects control characters and invalid Unicode in names in sankey	known	a lone surrogate (\ud800) reaches the port as bytes that are not UTF-8, which read as U+FFFD, a valid character in a name (docs/divergences.md, Text that is not UTF-8); Pele refuses the surrogate itself
+tests/render/sankey.test.ts	sankey rendering rejects control characters and invalid Unicode in names in sankey-beta	known	the same as in sankey

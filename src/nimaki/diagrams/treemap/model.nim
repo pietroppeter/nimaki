@@ -7,9 +7,8 @@ import ../../jsregex
 type
   TreemapNode* = ref object
     name*: string
-    leaf*: bool
+    children*: Option[seq[TreemapNode]]
       ## Sections have a list of children, which may be empty. Leaves have none.
-    children*: seq[TreemapNode]
     value*: Option[float]
     classSelector*: string        ## "" for undefined
     cssCompiledStyles*: seq[string]
@@ -27,18 +26,21 @@ type
     roots*: seq[TreemapNode]
     classes*: OrderedTable[string, seq[string]]
 
+func leaf*(node: TreemapNode): bool = node.children.isNone
+
 proc buildHierarchy*(items: seq[TreemapItem]): seq[TreemapNode] =
   ## A row belongs to the nearest section above it that is indented less.
   var stack: seq[(TreemapNode, int)]
   for item in items:
-    let node = TreemapNode(name: item.name, leaf: item.leaf)
+    let node = TreemapNode(name: item.name)
+    if not item.leaf: node.children = some(newSeq[TreemapNode]())
     node.classSelector = item.classSelector
     if item.cssCompiledStyles.len > 0: node.cssCompiledStyles = item.cssCompiledStyles
     if item.leaf and item.value.isSome: node.value = item.value
 
     while stack.len > 0 and stack[^1][1] >= item.level: discard stack.pop()
     if stack.len == 0: result.add node
-    else: stack[^1][0].children.add node
+    else: stack[^1][0].children.get.add node
     if not item.leaf: stack.add (node, item.level)
 
 func collapseIndents(s: string): string =

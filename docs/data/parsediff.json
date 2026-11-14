@@ -2,8 +2,8 @@
   "about": "Pele's parse() against nimaki's, on corpus/cases.json, by tools/parsediff.nim. Do not edit by hand.",
   "pin": "1.13.0",
   "cases": 2118,
-  "same": 691,
-  "different": 1054,
+  "same": 1064,
+  "different": 681,
   "error": 373,
   "unsupported": 0,
   "types": [
@@ -44,8 +44,8 @@
     },
     {
       "type": "cynefin",
-      "same": 2,
-      "different": 17,
+      "same": 19,
+      "different": 0,
       "error": 0,
       "unsupported": 0
     },
@@ -58,15 +58,15 @@
     },
     {
       "type": "eventmodeling",
-      "same": 0,
-      "different": 21,
+      "same": 21,
+      "different": 0,
       "error": 3,
       "unsupported": 0
     },
     {
       "type": "flowchart",
-      "same": 327,
-      "different": 7,
+      "same": 334,
+      "different": 0,
       "error": 49,
       "unsupported": 0
     },
@@ -79,8 +79,8 @@
     },
     {
       "type": "gitGraph",
-      "same": 3,
-      "different": 78,
+      "same": 81,
+      "different": 0,
       "error": 13,
       "unsupported": 0
     },
@@ -121,8 +121,8 @@
     },
     {
       "type": "packet",
-      "same": 2,
-      "different": 9,
+      "same": 11,
+      "different": 0,
       "error": 8,
       "unsupported": 0
     },
@@ -135,8 +135,8 @@
     },
     {
       "type": "quadrantChart",
-      "same": 0,
-      "different": 34,
+      "same": 34,
+      "different": 0,
       "error": 1,
       "unsupported": 0
     },
@@ -149,8 +149,8 @@
     },
     {
       "type": "railroad",
-      "same": 1,
-      "different": 77,
+      "same": 78,
+      "different": 0,
       "error": 13,
       "unsupported": 0
     },
@@ -163,8 +163,8 @@
     },
     {
       "type": "sankey",
-      "same": 0,
-      "different": 10,
+      "same": 10,
+      "different": 0,
       "error": 4,
       "unsupported": 0
     },
@@ -205,36 +205,36 @@
     },
     {
       "type": "treemap",
-      "same": 0,
-      "different": 8,
+      "same": 8,
+      "different": 0,
       "error": 0,
       "unsupported": 0
     },
     {
       "type": "usecase",
-      "same": 0,
-      "different": 75,
+      "same": 1,
+      "different": 74,
       "error": 76,
       "unsupported": 0
     },
     {
       "type": "venn",
-      "same": 0,
-      "different": 22,
+      "same": 22,
+      "different": 0,
       "error": 3,
       "unsupported": 0
     },
     {
       "type": "wardley",
-      "same": 1,
-      "different": 38,
+      "same": 39,
+      "different": 0,
       "error": 0,
       "unsupported": 0
     },
     {
       "type": "xychart",
-      "same": 0,
-      "different": 51,
+      "same": 51,
+      "different": 0,
       "error": 20,
       "unsupported": 0
     }

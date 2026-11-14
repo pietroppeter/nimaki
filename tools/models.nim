@@ -8,9 +8,10 @@
 ##
 ## Used by tools/parsediff.nim, the referee for models, and by tools/peletests/bridge.nim, which
 ## hands these models to Pele's tests; so it compiles with `nim js` too.
-import std/[json, tables, sets, strutils, options, algorithm]
+import std/[json, tables, sets, strutils, options, algorithm, macros, typetraits]
 import nimaki
 import nimaki/util/yaml
+import nimaki/model
 from nimaki/diagrams/agentflow/db import AgentflowDb
 from nimaki/diagrams/architecture/db import ArchitectureDb
 from "nimaki/diagrams/block/db" import BlockDb
@@ -27,11 +28,11 @@ from nimaki/diagrams/ishikawa/db import IshikawaDb
 from nimaki/diagrams/journey/db import JourneyModel
 from nimaki/diagrams/kanban/db import KanbanModel
 from nimaki/diagrams/mindmap/db import MindmapModel
-from nimaki/diagrams/packet/model import PacketModel
+from nimaki/diagrams/packet/model import PacketModel, PacketLabel
 from nimaki/diagrams/pie/model import PieModel
-from nimaki/diagrams/quadrant/db import QuadrantModel
+from nimaki/diagrams/quadrant/db import QuadrantModel, QuadrantText
 from nimaki/diagrams/radar/model import RadarModel
-from nimaki/diagrams/railroad/types import RailroadModel
+from nimaki/diagrams/railroad/types import RailroadModel, RailroadNode, NodeKind
 from nimaki/diagrams/requirement/db import RequirementDb
 from nimaki/diagrams/sankey/db import SankeyModel
 from nimaki/diagrams/sequence/db import SeqDb
@@ -42,7 +43,7 @@ from nimaki/diagrams/treeview/model import TreeViewModel
 from nimaki/diagrams/usecase/types import UsecaseModel
 from nimaki/diagrams/venn/db import VennDb
 from nimaki/diagrams/wardley/model import WardleyModel
-from nimaki/diagrams/xychart/db import XyChartDb
+from nimaki/diagrams/xychart/db import XyChartDb, Axis, Plot
 
 when defined(js):
   import std/jsffi
@@ -86,6 +87,55 @@ proc onPath(w: Walk, p: Mark): bool =
 
 proc dump[T](x: T, path: var Walk): JsonNode
 
+# Where the port holds a value in a shape of its own, and Pele another. These write plain values
+# themselves: a call of the generic `dump` from here would be compiled before its body is.
+
+proc number(x: float, path: Walk): JsonNode =
+  ## A number as tools/oracle.mjs writes it: NaN is undefined, an infinity "Infinity". For the
+  ## bridge (`share`), the number itself.
+  if path.share: newJFloat(x)
+  elif x != x: newJNull()
+  elif x == Inf: %"Infinity"
+  elif x == -Inf: %"-Infinity"
+  else: %x
+
+proc dump(x: QuadrantText, path: var Walk): JsonNode =
+  ## Pele's optional label, held as an object with a flag for "defined" and one for its type.
+  if not x.defined: newJNull()
+  else: %*{"text": x.text, "type": (if x.markdown: "markdown" else: "text")}
+
+proc dump(x: Axis, path: var Walk): JsonNode =
+  ## Pele's union of a band axis and a linear one, held as one object with a flag.
+  if x.band: %*{"type": "band", "title": x.title, "categories": x.categories}
+  else: %*{"type": "linear", "title": x.title, "min": number(x.min, path), "max": number(x.max, path)}
+
+proc dump(x: Plot, path: var Walk): JsonNode =
+  ## Pele's plot, its type held as a flag, its optional point labels with another.
+  var data = newJArray()
+  for (label, value) in x.data: data.add %*[label, number(value, path)]
+  result = %*{"type": (if x.bar: "bar" else: "line"), "title": x.title, "data": data}
+  if x.hasPointLabels: result["pointLabels"] = %x.pointLabels
+
+proc dump(x: RailroadNode, path: var Walk): JsonNode =
+  ## Pele's union of seven shapes, which the port holds as one object with a kind.
+  if x == nil: return newJNull()
+  var kids = newJArray()
+  for k in x.kids: kids.add dump(k, path)
+  case x.kind
+  of nkTerminal: %*{"type": "terminal", "value": x.text}
+  of nkNonterminal: %*{"type": "nonterminal", "name": x.text}
+  of nkSpecial: %*{"type": "special", "text": x.text}
+  of nkSequence: %*{"type": "sequence", "elements": kids}
+  of nkChoice: %*{"type": "choice", "alternatives": kids}
+  of nkOptional: %*{"type": "optional", "element": (if kids.len > 0: kids[0] else: newJNull())}
+  of nkRepetition:
+    %*{"type": "repetition", "element": (if kids.len > 0: kids[0] else: newJNull()),
+       "min": number(x.min, path), "max": number(x.max, path)}
+
+proc dump(x: PacketLabel, path: var Walk): JsonNode =
+  ## A label boxed so that the pieces of a field share it, as JavaScript shares a string.
+  if x == nil: newJNull() else: %x.text
+
 func enumName(s: string): string =
   ## An enum's name as Pele's string: Nim's enums carry a prefix (`skState`, `nkTerminal`), which
   ## Pele's string unions do not (`"state"`, `"terminal"`). An enum with string values is written
@@ -97,7 +147,10 @@ func enumName(s: string): string =
 const renamed = {"kind": "type", "typ": "type", "stop": "end"}.toTable
   ## Pele's field names that are Nim keywords, and the names the port gives those fields.
 
-const renamedIn* = {"sequence": {"start": "from"}.toTable}.toTable
+const renamedIn* = {"sequence": {"start": "from"}.toTable,
+                    "cynefin": {"start": "from"}.toTable,
+                    "eventmodeling": {"type": "kind"}.toTable}.toTable
+  ## (eventmodeling's `kind` is Pele's own `kind`, which the general rule would rename.)
   ## The same, for one diagram type only (`start` is a field of its own in other types).
 
 proc rename*(j: JsonNode, names: Table[string, string]): JsonNode =
@@ -113,15 +166,44 @@ proc rename*(j: JsonNode, names: Table[string, string]): JsonNode =
 proc dumpFields[T: object | tuple](x: T, path: var Walk): JsonNode =
   result = newJObject()
   for name, value in fieldPairs(x):
-    when value is proc or value is YamlValue or value is pointer:
-      discard   # functions are left out, as JSON leaves them out; config is not the model
+    when value is proc or value is pointer:
+      discard   # functions are left out, as JSON leaves them out
+    elif value.hasCustomPragma(portOnly):
+      discard   # a field of the port's own (src/nimaki/model.nim)
+    elif value.hasCustomPragma(undefinedIfEmpty):
+      # "" for Pele's undefined (src/nimaki/model.nim)
+      result[renamed.getOrDefault(name, name)] = (if value.len > 0: dump(value, path) else: newJNull())
+    elif value.hasCustomPragma(spread):
+      let inner = dump(value, path)
+      if inner.kind == JObject:
+        for k, v in inner:
+          if k != "$id": result[k] = v
     else:
       result[renamed.getOrDefault(name, name)] = dump(value, path)
+
+proc dumpYaml(v: YamlValue): JsonNode =
+  ## A value read from YAML or JSON in the text (metadata, a config), as Pele holds it: a plain
+  ## object, not a Map.
+  if v == nil: return newJNull()
+  case v.kind
+  of yNull: newJNull()
+  of yBool: %v.b
+  of yNumber: (if v.n != v.n: newJNull() else: %v.n)
+  of yString: %v.s
+  of ySeq:
+    var a = newJArray()
+    for item in v.items: a.add dumpYaml(item)
+    a
+  of yMap:
+    var o = newJObject()
+    for k, item in v.fields: o[k] = dumpYaml(item)
+    o
 
 proc dump[T](x: T, path: var Walk): JsonNode =
   when T is string: path.spend(x.len + 1)
   else: path.spend(1)
-  when T is ref:
+  when T is YamlValue: dumpYaml(x)
+  elif T is ref:
     if x == nil: return newJNull()
     let p = mark(x)
     if path.share:
@@ -145,10 +227,8 @@ proc dump[T](x: T, path: var Walk): JsonNode =
   elif T is bool: %x
   elif T is enum: %enumName($x)
   elif T is SomeNumber:
-    when T is SomeFloat:
-      if x != x:   # NaN: the port's undefined number, or a NaN of Pele's
-        return if path.share: newJFloat(x) else: newJNull()
-    %x.float
+    when T is SomeFloat: number(x.float, path)   # NaN: the port's undefined number
+    else: %x.float
   elif T is char: %($x)
   elif T is Option:
     if x.isSome: dump(x.get, path) else: newJNull()
@@ -163,6 +243,10 @@ proc dump[T](x: T, path: var Walk): JsonNode =
   elif T is seq or T is array:
     var a = newJArray()
     for v in x: a.add dump(v, path)
+    a
+  elif T is tuple and not isNamedTuple(T):
+    var a = newJArray()   # Pele's pair, [label, value]: an array in JavaScript
+    for v in x.fields: a.add dump(v, path)
     a
   elif T is object or T is tuple: dumpFields(x, path)
   else: %($x)
@@ -208,27 +292,32 @@ proc dumpModel*(m: ParsedModel, share = false, budget = 0): JsonNode =
   of "xychart": asT(XyChartDb)
   else: newJNull()
   if m.diagramType in renamedIn: result = rename(result, renamedIn[m.diagramType])
+  if result.kind == JObject and m.diagramType != "usecase":   # usecase's Pele starts them as ""
+    for k in ["title", "accTitle", "accDescr"]:
+      # "" for undefined in every model (src/nimaki/model.nim)
+      if result{k} != nil and result[k].kind == JString and result[k].getStr == "": result[k] = newJNull()
 
 
-proc normal*(j: JsonNode): JsonNode =
-  ## What is compared: keys with null or "" dropped, numbers as floats, sets sorted.
+proc normal*(j: JsonNode, strict = false): JsonNode =
+  ## What is compared: keys with null or "" dropped, numbers as floats, sets sorted. With
+  ## `strict`, "" is kept: an empty text and a missing one differ, as they do to Pele's tests.
   case j.kind
   of JInt: result = %j.getInt.float
   of JFloat: result = j
   of JObject:
-    if j.len == 1 and j.hasKey("$map"): return normal(j["$map"])   # a Map reads as an object
+    if j.len == 1 and j.hasKey("$map"): return normal(j["$map"], strict)   # a Map reads as an object
     if j.len == 1 and j.hasKey("$set"):
       var items: seq[JsonNode]
-      for v in j["$set"]: items.add normal(v)
+      for v in j["$set"]: items.add normal(v, strict)
       items.sort(proc (a, b: JsonNode): int = cmp($a, $b))
       return %*{"$set": items}
     result = newJObject()
     for k, v in j:
-      if v.kind == JNull or (v.kind == JString and v.getStr == ""): continue
-      let n = normal(v)
+      if v.kind == JNull or (not strict and v.kind == JString and v.getStr == ""): continue
+      let n = normal(v, strict)
       if n.kind in {JArray, JObject} and n.len == 0: continue   # an empty list is a missing one
       result[k] = n
   of JArray:
     result = newJArray()
-    for v in j: result.add normal(v)
+    for v in j: result.add normal(v, strict)
   else: result = j

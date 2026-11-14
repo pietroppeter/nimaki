@@ -4,13 +4,13 @@
   "files": 295,
   "tests": 6992,
   "counts": {
-    "passed": 6820,
+    "passed": 6836,
     "api": 25,
-    "model": 85,
+    "model": 28,
     "unported": 0,
-    "speed": 54,
+    "speed": 97,
     "canvas": 1,
-    "known": 7,
+    "known": 5,
     "failed": 0
   },
   "byFile": {
@@ -35,11 +35,11 @@
       "failed": 0
     },
     "tests/agentflow/stress.test.ts": {
-      "passed": 66,
+      "passed": 61,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 3,
+      "speed": 8,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -55,11 +55,11 @@
       "failed": 0
     },
     "tests/architecture/stress.test.ts": {
-      "passed": 47,
+      "passed": 46,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 0,
+      "speed": 1,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -75,11 +75,11 @@
       "failed": 0
     },
     "tests/block/stress.test.ts": {
-      "passed": 48,
+      "passed": 45,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 0,
+      "speed": 3,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -145,11 +145,11 @@
       "failed": 0
     },
     "tests/class/stress.test.ts": {
-      "passed": 48,
+      "passed": 46,
       "api": 0,
       "model": 2,
       "unported": 0,
-      "speed": 5,
+      "speed": 7,
       "canvas": 0,
       "known": 1,
       "failed": 0
@@ -1525,11 +1525,11 @@
       "failed": 0
     },
     "tests/cynefin/stress.test.ts": {
-      "passed": 21,
+      "passed": 19,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 1,
+      "speed": 3,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -1555,11 +1555,11 @@
       "failed": 0
     },
     "tests/er/stress.test.ts": {
-      "passed": 47,
+      "passed": 44,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 0,
+      "speed": 3,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -1625,11 +1625,11 @@
       "failed": 0
     },
     "tests/gantt/stress.test.ts": {
-      "passed": 31,
+      "passed": 30,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 6,
+      "speed": 7,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -1655,11 +1655,11 @@
       "failed": 0
     },
     "tests/git/stress.test.ts": {
-      "passed": 30,
+      "passed": 24,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 1,
+      "speed": 7,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -1695,11 +1695,11 @@
       "failed": 0
     },
     "tests/ishikawa/stress.test.ts": {
-      "passed": 28,
+      "passed": 26,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 0,
+      "speed": 2,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -1715,11 +1715,11 @@
       "failed": 0
     },
     "tests/journey/stress.test.ts": {
-      "passed": 30,
+      "passed": 28,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 4,
+      "speed": 6,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -1785,11 +1785,11 @@
       "failed": 0
     },
     "tests/mindmap/stress.test.ts": {
-      "passed": 30,
+      "passed": 29,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 2,
+      "speed": 3,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -1865,19 +1865,19 @@
       "failed": 0
     },
     "tests/radar/stress.test.ts": {
-      "passed": 23,
+      "passed": 22,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 0,
+      "speed": 1,
       "canvas": 0,
       "known": 0,
       "failed": 0
     },
     "tests/railroad/model.test.ts": {
-      "passed": 2,
+      "passed": 16,
       "api": 0,
-      "model": 14,
+      "model": 0,
       "unported": 0,
       "speed": 0,
       "canvas": 0,
@@ -1895,11 +1895,11 @@
       "failed": 0
     },
     "tests/railroad/stress.test.ts": {
-      "passed": 55,
+      "passed": 49,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 0,
+      "speed": 6,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -1915,9 +1915,9 @@
       "failed": 0
     },
     "tests/render/agentflow.test.ts": {
-      "passed": 27,
+      "passed": 29,
       "api": 0,
-      "model": 8,
+      "model": 6,
       "unported": 0,
       "speed": 0,
       "canvas": 0,
@@ -1945,9 +1945,9 @@
       "failed": 0
     },
     "tests/render/architecture.test.ts": {
-      "passed": 22,
+      "passed": 23,
       "api": 0,
-      "model": 1,
+      "model": 0,
       "unported": 0,
       "speed": 0,
       "canvas": 0,
@@ -1995,9 +1995,9 @@
       "failed": 0
     },
     "tests/render/c4.test.ts": {
-      "passed": 41,
+      "passed": 42,
       "api": 0,
-      "model": 5,
+      "model": 4,
       "unported": 0,
       "speed": 0,
       "canvas": 0,
@@ -2045,9 +2045,9 @@
       "failed": 0
     },
     "tests/render/cynefin.test.ts": {
-      "passed": 7,
+      "passed": 9,
       "api": 0,
-      "model": 2,
+      "model": 0,
       "unported": 0,
       "speed": 0,
       "canvas": 0,
@@ -2095,9 +2095,9 @@
       "failed": 0
     },
     "tests/render/eventmodeling.test.ts": {
-      "passed": 13,
+      "passed": 14,
       "api": 0,
-      "model": 1,
+      "model": 0,
       "unported": 0,
       "speed": 0,
       "canvas": 0,
@@ -2155,9 +2155,9 @@
       "failed": 0
     },
     "tests/render/git.test.ts": {
-      "passed": 21,
+      "passed": 22,
       "api": 0,
-      "model": 1,
+      "model": 0,
       "unported": 0,
       "speed": 0,
       "canvas": 0,
@@ -2185,13 +2185,13 @@
       "failed": 0
     },
     "tests/render/info.test.ts": {
-      "passed": 4,
+      "passed": 5,
       "api": 0,
       "model": 0,
       "unported": 0,
       "speed": 0,
       "canvas": 0,
-      "known": 1,
+      "known": 0,
       "failed": 0
     },
     "tests/render/ink.test.ts": {
@@ -2235,13 +2235,13 @@
       "failed": 0
     },
     "tests/render/journey.test.ts": {
-      "passed": 19,
+      "passed": 20,
       "api": 0,
       "model": 0,
       "unported": 0,
       "speed": 0,
       "canvas": 0,
-      "known": 1,
+      "known": 0,
       "failed": 0
     },
     "tests/render/kanban-security.test.ts": {
@@ -2335,9 +2335,9 @@
       "failed": 0
     },
     "tests/render/packet.test.ts": {
-      "passed": 12,
+      "passed": 13,
       "api": 0,
-      "model": 1,
+      "model": 0,
       "unported": 0,
       "speed": 0,
       "canvas": 0,
@@ -2375,9 +2375,9 @@
       "failed": 0
     },
     "tests/render/quadrant.test.ts": {
-      "passed": 19,
+      "passed": 21,
       "api": 0,
-      "model": 2,
+      "model": 0,
       "unported": 0,
       "speed": 0,
       "canvas": 0,
@@ -2395,13 +2395,13 @@
       "failed": 0
     },
     "tests/render/radar.test.ts": {
-      "passed": 14,
+      "passed": 15,
       "api": 0,
       "model": 0,
       "unported": 0,
       "speed": 0,
       "canvas": 0,
-      "known": 1,
+      "known": 0,
       "failed": 0
     },
     "tests/render/railroad-security.test.ts": {
@@ -2415,9 +2415,9 @@
       "failed": 0
     },
     "tests/render/railroad.test.ts": {
-      "passed": 17,
+      "passed": 19,
       "api": 0,
-      "model": 2,
+      "model": 0,
       "unported": 0,
       "speed": 0,
       "canvas": 0,
@@ -2455,13 +2455,13 @@
       "failed": 0
     },
     "tests/render/sankey.test.ts": {
-      "passed": 39,
+      "passed": 61,
       "api": 0,
-      "model": 24,
+      "model": 0,
       "unported": 0,
       "speed": 0,
       "canvas": 0,
-      "known": 0,
+      "known": 2,
       "failed": 0
     },
     "tests/render/security.test.ts": {
@@ -2485,9 +2485,9 @@
       "failed": 0
     },
     "tests/render/sequence.test.ts": {
-      "passed": 52,
+      "passed": 53,
       "api": 0,
-      "model": 2,
+      "model": 1,
       "unported": 0,
       "speed": 0,
       "canvas": 0,
@@ -2535,13 +2535,13 @@
       "failed": 0
     },
     "tests/render/timeline.test.ts": {
-      "passed": 18,
+      "passed": 19,
       "api": 0,
       "model": 0,
       "unported": 0,
       "speed": 0,
       "canvas": 0,
-      "known": 1,
+      "known": 0,
       "failed": 0
     },
     "tests/render/treemap-security.test.ts": {
@@ -2555,9 +2555,9 @@
       "failed": 0
     },
     "tests/render/treemap.test.ts": {
-      "passed": 32,
+      "passed": 33,
       "api": 0,
-      "model": 1,
+      "model": 0,
       "unported": 0,
       "speed": 0,
       "canvas": 0,
@@ -2615,9 +2615,9 @@
       "failed": 0
     },
     "tests/render/venn.test.ts": {
-      "passed": 32,
+      "passed": 33,
       "api": 0,
-      "model": 1,
+      "model": 0,
       "unported": 0,
       "speed": 0,
       "canvas": 0,
@@ -2635,9 +2635,9 @@
       "failed": 0
     },
     "tests/render/wardley.test.ts": {
-      "passed": 11,
+      "passed": 13,
       "api": 0,
-      "model": 2,
+      "model": 0,
       "unported": 0,
       "speed": 0,
       "canvas": 0,
@@ -2655,9 +2655,9 @@
       "failed": 0
     },
     "tests/render/xychart.test.ts": {
-      "passed": 20,
+      "passed": 22,
       "api": 0,
-      "model": 2,
+      "model": 0,
       "unported": 0,
       "speed": 0,
       "canvas": 0,
@@ -2705,11 +2705,11 @@
       "failed": 0
     },
     "tests/sankey/stress.test.ts": {
-      "passed": 25,
+      "passed": 23,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 0,
+      "speed": 2,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -2725,9 +2725,9 @@
       "failed": 0
     },
     "tests/sequence/stress.test.ts": {
-      "passed": 46,
+      "passed": 45,
       "api": 0,
-      "model": 0,
+      "model": 1,
       "unported": 0,
       "speed": 1,
       "canvas": 0,
@@ -2745,21 +2745,21 @@
       "failed": 0
     },
     "tests/state/stress.test.ts": {
-      "passed": 44,
+      "passed": 42,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 9,
+      "speed": 11,
       "canvas": 0,
       "known": 0,
       "failed": 0
     },
     "tests/stress.test.ts": {
-      "passed": 32,
+      "passed": 30,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 5,
+      "speed": 7,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -2785,11 +2785,11 @@
       "failed": 0
     },
     "tests/timeline/stress.test.ts": {
-      "passed": 29,
+      "passed": 28,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 8,
+      "speed": 9,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -2825,11 +2825,11 @@
       "failed": 0
     },
     "tests/treeview/stress.test.ts": {
-      "passed": 24,
+      "passed": 23,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 3,
+      "speed": 4,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -2845,11 +2845,11 @@
       "failed": 0
     },
     "tests/usecase/stress.test.ts": {
-      "passed": 46,
+      "passed": 48,
       "api": 0,
       "model": 1,
       "unported": 0,
-      "speed": 2,
+      "speed": 0,
       "canvas": 0,
       "known": 2,
       "failed": 0
@@ -2905,11 +2905,11 @@
       "failed": 0
     },
     "tests/venn/stress.test.ts": {
-      "passed": 42,
+      "passed": 40,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 0,
+      "speed": 2,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -2980,33 +2980,87 @@
     },
     {
       "file": "tests/agentflow/stress.test.ts",
+      "test": "agentflow worst cases 1,500 nested flows crossed by 1,000 edges",
+      "kind": "speed",
+      "message": "AssertionError: expected 4638.8709340000005 to be less than 3000"
+    },
+    {
+      "file": "tests/agentflow/stress.test.ts",
+      "test": "agentflow worst cases 5,000 sibling flows",
+      "kind": "speed",
+      "message": "AssertionError: expected 3010.1777479999982 to be less than 3000"
+    },
+    {
+      "file": "tests/agentflow/stress.test.ts",
       "test": "agentflow worst cases 3,000 flows that each name the next one",
       "kind": "speed",
-      "message": "AssertionError: expected 3200.417775 to be less than 3000"
+      "message": "AssertionError: expected 4208.107275000002 to be less than 3000"
     },
     {
       "file": "tests/agentflow/stress.test.ts",
       "test": "agentflow worst cases 3,000 global blocks after a flow of 3,000 nodes",
       "kind": "speed",
-      "message": "AssertionError: expected 3510.538679000001 to be less than 3000"
+      "message": "AssertionError: expected 3751.650078000006 to be less than 3000"
+    },
+    {
+      "file": "tests/agentflow/stress.test.ts",
+      "test": "agentflow worst cases 5,000 connectors",
+      "kind": "speed",
+      "message": "AssertionError: expected 3084.7270140000037 to be less than 3000"
+    },
+    {
+      "file": "tests/agentflow/stress.test.ts",
+      "test": "agentflow worst cases chain of 5,000",
+      "kind": "speed",
+      "message": "AssertionError: expected 4314.288502000003 to be less than 3000"
     },
     {
       "file": "tests/agentflow/stress.test.ts",
       "test": "agentflow worst cases one statement chaining 5,000",
       "kind": "speed",
-      "message": "AssertionError: expected 4371.5929650000035 to be less than 3000"
+      "message": "AssertionError: expected 5775.275108999995 to be less than 3000"
+    },
+    {
+      "file": "tests/agentflow/stress.test.ts",
+      "test": "agentflow worst cases star of 5,000",
+      "kind": "speed",
+      "message": "AssertionError: expected 4523.190458999998 to be less than 3000"
+    },
+    {
+      "file": "tests/architecture/stress.test.ts",
+      "test": "architecture worst cases 4,500 unconnected services",
+      "kind": "speed",
+      "message": "AssertionError: expected 3734.3117890000003 to be less than 3000"
+    },
+    {
+      "file": "tests/block/stress.test.ts",
+      "test": "block worst cases one row of 16,000 blocks",
+      "kind": "speed",
+      "message": "AssertionError: expected 5598.398012 to be less than 3000"
+    },
+    {
+      "file": "tests/block/stress.test.ts",
+      "test": "block worst cases one column of 10,000 blocks",
+      "kind": "speed",
+      "message": "AssertionError: expected 3732.9508889999997 to be less than 3000"
+    },
+    {
+      "file": "tests/block/stress.test.ts",
+      "test": "block worst cases one statement of 8,000 links",
+      "kind": "speed",
+      "message": "AssertionError: expected 3913.9220559999994 to be less than 3000"
     },
     {
       "file": "tests/c4/stress.test.ts",
       "test": "C4 worst cases as many relations as get careful placement",
       "kind": "speed",
-      "message": "AssertionError: expected 3172.7783500000005 to be less than 3000"
+      "message": "AssertionError: expected 3289.1687600000005 to be less than 3000"
     },
     {
       "file": "tests/c4/stress.test.ts",
       "test": "C4 worst cases 600 relations among 600 boundaries",
       "kind": "speed",
-      "message": "AssertionError: expected 3847.448894000001 to be less than 3000"
+      "message": "AssertionError: expected 5354.492662000001 to be less than 3000"
     },
     {
       "file": "tests/class/stress.test.ts",
@@ -3018,49 +3072,73 @@
       "file": "tests/class/stress.test.ts",
       "test": "class diagram worst cases namespace name of 3,000 parts, rendered",
       "kind": "speed",
-      "message": "AssertionError: expected 5371.899628000001 to be less than 3000"
+      "message": "AssertionError: expected 21042.241238000002 to be less than 3000"
     },
     {
       "file": "tests/class/stress.test.ts",
       "test": "class diagram worst cases 4,000 nested namespaces",
       "kind": "model",
-      "message": "AssertionError: expected 3235.227526999999 to be less than 3000"
+      "message": "AssertionError: expected 21947.086129 to be less than 3000"
     },
     {
       "file": "tests/class/stress.test.ts",
       "test": "class diagram worst cases 2,000 nested namespaces, rendered",
       "kind": "speed",
-      "message": "AssertionError: expected 6960.994288999998 to be less than 3000"
+      "message": "AssertionError: expected 30347.964819999994 to be less than 3000"
     },
     {
       "file": "tests/class/stress.test.ts",
       "test": "class diagram worst cases unclosed nested namespaces",
       "kind": "model",
-      "message": "AssertionError: expected 3216.173365999999 to be less than 3000"
+      "message": "AssertionError: expected 19059.710288000002 to be less than 3000"
     },
     {
       "file": "tests/class/stress.test.ts",
       "test": "class diagram worst cases 5,000 sibling namespaces",
       "kind": "speed",
-      "message": "AssertionError: expected 3042.5563129999973 to be less than 3000"
+      "message": "AssertionError: expected 4414.686573999992 to be less than 3000"
+    },
+    {
+      "file": "tests/class/stress.test.ts",
+      "test": "class diagram worst cases star of 4,000 with cardinalities",
+      "kind": "speed",
+      "message": "AssertionError: expected 3911.9890390000073 to be less than 3000"
+    },
+    {
+      "file": "tests/class/stress.test.ts",
+      "test": "class diagram worst cases 3,000 classDefs applied to 100 classes",
+      "kind": "speed",
+      "message": "AssertionError: expected 3001.462320999999 to be less than 3000"
     },
     {
       "file": "tests/class/stress.test.ts",
       "test": "class diagram worst cases 1,600 classDefs applied to 1,600 classes",
       "kind": "speed",
-      "message": "AssertionError: expected 6289.843651000003 to be less than 3000"
+      "message": "AssertionError: expected 18982.003488999995 to be less than 3000"
     },
     {
       "file": "tests/class/stress.test.ts",
       "test": "class diagram worst cases a classDef of 5,000 declarations on 800 classes, each with a style of its own",
       "kind": "speed",
-      "message": "AssertionError: expected 7328.456367999999 to be less than 3000"
+      "message": "AssertionError: expected 9826.383685000008 to be less than 3000"
     },
     {
       "file": "tests/cynefin/stress.test.ts",
       "test": "cynefin worst cases 10,000 items in one domain",
       "kind": "speed",
-      "message": "AssertionError: expected 2311.871545 to be less than 2000"
+      "message": "AssertionError: expected 3085.99205 to be less than 2000"
+    },
+    {
+      "file": "tests/cynefin/stress.test.ts",
+      "test": "cynefin worst cases 5,000 transitions",
+      "kind": "speed",
+      "message": "AssertionError: expected 2747.3525519999994 to be less than 2000"
+    },
+    {
+      "file": "tests/cynefin/stress.test.ts",
+      "test": "cynefin worst cases 5,000 transitions between every pair",
+      "kind": "speed",
+      "message": "AssertionError: expected 2017.846493000001 to be less than 2000"
     },
     {
       "file": "tests/entries.test.ts",
@@ -3069,88 +3147,178 @@
       "message": "NotInNimaki: nimaki does not provide registered()"
     },
     {
+      "file": "tests/er/stress.test.ts",
+      "test": "ER worst cases 5,000 sibling subgraphs",
+      "kind": "speed",
+      "message": "AssertionError: expected 3601.23474 to be less than 3000"
+    },
+    {
+      "file": "tests/er/stress.test.ts",
+      "test": "ER worst cases chain of 5,000",
+      "kind": "speed",
+      "message": "AssertionError: expected 3813.258408999998 to be less than 3000"
+    },
+    {
+      "file": "tests/er/stress.test.ts",
+      "test": "ER worst cases star of 5,000",
+      "kind": "speed",
+      "message": "AssertionError: expected 4157.04579 to be less than 3000"
+    },
+    {
       "file": "tests/eventmodeling/stress.test.ts",
       "test": "eventmodeling worst cases 1,000 frames that each name every earlier frame",
       "kind": "speed",
-      "message": "AssertionError: expected 2134.231172 to be less than 2000"
+      "message": "AssertionError: expected 2802.017637 to be less than 2000"
     },
     {
       "file": "tests/gantt/stress.test.ts",
       "test": "gantt worst cases 8,000 tasks",
       "kind": "speed",
-      "message": "AssertionError: expected 4623.044873 to be less than 3000"
+      "message": "AssertionError: expected 7458.534991 to be less than 3000"
     },
     {
       "file": "tests/gantt/stress.test.ts",
       "test": "gantt worst cases 5,000 sections",
       "kind": "speed",
-      "message": "AssertionError: expected 3305.132211 to be less than 3000"
+      "message": "AssertionError: expected 5575.722295000001 to be less than 3000"
     },
     {
       "file": "tests/gantt/stress.test.ts",
       "test": "gantt worst cases compact mode with 6,000 overlapping tasks",
       "kind": "speed",
-      "message": "AssertionError: expected 3496.3365400000002 to be less than 3000"
+      "message": "AssertionError: expected 4895.725597000001 to be less than 3000"
     },
     {
       "file": "tests/gantt/stress.test.ts",
       "test": "gantt worst cases 12,000 excluded dates over long tasks",
       "kind": "speed",
-      "message": "AssertionError: expected 4025.814527999999 to be less than 3000"
+      "message": "AssertionError: expected 12691.134971000003 to be less than 3000"
     },
     {
       "file": "tests/gantt/stress.test.ts",
       "test": "gantt worst cases a custom format checked for every excluded day",
       "kind": "speed",
-      "message": "AssertionError: expected 5768.274013999999 to be less than 3000"
+      "message": "AssertionError: expected 21300.693913999996 to be less than 3000"
     },
     {
       "file": "tests/gantt/stress.test.ts",
       "test": "gantt worst cases a date format of 25,000 tokens",
       "kind": "speed",
-      "message": "AssertionError: expected 5751.347562000003 to be less than 3000"
+      "message": "AssertionError: expected 9101.694630000005 to be less than 3000"
+    },
+    {
+      "file": "tests/gantt/stress.test.ts",
+      "test": "gantt worst cases 2,000 links to 2,000 tasks",
+      "kind": "speed",
+      "message": "AssertionError: expected 3030.6179300000076 to be less than 3000"
     },
     {
       "file": "tests/git/stress.test.ts",
       "test": "git graph worst cases 7,000 commits",
       "kind": "speed",
-      "message": "AssertionError: expected 2359.308134 to be less than 2000"
+      "message": "AssertionError: expected 3742.6723349999997 to be less than 2000"
+    },
+    {
+      "file": "tests/git/stress.test.ts",
+      "test": "git graph worst cases 7,000 commits, top to bottom, ids level",
+      "kind": "speed",
+      "message": "AssertionError: expected 2938.1572029999998 to be less than 2000"
+    },
+    {
+      "file": "tests/git/stress.test.ts",
+      "test": "git graph worst cases 3,000 branches of one commit",
+      "kind": "speed",
+      "message": "AssertionError: expected 3083.0450120000005 to be less than 2000"
+    },
+    {
+      "file": "tests/git/stress.test.ts",
+      "test": "git graph worst cases 1,500 branches merged back",
+      "kind": "speed",
+      "message": "AssertionError: expected 2251.783272999999 to be less than 2000"
+    },
+    {
+      "file": "tests/git/stress.test.ts",
+      "test": "git graph worst cases 1,500 cherry-picks of one old commit",
+      "kind": "speed",
+      "message": "AssertionError: expected 3263.9030490000005 to be less than 2000"
+    },
+    {
+      "file": "tests/git/stress.test.ts",
+      "test": "git graph worst cases the same, parallel and top to bottom",
+      "kind": "speed",
+      "message": "AssertionError: expected 2542.733712999998 to be less than 2000"
+    },
+    {
+      "file": "tests/git/stress.test.ts",
+      "test": "git graph worst cases 1,500 commits that already have the ids Pele would generate next",
+      "kind": "speed",
+      "message": "AssertionError: expected 2018.2519260000008 to be less than 2000"
+    },
+    {
+      "file": "tests/ishikawa/stress.test.ts",
+      "test": "Ishikawa worst cases an outline 3,000 levels deep",
+      "kind": "speed",
+      "message": "AssertionError: expected 3783.642618 to be less than 3000"
+    },
+    {
+      "file": "tests/ishikawa/stress.test.ts",
+      "test": "Ishikawa worst cases an outline 3,000 levels deep, twice",
+      "kind": "speed",
+      "message": "AssertionError: expected 5674.423721000001 to be less than 3000"
     },
     {
       "file": "tests/journey/stress.test.ts",
       "test": "journey worst cases 6,000 tasks",
       "kind": "speed",
-      "message": "AssertionError: expected 1772.3952120000001 to be less than 1500"
+      "message": "AssertionError: expected 2530.184841 to be less than 1500"
     },
     {
       "file": "tests/journey/stress.test.ts",
       "test": "journey worst cases 5,000 tasks, each with its own actor",
       "kind": "speed",
-      "message": "AssertionError: expected 1600.2589969999995 to be less than 1500"
+      "message": "AssertionError: expected 2708.017979 to be less than 1500"
     },
     {
       "file": "tests/journey/stress.test.ts",
       "test": "journey worst cases one task with 16,000 actors",
       "kind": "speed",
-      "message": "AssertionError: expected 2011.873595 to be less than 1500"
+      "message": "AssertionError: expected 3329.2055690000007 to be less than 1500"
+    },
+    {
+      "file": "tests/journey/stress.test.ts",
+      "test": "journey worst cases one task with the same actor 25,000 times",
+      "kind": "speed",
+      "message": "AssertionError: expected 2049.8497860000007 to be less than 1500"
     },
     {
       "file": "tests/journey/stress.test.ts",
       "test": "journey worst cases 4,000 sections with one task each",
       "kind": "speed",
-      "message": "AssertionError: expected 1673.7482449999989 to be less than 1500"
+      "message": "AssertionError: expected 2518.556731999999 to be less than 1500"
+    },
+    {
+      "file": "tests/journey/stress.test.ts",
+      "test": "journey worst cases hash comments",
+      "kind": "speed",
+      "message": "AssertionError: expected 2027.7432459999982 to be less than 1500"
     },
     {
       "file": "tests/mindmap/stress.test.ts",
       "test": "mindmap worst cases 16,000 nodes on one level, rendered",
       "kind": "speed",
-      "message": "AssertionError: expected 3137.826264 to be less than 3000"
+      "message": "AssertionError: expected 3859.9255450000005 to be less than 3000"
     },
     {
       "file": "tests/mindmap/stress.test.ts",
       "test": "mindmap worst cases 3,000 levels of nesting",
       "kind": "speed",
-      "message": "AssertionError: expected 3447.486573 to be less than 3000"
+      "message": "AssertionError: expected 5324.3202169999995 to be less than 3000"
+    },
+    {
+      "file": "tests/mindmap/stress.test.ts",
+      "test": "mindmap worst cases 5,000 branches with two leaves each",
+      "kind": "speed",
+      "message": "AssertionError: expected 3205.727112999999 to be less than 3000"
     },
     {
       "file": "tests/mount.test.ts",
@@ -3297,88 +3465,46 @@
       "message": "NotInNimaki: nimaki does not provide mount()"
     },
     {
-      "file": "tests/railroad/model.test.ts",
-      "test": "railroad model builds the constructor notation node for node",
-      "kind": "model",
-      "message": "AssertionError: expected { type: 'terminal', text: 'a', …(3) } to deeply equal { type: 'terminal', value: 'a' }"
+      "file": "tests/radar/stress.test.ts",
+      "test": "radar worst cases 5,000 axes with a polygon graticule of 32 ticks",
+      "kind": "speed",
+      "message": "AssertionError: expected 3285.1011430000003 to be less than 3000"
     },
     {
-      "file": "tests/railroad/model.test.ts",
-      "test": "railroad model replaces a sequence or choice of one by its only member",
-      "kind": "model",
-      "message": "AssertionError: expected { type: 'terminal', text: 'a', …(3) } to deeply equal { type: 'terminal', value: 'a' }"
+      "file": "tests/railroad/stress.test.ts",
+      "test": "railroad worst cases 50,000 postfix operators",
+      "kind": "speed",
+      "message": "AssertionError: expected 3687.9956060000004 to be less than 3000"
     },
     {
-      "file": "tests/railroad/model.test.ts",
-      "test": "railroad model decodes three escapes in strings and keeps any other escaped character",
-      "kind": "model",
-      "message": "AssertionError: expected { type: 'terminal', …(4) } to deeply equal { type: 'terminal', …(1) }"
+      "file": "tests/railroad/stress.test.ts",
+      "test": "railroad worst cases chain of 12,000 exceptions",
+      "kind": "speed",
+      "message": "AssertionError: expected 3346.202381000001 to be less than 3000"
     },
     {
-      "file": "tests/railroad/model.test.ts",
-      "test": "railroad model reads EBNF in both styles",
-      "kind": "model",
-      "message": "AssertionError: expected { type: 'sequence', text: '', …(3) } to deeply equal { type: 'sequence', …(1) }"
+      "file": "tests/railroad/stress.test.ts",
+      "test": "railroad worst cases exceptions nested 8,000 deep",
+      "kind": "speed",
+      "message": "AssertionError: expected 3265.2546550000006 to be less than 3000"
     },
     {
-      "file": "tests/railroad/model.test.ts",
-      "test": "railroad model applies EBNF postfix operators left to right to everything before them",
-      "kind": "model",
-      "message": "AssertionError: expected { type: 'repetition', text: '', …(3) } to deeply equal { type: 'repetition', …(3) }"
+      "file": "tests/railroad/stress.test.ts",
+      "test": "railroad worst cases choice of 12,000 alternatives",
+      "kind": "speed",
+      "message": "AssertionError: expected 3418.150848000001 to be less than 3000"
     },
     {
-      "file": "tests/railroad/model.test.ts",
-      "test": "railroad model lets an EBNF special sequence start at any question mark that has a partner",
-      "kind": "model",
-      "message": "AssertionError: expected { type: 'sequence', text: '', …(3) } to deeply equal { type: 'sequence', …(1) }"
+      "file": "tests/railroad/stress.test.ts",
+      "test": "railroad worst cases 5,000 rules",
+      "kind": "speed",
+      "message": "AssertionError: expected 3009.845905000002 to be less than 3000"
     },
     {
-      "file": "tests/railroad/model.test.ts",
-      "test": "railroad model reads ABNF repeats",
-      "kind": "model",
-      "message": "AssertionError: expected { type: 'repetition', text: '', …(3) } to deeply equal { type: 'repetition', …(3) }"
-    },
-    {
-      "file": "tests/railroad/model.test.ts",
-      "test": "railroad model reads ABNF values, groups, and alternation",
-      "kind": "model",
-      "message": "AssertionError: expected { type: 'sequence', text: '', …(3) } to deeply equal { type: 'sequence', …(1) }"
-    },
-    {
-      "file": "tests/railroad/model.test.ts",
-      "test": "railroad model ends an ABNF rule only with a semicolon that ends its line",
-      "kind": "model",
-      "message": "AssertionError: expected [ { name: 'r', …(1) }, …(1) ] to deeply equal [ { name: 'r', …(1) }, …(1) ]"
-    },
-    {
-      "file": "tests/railroad/model.test.ts",
-      "test": "railroad model reads PEG suffixes, and shows predicates as special text",
-      "kind": "model",
-      "message": "AssertionError: expected { type: 'sequence', text: '', …(3) } to deeply equal { type: 'sequence', …(1) }"
-    },
-    {
-      "file": "tests/railroad/model.test.ts",
-      "test": "railroad model reads the title and accessibility statements",
-      "kind": "model",
-      "message": "AssertionError: expected '' to be undefined"
-    },
-    {
-      "file": "tests/railroad/model.test.ts",
-      "test": "railroad model reads names that start with title, but no title after the first rule",
-      "kind": "model",
-      "message": "AssertionError: expected { notation: 'ebnf', title: '', …(5) } to match object { title: undefined, …(1) }"
-    },
-    {
-      "file": "tests/railroad/model.test.ts",
-      "test": "railroad model keeps keywords out of names only when they stand alone",
-      "kind": "model",
-      "message": "AssertionError: expected { name: 'terminals', …(1) } to deeply equal { name: 'terminals', …(1) }"
-    },
-    {
-      "file": "tests/railroad/model.test.ts",
-      "test": "railroad model skips comments in each notation",
-      "kind": "model",
-      "message": "AssertionError: expected { type: 'sequence', text: '', …(3) } to deeply equal { type: 'sequence', …(1) }"
+      "file": "tests/railroad/stress.test.ts",
+      "test": "railroad worst cases PEG sequence of 12,000 predicates",
+      "kind": "speed",
+      "message": "AssertionError: expected 3100.869928 to be less than 3000"
     },
     {
       "file": "tests/render/agentflow-security.test.ts",
@@ -3408,7 +3534,7 @@
       "file": "tests/render/agentflow.test.ts",
       "test": "agentflow rendering reads metadata without drawing it",
       "kind": "model",
-      "message": "AssertionError: expected undefined to deeply equal { shape: 'subroutine', …(2) }"
+      "message": "TypeError: model.semanticModel is not a function"
     },
     {
       "file": "tests/render/agentflow.test.ts",
@@ -3423,28 +3549,10 @@
       "message": "TypeError: Cannot read properties of undefined (reading 'map')"
     },
     {
-      "file": "tests/render/agentflow.test.ts",
-      "test": "agentflow rendering accepts trailing commas in a multi-line metadata block",
-      "kind": "model",
-      "message": "AssertionError: expected undefined to deeply equal { protocol: 'mcp', …(1) }"
-    },
-    {
-      "file": "tests/render/agentflow.test.ts",
-      "test": "agentflow rendering strips prototype-shaped keys from metadata at every depth",
-      "kind": "model",
-      "message": "AssertionError: expected undefined to be '{\"params\":[{\"name\":\"first\"}],\"kept\":1}' // Object.is equality"
-    },
-    {
-      "file": "tests/render/architecture.test.ts",
-      "test": "architecture rendering reads ids that start with title",
-      "kind": "model",
-      "message": "AssertionError: expected '' to be undefined"
-    },
-    {
       "file": "tests/render/c4.test.ts",
       "test": "C4 rendering ignores the index of RelIndex and a relation without a label",
       "kind": "model",
-      "message": "AssertionError: expected { type: 'rel', start: 'a', …(5) } to match object { type: 'rel', from: 'a', …(2) }"
+      "message": "AssertionError: expected { type: 'rel', start: 'a', …(8) } to match object { type: 'rel', from: 'a', …(2) }"
     },
     {
       "file": "tests/render/c4.test.ts",
@@ -3454,45 +3562,21 @@
     },
     {
       "file": "tests/render/c4.test.ts",
-      "test": "C4 rendering treats a bare title as no title and keeps a title after a tab",
-      "kind": "model",
-      "message": "AssertionError: expected '' to be undefined"
-    },
-    {
-      "file": "tests/render/c4.test.ts",
       "test": "C4 rendering applies a named argument wherever it is written",
       "kind": "model",
-      "message": "AssertionError: expected { uid: 1, alias: 'a', label: '', …(5) } to match object { alias: 'a', label: '', …(1) }"
+      "message": "AssertionError: expected { uid: 1, alias: 'a', label: '', …(6) } to match object { alias: 'a', label: '', …(1) }"
     },
     {
       "file": "tests/render/c4.test.ts",
       "test": "C4 rendering merges a repeated alias and keeps the first position",
       "kind": "model",
-      "message": "AssertionError: expected { uid: 1, alias: 'a', …(5) } to match object { label: 'Second', descr: 'd1', …(1) }"
-    },
-    {
-      "file": "tests/render/cynefin.test.ts",
-      "test": "cynefin rendering draws transitions with arrowheads and labels, and drops self loops",
-      "kind": "model",
-      "message": "AssertionError: expected [ 'undefined>complicated', …(3) ] to deeply equal [ 'complex>complicated', …(3) ]"
-    },
-    {
-      "file": "tests/render/cynefin.test.ts",
-      "test": "cynefin rendering keeps the last block when a domain is declared twice",
-      "kind": "model",
-      "message": "AssertionError: expected [ 'second' ] to deeply equal [ { label: 'second' } ]"
-    },
-    {
-      "file": "tests/render/eventmodeling.test.ts",
-      "test": "eventmodeling rendering shows inline data and data blocks, a block winning over inline data",
-      "kind": "model",
-      "message": "AssertionError: expected [ 'productId: 7', …(4) ] to deeply equal [ 'productId: 7', …(4) ]"
+      "message": "AssertionError: expected { uid: 1, alias: 'a', …(7) } to match object { label: 'Second', descr: 'd1', …(1) }"
     },
     {
       "file": "tests/render/gantt.test.ts",
       "test": "gantt rendering treats a bare title as no title and keeps a title after a tab",
       "kind": "model",
-      "message": "AssertionError: expected '' to be undefined"
+      "message": "TypeError: model.getTasks is not a function"
     },
     {
       "file": "tests/render/gantt.test.ts",
@@ -3537,202 +3621,16 @@
       "message": "TypeError: (0 , __vite_ssr_import_1__.parse)(...).getTasks is not a function"
     },
     {
-      "file": "tests/render/git.test.ts",
-      "test": "git graph rendering reads branch names that start with title",
-      "kind": "model",
-      "message": "AssertionError: expected '' to be undefined"
-    },
-    {
-      "file": "tests/render/info.test.ts",
-      "test": "info rendering writes accessible names and exposes the model",
-      "kind": "known",
-      "message": "AssertionError: expected { title: '', accTitle: 'Name', …(3) } to deeply equal { type: 'info', …(4) }"
-    },
-    {
-      "file": "tests/render/journey.test.ts",
-      "test": "journey rendering treats a bare title as no title",
-      "kind": "known",
-      "message": "AssertionError: expected '' to be undefined"
-    },
-    {
-      "file": "tests/render/packet.test.ts",
-      "test": "packet rendering exposes the model",
-      "kind": "model",
-      "message": "AssertionError: expected [ …(2) ] to deeply equal [ …(2) ]"
-    },
-    {
-      "file": "tests/render/quadrant.test.ts",
-      "test": "quadrant chart rendering exposes the model",
-      "kind": "model",
-      "message": "AssertionError: expected { defined: true, text: 'a', …(1) } to deeply equal { text: 'a', type: 'text' }"
-    },
-    {
-      "file": "tests/render/quadrant.test.ts",
-      "test": "quadrant chart rendering keeps the character before a comment",
-      "kind": "model",
-      "message": "AssertionError: expected { defined: true, text: 'A', …(1) } to deeply equal { text: 'A', type: 'text' }"
-    },
-    {
-      "file": "tests/render/radar.test.ts",
-      "test": "radar rendering reads names that start with circle, polygon, true, false or title",
-      "kind": "known",
-      "message": "AssertionError: expected '' to be undefined"
-    },
-    {
-      "file": "tests/render/railroad.test.ts",
-      "test": "railroad rendering accepts the four keywords as one diagram type",
-      "kind": "model",
-      "message": "AssertionError: expected [ { name: 'r', definition: { …(5) } } ] to deeply equal [ { name: 'r', definition: { …(2) } } ]"
-    },
-    {
-      "file": "tests/render/railroad.test.ts",
-      "test": "railroad rendering draws a rule again when its name is defined again",
-      "kind": "model",
-      "message": "AssertionError: expected [ { type: 'nonterminal', …(4) }, …(1) ] to deeply equal [ …(2) ]"
-    },
-    {
-      "file": "tests/render/sankey.test.ts",
-      "test": "sankey rendering keeps quoted fields, escaped quotes and odd characters as node names",
-      "kind": "model",
-      "message": "AssertionError: expected [ [ undefined, undefined, 1 ], …(1) ] to deeply equal [ [ 'Heating, \"homes\"', …(2) ], …(1) ]"
-    },
-    {
-      "file": "tests/render/sankey.test.ts",
-      "test": "sankey rendering keeps Unicode names Доход, Расходы with sankey, quoted=false",
-      "kind": "model",
-      "message": "AssertionError: expected [ [ undefined, undefined, 100 ] ] to deeply equal [ [ 'Доход', 'Расходы', 100 ] ]"
-    },
-    {
-      "file": "tests/render/sankey.test.ts",
-      "test": "sankey rendering keeps Unicode names Доход, Расходы with sankey, quoted=true",
-      "kind": "model",
-      "message": "AssertionError: expected [ [ undefined, undefined, 100 ] ] to deeply equal [ [ 'Доход', 'Расходы', 100 ] ]"
-    },
-    {
-      "file": "tests/render/sankey.test.ts",
-      "test": "sankey rendering keeps Unicode names Café, München with sankey, quoted=false",
-      "kind": "model",
-      "message": "AssertionError: expected [ [ undefined, undefined, 100 ] ] to deeply equal [ [ 'Café', 'München', 100 ] ]"
-    },
-    {
-      "file": "tests/render/sankey.test.ts",
-      "test": "sankey rendering keeps Unicode names Café, München with sankey, quoted=true",
-      "kind": "model",
-      "message": "AssertionError: expected [ [ undefined, undefined, 100 ] ] to deeply equal [ [ 'Café', 'München', 100 ] ]"
-    },
-    {
-      "file": "tests/render/sankey.test.ts",
-      "test": "sankey rendering keeps Unicode names 収入, 支出 with sankey, quoted=false",
-      "kind": "model",
-      "message": "AssertionError: expected [ [ undefined, undefined, 100 ] ] to deeply equal [ [ '収入', '支出', 100 ] ]"
-    },
-    {
-      "file": "tests/render/sankey.test.ts",
-      "test": "sankey rendering keeps Unicode names 収入, 支出 with sankey, quoted=true",
-      "kind": "model",
-      "message": "AssertionError: expected [ [ undefined, undefined, 100 ] ] to deeply equal [ [ '収入', '支出', 100 ] ]"
-    },
-    {
-      "file": "tests/render/sankey.test.ts",
-      "test": "sankey rendering keeps Unicode names ☀️, 🏠 with sankey, quoted=false",
-      "kind": "model",
-      "message": "AssertionError: expected [ [ undefined, undefined, 100 ] ] to deeply equal [ [ '☀️', '🏠', 100 ] ]"
-    },
-    {
-      "file": "tests/render/sankey.test.ts",
-      "test": "sankey rendering keeps Unicode names ☀️, 🏠 with sankey, quoted=true",
-      "kind": "model",
-      "message": "AssertionError: expected [ [ undefined, undefined, 100 ] ] to deeply equal [ [ '☀️', '🏠', 100 ] ]"
-    },
-    {
-      "file": "tests/render/sankey.test.ts",
-      "test": "sankey rendering keeps Unicode names Café, Cafè with sankey, quoted=false",
-      "kind": "model",
-      "message": "AssertionError: expected [ [ undefined, undefined, 100 ] ] to deeply equal [ [ 'Café', 'Cafè', 100 ] ]"
-    },
-    {
-      "file": "tests/render/sankey.test.ts",
-      "test": "sankey rendering keeps Unicode names Café, Cafè with sankey, quoted=true",
-      "kind": "model",
-      "message": "AssertionError: expected [ [ undefined, undefined, 100 ] ] to deeply equal [ [ 'Café', 'Cafè', 100 ] ]"
-    },
-    {
       "file": "tests/render/sankey.test.ts",
       "test": "sankey rendering rejects control characters and invalid Unicode in names in sankey",
-      "kind": "model",
+      "kind": "known",
       "message": "AssertionError: \"a\\ud800b\""
-    },
-    {
-      "file": "tests/render/sankey.test.ts",
-      "test": "sankey rendering keeps Unicode names Доход, Расходы with sankey-beta, quoted=false",
-      "kind": "model",
-      "message": "AssertionError: expected [ [ undefined, undefined, 100 ] ] to deeply equal [ [ 'Доход', 'Расходы', 100 ] ]"
-    },
-    {
-      "file": "tests/render/sankey.test.ts",
-      "test": "sankey rendering keeps Unicode names Доход, Расходы with sankey-beta, quoted=true",
-      "kind": "model",
-      "message": "AssertionError: expected [ [ undefined, undefined, 100 ] ] to deeply equal [ [ 'Доход', 'Расходы', 100 ] ]"
-    },
-    {
-      "file": "tests/render/sankey.test.ts",
-      "test": "sankey rendering keeps Unicode names Café, München with sankey-beta, quoted=false",
-      "kind": "model",
-      "message": "AssertionError: expected [ [ undefined, undefined, 100 ] ] to deeply equal [ [ 'Café', 'München', 100 ] ]"
-    },
-    {
-      "file": "tests/render/sankey.test.ts",
-      "test": "sankey rendering keeps Unicode names Café, München with sankey-beta, quoted=true",
-      "kind": "model",
-      "message": "AssertionError: expected [ [ undefined, undefined, 100 ] ] to deeply equal [ [ 'Café', 'München', 100 ] ]"
-    },
-    {
-      "file": "tests/render/sankey.test.ts",
-      "test": "sankey rendering keeps Unicode names 収入, 支出 with sankey-beta, quoted=false",
-      "kind": "model",
-      "message": "AssertionError: expected [ [ undefined, undefined, 100 ] ] to deeply equal [ [ '収入', '支出', 100 ] ]"
-    },
-    {
-      "file": "tests/render/sankey.test.ts",
-      "test": "sankey rendering keeps Unicode names 収入, 支出 with sankey-beta, quoted=true",
-      "kind": "model",
-      "message": "AssertionError: expected [ [ undefined, undefined, 100 ] ] to deeply equal [ [ '収入', '支出', 100 ] ]"
-    },
-    {
-      "file": "tests/render/sankey.test.ts",
-      "test": "sankey rendering keeps Unicode names ☀️, 🏠 with sankey-beta, quoted=false",
-      "kind": "model",
-      "message": "AssertionError: expected [ [ undefined, undefined, 100 ] ] to deeply equal [ [ '☀️', '🏠', 100 ] ]"
-    },
-    {
-      "file": "tests/render/sankey.test.ts",
-      "test": "sankey rendering keeps Unicode names ☀️, 🏠 with sankey-beta, quoted=true",
-      "kind": "model",
-      "message": "AssertionError: expected [ [ undefined, undefined, 100 ] ] to deeply equal [ [ '☀️', '🏠', 100 ] ]"
-    },
-    {
-      "file": "tests/render/sankey.test.ts",
-      "test": "sankey rendering keeps Unicode names Café, Cafè with sankey-beta, quoted=false",
-      "kind": "model",
-      "message": "AssertionError: expected [ [ undefined, undefined, 100 ] ] to deeply equal [ [ 'Café', 'Cafè', 100 ] ]"
-    },
-    {
-      "file": "tests/render/sankey.test.ts",
-      "test": "sankey rendering keeps Unicode names Café, Cafè with sankey-beta, quoted=true",
-      "kind": "model",
-      "message": "AssertionError: expected [ [ undefined, undefined, 100 ] ] to deeply equal [ [ 'Café', 'Cafè', 100 ] ]"
     },
     {
       "file": "tests/render/sankey.test.ts",
       "test": "sankey rendering rejects control characters and invalid Unicode in names in sankey-beta",
-      "kind": "model",
+      "kind": "known",
       "message": "AssertionError: \"a\\ud800b\""
-    },
-    {
-      "file": "tests/render/sankey.test.ts",
-      "test": "sankey rendering ignores blanks at the start and end of each row",
-      "kind": "model",
-      "message": "AssertionError: expected [ 'undefined>undefined:1' ] to deeply equal [ 'a>b:1' ]"
     },
     {
       "file": "tests/render/sequence.test.ts",
@@ -3741,28 +3639,10 @@
       "message": "AssertionError: expected [ [ 'Repo', …(1) ], …(2) ] to deeply equal [ [ 'Repo', …(1) ], …(2) ]"
     },
     {
-      "file": "tests/render/sequence.test.ts",
-      "test": "sequence rendering treats a bare title as no title",
-      "kind": "model",
-      "message": "AssertionError: sequenceDiagram"
-    },
-    {
       "file": "tests/render/state.test.ts",
       "test": "state diagram rendering exposes the parsed model",
       "kind": "model",
       "message": "AssertionError: expected undefined to be 'LR' // Object.is equality"
-    },
-    {
-      "file": "tests/render/timeline.test.ts",
-      "test": "timeline rendering treats a bare title as no title",
-      "kind": "known",
-      "message": "AssertionError: expected '' to be undefined"
-    },
-    {
-      "file": "tests/render/treemap.test.ts",
-      "test": "treemap rendering builds the hierarchy from indentation",
-      "kind": "model",
-      "message": "AssertionError: expected [ …(2) ] to deeply equal [ …(2) ]"
     },
     {
       "file": "tests/render/usecase.test.ts",
@@ -3771,202 +3651,226 @@
       "message": "TypeError: Cannot read properties of undefined (reading 'map')"
     },
     {
-      "file": "tests/render/venn.test.ts",
-      "test": "venn diagram rendering is detected, supported and typed",
-      "kind": "model",
-      "message": "AssertionError: expected [ …(3) ] to deeply equal [ …(3) ]"
+      "file": "tests/sankey/stress.test.ts",
+      "test": "sankey worst cases 8,000 links between 8,001 nodes in a chain",
+      "kind": "speed",
+      "message": "AssertionError: expected 3953.784641 to be less than 3000"
     },
     {
-      "file": "tests/render/wardley.test.ts",
-      "test": "wardley rendering exposes the model in percentages",
-      "kind": "model",
-      "message": "TypeError: Cannot read properties of undefined (reading 'find')"
+      "file": "tests/sankey/stress.test.ts",
+      "test": "sankey worst cases a star of 6,000 targets",
+      "kind": "speed",
+      "message": "AssertionError: expected 3061.635301999999 to be less than 3000"
     },
     {
-      "file": "tests/render/wardley.test.ts",
-      "test": "wardley rendering draws pipelines around their components and moves the parent onto the box",
+      "file": "tests/sequence/stress.test.ts",
+      "test": "sequence worst cases 10,000 nested loops",
       "kind": "model",
-      "message": "AssertionError: expected undefined to deeply equal [ { nodeId: 'Kettle', …(1) } ]"
-    },
-    {
-      "file": "tests/render/xychart.test.ts",
-      "test": "XY chart rendering exposes the model",
-      "kind": "model",
-      "message": "AssertionError: expected { band: true, title: 'x', …(3) } to deeply equal { type: 'band', title: 'x', …(1) }"
-    },
-    {
-      "file": "tests/render/xychart.test.ts",
-      "test": "XY chart rendering keeps the character before a comment",
-      "kind": "model",
-      "message": "AssertionError: expected [ { bar: true, title: '', …(3) } ] to deeply equal [ { type: 'bar', title: '', …(1) } ]"
+      "message": "AssertionError: expected 4292.659641999999 to be less than 3000"
     },
     {
       "file": "tests/sequence/stress.test.ts",
       "test": "sequence worst cases 5,000 nested activations",
       "kind": "speed",
-      "message": "AssertionError: expected 3069.7985519999966 to be less than 3000"
+      "message": "AssertionError: expected 3893.3601710000003 to be less than 3000"
     },
     {
       "file": "tests/state/stress.test.ts",
       "test": "state diagram worst cases the same class statement and transitions 1,500 times",
       "kind": "speed",
-      "message": "AssertionError: expected 7082.59324 to be less than 3000"
+      "message": "AssertionError: expected 8798.982506999999 to be less than 3000"
     },
     {
       "file": "tests/state/stress.test.ts",
       "test": "state diagram worst cases 2,500 nested composites, each split in two",
       "kind": "speed",
-      "message": "AssertionError: expected 3626.348750000001 to be less than 3000"
+      "message": "AssertionError: expected 4161.228017000001 to be less than 3000"
     },
     {
       "file": "tests/state/stress.test.ts",
       "test": "state diagram worst cases 5,000 sibling composites",
       "kind": "speed",
-      "message": "AssertionError: expected 3957.957558000002 to be less than 3000"
+      "message": "AssertionError: expected 4019.210469999998 to be less than 3000"
+    },
+    {
+      "file": "tests/state/stress.test.ts",
+      "test": "state diagram worst cases one composite with 8,000 regions",
+      "kind": "speed",
+      "message": "AssertionError: expected 4224.097664000001 to be less than 3000"
     },
     {
       "file": "tests/state/stress.test.ts",
       "test": "state diagram worst cases chain of 5,000",
       "kind": "speed",
-      "message": "AssertionError: expected 3578.9425269999992 to be less than 3000"
+      "message": "AssertionError: expected 3786.032432 to be less than 3000"
     },
     {
       "file": "tests/state/stress.test.ts",
       "test": "state diagram worst cases star of 5,000",
       "kind": "speed",
-      "message": "AssertionError: expected 3374.012637 to be less than 3000"
+      "message": "AssertionError: expected 3960.736269000001 to be less than 3000"
     },
     {
       "file": "tests/state/stress.test.ts",
       "test": "state diagram worst cases fork with 5,000 branches",
       "kind": "speed",
-      "message": "AssertionError: expected 3923.0799069999994 to be less than 3000"
+      "message": "AssertionError: expected 4181.031763999999 to be less than 3000"
+    },
+    {
+      "file": "tests/state/stress.test.ts",
+      "test": "state diagram worst cases complete graph of 60",
+      "kind": "speed",
+      "message": "AssertionError: expected 3621.0991159999976 to be less than 3000"
     },
     {
       "file": "tests/state/stress.test.ts",
       "test": "state diagram worst cases transitions from 1,500 levels out to the innermost state",
       "kind": "speed",
-      "message": "AssertionError: expected 4392.724096000005 to be less than 3000"
+      "message": "AssertionError: expected 5884.936636999999 to be less than 3000"
     },
     {
       "file": "tests/state/stress.test.ts",
       "test": "state diagram worst cases 3,000 transitions into a state 1,500 levels deep",
       "kind": "speed",
-      "message": "AssertionError: expected 4746.769825999996 to be less than 3000"
+      "message": "AssertionError: expected 5562.78499900001 to be less than 3000"
     },
     {
       "file": "tests/state/stress.test.ts",
       "test": "state diagram worst cases 3,000 transitions into a ring of 1,200 composites",
       "kind": "speed",
-      "message": "AssertionError: expected 5279.974449999994 to be less than 3000"
+      "message": "AssertionError: expected 4271.841134000002 to be less than 3000"
     },
     {
       "file": "tests/stress.test.ts",
       "test": "worst cases edges that each cross 1,000 nested subgraph borders",
       "kind": "speed",
-      "message": "AssertionError: expected 5167.189333 to be less than 3000"
+      "message": "AssertionError: expected 7220.834463000001 to be less than 3000"
+    },
+    {
+      "file": "tests/stress.test.ts",
+      "test": "worst cases 5,000 sibling subgraphs",
+      "kind": "speed",
+      "message": "AssertionError: expected 3666.6918609999993 to be less than 3000"
     },
     {
       "file": "tests/stress.test.ts",
       "test": "worst cases chain of 5,000",
       "kind": "speed",
-      "message": "AssertionError: expected 4042.3217490000025 to be less than 3000"
+      "message": "AssertionError: expected 4749.227197 to be less than 3000"
     },
     {
       "file": "tests/stress.test.ts",
       "test": "worst cases star of 5,000",
       "kind": "speed",
-      "message": "AssertionError: expected 4385.774347999999 to be less than 3000"
+      "message": "AssertionError: expected 4488.914367000001 to be less than 3000"
     },
     {
       "file": "tests/stress.test.ts",
       "test": "worst cases 3,000 long edges over a chain of 3,000",
       "kind": "speed",
-      "message": "AssertionError: expected 6349.297044000003 to be less than 3000"
+      "message": "AssertionError: expected 6433.054621000003 to be less than 3000"
     },
     {
       "file": "tests/stress.test.ts",
       "test": "worst cases complete graph of 60",
       "kind": "speed",
-      "message": "AssertionError: expected 3386.9234579999975 to be less than 3000"
+      "message": "AssertionError: expected 3497.7011649999986 to be less than 3000"
+    },
+    {
+      "file": "tests/stress.test.ts",
+      "test": "worst cases 2,000 parallel edges and 2,000 self loops",
+      "kind": "speed",
+      "message": "AssertionError: expected 3237.4352720000024 to be less than 3000"
     },
     {
       "file": "tests/swimlane/stress.test.ts",
       "test": "swimlane worst cases 2,000 nodes in 20 lanes with 3,000 edges",
       "kind": "speed",
-      "message": "AssertionError: expected 3728.47988 to be less than 3000"
+      "message": "AssertionError: expected 3570.6781360000004 to be less than 3000"
     },
     {
       "file": "tests/timeline/stress.test.ts",
       "test": "timeline worst cases 8,000 periods with one event each",
       "kind": "speed",
-      "message": "AssertionError: expected 2913.693408 to be less than 1500"
+      "message": "AssertionError: expected 3138.9368759999998 to be less than 1500"
     },
     {
       "file": "tests/timeline/stress.test.ts",
       "test": "timeline worst cases 8,000 periods with one event each, top down",
       "kind": "speed",
-      "message": "AssertionError: expected 2544.3013389999996 to be less than 1500"
+      "message": "AssertionError: expected 2388.027476 to be less than 1500"
     },
     {
       "file": "tests/timeline/stress.test.ts",
       "test": "timeline worst cases one period with 12,000 events",
       "kind": "speed",
-      "message": "AssertionError: expected 1753.787523 to be less than 1500"
+      "message": "AssertionError: expected 2730.9330610000006 to be less than 1500"
     },
     {
       "file": "tests/timeline/stress.test.ts",
       "test": "timeline worst cases one period with 12,000 events, top down",
       "kind": "speed",
-      "message": "AssertionError: expected 1983.5807480000003 to be less than 1500"
+      "message": "AssertionError: expected 2209.181022999999 to be less than 1500"
     },
     {
       "file": "tests/timeline/stress.test.ts",
       "test": "timeline worst cases 5,000 sections with one period each",
       "kind": "speed",
-      "message": "AssertionError: expected 2117.4965790000006 to be less than 1500"
+      "message": "AssertionError: expected 3164.907467000001 to be less than 1500"
+    },
+    {
+      "file": "tests/timeline/stress.test.ts",
+      "test": "timeline worst cases repeated accDescr with no colon",
+      "kind": "speed",
+      "message": "AssertionError: expected 1644.0201269999998 to be less than 1500"
     },
     {
       "file": "tests/timeline/stress.test.ts",
       "test": "timeline worst cases percent comments",
       "kind": "speed",
-      "message": "AssertionError: expected 2225.8833349999986 to be less than 1500"
+      "message": "AssertionError: expected 2390.888440999999 to be less than 1500"
     },
     {
       "file": "tests/timeline/stress.test.ts",
       "test": "timeline worst cases hash comments",
       "kind": "speed",
-      "message": "AssertionError: expected 1896.6004280000016 to be less than 1500"
+      "message": "AssertionError: expected 2667.8162010000015 to be less than 1500"
     },
     {
       "file": "tests/timeline/stress.test.ts",
       "test": "timeline worst cases carriage returns",
       "kind": "speed",
-      "message": "AssertionError: expected 2334.4492949999985 to be less than 1500"
+      "message": "AssertionError: expected 2930.195323 to be less than 1500"
     },
     {
       "file": "tests/treeview/stress.test.ts",
       "test": "treeView worst cases 25,000 flat entries",
       "kind": "speed",
-      "message": "AssertionError: expected 2782.328068 to be less than 2000"
+      "message": "AssertionError: expected 3670.4281220000003 to be less than 2000"
     },
     {
       "file": "tests/treeview/stress.test.ts",
       "test": "treeView worst cases box drawing, 10,000 rows",
       "kind": "speed",
-      "message": "AssertionError: expected 2994.598448999999 to be less than 2000"
+      "message": "AssertionError: expected 3754.4218949999995 to be less than 2000"
     },
     {
       "file": "tests/treeview/stress.test.ts",
       "test": "treeView worst cases box drawing, deep columns",
       "kind": "speed",
-      "message": "AssertionError: expected 3145.801486999997 to be less than 2000"
+      "message": "AssertionError: expected 2806.808638999999 to be less than 2000"
+    },
+    {
+      "file": "tests/treeview/stress.test.ts",
+      "test": "treeView worst cases box characters inside names",
+      "kind": "speed",
+      "message": "AssertionError: expected 2462.2676630000024 to be less than 2000"
     },
     {
       "file": "tests/usecase/stress.test.ts",
       "test": "use case worst cases class statement with 2,500 ids and 4,000 classes",
       "kind": "model",
-      "message": "AssertionError: expected 27173.331081999997 to be less than 3000"
+      "message": "AssertionError: expected 26823.099222999997 to be less than 3000"
     },
     {
       "file": "tests/usecase/stress.test.ts",
@@ -3981,22 +3885,22 @@
       "message": ""
     },
     {
-      "file": "tests/usecase/stress.test.ts",
-      "test": "use case worst cases JSON with 8,000 keys",
-      "kind": "speed",
-      "message": "AssertionError: expected 4135.480948000004 to be less than 3000"
-    },
-    {
-      "file": "tests/usecase/stress.test.ts",
-      "test": "use case worst cases JSON with 5,000 nested objects and 5,000 repeats of a key",
-      "kind": "speed",
-      "message": "AssertionError: expected 3305.4600589999973 to be less than 3000"
-    },
-    {
       "file": "tests/util/measurer.test.ts",
       "test": "canvasMeasurer measures code in the monospace font a diagram is given",
       "kind": "canvas",
       "message": "AssertionError: expected false to be true // Object.is equality"
+    },
+    {
+      "file": "tests/venn/stress.test.ts",
+      "test": "venn worst cases 5,000 sets",
+      "kind": "speed",
+      "message": "AssertionError: expected 3879.302149 to be less than 3000"
+    },
+    {
+      "file": "tests/venn/stress.test.ts",
+      "test": "venn worst cases one union of 300 sets",
+      "kind": "speed",
+      "message": "AssertionError: expected 6508.3136460000005 to be less than 3000"
     }
   ]
 }
