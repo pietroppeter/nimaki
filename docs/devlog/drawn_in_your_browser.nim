@@ -45,7 +45,7 @@ nbText: &"""
 """
 
 nbCode:
-  let built = render(source, RenderOptions(now: fixedNow)).svg
+  let built = render(source, RenderOptions(now: some(fixedNow))).svg
   echo built.len, " bytes of SVG, drawn when this page was built"
 
 nbLive source, built, "The two ways nimaki draws. The line below says what your browser found.", """{"now": 1767225600000}"""

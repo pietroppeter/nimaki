@@ -14,7 +14,7 @@ proc answer(run: proc (): RenderResult): string =
 
 suite "parse, then render":
   let cases = parseFile(repoDir / "corpus" / "cases.json")["cases"]
-  let options = RenderOptions(now: fixedNow)
+  let options = RenderOptions(now: some(fixedNow))
 
   test "render(parse(text)) is render(text), on every corpus input":
     var same, parsed = 0

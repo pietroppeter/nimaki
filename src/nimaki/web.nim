@@ -25,7 +25,7 @@ proc toOptions(j: JsonNode): RenderOptions =
   if j.hasKey("directionBreakpoint"): result.directionBreakpoint = some(j["directionBreakpoint"].getFloat)
   if j.hasKey("monospace"):
     for m in j["monospace"]: result.monospace.add m.getStr
-  if j.hasKey("now"): result.now = j["now"].getFloat
+  if j.hasKey("now"): result.now = some(j["now"].getFloat)
 
 proc renderJson(text, options: cstring): cstring {.exportc: "nimakiRenderJson".} =
   ## The text and the options (as JSON) in, the answer (as JSON) out.

@@ -84,7 +84,7 @@ proc toOptions(o: JsObject): RenderOptions =
         MathMarkup(isSvg: false, markup: r["html"].str, width: r["width"].num, height: r["height"].num)
   if has"config": result.config = toYaml(o["config"])
   if has"now":
-    result.now = if o["now"].isDate: o["now"].dateValue else: o["now"].num
+    result.now = some(if o["now"].isDate: o["now"].dateValue else: o["now"].num)
 
 proc orNull(s: string): JsObject =
   if s.len == 0: jsNull else: toJs(cstring(s))

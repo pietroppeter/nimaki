@@ -62,7 +62,7 @@ proc toOptions*(j: JsonNode): RenderOptions =
   if j.hasKey("links"): result.links = some(j["links"].getBool)
   if j.hasKey("images"): result.images = some(j["images"].getBool)
   if j.hasKey("linkRel"): result.linkRel = some(j["linkRel"].getStr)
-  if j.hasKey("now"): result.now = j["now"].getFloat
+  if j.hasKey("now"): result.now = some(j["now"].getFloat)
   if j.hasKey("config") and j["config"].kind == JObject: result.config = fromJson(j["config"])
 
 proc answer*(request: JsonNode): JsonNode =

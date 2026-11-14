@@ -266,7 +266,7 @@ proc main() =
     let p = pele[id]
     var o = Outcome(id: id, diagramType: c["type"].getStr)
     try:
-      let m = parse(c["source"].getStr, RenderOptions(now: fixedNow))
+      let m = parse(c["source"].getStr, RenderOptions(now: some(fixedNow)))
       if not p["ok"].getBool:
         o.verdict = "different"
         o.detail = "Pele throws " & p["code"].getStr & ", nimaki parses"

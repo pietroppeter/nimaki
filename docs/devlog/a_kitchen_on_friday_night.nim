@@ -136,8 +136,8 @@ tf 11 evt PlatesServed
 var drawn = initOrderedTable[string, RenderResult]()
 var wideOnes = initOrderedTable[string, float]()   # how wide each drawing is without maxWidth
 for name, text in diagrams:
-  drawn[name] = render(text, RenderOptions(maxWidth: some(phone), now: fixedNow))
-  wideOnes[name] = render(text, RenderOptions(now: fixedNow)).width
+  drawn[name] = render(text, RenderOptions(maxWidth: some(phone), now: some(fixedNow)))
+  wideOnes[name] = render(text, RenderOptions(now: some(fixedNow))).width
 var sources: seq[string]
 for text in diagrams.values: sources.add text
 let fromPele = peleRenders(sources, %*{"maxWidth": phone})

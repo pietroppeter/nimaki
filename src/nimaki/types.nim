@@ -34,8 +34,9 @@ type
     icons*: IconResolver
     math*: MathResolver
     config*: Config                   ## nil for undefined
-    now*: float
-      ## The time gantt charts treat as now, in milliseconds since 1970 (UTC). 0: the current time.
+    now*: Option[float]
+      ## The time gantt charts treat as now, in milliseconds since 1970 (UTC); none for the
+      ## current time. As in Pele, any finite number is a time, 0 included.
 
   LinkInfo* = object
     id*, href*: string
