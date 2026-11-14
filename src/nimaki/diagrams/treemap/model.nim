@@ -50,7 +50,7 @@ proc buildTreemap*(ast: TreemapAst, title: string): TreemapModel =
     if not row.classDef: continue
     if row.className notin classes: classes[row.className] = @[]
     # An escaped comma stays in the value; the others separate declarations.
-    let text = row.styleText.replace("\\,", "§§§").replace(",", ";").replace("§§§", ",")
+    let text = row.styleText.replace(jsre"/\\,/g", "§§§").replace(jsre"/,/g", ";").replace(jsre"/§§§/g", ",")
     for style in text.split(';'): classes[row.className].add style
 
   var items: seq[TreemapItem]

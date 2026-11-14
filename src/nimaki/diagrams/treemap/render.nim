@@ -8,6 +8,7 @@ import ../../svg/[builder, ink, root, palette, theme]
 import ../../text/[entities, label, measurer]
 import ../../types
 import ../../js
+import ../../jsregex
 import ../../util/yaml
 import ../common/[fit_width, fit_text]
 import format, layout, model
@@ -128,7 +129,7 @@ proc renderTreemap*(model: TreemapModel, config: Config, options: RenderOptions)
             style.text & ">" & esc(value) & "</text>"
       # A section is a tint of its color, unless a class gives it a fill of its own. Headerless
       # sections draw no box, so their children blend into the grid.
-      let tint = if setsFill(style.shape): "" else: " fill-opacity=\"0.12\""
+      let tint = if jsre"""/[";]fill:/""".test(style.shape): "" else: " fill-opacity=\"0.12\""
       let shape = if b.headed: rect & corners(tint & " stroke=\"" & color & "\"" & style.shape, b) & "/>"
                   else: "<rect x=\"" & num(x) & "\" y=\"" & num(y) & "\" width=\"" & num(b.w) & "\" height=\"" & num(b.h) & "\" fill=\"none\"/>"
       sections.add "<g class=\"pele-node pele-section" & classNames(node.classSelector) & "\" " & group &
