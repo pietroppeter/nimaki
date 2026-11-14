@@ -128,7 +128,7 @@ proc defineClass*(db: RequirementDb, ids, style: seq[string]) =
       if id in element.classes: db.copy(element.cssStyles, split)
 
 proc setAccTitle*(db: RequirementDb, text: string) =
-  db.accTitle = text.jsTrimStart  # text.replace(/^\s+/g, '')
+  db.accTitle = text.replace(jsre"/^\s+/g", "")
 
 proc setAccDescription*(db: RequirementDb, text: string) =
   db.accDescr = text.replace(jsre"/\n\s+/g", "\n")

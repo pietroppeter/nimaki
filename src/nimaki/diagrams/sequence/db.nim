@@ -71,7 +71,7 @@ proc newSeqDb*(options = SeqDbOptions()): SeqDb =
 proc autoWrap*(db: SeqDb): bool = db.wrapEnabled.get(db.sequenceWrap)
 
 proc setAccTitle*(db: SeqDb, text: string) =
-  db.accTitle = jsTrimStart(text)
+  db.accTitle = text.replace(jsre"/^\s+/g", "")
 
 proc setAccDescription*(db: SeqDb, text: string) =
   db.accDescr = text.replace(jsre"/\n\s+/g", "\n")

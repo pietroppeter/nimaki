@@ -13,5 +13,5 @@ func collapseIndents(s: string): string =
 proc buildInfo*(ast: InfoAst, title: string): InfoModel =
   InfoModel(
     title: if ast.title != "": ast.title else: title,
-    accTitle: if ast.accTitle != "": jsTrimStart(ast.accTitle) else: "",   # replace(/^\s+/g, '')
+    accTitle: if ast.accTitle != "": ast.accTitle.replace(jsre"/^\s+/g", "") else: "",
     accDescr: if ast.accDescr != "": collapseIndents(ast.accDescr) else: "")

@@ -29,7 +29,7 @@ func dropBreakSpaces(text: string): string =
 proc buildCynefin*(ast: CynefinAst, title: string): CynefinModel =
   result = CynefinModel(
     title: (if ast.title != "": ast.title else: title),
-    accTitle: (if ast.accTitle != "": jsTrimStart(ast.accTitle) else: ""),
+    accTitle: (if ast.accTitle != "": ast.accTitle.replace(jsre"/^\s+/g", "") else: ""),
     accDescr: (if ast.accDescr != "": dropBreakSpaces(ast.accDescr) else: ""))
   # A later block for a domain replaces an earlier one.
   for blk in ast.domains:

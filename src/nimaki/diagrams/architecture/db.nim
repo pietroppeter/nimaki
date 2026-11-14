@@ -95,7 +95,7 @@ func dropBreakSpaces(text: string): string =
 proc populate*(ast: ArchitectureAst, db: ArchitectureDb) =
   ## Mermaid's populateDb: every group, then services, junctions, edges, and alignments.
   if ast.accDescr != "": db.accDescr = dropBreakSpaces(ast.accDescr)
-  if ast.accTitle != "": db.accTitle = jsTrimStart(ast.accTitle)
+  if ast.accTitle != "": db.accTitle = ast.accTitle.replace(jsre"/^\s+/g", "")
   if ast.title != "": db.title = ast.title
   for group in ast.groups: db.addGroup(group)
   for service in ast.services: db.addService(service)

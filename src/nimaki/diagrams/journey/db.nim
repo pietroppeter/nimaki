@@ -36,7 +36,7 @@ proc setDiagramTitle*(db: JourneyDb, text: string) = db.title = text
 
 proc setAccTitle*(db: JourneyDb, text: string) =
   ## text.replace(/^\s+/g, '')
-  db.accTitle = jsTrimStart(text)
+  db.accTitle = text.replace(jsre"/^\s+/g", "")
 
 proc setAccDescription*(db: JourneyDb, text: string) =
   db.accDescr = text.replace(jsre"/\n\s+/g", "\n")

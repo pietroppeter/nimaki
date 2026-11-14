@@ -194,7 +194,7 @@ proc trimColon*(db: StateDb, text: string): string =
   if text.startsWith(":"): text.substr(1).jsTrim else: text.jsTrim
 
 proc setAccTitle*(db: StateDb, text: string) =
-  db.accTitle = text.jsTrimStart  # text.replace(/^\s+/g, '')
+  db.accTitle = text.replace(jsre"/^\s+/g", "")
 
 proc setAccDescription*(db: StateDb, text: string) =
   db.accDescr = text.replace(jsre"/\n\s+/g", "\n")

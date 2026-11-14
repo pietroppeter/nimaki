@@ -70,7 +70,7 @@ proc buildRadar*(ast: RadarAst, title: string): RadarModel =
 
   RadarModel(
     title: if ast.title != "": ast.title else: title,
-    accTitle: if ast.accTitle != "": jsTrimStart(ast.accTitle) else: "",   # replace(/^\s+/g, '')
+    accTitle: if ast.accTitle != "": ast.accTitle.replace(jsre"/^\s+/g", "") else: "",
     accDescr: if ast.accDescr != "": collapseIndents(ast.accDescr) else: "",
     axes: axes,
     curves: curves,

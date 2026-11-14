@@ -176,7 +176,7 @@ proc buildEventModel*(ast: EventModelAst, title: string): EventModelingModel =
   let titled = if ast.title != "": titleValue(ast.title) else: ""
   EventModelingModel(
     title: if titled != "": titled else: title,
-    accTitle: if ast.accTitle != "": jsTrimStart(accTitleValue(ast.accTitle)) else: "",
+    accTitle: if ast.accTitle != "": accTitleValue(ast.accTitle).replace(jsre"/^\s+/g", "") else: "",
     accDescr: if ast.accDescr != "": collapseIndents(accDescrValue(ast.accDescr)) else: "",
     boxes: boxes,
     lanes: lanes,

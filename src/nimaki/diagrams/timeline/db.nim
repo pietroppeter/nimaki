@@ -35,7 +35,7 @@ proc setDiagramTitle*(db: TimelineDb, text: string) = db.title = text
 
 proc setAccTitle*(db: TimelineDb, text: string) =
   ## text.replace(/^\s+/g, '')
-  db.accTitle = jsTrimStart(text)
+  db.accTitle = text.replace(jsre"/^\s+/g", "")
 
 proc setAccDescription*(db: TimelineDb, text: string) =
   db.accDescr = text.replace(jsre"/\n\s+/g", "\n")

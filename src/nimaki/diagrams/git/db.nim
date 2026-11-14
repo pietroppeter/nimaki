@@ -191,7 +191,7 @@ proc buildGit*(ast: GitGraphAst, config: Config, title: string): GitModel =
 
   GitModel(
     title: (if ast.title != "": ast.title else: title),
-    accTitle: (if ast.accTitle != "": jsTrimStart(ast.accTitle) else: ""),
+    accTitle: (if ast.accTitle != "": ast.accTitle.replace(jsre"/^\s+/g", "") else: ""),
     accDescr: (if ast.accDescr != "": collapseIndents(ast.accDescr) else: ""),
     direction: direction,
     commits: commits,

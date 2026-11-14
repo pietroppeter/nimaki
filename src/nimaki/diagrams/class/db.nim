@@ -166,7 +166,7 @@ proc setClickEvent*(db: ClassDb, ids: string) =
 
 proc setDirection*(db: ClassDb, dir: string) = db.direction = dir
 
-proc setAccTitle*(db: ClassDb, text: string) = db.accTitle = jsTrimStart(text)
+proc setAccTitle*(db: ClassDb, text: string) = db.accTitle = text.replace(jsre"/^\s+/g", "")
 
 proc setAccDescription*(db: ClassDb, text: string) =
   db.accDescr = text.replace(jsre"/\n\s+/g", "\n")

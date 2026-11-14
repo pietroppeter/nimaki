@@ -300,7 +300,7 @@ proc setClickEvent*(db: FlowDb, ids: string, functionName = "", functionArgs = "
   db.setClass(ids, "clickable")
 
 proc setAccTitle*(db: FlowDb, text: string) =
-  db.accTitle = text.jsTrimStart  # text.replace(/^\s+/g, '')
+  db.accTitle = text.replace(jsre"/^\s+/g", "")
 
 proc setAccDescription*(db: FlowDb, text: string) =
   db.accDescr = text.replace(jsre"/\n\s+/g", "\n")

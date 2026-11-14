@@ -445,7 +445,7 @@ proc setClickEvent*(db: AgentflowDb, ids: string, functionName = "", functionArg
   db.setClass(ids, "clickable")
 
 proc setAccTitle*(db: AgentflowDb, text: string) =
-  db.accTitle = text.jsTrimStart
+  db.accTitle = text.replace(jsre"/^\s+/g", "")
 
 proc setAccDescription*(db: AgentflowDb, text: string) =
   db.accDescr = text.replace(jsre"/\n\s+/g", "\n")

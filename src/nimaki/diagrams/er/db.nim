@@ -94,7 +94,7 @@ proc addSubGraph*(db: ErDb, idText: string, list: seq[DocItem], titleText: strin
   id
 
 proc setAccTitle*(db: ErDb, text: string) =
-  db.accTitle = text.jsTrimStart  # text.replace(/^\s+/g, '')
+  db.accTitle = text.replace(jsre"/^\s+/g", "")
 
 proc setAccDescription*(db: ErDb, text: string) =
   db.accDescr = text.replace(jsre"/\n\s+/g", "\n")

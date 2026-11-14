@@ -104,7 +104,7 @@ proc setDiagramTitle*(db: XyChartDb, text: string) = db.title = text
 
 proc setAccTitle*(db: XyChartDb, text: string) =
   ## text.replace(/^\s+/g, '')
-  db.accTitle = jsTrimStart(text)
+  db.accTitle = text.replace(jsre"/^\s+/g", "")
 
 proc setAccDescription*(db: XyChartDb, text: string) =
   db.accDescr = text.replace(jsre"/\n\s+/g", "\n")

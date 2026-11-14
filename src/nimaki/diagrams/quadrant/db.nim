@@ -82,7 +82,7 @@ proc addClass*(db: QuadrantDb, className: string, styles: seq[string]) =
   db.classes[className] = parseStyles(styles)
 
 proc setDiagramTitle*(db: QuadrantDb, text: string) = db.title = text
-proc setAccTitle*(db: QuadrantDb, text: string) = db.accTitle = jsTrimStart(text)   # replace(/^\s+/g, '')
+proc setAccTitle*(db: QuadrantDb, text: string) = db.accTitle = text.replace(jsre"/^\s+/g", "")
 
 func collapseIndents(s: string): string =
   s.replace(jsre"/\n\s+/g", "\n")

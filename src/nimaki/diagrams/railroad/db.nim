@@ -41,7 +41,7 @@ proc populate*(db: RailroadModel, source: string, notation: Notation) =
   let (ast, rules) = grammar(source, notation)
   db.notation = notation
   if ast.accDescr != "": db.accDescr = dropBreakSpaces(ast.accDescr)
-  if ast.accTitle != "": db.accTitle = jsTrimStart(ast.accTitle)
+  if ast.accTitle != "": db.accTitle = ast.accTitle.replace(jsre"/^\s+/g", "")
   if ast.title != "": db.title = ast.title
   for rule in rules: db.rules.add rule
 

@@ -80,7 +80,7 @@ proc buildPacket*(ast: PacketAst, config: Config, title: string): PacketModel =
 
   PacketModel(
     title: if ast.title != "": ast.title else: title,
-    accTitle: if ast.accTitle != "": jsTrimStart(ast.accTitle) else: "",   # replace(/^\s+/g, '')
+    accTitle: if ast.accTitle != "": ast.accTitle.replace(jsre"/^\s+/g", "") else: "",
     accDescr: if ast.accDescr != "": collapseIndents(ast.accDescr) else: "",
     bitsPerRow: bitsPerRow,
     rows: rows)

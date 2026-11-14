@@ -123,6 +123,6 @@ proc buildWardley*(ast: WardleyAst, title: string): WardleyModel =
   populate(ast, db)
   WardleyModel(
     title: (if ast.title != "": ast.title else: title),
-    accTitle: (if ast.accTitle != "": jsTrimStart(ast.accTitle) else: ""),
+    accTitle: (if ast.accTitle != "": ast.accTitle.replace(jsre"/^\s+/g", "") else: ""),
     accDescr: (if ast.accDescr != "": dropBreakSpaces(ast.accDescr) else: ""),
     built: db.build())

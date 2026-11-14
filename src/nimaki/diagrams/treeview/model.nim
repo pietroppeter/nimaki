@@ -102,7 +102,7 @@ proc buildTreeView*(ast: TreeViewAst, title: string): TreeViewModel =
   populate(ast, db)
   TreeViewModel(
     title: if ast.title != "": ast.title else: title,
-    accTitle: if ast.accTitle != "": jsTrimStart(ast.accTitle) else: "",   # replace(/^\s+/g, '')
+    accTitle: if ast.accTitle != "": ast.accTitle.replace(jsre"/^\s+/g", "") else: "",
     accDescr: if ast.accDescr != "": collapseIndents(ast.accDescr) else: "",
     root: db.root,
     count: db.count)

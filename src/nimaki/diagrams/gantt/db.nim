@@ -90,7 +90,7 @@ proc setExcludes*(db: GanttDb, txt: string) = db.excludes = mergeTokens(db.exclu
 proc setWeekday*(db: GanttDb, txt: string) = db.weekday = txt
 proc setWeekend*(db: GanttDb, startDay: string) = db.weekend = startDay
 proc setDiagramTitle*(db: GanttDb, txt: string) = db.title = txt
-proc setAccTitle*(db: GanttDb, txt: string) = db.accTitle = jsTrimStart(txt)
+proc setAccTitle*(db: GanttDb, txt: string) = db.accTitle = txt.replace(jsre"/^\s+/g", "")
 
 func dropBreakSpaces(text: string): string =
   text.replace(jsre"/\n\s+/g", "\n")
