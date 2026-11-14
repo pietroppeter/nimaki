@@ -1,4 +1,4 @@
-## devlog: 14 Nov 2026 C | How nimaki reads text | The second article on nimaki's own code: how its diagram types cut Mermaid text into tokens, in three families of lexer, and what happened when a new tool slipped one invisible character into every case of the corpus.
+## devlog: 14 Nov 2026 D | How nimaki reads text | The second article on nimaki's own code: how its diagram types cut Mermaid text into tokens, in three families of lexer, and what happened when a new tool slipped one invisible character into every case of the corpus.
 ## kind: research
 import std/[algorithm, json, os, sequtils, strformat, strutils, tables]
 import nimib
