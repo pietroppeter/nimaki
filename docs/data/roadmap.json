@@ -444,8 +444,8 @@
           "title": "Sankey",
           "what": "src/diagrams/sankey: 786 lines of TypeScript, 8 corpus cases.",
           "done_when": "difftest: every sankey case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port diagrams that need no layered layout",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -466,8 +466,8 @@
           "title": "Quadrant",
           "what": "src/diagrams/quadrant: 876 lines of TypeScript, 3 corpus cases.",
           "done_when": "difftest: every quadrant case identical.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port diagrams that need no layered layout",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -717,6 +717,17 @@
           "pr": "47"
         },
         {
+          "id": "code-lexers",
+          "kind": "research",
+          "title": "How nimaki reads text: the lexers",
+          "what": "The second article on the port's code: how its diagram types turn text into tokens, the families of lexer they use (Jison's rules ported by hand, the shared tokenizer, stateful lexers), what they share and what each copies, with runnable examples.",
+          "done_when": "A devlog post whose numbers come from the code on main; findings filed as roadmap steps or notes.",
+          "owner": "Write articles explaining nimaki code",
+          "status": "started",
+          "post": "",
+          "pr": ""
+        },
+        {
           "id": "code-articles",
           "kind": "research",
           "title": "Articles on the code, every once in a while",
@@ -737,6 +748,17 @@
           "status": "done",
           "post": "opening-a-web-page",
           "pr": "45"
+        },
+        {
+          "id": "article-2",
+          "kind": "article",
+          "title": "A domain in diagrams: a kitchen on a Friday night",
+          "what": "The second domain article: how a restaurant kitchen runs a service, drawn with the types no article has used yet, most of them newly ported (mindmap, kanban, eventmodeling, swimlane, journey, ishikawa), plus a gantt of courses timed backwards. Every diagram drawn by nimaki and checked against Pele at build time; what the library teaches becomes notes or steps.",
+          "done_when": "An article on the site whose every diagram is drawn by nimaki and identical to Pele's; its lessons are notes or steps on this roadmap.",
+          "owner": "Write domain articles with diagrams",
+          "status": "started",
+          "post": "",
+          "pr": ""
         },
         {
           "id": "domain-articles",
