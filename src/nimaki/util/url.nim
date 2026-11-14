@@ -8,7 +8,7 @@
 ## `decodeURIComponent` and `new URL()` are written here: the URL parser covers what a link in
 ## a diagram needs (the WHATWG rules for http and https: scheme and host in lower case, default
 ## ports dropped, dot segments resolved, the percent-encode sets of path, query and fragment,
-## IPv4 hosts) but not internationalized domain names, which it keeps as they are written.
+## IPv4 hosts, and hosts outside ASCII through IDNA, in `idna.nim`).
 import std/[strutils, options]
 from std/math import trunc, pow, `mod`
 import ../js
@@ -16,6 +16,7 @@ import ../jsregex
 import ../svg/builder
 import ../text/entities
 import ../types
+import idna
 
 const
   BLANK = "about:blank"
@@ -275,6 +276,23 @@ func ipv4(host: string): (bool, string) =
     n = n div 256
   (true, output.join("."))
 
+proc parseDomain*(host: string): Option[string] =
+  ## The host of `new URL()` for a host that is not an IPv6 address in brackets, still percent
+  ## encoded: none for one it refuses. Domain to ASCII (IDNA) first: `exampleΩ.com` is written
+  ## `xn--example-...`, and a host that holds a character IDNA refuses, or that maps to a space
+  ## (a no-break space does), is refused.
+  let ascii = domainToAscii(decode(host))
+  if ascii.isNone: return none(string)
+  result = ascii
+  for c in ascii.get:
+    if c in {'\0', '\t', '\n', '\r', ' ', '#', '%', '/', ':', '<', '>', '?', '@', '[', '\\', ']', '^', '|'} or
+       ord(c) < 0x20 or ord(c) == 0x7f:
+      return none(string)
+  if endsInNumber(ascii.get):
+    let (ok, v4) = ipv4(ascii.get)
+    if not ok: return none(string)
+    result = some(v4)
+
 proc parseHttpUrl(input: string): Option[string] =
   ## new URL(input).toString() for an input whose scheme is http or https (lower case already).
   let colon = input.find(':')
@@ -314,15 +332,9 @@ proc parseHttpUrl(input: string): Option[string] =
     port = $p
     if (scheme == "http" and p == 80) or (scheme == "https" and p == 443): port = ""
   if not host.startsWith("["):
-    host = decode(host).toLowerAscii
-    for c in host:
-      if c in {'\0', '\t', '\n', '\r', ' ', '#', '%', '/', ':', '<', '>', '?', '@', '[', '\\', ']', '^', '|'} or
-         ord(c) < 0x20 or ord(c) == 0x7f:
-        return none(string)
-    if endsInNumber(host):
-      let (ok, v4) = ipv4(host)
-      if not ok: return none(string)
-      host = v4
+    let parsed = parseDomain(host)
+    if parsed.isNone: return none(string)
+    host = parsed.get
   # Path, query, fragment.
   var path = tail
   var query = ""

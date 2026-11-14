@@ -1,0 +1,37 @@
+{
+  "pin": "1.13.0",
+  "seed": 6,
+  "copies": 3,
+  "cases": 7,
+  "identical": 7,
+  "different": 0,
+  "inserts": [
+    "no-break space",
+    "line separator",
+    "byte order mark",
+    "zero-width space",
+    "ideographic space",
+    "é",
+    "Ω",
+    "mathematical bold A (outside the BMP)",
+    "emoji (outside the BMP)"
+  ],
+  "types": [
+    {
+      "type": "c4",
+      "identical": 3,
+      "different": 0
+    },
+    {
+      "type": "flowchart",
+      "identical": 2,
+      "different": 0
+    },
+    {
+      "type": "gantt",
+      "identical": 2,
+      "different": 0
+    }
+  ],
+  "differences": []
+}

@@ -126,6 +126,11 @@ jobs:
           nim r tools/fuzz.nim sankey --cases:5000
           nim r tools/fuzz.nim quadrantChart --cases:5000
 
+      # The corpus with one odd character slipped into each case (a no-break space, a line
+      # separator, an emoji...), against Pele, on seven seeds
+      - name: Mutate
+        run: for s in 1 2 3 4 5 6 7; do nim r tools/mutate.nim --seed:$s --out:build/mutate-$s.json; done
+
       # Pele's own test suites (vitest), run on nimaki's JavaScript build: a test that passes on
       # Pele and fails on nimaki fails CI, unless it needs what nimaki does not provide (parse(),
       # mount()), only misses one of Pele's time bounds, or is listed in tools/peletests/known.txt
