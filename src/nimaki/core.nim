@@ -94,7 +94,7 @@ proc parseSource(text: string, limit: int, maxEdges: int, extra: Config): Parsed
 
 proc detectType*(text: string): string =
   ## The diagram type, or "" for none.
-  detect(preprocess(text).text)
+  detect(preprocess(wellFormed(text)).text)
 
 proc supports*(text: string): bool =
   try:
@@ -117,7 +117,7 @@ proc parse*(text: string, options = RenderOptions()): ParsedModel =
   ## Of the options, only those read while parsing count, as in Pele's `ParseOptions`:
   ## `limit`, `maxEdges` and `config`.
   guarded(proc (): ParsedModel =
-    let parsed = parseSource(text, options.limit.get(DEFAULT_LIMIT),
+    let parsed = parseSource(wellFormed(text), options.limit.get(DEFAULT_LIMIT),
                              options.maxEdges.get(DEFAULT_MAX_EDGES), options.config)
     ParsedModel(diagramType: parsed.found.diagramType, mermaidType: parsed.found.mermaidType,
                 model: parsed.model, parsed: parsed))
@@ -153,7 +153,7 @@ proc renderParsed(parsed: Parsed, options: RenderOptions): RenderResult =
 proc render*(source: string, options = RenderOptions()): RenderResult =
   ## Draws Mermaid `source` as SVG, or raises PeleError.
   guarded(proc (): RenderResult =
-    renderParsed(parseSource(source, options.limit.get(DEFAULT_LIMIT),
+    renderParsed(parseSource(wellFormed(source), options.limit.get(DEFAULT_LIMIT),
                              options.maxEdges.get(DEFAULT_MAX_EDGES), options.config), options))
 
 proc render*(model: ParsedModel, options = RenderOptions()): RenderResult =

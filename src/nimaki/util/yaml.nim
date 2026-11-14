@@ -7,6 +7,7 @@
 ## JavaScript's `undefined` is `nil` here; YAML's `null` is a value of kind `yNull`.
 import std/[tables, strutils, math]
 import ../js
+import ../jsregex
 import ../errors
 
 type
@@ -76,7 +77,7 @@ type Reader = ref object
   i: int
 
 proc newReader(src: string): Reader =
-  let text = if '\r' in src: src.replace("\r\n", "\n").replace("\r", "\n") else: src
+  let text = if '\r' in src: src.replace(jsre"/\r\n?/g", "\n") else: src
   Reader(lines: text.split('\n'))
 
 proc skipBlank(r: Reader) =
@@ -96,43 +97,12 @@ func at(s: string, i: int): char =
   ## `s[i]`, or '\0' for undefined past either end.
   if i >= 0 and i < s.len: s[i] else: '\0'
 
-func isDigitStr(s: string, first: int): bool =
-  first < s.len and s[first .. ^1].allCharsInSet(Digits)
-
-func reInt(s: string): bool =
-  ## /^[-+]?(?:0|[1-9][0-9]*)$/
-  var i = 0
-  if s.at(0) in {'-', '+'}: i = 1
-  if i >= s.len: return false
-  if s[i] == '0': return i == s.len - 1
-  s[i] in {'1'..'9'} and s[i .. ^1].allCharsInSet(Digits)
-
-func reFloat(s: string): bool =
-  ## /^[-+]?(?:[0-9][0-9]*(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][-+]?[0-9]+)?$/
-  var i = 0
-  if s.at(0) in {'-', '+'}: i = 1
-  if s.at(i) in Digits:
-    while s.at(i) in Digits: inc i
-    if s.at(i) == '.':
-      inc i
-      while s.at(i) in Digits: inc i
-  elif s.at(i) == '.' and s.at(i + 1) in Digits:
-    inc i
-    while s.at(i) in Digits: inc i
-  else: return false
-  if s.at(i) in {'e', 'E'}:
-    inc i
-    if s.at(i) in {'-', '+'}: inc i
-    if s.at(i) notin Digits: return false
-    while s.at(i) in Digits: inc i
-  i == s.len
-
-func rePrefixed(s: string, prefix: char, digits: set[char]): bool =
-  var i = 0
-  if s.at(0) in {'-', '+'}: i = 1
-  if not (s.at(i) == '0' and s.at(i + 1) == prefix): return false
-  i += 2
-  i < s.len and s[i .. ^1].allCharsInSet(digits)
+const
+  RE_INT = jsre"/^[-+]?(?:0|[1-9][0-9]*)$/"
+  RE_HEX = jsre"/^[-+]?0x[0-9a-fA-F]+$/"
+  RE_OCT = jsre"/^[-+]?0o[0-7]+$/"
+  RE_BIN = jsre"/^[-+]?0b[01]+$/"
+  RE_FLOAT = jsre"/^[-+]?(?:[0-9][0-9]*(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][-+]?[0-9]+)?$/"
 
 func jsNumberOf(s: string): float =
   ## `Number(s)` for what RE_INT, RE_FLOAT, RE_HEX, RE_OCT and RE_BIN accept (unsigned for
@@ -199,14 +169,13 @@ proc scalar(raw: string): YamlValue =
   if s == "false" or s == "False" or s == "FALSE": return ybool(false)
   let c = s[0]
   if c != '-' and c != '+' and c != '.' and (c < '0' or c > '9'): return ystr(s)
-  if reInt(s) or reFloat(s): return ynum(jsNumberOf(s))
-  if rePrefixed(s, 'x', HexDigits) or rePrefixed(s, 'o', {'0'..'7'}) or rePrefixed(s, 'b', {'0', '1'}):
+  if RE_INT.test(s) or RE_FLOAT.test(s): return ynum(jsNumberOf(s))
+  if RE_HEX.test(s) or RE_OCT.test(s) or RE_BIN.test(s):
     let neg = s[0] == '-'
     let v = jsNumberOf(if neg or s[0] == '+': s[1 .. ^1] else: s)
     return ynum(if neg: -v else: v)
-  let body = if s[0] in {'-', '+'}: s[1 .. ^1] else: s
-  if body in [".inf", ".Inf", ".INF"]: return ynum(if s[0] == '-': -Inf else: Inf)
-  if s in [".nan", ".NaN", ".NAN"]: return ynum(NaN)
+  if jsre"/^[-+]?\.(?:inf|Inf|INF)$/".test(s): return ynum(if s[0] == '-': -Inf else: Inf)
+  if jsre"/^\.(?:nan|NaN|NAN)$/".test(s): return ynum(NaN)
   ystr(s)
 
 proc escapeOf(e: char, ok: var bool): string =
@@ -248,33 +217,13 @@ proc fold(text: string): string =
     if i < last:
       while stop > first and line[stop - 1] in {' ', '\t'}: dec stop
     lines[i] = line[first ..< stop]
-  let joined = lines.join("\n")
-  var i = 0
-  while i < joined.len:
-    if joined[i] == '\n':
-      var j = i
-      while j < joined.len and joined[j] == '\n': inc j
-      let m = j - i
-      result.add(if m == 1: " " else: repeat('\n', m - 1))
-      i = j
-    else:
-      result.add joined[i]
-      inc i
+  lines.join("\n").replace(jsre"/\n+/g", func (m: JsMatch): string =
+    if m[0].len == 1: " " else: repeat('\n', m[0].len - 1))
 
 proc unquoteDouble(body: string): string =
   if '\\' notin body: return fold(body)
-  # body.replace(/\\\n[ \t]*/g, '')
-  var pre = ""
+  let s = fold(body.replace(jsre"/\\\n[ \t]*/g", ""))
   var i = 0
-  while i < body.len:
-    if body[i] == '\\' and body.at(i + 1) == '\n':
-      i += 2
-      while body.at(i) in {' ', '\t'}: inc i
-    else:
-      pre.add body[i]
-      inc i
-  let s = fold(pre)
-  i = 0
   while i < s.len:
     let ch = s[i]
     if ch != '\\':
@@ -373,7 +322,7 @@ proc flow(s: string, pos: int, stops: string, depth = 0): (YamlValue, int) =
         inc stop
       inc stop
     if stop >= s.len: raise newException(Incomplete, "YAML: unexpected end of the stream within a single quoted scalar")
-    return (ystr(fold(s[pos + 1 ..< stop]).replace("''", "'")), stop + 1)
+    return (ystr(fold(s[pos + 1 ..< stop]).replace(jsre"/''/g", "'")), stop + 1)
   var stop = pos
   while stop < s.len:
     let c = s[stop]
@@ -408,12 +357,8 @@ func leading(line: string): int =
 proc blockScalar(r: Reader, header: string, parentIndent: int): string =
   let folded = header[0] == '>'
   let chomp = if '-' in header: '-' elif '+' in header: '+' else: '\0'
-  var explicit = -1
-  for c in header:
-    if c in {'1'..'9'}:
-      explicit = ord(c) - ord('0')
-      break
-  var indent = if explicit >= 0: parentIndent + explicit else: -1
+  let explicit = jsre"/[1-9]/".exec(header)
+  var indent = if explicit.found: parentIndent + ord(explicit[0][0]) - ord('0') else: -1
   var output: seq[string]
   while r.i < r.lines.len:
     let line = r.lines[r.i]
@@ -448,25 +393,10 @@ proc blockScalar(r: Reader, header: string, parentIndent: int): string =
   if chomp == '+': return text & repeat('\n', trailing + 1)
   text & "\n"
 
-func isBlockHeader(rest: string): bool =
-  ## /^[|>][-+0-9]*\s*(?:#.*)?$/
-  var i = 1
-  while rest.at(i) in {'-', '+', '0'..'9'}: inc i
-  while i < rest.len:
-    let n = spaceLenAt(rest, i)
-    if n == 0: break
-    i += n
-  if i == rest.len: return true
-  if rest[i] != '#': return false
-  for c in rest[i .. ^1]:
-    if c in {'\n', '\r'}: return false
-  # `.` also stops at U+2028 and U+2029
-  not (rest[i .. ^1].contains(" ") or rest[i .. ^1].contains(" "))
-
 proc inlineValue(r: Reader, rest: string, indent: int): YamlValue =
   let first = rest.at(0)
   if first == '|' or first == '>':
-    if isBlockHeader(rest): return ystr(blockScalar(r, rest, indent))
+    if jsre"/^[|>][-+0-9]*\s*(?:#.*)?$/".test(rest): return ystr(blockScalar(r, rest, indent))
   if first in {'{', '[', '"', '\''}:
     # The value may continue on later lines. Read them in growing batches until it closes.
     let start = r.i

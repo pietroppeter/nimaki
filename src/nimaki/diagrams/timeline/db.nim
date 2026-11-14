@@ -1,7 +1,7 @@
 ## port-of: src/diagrams/timeline/db.ts
 ## port-status: conformant
 import ../../errors
-import ../../js
+import ../../jsregex
 
 type
   TimelinePeriod* = object
@@ -34,24 +34,10 @@ proc setDiagramTitle*(db: TimelineDb, text: string) = db.title = text
 
 proc setAccTitle*(db: TimelineDb, text: string) =
   ## text.replace(/^\s+/g, '')
-  db.accTitle = jsTrimStart(text)
+  db.accTitle = text.replace(jsre"/^\s+/g", "")
 
 proc setAccDescription*(db: TimelineDb, text: string) =
-  ## text.replace(/\n\s+/g, '\n')
-  var output = ""
-  var i = 0
-  while i < text.len:
-    if text[i] == '\n' and spaceLenAt(text, i + 1) > 0:
-      output.add '\n'
-      i += 1
-      while true:
-        let n = spaceLenAt(text, i)
-        if n == 0: break
-        i += n
-      continue
-    output.add text[i]
-    inc i
-  db.accDescr = output
+  db.accDescr = text.replace(jsre"/\n\s+/g", "\n")
 
 proc setDirection*(db: TimelineDb, direction: string) = db.direction = direction
 

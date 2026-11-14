@@ -10,6 +10,7 @@ import ../../errors
 import ../../js
 import ../../util/[url, yaml]
 import shapes, types
+import ../../jsregex
 
 type
   AgentflowDbOptions* = object
@@ -123,23 +124,8 @@ proc jsonStringify(v: YamlValue): string =
       if v.fields[k] != nil: parts.add jsonQuote(k) & ":" & jsonStringify(v.fields[k])
     "{" & parts.join(",") & "}"
 
-func isJsSpaceNoNewline(s: string, i: int): bool = s[i] != '\n' and isJsSpaceAt(s, i)
-
-proc blockScalarHeader(code: string): bool =
-  ## /:\s*[>|][\d+-]*\s*$/.test(code)
-  var k = code.len
-  while k > 0 and isJsSpaceBefore(code, k): k = prevRuneStart(code, k)
-  while k > 0 and code[k - 1] in {'0'..'9', '+', '-'}: dec k
-  if k == 0 or code[k - 1] notin {'>', '|'}: return false
-  dec k
-  while k > 0 and isJsSpaceBefore(code, k): k = prevRuneStart(code, k)
-  k > 0 and code[k - 1] == ':'
-
-proc withoutTrailingComma(code: string): string =
-  ## code.replace(/,([\t ]*)$/, '$1')
-  var k = code.len
-  while k > 0 and code[k - 1] in {'\t', ' '}: dec k
-  if k > 0 and code[k - 1] == ',': code[0 ..< k - 1] & code[k .. ^1] else: code
+const RE_BLOCK_SCALAR = jsre"/:\s*[>|][\d+-]*\s*$/"
+const RE_TRAILING_COMMA = jsre"/,([\t ]*)$/"
 
 proc indentOf(line: string): int = utf16Len(line) - utf16Len(line.jsTrimStart)
 
@@ -184,11 +170,11 @@ proc stripLineTrailingCommas(body: string): string =
       continue
     let code = if commentStart >= 0: line[0 ..< commentStart] else: line
     let comment = if commentStart >= 0: line[commentStart .. ^1] else: ""
-    if blockScalarHeader(code):
+    if RE_BLOCK_SCALAR.test(code):
       blockScalarIndent = indentOf(line)
       output.add line
       continue
-    output.add withoutTrailingComma(code) & comment
+    output.add code.replace(RE_TRAILING_COMMA, "$1") & comment
   output.join("\n")
 
 proc edgeSemanticOf(t, stroke: string): string =
@@ -417,7 +403,7 @@ proc updateLink*(db: AgentflowDb, positions: seq[string], styleIn: seq[string]) 
     edge.style = style
 
 proc addClass*(db: AgentflowDb, ids: string, styles: seq[string]) =
-  let style = styles.join(",").replace("\\,", "§§§").replace(",", ";").replace("§§§", ",").split(';')
+  let style = styles.join(",").replace(jsre"/\\,/g", "§§§").replace(jsre"/,/g", ";").replace(jsre"/§§§/g", ",").split(';')
   for id in ids.split(','):
     var classNode = db.classes.getOrDefault(id, nil)
     if classNode == nil:
@@ -459,21 +445,10 @@ proc setClickEvent*(db: AgentflowDb, ids: string, functionName = "", functionArg
   db.setClass(ids, "clickable")
 
 proc setAccTitle*(db: AgentflowDb, text: string) =
-  db.accTitle = text.jsTrimStart
+  db.accTitle = text.replace(jsre"/^\s+/g", "")
 
 proc setAccDescription*(db: AgentflowDb, text: string) =
-  # text.replace(/\n\s+/g, '\n')
-  var s = ""
-  var i = 0
-  while i < text.len:
-    if text[i] == '\n' and i + 1 < text.len and isJsSpaceAt(text, i + 1):
-      s.add '\n'
-      inc i
-      while i < text.len and isJsSpaceAt(text, i): i += spaceLenAt(text, i)
-    else:
-      s.add text[i]
-      inc i
-  db.accDescr = s
+  db.accDescr = text.replace(jsre"/\n\s+/g", "\n")
 
 proc addSubGraph*(db: AgentflowDb, idText: Option[FlowText], list: seq[DocItem],
                   titleText: Option[FlowText]): string =

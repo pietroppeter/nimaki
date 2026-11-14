@@ -1,6 +1,6 @@
 ## port-of: src/diagrams/usecase/render.ts
 ## port-status: conformant
-import std/[algorithm, options, strutils, tables]
+import std/[algorithm, options, tables]
 from std/math import ceil
 import ../../js
 import ../../jsmath
@@ -13,6 +13,7 @@ import ../../util/yaml
 import ../common/fit_width
 import graph
 import types as usecaseTypes
+import ../../jsregex
 
 const
   NODE_SEP = 32.0
@@ -55,9 +56,7 @@ proc literal(text: string): string =
   ## A plain label is shown as written: no tags, no markdown, no `\n` breaks. Its markup
   ## characters are handed to the label parser as character references, which it turns back
   ## into characters.
-  for c in text:
-    if c in {'&', '<', '>', '\\'}: result.add "&#" & $ord(c) & ";"
-    else: result.add c
+  text.replaceWith(jsre"/[&<>\\]/g", m): "&#" & $ord(m[0][0]) & ";"
 
 proc text(raw: string, markdown: bool, measurer: TextMeasurer, size, wrap: float, base = 0): Label =
   layoutLabel(if raw != "" and not markdown: literal(raw) else: raw, markdown, measurer, size, wrap, base)
@@ -314,11 +313,7 @@ proc draw(model: UsecaseModel, config: Config, options: RenderOptions, turned: b
     let view = views[i]
     let c = cnodes[i]
     let node = view.node
-    var stripped = node.cssClasses
-    if stripped.startsWith("default"):
-      stripped = stripped[7 .. ^1]
-      if stripped.len > 0 and stripped[0] in Whitespace: stripped = stripped[1 .. ^1]
-    let classes = classNames(stripped)
+    let classes = classNames(node.cssClasses.replace(jsre"/^default\s?/", ""))
     let id = escText(node.id)
     let textAttrs = view.style.text
     let shape = view.style.shape
@@ -493,15 +488,7 @@ proc draw(model: UsecaseModel, config: Config, options: RenderOptions, turned: b
     let dashes = if edge.internal: "2 3" elif edge.pattern == "dotted": "5 4" elif edge.animate: "9 5" else: ""
     let marks = mark(startType, path.sx, path.sy, path.sdx, path.sdy, color) &
       mark(endType, path.ex, path.ey, path.edx, path.edy, color)
-    # edge.classes.replace(/^default relationship relationship-\S+\s?/, '')
-    var extra = edge.classes
-    const prefix = "default relationship relationship-"
-    if extra.startsWith(prefix):
-      var k = prefix.len
-      while k < extra.len and extra[k] notin Whitespace: inc k
-      if k > prefix.len:
-        if k < extra.len: inc k
-        extra = extra[k .. ^1]
+    let extra = edge.classes.replace(jsre"/^default relationship relationship-\S+\s?/", "")
     edgesOut.add "<g class=\"pele-edge pele-" & edge.relationshipType & classNames(extra) & "\" data-id=\"" &
       escText(edge.id) & "\"" & (if over != "": " stroke=\"" & over & "\"" else: "") & style.line & ">" &
       "<path d=\"" & path.d & "\"" & (if dashes != "": " stroke-dasharray=\"" & dashes & "\"" else: "") & "/>" &

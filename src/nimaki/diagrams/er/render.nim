@@ -13,6 +13,7 @@ import ../../util/[url, yaml]
 import ../common/[fit_width, generics]
 import db, graph, markers
 import types as erTypes
+import ../../jsregex
 
 const
   NODE_SEP = 48.0
@@ -67,28 +68,6 @@ type
     band: float
     at: float
 
-func stripDefault(s: string): string =
-  ## s.replace(/^default\s?/, '')
-  if not s.startsWith("default"): return s
-  if isJsSpaceAt(s, 7): s.substr(7 + spaceLenAt(s, 7)) else: s.substr(7)
-
-func hasInternalLink(s: string): bool =
-  ## / internal-link(?: |$)/.test(s)
-  var at = s.find(" internal-link")
-  while at >= 0:
-    let e = at + " internal-link".len
-    if e == s.len or s[e] == ' ': return true
-    at = s.find(" internal-link", at + 1)
-  false
-
-func setsFontFamily(text: string): bool =
-  ## /[";]font-family:/.test(text)
-  var at = text.find("font-family:")
-  while at != -1:
-    if at > 0 and text[at - 1] in {'"', ';'}: return true
-    at = text.find("font-family:", at + 1)
-  false
-
 # Writes a measured label starting at x, with the baseline of its first line at y.
 proc textLeft(label: Label, x, y: float, attrs: string, icons: IconResolver, mono = 0): string =
   let lines = label.lines
@@ -134,7 +113,7 @@ proc textLeft(label: Label, x, y: float, attrs: string, icons: IconResolver, mon
 # does not take `<int>` for a tag.
 func cellText(raw: string): string =
   let converted = parseGenericTypes(raw)
-  if converted == raw: raw else: converted.replace("<", "&lt;").replace(">", "&gt;")
+  if converted == raw: raw else: converted.replace(jsre"/</g", "&lt;").replace(jsre"/>/g", "&gt;")
 
 proc draw(db: ErDb, config: Config, options: RenderOptions, turned: bool): Rendered
 
@@ -264,7 +243,7 @@ proc draw(db: ErDb, config: Config, options: RenderOptions, turned: bool): Rende
     let style = resolveStyle(
       if node.cssStyles.len > 0: node.cssCompiledStyles & node.cssStyles else: node.cssCompiledStyles)
     let base = (if style.bold: Bold else: 0) or (if style.italic: Italic else: 0)
-    let mono = if monospaced and not setsFontFamily(style.text): Mono else: 0
+    let mono = if monospaced and not jsre"""/[";]font-family:/""".test(style.text): Mono else: 0
     let nameSize = if style.fontSize != 0: style.fontSize else: size
     let rowSize = if style.fontSize != 0: style.fontSize else: smallSize
     let keySize = if style.fontSize != 0: style.fontSize else: jsRound(size * 0.75)
@@ -380,7 +359,7 @@ proc draw(db: ErDb, config: Config, options: RenderOptions, turned: bool): Rende
     let view = views[i]
     let c = cnodes[i]
     let node = view.node
-    let classes = classNames(stripDefault(node.cssClasses))
+    let classes = classNames(node.cssClasses.replace(jsre"/^default\s?/", ""))
     if c.isGroup:
       view.w = c.w
       view.h = c.h
@@ -409,7 +388,7 @@ proc draw(db: ErDb, config: Config, options: RenderOptions, turned: bool): Rende
     var name = labelSvg(view.label, 0, if view.rows.len > 0: y0 + view.headH / 2 else: 0,
                         " class=\"pele-label\"" & color & text, icons)
     let display = decodeEntities(if node.alias != "": node.alias else: node.label)
-    if hasInternalLink(classes & " ") and name != "" and options.links != some(false):
+    if jsre"/ internal-link(?: |$)/".test(classes & " ") and name != "" and options.links != some(false):
       # The name ends up in an href, so it gets the same check as a URL.
       let safe = internalLink(display, options)
       let target = esc(display)

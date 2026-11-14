@@ -6,6 +6,7 @@
 import std/[sets, strutils]
 import std/unicode except strip, split, splitWhitespace
 import ../../js
+import ../../jsregex
 
 # Mermaid asks the browser whether the first word of a box title is a color. Pele has no browser,
 # so it knows the color keywords and the rgb() and hsl() notations. Other functions, such as calc()
@@ -40,62 +41,17 @@ const
   K_Angle = 3
   K_None = 4
 
-func digitsAt(s: string, i: int): int =
-  var j = i
-  while j < s.len and s[j] in Digits: inc j
-  j
-
-func reTerm(term: string): (bool, string) =
-  ## /^[+-]?(?:\d+(?:\.\d+)?|\.\d+)(?:e[+-]?\d+)?(%|deg|grad|rad|turn)?$/i: whether it matches,
-  ## and the unit as written ("" when there is none).
-  var i = 0
-  if i < term.len and term[i] in {'+', '-'}: inc i
-  let d = digitsAt(term, i)
-  if d > i:
-    i = d
-    if i < term.len and term[i] == '.' and digitsAt(term, i + 1) > i + 1: i = digitsAt(term, i + 1)
-  elif i < term.len and term[i] == '.' and digitsAt(term, i + 1) > i + 1:
-    i = digitsAt(term, i + 1)
-  else:
-    return (false, "")
-  if i < term.len and term[i] in {'e', 'E'}:
-    var j = i + 1
-    if j < term.len and term[j] in {'+', '-'}: inc j
-    let k = digitsAt(term, j)
-    if k > j: i = k
-  let rest = term[i .. ^1]
-  if rest == "": return (true, "")
-  if rest.toLowerAscii in ["%", "deg", "grad", "rad", "turn"]: return (true, rest)
-  (false, "")
+const RE_TERM = jsre"/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)(?:e[+-]?\d+)?(%|deg|grad|rad|turn)?$/i"
 
 func kind(term: string): int =
   if unicode.toLower(term) == "none": return K_None
-  let (ok, unit) = reTerm(term)
-  if not ok: return K_Bad
-  if unit == "": K_Number elif unit == "%": K_Percent else: K_Angle
+  let m = RE_TERM.exec(term)
+  if not m.found: return K_Bad
+  if not m.has(1): K_Number elif m[1] == "%": K_Percent else: K_Angle
 
 func isAlpha(term: string, modern: bool): bool =
   let k = kind(term)
   k == K_Number or k == K_Percent or (modern and k == K_None)
-
-func splitSpaces(s: string): seq[string] =
-  ## s.split(/\s+/)
-  var part = ""
-  var i = 0
-  while i < s.len:
-    let n = spaceLenAt(s, i)
-    if n > 0:
-      result.add part
-      part = ""
-      i += n
-      while true:
-        let m = spaceLenAt(s, i)
-        if m == 0: break
-        i += m
-    else:
-      part.add s[i]
-      inc i
-  result.add part
 
 func isFunction(color: string): bool =
   let hsl = color.startsWith("hsl")
@@ -116,7 +72,7 @@ func isFunction(color: string): bool =
   else:
     let slash = inner.split('/')
     if slash.len > 2: return false
-    parts = splitSpaces(jsTrim(slash[0]))
+    parts = jsTrim(slash[0]).split(jsre"/\s+/")
     if slash.len == 2:
       alpha = jsTrim(slash[1])
       hasAlpha = true

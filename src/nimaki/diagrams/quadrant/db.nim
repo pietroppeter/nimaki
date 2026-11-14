@@ -3,6 +3,7 @@
 import std/[options, tables, strutils]
 import ../../errors
 import ../../js
+import ../../jsregex
 
 type
   QuadrantText* = object
@@ -29,24 +30,9 @@ type
 
   QuadrantModel* = QuadrantDb
 
-func allDigits(s: string, first, last: int): bool =
-  if last <= first: return false
-  for i in first ..< last:
-    if s[i] notin Digits: return false
-  true
-
-func isNumber(s: string): bool = allDigits(s, 0, s.len)   ## /^\d+$/
-
-func isHex(s: string): bool =
-  ## /^#?([\dA-Fa-f]{6}|[\dA-Fa-f]{3})$/
-  let start = if s.startsWith("#"): 1 else: 0
-  let len = s.len - start
-  if len != 6 and len != 3: return false
-  for i in start ..< s.len:
-    if s[i] notin HexDigits: return false
-  true
-
-func isPixels(s: string): bool = s.endsWith("px") and allDigits(s, 0, s.len - 2)   ## /^\d+px$/
+const RE_NUMBER = jsre"/^\d+$/"
+const RE_HEX = jsre"/^#?([\dA-Fa-f]{6}|[\dA-Fa-f]{3})$/"
+const RE_PIXELS = jsre"/^\d+px$/"
 
 proc invalid(style, value, kind: string): ref PeleError =
   newPeleError("value for " & style & " " & value & " is invalid, please use a valid " & kind,
@@ -65,16 +51,16 @@ proc parseStyles*(styles: seq[string]): PointStyle =
   for style in styles:
     let (key, value) = keyValue(style)
     if key == "radius":
-      if not isNumber(value): raise invalid(key, value, "number")
+      if not RE_NUMBER.test(value): raise invalid(key, value, "number")
       result.radius = some(jsToNumber(value))
     elif key == "color":
-      if not isHex(value): raise invalid(key, value, "hex code")
+      if not RE_HEX.test(value): raise invalid(key, value, "hex code")
       result.color = some(value)
     elif key == "stroke-color":
-      if not isHex(value): raise invalid(key, value, "hex code")
+      if not RE_HEX.test(value): raise invalid(key, value, "hex code")
       result.strokeColor = some(value)
     elif key == "stroke-width":
-      if not isPixels(value): raise invalid(key, value, "number of pixels (eg. 10px)")
+      if not RE_PIXELS.test(value): raise invalid(key, value, "number of pixels (eg. 10px)")
       result.strokeWidth = some(value)
     else:
       raise newPeleError("style named " & key & " is not supported.", "semantic", "quadrantChart")
@@ -96,18 +82,9 @@ proc addClass*(db: QuadrantDb, className: string, styles: seq[string]) =
   db.classes[className] = parseStyles(styles)
 
 proc setDiagramTitle*(db: QuadrantDb, text: string) = db.title = text
-proc setAccTitle*(db: QuadrantDb, text: string) = db.accTitle = jsTrimStart(text)   # replace(/^\s+/g, '')
+proc setAccTitle*(db: QuadrantDb, text: string) = db.accTitle = text.replace(jsre"/^\s+/g", "")
 
 func collapseIndents(s: string): string =
-  ## s.replace(/\n\s+/g, '\n')
-  var i = 0
-  while i < s.len:
-    if s[i] == '\n' and spaceLenAt(s, i + 1) > 0:
-      result.add '\n'
-      i += 1
-      while spaceLenAt(s, i) > 0: i += spaceLenAt(s, i)
-    else:
-      result.add s[i]
-      inc i
+  s.replace(jsre"/\n\s+/g", "\n")
 
 proc setAccDescription*(db: QuadrantDb, text: string) = db.accDescr = collapseIndents(text)

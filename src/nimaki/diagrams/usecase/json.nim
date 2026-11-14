@@ -10,6 +10,7 @@ import ../../errors
 import ../../js
 import ../../text/entities
 import ../../util/chars
+import ../../jsregex
 
 type
   JsonKind* = enum jNull, jBool, jNumber, jString, jArray, jObject
@@ -536,37 +537,16 @@ proc locationAt(text: string, offset, line, column: int): (int, int) =
     inc i
   (line, column)
 
-proc numberAfter(message, prefix: string, start: int): (int, int, int) =
-  ## A match of /\b<prefix>(\d+)\b/ from `start`: (where it starts, the number, where it ends),
-  ## or (-1, 0, 0).
-  var at = message.find(prefix, start)
-  while at != -1:
-    let boundary = at == 0 or not isWordChar(message[at - 1])
-    var k = at + prefix.len
-    while k < message.len and message[k] in {'0'..'9'}: inc k
-    # \d+ backtracks, but a shorter run still ends next to a digit, so only the whole run can end at \b.
-    if boundary and k > at + prefix.len and (k == message.len or not isWordChar(message[k])):
-      return (at, parseInt(message[at + prefix.len ..< k]), k)
-    at = message.find(prefix, at + 1)
-  (-1, 0, 0)
-
 proc locationFromMessage(message, text: string, line, column: int): (bool, (int, int)) =
   ## Engines word JSON.parse errors differently: some give an offset, some a line and column.
-  let position = numberAfter(message, "position ", 0)
-  if position[0] != -1: return (true, locationAt(text, position[1], line, column))
-  var at = message.find("line ")
-  while at != -1:
-    let first = numberAfter(message, "line ", at)
-    if first[0] == -1: break
-    if message.continuesWith(" column ", first[2]):
-      let second = numberAfter(message, "column ", first[2] + 1)
-      if second[0] == first[2] + 1:
-        let localLine = first[1]
-        let localColumn = second[1]
-        return (true, (line + localLine - 1, if localLine == 1: column + localColumn - 1 else: localColumn))
-    at = message.find("line ", first[0] + 1)
-  let lower = message.toLowerAscii
-  if "unexpected end" in lower or "end of json input" in lower:
+  let position = jsre"/\bposition (\d+)\b/".exec(message)
+  if position.found: return (true, locationAt(text, parseInt(position[1]), line, column))
+  let local = jsre"/\bline (\d+) column (\d+)\b/".exec(message)
+  if local.found:
+    let localLine = parseInt(local[1])
+    let localColumn = parseInt(local[2])
+    return (true, (line + localLine - 1, if localLine == 1: column + localColumn - 1 else: localColumn))
+  if jsre"/unexpected end|end of json input/i".test(message):
     return (true, locationAt(text, utf16Len(text), line, column))
   (false, (0, 0))
 

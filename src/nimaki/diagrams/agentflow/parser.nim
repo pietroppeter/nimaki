@@ -8,6 +8,7 @@ import std/[options, tables]
 import ../../errors
 import ../../js
 import db, lexer, tokens, types
+import ../../jsregex
 
 const ID: set[uint8] = {
   T_NUM.uint8, T_NODE_STRING.uint8, T_DOWN.uint8, T_MINUS.uint8, T_DEFAULT.uint8, T_COMMA.uint8,
@@ -55,32 +56,11 @@ const STATEMENT_START =
 func noItems(): DocItem = DocItem(kind: dkList)
 
 # Mermaid trims spaces and tabs between a closing brace and the end of its line before parsing.
-proc braceTrail(source: string): seq[Edit] =
-  ## The matches of /}[^\S\n]*\n/g.
-  var p = 0
-  while p < source.len:
-    if source[p] == '}':
-      var q = p + 1
-      while q < source.len and source[q] != '\n' and isJsSpaceAt(source, q): q += spaceLenAt(source, q)
-      if q < source.len and source[q] == '\n':
-        result.add (p, q + 1, 2)
-        p = q + 1
-        continue
-    inc p
-
-proc replaceBraceTrail(source: string, edits: seq[Edit]): string =
-  var at = 0
-  for (first, last, length) in edits:
-    result.add source[at ..< first]
-    result.add "}\n"
-    at = last
-  result.add source[at .. ^1]
+const RE_BRACE_TRAIL = jsre"/}[^\S\n]*\n/g"
 
 proc parseAgentflow*(source: string, db: AgentflowDb, raw = false) =
   ## `raw` parses the text as it is, the way Mermaid's generated parser does without its wrapper.
-  let trims = not raw and '}' in source
-  let edits = if trims: braceTrail(source) else: @[]
-  let src = if trims: replaceBraceTrail(source, edits) else: source
+  let src = if not raw and '}' in source: source.replace(RE_BRACE_TRAIL, "}\n") else: source
   let tokens = tokenize(src)
   let types = tokens.types
   let texts = tokens.texts
@@ -99,7 +79,7 @@ proc parseAgentflow*(source: string, db: AgentflowDb, raw = false) =
       var k = i
       while k > 0 and types[k - 1].isIn(TRAILING): dec k
       start = jsTrimEnd(src[0 ..< starts[k]]).len
-    let at = if src == source: start else: inputOffset(@[edits], start)
+    let at = if src == source: start else: inputOffset(@[replacements(source, RE_BRACE_TRAIL, 2)], start)
     if t == T_ERROR: raise syntaxError("agentflow", source, at, "", true)
     raise syntaxError("agentflow", source, at, "Expecting " & expected & ", got '" & TOKEN_NAMES[t] & "'")
 

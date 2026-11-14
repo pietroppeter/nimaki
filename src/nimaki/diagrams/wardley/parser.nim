@@ -1,8 +1,9 @@
 ## port-of: src/diagrams/wardley/parser.ts
 ## port-status: conformant
-import std/[strutils, options]
+import std/options
 import ../../js
 import ../common/[tokens, acc_descr]
+import ../../jsregex
 
 const
   # const enum T: the index of each token type in WARDLEY_TOKENS
@@ -47,9 +48,6 @@ const
   T_newline = 38
 
 func isDigit(s: string, i: int): bool = i < s.len and s[i] in {'0' .. '9'}
-func isWord(s: string, i: int): bool = i < s.len and s[i] in {'A' .. 'Z', 'a' .. 'z', '0' .. '9', '_'}
-func isLetter(s: string, i: int): bool = i < s.len and s[i] in {'A' .. 'Z', 'a' .. 'z'}
-
 func digits(src: string, start: int): int =
   result = start
   while isDigit(src, result): inc result
@@ -67,100 +65,11 @@ proc numberScanner(): Scanner =
     let after = digits(src, stop + 1)
     if after > stop + 1: after else: -1
 
-func matchArrow(s: string, p: int): int =
-  ## /->/y
-  if s.continuesWith("->", p): p + 2 else: -1
-
-func quoted(s: string, p: int): int =
-  ## \+'[^']*' from p: where it ends, or -1
-  if not s.continuesWith("+'", p): return -1
-  let close = s.find('\'', p + 2)
-  if close == -1: -1 else: close + 1
-
-func matchLinkArrow(s: string, p: int): int =
-  ## /-->|-\.->|>|\+'[^']*'<>|\+'[^']*'<|\+'[^']*'>/y
-  if s.continuesWith("-->", p): return p + 3
-  if s.continuesWith("-.->", p): return p + 4
-  if s.continuesWith(">", p): return p + 1
-  let q = quoted(s, p)
-  if q == -1: return -1
-  if s.continuesWith("<>", q): return q + 2
-  if s.continuesWith("<", q) or s.continuesWith(">", q): return q + 1
-  -1
-
-func matchLinkPort(s: string, p: int): int =
-  ## /\+<>|\+>|\+</y
-  if s.continuesWith("+<>", p): p + 3
-  elif s.continuesWith("+>", p) or s.continuesWith("+<", p): p + 2
-  else: -1
-
-func matchLinkLabel(s: string, p: int): int =
-  ## /;[^\n\r]+/y
-  if p >= s.len or s[p] != ';': return -1
-  var i = p + 1
-  while i < s.len and s[i] notin {'\n', '\r'}: inc i
-  if i > p + 1: i else: -1
-
-func matchStrategy(s: string, p: int): int =
-  ## /build|buy|outsource|market/y
-  for w in ["build", "buy", "outsource", "market"]:
-    if s.continuesWith(w, p): return p + w.len
-  -1
-
 proc word(name, text: string): TokenType =
-  ## A sticky pattern of the text alone: it does not need a word boundary after it.
-  let m = proc (s: string, p: int): int {.noSideEffect.} =
-    if s.continuesWith(text, p): p + text.len else: -1
-  TokenType(name: name, pattern: m, first: text[0 .. 0], hasFirst: true)
+  TokenType(name: name, pattern: newRegExp(text, "y"), first: text[0 .. 0], hasFirst: true)
 
-func namePart(s: string, i: int): int =
-  ## (?:[A-Za-z0-9_()&]|-(?!>))* from i
-  result = i
-  while result < s.len:
-    let c = s[result]
-    if c in {'A' .. 'Z', 'a' .. 'z', '0' .. '9', '_', '(', ')', '&'}: inc result
-    elif c == '-' and not s.continuesWith("->", result): inc result
-    else: break
-
-func matchNameWithSpaces(s: string, p: int): int =
-  ## /(?!title\s|accTitle|accDescr)[A-Za-z](?:[A-Za-z0-9_()&]|-(?!>))*(?:[ \t]+[A-Za-z(](?:[A-Za-z0-9_()&]|-(?!>))*)*/y
-  if s.continuesWith("title", p) and spaceLenAt(s, p + 5) > 0: return -1
-  if s.continuesWith("accTitle", p) or s.continuesWith("accDescr", p): return -1
-  if not isLetter(s, p): return -1
-  result = namePart(s, p + 1)
-  while true:
-    var i = result
-    while i < s.len and s[i] in {' ', '\t'}: inc i
-    if i == result or i >= s.len or s[i] notin {'A' .. 'Z', 'a' .. 'z', '('}: break
-    result = namePart(s, i + 1)
-
-func matchWs(s: string, p: int): int =
-  ## /[ \t]+/y
-  var i = p
-  while i < s.len and s[i] in {' ', '\t'}: inc i
-  if i > p: i else: -1
-
-func matchInt(s: string, p: int): int =
-  ## /0|[1-9][0-9]*(?!\.)/y; the run of digits gives back one digit at a time until no `.` follows.
-  if p >= s.len: return -1
-  if s[p] == '0': return p + 1
-  if s[p] notin {'1' .. '9'}: return -1
-  var stop = digits(s, p + 1)
-  while stop > p and stop < s.len and s[stop] == '.': dec stop
-  if stop > p: stop else: -1
-
-func matchId(s: string, p: int): int =
-  ## /[\w]([-\w]*\w)?/y
-  if not isWord(s, p): return -1
-  var i = p + 1
-  var last = p + 1
-  while i < s.len and (isWord(s, i) or s[i] == '-'):
-    inc i
-    if isWord(s, i - 1): last = i
-  last
-
-let ARROW = TokenType(name: "ARROW", pattern: matchArrow, first: "-", hasFirst: true)
-let LINK_ARROW = TokenType(name: "LINK_ARROW", pattern: matchLinkArrow, first: "->+", hasFirst: true)
+let ARROW = TokenType(name: "ARROW", pattern: jsre"/->/y", first: "-", hasFirst: true)
+let LINK_ARROW = TokenType(name: "LINK_ARROW", pattern: jsre"/-->|-\.->|>|\+'[^']*'<>|\+'[^']*'<|\+'[^']*'>/y", first: "->+", hasFirst: true)
 
 let WARDLEY_TOKENS*: seq[TokenType] = @[
   TokenType(name: "[", literal: "["),
@@ -173,12 +82,12 @@ let WARDLEY_TOKENS*: seq[TokenType] = @[
   TokenType(name: "-", literal: "-", longer: @[ARROW, LINK_ARROW, YAML]),
   TokenType(name: "{", literal: "{"),
   TokenType(name: "}", literal: "}"),
-  TokenType(name: "WARDLEY_NUMBER", first: "0123456789", hasFirst: true, scanner: numberScanner),
+  TokenType(name: "WARDLEY_NUMBER", pattern: jsre"/[0-9]+\.[0-9]+/y", first: "0123456789", hasFirst: true, scanner: numberScanner),
   ARROW,
-  TokenType(name: "LINK_PORT", pattern: matchLinkPort, first: "+", hasFirst: true),
+  TokenType(name: "LINK_PORT", pattern: jsre"/\+<>|\+>|\+</y", first: "+", hasFirst: true),
   LINK_ARROW,
-  TokenType(name: "LINK_LABEL", pattern: matchLinkLabel, first: ";", hasFirst: true),
-  TokenType(name: "STRATEGY", pattern: matchStrategy, first: "bom", hasFirst: true),
+  TokenType(name: "LINK_LABEL", pattern: jsre"/;[^\n\r]+/y", first: ";", hasFirst: true),
+  TokenType(name: "STRATEGY", pattern: jsre"/build|buy|outsource|market/y", first: "bom", hasFirst: true),
   word("KW_WARDLEY", "wardley-beta"),
   word("KW_SIZE", "size"),
   word("KW_EVOLUTION", "evolution"),
@@ -193,15 +102,15 @@ let WARDLEY_TOKENS*: seq[TokenType] = @[
   word("KW_ANNOTATION", "annotation"),
   word("KW_ACCELERATOR", "accelerator"),
   word("KW_DEACCELERATOR", "deaccelerator"),
-  TokenType(name: "NAME_WITH_SPACES", pattern: matchNameWithSpaces,
+  TokenType(name: "NAME_WITH_SPACES", pattern: jsre"/(?!title\s|accTitle|accDescr)[A-Za-z](?:[A-Za-z0-9_()&]|-(?!>))*(?:[ \t]+[A-Za-z(](?:[A-Za-z0-9_()&]|-(?!>))*)*/y",
             first: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", hasFirst: true),
-  TokenType(name: "WS", pattern: matchWs, hidden: true, first: "\t ", hasFirst: true),
+  TokenType(name: "WS", pattern: jsre"/[ \t]+/y", hidden: true, first: "\t ", hasFirst: true),
   accDescr(),
   ACC_TITLE,
   TITLE,
-  TokenType(name: "INT", pattern: matchInt, first: "0123456789", hasFirst: true),
+  TokenType(name: "INT", pattern: jsre"/0|[1-9][0-9]*(?!\.)/y", first: "0123456789", hasFirst: true),
   STRING,
-  TokenType(name: "ID", pattern: matchId, first: "_0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+  TokenType(name: "ID", pattern: jsre"/[\w]([-\w]*\w)?/y", first: "_0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
             hasFirst: true),
   NEWLINE,
   WHITESPACE,

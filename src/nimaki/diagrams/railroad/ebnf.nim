@@ -4,6 +4,7 @@
 ## `railroad-ebnf-beta`: EBNF in the W3C and ISO 14977 styles.
 import ../../js
 import common, types
+import ../../jsregex
 
 const
   # const enum T: the index of each token type in EBNF_TOKENS
@@ -45,11 +46,13 @@ func specialSequence(src: string, at: int): int =
   -1
 
 let ID = identifier("EBNF_ID")
-let SPECIAL = TokenType(name: "EBNF_SPECIAL_SEQUENCE", first: "?", hasFirst: true,
+let SPECIAL = TokenType(name: "EBNF_SPECIAL_SEQUENCE", pattern: jsre"/\?(?=[^?;]*[^?\s;][^?;]*\?)[^?;]*\?/y",
+                        first: "?", hasFirst: true,
                         scanner: proc (): Scanner =
                           proc (src: string, at: int, previous: int): int = specialSequence(src, at))
 let HIDDEN = hiddenTokens("EBNF")
-let ISO_COMMENT = between("EBNF_ISO_COMMENT", "(*", "*)", "(")
+let ISO_COMMENT = TokenType(name: "EBNF_ISO_COMMENT", pattern: jsre"/\(\*[\s\S]*?\*\)/y", hidden: true,
+                            first: "(", hasFirst: true, opener: jsre"/\(\*/y")
 
 let EBNF_TOKENS*: seq[TokenType] = @[
   opening("railroad-ebnf-beta", ID),
@@ -68,14 +71,15 @@ let EBNF_TOKENS*: seq[TokenType] = @[
   literal("*"),
   literal("+"),
   literal("-", @[HIDDEN[1]]),
-  title(wordRest),
+  title(r"[\w-]"),
   ACC_TITLE,
   ACC_DESCR,
   ID,
   quoted("EBNF_STRING"),
   SPECIAL,
 ] & HIDDEN & @[
-  between("EBNF_BLOCK_COMMENT", "/*", "*/", "/"),
+  TokenType(name: "EBNF_BLOCK_COMMENT", pattern: jsre"/\/\*[\s\S]*?\*\//y", hidden: true, first: "/", hasFirst: true,
+            opener: jsre"/\/\*/y"),
   ISO_COMMENT,
 ]
 

@@ -1,8 +1,8 @@
 ## port-of: src/diagrams/git/parser.ts
 ## port-status: conformant
-import std/strutils
 import ../common/tokens
 import ../../js
+import ../../jsregex
 
 const
   # const enum T: the index of each token type in GIT_TOKENS
@@ -35,49 +35,7 @@ const
   T_newline = 26
   T_reference = 31
 
-func isRefChar(c: char): bool = isWordChar(c) or c in {'-', '.', '/'}
-
-func matchReference(s: string, p: int): int =
-  ## /\w([-\./\w]*[-\w])?/y
-  if p >= s.len or not isWordChar(s[p]): return -1
-  var e = p + 1
-  while e < s.len and isRefChar(s[e]): inc e
-  while e > p + 1 and s[e - 1] in {'.', '/'}: dec e
-  e
-
-func titleRest(s: string, i: int): bool {.noSideEffect.} =
-  ## [-./\w]*[-\w] matches at i: the run of name characters holds a `-` or a word character.
-  var e = i
-  while e < s.len and isRefChar(s[e]):
-    if s[e] != '.' and s[e] != '/': return true
-    inc e
-  false
-
-func matchInt(s: string, p: int): int =
-  ## /0|[1-9][0-9]*(?!\.)/y: a 0 alone, or a run of digits not followed by a dot (the run
-  ## gives back its last digit when a dot follows).
-  if p >= s.len: return -1
-  if s[p] == '0': return p + 1
-  if s[p] notin {'1'..'9'}: return -1
-  var e = p + 1
-  while e < s.len and s[e] in {'0'..'9'}: inc e
-  if e < s.len and s[e] == '.':
-    if e - 1 > p: e - 1 else: -1
-  else: e
-
-func blockOpener(s: string, at: int): int =
-  ## /[\t ]*accDescr\s*{/y, where it ends, or -1.
-  var i = at
-  while i < s.len and s[i] in {'\t', ' '}: inc i
-  if not s.continuesWith("accDescr", i): return -1
-  i += 8
-  while true:
-    let n = spaceLenAt(s, i)
-    if n == 0: break
-    i += n
-  if i < s.len and s[i] == '{': i + 1 else: -1
-
-let REFERENCE = TokenType(name: "REFERENCE", pattern: matchReference)
+let REFERENCE = TokenType(name: "REFERENCE", pattern: jsre"/\w([-\./\w]*[-\w])?/y")
 let NAME = @[REFERENCE]
 
 proc word(name: string): TokenType =
@@ -95,7 +53,7 @@ let GIT_TOKENS*: seq[TokenType] = block:
   # Without a closing brace the block form scans to the end of the text, and a brace is not a
   # token on its own, so the first failure is final.
   let accDescr = copyOf(ACC_DESCR)
-  accDescr.opener = blockOpener
+  accDescr.opener = jsre"/[\t ]*accDescr\s*{/y"
   @[
     word("cherry-pick"),
     mark("gitGraph:"),
@@ -120,8 +78,8 @@ let GIT_TOKENS*: seq[TokenType] = block:
     mark(":"),
     accDescr,
     ACC_TITLE,
-    titleBefore(titleRest),
-    TokenType(name: "INT", pattern: matchInt, first: "0123456789", hasFirst: true),
+    titleBefore(r"[-./\w]*[-\w]"),
+    TokenType(name: "INT", pattern: jsre"/0|[1-9][0-9]*(?!\.)/y", first: "0123456789", hasFirst: true),
     STRING,
     NEWLINE,
     WHITESPACE,

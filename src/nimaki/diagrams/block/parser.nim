@@ -9,8 +9,12 @@ type
   NodeInfo = object
     id, label, typeStr: string
     directions: seq[string]
+  Statements = ref object
+    ## A statement list held by reference: nim js copies a seq at every assignment, and a
+    ## composite that opens saves the list of its parent, which can hold thousands.
+    items: seq[Statement]
   Frame = object
-    list: seq[Statement]
+    list: Statements
     hasHeader: bool
     header: Statement
 
@@ -112,37 +116,37 @@ proc parseBlock*(src: string, db: BlockDb) =
   discard expect(T_KEY)
   # Composites nest without recursion: each open one keeps the statement list of its parent.
   var open: seq[Frame]
-  var list: seq[Statement]
+  var list = Statements()
   while true:
     case types[i]
     of T_NODE_ID:
-      list.add nodeStatement()
+      list.items.add nodeStatement()
     of T_COLUMNS:
       let b = newBlock("", "column-setting")
       b.columns = some(digitsValue(texts[i]))
       inc i
-      list.add one(b)
+      list.items.add one(b)
     of T_SPACE_BLOCK:
       let width = digitsValue(texts[i])
       inc i
       let b = newBlock(db.generateId(), "space")
       b.width = width
-      list.add one(b)
+      list.items.add one(b)
     of T_KEY:
       inc i
       open.add Frame(list: list)
-      list = @[]
+      list = Statements()
     of T_ID_BLOCK:
       inc i
       if types[i] != T_NODE_ID: fail("'NODE_ID'")
       open.add Frame(list: list, hasHeader: true, header: nodeStatement())
-      list = @[]
+      list = Statements()
     of T_end:
-      if open.len == 0 or list.len == 0: fail(STATEMENT_START)
+      if open.len == 0 or list.items.len == 0: fail(STATEMENT_START)
       let frame = open.pop()
       inc i
       let id = db.generateId()
-      let children = closeDocument(list)
+      let children = closeDocument(list.items)
       list = frame.list
       var b: Block
       if not frame.hasHeader:
@@ -154,27 +158,27 @@ proc parseBlock*(src: string, db: BlockDb) =
         b[] = frame.header.blocks[0][]
         b.typ = "composite"
       b.statements = children
-      list.add one(b)
+      list.items.add one(b)
     of T_CLASSDEF:
       inc i
       let b = newBlock(jsTrim(expect(T_CLASSDEF_ID)), "classDef")
       b.css = jsTrim(expect(T_CLASSDEF_STYLEOPTS))
-      list.add one(b)
+      list.items.add one(b)
     of T_CLASS:
       inc i
       let b = newBlock(jsTrim(expect(T_CLASSENTITY_IDS)), "applyClass")
       b.styleClass = jsTrim(expect(T_STYLECLASS))
-      list.add one(b)
+      list.items.add one(b)
     of T_STYLE:
       inc i
       let b = newBlock(jsTrim(expect(T_STYLE_ENTITY_IDS)), "applyStyles")
       b.stylesStr = jsTrim(expect(T_STYLE_DEFINITION_DATA))
-      list.add one(b)
+      list.items.add one(b)
     of T_EOF:
       if open.len > 0: fail(STATEMENT_START & ", 'end'")
-      if list.len == 0: fail(STATEMENT_START)
-      db.setHierarchy(closeDocument(list))
+      if list.items.len == 0: fail(STATEMENT_START)
+      db.setHierarchy(closeDocument(list.items))
       return
     else:
-      fail(if list.len == 0: STATEMENT_START
+      fail(if list.items.len == 0: STATEMENT_START
            else: STATEMENT_START & (if open.len > 0: ", 'end'" else: ", 'EOF'"))

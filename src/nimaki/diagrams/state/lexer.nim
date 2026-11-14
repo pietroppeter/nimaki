@@ -10,6 +10,7 @@ import ../../js
 import ../../util/chars
 import ../common/scan
 import tokens
+import ../../jsregex
 
 type Tokens* = object
   types*: seq[int]
@@ -52,54 +53,20 @@ func wordCI(src, w: string, q: int): bool =
     if c != a and not (a >= 97 and a <= 122 and c == a - 32): return false
   true
 
-proc searchDirection(src: string, q: int): int =
-  ## /direction/gi
-  var i = max(q, 0)
-  while i + 9 <= src.len:
-    if lowerAt(src, i) == ord('d') and wordCI(src, "direction", i): return i
-    inc i
-  -1
-
-proc searchStereotype(src: string, q: int): int =
-  ## /<<(?:fork|join|choice)>>|\[\[(?:fork|join|choice)\]\]/gi
-  var i = max(q, 0)
-  while i < src.len:
-    let c = src[i]
-    if (c == '<' or c == '[') and i + 1 < src.len and src[i + 1] == c:
-      let close = if c == '<': ">>" else: "]]"
-      for w in ["fork", "join", "choice"]:
-        if wordCI(src, w, i + 2) and src.continuesWith(close, i + 2 + w.len): return i
-    inc i
-  -1
-
-proc searchLineEnd(src: string, q: int): int =
-  ## /[\n\r  ]/g
-  var i = max(q, 0)
-  while i < src.len:
-    let c = src[i]
-    if c == '\n' or c == '\r': return i
-    if c == '\xE2' and i + 2 < src.len and src[i + 1] == '\x80' and (src[i + 2] == '\xA8' or src[i + 2] == '\xA9'):
-      return i
-    inc i
-  -1
-
-proc searchPercent(src: string, q: int): int =
-  ## /%%/g
-  let at = src.find("%%", max(q, 0))
-  at
-
-proc searchBrace(src: string, q: int): int =
-  ## /\{/g
-  src.find('{', max(q, 0))
+const RE_DIRECTION = jsre"/direction/gi"
+const RE_STEREOTYPE = jsre"/<<(?:fork|join|choice)>>|\[\[(?:fork|join|choice)\]\]/gi"
+const RE_LINE_END = jsre"/[\n\r\u2028\u2029]/g"
+const RE_PERCENT = jsre"/%%/g"
+const RE_BRACE = jsre"/\{/g"
 
 # Finds the next match of a pattern at or after a position, remembering the answer so that
 # asking at each token costs one scan of the text in total.
-proc finder(search: proc (src: string, q: int): int, src: string): proc (q: int): int =
+proc finder(re: JsRegExp, src: string): proc (q: int): int =
   var start = 0
   var next = -2
   result = proc (q: int): int =
     if next == -2 or q < start or (next != -1 and q > next):
-      next = search(src, q)
+      next = re.exec(src, q).index
       start = q
     next
 
@@ -113,11 +80,11 @@ proc tokenize*(src: string): Tokens =
   var p = 0
   var error = ""
 
-  let nextDirection = finder(searchDirection, src)
-  let nextStereotype = finder(searchStereotype, src)
-  let nextLineEnd = finder(searchLineEnd, src)
-  let nextPercent = finder(searchPercent, src)
-  let nextBrace = finder(searchBrace, src)
+  let nextDirection = finder(RE_DIRECTION, src)
+  let nextStereotype = finder(RE_STEREOTYPE, src)
+  let nextLineEnd = finder(RE_LINE_END, src)
+  let nextPercent = finder(RE_PERCENT, src)
+  let nextBrace = finder(RE_BRACE, src)
 
   # The last `direction <dir>` of each kind on the line being lexed, and where its keyword ends.
   var dirFrom = -1

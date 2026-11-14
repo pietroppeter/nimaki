@@ -1,5 +1,8 @@
 ## port-of: src/text/label.ts
 ## port-status: conformant
+## Its patterns stay hand-written scanners (decision 0016): they run on every label of every
+## drawing, and nim-regex compiled to JavaScript costs microseconds a character (Pele's stress
+## tests missed their time bounds with it).
 ##
 ## Labels are measured and broken into lines here. The regular expressions are scanners
 ## (porting guide); each one names the pattern it answers as.
@@ -61,17 +64,24 @@ let openSet = runeSet(OPEN_CHARS)
 func isHint(c: int): bool = c == 0x200b or c == 0xad
 const SHY = "­"
 
+# The helpers of pieceEnd take the string, not capture it: nim js copies a captured string at
+# every call of the closure (porting guide, Code that JavaScript runs slowly).
+func cpAt(s: string, i: int): int = (if i < s.len: codePointAt(s, i).rune else: -1)
+func nextAt(s: string, i: int): int = i + codePointAt(s, i).size
+func spacesAt(s: string, i: int): int =
+  result = i
+  while result < s.len and isJsSpace(cpAt(s, result)): result = nextAt(s, result)
+proc closesAt(s: string, i: int): int =
+  result = i
+  while result < s.len and cpAt(s, result) in closeSet: result = nextAt(s, result)
+
 proc pieceEnd(s: string, p: int): int =
   ## The end of the match of RE_PIECE at p:
   ## \s*(?:[OPEN]*[CJK][CLOSE]*|[^\s CJK HINT]+[HINT]*[CLOSE]*|[HINT]+)\s*|\s+
-  proc cp(i: int): int = (if i < s.len: codePointAt(s, i).rune else: -1)
-  proc next(i: int): int = i + codePointAt(s, i).size
-  proc spaces(i: int): int =
-    result = i
-    while result < s.len and isJsSpace(cp(result)): result = next(result)
-  proc closes(i: int): int =
-    result = i
-    while result < s.len and cp(result) in closeSet: result = next(result)
+  template cp(i: int): int = cpAt(s, i)
+  template next(i: int): int = nextAt(s, i)
+  template spaces(i: int): int = spacesAt(s, i)
+  template closes(i: int): int = closesAt(s, i)
   let a = spaces(p)
   if a < s.len:
     # [OPEN]*[CJK], backtracking over the opening marks

@@ -8,6 +8,7 @@ import ../../errors
 import ../../js
 import ../../util/yaml
 import colors, types
+import ../../jsregex
 
 type
   SeqDbOptions* = object
@@ -34,53 +35,34 @@ type
     sequenceWrap: bool
     active: Table[string, int]
 
+const RE_WRAP = jsre"/^:?wrap:/"
+const RE_NOWRAP = jsre"/^:?nowrap:/"
+const RE_WRAP_PREFIX = jsre"/^:?(?:no)?wrap:/"
+const RE_BOX_FUNCTION = jsre"/^(?:rgba?|hsla?)\s*\(/"
+const RE_LINE_TERMINATOR = jsre"/[\r\u2028\u2029]/"
+const RE_WORD = jsre"/^\w*/"
+
 proc fail(message: string) {.noreturn.} =
   raise newPeleError(message, "semantic", "sequence")
 
-func reWrap(text: string, no: bool): int =
-  ## /^:?wrap:/ (no: /^:?nowrap:/): the end of the match, or -1.
-  var i = 0
-  if text.startsWith(":"): i = 1
-  let word = if no: "nowrap:" else: "wrap:"
-  if text.continuesWith(word, i): i + word.len else: -1
-
 proc extractWrap(raw: string): SeqText =
   let text = jsTrim(raw)
-  let wrap = if reWrap(text, false) >= 0: some(true) elif reWrap(text, true) >= 0: some(false) else: none(bool)
-  if wrap.isNone: return SeqText(text: jsTrim(text), wrap: wrap)
-  # /^:?(?:no)?wrap:/
-  let stop = max(reWrap(text, false), reWrap(text, true))
-  SeqText(text: jsTrim(text[stop .. ^1]), wrap: wrap)
-
-func isLineTerminator(s: string): bool =
-  ## /[\r  ]/.test(s)
-  '\r' in s or " " in s or " " in s
-
-func reBoxFunction(s: string): int =
-  ## /^(?:rgba?|hsla?)\s*\(/: the end of the match, or -1.
-  var i: int
-  if s.startsWith("rgb") or s.startsWith("hsl"): i = 3 else: return -1
-  if i < s.len and s[i] == 'a': inc i
-  while true:
-    let n = spaceLenAt(s, i)
-    if n == 0: break
-    i += n
-  if i < s.len and s[i] == '(': i + 1 else: -1
+  let wrap = if RE_WRAP.test(text): some(true) elif RE_NOWRAP.test(text): some(false) else: none(bool)
+  SeqText(text: jsTrim(if wrap.isNone: text else: text.replace(RE_WRAP_PREFIX, "")), wrap: wrap)
 
 # Splits a box line into a leading color and the rest, as Mermaid's
 # /^((?:rgba?|hsla?)\s*\(.*\)|\w*)(.*)$/ does. `.` stops at a line terminator, so a line that
 # holds one outside the gap before the parenthesis does not match at all.
 proc splitBox(str: string): Option[(string, string)] =
-  let fn = reBoxFunction(str)
-  if fn >= 0:
+  let fn = RE_BOX_FUNCTION.exec(str)
+  if fn.found:
     let close = str.rfind(')')
-    if close >= fn:
-      if isLineTerminator(str[fn .. ^1]): return none((string, string))
+    if close >= fn.stop:
+      if RE_LINE_TERMINATOR.test(str[fn.stop .. ^1]): return none((string, string))
       return some((str[0 .. close], str[close + 1 .. ^1]))
-  if isLineTerminator(str): return none((string, string))
-  var w = 0
-  while w < str.len and isWordChar(str[w]): inc w
-  some((str[0 ..< w], str[w .. ^1]))
+  if RE_LINE_TERMINATOR.test(str): return none((string, string))
+  let word = RE_WORD.exec(str)[0]
+  some((word, str[word.len .. ^1]))
 
 proc newSeqDb*(options = SeqDbOptions()): SeqDb =
   SeqDb(wrapEnabled: options.wrap, sequenceWrap: options.sequenceWrap.get(false))
@@ -88,24 +70,10 @@ proc newSeqDb*(options = SeqDbOptions()): SeqDb =
 proc autoWrap*(db: SeqDb): bool = db.wrapEnabled.get(db.sequenceWrap)
 
 proc setAccTitle*(db: SeqDb, text: string) =
-  db.accTitle = jsTrimStart(text)
+  db.accTitle = text.replace(jsre"/^\s+/g", "")
 
 proc setAccDescription*(db: SeqDb, text: string) =
-  ## text.replace(/\n\s+/g, '\n')
-  var output = ""
-  var i = 0
-  while i < text.len:
-    if text[i] == '\n' and spaceLenAt(text, i + 1) > 0:
-      output.add '\n'
-      i += 1
-      while true:
-        let n = spaceLenAt(text, i)
-        if n == 0: break
-        i += n
-    else:
-      output.add text[i]
-      inc i
-  db.accDescr = output
+  db.accDescr = text.replace(jsre"/\n\s+/g", "\n")
 
 proc setDiagramTitle*(db: SeqDb, text: string) =
   db.title = text

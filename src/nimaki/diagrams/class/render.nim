@@ -15,6 +15,7 @@ import ../../types
 import ../../util/[url, yaml]
 import ../common/[fit_width, generics]
 import db, graph, markers, members
+import ../../jsregex
 
 const
   NODE_SEP = 40.0
@@ -82,19 +83,6 @@ proc memberLine(member: ClassMember, measurer: TextMeasurer, size: float, mono: 
   let style = (if member.classifier == "*": Italic else: 0) or (if mono: Mono else: 0)
   MemberLine(text: text, width: measurer.width(text, size, style), classifier: member.classifier)
 
-func stripDefault(s: string): string =
-  ## s.replace(/^default\s?/, '')
-  if not s.startsWith("default"): return s
-  if isJsSpaceAt(s, 7): s.substr(7 + spaceLenAt(s, 7)) else: s.substr(7)
-
-func hasFontFamily(text: string): bool =
-  ## /[";]font-family:/.test(text)
-  "\"font-family:" in text or ";font-family:" in text
-
-func escapeAngles(s: string): string =
-  ## s.replace(/</g, '&lt;').replace(/>/g, '&gt;')
-  s.replace("<", "&lt;").replace(">", "&gt;")
-
 proc draw(db: ClassDb, config: Config, options: RenderOptions, turned, tight: bool): Rendered
 
 proc renderClass*(db: ClassDb, config: Config, options: RenderOptions): Rendered =
@@ -113,7 +101,7 @@ proc draw(db: ClassDb, config: Config, options: RenderOptions, turned, tight: bo
   let hideEmpty = hideOpt != nil and hideOpt.kind == yBool and hideOpt.b
   let monospaced = "members" in options.monospace
   # Explicit class fonts override monospace.
-  proc mono(style: ResolvedStyle): bool = monospaced and not hasFontFamily(style.text)
+  proc mono(style: ResolvedStyle): bool = monospaced and not jsre"""/[";]font-family:/""".test(style.text)
   let size = options.fontSize.get(16)
   let small = jsRound(size * 0.875)
   let tiny = jsRound(size * 0.8)
@@ -198,7 +186,7 @@ proc draw(db: ClassDb, config: Config, options: RenderOptions, turned, tight: bo
     let memberSize = jsRound(fontSize * 0.875)
     let lineHeight = jsRound(memberSize * 1.5)
     # The generic type is escaped so that `<T>` is not read as a tag.
-    let generic = if cls.kind != "": "&lt;" & escapeAngles(parseGenericTypes(cls.kind)) & "&gt;" else: ""
+    let generic = if cls.kind != "": "&lt;" & parseGenericTypes(cls.kind).replace(jsre"/</g", "&lt;").replace(jsre"/>/g", "&gt;") & "&gt;" else: ""
     let label = layoutLabel(cls.label & generic, false, measurer, fontSize, 4000,
                             Bold or (if style.italic: Italic else: 0))
     var annotations: seq[Annotation]
@@ -558,7 +546,7 @@ proc draw(db: ClassDb, config: Config, options: RenderOptions, turned, tight: bo
     if cls.link != "":
       body = linked(body, cls.link, cls.id, links, options,
                     if cls.linkTarget != "" and cls.linkTarget in TARGETS: " target=\"" & cls.linkTarget & "\"" else: "")
-    "<g class=\"pele-node pele-class" & classNames(stripDefault(cls.cssClasses)) & "\" data-id=\"" & id & "\"" &
+    "<g class=\"pele-node pele-class" & classNames(cls.cssClasses.replace(jsre"/^default\s?/", "")) & "\" data-id=\"" & id & "\"" &
       at & ">" & body & "</g>"
 
   var clusters = ""

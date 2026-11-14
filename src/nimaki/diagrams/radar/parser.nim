@@ -1,6 +1,7 @@
 ## port-of: src/diagrams/radar/parser.ts
 ## port-status: conformant
 import std/strutils
+import ../../jsregex
 import ../common/tokens
 import ../../js
 
@@ -61,55 +62,30 @@ proc numberScanner(): Scanner =
     if not dot: return whole
     if whole - 1 > at: whole - 1 else: -1
 
-func blockEnd(src: string, at: int): int =
-  ## RE_BLOCK: /[\t ]*accDescr\s*{/y, where it ends, or -1.
-  var i = at
-  while i < src.len and src[i] in {'\t', ' '}: inc i
-  if not src.continuesWith("accDescr", i): return -1
-  i += 8
-  while true:
-    let n = spaceLenAt(src, i)
-    if n == 0: break
-    i += n
-  if i < src.len and src[i] == '{': i + 1 else: -1
+const RE_BLOCK = jsre"/[\t ]*accDescr\s*{/y"
 
 proc accDescrScanner(): Scanner =
   ## In the other grammars an `accDescr {` that never closes ends the lexing. Here `accDescr` is
   ## also a name and `{` a token, so each unclosed one would read to the end of the text again.
   var lastBrace = -2
   result = proc (src: string, at: int, previous: int): int =
-    let stop = blockEnd(src, at)
+    let stop = RE_BLOCK.matchEnd(src, at)
     if stop >= 0:
       if lastBrace == -2: lastBrace = src.rfind('}')
       if stop > lastBrace: return -1
-    ACC_DESCR.pattern(src, at)
+    let m = ACC_DESCR.pattern.exec(src, at)
+    if m.found: m.stop else: -1
 
-func nameRestEnd(s: string, at: int): int =
-  ## RE_NAME_REST: /[-\w]*\w/y, where it ends, or -1.
-  var e = at
-  while e < s.len and (isWordChar(s[e]) or s[e] == '-'): inc e
-  while e > at and s[e - 1] == '-': dec e
-  if e > at: e else: -1
+let ID = TokenType(name: "ID", pattern: jsre"/[\w]([-\w]*\w)?/y")
+const RE_NAME_REST = jsre"/[-\w]*\w/y"
 
-func matchId(s: string, at: int): int =
-  ## /[\w]([-\w]*\w)?/y
-  if at >= s.len or not isWordChar(s[at]): return -1
-  let rest = nameRestEnd(s, at + 1)
-  if rest > 0: rest else: at + 1
-
-let ID = TokenType(name: "ID", pattern: matchId)
-
-proc optionValue(words: seq[string], option: int): Scanner =
+proc optionValue(pattern: JsRegExp, option: int): Scanner =
   ## Gives way to a longer name, except right after its option, as in `graticule polygonaxis`.
   result = proc (src: string, at: int, previous: int): int =
-    var stop = -1
-    for w in words:
-      if src.continuesWith(w, at):
-        stop = at + w.len
-        break
+    let stop = pattern.matchEnd(src, at)
     if stop < 0: return -1
     if previous == option: return stop
-    if nameRestEnd(src, stop) >= 0: -1 else: stop
+    if RE_NAME_REST.test(src, stop): -1 else: stop
 
 proc word(text: string): TokenType = TokenType(name: text, literal: text, longer: @[ID])
 proc mark(text: string): TokenType = TokenType(name: text, literal: text)
@@ -142,11 +118,13 @@ let RADAR_TOKENS*: seq[TokenType] = @[
   mark("]"),
   mark("{"),
   mark("}"),
-  TokenType(name: "GRATICULE", match: optionValue(@["circle", "polygon"], T_graticule)),
-  TokenType(name: "BOOLEAN", match: optionValue(@["true", "false"], T_showLegend)),
+  TokenType(name: "GRATICULE", pattern: jsre"/circle|polygon/y",
+            match: optionValue(jsre"/circle|polygon/y", T_graticule)),
+  TokenType(name: "BOOLEAN", pattern: jsre"/true|false/y",
+            match: optionValue(jsre"/true|false/y", T_showLegend)),
   ACC_DESCR.withScanner(accDescrScanner),
   ACC_TITLE,
-  titleBefore(proc (s: string, i: int): bool {.noSideEffect.} = nameRestEnd(s, i) >= 0),   # [-\w]*\w
+  titleBefore(r"[-\w]*\w"),
   TokenType(name: "NUMBER", scanner: numberScanner, first: "0123456789", hasFirst: true),
   STRING,
   ID,

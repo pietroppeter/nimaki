@@ -80,7 +80,12 @@ proc buildStateGraph*(rootDoc: seq[Stmt], states: OrderedTable[string, Stmt],
   var counter = 0
   var nextSlot = 0
 
-  proc insert(node: StateNode) =
+  # The description of a state is the list of its draft but its first line, and a state named
+  # again is drawn from its draft again. Pele slices the list at each visit; nim js would copy
+  # every string of it each time, so the slice waits for the end: `described` holds the draft
+  # whose list the node last took.
+  var described = initTable[string, Draft]()
+  proc insert(node: StateNode, draft: Draft = nil) =
     # The two literal ids are what DOMPurify leaves of `<<fork>>` and `<<choice>>` in Mermaid; kept for parity.
     if node.id == "" or node.id == "</join></fork>" or node.id == "</choice>": return
     if node.cssClasses != "":
@@ -95,16 +100,19 @@ proc buildStateGraph*(rootDoc: seq[Stmt], states: OrderedTable[string, Stmt],
           any = true
         for style in def.styles: compiled.add style
       if any: node.cssCompiledStyles = compiled
+    if draft != nil: described[node.id] = draft
+    else: described.del node.id
     let existing = byId.getOrDefault(node.id, nil)
     if existing != nil:
       let parentId = if node.parentId.isSome: node.parentId else: existing.parentId
       # Object.assign(existing, node): the keys the node has.
       existing.shape = node.shape
-      existing.label = node.label
-      existing.description = node.description
-      existing.cssClasses = node.cssClasses
-      existing.cssCompiledStyles = node.cssCompiledStyles
-      existing.cssStyles = node.cssStyles
+      # The node is dropped after this, so its fields move: nim js would copy each string.
+      existing.label = move node.label
+      existing.description = move node.description
+      existing.cssClasses = move node.cssClasses
+      existing.cssCompiledStyles = move node.cssCompiledStyles
+      existing.cssStyles = move node.cssStyles
       existing.kind = node.kind
       existing.isGroup = node.isGroup
       existing.dir = node.dir
@@ -138,7 +146,7 @@ proc buildStateGraph*(rootDoc: seq[Stmt], states: OrderedTable[string, Stmt],
     if item.hasDescription:
       if draft.isList:
         draft.shape = "rectWithTitle"
-        draft.list = draft.list & item.descriptionItems
+        draft.list.add item.descriptionItems
       elif draft.text.len > 0:
         draft.shape = "rectWithTitle"
         draft.list = if draft.text == id: item.descriptionItems else: @[draft.text] & item.descriptionItems
@@ -172,7 +180,6 @@ proc buildStateGraph*(rootDoc: seq[Stmt], states: OrderedTable[string, Stmt],
       id: id,
       shape: draft.shape,
       label: if draft.isList: (if draft.list.len > 0: draft.list[0] else: "") else: draft.text,
-      description: if draft.isList and draft.list.len > 1: draft.list[1 .. ^1] else: @[],
       cssClasses: draft.cssClasses,
       cssStyles: draft.cssStyles,
       kind: draft.kind,
@@ -185,7 +192,7 @@ proc buildStateGraph*(rootDoc: seq[Stmt], states: OrderedTable[string, Stmt],
     if parent != nil and parent.id != "root": node.parentId = some(parent.id)
 
     if not item.hasNote:
-      insert(node)
+      insert(node, draft)
       return
     let note = item.note
     # Mermaid puts each note in a group of its own, named after the state. Pele keeps that
@@ -199,7 +206,7 @@ proc buildStateGraph*(rootDoc: seq[Stmt], states: OrderedTable[string, Stmt],
     noteNode.noteFor = some(id)
     insert(aside(noteNode.parentId.get, "noteGroup", draft.cssClasses, true))
     insert(noteNode)
-    insert(node)
+    insert(node, draft)
     let left = note.position == "left of"
     let start = if left: noteNode.id else: id
     let to = if left: id else: noteNode.id
@@ -225,6 +232,8 @@ proc buildStateGraph*(rootDoc: seq[Stmt], states: OrderedTable[string, Stmt],
                           label: item.relDescription.get(""), classes: "transition")
       inc counter
 
+  for id, draft in described:
+    if draft.isList and draft.list.len > 1: byId[id].description = draft.list[1 .. ^1]
   for node in nodes:
     if node.isGroup and node.description.len > 0:
       raise newPeleError("Group nodes can only have label. Remove the additional description for node [" &

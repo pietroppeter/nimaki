@@ -3,6 +3,7 @@
 import std/[options, strutils, tables]
 import ../../js
 import graph, types
+import ../../jsregex
 
 # Mermaid's StateDB in its version 2 form, which is what Mermaid uses for both `stateDiagram`
 # and `stateDiagram-v2`. The legacy version, which numbers `[*]` states, is not ported.
@@ -119,7 +120,7 @@ proc extract*(db: StateDb, doc: seq[Stmt]) =
       db.addStyleClass(item.id.jsTrim, item.classesText)
     of skStyle:
       var styles: seq[string]
-      for s in item.styleClass.split(','): styles.add s.replace(";", "").jsTrim
+      for s in item.styleClass.split(','): styles.add s.replace(jsre"/;/g", "").jsTrim
       for state in db.named(item.id.jsTrim): state.styles = styles
     of skApplyClass:
       db.setCssClass(item.id.jsTrim, item.styleClass)
@@ -193,18 +194,7 @@ proc trimColon*(db: StateDb, text: string): string =
   if text.startsWith(":"): text.substr(1).jsTrim else: text.jsTrim
 
 proc setAccTitle*(db: StateDb, text: string) =
-  db.accTitle = text.jsTrimStart  # text.replace(/^\s+/g, '')
+  db.accTitle = text.replace(jsre"/^\s+/g", "")
 
 proc setAccDescription*(db: StateDb, text: string) =
-  # text.replace(/\n\s+/g, '\n')
-  var s = ""
-  var i = 0
-  while i < text.len:
-    if text[i] == '\n' and isJsSpaceAt(text, i + 1):
-      s.add '\n'
-      inc i
-      while i < text.len and isJsSpaceAt(text, i): i += spaceLenAt(text, i)
-    else:
-      s.add text[i]
-      inc i
-  db.accDescr = s
+  db.accDescr = text.replace(jsre"/\n\s+/g", "\n")

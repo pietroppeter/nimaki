@@ -2,8 +2,8 @@
 ## port-status: conformant
 import std/[algorithm, sets, tables]
 import ../../errors
-import ../../js
 import json, lexer, types
+import ../../jsregex
 
 type
   DraftLabel* = object
@@ -164,17 +164,7 @@ proc inferKind(properties: seq[DraftProperty]): string =
   if possible.len == 1: possible[0] else: ""
 
 proc dropIndentation(s: string): string =
-  ## s.replace(/\n\s+/g, '\n')
-  var i = 0
-  while i < s.len:
-    if s[i] == '\n':
-      var j = i + 1
-      while isJsSpaceAt(s, j): j += spaceLenAt(s, j)
-      result.add '\n'
-      i = j
-    else:
-      result.add s[i]
-      inc i
+  s.replace(jsre"/\n\s+/g", "\n")
 
 proc resolveUsecase*(src: string, drafts: Drafts, headerSpan: Span, title: string): UsecaseModel =
   ## Resolves what the parser read into a model, once the whole diagram is read: which ids are

@@ -3,8 +3,8 @@
 ##
 ## Pele's `DomainBlock` and `Transition` inputs of `CynefinDb` are the parser's AST types.
 import std/tables
-import ../../js
 import parser
+import ../../jsregex
 
 type
   CynefinDomain* = object
@@ -23,24 +23,12 @@ type
     transitions*: seq[CynefinTransition]
 
 func dropBreakSpaces(text: string): string =
-  ## text.replace(/\n\s+/g, '\n')
-  var i = 0
-  while i < text.len:
-    if text[i] == '\n' and spaceLenAt(text, i + 1) > 0:
-      result.add '\n'
-      i += 1
-      while true:
-        let n = spaceLenAt(text, i)
-        if n == 0: break
-        i += n
-    else:
-      result.add text[i]
-      inc i
+  text.replace(jsre"/\n\s+/g", "\n")
 
 proc buildCynefin*(ast: CynefinAst, title: string): CynefinModel =
   result = CynefinModel(
     title: (if ast.title != "": ast.title else: title),
-    accTitle: (if ast.accTitle != "": jsTrimStart(ast.accTitle) else: ""),
+    accTitle: (if ast.accTitle != "": ast.accTitle.replace(jsre"/^\s+/g", "") else: ""),
     accDescr: (if ast.accDescr != "": dropBreakSpaces(ast.accDescr) else: ""))
   # A later block for a domain replaces an earlier one.
   for blk in ast.domains:

@@ -7,6 +7,7 @@ import ../../svg/edges
 import ../../js
 import ../../text/[label, measurer]
 import db, route
+import ../../jsregex
 
 const
   SHAPE_W = 216.0
@@ -65,7 +66,7 @@ proc measure(shape: C4Element, measurer: TextMeasurer, size, small: float, width
   let inner = width - 2 * PAD_X - capW
   let techn = shape["techn"]
   let labels = @[
-    layoutLabel("«" & shape.kind.replace('_', ' ') & "»", false, measurer, small - 1, inner),
+    layoutLabel("«" & shape.kind.replace(jsre"/_/g", " ") & "»", false, measurer, small - 1, inner),
     layoutLabel(shape.label, false, measurer, size, inner, Bold),
     layoutLabel(if techn != "": "[" & techn & "]" else: "", false, measurer, small, inner),
     layoutLabel(shape["descr"], false, measurer, small, inner)]

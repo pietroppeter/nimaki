@@ -287,21 +287,45 @@ func jsMin*(a, b: float): float =
 func codePointAt*(s: string, i: int): tuple[rune: int, size: int] =
   ## The code point that starts at byte `i`, and its length in bytes. A byte that does not
   ## start a valid sequence reads as U+FFFD, one byte long (as TextDecoder does).
+  # The fields of `result` are set one by one: nim js copies a whole tuple, field by field
+  # through its type information, at every `return (a, b)`, and this runs once a character.
   let b = ord(s[i])
-  if b < 0x80: return (b, 1)
+  result.size = 1
+  if b < 0x80:
+    result.rune = b
+    return
+  result.rune = 0xFFFD
   var n, cp, least: int
-  if b >= 0xC2 and b <= 0xDF: (n, cp, least) = (2, b and 0x1F, 0x80)
-  elif b >= 0xE0 and b <= 0xEF: (n, cp, least) = (3, b and 0x0F, 0x800)
-  elif b >= 0xF0 and b <= 0xF4: (n, cp, least) = (4, b and 0x07, 0x10000)
-  else: return (0xFFFD, 1)
-  if i + n > s.len: return (0xFFFD, 1)
+  if b >= 0xC2 and b <= 0xDF:
+    n = 2; cp = b and 0x1F; least = 0x80
+  elif b >= 0xE0 and b <= 0xEF:
+    n = 3; cp = b and 0x0F; least = 0x800
+  elif b >= 0xF0 and b <= 0xF4:
+    n = 4; cp = b and 0x07; least = 0x10000
+  else: return
+  if i + n > s.len: return
   for k in 1 ..< n:
     let c = ord(s[i + k])
-    if (c and 0xC0) != 0x80: return (0xFFFD, 1)
+    if (c and 0xC0) != 0x80: return
     cp = (cp shl 6) or (c and 0x3F)
-  if cp < least or cp > 0x10FFFF or (cp >= 0xD800 and cp <= 0xDFFF): return (0xFFFD, 1)
-  (cp, n)
+  if cp < least or cp > 0x10FFFF or (cp >= 0xD800 and cp <= 0xDFFF): return
+  result.rune = cp
+  result.size = n
 
+func wellFormed*(s: string): string =
+  ## `s` with each byte that does not start a valid UTF-8 sequence read as U+FFFD, as TextDecoder
+  ## reads it: what the renderer works on (decision 0016). `s` itself when it is valid.
+  var i = 0
+  while i < s.len:
+    let (cp, size) = codePointAt(s, i)
+    if cp == 0xFFFD and not s.continuesWith("\uFFFD", i): break
+    i += size
+  if i == s.len: return s
+  result = s[0 ..< i]
+  while i < s.len:
+    let (cp, size) = codePointAt(s, i)
+    if cp == 0xFFFD: result.add "\uFFFD" else: result.add s[i ..< i + size]
+    i += size
 iterator codePoints*(s: string): string =
   ## `Array.from(s)`: one item per code point, as UTF-8. Use it instead of `unicode.runes`, which
   ## nim js compiles to a copy of the whole string at every byte it reads, so a long label took

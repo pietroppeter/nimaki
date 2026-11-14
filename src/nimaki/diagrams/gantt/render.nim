@@ -11,6 +11,7 @@ import ../../types
 import ../../util/[url, yaml]
 import ../common/fit_width
 import axis, dates, db
+import ../../jsregex
 
 const
   WIDTH = 800.0
@@ -31,27 +32,11 @@ proc flag(config: Config, key: string): bool =
   let value = config["gantt"][key]
   value != nil and value.kind == yBool and value.b
 
-func dropBreaks(raw: string): string =
-  ## raw.replace(/<br\s*\/?>/gi, ' ')
-  var i = 0
-  while i < raw.len:
-    if raw[i] == '<' and i + 2 < raw.len and raw[i + 1] in {'b', 'B'} and raw[i + 2] in {'r', 'R'}:
-      var j = i + 3
-      while j < raw.len:
-        let n = spaceLenAt(raw, j)
-        if n == 0: break
-        j += n
-      if j < raw.len and raw[j] == '/': inc j
-      if j < raw.len and raw[j] == '>':
-        result.add ' '
-        i = j + 1
-        continue
-    result.add raw[i]
-    inc i
+const RE_BREAK = jsre"/<br\s*\/?>/gi"
 
 proc oneLine(raw: string, measurer: TextMeasurer, size: float): Label =
   ## A task label sits on one row, so only its first line is kept.
-  result = layoutLabel(dropBreaks(raw), false, measurer, size, 4000)
+  result = layoutLabel(raw.replace(RE_BREAK, " "), false, measurer, size, 4000)
   if result.lines.len <= 1: return
   result.lines = @[result.lines[0]]
   result.widths = @[result.widths[0]]

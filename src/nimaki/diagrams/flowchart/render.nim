@@ -1,6 +1,6 @@
 ## port-of: src/diagrams/flowchart/render.ts
 ## port-status: conformant
-import std/[options, strutils, tables]
+import std/[options, tables]
 from std/math import ceil, isNaN
 import ../../js
 import ../../layout/[compound, layered]
@@ -12,6 +12,7 @@ import ../../util/[url, yaml]
 import ../common/fit_width
 import db, graph, types
 import shapes as flowShapes
+import ../../jsregex
 
 const
   NODE_SEP = 40.0
@@ -58,34 +59,6 @@ proc renderFlowchart*(db: FlowDb, config: Config, options: RenderOptions, varian
   let fitted = proc (down: bool): Rendered =
     tighten(options, proc (tight: bool): Rendered = draw(db, config, options, variant, down, tight))
   if runsAcross(db.direction): turnToFit(options, fitted) else: fitted(false)
-
-func stripDefault(s: string): string =
-  ## s.replace(/^default\s?/, '')
-  if not s.startsWith("default"): return s
-  if isJsSpaceAt(s, 7): s.substr(7 + spaceLenAt(s, 7)) else: s.substr(7)
-
-func hasInternalLink(s: string): bool =
-  ## / internal-link(?: |$)/.test(s)
-  var at = s.find(" internal-link")
-  while at >= 0:
-    let e = at + " internal-link".len
-    if e == s.len or s[e] == ' ': return true
-    at = s.find(" internal-link", at + 1)
-  false
-
-func withoutFlowClasses(s: string): string =
-  ## s.replace(/edge-thickness-normal|edge-pattern-solid|flowchart-link/g, '')
-  var i = 0
-  while i < s.len:
-    var matched = false
-    for w in ["edge-thickness-normal", "edge-pattern-solid", "flowchart-link"]:
-      if s.continuesWith(w, i):
-        i += w.len
-        matched = true
-        break
-    if not matched:
-      result.add s[i]
-      inc i
 
 # `turned` draws a flowchart that runs across as one that runs down. `tight` sets nodes closer together.
 proc draw(db: FlowDb, config: Config, options: RenderOptions, variant: FlowVariant, turned, tight: bool): Rendered =
@@ -205,7 +178,7 @@ proc draw(db: FlowDb, config: Config, options: RenderOptions, variant: FlowVaria
     edgeSep: EDGE_SEP,
     rankSep: numberOption(flow, "rankSpacing", RANK_SEP) * (if tight: 0.75 else: 1),
     portSep: 20,
-    tracks: isCurve and curveOpt.s.startsWith("step"),
+    tracks: isCurve and jsre"/^step/".test(curveOpt.s),
     straight: isCurve and curveOpt.s == "linear",
     headRoom: markerTrim("arrow_point"),
   )
@@ -240,7 +213,7 @@ proc draw(db: FlowDb, config: Config, options: RenderOptions, variant: FlowVaria
     let node = view.node
     let x = c.x
     let y = c.y
-    let classes = classNames(stripDefault(node.cssClasses))
+    let classes = classNames(node.cssClasses.replace(jsre"/^default\s?/", ""))
     let id = escText(node.id)
     if c.isGroup and variant != nil and variant.drawGroup != nil and c.parent < 0:
       if paints(view.style.shape) and variant.filledBox != nil:
@@ -304,7 +277,7 @@ proc draw(db: FlowDb, config: Config, options: RenderOptions, variant: FlowVaria
       if shapeFilled(view.shape): ink = inkFill(view.style.shape, view.style.text)
 
     var text = labelSvg(view.label, 0, view.dy, " class=\"pele-label\"" & ink & view.style.text, icons)
-    let internal = hasInternalLink(classes & " ")
+    let internal = jsre"/ internal-link(?: |$)/".test(classes & " ")
     if internal and node.label != "" and options.links != some(false):
       # The label is a note name, but it still ends up in an href, so it gets the same check as a URL.
       let name = decodeEntities(node.label)
@@ -366,7 +339,7 @@ proc draw(db: FlowDb, config: Config, options: RenderOptions, variant: FlowVaria
       var attrs = ""
       if edge.thickness == "thick": attrs.add " stroke-width=\"2.5\""
       elif edge.thickness == "dotted": attrs.add " stroke-dasharray=\"3 4\""
-      let classes = classNames(withoutFlowClasses(edge.classes))
+      let classes = classNames(edge.classes.replace(jsre"/edge-thickness-normal|edge-pattern-solid|flowchart-link/g", ""))
       if not over.none and over.ink == "":
         casings.add edgeCasing(path, startType, endType, style.line, edge.thickness == "thick")
       edgesOut.add "<g class=\"pele-edge" & classes & "\" data-id=\"" & escText(edge.id) & "\"" &
