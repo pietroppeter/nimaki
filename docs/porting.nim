@@ -43,9 +43,10 @@ nbText: """
 5. **Comments come along.** They are part of the program we are porting; Pele comments only the
    non-obvious, so each one matters.
 6. **Only the standard library** in `src/`. A new dependency needs a decision record.
-7. **Three states.** `draft` when translated, `verified` when a second pass with fresh eyes has
-   read it against the TypeScript, `conformant` when difftest agrees on its part
-   ([decision 0005](../decisions/#0005-every-file-goes-through-translate-verify-conform)).
+7. **Draft, then conformant.** `draft` when translated, `conformant` when difftest and the fuzzer
+   agree on its part and Pele's tests that reach it pass on the port
+   ([decision 0014](../decisions/#0014-tests-and-fuzzing-make-a-file-conformant-without-a-second-reading));
+   `verified`, a second reading against the TypeScript, is no longer required.
 8. **Check, then claim.** A part is `done` on the [coverage map](../coverage/) only when
    `nim r tools/difftest.nim <type>` reports every case identical.
 9. **It also compiles to JavaScript.** `nim js` must build the same renderer, and

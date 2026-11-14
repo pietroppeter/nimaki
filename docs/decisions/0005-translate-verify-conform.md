@@ -1,6 +1,6 @@
 ---
 title: Every file goes through translate, verify, conform
-status: accepted
+status: superseded in part by 0014
 date: 2026-11-12
 ---
 

@@ -13,8 +13,8 @@
 ##
 ## `port-of` may be repeated (a Nim file that ports two TypeScript files); `port-part-of` names
 ## a file ported in pieces. The status is `draft` (translated), `verified` (read against the
-## TypeScript by a second pass) or `conformant` (difftest finds the output identical to Pele's on
-## the corpus of that part). A file ported by several Nim files takes the lowest of their
+## TypeScript by a second pass, no longer required) or `conformant` (difftest and the fuzzer find
+## its part identical to Pele, and Pele's tests that reach it pass on the port; decision 0014). A file ported by several Nim files takes the lowest of their
 ## statuses. Files that will not be ported are listed, with the reason, in
 ## docs/data/portmap_skip.txt (`path-prefix<TAB>reason`).
 import std/[os, strutils, json, tables, algorithm, parseopt]
