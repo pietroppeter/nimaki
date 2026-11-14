@@ -302,6 +302,21 @@ func codePointAt*(s: string, i: int): tuple[rune: int, size: int] =
   if cp < least or cp > 0x10FFFF or (cp >= 0xD800 and cp <= 0xDFFF): return (0xFFFD, 1)
   (cp, n)
 
+func wellFormed*(s: string): string =
+  ## `s` with each byte that does not start a valid UTF-8 sequence read as U+FFFD, as TextDecoder
+  ## reads it: what the renderer works on (decision 0014). `s` itself when it is valid.
+  var i = 0
+  while i < s.len:
+    let (cp, size) = codePointAt(s, i)
+    if cp == 0xFFFD and not s.continuesWith("\uFFFD", i): break
+    i += size
+  if i == s.len: return s
+  result = s[0 ..< i]
+  while i < s.len:
+    let (cp, size) = codePointAt(s, i)
+    if cp == 0xFFFD: result.add "\uFFFD" else: result.add s[i ..< i + size]
+    i += size
+
 iterator codeUnits*(s: string): int =
   ## The UTF-16 code units of `s`, as `charCodeAt` reads them one by one.
   var i = 0
