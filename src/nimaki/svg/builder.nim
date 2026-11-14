@@ -13,7 +13,9 @@ func isInvalidXml(c: int): bool =
 func invalidAt(s: string, i: int): (bool, int) =
   ## Whether an invalid XML character starts at byte i, and its length. A byte that is not
   ## valid UTF-8 counts as one (JavaScript strings cannot hold one; a lone surrogate is the
-  ## nearest thing, and it is dropped).
+  ## nearest thing, and it is dropped). This stays a scanner (decision 0015): Pele's regexes
+  ## find lone surrogates, which here are bytes that are not UTF-8, and no regex over code points
+  ## can match those.
   let (cp, size) = codePointAt(s, i)
   if cp == 0xFFFD and not s.continuesWith("�", i): return (true, size)
   (isInvalidXml(cp), size)

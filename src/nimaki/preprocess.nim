@@ -123,7 +123,7 @@ proc fromJson*(j: JsonNode): YamlValue =
 
 proc directives(text: string, config: Config, steps: Steps): string =
   if "%%{" notin text: return text
-  let normalized = jsTrim(text).replace('\'', '"')
+  let normalized = jsTrim(text).replace(jsre"/'/g", "\"")
   for match in RE_DIRECTIVE.matches(normalized):
     let kind = if match.has(1): match[1] else: match[2]
     if kind == "wrap":
