@@ -132,7 +132,7 @@ proc buildUsecaseGraph*(model: UsecaseModel): UsecaseGraph =
     var output = initOrderedTable[string, string]()
     for name in @["default"] & classNames:
       if name notin model.classDefs: continue
-      for raw in model.classDefs[name].styles:
+      for raw in model.classDefs[name].styles.items:
         let style = jsTrim(raw)
         let colon = style.find(':')
         let property = jsTrim(if colon == -1: style else: style[0 ..< colon])

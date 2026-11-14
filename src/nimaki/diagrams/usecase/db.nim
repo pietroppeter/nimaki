@@ -525,7 +525,8 @@ proc resolveUsecase*(src: string, drafts: Drafts, headerSpan: Span, title: strin
                                   markdown: draft.label.markdown)
 
   for definition in drafts.classDefs:
-    for id in definition.ids: model.classDefs[id] = ClassDef(id: id, styles: definition.styles)
+    let styles = SharedStyles(items: definition.styles)
+    for id in definition.ids: model.classDefs[id] = ClassDef(id: id, styles: styles)
   for assignment in drafts.classes:
     for (id, span) in assignment.targets:
       let target = stylable(id, span)

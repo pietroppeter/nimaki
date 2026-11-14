@@ -63,7 +63,14 @@ type
 
   ClassDef* = ref object
     id*: string
-    styles*: seq[string]
+    styles*: SharedStyles
+      ## Pele copies the list for each id (`[...definition.styles]`), a copy of references; in
+      ## nimaki the ids of one classDef share it, since nothing changes it later. Copies of Nim
+      ## strings are copies of their text: 8,000 ids with 8,000 declarations each ran the
+      ## JavaScript build out of memory.
+
+  SharedStyles* = ref object
+    items*: seq[string]
 
   UsecaseModel* = ref object of RootObj
     actors*: OrderedTable[string, Actor]

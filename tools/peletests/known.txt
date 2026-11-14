@@ -1,0 +1,6 @@
+# Tests of Pele's that are known not to pass on nimaki's JavaScript build, and why: one line each,
+# test file<TAB>full test name<TAB>skip or known<TAB>reason. `skip` keeps the test from running at
+# all (it takes the vitest worker down); `known` lets it run and counts its failure apart. A line
+# goes when the port is fixed.
+tests/usecase/stress.test.ts	use case worst cases JSON nested 12,000 objects deep	skip	JavaScript build: the JSON reader keeps one pointer string per nesting level (O(depth²) characters), which exhausts the heap; the C build draws it in 0.5 s
+tests/usecase/stress.test.ts	use case worst cases JSON nested 20,000 arrays deep	skip	JavaScript build: the same as 12,000 objects deep

@@ -1,6 +1,5 @@
 ## port-of: src/diagrams/common/fit-text.ts
 ## port-status: draft
-import std/unicode
 from std/math import floor
 import ../../js
 import ../../text/measurer
@@ -28,7 +27,7 @@ proc fitText*(text: string, max, size, min: float, measurer: TextMeasurer,
 
   # Array.from(text): one item per code point
   var chars: seq[string]
-  for r in text.runes: chars.add r.toUTF8
+  for c in codePoints(text): chars.add c
   proc prefix(count: int): string =
     for i in 0 ..< count: result.add chars[i]
   var low = 0

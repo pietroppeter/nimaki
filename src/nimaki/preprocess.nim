@@ -172,11 +172,13 @@ proc matchDirective(s: string, p: int): (bool, DirectiveMatch) =
   ## /%{2}{\s*(?:(\w+)\s*:|(\w+))\s*(?:(\w+)|((?:(?!}%{2}).|\r?\n)*))?\s*(?:}%{2})?/i at p.
   if not s.continuesWith("%%{", p): return
   var i = p + 3
-  proc spaces(i: var int) =
+  # A template, not a closure: a closure that captures `s` copies it at every call (nim js
+  # copies the whole source, which made 12,000 unclosed directives take seconds).
+  template spaces(at: var int) =
     while true:
-      let n = spaceLenAt(s, i)
+      let n = spaceLenAt(s, at)
       if n == 0: break
-      i += n
+      at += n
   spaces(i)
   if i >= s.len or not isWordChar(s[i]): return
   let w0 = i

@@ -50,7 +50,7 @@ proc draw(model: PacketModel, config: Config, options: RenderOptions, down: bool
     var whole: seq[PacketBlock]
     for row in model.rows:
       for blk in row:
-        if whole.len > 0 and piece(whole[^1]) and piece(blk) and whole[^1].label == blk.label and
+        if whole.len > 0 and piece(whole[^1]) and piece(blk) and (whole[^1].label == blk.label or whole[^1].label.text == blk.label.text) and
            blk.start == whole[^1].stop + 1 and blk.start mod model.bitsPerRow == 0:
           whole[^1].stop = blk.stop
           whole[^1].bits = whole[^1].stop - whole[^1].start
@@ -75,7 +75,7 @@ proc draw(model: PacketModel, config: Config, options: RenderOptions, down: bool
       var ls: seq[Label]
       for blk in row:
         let room = jsMax(1, (blk.stop - blk.start + 1) * bitWidth - jsMin(paddingX, bitWidth - 1) - 6)
-        ls.add literalLabel(jsTrim(decodeEntities(blk.label)), measurer, labelSize, room)
+        ls.add literalLabel(jsTrim(decodeEntities(blk.label.text)), measurer, labelSize, room)
       labels.add ls
   # Bit numbers sit above each row and need room of their own.
   let numbers = if showBits: bitSize + 4 else: 0.0
@@ -98,11 +98,17 @@ proc draw(model: PacketModel, config: Config, options: RenderOptions, down: bool
   let titleHeight = if title.height > 0: title.height + (if rowsHeight > 0: 12 else: 0) else: 0.0
 
   # The pieces of a field split across rows share its label, so each width is fitted once.
-  var fits = initTable[(string, float), (bool, Fitted)]()
-  proc fit(label: string, max: float): (bool, Fitted) =
-    if (label, max) notin fits:
-      fits[(label, max)] = fitText(jsTrim(decodeEntities(label)), max, labelSize, jsRound(size * 0.5), measurer)
-    fits[(label, max)]
+  # Pele's Map is keyed by the label's text; here by the field's own label, which its pieces share
+  # and which follow each other, so no long label is hashed. The fitted text is the same either way.
+  var fitsOf: PacketLabel
+  var fits = initTable[float, (bool, Fitted)]()
+  proc fit(label: PacketLabel, max: float): (bool, Fitted) =
+    if label != fitsOf:
+      fitsOf = label
+      fits.clear()
+    if max notin fits:
+      fits[max] = fitText(jsTrim(decodeEntities(label.text)), max, labelSize, jsRound(size * 0.5), measurer)
+    fits[max]
 
   let left = pad + jsMax(0, (title.width - width) / 2)
   var fields = ""
