@@ -478,9 +478,9 @@
           "what": "src/diagrams/venn: 909 lines of TypeScript, 8 corpus cases.",
           "done_when": "difftest: every venn case identical.",
           "owner": "Build C ABI and diagrammari proposal",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "circles-that-overlap",
+          "pr": "61"
         },
         {
           "id": "xychart",

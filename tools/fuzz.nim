@@ -1253,6 +1253,53 @@ proc xychartSource(g: var Gen): string =
     let line = g.chance(0.5)
     result.add "  " & (if line: "line" else: "bar") & " " & g.xyValues(if nCats > 0: nCats else: g.rng.rand(1 .. 10), line) & "\n"
 
+const vennIds = ["A", "B", "C", "D", "E", "F", "cats", "dogs", "set-theory", "x_1", "\"Quoted id\"", "\"日本\"", "Alpha", "b2"]
+const vennStyles = ["fill: red", "fill: #ff0000", "fill:#abc", "color: white", "fill-opacity: 0.6", "stroke: blue",
+                    "font-weight: bold", "font-style: italic", "fill: rgb(10, 20, 30)", "fill: rgba(1, 2, 3, 0.5)",
+                    "stroke-width: 3", "fill: \"teal\"", "color: #333, fill: yellow", "fill: none"]
+
+proc vennLabel(g: var Gen): string =
+  if g.chance(0.5): "[\"" & g.pick(labels).replace("\"", "") & "\"]"
+  else: "[" & g.pick(["Mammals", "a b", "1 + 1", "Ünï", "", "x"]) & "]"
+
+proc vennSource(g: var Gen): string =
+  if g.chance(0.2): result.add "---\ntitle: " & g.pick(labels) & "\n---\n"
+  result.add(if g.chance(0.03): g.pick(["venn", "Venn-beta", "venn-betax"]) else: g.pick(["venn-beta", "VENN-BETA", "venn-beta\n"]))
+  result.add "\n"
+  var known: seq[string]
+  let nSets = g.rng.rand(0 .. (if g.chance(0.15): 9 else: 4))
+  for i in 0 ..< nSets:
+    var id = g.pick(vennIds)
+    if id in known: id = "S" & $i
+    known.add id
+    result.add "  set " & id
+    if g.chance(0.4): result.add g.vennLabel()
+    if g.chance(0.5): result.add ":" & g.pick(["10", "5", "20", "1", "0", "100", "2.5", "-3", ".5", "1000"])
+    result.add "\n"
+    if g.chance(0.2): result.add "    text " & g.pick(["t1", "\"note\"", "42", "x"]) & (if g.chance(0.5): g.vennLabel() else: "") & "\n"
+  for i in 0 ..< g.rng.rand(0 .. 4):
+    let r = g.rng.rand(1.0)
+    if r < 0.45 and known.len >= 2:
+      var members: seq[string]
+      for k in 0 ..< g.rng.rand(2 .. min(known.len, 4)):
+        let m = g.pick(known)
+        if m notin members: members.add m
+      if members.len < 2: members = known[0 .. 1]
+      result.add "  union " & members.join(g.pick([", ", ","]))
+      if g.chance(0.4): result.add g.vennLabel()
+      if g.chance(0.6): result.add ":" & g.pick(["1", "2", "3", "0.5", "5", "8", "0"])
+      result.add "\n"
+      if g.chance(0.3): result.add "    text " & g.pick(["both", "\"shared\"", "7"]) & "\n"
+    elif r < 0.6 and known.len > 0:
+      result.add "  style " & g.pick(known) & (if known.len >= 2 and g.chance(0.4): ", " & g.pick(known) else: "") &
+        " " & g.pick(vennStyles) & "\n"
+    elif r < 0.7 and known.len > 0:
+      result.add "  text " & g.pick(known) & " " & g.pick(["n1", "\"free\"", "3"]) & (if g.chance(0.5): g.vennLabel() else: "") & "\n"
+    elif r < 0.8: result.add "  title " & g.pick(labels) & "\n"
+    elif r < 0.88: result.add "  %% " & g.pick(labels) & "\n"
+    elif r < 0.94: result.add "\n"
+    else: result.add "  " & g.pick(["union A", "set", "text", "style A", "union Z, Q", "set A:", "set A[", "set A:x", "title", "pie"]) & "\n"
+
 const treemapValues = ["10", "25", "1", "0", "100", "3.5", "1,000", "2_5", "1000000", "0.01", "7", "42", "12.", "99999999", "1e3"]
 const treemapOdd = ["1.2.3", ".", ",5", "_"]
 
@@ -2102,7 +2149,7 @@ proc main() =
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
-  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad", "gantt", "wardley", "architecture", "c4", "block", "agentflow", "mindmap", "kanban", "eventmodeling", "labels", "xychart", "sankey", "quadrantChart"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad, gantt, wardley, architecture, c4, block, agentflow, mindmap, kanban, eventmodeling, labels, xychart, sankey, quadrantChart", 2
+  if kind notin ["pie", "timeline", "journey", "info", "packet", "flowchart", "sequence", "radar", "treemap", "treeView", "swimlane", "class", "state", "ishikawa", "cynefin", "gitGraph", "er", "requirement", "usecase", "railroad", "gantt", "wardley", "architecture", "c4", "block", "agentflow", "mindmap", "kanban", "eventmodeling", "labels", "xychart", "sankey", "quadrantChart", "venn"]: quit "ERROR fuzz knows only: pie, timeline, journey, info, packet, flowchart, sequence, radar, treemap, treeView, swimlane, class, state, ishikawa, cynefin, gitGraph, er, requirement, usecase, railroad, gantt, wardley, architecture, c4, block, agentflow, mindmap, kanban, eventmodeling, labels, xychart, sankey, quadrantChart, venn", 2
   let packageDir = packageDirFrom(packageArg)
   var g = Gen(rng: initRand(seed))
   var cases: seq[JsonNode]
@@ -2137,6 +2184,7 @@ proc main() =
                                                           of "block": g.blockSource()
                                                           of "radar": g.radarSource()
                                                           of "xychart": g.xychartSource()
+                                                          of "venn": g.vennSource()
                                                           of "treemap": g.treemapSource()
                                                           of "er": g.erSource()
                                                           of "requirement": g.requirementSource()

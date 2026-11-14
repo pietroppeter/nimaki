@@ -3,12 +3,12 @@
   "code": 47594,
   "totals": {
     "todo": {
-      "files": 50,
-      "code": 2094
+      "files": 43,
+      "code": 1185
     },
     "draft": {
-      "files": 241,
-      "code": 45500
+      "files": 248,
+      "code": 46409
     },
     "verified": {
       "files": 0,
@@ -290,8 +290,8 @@
     },
     {
       "component": "diagrams/venn",
-      "todo": 909,
-      "draft": 0,
+      "todo": 0,
+      "draft": 909,
       "verified": 0,
       "conformant": 0,
       "skip": 0
@@ -2421,56 +2421,70 @@
       "component": "diagrams/venn",
       "lines": 66,
       "code": 51,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/venn/db.nim"
+      ]
     },
     {
       "path": "src/diagrams/venn/index.ts",
       "component": "diagrams/venn",
       "lines": 16,
       "code": 14,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/venn/index.nim"
+      ]
     },
     {
       "path": "src/diagrams/venn/layout.ts",
       "component": "diagrams/venn",
       "lines": 347,
       "code": 304,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/venn/layout.nim"
+      ]
     },
     {
       "path": "src/diagrams/venn/lexer.ts",
       "component": "diagrams/venn",
       "lines": 257,
       "code": 232,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/venn/lexer.nim"
+      ]
     },
     {
       "path": "src/diagrams/venn/parser.ts",
       "component": "diagrams/venn",
       "lines": 113,
       "code": 96,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/venn/parser.nim"
+      ]
     },
     {
       "path": "src/diagrams/venn/render.ts",
       "component": "diagrams/venn",
       "lines": 220,
       "code": 191,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/venn/render.nim"
+      ]
     },
     {
       "path": "src/diagrams/venn/types.ts",
       "component": "diagrams/venn",
       "lines": 28,
       "code": 21,
-      "status": "todo",
-      "nim": []
+      "status": "draft",
+      "nim": [
+        "src/nimaki/diagrams/venn/types.nim"
+      ]
     },
     {
       "path": "src/diagrams/wardley/builder.ts",

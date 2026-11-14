@@ -38,6 +38,7 @@ import nimaki/diagrams/usecase/index as usecaseIndex
 import nimaki/diagrams/agentflow/index as agentflowIndex
 import nimaki/diagrams/gantt/index as ganttIndex
 import nimaki/diagrams/xychart/index as xychartIndex
+import nimaki/diagrams/venn/index as vennIndex
 
 export core, errors, types, measurer
 
@@ -73,3 +74,4 @@ register(usecaseIndex.usecase)
 register(agentflowIndex.agentflow)
 register(ganttIndex.gantt)
 register(xychartIndex.xychart)
+register(vennIndex.venn)

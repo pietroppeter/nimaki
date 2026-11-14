@@ -454,19 +454,19 @@
       "corpus": 8,
       "parse": {
         "code": 414,
-        "status": "planned"
+        "status": "done"
       },
       "layout": {
         "code": 304,
-        "status": "planned"
+        "status": "done"
       },
       "render": {
         "code": 191,
-        "status": "planned"
+        "status": "done"
       },
-      "nim": "",
-      "post": "",
-      "notes": ""
+      "nim": "src/nimaki/diagrams/venn/",
+      "post": "circles-that-overlap",
+      "notes": "Identical on 25 of 25 corpus cases; fuzz 5,000 cases identical"
     },
     {
       "id": "xychart",
