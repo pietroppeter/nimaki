@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/usecase/json.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Pele calls `JSON.parse` and reports its error message, which is V8's. `jsonParse` below is
 ## V8's JSON parser (`src/json/json-parser.cc`) as far as its results and messages go: the same

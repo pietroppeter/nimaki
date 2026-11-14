@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/sequence/parser.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Pele's `SeqBuilder` interface (the calls Mermaid's grammar makes on its `yy` object) is the
 ## `SeqDb` itself. A frame's finished sections are pairs of a statement list and the divider text

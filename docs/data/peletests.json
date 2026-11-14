@@ -1,0 +1,5368 @@
+{
+  "pele": "1.13.0",
+  "commit": "3a2f075ee0c3d914f0fad3545fc0f193693975ac",
+  "files": 295,
+  "tests": 6992,
+  "counts": {
+    "passed": 6543,
+    "api": 339,
+    "unported": 0,
+    "speed": 107,
+    "canvas": 1,
+    "known": 2,
+    "failed": 0
+  },
+  "byFile": {
+    "tests/agentflow/oracle.test.ts": {
+      "passed": 4,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/agentflow/reference.test.ts": {
+      "passed": 1,
+      "api": 2,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/agentflow/stress.test.ts": {
+      "passed": 56,
+      "api": 7,
+      "unported": 0,
+      "speed": 6,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/architecture/oracle.test.ts": {
+      "passed": 5,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/architecture/stress.test.ts": {
+      "passed": 46,
+      "api": 0,
+      "unported": 0,
+      "speed": 1,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/block/oracle.test.ts": {
+      "passed": 4,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/block/stress.test.ts": {
+      "passed": 31,
+      "api": 13,
+      "unported": 0,
+      "speed": 4,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/browsers.test.ts": {
+      "passed": 1,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/c4/oracle.test.ts": {
+      "passed": 4,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/c4/stress.test.ts": {
+      "passed": 37,
+      "api": 3,
+      "unported": 0,
+      "speed": 2,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/class/members.test.ts": {
+      "passed": 4,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/class/oracle.test.ts": {
+      "passed": 5,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/class/parser.test.ts": {
+      "passed": 13,
+      "api": 1,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/class/stress.test.ts": {
+      "passed": 37,
+      "api": 13,
+      "unported": 0,
+      "speed": 6,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-attachment-mapping.spec.ts": {
+      "passed": 8,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-blank-line-fold.spec.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-comments.spec.ts": {
+      "passed": 13,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-containment-cycle.spec.ts": {
+      "passed": 8,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-diagnostics-lifecycle.spec.ts": {
+      "passed": 4,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-diagnostics.spec.ts": {
+      "passed": 12,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-edge-instruction.spec.ts": {
+      "passed": 4,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-edge-semantic.spec.ts": {
+      "passed": 8,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-empty-metadata.spec.ts": {
+      "passed": 7,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-flow-metadata.spec.ts": {
+      "passed": 4,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-flow-self-reference.spec.ts": {
+      "passed": 7,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-flowchart-parity.spec.ts": {
+      "passed": 8,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-global.spec.ts": {
+      "passed": 10,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-inline-metadata-mapping.spec.ts": {
+      "passed": 4,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-link-style.spec.ts": {
+      "passed": 4,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-mappings.spec.ts": {
+      "passed": 14,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-metadata-no-validation.spec.ts": {
+      "passed": 11,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-metadata-prototype-keys.spec.ts": {
+      "passed": 4,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-metadata-trailing-comma.spec.ts": {
+      "passed": 10,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-semantic-model.spec.ts": {
+      "passed": 11,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-shape-catalogue.spec.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-subgraph-span.spec.ts": {
+      "passed": 5,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-tool-validators.spec.ts": {
+      "passed": 9,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow-yaml-error-position.spec.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/agentflow.spec.ts": {
+      "passed": 31,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/colorSlots.spec.ts": {
+      "passed": 7,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/conformance.spec.ts": {
+      "passed": 9,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/containerOrder.spec.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/diagnostics.spec.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/agentflow/runner.spec.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/architecture/architecture.spec.ts": {
+      "passed": 28,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/architecture/architecture.test.ts": {
+      "passed": 27,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/block/block.spec.ts": {
+      "passed": 25,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/block/blockColorIndex.spec.ts": {
+      "passed": 4,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/block/blockDB.spec.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/block/layout.spec.ts": {
+      "passed": 2,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/c4/c4Boundary.spec.ts": {
+      "passed": 7,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/c4/c4Component.spec.ts": {
+      "passed": 12,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/c4/c4Container.spec.ts": {
+      "passed": 48,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/c4/c4Diagram.spec.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/c4/c4NamedAttributes.spec.ts": {
+      "passed": 42,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/c4/c4Person.spec.ts": {
+      "passed": 8,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/c4/c4PersonExt.spec.ts": {
+      "passed": 7,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/c4/c4System.spec.ts": {
+      "passed": 42,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/class/class.spec.js": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/class/classDiagram-colorIndex.spec.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/class/classDiagram-styles.spec.js": {
+      "passed": 10,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/class/classDiagram.spec.ts": {
+      "passed": 381,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/class/classTypes.spec.ts": {
+      "passed": 93,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/cynefin/cynefin.integration.spec.ts": {
+      "passed": 15,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/cynefin/cynefin.spec.ts": {
+      "passed": 27,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/er/erDb.spec.js": {
+      "passed": 8,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/er/erDiagram.spec.js": {
+      "passed": 633,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/er/subgraph.spec.js": {
+      "passed": 18,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/eventmodeling/eventmodeling.spec.ts": {
+      "passed": 9,
+      "api": 1,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/eventmodeling/eventmodeling.test.ts": {
+      "passed": 31,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/flowchart/flow-arrows.spec.js": {
+      "passed": 14,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/flowchart/flow-comments.spec.js": {
+      "passed": 9,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/flowchart/flow-direction.spec.js": {
+      "passed": 4,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/flowchart/flow-edges.spec.js": {
+      "passed": 293,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/flowchart/flow-huge.spec.js": {
+      "passed": 0,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/flowchart/flow-interactions.spec.js": {
+      "passed": 13,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/flowchart/flow-lines.spec.js": {
+      "passed": 12,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/flowchart/flow-md-string.spec.js": {
+      "passed": 2,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/flowchart/flow-node-data.spec.js": {
+      "passed": 30,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/flowchart/flow-singlenode.spec.js": {
+      "passed": 148,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/flowchart/flow-style.spec.js": {
+      "passed": 25,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/flowchart/flow-text.spec.js": {
+      "passed": 342,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/flowchart/flow-vertice-chaining.spec.js": {
+      "passed": 7,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/flowchart/flow.spec.js": {
+      "passed": 25,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/flowchart/flowDb.spec.ts": {
+      "passed": 31,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/flowchart/subgraph.spec.js": {
+      "passed": 23,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/gantt/gantt.spec.js": {
+      "passed": 28,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/gantt/ganttDb.spec.ts": {
+      "passed": 52,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/git/gitGraph.spec.ts": {
+      "passed": 70,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/git/gitGraph.test.ts": {
+      "passed": 24,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/info/info.spec.ts": {
+      "passed": 2,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/info/info.test.ts": {
+      "passed": 12,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/ishikawa/ishikawa.spec.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/journey/journey.spec.js": {
+      "passed": 7,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/journey/journeyDb.spec.js": {
+      "passed": 9,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/kanban/kanban.spec.ts": {
+      "passed": 30,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/mindmap/mindmap.spec.ts": {
+      "passed": 26,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/mindmap/mindmapDb.getData.test.ts": {
+      "passed": 11,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/packet/packet.spec.ts": {
+      "passed": 15,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/packet/packet.test.ts": {
+      "passed": 8,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/pie/pie.spec.ts": {
+      "passed": 14,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/pie/pie.test.ts": {
+      "passed": 32,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/quadrant/quadrant.jison.spec.ts": {
+      "passed": 24,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/quadrant/quadrantDb.spec.ts": {
+      "passed": 4,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/radar/radar.spec.ts": {
+      "passed": 18,
+      "api": 2,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/radar/radar.test.ts": {
+      "passed": 80,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/railroad/abnfDetector.spec.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/railroad/abnfDiagram.spec.ts": {
+      "passed": 12,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/railroad/ebnfDetector.spec.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/railroad/ebnfDiagram.spec.ts": {
+      "passed": 14,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/railroad/pegDetector.spec.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/railroad/pegDiagram.spec.ts": {
+      "passed": 14,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/railroad/railroad.test.ts": {
+      "passed": 7,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/railroad/railroadDb.spec.ts": {
+      "passed": 10,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/railroad/railroadDetector.spec.ts": {
+      "passed": 14,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/railroad/railroadDiagram.spec.ts": {
+      "passed": 26,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/requirement/requirementDb.spec.ts": {
+      "passed": 10,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/requirement/requirementDiagram.spec.js": {
+      "passed": 43,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/sankey/sankey.spec.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/sequence/keywordActors.spec.ts": {
+      "passed": 13,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/sequence/sequenceDiagram.spec.js": {
+      "passed": 125,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/state/state-parser.spec.js": {
+      "passed": 17,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/state/state-style.spec.js": {
+      "passed": 24,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/state/stateDb.spec.js": {
+      "passed": 4,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/state/stateDiagram-colorIndex.spec.ts": {
+      "passed": 9,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/state/stateDiagram-v2.spec.js": {
+      "passed": 29,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/state/stateDiagram.spec.js": {
+      "passed": 29,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/state/stateNoteEdge.spec.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/state/stateNoteNode.spec.js": {
+      "passed": 2,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/timeline/timeline.spec.js": {
+      "passed": 11,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/treemap/treemap.test.ts": {
+      "passed": 17,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/treemap/utils.test.ts": {
+      "passed": 4,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/treeview/boxDrawingPreprocessor.spec.ts": {
+      "passed": 42,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/treeview/db.spec.ts": {
+      "passed": 18,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/treeview/icons.spec.ts": {
+      "passed": 22,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/treeview/parser.spec.ts": {
+      "passed": 33,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/treeview/treeView.test.ts": {
+      "passed": 28,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/treeview/treeViewValueConverter.test.ts": {
+      "passed": 19,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/usecase-parser/usecase.lexer.spec.ts": {
+      "passed": 13,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/usecase-parser/usecase.parser.spec.ts": {
+      "passed": 75,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/usecase-parser/usecaseJson.spec.ts": {
+      "passed": 11,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/usecase/usecase.parser.spec.ts": {
+      "passed": 79,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/usecase/usecase.spec.ts": {
+      "passed": 37,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/usecase/usecaseDb.spec.ts": {
+      "passed": 1,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/venn/venn.spec.ts": {
+      "passed": 17,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/venn/vennRenderer.spec.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/wardley/wardleyBuilder.spec.ts": {
+      "passed": 4,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/wardley/wardleyParser.spec.ts": {
+      "passed": 20,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/xychart/xychart.jison.spec.ts": {
+      "passed": 58,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/compat/xychart/xychartDb.spec.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/cynefin/oracle.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/cynefin/stress.test.ts": {
+      "passed": 19,
+      "api": 0,
+      "unported": 0,
+      "speed": 3,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/entries.test.ts": {
+      "passed": 6,
+      "api": 1,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/er/oracle.test.ts": {
+      "passed": 4,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/er/stress.test.ts": {
+      "passed": 39,
+      "api": 6,
+      "unported": 0,
+      "speed": 2,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/eventmodeling/oracle.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/eventmodeling/stress.test.ts": {
+      "passed": 32,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/flowchart/oracle.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/flowchart/parser.test.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/gantt/dates.test.ts": {
+      "passed": 90,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/gantt/oracle.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/gantt/stress.test.ts": {
+      "passed": 30,
+      "api": 1,
+      "unported": 0,
+      "speed": 6,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/git/oracle.test.ts": {
+      "passed": 4,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/git/populate.test.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/git/stress.test.ts": {
+      "passed": 27,
+      "api": 1,
+      "unported": 0,
+      "speed": 3,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/info/oracle.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/info/stress.test.ts": {
+      "passed": 12,
+      "api": 0,
+      "unported": 0,
+      "speed": 1,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/ishikawa/oracle.test.ts": {
+      "passed": 5,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/ishikawa/stress.test.ts": {
+      "passed": 25,
+      "api": 1,
+      "unported": 0,
+      "speed": 2,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/journey/oracle.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/journey/stress.test.ts": {
+      "passed": 25,
+      "api": 0,
+      "unported": 0,
+      "speed": 9,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/kanban/oracle.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/kanban/stress.test.ts": {
+      "passed": 26,
+      "api": 3,
+      "unported": 0,
+      "speed": 2,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/layout/compound.test.ts": {
+      "passed": 30,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/layout/lanes.test.ts": {
+      "passed": 24,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/layout/layered.test.ts": {
+      "passed": 1,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/mindmap/oracle.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/mindmap/stress.test.ts": {
+      "passed": 27,
+      "api": 1,
+      "unported": 0,
+      "speed": 4,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/mount.test.ts": {
+      "passed": 0,
+      "api": 38,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/packet/oracle.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/packet/stress.test.ts": {
+      "passed": 20,
+      "api": 1,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/pie/oracle.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/quadrant/oracle.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/quadrant/stress.test.ts": {
+      "passed": 25,
+      "api": 3,
+      "unported": 0,
+      "speed": 2,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/radar/oracle.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/radar/stress.test.ts": {
+      "passed": 22,
+      "api": 0,
+      "unported": 0,
+      "speed": 1,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/railroad/model.test.ts": {
+      "passed": 0,
+      "api": 16,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/railroad/oracle.test.ts": {
+      "passed": 16,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/railroad/stress.test.ts": {
+      "passed": 52,
+      "api": 3,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/agentflow-security.test.ts": {
+      "passed": 8,
+      "api": 1,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/agentflow.test.ts": {
+      "passed": 23,
+      "api": 12,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/all-types.test.ts": {
+      "passed": 23,
+      "api": 3,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/architecture-security.test.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/architecture.test.ts": {
+      "passed": 21,
+      "api": 2,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/block-security.test.ts": {
+      "passed": 7,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/block.test.ts": {
+      "passed": 40,
+      "api": 13,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/break-hints.test.ts": {
+      "passed": 11,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/c4-security.test.ts": {
+      "passed": 7,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/c4.test.ts": {
+      "passed": 35,
+      "api": 11,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/cjk-wrap.test.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/class-security.test.ts": {
+      "passed": 4,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/class.test.ts": {
+      "passed": 40,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/cynefin-security.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/cynefin.test.ts": {
+      "passed": 7,
+      "api": 2,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/edges.test.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/er-security.test.ts": {
+      "passed": 7,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/er.test.ts": {
+      "passed": 32,
+      "api": 1,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/eventmodeling-security.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/eventmodeling.test.ts": {
+      "passed": 8,
+      "api": 6,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/flowchart.test.ts": {
+      "passed": 62,
+      "api": 1,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/fonts.test.ts": {
+      "passed": 7,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/gantt-security.test.ts": {
+      "passed": 7,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/gantt.test.ts": {
+      "passed": 27,
+      "api": 10,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/git-security.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/git.test.ts": {
+      "passed": 17,
+      "api": 5,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/inert.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/info-security.test.ts": {
+      "passed": 4,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/info.test.ts": {
+      "passed": 4,
+      "api": 1,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/ink.test.ts": {
+      "passed": 8,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/ishikawa-security.test.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/ishikawa.test.ts": {
+      "passed": 12,
+      "api": 2,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/journey-security.test.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/journey.test.ts": {
+      "passed": 17,
+      "api": 3,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/kanban-security.test.ts": {
+      "passed": 7,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/kanban.test.ts": {
+      "passed": 15,
+      "api": 3,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/math.test.ts": {
+      "passed": 42,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/max-width.test.ts": {
+      "passed": 11,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/mermaid-type.test.ts": {
+      "passed": 2,
+      "api": 14,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/mindmap-security.test.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/mindmap.test.ts": {
+      "passed": 14,
+      "api": 4,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/mobile-layouts.test.ts": {
+      "passed": 19,
+      "api": 3,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/packet-security.test.ts": {
+      "passed": 5,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/packet.test.ts": {
+      "passed": 11,
+      "api": 2,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/palette.test.ts": {
+      "passed": 10,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/pie.test.ts": {
+      "passed": 11,
+      "api": 1,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/quadrant-security.test.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/quadrant.test.ts": {
+      "passed": 19,
+      "api": 2,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/radar-security.test.ts": {
+      "passed": 5,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/radar.test.ts": {
+      "passed": 12,
+      "api": 3,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/railroad-security.test.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/railroad.test.ts": {
+      "passed": 16,
+      "api": 3,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/requirement-security.test.ts": {
+      "passed": 7,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/requirement.test.ts": {
+      "passed": 18,
+      "api": 2,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/sankey-security.test.ts": {
+      "passed": 9,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/sankey.test.ts": {
+      "passed": 30,
+      "api": 33,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/security.test.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/sequence-security.test.ts": {
+      "passed": 7,
+      "api": 1,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/sequence.test.ts": {
+      "passed": 38,
+      "api": 16,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/state-security.test.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/state.test.ts": {
+      "passed": 29,
+      "api": 2,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/swimlane.test.ts": {
+      "passed": 22,
+      "api": 2,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/timeline-security.test.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/timeline.test.ts": {
+      "passed": 15,
+      "api": 4,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/treemap-security.test.ts": {
+      "passed": 7,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/treemap.test.ts": {
+      "passed": 32,
+      "api": 1,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/treeview-security.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/treeview.test.ts": {
+      "passed": 11,
+      "api": 3,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/usecase-security.test.ts": {
+      "passed": 8,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/usecase.test.ts": {
+      "passed": 31,
+      "api": 1,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/venn-security.test.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/venn.test.ts": {
+      "passed": 29,
+      "api": 4,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/wardley-security.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/wardley.test.ts": {
+      "passed": 11,
+      "api": 2,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/xychart-security.test.ts": {
+      "passed": 6,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/render/xychart.test.ts": {
+      "passed": 20,
+      "api": 2,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/requirement/oracle.test.ts": {
+      "passed": 4,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/requirement/stress.test.ts": {
+      "passed": 29,
+      "api": 6,
+      "unported": 0,
+      "speed": 1,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/sankey/layout.test.ts": {
+      "passed": 12,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/sankey/oracle.test.ts": {
+      "passed": 5,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/sankey/stress.test.ts": {
+      "passed": 23,
+      "api": 1,
+      "unported": 0,
+      "speed": 1,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/sequence/oracle.test.ts": {
+      "passed": 5,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/sequence/stress.test.ts": {
+      "passed": 35,
+      "api": 10,
+      "unported": 0,
+      "speed": 2,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/state/oracle.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/state/stress.test.ts": {
+      "passed": 41,
+      "api": 2,
+      "unported": 0,
+      "speed": 10,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/stress.test.ts": {
+      "passed": 27,
+      "api": 5,
+      "unported": 0,
+      "speed": 5,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/swimlane/stress.test.ts": {
+      "passed": 9,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/timeline/oracle.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/timeline/stress.test.ts": {
+      "passed": 24,
+      "api": 0,
+      "unported": 0,
+      "speed": 13,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/treemap/oracle.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/treemap/stress.test.ts": {
+      "passed": 27,
+      "api": 1,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/treeview/oracle.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/treeview/stress.test.ts": {
+      "passed": 26,
+      "api": 0,
+      "unported": 0,
+      "speed": 1,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/usecase/oracle.test.ts": {
+      "passed": 7,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/usecase/stress.test.ts": {
+      "passed": 34,
+      "api": 11,
+      "unported": 0,
+      "speed": 4,
+      "canvas": 0,
+      "known": 2,
+      "failed": 0
+    },
+    "tests/util/measurer.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 1,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/util/preprocess.test.ts": {
+      "passed": 9,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/util/url.test.ts": {
+      "passed": 34,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/util/yaml.test.ts": {
+      "passed": 29,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/venn/oracle.test.ts": {
+      "passed": 5,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/venn/stress.test.ts": {
+      "passed": 28,
+      "api": 1,
+      "unported": 0,
+      "speed": 13,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/wardley/oracle.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/wardley/stress.test.ts": {
+      "passed": 34,
+      "api": 0,
+      "unported": 0,
+      "speed": 3,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/xychart/oracle.test.ts": {
+      "passed": 3,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/xychart/stress.test.ts": {
+      "passed": 24,
+      "api": 4,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    },
+    "tests/zoom.test.ts": {
+      "passed": 9,
+      "api": 0,
+      "unported": 0,
+      "speed": 0,
+      "canvas": 0,
+      "known": 0,
+      "failed": 0
+    }
+  },
+  "notPassed": [
+    {
+      "file": "tests/agentflow/reference.test.ts",
+      "test": "agentflow model against Mermaid accepts and rejects the same inputs",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/agentflow/reference.test.ts",
+      "test": "agentflow model against Mermaid builds the same model",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/agentflow/stress.test.ts",
+      "test": "agentflow worst cases 10,000 comment lines",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/agentflow/stress.test.ts",
+      "test": "agentflow worst cases braces followed by spaces",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/agentflow/stress.test.ts",
+      "test": "agentflow worst cases style statement of colons and hashes",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/agentflow/stress.test.ts",
+      "test": "agentflow worst cases class statement with 10,000 ids and classes",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/agentflow/stress.test.ts",
+      "test": "agentflow worst cases 20,000 nested flows",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/agentflow/stress.test.ts",
+      "test": "agentflow worst cases 1,500 nested flows crossed by 1,000 edges",
+      "kind": "speed",
+      "message": "AssertionError: expected 8386.264069 to be less than 3000"
+    },
+    {
+      "file": "tests/agentflow/stress.test.ts",
+      "test": "agentflow worst cases one flow of 10,000 nodes",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/agentflow/stress.test.ts",
+      "test": "agentflow worst cases unclosed flows",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/agentflow/stress.test.ts",
+      "test": "agentflow worst cases 3,000 flows that each name the next one",
+      "kind": "speed",
+      "message": "AssertionError: expected 35375.377937 to be less than 3000"
+    },
+    {
+      "file": "tests/agentflow/stress.test.ts",
+      "test": "agentflow worst cases 2,000 flows that each name the one before",
+      "kind": "speed",
+      "message": "AssertionError: expected 17040.087477999994 to be less than 3000"
+    },
+    {
+      "file": "tests/agentflow/stress.test.ts",
+      "test": "agentflow worst cases label of emphasis markers",
+      "kind": "speed",
+      "message": "AssertionError: expected 5290.167335000006 to be less than 3000"
+    },
+    {
+      "file": "tests/agentflow/stress.test.ts",
+      "test": "agentflow worst cases one 50,000 character edge label",
+      "kind": "speed",
+      "message": "AssertionError: expected 3354.3662820000027 to be less than 3000"
+    },
+    {
+      "file": "tests/agentflow/stress.test.ts",
+      "test": "agentflow worst cases one statement chaining 5,000",
+      "kind": "speed",
+      "message": "AssertionError: expected 3736.4038139999902 to be less than 3000"
+    },
+    {
+      "file": "tests/architecture/stress.test.ts",
+      "test": "architecture worst cases one 50,000 character service title",
+      "kind": "speed",
+      "message": "AssertionError: expected 3642.50569 to be less than 3000"
+    },
+    {
+      "file": "tests/block/stress.test.ts",
+      "test": "block worst cases one row of 16,000 blocks",
+      "kind": "speed",
+      "message": "AssertionError: expected 3258.307971 to be less than 3000"
+    },
+    {
+      "file": "tests/block/stress.test.ts",
+      "test": "block worst cases 12,000 unclosed composites",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/block/stress.test.ts",
+      "test": "block worst cases 12,000 stray ends",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/block/stress.test.ts",
+      "test": "block worst cases 5,000 sibling composites",
+      "kind": "speed",
+      "message": "AssertionError: expected 14437.954109 to be less than 3000"
+    },
+    {
+      "file": "tests/block/stress.test.ts",
+      "test": "block worst cases one statement of 8,000 links",
+      "kind": "speed",
+      "message": "AssertionError: expected 3046.346614000002 to be less than 3000"
+    },
+    {
+      "file": "tests/block/stress.test.ts",
+      "test": "block worst cases one 50,000 character label",
+      "kind": "speed",
+      "message": "AssertionError: expected 3210.894822999995 to be less than 3000"
+    },
+    {
+      "file": "tests/block/stress.test.ts",
+      "test": "block worst cases unclosed label",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/block/stress.test.ts",
+      "test": "block worst cases unclosed markdown label",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/block/stress.test.ts",
+      "test": "block worst cases arrow label then nothing",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/block/stress.test.ts",
+      "test": "block worst cases arrow directions made of spaces",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/block/stress.test.ts",
+      "test": "block worst cases arrow close then spaces",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/block/stress.test.ts",
+      "test": "block worst cases class list with spaces after each comma",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/block/stress.test.ts",
+      "test": "block worst cases classDef id then spaces",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/block/stress.test.ts",
+      "test": "block worst cases accDescr never closed",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/block/stress.test.ts",
+      "test": "block worst cases links without blocks",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/block/stress.test.ts",
+      "test": "block worst cases 25,000 one-letter statements on one line",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/block/stress.test.ts",
+      "test": "block worst cases refuses space counts past the limit and keeps the ones within it",
+      "kind": "api",
+      "message": "AssertionError: expected [Function] to throw error matching /at most 100000 space blocks/ but got 'nimaki does not provide parse()'"
+    },
+    {
+      "file": "tests/c4/stress.test.ts",
+      "test": "C4 worst cases 50,000 commas",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/c4/stress.test.ts",
+      "test": "C4 worst cases 600 relations among 600 boundaries",
+      "kind": "speed",
+      "message": "AssertionError: expected 3693.787214 to be less than 3000"
+    },
+    {
+      "file": "tests/c4/stress.test.ts",
+      "test": "C4 worst cases a link wrapped in layers of entity encoding",
+      "kind": "speed",
+      "message": "AssertionError: expected 5837.222074999998 to be less than 3000"
+    },
+    {
+      "file": "tests/c4/stress.test.ts",
+      "test": "C4 worst cases 3,000 other statements",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/c4/stress.test.ts",
+      "test": "C4 worst cases a multi-line description full of line breaks",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/class/parser.test.ts",
+      "test": "class diagram parser is reached through the public parse function, with the front matter title",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/class/stress.test.ts",
+      "test": "class diagram worst cases blank lines between statements",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/class/stress.test.ts",
+      "test": "class diagram worst cases unclosed accDescr block",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/class/stress.test.ts",
+      "test": "class diagram worst cases callback arguments with no closing parenthesis",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/class/stress.test.ts",
+      "test": "class diagram worst cases unclosed string",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/class/stress.test.ts",
+      "test": "class diagram worst cases unclosed generic",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/class/stress.test.ts",
+      "test": "class diagram worst cases unclosed backtick name",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/class/stress.test.ts",
+      "test": "class diagram worst cases class name of 25,000 parts",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/class/stress.test.ts",
+      "test": "class diagram worst cases class name of 25,000 words",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/class/stress.test.ts",
+      "test": "class diagram worst cases namespace name of 12,000 parts",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/class/stress.test.ts",
+      "test": "class diagram worst cases namespace name of 3,000 parts, rendered",
+      "kind": "speed",
+      "message": "AssertionError: expected 19508.984113 to be less than 3000"
+    },
+    {
+      "file": "tests/class/stress.test.ts",
+      "test": "class diagram worst cases 4,000 nested namespaces",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/class/stress.test.ts",
+      "test": "class diagram worst cases 2,000 nested namespaces, rendered",
+      "kind": "speed",
+      "message": "AssertionError: expected 23177.482486 to be less than 3000"
+    },
+    {
+      "file": "tests/class/stress.test.ts",
+      "test": "class diagram worst cases unclosed nested namespaces",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/class/stress.test.ts",
+      "test": "class diagram worst cases closing braces with nothing open",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/class/stress.test.ts",
+      "test": "class diagram worst cases namespace keyword repeated",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/class/stress.test.ts",
+      "test": "class diagram worst cases 5,000 sibling namespaces",
+      "kind": "speed",
+      "message": "AssertionError: expected 3660.444245999999 to be less than 3000"
+    },
+    {
+      "file": "tests/class/stress.test.ts",
+      "test": "class diagram worst cases one 50,000 character note",
+      "kind": "speed",
+      "message": "AssertionError: expected 3276.288474000001 to be less than 3000"
+    },
+    {
+      "file": "tests/class/stress.test.ts",
+      "test": "class diagram worst cases 1,600 classDefs applied to 1,600 classes",
+      "kind": "speed",
+      "message": "AssertionError: expected 13443.804849000007 to be less than 3000"
+    },
+    {
+      "file": "tests/class/stress.test.ts",
+      "test": "class diagram worst cases a classDef of 5,000 declarations on 800 classes, each with a style of its own",
+      "kind": "speed",
+      "message": "AssertionError: expected 8107.971980000002 to be less than 3000"
+    },
+    {
+      "file": "tests/compat/eventmodeling/eventmodeling.spec.ts",
+      "test": "eventmodeling diagrams should report the original line number when comments precede a duplicate frame",
+      "kind": "api",
+      "message": "Error: expected [Function] to throw error including 'Duplicate event modeling frame ID \"01…' but got 'nimaki does not provide parse()'"
+    },
+    {
+      "file": "tests/compat/radar/radar.spec.ts",
+      "test": "radar diagrams renderer draw should draw a simple radar diagram",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/compat/radar/radar.spec.ts",
+      "test": "radar diagrams renderer draw should draw a complex radar diagram",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/cynefin/stress.test.ts",
+      "test": "cynefin worst cases 10,000 items in one domain",
+      "kind": "speed",
+      "message": "AssertionError: expected 2347.097304 to be less than 2000"
+    },
+    {
+      "file": "tests/cynefin/stress.test.ts",
+      "test": "cynefin worst cases one 50,000 character item",
+      "kind": "speed",
+      "message": "AssertionError: expected 3348.7297900000003 to be less than 2000"
+    },
+    {
+      "file": "tests/cynefin/stress.test.ts",
+      "test": "cynefin worst cases one 50,000 character transition label",
+      "kind": "speed",
+      "message": "AssertionError: expected 3219.7555730000004 to be less than 2000"
+    },
+    {
+      "file": "tests/entries.test.ts",
+      "test": "the full entry point has every type registered",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide registered()"
+    },
+    {
+      "file": "tests/er/stress.test.ts",
+      "test": "ER worst cases style statement of colons and hashes",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/er/stress.test.ts",
+      "test": "ER worst cases style statement with 10,000 ids",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/er/stress.test.ts",
+      "test": "ER worst cases class statement with 10,000 ids and classes",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/er/stress.test.ts",
+      "test": "ER worst cases 20,000 nested subgraphs",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/er/stress.test.ts",
+      "test": "ER worst cases one subgraph of 10,000 entities",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/er/stress.test.ts",
+      "test": "ER worst cases unclosed subgraphs",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/er/stress.test.ts",
+      "test": "ER worst cases comment of emphasis markers",
+      "kind": "speed",
+      "message": "AssertionError: expected 5294.226556 to be less than 3000"
+    },
+    {
+      "file": "tests/er/stress.test.ts",
+      "test": "ER worst cases star of 5,000",
+      "kind": "speed",
+      "message": "AssertionError: expected 3426.3526960000017 to be less than 3000"
+    },
+    {
+      "file": "tests/gantt/stress.test.ts",
+      "test": "gantt worst cases 8,000 tasks",
+      "kind": "speed",
+      "message": "AssertionError: expected 3171.950865 to be less than 3000"
+    },
+    {
+      "file": "tests/gantt/stress.test.ts",
+      "test": "gantt worst cases one 50,000 character task name",
+      "kind": "speed",
+      "message": "AssertionError: expected 3398.438956 to be less than 3000"
+    },
+    {
+      "file": "tests/gantt/stress.test.ts",
+      "test": "gantt worst cases one 50,000 character section name",
+      "kind": "speed",
+      "message": "AssertionError: expected 3323.7571819999994 to be less than 3000"
+    },
+    {
+      "file": "tests/gantt/stress.test.ts",
+      "test": "gantt worst cases 12,000 excluded dates over long tasks",
+      "kind": "speed",
+      "message": "AssertionError: expected 10610.232080999998 to be less than 3000"
+    },
+    {
+      "file": "tests/gantt/stress.test.ts",
+      "test": "gantt worst cases a custom format checked for every excluded day",
+      "kind": "speed",
+      "message": "AssertionError: expected 19669.981162999997 to be less than 3000"
+    },
+    {
+      "file": "tests/gantt/stress.test.ts",
+      "test": "gantt worst cases a date format of 25,000 tokens",
+      "kind": "speed",
+      "message": "AssertionError: expected 5462.410855000002 to be less than 3000"
+    },
+    {
+      "file": "tests/gantt/stress.test.ts",
+      "test": "gantt worst cases timestamps too large for a date",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/git/stress.test.ts",
+      "test": "git graph worst cases 7,000 commits",
+      "kind": "speed",
+      "message": "AssertionError: expected 2314.6122130000003 to be less than 2000"
+    },
+    {
+      "file": "tests/git/stress.test.ts",
+      "test": "git graph worst cases 7,000 commits, top to bottom, ids level",
+      "kind": "speed",
+      "message": "AssertionError: expected 2000.1786749999997 to be less than 2000"
+    },
+    {
+      "file": "tests/git/stress.test.ts",
+      "test": "git graph worst cases 1,500 commits that already have the ids Pele would generate next",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/git/stress.test.ts",
+      "test": "git graph worst cases one 50,000 character id",
+      "kind": "speed",
+      "message": "AssertionError: expected 3278.265277999999 to be less than 2000"
+    },
+    {
+      "file": "tests/info/stress.test.ts",
+      "test": "info worst cases a 50,000 character title",
+      "kind": "speed",
+      "message": "AssertionError: expected 3415.429062 to be less than 3000"
+    },
+    {
+      "file": "tests/ishikawa/stress.test.ts",
+      "test": "Ishikawa worst cases an outline 3,000 levels deep",
+      "kind": "speed",
+      "message": "AssertionError: expected 5035.3263019999995 to be less than 3000"
+    },
+    {
+      "file": "tests/ishikawa/stress.test.ts",
+      "test": "Ishikawa worst cases an outline 3,000 levels deep, twice",
+      "kind": "speed",
+      "message": "AssertionError: expected 9072.162219000002 to be less than 3000"
+    },
+    {
+      "file": "tests/ishikawa/stress.test.ts",
+      "test": "Ishikawa worst cases a sawtooth of indentation",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/journey/stress.test.ts",
+      "test": "journey worst cases 6,000 tasks",
+      "kind": "speed",
+      "message": "AssertionError: expected 2285.218252 to be less than 1500"
+    },
+    {
+      "file": "tests/journey/stress.test.ts",
+      "test": "journey worst cases 5,000 tasks, each with its own actor",
+      "kind": "speed",
+      "message": "AssertionError: expected 2224.1965799999994 to be less than 1500"
+    },
+    {
+      "file": "tests/journey/stress.test.ts",
+      "test": "journey worst cases one task with 16,000 actors",
+      "kind": "speed",
+      "message": "AssertionError: expected 2197.198185 to be less than 1500"
+    },
+    {
+      "file": "tests/journey/stress.test.ts",
+      "test": "journey worst cases one task with the same actor 25,000 times",
+      "kind": "speed",
+      "message": "AssertionError: expected 2082.3936590000003 to be less than 1500"
+    },
+    {
+      "file": "tests/journey/stress.test.ts",
+      "test": "journey worst cases 4,000 sections with one task each",
+      "kind": "speed",
+      "message": "AssertionError: expected 1842.077865000001 to be less than 1500"
+    },
+    {
+      "file": "tests/journey/stress.test.ts",
+      "test": "journey worst cases one task name of 10,000 words",
+      "kind": "speed",
+      "message": "AssertionError: expected 3137.9271879999997 to be less than 1500"
+    },
+    {
+      "file": "tests/journey/stress.test.ts",
+      "test": "journey worst cases one actor name of 10,000 words",
+      "kind": "speed",
+      "message": "AssertionError: expected 2902.8333439999988 to be less than 1500"
+    },
+    {
+      "file": "tests/journey/stress.test.ts",
+      "test": "journey worst cases a title of 50,000 characters",
+      "kind": "speed",
+      "message": "AssertionError: expected 7614.404456 to be less than 1500"
+    },
+    {
+      "file": "tests/journey/stress.test.ts",
+      "test": "journey worst cases hash comments",
+      "kind": "speed",
+      "message": "AssertionError: expected 1669.2319019999995 to be less than 1500"
+    },
+    {
+      "file": "tests/kanban/stress.test.ts",
+      "test": "kanban worst cases 16,000 cards in one column, parsed",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/kanban/stress.test.ts",
+      "test": "kanban worst cases deeply bracketed metadata",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/kanban/stress.test.ts",
+      "test": "kanban worst cases metadata key followed by spaces",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/kanban/stress.test.ts",
+      "test": "kanban worst cases card of emphasis markers",
+      "kind": "speed",
+      "message": "AssertionError: expected 5079.597532 to be less than 3000"
+    },
+    {
+      "file": "tests/kanban/stress.test.ts",
+      "test": "kanban worst cases an assignee of 50,000 characters",
+      "kind": "speed",
+      "message": "AssertionError: expected 4752.854196 to be less than 3000"
+    },
+    {
+      "file": "tests/mindmap/stress.test.ts",
+      "test": "mindmap worst cases 16,000 nodes on one level, parsed",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/mindmap/stress.test.ts",
+      "test": "mindmap worst cases 16,000 nodes on one level, rendered",
+      "kind": "speed",
+      "message": "AssertionError: expected 4204.565091 to be less than 3000"
+    },
+    {
+      "file": "tests/mindmap/stress.test.ts",
+      "test": "mindmap worst cases 3,000 levels of nesting",
+      "kind": "speed",
+      "message": "AssertionError: expected 4558.490342000001 to be less than 3000"
+    },
+    {
+      "file": "tests/mindmap/stress.test.ts",
+      "test": "mindmap worst cases one 50,000 character label",
+      "kind": "speed",
+      "message": "AssertionError: expected 3224.469320000002 to be less than 3000"
+    },
+    {
+      "file": "tests/mindmap/stress.test.ts",
+      "test": "mindmap worst cases label of emphasis markers",
+      "kind": "speed",
+      "message": "AssertionError: expected 5494.773424999999 to be less than 3000"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount draws a chart for the room the element has, and again when that changes",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount draws for a change of size in the next frame, once however many changes it sees",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount draws for a change of size at once in a window without frames",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount leaves the drawing alone while the element has no width, as when it is hidden",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount starts narrow in a narrow element",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount draws once when the diagram cannot use the room differently",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount turns a flowchart that runs across when the element gets narrow, and back",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount does not chase an element that takes the width of its drawing",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount waits for an element that has no width yet",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount measures with the font of the element unless one is given",
+      "kind": "api",
+      "message": "AssertionError: expected [] to deeply equal [ 'Inter', 'Georgia' ]"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount takes its fonts from the variables where they are set",
+      "kind": "api",
+      "message": "TypeError: doc.createElement is not a function"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount finds a variable that is set on the drawing and not on the element",
+      "kind": "api",
+      "message": "TypeError: doc.createElement is not a function"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount measures again once fonts that were loading have loaded, and leaves the element alone if nothing moved",
+      "kind": "api",
+      "message": "TypeError: doc.createElement is not a function"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount draws again with the page's fonts once an element mounted outside the document is in it",
+      "kind": "api",
+      "message": "TypeError: doc.createElement is not a function"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount makes a zoom for the diagram unless told not to",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount keeps to a width the host sets",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount updates, reports errors as render does, and stops when destroyed",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount works where there is nothing to watch with",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount draws every diagram that was measured while fonts were loading again once they have loaded",
+      "kind": "api",
+      "message": "TypeError: doc.createElement is not a function"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount does not keep an element that the page has dropped",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount leaves a diagram that is out of the document alone when a font loads, and draws it when it is back",
+      "kind": "api",
+      "message": "TypeError: doc.createElement is not a function"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount draws text that was given while out of the document again when it is back, with the fonts there",
+      "kind": "api",
+      "message": "TypeError: doc.createElement is not a function"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount shows the error over the last drawing, dimmed, until the text can be drawn",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount shows the whole error in place of a diagram that could not be drawn at all",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount keeps the error of text that could not be drawn while hidden, at any width",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount takes the options given with text that cannot be drawn",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount gives each diagram its own ids",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount keeps the text it had when other text cannot be drawn",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount lets the new drawing stand when it is the host's onRender that throws",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount measures with the fonts of the window an element was moved to when refreshed, and observes it from there",
+      "kind": "api",
+      "message": "TypeError: doc.createElement is not a function"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount parses the text once, however often it is drawn",
+      "kind": "api",
+      "message": "AssertionError: expected 0 to be greater than 4"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount draws again on refresh only when the width or the fonts have changed",
+      "kind": "api",
+      "message": "TypeError: Cannot read properties of undefined (reading 'width')"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount leaves a hidden diagram alone, and draws what it missed when it is shown",
+      "kind": "api",
+      "message": "TypeError: Cannot read properties of undefined (reading 'type')"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount draws a hidden diagram anew when it is shown after the fonts it was drawn with have loaded",
+      "kind": "api",
+      "message": "TypeError: doc.createElement is not a function"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount reports a drawing that was put off and then fails, and keeps what was shown",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount puts in the element what a host makes of the markup",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount keeps the first drawing, and reports it, when the host fails on the one for the drawing's fonts",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide mount()"
+    },
+    {
+      "file": "tests/mount.test.ts",
+      "test": "mount stops the diagram an element had when another is mounted in it",
+      "kind": "api",
+      "message": "TypeError: doc.createElement is not a function"
+    },
+    {
+      "file": "tests/packet/stress.test.ts",
+      "test": "packet worst cases a title on every line",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/quadrant/stress.test.ts",
+      "test": "quadrant chart worst cases an unclosed accDescr block",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/quadrant/stress.test.ts",
+      "test": "quadrant chart worst cases an unclosed string",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/quadrant/stress.test.ts",
+      "test": "quadrant chart worst cases an unclosed markdown string",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/quadrant/stress.test.ts",
+      "test": "quadrant chart worst cases one point with a 50,000 character label",
+      "kind": "speed",
+      "message": "AssertionError: expected 3121.104593 to be less than 3000"
+    },
+    {
+      "file": "tests/quadrant/stress.test.ts",
+      "test": "quadrant chart worst cases a quadrant label of emphasis markers",
+      "kind": "speed",
+      "message": "AssertionError: expected 4939.699827 to be less than 3000"
+    },
+    {
+      "file": "tests/radar/stress.test.ts",
+      "test": "radar worst cases a 50,000 character label",
+      "kind": "speed",
+      "message": "AssertionError: expected 3037.572814 to be less than 3000"
+    },
+    {
+      "file": "tests/railroad/model.test.ts",
+      "test": "railroad model builds the constructor notation node for node",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/railroad/model.test.ts",
+      "test": "railroad model replaces a sequence or choice of one by its only member",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/railroad/model.test.ts",
+      "test": "railroad model decodes three escapes in strings and keeps any other escaped character",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/railroad/model.test.ts",
+      "test": "railroad model reads EBNF in both styles",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/railroad/model.test.ts",
+      "test": "railroad model applies EBNF postfix operators left to right to everything before them",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/railroad/model.test.ts",
+      "test": "railroad model lets an EBNF special sequence start at any question mark that has a partner",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/railroad/model.test.ts",
+      "test": "railroad model reads ABNF repeats",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/railroad/model.test.ts",
+      "test": "railroad model reads ABNF values, groups, and alternation",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/railroad/model.test.ts",
+      "test": "railroad model ends an ABNF rule only with a semicolon that ends its line",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/railroad/model.test.ts",
+      "test": "railroad model reads PEG suffixes, and shows predicates as special text",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/railroad/model.test.ts",
+      "test": "railroad model reads the title and accessibility statements",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/railroad/model.test.ts",
+      "test": "railroad model prefers its own title to the front matter title",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/railroad/model.test.ts",
+      "test": "railroad model reads names that start with title, but no title after the first rule",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/railroad/model.test.ts",
+      "test": "railroad model keeps keywords out of names only when they stand alone",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/railroad/model.test.ts",
+      "test": "railroad model skips comments in each notation",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/railroad/model.test.ts",
+      "test": "railroad model rejects what the grammars reject",
+      "kind": "api",
+      "message": "AssertionError: railroad-ebnf-beta"
+    },
+    {
+      "file": "tests/railroad/stress.test.ts",
+      "test": "railroad worst cases unclosed brackets",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/railroad/stress.test.ts",
+      "test": "railroad worst cases unclosed constructor calls",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/railroad/stress.test.ts",
+      "test": "railroad worst cases PEG run of operators",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/render/agentflow-security.test.ts",
+      "test": "inert agentflow output does not pollute prototypes",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/agentflow.test.ts",
+      "test": "agentflow rendering is detected, supported and typed",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/agentflow.test.ts",
+      "test": "agentflow rendering writes the bracket shapes agentflow removed as plain tasks and reports them",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/agentflow.test.ts",
+      "test": "agentflow rendering warns about a shape outside the catalogue and still draws the node",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/agentflow.test.ts",
+      "test": "agentflow rendering keeps a global node out of the flows that mention it",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/agentflow.test.ts",
+      "test": "agentflow rendering draws a container that two flows fight over once, and reports the dropped nesting",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/agentflow.test.ts",
+      "test": "agentflow rendering reads metadata without drawing it",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/agentflow.test.ts",
+      "test": "agentflow rendering reports positions in the lines of the original source",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/agentflow.test.ts",
+      "test": "agentflow rendering maps a flow from its keyword to its end, and a metadata block as an attachment",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/agentflow.test.ts",
+      "test": "agentflow rendering reads comments wherever Mermaid does",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/agentflow.test.ts",
+      "test": "agentflow rendering rejects an unknown shape and unreadable metadata, pointing at the block",
+      "kind": "api",
+      "message": "AssertionError: expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/render/agentflow.test.ts",
+      "test": "agentflow rendering accepts trailing commas in a multi-line metadata block",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/agentflow.test.ts",
+      "test": "agentflow rendering strips prototype-shaped keys from metadata at every depth",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/all-types.test.ts",
+      "test": "every diagram type draws a model that parse() returned as it draws the text, however often and at any width",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/all-types.test.ts",
+      "test": "every diagram type reads the limits and the configuration when the text is parsed",
+      "kind": "api",
+      "message": "AssertionError: expected error to be instance of PeleError"
+    },
+    {
+      "file": "tests/render/all-types.test.ts",
+      "test": "every diagram type refuses a model that parse() did not return",
+      "kind": "api",
+      "message": "AssertionError: expected error to be instance of TypeError"
+    },
+    {
+      "file": "tests/render/architecture.test.ts",
+      "test": "architecture rendering reads ids that start with title",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/architecture.test.ts",
+      "test": "architecture rendering exposes the model",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/block.test.ts",
+      "test": "block rendering separates labels on opposite vertical edges",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/block.test.ts",
+      "test": "block rendering separates labels on opposite horizontal edges",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/block.test.ts",
+      "test": "block rendering keeps disjoint labels on their original straight parallel routes",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/block.test.ts",
+      "test": "block rendering separates wide labels when narrow endpoints clamp the parallel routes",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/block.test.ts",
+      "test": "block rendering keeps every label for several edges between the same blocks",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/block.test.ts",
+      "test": "block rendering keeps parallel edges straight while it stacks their labels",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/block.test.ts",
+      "test": "block rendering widens the gap between blocks whose parallel labels do not fit between them",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/block.test.ts",
+      "test": "block rendering stacks parallel labels without widening the drawing past maxWidth",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/block.test.ts",
+      "test": "block rendering keeps every link of a statement with several",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/block.test.ts",
+      "test": "block rendering uses the id as the label and merges later statements into the first",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/block.test.ts",
+      "test": "block rendering lets a block be called root",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/block.test.ts",
+      "test": "block rendering rejects what the grammar rejects",
+      "kind": "api",
+      "message": "AssertionError: block: expected error to be instance of PeleError"
+    },
+    {
+      "file": "tests/render/block.test.ts",
+      "test": "block rendering gives generated ids that do not change between runs",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/c4.test.ts",
+      "test": "C4 rendering accepts all five diagram keywords",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/c4.test.ts",
+      "test": "C4 rendering follows UpdateLayoutConfig",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/c4.test.ts",
+      "test": "C4 rendering ignores the index of RelIndex and a relation without a label",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/c4.test.ts",
+      "test": "C4 rendering keeps every line clear of the shapes it does not join",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/c4.test.ts",
+      "test": "C4 rendering reattaches manually offset labels to their arrows when the component layout compacts",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/c4.test.ts",
+      "test": "C4 rendering stores sprites, tags, and legend arguments without drawing them",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/c4.test.ts",
+      "test": "C4 rendering treats a bare title as no title and keeps a title after a tab",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/c4.test.ts",
+      "test": "C4 rendering treats accTitle as the title, as the grammar does, and accDescr as the description",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/c4.test.ts",
+      "test": "C4 rendering applies a named argument wherever it is written",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/c4.test.ts",
+      "test": "C4 rendering merges a repeated alias and keeps the first position",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/c4.test.ts",
+      "test": "C4 rendering reads an unquoted last argument through to the next comma, as Mermaid does",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/cynefin.test.ts",
+      "test": "cynefin rendering draws transitions with arrowheads and labels, and drops self loops",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/cynefin.test.ts",
+      "test": "cynefin rendering keeps the last block when a domain is declared twice",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/er.test.ts",
+      "test": "ER diagram rendering is detected, supported and typed",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/eventmodeling.test.ts",
+      "test": "eventmodeling rendering infers each relation from the nearest earlier frame in another lane",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/eventmodeling.test.ts",
+      "test": "eventmodeling rendering stops the inferred flow at a reset frame and follows explicit sources",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/eventmodeling.test.ts",
+      "test": "eventmodeling rendering gives each namespace its own lane within a group, shared by its frames",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/eventmodeling.test.ts",
+      "test": "eventmodeling rendering shows inline data and data blocks, a block winning over inline data",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/eventmodeling.test.ts",
+      "test": "eventmodeling rendering lists notes and specifications under the lanes",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/eventmodeling.test.ts",
+      "test": "eventmodeling rendering reads entity names that start with title",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/flowchart.test.ts",
+      "test": "public api parses without rendering",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/gantt.test.ts",
+      "test": "gantt rendering packs tasks that do not overlap onto one row in compact mode",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/gantt.test.ts",
+      "test": "gantt rendering treats a bare title as no title and keeps a title after a tab",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/gantt.test.ts",
+      "test": "gantt scheduling starts a task with no start, and nothing before it, today",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/gantt.test.ts",
+      "test": "gantt scheduling uses the injected time for unknown references and for fields a format leaves out",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/gantt.test.ts",
+      "test": "gantt scheduling gives the same result each time it is asked",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/gantt.test.ts",
+      "test": "gantt scheduling leaves tasks that refer to each other unscheduled and still draws the rest",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/gantt.test.ts",
+      "test": "gantt scheduling rejects task data Mermaid crashes on, and accepts topAxis, which Mermaid crashes on",
+      "kind": "api",
+      "message": "AssertionError: expected [Function] to throw error matching /needs a duration or an end date/ but got 'nimaki does not provide parse()'"
+    },
+    {
+      "file": "tests/render/gantt.test.ts",
+      "test": "gantt scheduling reads tags, ids, sections, and settings into the model",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/gantt.test.ts",
+      "test": "gantt scheduling keeps a task whose name runs into %%",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/gantt.test.ts",
+      "test": "gantt scheduling treats ids that are Object.prototype names as ordinary ids",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/git.test.ts",
+      "test": "git graph rendering names and orders the main branch from config, and orders branches by `order`",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/git.test.ts",
+      "test": "git graph rendering reads branch names that start with title",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/git.test.ts",
+      "test": "git graph rendering generates the same commit ids every time, in Mermaid's shape",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/git.test.ts",
+      "test": "git graph rendering does not let a generated id replace a commit that already has it",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/git.test.ts",
+      "test": "git graph rendering keeps Mermaid's rule for a repeated commit id: the later commit replaces the earlier, with a warning",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/info.test.ts",
+      "test": "info rendering writes accessible names and exposes the model",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/ishikawa.test.ts",
+      "test": "Ishikawa diagram rendering is detected under both keywords, supported and typed",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/ishikawa.test.ts",
+      "test": "Ishikawa diagram rendering nests by indentation relative to the first cause",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/journey.test.ts",
+      "test": "journey rendering treats a bare title as no title",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/journey.test.ts",
+      "test": "journey rendering keeps the character before a comment",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/journey.test.ts",
+      "test": "journey rendering exposes the model",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/kanban.test.ts",
+      "test": "kanban rendering treats every deeper line as a card of the last column",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/kanban.test.ts",
+      "test": "kanban rendering rejects a line after one indented less than the first column",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/kanban.test.ts",
+      "test": "kanban rendering reads metadata on one line and on several",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/mermaid-type.test.ts",
+      "test": "mermaidType reports Mermaid’s type beside Pele’s for \"graph TD\\n  A --> B\"",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/mermaid-type.test.ts",
+      "test": "mermaidType reports Mermaid’s type beside Pele’s for \"flowchart LR\\n  A --> B\"",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/mermaid-type.test.ts",
+      "test": "mermaidType reports Mermaid’s type beside Pele’s for \"flowchart-elk TD\\n  A --> B\"",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/mermaid-type.test.ts",
+      "test": "mermaidType reports Mermaid’s type beside Pele’s for \"classDiagram\\n  class A\"",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/mermaid-type.test.ts",
+      "test": "mermaidType reports Mermaid’s type beside Pele’s for \"classDiagram-v2\\n  class A\"",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/mermaid-type.test.ts",
+      "test": "mermaidType reports Mermaid’s type beside Pele’s for \"stateDiagram\\n  [*] --> A\"",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/mermaid-type.test.ts",
+      "test": "mermaidType reports Mermaid’s type beside Pele’s for \"stateDiagram-v2\\n  [*] --> A\"",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/mermaid-type.test.ts",
+      "test": "mermaidType reports Mermaid’s type beside Pele’s for \"railroad-beta\\ntitle Expression Grammar\\n\\nexpression = sequence(\\n    nonterminal(\\\"term\\\"),\\n    zeroOrMore(sequence(\\n        choice(terminal(\\\"+\\\"), terminal(\\\"-\\\")),\\n        nonterminal(\\\"term\\\")\\n    ))\\n) ;\\nterm = sequence(\\n    nonterminal(\\\"factor\\\"),\\n    zeroOrMore(sequence(\\n        choice(terminal(\\\"*\\\"), terminal(\\\"/\\\")),\\n        nonterminal(\\\"factor\\\")\\n    ))\\n) ;\\nfactor = choice(\\n    nonterminal(\\\"number\\\"),\\n    sequence(terminal(\\\"(\\\"), nonterminal(\\\"expression\\\"), terminal(\\\")\\\"))\\n) ;\\nnumber = oneOrMore(nonterminal(\\\"digit\\\")) ;\\ndigit = choice(terminal(\\\"0\\\"), terminal(\\\"1\\\"), terminal(\\\"2\\\"), terminal(\\\"3\\\"), terminal(\\\"4\\\"), terminal(\\\"5\\\"), terminal(\\\"6\\\"), terminal(\\\"7\\\"), terminal(\\\"8\\\"), terminal(\\\"9\\\")) ;\\n\"",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/mermaid-type.test.ts",
+      "test": "mermaidType reports Mermaid’s type beside Pele’s for \"railroad-ebnf-beta\\ntitle \\\"Digit Definition\\\"\\n\\ndigit = \\\"0\\\" | \\\"1\\\" | \\\"2\\\" | \\\"3\\\" | \\\"4\\\" | \\\"5\\\" | \\\"6\\\" | \\\"7\\\" | \\\"8\\\" | \\\"9\\\" ;\\n\"",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/mermaid-type.test.ts",
+      "test": "mermaidType reports Mermaid’s type beside Pele’s for \"railroad-abnf-beta\\ntitle \\\"Email Address\\\"\\n\\naddress = local-part \\\"@\\\" domain ;\\nlocal-part = 1*( ALPHA / DIGIT / \\\".\\\" / \\\"-\\\" ) ;\\ndomain = label *( \\\".\\\" label ) ;\\nlabel = 1*( ALPHA / DIGIT / \\\"-\\\" ) ;\\n\"",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/mermaid-type.test.ts",
+      "test": "mermaidType reports Mermaid’s type beside Pele’s for \"railroad-peg-beta\\ntitle \\\"Calculator Grammar\\\"\\n\\nExpression <- Term ((\\\"+\\\" / \\\"-\\\") Term)* ;\\nTerm <- Factor ((\\\"*\\\" / \\\"/\\\") Factor)* ;\\nFactor <- Number / \\\"(\\\" Expression \\\")\\\" ;\\nNumber <- Digit+ ;\\nDigit <- \\\"0\\\" / \\\"1\\\" / \\\"2\\\" / \\\"3\\\" / \\\"4\\\" / \\\"5\\\" / \\\"6\\\" / \\\"7\\\" / \\\"8\\\" / \\\"9\\\" ;\\n\"",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/mermaid-type.test.ts",
+      "test": "mermaidType reports Mermaid’s type beside Pele’s for \"sequenceDiagram\\n  A->>B: Hi\"",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/mermaid-type.test.ts",
+      "test": "mermaidType reports Mermaid’s type beside Pele’s for \"pie\\n  \\\"a\\\": 1\"",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/mermaid-type.test.ts",
+      "test": "mermaidType is on errors once the type is known",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/mindmap.test.ts",
+      "test": "mindmap rendering maps each pair of delimiters to its shape",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/mindmap.test.ts",
+      "test": "mindmap rendering wraps section numbers after eleven branches, as Mermaid does",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/mindmap.test.ts",
+      "test": "mindmap rendering follows Mermaid on unclear indentation",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/mindmap.test.ts",
+      "test": "mindmap rendering keeps a trailing comment out of a shaped node but not out of a bare one",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/mobile-layouts.test.ts",
+      "test": "mobile diagram layouts compacts every newly supported type while retaining its model and desktop drawing",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/mobile-layouts.test.ts",
+      "test": "mobile diagram layouts keeps event frames, lanes, data, reset markers, explicit relations and specifications",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/mobile-layouts.test.ts",
+      "test": "mobile diagram layouts retains every category and nested cause in the narrow Ishikawa tree",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/packet.test.ts",
+      "test": "packet rendering exposes the model",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/packet.test.ts",
+      "test": "packet rendering stops after ten thousand rows, as Mermaid does",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/pie.test.ts",
+      "test": "pie rendering exposes the model",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/quadrant.test.ts",
+      "test": "quadrant chart rendering exposes the model",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/quadrant.test.ts",
+      "test": "quadrant chart rendering keeps the character before a comment",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/radar.test.ts",
+      "test": "radar rendering orders named entries by axis, and rejects a missing one",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/radar.test.ts",
+      "test": "radar rendering reads names that start with circle, polygon, true, false or title",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/radar.test.ts",
+      "test": "radar rendering uses the last value of a repeated option and caps ticks at 32",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/railroad.test.ts",
+      "test": "railroad rendering accepts the four keywords as one diagram type",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/railroad.test.ts",
+      "test": "railroad rendering reads rule names that start with title in each notation",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/railroad.test.ts",
+      "test": "railroad rendering draws a rule again when its name is defined again",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/requirement.test.ts",
+      "test": "requirement rendering exposes the model",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/requirement.test.ts",
+      "test": "requirement rendering keeps Mermaid quirks: the first of two repeated fields wins, and keywords ignore case",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps quoted fields, escaped quotes and odd characters as node names",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps Unicode names Доход, Расходы with sankey, quoted=false",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps Unicode names Доход, Расходы with sankey, quoted=true",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps Unicode names Café, München with sankey, quoted=false",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps Unicode names Café, München with sankey, quoted=true",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps Unicode names 収入, 支出 with sankey, quoted=false",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps Unicode names 収入, 支出 with sankey, quoted=true",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps Unicode names ☀️, 🏠 with sankey, quoted=false",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps Unicode names ☀️, 🏠 with sankey, quoted=true",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps Unicode names Café, Cafè with sankey, quoted=false",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps Unicode names Café, Cafè with sankey, quoted=true",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps CSV escaping and node identity with Unicode names in sankey",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering rejects malformed CSV containing Unicode names in sankey",
+      "kind": "api",
+      "message": "AssertionError: Доход,Расходы: expected error to be instance of PeleError"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering rejects control characters and invalid Unicode in names in sankey",
+      "kind": "api",
+      "message": "AssertionError: \"a\\u0000b\": expected error to be instance of PeleError"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering rejects entity codes for invalid XML characters in sankey",
+      "kind": "api",
+      "message": "AssertionError: sankey"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps Unicode names Доход, Расходы with sankey-beta, quoted=false",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps Unicode names Доход, Расходы with sankey-beta, quoted=true",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps Unicode names Café, München with sankey-beta, quoted=false",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps Unicode names Café, München with sankey-beta, quoted=true",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps Unicode names 収入, 支出 with sankey-beta, quoted=false",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps Unicode names 収入, 支出 with sankey-beta, quoted=true",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps Unicode names ☀️, 🏠 with sankey-beta, quoted=false",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps Unicode names ☀️, 🏠 with sankey-beta, quoted=true",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps Unicode names Café, Cafè with sankey-beta, quoted=false",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps Unicode names Café, Cafè with sankey-beta, quoted=true",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering keeps CSV escaping and node identity with Unicode names in sankey-beta",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering rejects malformed CSV containing Unicode names in sankey-beta",
+      "kind": "api",
+      "message": "AssertionError: Доход,Расходы: expected error to be instance of PeleError"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering rejects control characters and invalid Unicode in names in sankey-beta",
+      "kind": "api",
+      "message": "AssertionError: \"a\\u0000b\": expected error to be instance of PeleError"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering rejects entity codes for invalid XML characters in sankey-beta",
+      "kind": "api",
+      "message": "AssertionError: sankey-beta"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering rejects circular links at render time, as d3-sankey fails on them",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering reports the line of an error after blank lines",
+      "kind": "api",
+      "message": "AssertionError: expected error to match asymmetric matcher"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering ignores blanks at the start and end of each row",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sankey.test.ts",
+      "test": "sankey rendering reports errors after blanks at row edges where they are written",
+      "kind": "api",
+      "message": "AssertionError: expected error to match asymmetric matcher"
+    },
+    {
+      "file": "tests/render/sequence-security.test.ts",
+      "test": "inert sequence output does not pollute prototypes",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sequence.test.ts",
+      "test": "sequence rendering is detected, supported, and parsed to a sequence model",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sequence.test.ts",
+      "test": "sequence rendering places notes left of, right of, and over participants",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sequence.test.ts",
+      "test": "sequence rendering groups participants in boxes, with color and title",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sequence.test.ts",
+      "test": "sequence rendering reads box colors as Mermaid does, treating an unknown first word as part of the title",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sequence.test.ts",
+      "test": "sequence rendering draws each participant kind, with figures above their labels",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sequence.test.ts",
+      "test": "sequence rendering takes aliases from `as` and from the config object, `as` first",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sequence.test.ts",
+      "test": "sequence rendering creates a participant at its first message and ends a destroyed one with a cross",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sequence.test.ts",
+      "test": "sequence rendering marks central connections with a circle on the lifeline",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sequence.test.ts",
+      "test": "sequence rendering records the wrap of every message, from prefixes, the directive, and the config",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sequence.test.ts",
+      "test": "sequence rendering stores participant links, properties, and details without drawing anything interactive",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sequence.test.ts",
+      "test": "sequence rendering ignores menu statements whose text is not valid JSON",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sequence.test.ts",
+      "test": "sequence rendering titles the diagram from a statement or from front matter",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sequence.test.ts",
+      "test": "sequence rendering treats a bare title as no title",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sequence.test.ts",
+      "test": "sequence rendering writes accessible title and description",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sequence.test.ts",
+      "test": "sequence rendering treats keywords without regard to case and keeps names as written",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/sequence.test.ts",
+      "test": "sequence rendering keeps the character before a comment",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/state.test.ts",
+      "test": "state diagram rendering keeps Mermaid quirks that change what is drawn",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/state.test.ts",
+      "test": "state diagram rendering exposes the parsed model",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/swimlane.test.ts",
+      "test": "swimlane rendering reads the same model as a flowchart with the same body",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/swimlane.test.ts",
+      "test": "swimlane rendering turns long horizontal flows downward while retaining every lane, step and relation",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/timeline.test.ts",
+      "test": "timeline rendering treats a bare title as no title",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/timeline.test.ts",
+      "test": "timeline rendering keeps the character before a comment",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/timeline.test.ts",
+      "test": "timeline rendering attaches an event after a section header to the last period, as Mermaid does",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/timeline.test.ts",
+      "test": "timeline rendering exposes the model",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/treemap.test.ts",
+      "test": "treemap rendering builds the hierarchy from indentation",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/treeview.test.ts",
+      "test": "treeView rendering exposes the model as a tree",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/treeview.test.ts",
+      "test": "treeView rendering accepts box-drawing input and gives the same model",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/treeview.test.ts",
+      "test": "treeView rendering reads names that start with title",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/usecase.test.ts",
+      "test": "use case diagram rendering is detected, supported and typed",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/venn.test.ts",
+      "test": "venn diagram rendering is detected, supported and typed",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/venn.test.ts",
+      "test": "venn diagram rendering keeps the character before a comment",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/venn.test.ts",
+      "test": "venn diagram rendering treats a bare title as no title",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/venn.test.ts",
+      "test": "venn diagram rendering reads a name that starts with a keyword and a hyphen",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/wardley.test.ts",
+      "test": "wardley rendering exposes the model in percentages",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/wardley.test.ts",
+      "test": "wardley rendering draws pipelines around their components and moves the parent onto the box",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/xychart.test.ts",
+      "test": "XY chart rendering exposes the model",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/render/xychart.test.ts",
+      "test": "XY chart rendering keeps the character before a comment",
+      "kind": "api",
+      "message": "NotInNimaki: nimaki does not provide parse()"
+    },
+    {
+      "file": "tests/requirement/stress.test.ts",
+      "test": "requirement worst cases a style statement of 25,000 parts",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/requirement/stress.test.ts",
+      "test": "requirement worst cases a class list of 25,000 names",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/requirement/stress.test.ts",
+      "test": "requirement worst cases a body of 10,000 repeated fields",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/requirement/stress.test.ts",
+      "test": "requirement worst cases a body that never closes",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/requirement/stress.test.ts",
+      "test": "requirement worst cases 25,000 blank lines",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/requirement/stress.test.ts",
+      "test": "requirement worst cases comment characters on every line",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/requirement/stress.test.ts",
+      "test": "requirement worst cases one 50,000 character text",
+      "kind": "speed",
+      "message": "AssertionError: expected 3273.552973 to be less than 3000"
+    },
+    {
+      "file": "tests/sankey/stress.test.ts",
+      "test": "sankey worst cases a quoted field spanning 10,000 lines",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/sankey/stress.test.ts",
+      "test": "sankey worst cases 8,000 links between 8,001 nodes in a chain",
+      "kind": "speed",
+      "message": "AssertionError: expected 3080.0403589999996 to be less than 3000"
+    },
+    {
+      "file": "tests/sequence/stress.test.ts",
+      "test": "sequence worst cases one wrapped 50,000 character message",
+      "kind": "speed",
+      "message": "AssertionError: expected 3507.286229 to be less than 3000"
+    },
+    {
+      "file": "tests/sequence/stress.test.ts",
+      "test": "sequence worst cases config object never closed",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/sequence/stress.test.ts",
+      "test": "sequence worst cases config object of nested brackets",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/sequence/stress.test.ts",
+      "test": "sequence worst cases accessible description opened and closed",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/sequence/stress.test.ts",
+      "test": "sequence worst cases box with a long color function",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/sequence/stress.test.ts",
+      "test": "sequence worst cases box of parentheses",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/sequence/stress.test.ts",
+      "test": "sequence worst cases links with a huge JSON object",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/sequence/stress.test.ts",
+      "test": "sequence worst cases links with deeply nested JSON",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/sequence/stress.test.ts",
+      "test": "sequence worst cases 10,000 nested loops",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/sequence/stress.test.ts",
+      "test": "sequence worst cases 5,000 nested activations",
+      "kind": "speed",
+      "message": "AssertionError: expected 3031.1592579999997 to be less than 3000"
+    },
+    {
+      "file": "tests/sequence/stress.test.ts",
+      "test": "sequence worst cases 3,000 deactivations of an idle participant",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/sequence/stress.test.ts",
+      "test": "sequence worst cases invalid characters",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/state/stress.test.ts",
+      "test": "state diagram worst cases the same class statement and transitions 1,500 times",
+      "kind": "speed",
+      "message": "AssertionError: expected 6812.311586 to be less than 3000"
+    },
+    {
+      "file": "tests/state/stress.test.ts",
+      "test": "state diagram worst cases unclosed accDescr block",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/state/stress.test.ts",
+      "test": "state diagram worst cases 6,000 nested composites",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/state/stress.test.ts",
+      "test": "state diagram worst cases one composite with 8,000 regions",
+      "kind": "speed",
+      "message": "AssertionError: expected 3020.524512 to be less than 3000"
+    },
+    {
+      "file": "tests/state/stress.test.ts",
+      "test": "state diagram worst cases chain of 5,000",
+      "kind": "speed",
+      "message": "AssertionError: expected 4635.67542 to be less than 3000"
+    },
+    {
+      "file": "tests/state/stress.test.ts",
+      "test": "state diagram worst cases star of 5,000",
+      "kind": "speed",
+      "message": "AssertionError: expected 4614.854891999999 to be less than 3000"
+    },
+    {
+      "file": "tests/state/stress.test.ts",
+      "test": "state diagram worst cases fork with 5,000 branches",
+      "kind": "speed",
+      "message": "AssertionError: expected 4130.06553 to be less than 3000"
+    },
+    {
+      "file": "tests/state/stress.test.ts",
+      "test": "state diagram worst cases 8,000 description lines on one state",
+      "kind": "speed",
+      "message": "AssertionError: expected 18476.406547 to be less than 3000"
+    },
+    {
+      "file": "tests/state/stress.test.ts",
+      "test": "state diagram worst cases one 50,000 character composite title",
+      "kind": "speed",
+      "message": "AssertionError: expected 7158.926307999995 to be less than 3000"
+    },
+    {
+      "file": "tests/state/stress.test.ts",
+      "test": "state diagram worst cases transitions from 1,500 levels out to the innermost state",
+      "kind": "speed",
+      "message": "AssertionError: expected 4387.359752999997 to be less than 3000"
+    },
+    {
+      "file": "tests/state/stress.test.ts",
+      "test": "state diagram worst cases 3,000 transitions into a state 1,500 levels deep",
+      "kind": "speed",
+      "message": "AssertionError: expected 4733.2475549999945 to be less than 3000"
+    },
+    {
+      "file": "tests/state/stress.test.ts",
+      "test": "state diagram worst cases 3,000 transitions into a ring of 1,200 composites",
+      "kind": "speed",
+      "message": "AssertionError: expected 5464.200398000001 to be less than 3000"
+    },
+    {
+      "file": "tests/stress.test.ts",
+      "test": "worst cases edges that each cross 1,000 nested subgraph borders",
+      "kind": "speed",
+      "message": "AssertionError: expected 11485.848657999999 to be less than 3000"
+    },
+    {
+      "file": "tests/stress.test.ts",
+      "test": "worst cases 20,000 nested subgraphs",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/stress.test.ts",
+      "test": "worst cases deeply bracketed metadata",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/stress.test.ts",
+      "test": "worst cases unclosed metadata over many lines",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/stress.test.ts",
+      "test": "worst cases chain of 5,000",
+      "kind": "speed",
+      "message": "AssertionError: expected 4170.172849999999 to be less than 3000"
+    },
+    {
+      "file": "tests/stress.test.ts",
+      "test": "worst cases star of 5,000",
+      "kind": "speed",
+      "message": "AssertionError: expected 4826.910738999999 to be less than 3000"
+    },
+    {
+      "file": "tests/stress.test.ts",
+      "test": "worst cases 3,000 long edges over a chain of 3,000",
+      "kind": "speed",
+      "message": "AssertionError: expected 11057.177046999997 to be less than 3000"
+    },
+    {
+      "file": "tests/stress.test.ts",
+      "test": "worst cases label of emphasis markers",
+      "kind": "speed",
+      "message": "AssertionError: expected 4657.109188000002 to be less than 3000"
+    },
+    {
+      "file": "tests/stress.test.ts",
+      "test": "worst cases metadata key followed by spaces",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/stress.test.ts",
+      "test": "worst cases refuses more edges than the limit before making them",
+      "kind": "api",
+      "message": "AssertionError: expected [Function] to throw error matching /limit is 10\\b/ but got 'nimaki does not provide parse()'"
+    },
+    {
+      "file": "tests/timeline/stress.test.ts",
+      "test": "timeline worst cases 8,000 periods with one event each",
+      "kind": "speed",
+      "message": "AssertionError: expected 2924.6449039999998 to be less than 1500"
+    },
+    {
+      "file": "tests/timeline/stress.test.ts",
+      "test": "timeline worst cases 8,000 periods with one event each, top down",
+      "kind": "speed",
+      "message": "AssertionError: expected 2621.996635 to be less than 1500"
+    },
+    {
+      "file": "tests/timeline/stress.test.ts",
+      "test": "timeline worst cases one period with 12,000 events",
+      "kind": "speed",
+      "message": "AssertionError: expected 1995.1072869999998 to be less than 1500"
+    },
+    {
+      "file": "tests/timeline/stress.test.ts",
+      "test": "timeline worst cases one period with 12,000 events, top down",
+      "kind": "speed",
+      "message": "AssertionError: expected 1824.9035640000002 to be less than 1500"
+    },
+    {
+      "file": "tests/timeline/stress.test.ts",
+      "test": "timeline worst cases 5,000 sections with one period each",
+      "kind": "speed",
+      "message": "AssertionError: expected 2133.6259090000003 to be less than 1500"
+    },
+    {
+      "file": "tests/timeline/stress.test.ts",
+      "test": "timeline worst cases one event of 10,000 words",
+      "kind": "speed",
+      "message": "AssertionError: expected 3304.717235000002 to be less than 1500"
+    },
+    {
+      "file": "tests/timeline/stress.test.ts",
+      "test": "timeline worst cases one event of 10,000 words, top down",
+      "kind": "speed",
+      "message": "AssertionError: expected 3395.0774039999997 to be less than 1500"
+    },
+    {
+      "file": "tests/timeline/stress.test.ts",
+      "test": "timeline worst cases a title of 50,000 characters",
+      "kind": "speed",
+      "message": "AssertionError: expected 6816.444605000001 to be less than 1500"
+    },
+    {
+      "file": "tests/timeline/stress.test.ts",
+      "test": "timeline worst cases event of tag openers followed by spaces",
+      "kind": "speed",
+      "message": "AssertionError: expected 5155.270472 to be less than 1500"
+    },
+    {
+      "file": "tests/timeline/stress.test.ts",
+      "test": "timeline worst cases event of emphasis markers",
+      "kind": "speed",
+      "message": "AssertionError: expected 4841.799726999998 to be less than 1500"
+    },
+    {
+      "file": "tests/timeline/stress.test.ts",
+      "test": "timeline worst cases percent comments",
+      "kind": "speed",
+      "message": "AssertionError: expected 2399.9681520000013 to be less than 1500"
+    },
+    {
+      "file": "tests/timeline/stress.test.ts",
+      "test": "timeline worst cases hash comments",
+      "kind": "speed",
+      "message": "AssertionError: expected 1645.6289350000006 to be less than 1500"
+    },
+    {
+      "file": "tests/timeline/stress.test.ts",
+      "test": "timeline worst cases carriage returns",
+      "kind": "speed",
+      "message": "AssertionError: expected 3135.742769999997 to be less than 1500"
+    },
+    {
+      "file": "tests/treemap/stress.test.ts",
+      "test": "treemap worst cases 20,000 sections that step in and out",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/treeview/stress.test.ts",
+      "test": "treeView worst cases 25,000 flat entries",
+      "kind": "speed",
+      "message": "AssertionError: expected 2047.4845610000002 to be less than 2000"
+    },
+    {
+      "file": "tests/usecase/stress.test.ts",
+      "test": "use case worst cases quotes that cannot start a token, one after another",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/usecase/stress.test.ts",
+      "test": "use case worst cases one label of 20,000 words",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/usecase/stress.test.ts",
+      "test": "use case worst cases a label that is never closed",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/usecase/stress.test.ts",
+      "test": "use case worst cases 10,000 statements that each look for a label",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/usecase/stress.test.ts",
+      "test": "use case worst cases metadata of 10,000 properties",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/usecase/stress.test.ts",
+      "test": "use case worst cases metadata of line breaks",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/usecase/stress.test.ts",
+      "test": "use case worst cases class statement with 2,500 ids and 4,000 classes",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/usecase/stress.test.ts",
+      "test": "use case worst cases style of colons and hashes",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/usecase/stress.test.ts",
+      "test": "use case worst cases 10,000 members of one boundary",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/usecase/stress.test.ts",
+      "test": "use case worst cases 5,000 metadata statements for one actor",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/usecase/stress.test.ts",
+      "test": "use case worst cases JSON nested 12,000 objects deep",
+      "kind": "known",
+      "message": ""
+    },
+    {
+      "file": "tests/usecase/stress.test.ts",
+      "test": "use case worst cases JSON nested 20,000 arrays deep",
+      "kind": "known",
+      "message": ""
+    },
+    {
+      "file": "tests/usecase/stress.test.ts",
+      "test": "use case worst cases JSON with 8,000 keys",
+      "kind": "speed",
+      "message": "AssertionError: expected 3937.5084609999994 to be less than 3000"
+    },
+    {
+      "file": "tests/usecase/stress.test.ts",
+      "test": "use case worst cases JSON with 5,000 nested objects and 5,000 repeats of a key",
+      "kind": "speed",
+      "message": "AssertionError: expected 3472.2762600000005 to be less than 3000"
+    },
+    {
+      "file": "tests/usecase/stress.test.ts",
+      "test": "use case worst cases invalid JSON at the end of 50,000 characters",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/usecase/stress.test.ts",
+      "test": "use case worst cases one 50,000 character plain label",
+      "kind": "speed",
+      "message": "AssertionError: expected 3312.1211980000007 to be less than 3000"
+    },
+    {
+      "file": "tests/usecase/stress.test.ts",
+      "test": "use case worst cases markdown label of emphasis markers",
+      "kind": "speed",
+      "message": "AssertionError: expected 4729.204364000001 to be less than 3000"
+    },
+    {
+      "file": "tests/util/measurer.test.ts",
+      "test": "canvasMeasurer measures code in the monospace font a diagram is given",
+      "kind": "canvas",
+      "message": "AssertionError: expected false to be true // Object.is equality"
+    },
+    {
+      "file": "tests/venn/stress.test.ts",
+      "test": "venn worst cases 5,000 sets",
+      "kind": "speed",
+      "message": "AssertionError: expected 6988.499996 to be less than 3000"
+    },
+    {
+      "file": "tests/venn/stress.test.ts",
+      "test": "venn worst cases 60 sets, every pair a union",
+      "kind": "speed",
+      "message": "AssertionError: expected 4205.195753000002 to be less than 3000"
+    },
+    {
+      "file": "tests/venn/stress.test.ts",
+      "test": "venn worst cases one union of 300 sets",
+      "kind": "speed",
+      "message": "AssertionError: expected 6162.683068000002 to be less than 3000"
+    },
+    {
+      "file": "tests/venn/stress.test.ts",
+      "test": "venn worst cases one set stated 8,000 times",
+      "kind": "speed",
+      "message": "AssertionError: expected 26712.606969999997 to be less than 3000"
+    },
+    {
+      "file": "tests/venn/stress.test.ts",
+      "test": "venn worst cases one union stated 5,000 times",
+      "kind": "speed",
+      "message": "AssertionError: expected 18432.27143400001 to be less than 3000"
+    },
+    {
+      "file": "tests/venn/stress.test.ts",
+      "test": "venn worst cases 8,000 texts in one set",
+      "kind": "speed",
+      "message": "AssertionError: expected 9757.164852000002 to be less than 3000"
+    },
+    {
+      "file": "tests/venn/stress.test.ts",
+      "test": "venn worst cases 5,000 texts in the overlap of three sets",
+      "kind": "speed",
+      "message": "AssertionError: expected 9949.920610000001 to be less than 3000"
+    },
+    {
+      "file": "tests/venn/stress.test.ts",
+      "test": "venn worst cases 5,000 styles for one set",
+      "kind": "speed",
+      "message": "AssertionError: expected 34267.234081999995 to be less than 3000"
+    },
+    {
+      "file": "tests/venn/stress.test.ts",
+      "test": "venn worst cases one style of 8,000 declarations",
+      "kind": "speed",
+      "message": "AssertionError: expected 10082.684482000011 to be less than 3000"
+    },
+    {
+      "file": "tests/venn/stress.test.ts",
+      "test": "venn worst cases one style value of 20,000 words",
+      "kind": "speed",
+      "message": "AssertionError: expected 4542.015004999994 to be less than 3000"
+    },
+    {
+      "file": "tests/venn/stress.test.ts",
+      "test": "venn worst cases 5,000 styled overlaps",
+      "kind": "speed",
+      "message": "AssertionError: expected 26257.81151999999 to be less than 3000"
+    },
+    {
+      "file": "tests/venn/stress.test.ts",
+      "test": "venn worst cases one 50,000 character label",
+      "kind": "speed",
+      "message": "AssertionError: expected 5296.82676299999 to be less than 3000"
+    },
+    {
+      "file": "tests/venn/stress.test.ts",
+      "test": "venn worst cases a union of one set with itself, many times",
+      "kind": "speed",
+      "message": "AssertionError: expected 8103.133747000014 to be less than 3000"
+    },
+    {
+      "file": "tests/venn/stress.test.ts",
+      "test": "venn worst cases refuses source over the default limit",
+      "kind": "api",
+      "message": "AssertionError: expected [Function] to throw error matching /limit of 50000/ but got 'nimaki does not provide parse()'"
+    },
+    {
+      "file": "tests/wardley/stress.test.ts",
+      "test": "wardley worst cases one name of 12,000 words",
+      "kind": "speed",
+      "message": "AssertionError: expected 3645.674405999999 to be less than 2000"
+    },
+    {
+      "file": "tests/wardley/stress.test.ts",
+      "test": "wardley worst cases one 50,000 character quoted name",
+      "kind": "speed",
+      "message": "AssertionError: expected 3290.788332 to be less than 2000"
+    },
+    {
+      "file": "tests/wardley/stress.test.ts",
+      "test": "wardley worst cases one 50,000 character note",
+      "kind": "speed",
+      "message": "AssertionError: expected 2615.851413000002 to be less than 2000"
+    },
+    {
+      "file": "tests/xychart/stress.test.ts",
+      "test": "XY chart worst cases an unclosed accDescr block",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/xychart/stress.test.ts",
+      "test": "XY chart worst cases an unclosed string",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/xychart/stress.test.ts",
+      "test": "XY chart worst cases 10,000 nested axis and series keywords",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    },
+    {
+      "file": "tests/xychart/stress.test.ts",
+      "test": "XY chart worst cases 10,000 chart keywords",
+      "kind": "api",
+      "message": "AssertionError: nimaki does not provide parse(): expected NotInNimaki: nimaki does not provide pars… to be an instance of PeleError"
+    }
+  ]
+}

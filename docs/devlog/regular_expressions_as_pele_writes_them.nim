@@ -1,4 +1,4 @@
-## devlog: 14 Nov 2026 J | Regular expressions, as Pele writes them | nimaki now reads text with Pele's own regular expressions, on nitely's pure Nim regex package, instead of two hundred hand-written scanners: what that took, what it costs, and why the drawings did not change by a single byte.
+## devlog: 14 Nov 2026 L | Regular expressions, as Pele writes them | nimaki now reads text with Pele's own regular expressions, on nitely's pure Nim regex package, instead of two hundred hand-written scanners: what that took, what it costs, and why the drawings did not change by a single byte.
 ## kind: tooling
 import std/[algorithm, json, os, strformat, strutils, tables]
 import nimib

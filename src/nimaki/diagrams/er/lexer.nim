@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/er/lexer.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Positions are byte offsets into the UTF-8 source (decision 0011). `cc(q)` reads the character
 ## at `q` as `charCodeAt` would where it matters (a whole code point; -1 past the end), and a

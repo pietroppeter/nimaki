@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/swimlane/index.ts
-## port-status: draft
+## port-status: conformant
 import std/options
 import ../../layout/[compound, lanes, layered]
 import ../../svg/[builder, ink, theme]

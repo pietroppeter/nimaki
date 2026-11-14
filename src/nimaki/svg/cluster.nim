@@ -1,5 +1,5 @@
 ## port-of: src/svg/cluster.ts
-## port-status: draft
+## port-status: conformant
 import std/[tables, math]
 import ../js
 import ../layout/compound

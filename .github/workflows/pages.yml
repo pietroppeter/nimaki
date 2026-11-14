@@ -34,7 +34,7 @@ jobs:
 
       - uses: jiro4989/setup-nim-action@v2
         with:
-          nim-version: "2.2.4"
+          nim-version: "2.2.14"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       # Node runs the oracle: the pinned Pele npm package (reference/PIN)
@@ -59,8 +59,8 @@ jobs:
       - uses: actions/cache@v4
         with:
           path: ~/.cache/nim
-          key: nimcache-2.2.4-${{ hashFiles('src/**/*.nim', 'docs/**/*.nim', 'tests/**/*.nim', 'tools/*.nim', '*.nims', 'nim.cfg', 'deps.lock') }}
-          restore-keys: nimcache-2.2.4-
+          key: nimcache-2.2.14-${{ hashFiles('src/**/*.nim', 'docs/**/*.nim', 'tests/**/*.nim', 'tools/*.nim', '*.nims', 'nim.cfg', 'deps.lock') }}
+          restore-keys: nimcache-2.2.14-
 
       # every `port-of:` header names a file of Pele at the pin
       - name: Port map
@@ -125,6 +125,18 @@ jobs:
           nim r tools/fuzz.nim eventmodeling --cases:5000
           nim r tools/fuzz.nim sankey --cases:5000
           nim r tools/fuzz.nim quadrantChart --cases:5000
+
+      # Pele's own test suites (vitest), run on nimaki's JavaScript build: a test that passes on
+      # Pele and fails on nimaki fails CI, unless it needs what nimaki does not provide (parse(),
+      # mount()), only misses one of Pele's time bounds, or is listed in tools/peletests/known.txt
+      - uses: actions/cache@v4
+        with:
+          path: |
+            build/peletests/pele
+            build/peletests/pele-*.json
+          key: peletests-${{ hashFiles('reference/PIN') }}
+      - name: Pele's test suites
+        run: nim r tools/peletests.nim --check
 
       - name: Tests
         run: |

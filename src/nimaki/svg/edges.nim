@@ -1,5 +1,5 @@
 ## port-of: src/svg/edges.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Port notes: `EdgePath.tokens` is empty for undefined (a path always has at least its move).
 ## `fillUnder` answers a `FillAt`: none (undefined), across (''), or the fill. The regular

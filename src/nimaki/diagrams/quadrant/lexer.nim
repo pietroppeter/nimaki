@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/quadrant/lexer.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Offsets are bytes. Pele keeps the end of the last run of spaces, dashes and whitespace it
 ## scanned, so that a long run is not scanned again from each of its characters; the end of a

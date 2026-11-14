@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/sankey/parser.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Edits and error offsets are in bytes.
 import std/[strutils, math]

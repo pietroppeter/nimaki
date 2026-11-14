@@ -1,5 +1,5 @@
 ## port-of: src/svg/palette.ts
-## port-status: draft
+## port-status: conformant
 import std/[strutils, sets, tables]
 import ../util/yaml
 import builder, ink

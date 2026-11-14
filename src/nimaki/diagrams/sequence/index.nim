@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/sequence/index.ts
-## port-status: draft
+## port-status: conformant
 import std/options
 import ../../types
 import ../../preprocess

@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/c4/render.ts
-## port-status: draft
+## port-status: conformant
 import std/[options, tables, strutils, sets]
 from std/math import ceil, isNaN
 import ../../preprocess

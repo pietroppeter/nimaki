@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/wardley/model.ts
-## port-status: draft
+## port-status: conformant
 import std/[options, strutils]
 import ../../errors
 import ../../js

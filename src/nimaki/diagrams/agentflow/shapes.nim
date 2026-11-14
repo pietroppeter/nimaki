@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/agentflow/shapes.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Pele reports the shapes it replaces as diagnostics; nothing drawn reads them, so the port
 ## only replaces them.

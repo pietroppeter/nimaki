@@ -1,7 +1,7 @@
 ## port-of: src/diagrams/sankey/render.ts
-## port-status: draft
+## port-status: conformant
 import std/[options, tables]
-from std/math import ceil, floor, classify, FloatClass
+from std/math import ceil, floor, classify, FloatClass, isNaN
 import ../../preprocess
 import ../../svg/[builder, root, theme]
 import ../../text/[entities, label, measurer]
@@ -163,12 +163,14 @@ proc draw(model: SankeyModel, conf: Config, options: RenderOptions, chartWidth, 
     maxY = jsMax(maxY, y + small * 0.75)
     labels.add LabelBox(value: value, width: width, after: after, left: (if after: x else: x - width), y: y)
   # A label moves at most one line; retain two bands on each side.
-  var bands = initTable[int, seq[int]]()
+  # Pele's Map is keyed by numbers, which can be infinite (a tiny font size); NaN is one key.
+  func bandKey(x: float): (bool, float) = (if x.isNaN: (true, 0.0) else: (false, x))
+  var bands = initTable[(bool, float), seq[int]]()
   if nodes.len <= CAREFUL:
     for k, label in labels:
-      let band = int(floor(label.y / lineHeight))
+      let band = floor(label.y / lineHeight)
       for key in [band - 2, band - 1, band, band + 1, band + 2]:
-        bands.mgetOrPut(key, @[]).add k
+        bands.mgetOrPut(bandKey(key), @[]).add k
   var labelsOut = ""
   var nodesOut = ""
   for i, node in nodes:
@@ -180,7 +182,7 @@ proc draw(model: SankeyModel, conf: Config, options: RenderOptions, chartWidth, 
       "\" rx=\"" & num(jsMin(2, height / 2)) & "\" fill=\"" & seriesColor(i) & "\"" & nodeStyle(i) & "/>"
 
     proc overlapsLabel(left, y: float): bool =
-      for j in bands.getOrDefault(int(floor(y / lineHeight)), @[]):
+      for j in bands.getOrDefault(bandKey(floor(y / lineHeight)), @[]):
         let other = labels[j]
         if j != i and abs(other.y - y) < lineHeight and left < other.left + other.width + LABEL_GAP and
            left + labels[i].width > other.left - LABEL_GAP: return true

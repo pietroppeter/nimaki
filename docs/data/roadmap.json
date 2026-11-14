@@ -651,10 +651,21 @@
           "id": "pele-tests",
           "kind": "tooling",
           "title": "Run Pele's own test suites",
-          "what": "Pele's tests at the pin (tests/compat, tests/render, tests/layout and the per-type tests) hold inputs and expectations beyond the difftest corpus. Their inputs go through the port and the oracle, and their checks are ported where they test the port's own functions.",
+          "what": "Pele's vitest suites at the pin run on nimaki's JavaScript build: tools/peletests.nim replaces Pele's src/index.js with nimaki (tools/peletests/) and sorts every test that passes on Pele. Of 6,992: 6,543 pass, 339 need parse() or mount(), which nimaki does not provide, 107 only miss one of Pele's time bounds (the step js-speed), 1 tests the canvas measurer, 2 are listed in tools/peletests/known.txt (deep JSON in use case diagrams, out of memory in JavaScript), and none fails otherwise; CI runs it with --check. Fixed on the way: six bugs it found (a flowchart crash, a sankey crash, four places where the JavaScript build was quadratic or ran out of memory). By decision 0014, 226 files moved to conformant; 22 stay draft for a known open difference: util/url.nim and util/yaml.nim and the class and gantt files (the step reading-fixes), text/measurer.nim (no canvas measurer).",
           "done_when": "Every input of those suites gives the same result in nimaki as in Pele, or a divergence says why; the files they cover move from draft to verified.",
           "owner": "Verify labels and Pele's test suites",
-          "status": "started",
+          "status": "done",
+          "post": "pele-tests-on-nimaki",
+          "pr": "64"
+        },
+        {
+          "id": "js-speed",
+          "kind": "port",
+          "title": "Pele's time bounds in the JavaScript build",
+          "what": "About a hundred of Pele's stress tests (107 on 14 November 2026; the count moves a little from run to run) draw the same in nimaki's JavaScript build but miss Pele's time bound (most by less than twice; the worst, agentflow flows that each name the next, venn styles, nested class namespaces, by 9 to 12 times). The C build is fast on the ones measured. The porting guide's note Code that JavaScript runs slowly lists the causes found so far; build/peletests/report.txt lists the tests (nim r tools/peletests.nim).",
+          "done_when": "nim r tools/peletests.nim reports no speed, and tools/peletests/known.txt is empty.",
+          "owner": "",
+          "status": "planned",
           "post": "",
           "pr": ""
         }
@@ -788,10 +799,10 @@
           "title": "A Mermaid block for the pages, checked against Pele",
           "what": "Found by the first domain article, and wanted again by the second: every page that draws writes its own few lines to render Mermaid text with nimaki, show the SVG and fold the text under it. One block in docs/blocks.nim (say nbMermaid text, caption, options) would do it everywhere, and could ask Pele for the same drawing at build time, so each diagram on the site is also a small test.",
           "done_when": "The block exists, the posts that draw use it, and a difference from Pele fails the build.",
-          "owner": "",
-          "status": "planned",
-          "post": "",
-          "pr": ""
+          "owner": "Port class and swimlane",
+          "status": "done",
+          "post": "every-drawing-a-test",
+          "pr": "69"
         },
         {
           "id": "shared-scanners",

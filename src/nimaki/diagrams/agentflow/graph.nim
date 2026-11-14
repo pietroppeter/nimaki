@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/agentflow/graph.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Pele reports shape and containment problems on the model as diagnostics; nothing drawn reads
 ## them, so the port leaves the reports out and keeps what they change. `assignColorSlots` and

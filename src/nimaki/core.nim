@@ -1,5 +1,5 @@
 ## port-of: src/core.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## `mount` and `enableZoom` belong to the browser and are not ported. A diagram type Pele draws
 ## that nimaki has not ported yet raises a PeleError with code `unsupported`, which difftest

@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/railroad/peg.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## `railroad-peg-beta`: parsing expression grammars.
 import common, types

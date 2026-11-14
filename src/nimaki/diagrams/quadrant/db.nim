@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/quadrant/db.ts
-## port-status: draft
+## port-status: conformant
 import std/[options, tables, strutils]
 import ../../errors
 import ../../js

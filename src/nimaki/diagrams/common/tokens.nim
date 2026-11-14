@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/common/tokens.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Tokenizer for the diagram types Mermaid defines with Langium grammars. Token types are tried
 ## in order and the first match wins, as in Chevrotain; the tables in each diagram's folder are

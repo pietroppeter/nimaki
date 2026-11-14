@@ -1,5 +1,5 @@
 ## port-of: src/util/unicode.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Letters outside ASCII, as UTF-16 code units: the ranges of Unicode's letters in the Basic
 ## Multilingual Plane, packed as base-36 gaps and lengths.

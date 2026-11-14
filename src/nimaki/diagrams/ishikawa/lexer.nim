@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/ishikawa/lexer.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Offsets are bytes (decision 0011); the parser counts an indentation in UTF-16 code units.
 import std/strutils

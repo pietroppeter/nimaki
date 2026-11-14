@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/pie/model.ts
-## port-status: draft
+## port-status: conformant
 import std/tables
 import ../../errors
 import ../../js

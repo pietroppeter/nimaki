@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/agentflow/db.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Left out, because nothing drawn reads them: the semantic model, the element mappings and the
 ## diagnostics (Pele's `log` option is never set by the entry point). Metadata is a YAML record,

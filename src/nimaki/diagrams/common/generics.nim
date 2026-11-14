@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/common/generics.ts
-## port-status: draft
+## port-status: conformant
 import std/strutils
 import ../../jsregex
 

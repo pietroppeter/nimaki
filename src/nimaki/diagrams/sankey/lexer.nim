@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/sankey/lexer.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Positions are byte offsets; a character is read whole (`codePointAt`), where Pele steps one
 ## or two UTF-16 units.

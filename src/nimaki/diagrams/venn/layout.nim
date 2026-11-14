@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/venn/layout.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## A circle is a `ref object`, so that, as in Pele, the layout moves the very circles it returns
 ## and `regionPath` can tell two circles apart by identity (`==` on refs, which the JavaScript

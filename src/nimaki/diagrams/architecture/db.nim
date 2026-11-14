@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/architecture/db.ts
-## port-status: draft
+## port-status: conformant
 import std/[tables, sets, options]
 import ../../errors
 import parser

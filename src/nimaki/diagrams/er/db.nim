@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/er/db.ts
-## port-status: draft
+## port-status: conformant
 import std/[sets, strutils, tables]
 import ../../js
 import types

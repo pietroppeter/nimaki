@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/railroad/abnf.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## `railroad-abnf-beta`: ABNF as in RFC 5234, with each rule closed by a semicolon.
 import std/strutils except unescape

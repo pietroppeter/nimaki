@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/treemap/render.ts
-## port-status: draft
+## port-status: conformant
 import std/[options, strutils]
 from std/math import ceil, floor, classify, FloatClass
 import ../../jsmath

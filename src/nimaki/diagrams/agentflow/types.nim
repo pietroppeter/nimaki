@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/agentflow/types.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## As in the flowchart's types: a string that may be undefined and is never `""` when set is a
 ## `string` with `""` for undefined; an edge's length is `NO_LENGTH` when undefined. Pele's

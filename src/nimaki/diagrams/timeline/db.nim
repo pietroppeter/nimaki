@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/timeline/db.ts
-## port-status: draft
+## port-status: conformant
 import ../../errors
 import ../../jsregex
 

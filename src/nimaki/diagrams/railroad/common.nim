@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/railroad/common.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## What the four railroad grammars share: the title and accessibility tokens (which, unlike
 ## the ones in Mermaid's common grammar, do not take leading blanks), the hidden tokens, the

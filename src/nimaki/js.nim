@@ -316,6 +316,15 @@ func wellFormed*(s: string): string =
     let (cp, size) = codePointAt(s, i)
     if cp == 0xFFFD: result.add "\uFFFD" else: result.add s[i ..< i + size]
     i += size
+iterator codePoints*(s: string): string =
+  ## `Array.from(s)`: one item per code point, as UTF-8. Use it instead of `unicode.runes`, which
+  ## nim js compiles to a copy of the whole string at every byte it reads, so a long label took
+  ## seconds (Pele's stress tests found it, 14 November 2026).
+  var i = 0
+  while i < s.len:
+    let n = codePointAt(s, i).size
+    yield s[i ..< i + n]
+    i += n
 
 iterator codeUnits*(s: string): int =
   ## The UTF-16 code units of `s`, as `charCodeAt` reads them one by one.

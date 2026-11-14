@@ -1,5 +1,5 @@
 ## port-of: src/preprocess.ts
-## port-status: draft
+## port-status: conformant
 import std/[strutils, json, tables, sets]
 import errors, js, jsregex
 import util/yaml

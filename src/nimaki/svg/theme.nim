@@ -1,5 +1,5 @@
 ## port-of: src/svg/theme.ts
-## port-status: draft
+## port-status: conformant
 import std/[strutils, tables]
 import builder
 import ../js, ../jsregex

@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/flowchart/parser.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Pele's `T.END` (the end of the tokens) is `T_STOP`; `T_end` is the stop keyword. The
 ## `Uint8Array` tables of token types are sets.

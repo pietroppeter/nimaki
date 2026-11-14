@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/sequence/colors.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## `toLowerCase()` is `unicode.toLower`: it differs from ASCII lowering only on characters that
 ## lower to ASCII letters (the Kelvin sign is `k`), which the keyword test must see as JavaScript does.

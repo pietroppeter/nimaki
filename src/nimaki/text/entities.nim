@@ -1,5 +1,5 @@
 ## port-of: src/text/entities.ts
-## port-status: draft
+## port-status: conformant
 import std/[strutils, tables]
 import ../[js, jsregex]
 

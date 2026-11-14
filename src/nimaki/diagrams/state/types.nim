@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/state/types.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Pele's `Stmt` union is one `ref object` with a `stmt` tag, as the statements are shared and
 ## changed in place (the parser fills a composite's document after adding it; the translator

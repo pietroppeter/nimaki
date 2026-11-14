@@ -1,5 +1,5 @@
 ## port-of: src/text/label.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Labels are measured and broken into lines here.
 import std/[strutils, tables, sets, math]

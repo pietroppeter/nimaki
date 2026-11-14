@@ -1,5 +1,5 @@
 ## port-of: src/text/math.ts
-## port-status: draft
+## port-status: conformant
 import std/[tables, math]
 
 type

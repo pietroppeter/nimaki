@@ -157,9 +157,23 @@ expression whose branch is a constant array made a `seq` (`if s.len > 0: s else:
 loses that branch: assign it in an `if` statement. A `case` expression whose branch is one (`of 'a':
 @KEYWORDS_A`) fails in JavaScript too: loop over one constant array instead, as the gantt lexer does. Last, a JavaScript number is a double: a product
 of two 32-bit numbers can pass 2^53 and lose its low bits before Nim masks it (the JavaScript build
-of Nim 2.2.4, which CI uses, does). Multiply in 16-bit halves, as `imul` in
+of Nim 2.2.4, which CI used until decision 0015, does). Multiply in 16-bit halves, as `imul` in
 `diagrams/cynefin/boundaries.nim` does.
 """, nkWarning, "Code that only C can run"
+
+nbNote """
+Some Nim runs in JavaScript, gives the same SVG, and is far slower, because a Nim string compiled
+to JavaScript is an array of bytes, and copying it copies every byte, where a JavaScript string is
+shared. Pele's stress tests (`nim r tools/peletests.nim`) found four cases, on 14 November 2026. `for r
+in s.runes` copies `s` at every byte it reads: use `codePoints(s)` of `js.nim`. A closure that
+captures a long string copies it at each call: write the helper as a `template`. A label given to
+each of thousands of pieces is thousands of copies: share it in a `ref object`
+(`PacketLabel`, `SharedStyles`); not a `ref string`, which nim js gets wrong. And a `Table` keyed
+by a long string hashes all of it at each lookup, where JavaScript caches a string's hash: key it
+by something short. Last, a compiler matter: Nim 2.2.4 appends a string to another with
+`push.apply`, which overflows JavaScript's stack past about 100 KB; CI builds with 2.2.14
+([decision 0015](../decisions/#0015-ci-builds-with-the-latest-nim-2-2-release)), which does not.
+""", nkWarning, "Code that JavaScript runs slowly"
 
 nbNote """
 The older types (timeline, journey, flowchart, sequence...) are read by hand-written loops that

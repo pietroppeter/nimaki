@@ -1,5 +1,5 @@
 ## port-of: src/detect.ts
-## port-status: draft
+## port-status: conformant
 import jsregex
 
 type

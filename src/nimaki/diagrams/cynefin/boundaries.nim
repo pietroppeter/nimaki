@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/cynefin/boundaries.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## The geometry of Mermaid's Cynefin boundaries: seeded wavy lines between the domains and the
 ## S-shaped cliff between Clear and Chaotic. Curves are flat lists of numbers: a start point, then

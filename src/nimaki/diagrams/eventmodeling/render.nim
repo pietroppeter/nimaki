@@ -1,6 +1,6 @@
 ## port-of: src/diagrams/eventmodeling/render.ts
-## port-status: draft
-import std/[algorithm, options, sets, strutils, tables, unicode]
+## port-status: conformant
+import std/[algorithm, options, sets, strutils, tables]
 from std/math import ceil
 import ../../preprocess
 import ../../svg/[builder, edges, root, theme]
@@ -46,7 +46,7 @@ proc hardWrap(text: string, columns: int): seq[string] =
       result.add line
       continue
     var chars: seq[string]
-    for r in line.runes: chars.add $r
+    for c in codePoints(line): chars.add c
     if chars.len <= columns:
       result.add line
       continue

@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/treemap/parser.ts
-## port-status: draft
+## port-status: conformant
 import ../common/tokens
 import ../../js
 import ../../jsregex

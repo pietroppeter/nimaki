@@ -1,5 +1,5 @@
 ## port-of: src/svg/root.ts
-## port-status: draft
+## port-status: conformant
 import std/[sets, options]
 import ../types
 import builder, palette, theme

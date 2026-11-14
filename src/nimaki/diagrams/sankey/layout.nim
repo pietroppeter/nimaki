@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/sankey/layout.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Pele sorts short lists by insertion and long ones with the built-in sort. Every comparison
 ## here breaks ties by index, so the order is the same with any sort; nimaki uses one.

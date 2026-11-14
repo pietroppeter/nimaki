@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/ishikawa/db.ts
-## port-status: draft
+## port-status: conformant
 import types
 
 type

@@ -1,5 +1,5 @@
 ## port-of: src/svg/builder.ts
-## port-status: draft
+## port-status: conformant
 import std/[strutils, math]
 import ../text/[entities, measurer, label, icons]
 import ../text/math as pmath

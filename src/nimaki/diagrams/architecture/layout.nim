@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/architecture/layout.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Grid placement. Mermaid hands the edge sides to a force-directed solver as relative placement
 ## constraints. Pele applies them directly: every service and junction takes a cell, an edge

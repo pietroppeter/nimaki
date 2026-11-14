@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/radar/model.ts
-## port-status: draft
+## port-status: conformant
 import std/[options, tables]
 import ../../errors
 import parser

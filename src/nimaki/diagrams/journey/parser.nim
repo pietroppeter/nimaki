@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/journey/parser.ts
-## port-status: draft
+## port-status: conformant
 import ../../errors
 import ../../js
 import db, lexer

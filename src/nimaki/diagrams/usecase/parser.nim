@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/usecase/parser.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Mermaid parses use case diagrams with a Chevrotain parser, which decides each choice by
 ## looking at most three tokens ahead and reports the first token that fits nowhere. This parser

@@ -19,6 +19,7 @@ import devlog/gantt_charts
 import devlog/diagrammari_as_a_corpus
 import devlog/diagrammari_at_work
 import devlog/following_pele
+import devlog/every_drawing_a_test
 import devlog/nimaki_in_javascript
 import devlog/drawn_in_your_browser
 import devlog/how_pele_is_built
@@ -49,3 +50,4 @@ import devlog/charts_on_two_axes
 import devlog/circles_that_overlap
 import devlog/a_proposal_for_diagrammari
 import devlog/regular_expressions_as_pele_writes_them
+import devlog/pele_tests_on_nimaki

@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/xychart/lexer.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Positions are byte offsets. `charCodeAt` becomes `cu`, which reads the character at a byte
 ## offset (-1 past the end, as NaN is nothing; the high surrogate for a character past U+FFFF);
