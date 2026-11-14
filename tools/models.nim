@@ -13,7 +13,7 @@ import nimaki
 import nimaki/util/yaml
 import nimaki/model
 from nimaki/diagrams/agentflow/db import AgentflowDb
-from nimaki/diagrams/architecture/db import ArchitectureDb
+from nimaki/diagrams/architecture/db import ArchitectureDb, ArchNode
 from "nimaki/diagrams/block/db" import BlockDb
 from nimaki/diagrams/c4/db import C4Db
 from nimaki/diagrams/class/db import ClassDb
@@ -22,6 +22,7 @@ from nimaki/diagrams/er/db import ErDb
 from nimaki/diagrams/eventmodeling/model import EventModelingModel
 from nimaki/diagrams/flowchart/db import FlowDb
 from nimaki/diagrams/gantt/db import GanttDb
+from nimaki/diagrams/gantt/types import GanttTask
 from nimaki/diagrams/git/db import GitModel
 from nimaki/diagrams/info/model import InfoModel
 from nimaki/diagrams/ishikawa/db import IshikawaDb
@@ -116,6 +117,31 @@ proc dump(x: Plot, path: var Walk): JsonNode =
   result = %*{"type": (if x.bar: "bar" else: "line"), "title": x.title, "data": data}
   if x.hasPointLabels: result["pointLabels"] = %x.pointLabels
 
+proc text(x: Option[string]): JsonNode = (if x.isSome: %x.get else: newJNull())
+
+proc dump(x: GanttTask, path: var Walk): JsonNode =
+  ## Pele's task, whose dates and previous task may be undefined: the port holds each with a
+  ## flag beside it (`hasStart`...), read in many places of the scheduling. A date is its time in
+  ## milliseconds, as tools/oracle.mjs writes a Date.
+  if x == nil: return newJNull()
+  template date(set: bool, t: float): JsonNode = (if set: number(t, path) else: newJNull())
+  %*{"id": x.id, "task": x.task, "section": x.section,
+     "startTime": date(x.hasStart, x.startTime), "endTime": date(x.hasEnd, x.endTime),
+     "renderEndTime": date(x.hasRenderEnd, x.renderEndTime),
+     "manualEndTime": x.manualEndTime, "processed": x.processed, "active": x.active,
+     "done": x.done, "crit": x.crit, "milestone": x.milestone, "vert": x.vert,
+     "order": x.order, "classes": x.classes,
+     "prevTaskId": (if x.hasPrev: %x.prevTaskId else: newJNull()),
+     "raw": {"data": x.raw.data, "start": (if x.raw.hasStart: %x.raw.start else: newJNull()),
+             "end": x.raw.stop}}
+
+proc dump(x: ArchNode, path: var Walk): JsonNode =
+  ## Pele's union of a service and a junction, held as one object with a flag; `parent` is
+  ## Pele's `in`, a Nim keyword.
+  if x.junction: %*{"id": x.id, "type": "junction", "in": text(x.parent)}
+  else: %*{"id": x.id, "type": "service", "icon": text(x.icon), "iconText": text(x.iconText),
+           "title": text(x.title), "in": text(x.parent)}
+
 proc dump(x: RailroadNode, path: var Walk): JsonNode =
   ## Pele's union of seven shapes, which the port holds as one object with a kind.
   if x == nil: return newJNull()
@@ -149,7 +175,8 @@ const renamed = {"kind": "type", "typ": "type", "stop": "end"}.toTable
 
 const renamedIn* = {"sequence": {"start": "from"}.toTable,
                     "cynefin": {"start": "from"}.toTable,
-                    "eventmodeling": {"type": "kind"}.toTable}.toTable
+                    "eventmodeling": {"type": "kind"}.toTable,
+                    "architecture": {"parent": "in"}.toTable}.toTable
   ## (eventmodeling's `kind` is Pele's own `kind`, which the general rule would rename.)
   ## The same, for one diagram type only (`start` is a field of its own in other types).
 
