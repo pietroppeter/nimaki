@@ -642,8 +642,8 @@
           "title": "Run Pele's own test suites",
           "what": "Pele's tests at the pin (tests/compat, tests/render, tests/layout and the per-type tests) hold inputs and expectations beyond the difftest corpus. Their inputs go through the port and the oracle, and their checks are ported where they test the port's own functions.",
           "done_when": "Every input of those suites gives the same result in nimaki as in Pele, or a divergence says why; the files they cover move from draft to verified.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Verify labels and Pele's test suites",
+          "status": "started",
           "post": "",
           "pr": ""
         }
@@ -797,12 +797,12 @@
           "id": "second-reading",
           "kind": "plan",
           "title": "Past draft: verified and conformant",
-          "what": "Every ported file still says port-status: draft. Decision 0005 defines verified as a second reading against the TypeScript and conformant as Pele's tests passing, while labels-check and pele-tests move files to verified through tests. One new decision says what moves a file past draft; then the files the other steps do not cover are moved, starting with what most code depends on (js.nim, the measurer, the SVG builder, the layered layout). Waiting on Pietro's choice (asked in The shape of the port).",
+          "what": "Every ported file still says port-status: draft. Decision 0005 defines verified as a second reading against the TypeScript and conformant as Pele's tests passing, while labels-check and pele-tests move files to verified through tests. One new decision says what moves a file past draft; then the files the other steps do not cover are moved, starting with what most code depends on (js.nim, the measurer, the SVG builder, the layered layout). Decided in decision 0014 (14 Nov 2026): tests and fuzzing are enough, no second reading; pele-tests moves the files it covers to conformant.",
           "done_when": "A decision, and the port map showing files past draft.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Verify labels and Pele's test suites",
+          "status": "done",
           "post": "",
-          "pr": ""
+          "pr": "53"
         },
         {
           "id": "reading-fixes",

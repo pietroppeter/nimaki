@@ -56,8 +56,9 @@ coding agents*, so a change here is reviewed like any page. It is adapted from
   (`docs/decisions/NNNN-slug.md`: front matter with title, status, date; then Context, Decision,
   Consequences); a record is not rewritten, a new one supersedes it.
 - A ported Nim file (in `src/` or `tests/`) starts with `## port-of: <path of the TypeScript
-  file in the Pele repository>` and `## port-status: draft` (then `verified`, then
-  `conformant`). A file that ports only a part of a TypeScript file says `## port-part-of:`.
+  file in the Pele repository>` and `## port-status: draft`, then `conformant` once difftest,
+  the fuzzer and Pele's own tests agree (decision 0014; a second reading, `verified`, is
+  optional). A file that ports only a part of a TypeScript file says `## port-part-of:`.
   `nim r tools/portmap.nim` builds the port map from these headers (`docs/data/portmap.json`);
   run it in the pull request that ports or advances a file.
 - `src/` must also compile with `nim js` (decision 0013): `nim r tools/difftest.nim --js` compares
