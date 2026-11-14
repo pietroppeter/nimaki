@@ -187,12 +187,34 @@ nimaki in the last two days.
 
 ## Who does what: a mindmap
 
-Most restaurant kitchens are still organised the way Auguste Escoffier set out at the end of the
-nineteenth century, as a *brigade*: a chef at the top, a second (the *sous-chef*), and a line of
-*chefs de partie*, each running one station, helped by junior cooks (*commis*). A **mindmap**
-draws such a thing: one idea in the middle, branches for its parts, and their parts further out.
-It is not a strict hierarchy, which suits a kitchen, where the pass and the dish pit matter as
-much as rank.
+Most restaurant kitchens are still organised the way the French chef Auguste Escoffier set out at
+the end of the nineteenth century, as a *brigade*: a team with fixed roles, like a small army. The
+names are French, and English kitchens kept them. Here is who is who, in plain words:
+
+| Role | What the person does |
+|---|---|
+| **Chef de cuisine** (head chef) | Runs the kitchen: writes the menu, orders the food, leads the team. |
+| **Sous-chef** (literally *under-chef*) | The head chef's second: runs the service minute by minute and replaces the chef when away. |
+| **Chef de partie** (station chef) | Runs one *station*, a corner of the kitchen with its own stove and tools, where one kind of food is made. |
+| **Commis** (junior cook) | Helps a station chef: cuts, peels, prepares, and learns. |
+| **Expediter** | Stands at *the pass* (below) and directs the flow of orders between kitchen and dining room. Often the head chef. |
+| **Servers** (waiters) and **runners** | The *front of house*, the people the guests see. Servers take orders; runners carry plates. |
+| **Kitchen porter** | Washes the dishes and pans in the *dish pit*, the washing area. Without clean plates, service stops. |
+
+The stations of a classic brigade each take one part of the menu: the *saucier* makes sauces, the
+*poissonnier* fish, the *rôtisseur* roasted and grilled meat, the *entremetier* vegetables and
+eggs, the *garde manger* cold dishes such as salads and terrines, and the *pâtissier* desserts and
+pastry. A small restaurant merges several stations into one cook; a large one may split them
+further. The cooks working at the stations, side by side, are called *the line*.
+
+Two places matter as much as any role. **The pass** is a counter, usually under heat lamps, between
+the kitchen and the dining room: finished plates are put there, checked, and *passed* to the
+servers. **The dish pit** is where dirty plates come back. Both are bottlenecks: if plates wait on
+the pass they go cold, and if the dish pit falls behind there is nothing to put food on.
+
+A **mindmap** draws such a thing: one idea in the middle, branches for its parts, and their parts
+further out. It is not a strict hierarchy, which suits a kitchen, where the pass and the dish pit
+matter as much as rank.
 """
 
 show "brigade", "The brigade of a kitchen, after Escoffier's. On a phone the mindmap grows downwards from its root. Drawn by nimaki."
