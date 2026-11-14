@@ -717,6 +717,17 @@
           "pr": "47"
         },
         {
+          "id": "code-lexers",
+          "kind": "research",
+          "title": "How nimaki reads text: the lexers",
+          "what": "The second article on the port's code: how its diagram types turn text into tokens, the families of lexer they use (Jison's rules ported by hand, the shared tokenizer, stateful lexers), what they share and what each copies, with runnable examples.",
+          "done_when": "A devlog post whose numbers come from the code on main; findings filed as roadmap steps or notes.",
+          "owner": "Write articles explaining nimaki code",
+          "status": "started",
+          "post": "",
+          "pr": ""
+        },
+        {
           "id": "code-articles",
           "kind": "research",
           "title": "Articles on the code, every once in a while",
