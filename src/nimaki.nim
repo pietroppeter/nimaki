@@ -35,6 +35,7 @@ import nimaki/diagrams/railroad/index as railroadIndex
 import nimaki/diagrams/usecase/index as usecaseIndex
 import nimaki/diagrams/agentflow/index as agentflowIndex
 import nimaki/diagrams/gantt/index as ganttIndex
+import nimaki/diagrams/xychart/index as xychartIndex
 
 export core, errors, types, measurer
 
@@ -67,3 +68,4 @@ register(railroadIndex.railroad)
 register(usecaseIndex.usecase)
 register(agentflowIndex.agentflow)
 register(ganttIndex.gantt)
+register(xychartIndex.xychart)
