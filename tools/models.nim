@@ -412,6 +412,11 @@ proc dump[T](x: T, path: var Walk): JsonNode =
   elif T is object or T is tuple: dumpFields(x, path)
   else: %($x)
 
+proc dumpValue*[T](x: T): JsonNode =
+  ## Any value of a model (what a method of Pele's model returns), as `dumpModel` writes it.
+  var path = Walk()
+  dump(x, path)
+
 proc dumpModel*(m: ParsedModel, share = false, budget = 0): JsonNode =
   ## nimaki's model as JSON, for the diagram types nimaki draws (`share`, `budget`: see `Walk`).
   var path = Walk(share: share, budget: budget)

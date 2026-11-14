@@ -1,8 +1,8 @@
 ## port-of: src/diagrams/agentflow/db.ts
 ## port-status: conformant
 ##
-## Left out, because nothing drawn reads it: the semantic model, a method (Pele's `log` option,
-## which hears the diagnostics, is never set by the entry point either). Metadata is a YAML record,
+## Pele's `log` option, which hears the diagnostics, is never set by the entry point, and is left
+## out. Metadata is a YAML record,
 ## nil for undefined; `Object.assign` of a list or a string adds its indexes as keys, as in Pele.
 import std/[algorithm, options, sets, strutils, tables, unicode]
 from std/math import isNaN
@@ -212,7 +212,7 @@ type AgentflowDb* = ref object of RootObj
   connectors*: OrderedTable[string, AgentNode]
   classes*: Table[string, AgentClassDef]
   tooltips*: Table[string, string]
-  defaultEdgeStyle*: seq[string]  ## empty for undefined (only copied from)
+  defaultEdgeStyle*: Option[seq[string]]
   defaultInterpolate* {.undefinedIfEmpty.}: string     ## "" for undefined
   title*: string
   accTitle*: string
@@ -326,8 +326,9 @@ proc addVertex*(db: AgentflowDb, id: string, textObj = none(FlowText), typ = "",
   if typ != "": vertex.kind = typ
   if style.isSome:
     for s in style.get: vertex.styles.add s
-  if props.isSome:
-    for k, v in props.get: vertex.props[k] = v
+  if vertex.props.isNone: vertex.props = some(props.get(initTable[string, string]()))
+  elif props.isSome:
+    for k, v in props.get: vertex.props.get[k] = v
 
   if not hasDoc: return
   vertex.metadata = merge(vertex.metadata, doc)
@@ -399,14 +400,14 @@ proc updateLink*(db: AgentflowDb, positions: seq[string], styleIn: seq[string]) 
   var style = styleIn
   for pos in positions:
     if pos == "default":
-      db.defaultEdgeStyle = style
+      db.defaultEdgeStyle = some(style)
       continue
     let edge = db.edgeAt(pos)
     var anyFill = false
     for s in style:
       if s.startsWith("fill"): anyFill = true
     if style.len > 0 and not anyFill: style.add "fill:none"
-    edge.style = style
+    edge.style = some(style)
 
 proc addClass*(db: AgentflowDb, ids: string, styles: seq[string]) =
   let style = styles.join(",").replace(jsre"/\\,/g", "§§§").replace(jsre"/,/g", ";").replace(jsre"/§§§/g", ",").split(';')
@@ -625,6 +626,82 @@ proc emitWarning*(db: AgentflowDb, id, message: string, nodeId = "", edgeId = ""
 
 proc emitError*(db: AgentflowDb, id, message: string, nodeId = "", edgeId = "") =
   db.emit(id, "error", message, nodeId, edgeId)
+
+type
+  SemanticVertex* = object
+    id*: string
+    label*: Option[string]
+    shape*: Option[string]
+    vertexKind*: Option[string]
+    metadata*: YamlValue         ## nil for undefined
+
+  SemanticEdge* = object
+    start*, stop*: string
+    id*, label*, kind*, stroke*, edgeSemantic*: Option[string]
+    length*: Option[int]
+    metadata*: YamlValue
+
+  SemanticSubgraph* = object
+    id*: string
+    kind*, title*: Option[string]
+    nodes*: seq[string]
+    metadata*: YamlValue
+    direction*: Option[string]
+
+  SemanticConnector* = object
+    id*: string
+    title*: Option[string]
+    metadata*: YamlValue
+
+  SemanticModel* = object
+    ## The diagram with presentation-only controls left out, for tools that read what it means.
+    direction*: Option[string]
+    vertices*: seq[SemanticVertex]
+    edges*: seq[SemanticEdge]
+    subGraphs*: seq[SemanticSubgraph]
+    connectors*: seq[SemanticConnector]
+    diagnostics*: seq[Diagnostic]
+
+const PRESENTATION_KEYS = ["shape", "view", "icon", "img", "form", "pos", "w", "h", "class", "style",
+                           "labelType"]
+
+proc semanticMetadata(metadata: YamlValue): YamlValue =
+  if metadata == nil or metadata.kind != yMap: return nil
+  var any = false
+  result = ymap()
+  for key, value in metadata.fields:
+    if key in PRESENTATION_KEYS: continue
+    result.fields[key] = value
+    any = true
+  if not any: result = nil
+
+proc opt(s: string): Option[string] = (if s != "": some(s) else: none(string))
+
+proc vertexKind*(db: AgentflowDb, vertex: AgentNode): string
+
+proc semanticModel*(db: AgentflowDb): SemanticModel =
+  for id, v in db.nodes:
+    if id in db.subgraphLookup: continue
+    let metadata = semanticMetadata(v.metadata)
+    if v.isConnector == some(true):
+      var connector = SemanticConnector(id: id, metadata: metadata)
+      if v.text.isSome and v.text.get != id: connector.title = v.text
+      result.connectors.add connector
+      continue
+    let shape = resolveShapeAlias(v.kind)
+    result.vertices.add SemanticVertex(id: id, label: v.text, shape: opt(shape),
+                                       vertexKind: some(db.vertexKind(v)), metadata: metadata)
+  for e in db.edges:
+    var edge = SemanticEdge(start: e.start, stop: e.stop, id: opt(e.id), label: opt(e.text), kind: opt(e.kind),
+                            stroke: opt(e.stroke), edgeSemantic: opt(e.edgeSemantic))
+    if e.length != NO_LENGTH: edge.length = some(e.length)
+    if e.metadata != nil and e.metadata.kind == yMap and e.metadata.fields.len > 0: edge.metadata = e.metadata
+    result.edges.add edge
+  for sg in db.subgraphs:
+    result.subGraphs.add SemanticSubgraph(id: sg.id, nodes: sg.nodes, kind: opt(sg.kind), title: some(sg.title),
+                                          direction: opt(sg.dir), metadata: semanticMetadata(sg.metadata))
+  result.diagnostics = db.diagnostics
+  result.direction = opt(db.direction)
 
 proc subgraph*(db: AgentflowDb, id: string): AgentSubgraph =
   ## nil when there is none.

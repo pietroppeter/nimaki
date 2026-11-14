@@ -189,8 +189,8 @@ proc buildAgentGraph*(db: AgentflowDb, paletteLength: int, defaultCurve = ""): A
     let stop = collapsedInto.getOrDefault(raw.stop, raw.stop)
     # An edge between two things inside one collapsed flow has nothing left to connect.
     if start == stop and raw.start != raw.stop: continue
-    var styles = db.defaultEdgeStyle
-    for s in raw.style: styles.add s
+    var styles = db.defaultEdgeStyle.get(@[])
+    for s in raw.style.get(@[]): styles.add s
     let arrow =
       if raw.kind == "arrow_open": "none"
       elif raw.kind == "arrow_cross" or raw.kind == "arrow_point": raw.kind

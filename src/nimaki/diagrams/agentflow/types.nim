@@ -51,7 +51,7 @@ type
     styles*: seq[string]
     classes*: seq[string]
     dir* {.undefinedIfEmpty.}: string               ## "" for undefined
-    props*: Table[string, string]
+    props*: Option[Table[string, string]]   ## none for a connector that no statement names as a node
     link* {.undefinedIfEmpty.}: string              ## "" for undefined
     linkTarget* {.undefinedIfEmpty.}: string
     metadata*: YamlValue       ## nil for undefined
@@ -66,7 +66,7 @@ type
     stroke* {.undefinedIfEmpty.}: string            ## "" for undefined
     edgeSemantic* {.undefinedIfEmpty.}: string      ## "" for undefined
     length*: int               ## NO_LENGTH for undefined
-    style*: seq[string]
+    style*: Option[seq[string]]   ## none until a linkStyle sets it
     classes*: seq[string]
     id*: string
     isUserDefinedId*: bool
