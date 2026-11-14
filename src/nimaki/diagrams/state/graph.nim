@@ -90,16 +90,11 @@ proc buildStateGraph*(rootDoc: seq[Stmt], states: OrderedTable[string, Stmt],
     if node.id == "" or node.id == "</join></fork>" or node.id == "</choice>": return
     if node.cssClasses != "":
       # One copy, however many classes: a state named in a class statement many times has a long list.
-      var compiled: seq[string]
-      var any = false
+      # Added in place: a copy of the list and back would copy every string in nim js.
       for name in node.cssClasses.split(' '):
         let def = classes.getOrDefault(name, nil)
         if def == nil: continue
-        if not any:
-          compiled = node.cssCompiledStyles
-          any = true
-        for style in def.styles: compiled.add style
-      if any: node.cssCompiledStyles = compiled
+        for style in def.styles: node.cssCompiledStyles.add style
     if draft != nil: described[node.id] = draft
     else: described.del node.id
     let existing = byId.getOrDefault(node.id, nil)
@@ -107,12 +102,12 @@ proc buildStateGraph*(rootDoc: seq[Stmt], states: OrderedTable[string, Stmt],
       let parentId = if node.parentId.isSome: node.parentId else: existing.parentId
       # Object.assign(existing, node): the keys the node has.
       existing.shape = node.shape
-      # The node is dropped after this, so its fields move: nim js would copy each string.
-      existing.label = move node.label
-      existing.description = move node.description
-      existing.cssClasses = move node.cssClasses
-      existing.cssCompiledStyles = move node.cssCompiledStyles
-      existing.cssStyles = move node.cssStyles
+      # The node is dropped after this, so its fields move (`moveField`: `move` alone copies in nim js).
+      moveField(existing, node, label)
+      moveField(existing, node, description)
+      moveField(existing, node, cssClasses)
+      moveField(existing, node, cssCompiledStyles)
+      moveField(existing, node, cssStyles)
       existing.kind = node.kind
       existing.isGroup = node.isGroup
       existing.dir = node.dir

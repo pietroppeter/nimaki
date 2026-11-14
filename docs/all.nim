@@ -55,3 +55,4 @@ import devlog/a_proposal_for_diagrammari
 import devlog/regular_expressions_as_pele_writes_them
 import devlog/pele_tests_on_nimaki
 import devlog/faster_in_javascript
+import devlog/hashing_in_javascript

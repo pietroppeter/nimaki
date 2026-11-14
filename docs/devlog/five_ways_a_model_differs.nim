@@ -1,4 +1,4 @@
-## devlog: 14 Nov 2026 O | Five ways a model differs | Twelve more diagram types now hold their models in Pele's shape; the differences came in five kinds, and each kind has one way to fix it.
+## devlog: 14 Nov 2026 P | Five ways a model differs | Twelve more diagram types now hold their models in Pele's shape; the differences came in five kinds, and each kind has one way to fix it.
 ## kind: port
 import std/[strformat, strutils, json, osproc, options]
 import nimib
@@ -33,7 +33,7 @@ nbText: &"""
 - **Pele's own tests agree**: {count("passed")} pass on nimaki (there were {was("passed")}), and
   {count("model")} wait for a model not yet in Pele's shape (there were {was("model")}).
 - **The differences came in five kinds** (the empty text for "none" being the commonest), and each kind now has one way to be fixed, written down
-  as [decision 0017](../../decisions/#0017-a-model-is-pele-s-field-for-field-or-says-how-it-differs): an `Option` for a field Pele may leave undefined, a
+  as [decision 0018](../../decisions/#0018-a-model-is-pele-s-field-for-field-or-says-how-it-differs): an `Option` for a field Pele may leave undefined, a
   pragma on a field the port has and Pele does not, a pragma on an object Pele spreads into
   another, a writer of Pele's shape for a value the port holds otherwise on purpose, and a
   renaming for Nim's keywords.
@@ -139,7 +139,7 @@ The table of renamings for one type now puts it back.
 ## The rule, written down
 
 A later session porting a field would face the same choice: change the model, or change how it is
-written. [Decision 0017](../../decisions/#0017-a-model-is-pele-s-field-for-field-or-says-how-it-differs) says which, in that order: an `Option` first, a
+written. [Decision 0018](../../decisions/#0018-a-model-is-pele-s-field-for-field-or-says-how-it-differs) says which, in that order: an `Option` first, a
 pragma for what is the port's own or spread, a writer in `tools/models.nim` only for a shape kept on
 purpose, with its reason.
 """
@@ -171,7 +171,7 @@ nbText: """
 ## What this changes for the port
 
 - A model's type says where it is not Pele's, and how: `Option`, `portOnly`, `spread`, or a writer
-  in `tools/models.nim`, as decision 0017 says.
+  in `tools/models.nim`, as decision 0018 says.
 - *Models as Pele's* goes on with agentflow, architecture, c4, class, gantt, sequence, state and
   usecase.
 

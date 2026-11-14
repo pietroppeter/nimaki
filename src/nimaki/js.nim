@@ -44,9 +44,16 @@ func shortestDigits(x: float): tuple[digits: string, point: int] =
   digits.setLen last
   (digits, point)
 
+when defined(js):
+  func nativeNumberString(x: float): cstring {.importjs: "String(#)".}
+
 func jsString*(x: float): string =
   ## ECMAScript's Number::toString: `String(x)`, `${x}`. `-0` is "0"; exponent form from 1e21
   ## and below 1e-6.
+  when defined(js):
+    # The engine's own: the code below builds and slices strings, slow in nim js, and gives
+    # what the C build computes by hand (tests/test_js.nim checks that against Node).
+    return $nativeNumberString(x)
   if x.isNaN: return "NaN"
   if x == Inf: return "Infinity"
   if x == -Inf: return "-Infinity"
@@ -605,3 +612,12 @@ proc jsonParse*(text: string): JsonNode =
         discard keys.pop()
         continue
       fail()
+
+template moveField*(dst, src: typed, field: untyped) =
+  ## `dst.field = move src.field`, for a `src` that is dropped after this. In nim js `move` into
+  ## a place that exists still copies a string or a seq, every byte and item; here the field is
+  ## handed over as JavaScript would, so both objects share it until `src` is gone.
+  when defined(js):
+    {.emit: [dst, "." & astToStr(field) & " = ", src, "." & astToStr(field) & ";"].}
+  else:
+    dst.field = move src.field
