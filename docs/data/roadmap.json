@@ -278,6 +278,17 @@
           "pr": "35"
         },
         {
+          "id": "corpus-diagrammari-run",
+          "kind": "tooling",
+          "title": "diagrammari's diagrams, run",
+          "what": "Run diagrammari's tests, spec examples and pages, and add the Mermaid text its builders send to Pele to the diagrammari corpus.",
+          "done_when": "corpus/diagrammari.json holds the texts found by running it; difftest runs on them.",
+          "owner": "Port class and swimlane",
+          "status": "done",
+          "post": "diagrammari-at-work",
+          "pr": "65"
+        },
+        {
           "id": "fuzz",
           "kind": "tooling",
           "title": "Differential fuzzing",
@@ -669,12 +680,12 @@
           "id": "nimjs-browser",
           "kind": "port",
           "title": "nimaki drawing in the browser",
-          "what": "A browser entry point for the JavaScript build (render(text) exported), a page whose diagrams nimaki draws in the reader's browser, and a smaller file.",
+          "what": "A browser entry point for the JavaScript build (nimaki.render exported), and a page whose diagrams nimaki draws in the reader's browser: the Playground. A smaller file is left open.",
           "done_when": "a page draws its diagrams with nimaki in the browser, identical to the SVG drawn at build time.",
-          "owner": "",
-          "status": "planned",
-          "post": "",
-          "pr": ""
+          "owner": "Port class and swimlane",
+          "status": "done",
+          "post": "drawn-in-your-browser",
+          "pr": "44"
         },
         {
           "id": "cabi",
@@ -691,12 +702,12 @@
           "id": "follow-pele",
           "kind": "tooling",
           "title": "Following Pele",
-          "what": "A routine that diffs a new Pele release against the pin and ports the changes.",
+          "what": "A routine that diffs a new Pele release against the pin and ports the changes. The tool is ready (tools/followpele.nim, run weekly in CI with --fail); the pin waits for Pele's next release.",
           "done_when": "The pin moves once, with a post.",
-          "owner": "",
-          "status": "planned",
-          "post": "",
-          "pr": ""
+          "owner": "Port class and swimlane",
+          "status": "started",
+          "post": "following-pele",
+          "pr": "66"
         }
       ]
     },
