@@ -27,7 +27,9 @@ const FUNCTIONS = toHashSet(["rgb", "rgba", "hsl", "hsla", "hwb", "lab", "lch", 
 func record(value: YamlValue): YamlValue = (if isRecord(value): value else: ymap())
 
 const
-  RE_CHARS = jsre"/^[\w\s#%.,+\-/()]{1,200}$/"
+  RE_CHARS = jsre"/^[\w\s#%.,+\-/()]+$/"
+    ## Pele's is /^[\w\s#%.,+\-/()]{1,200}$/; the bound is checked apart, in UTF-16 units, as nim-regex
+    ## spells a bounded repeat out, one state per turn, and took 0.8 ms a test (decision 0015).
   RE_FUNCTION = jsre"/([\w-]*)\s*\(/g"
   RE_VAR = jsre"/var\(\s*([\w-]*)/gi"
 
@@ -36,7 +38,7 @@ func safeColor(value: YamlValue): (bool, string) =
   ## Values outside functions are checked as colors, so a typo keeps the theme color.
   if value == nil or value.kind != yString: return
   let color = jsTrim(value.s)
-  if not RE_CHARS.test(color): return
+  if not (RE_CHARS.test(color) and utf16Len(color) <= 200): return
   if '(' notin color: return (if plainColor(color): (true, color) else: (false, ""))
   var depth = 0
   for c in color:

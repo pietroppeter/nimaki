@@ -41,6 +41,8 @@ type
     source*: string        ## the pattern as Pele writes it
     flags*: string         ## the flags as Pele writes them (`g`, `i`, `m`, `y`, `u`)
     global*, sticky*: bool
+    atStart*: bool         ## it can only match at 0: a leading `^`, no `m` flag, no `|` around it
+    prefix*: string        ## text every match starts with, found with `find` before the engine runs
     translated*: string    ## the pattern in the engine's syntax
     slot: int
       ## Where its engine is: a `jsre` literal's place in `literals` plus one, or minus one less
@@ -481,8 +483,57 @@ proc compiled(re: JsRegExp): Regex2 =
     raise newException(JsRegExpError, "/" & re.source & "/" & re.flags & " -> " &
       re.translated & ": " & e.msg)
 
+func topLevelBar(pattern: string): bool =
+  ## Whether a `|` outside every group and class splits the pattern into alternatives.
+  var depth = 0
+  var i = 0
+  var inClass = false
+  while i < pattern.len:
+    let c = pattern[i]
+    if c == '\\': i += 2; continue
+    if inClass:
+      if c == ']': inClass = false
+    elif c == '[': inClass = true
+    elif c == '(': inc depth
+    elif c == ')': dec depth
+    elif c == '|' and depth == 0: return true
+    inc i
+  false
+
+func onlyAtStart(pattern, flags: string): bool =
+  ## Whether every match must start at 0: the pattern opens with `^`, there is no `m` flag, and
+  ## no `|` outside a group could start an alternative without it. The engine's search would try
+  ## every position of the text in vain.
+  'm' notin flags and pattern.len > 0 and pattern[0] == '^' and not topLevelBar(pattern)
+
+func literalPrefix(pattern, flags: string): string =
+  ## The plain characters every match starts with (`var(--_` of `/var\(--_(r|tw|hw|w)\)/g`). The
+  ## engine's search runs its automaton at every position of the text; finding the prefix first,
+  ## then matching where it is, gives the same first match and skips the rest.
+  if 'i' in flags or topLevelBar(pattern): return ""
+  const plain = {'a'..'z', 'A'..'Z', '0'..'9', ' ', '-', '_', ':', ';', '"', '\'', '<', '>', '=',
+                 ',', '#', '%', '&', '@', '!', '~', '`', '/'}
+  var i = 0
+  while i < pattern.len:
+    var ch: char
+    var next: int
+    if pattern[i] == '\\' and i + 1 < pattern.len and pattern[i + 1] in {'(', ')', '[', ']', '{',
+        '}', '.', '*', '+', '?', '|', '^', '$', '\\', '/', '-'}:
+      ch = pattern[i + 1]
+      next = i + 2
+    elif pattern[i] in plain:
+      ch = pattern[i]
+      next = i + 1
+    else: break
+    if next < pattern.len and pattern[next] in {'?', '*', '{', '+'}:
+      if pattern[next] == '+': result.add ch
+      break
+    result.add ch
+    i = next
+
 func made(pattern, flags, translated: string, slot: int): JsRegExp =
   JsRegExp(source: pattern, flags: flags, global: 'g' in flags, sticky: 'y' in flags,
+           atStart: onlyAtStart(pattern, flags), prefix: literalPrefix(pattern, flags),
            translated: translated, slot: slot)
 
 proc dynamicSlot(pattern, flags: string): JsRegExp =
@@ -601,6 +652,14 @@ func searchFrom(re: JsRegExp, s: string, at: int): JsMatch =
   ## The first match that starts at `at` or later.
   var m: RegexMatch2
   if at > s.len: return noMatch()
+  if re.atStart: return (if at == 0: matchHere(re, s, 0) else: noMatch())
+  if re.prefix.len > 0:
+    var p = s.find(re.prefix, at)
+    while p >= 0:
+      let m = matchHere(re, s, p)
+      if m.found: return m
+      p = s.find(re.prefix, p + 1)
+    return noMatch()
   withEngine(re, r):
     result = if find(s, r, m, at): toJsMatch(s, m) else: noMatch()
 
@@ -614,10 +673,17 @@ func matchEnd*(re: JsRegExp, s: string, lastIndex = 0): int =
   ## Where the match of `exec(re, s, lastIndex)` ends (the next `lastIndex`), or -1: the same
   ## match, without reading its groups (what a lexer needs, and quicker).
   var m: RegexMatch2
-  if lastIndex > s.len: return -1
+  if lastIndex > s.len or (re.atStart and lastIndex > 0): return -1
+  if re.prefix.len > 0 and not re.sticky and not re.atStart:
+    var p = s.find(re.prefix, lastIndex)
+    while p >= 0:
+      withEngine(re, r):
+        if matchImpl(s, r.toRegex, m, p, {mfAnchored, mfNoCaptures}): return m.boundaries.b + 1
+      p = s.find(re.prefix, p + 1)
+    return -1
   withEngine(re, r):
     result =
-      if re.sticky:
+      if re.sticky or re.atStart:
         if matchImpl(s, r.toRegex, m, lastIndex, {mfAnchored, mfNoCaptures}): m.boundaries.b + 1
         else: -1
       elif find(s, r, m, lastIndex): m.boundaries.b + 1
