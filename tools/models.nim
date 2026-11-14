@@ -30,7 +30,7 @@ from nimaki/diagrams/kanban/db import KanbanModel
 from nimaki/diagrams/mindmap/db import MindmapModel
 from nimaki/diagrams/packet/model import PacketModel, PacketLabel
 from nimaki/diagrams/pie/model import PieModel
-from nimaki/diagrams/quadrant/db import QuadrantModel
+from nimaki/diagrams/quadrant/db import QuadrantModel, QuadrantText
 from nimaki/diagrams/radar/model import RadarModel
 from nimaki/diagrams/railroad/types import RailroadModel, RailroadNode, NodeKind
 from nimaki/diagrams/requirement/db import RequirementDb
@@ -43,7 +43,7 @@ from nimaki/diagrams/treeview/model import TreeViewModel
 from nimaki/diagrams/usecase/types import UsecaseModel
 from nimaki/diagrams/venn/db import VennDb
 from nimaki/diagrams/wardley/model import WardleyModel
-from nimaki/diagrams/xychart/db import XyChartDb
+from nimaki/diagrams/xychart/db import XyChartDb, Axis, Plot
 
 when defined(js):
   import std/jsffi
@@ -87,7 +87,8 @@ proc onPath(w: Walk, p: Mark): bool =
 
 proc dump[T](x: T, path: var Walk): JsonNode
 
-# Where the port holds a value in a shape of its own, and Pele another.
+# Where the port holds a value in a shape of its own, and Pele another. These write plain values
+# themselves: a call of the generic `dump` from here would be compiled before its body is.
 
 proc number(x: float, path: Walk): JsonNode =
   ## A number as tools/oracle.mjs writes it: NaN is undefined, an infinity "Infinity". For the
@@ -97,6 +98,23 @@ proc number(x: float, path: Walk): JsonNode =
   elif x == Inf: %"Infinity"
   elif x == -Inf: %"-Infinity"
   else: %x
+
+proc dump(x: QuadrantText, path: var Walk): JsonNode =
+  ## Pele's optional label, held as an object with a flag for "defined" and one for its type.
+  if not x.defined: newJNull()
+  else: %*{"text": x.text, "type": (if x.markdown: "markdown" else: "text")}
+
+proc dump(x: Axis, path: var Walk): JsonNode =
+  ## Pele's union of a band axis and a linear one, held as one object with a flag.
+  if x.band: %*{"type": "band", "title": x.title, "categories": x.categories}
+  else: %*{"type": "linear", "title": x.title, "min": number(x.min, path), "max": number(x.max, path)}
+
+proc dump(x: Plot, path: var Walk): JsonNode =
+  ## Pele's plot, its type held as a flag, its optional point labels with another.
+  var data = newJArray()
+  for (label, value) in x.data: data.add %*[label, number(value, path)]
+  result = %*{"type": (if x.bar: "bar" else: "line"), "title": x.title, "data": data}
+  if x.hasPointLabels: result["pointLabels"] = %x.pointLabels
 
 proc dump(x: RailroadNode, path: var Walk): JsonNode =
   ## Pele's union of seven shapes, which the port holds as one object with a kind.
@@ -116,7 +134,7 @@ proc dump(x: RailroadNode, path: var Walk): JsonNode =
 
 proc dump(x: PacketLabel, path: var Walk): JsonNode =
   ## A label boxed so that the pieces of a field share it, as JavaScript shares a string.
-  if x == nil: newJNull() else: dump(x.text, path)
+  if x == nil: newJNull() else: %x.text
 
 func enumName(s: string): string =
   ## An enum's name as Pele's string: Nim's enums carry a prefix (`skState`, `nkTerminal`), which

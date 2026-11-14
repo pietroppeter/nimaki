@@ -2,6 +2,7 @@
 ## port-status: conformant
 import std/[options, tables, strutils]
 import ../../errors
+import ../../model
 import ../../js
 import ../../jsregex
 
@@ -19,7 +20,7 @@ type
     x*, y*: float
     text*: QuadrantText
     className*: string
-    style*: PointStyle
+    style* {.spread.}: PointStyle   ## Pele's point extends its style
 
   QuadrantDb* = ref object of RootObj
     title*, accTitle*, accDescr*: string   ## "" for undefined
