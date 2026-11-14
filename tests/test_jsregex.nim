@@ -4,9 +4,15 @@
 ## with two cases, line ends, an emoji). For each regex and string: `exec` (at 0, and at a later
 ## `lastIndex` for a `g` or `y` regex), `replace` with `$` patterns, `split`, and every match of a
 ## `g` regex. Results that hold half of an emoji in JavaScript (a lone surrogate, which a UTF-8
-## string cannot hold) are counted apart: that difference is in docs/divergences.md.
+## string cannot hold) are counted apart: that difference is in docs/divergences.md. The patterns
+## the port builds from pieces (`new RegExp` in Pele) are checked the same way, as the port builds them.
 import std/[os, osproc, json, random, unittest, unicode, strutils, sets]
 import ../src/nimaki/jsregex
+import ../src/nimaki/text/label {.all.}
+import ../src/nimaki/svg/theme {.all.}
+import ../src/nimaki/preprocess {.all.}
+import ../src/nimaki/diagrams/common/tokens
+from ../src/nimaki/diagrams/railroad/common as railroad import nil
 
 const pool = [" ", "  ", "\t", "\n", "\r", "\r\n", " ", " ", "﻿", "\u0085", "　",
               "é", "É", "K", "ſ", "ß", "😀", "日本", "a", "Z", "0", "42", "-1.5", "_", "-", ":",
@@ -45,8 +51,16 @@ proc main() =
   var r = initRand(14)
   var cases = newJArray()   # [pattern, flags, text, k]: k is the code point where lastIndex starts
   var compiled: seq[JsRegExp]
-  for lit in data["literals"]:
-    let (pattern, flags) = (lit["pattern"].getStr, lit["flags"].getStr)
+  var sources: seq[(string, string)]
+  for lit in data["literals"]: sources.add (lit["pattern"].getStr, lit["flags"].getStr)
+  # Built from pieces: label's CJK classes, the font family list, the line breaks of preprocess,
+  # a keyword, the titles that must not split a longer name, a style property in an edge.
+  for built in [RE_CJK, RE_HINT, RE_PIECE, RE_FAMILIES, RE_LINE_BREAK, keyword("pie").pattern,
+                keyword("C4Context").pattern, titleBefore(r"[-./\w]*[-\w]").pattern,
+                titleBefore(r"\w").pattern, railroad.title(r"[A-Za-z0-9-]").pattern,
+                railroad.title(r"[\w-]").pattern, newRegExp("[\";]" & "stroke" & ":([^;\"]+);")]:
+    sources.add (built.source, built.flags)
+  for (pattern, flags) in sources:
     compiled.add check(newRegExp(pattern, flags))
     let own = runesOf(pattern)
     var seen = initHashSet[string]()
@@ -121,7 +135,7 @@ process.stdout.write(JSON.stringify(out));
         if bad <= 25:
           echo "ERROR /", re.source, "/", re.flags, " ", key, " on ", escapeJson(s), ": node ",
             show(wv), ", nimaki ", show(v)
-  test "regex literals of Pele as in Node (" & $compiled.len & " regexes, " & $checked &
+  test "Pele's regexes, literal and built, as in Node (" & $compiled.len & " regexes, " & $checked &
       " strings; " & $lone & " with half an emoji in JavaScript not compared)":
     check bad == 0
 
