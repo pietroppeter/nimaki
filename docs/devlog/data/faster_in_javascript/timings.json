@@ -1,0 +1,99 @@
+{
+ "about": "Milliseconds vitest reports for one of Pele's stress tests run alone on the JavaScript build, before (main at 390ae3c) and after this step, on the 4-core sandbox, 14 November 2026. Measured with timings.sh beside this file, on tests.tsv; run to run they vary by a tenth or so.",
+ "tests": [
+  {
+   "file": "tests/venn/stress.test.ts",
+   "test": "venn worst cases 5,000 styles for one set",
+   "before": 26961,
+   "after": 329,
+   "afterStatus": "passed"
+  },
+  {
+   "file": "tests/agentflow/stress.test.ts",
+   "test": "agentflow worst cases 3,000 flows that each name the next one",
+   "before": 27036,
+   "after": 1926,
+   "afterStatus": "passed"
+  },
+  {
+   "file": "tests/state/stress.test.ts",
+   "test": "state diagram worst cases 8,000 description lines on one state",
+   "before": 14665,
+   "after": 838,
+   "afterStatus": "passed"
+  },
+  {
+   "file": "tests/journey/stress.test.ts",
+   "test": "journey worst cases a title of 50,000 characters",
+   "before": 5663,
+   "after": 243,
+   "afterStatus": "passed"
+  },
+  {
+   "file": "tests/timeline/stress.test.ts",
+   "test": "timeline worst cases a title of 50,000 characters",
+   "before": 6045,
+   "after": 301,
+   "afterStatus": "passed"
+  },
+  {
+   "file": "tests/block/stress.test.ts",
+   "test": "block worst cases 5,000 sibling composites",
+   "before": 7121,
+   "after": 1248,
+   "afterStatus": "passed"
+  },
+  {
+   "file": "tests/stress.test.ts",
+   "test": "worst cases edges that each cross 1,000 nested subgraph borders",
+   "before": 8996,
+   "after": 2602,
+   "afterStatus": "passed"
+  },
+  {
+   "file": "tests/stress.test.ts",
+   "test": "worst cases 3,000 long edges over a chain of 3,000",
+   "before": 8684,
+   "after": 2700,
+   "afterStatus": "passed"
+  },
+  {
+   "file": "tests/mindmap/stress.test.ts",
+   "test": "mindmap worst cases label of emphasis markers",
+   "before": 3986,
+   "after": 334,
+   "afterStatus": "passed"
+  },
+  {
+   "file": "tests/c4/stress.test.ts",
+   "test": "C4 worst cases a link wrapped in layers of entity encoding",
+   "before": 3787,
+   "after": 823,
+   "afterStatus": "passed"
+  },
+  {
+   "file": "tests/class/stress.test.ts",
+   "test": "class diagram worst cases 1,600 classDefs applied to 1,600 classes",
+   "before": 13286,
+   "after": 11921,
+   "afterStatus": "failed"
+  },
+  {
+   "file": "tests/gantt/stress.test.ts",
+   "test": "gantt worst cases a custom format checked for every excluded day",
+   "before": 16652,
+   "after": 12109,
+   "afterStatus": "failed"
+  }
+ ],
+ "countsBefore": {
+  "passed": 6543,
+  "api": 339,
+  "unported": 0,
+  "speed": 107,
+  "canvas": 1,
+  "known": 2,
+  "failed": 0
+ },
+ "aboutCountsBefore": "docs/data/peletests.json at 390ae3c (the last full run before this step, in this sandbox, four files at a time)."
+}

@@ -967,17 +967,24 @@ proc sideEnds(g: Graph, v, side: int, span: float, kinds: seq[int], idsVar: var 
     let d = g.pos[other[a]] - g.pos[other[b]]
     if d != 0: d else: a - b)
   room.setLen(ids.len)
-  proc fill(share: proc (leaves, same: bool): float): float =
+  # A template, not a closure: a closure would copy `kinds` (one entry per edge) for each node
+  # in nim js. `mode` 0 gives every gap a full pitch, 1 half a pitch to neighbours that both
+  # leave, 2 none to neighbours that run the same way.
+  template fill(mode: int): float =
     var total = 0.0
     room[0] = 0
     for k in 1 ..< ids.len:
       let same = kinds[ids[k]] == kinds[ids[k - 1]]
-      room[k] = share(same and kinds[ids[k]] == Leaves, same)
+      let leaves = same and kinds[ids[k]] == Leaves
+      room[k] = case mode
+        of 0: 1.0
+        of 1: (if leaves: 0.5 else: 1.0)
+        else: (if same: 0.0 else: 1.0)
       total += room[k]
     total
-  var total = fill(proc (leaves, same: bool): float = 1)
-  if span / total < MIN_PITCH: total = fill(proc (leaves, same: bool): float = (if leaves: 0.5 else: 1))
-  if span / total < MIN_PITCH: total = fill(proc (leaves, same: bool): float = (if same: 0 else: 1))
+  var total = fill(0)
+  if span / total < MIN_PITCH: total = fill(1)
+  if span / total < MIN_PITCH: total = fill(2)
   if total == 0: return 0
   let pitch = min(PORT_PITCH, span / total)
   for k in 1 ..< ids.len: room[k] *= pitch

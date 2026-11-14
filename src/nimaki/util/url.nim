@@ -20,18 +20,20 @@ func isCtrl(cp: int): bool =
   (cp >= 0 and cp <= 0x1f) or (cp >= 0x7f and cp <= 0x9f) or (cp >= 0x2000 and cp <= 0x200d) or
     cp == 0xfeff or (cp >= 0xd800 and cp <= 0xdfff) or cp == 0xfffe or cp == 0xffff
 
-func ctrlAt(s: string, i: int): (bool, int) =
+func ctrlAt(s: string, i: int): tuple[bad: bool, size: int] =
   ## Whether a character of RE_CTRL starts at byte i, and its length. A byte that is not valid
   ## UTF-8 counts as one (the nearest thing to a lone surrogate).
+  # Fields set one by one: nim js copies a tuple through its type information at `return (a, b)`.
   let (cp, size) = codePointAt(s, i)
-  if cp == 0xFFFD and not s.continuesWith("�", i): return (true, size)
-  (isCtrl(cp), size)
+  result.size = size
+  result.bad = (cp == 0xFFFD and not s.continuesWith("�", i)) or isCtrl(cp)
 
 func removeCtrl(s: string): string =
   var i = 0
   while i < s.len:
     let (bad, size) = ctrlAt(s, i)
-    if not bad: result.add s[i ..< i + size]
+    if not bad:
+      for k in i ..< i + size: result.add s[k]
     i += size
 
 func hasCtrl(s: string): bool =

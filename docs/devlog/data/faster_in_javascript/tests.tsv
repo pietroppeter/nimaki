@@ -1,0 +1,12 @@
+venn	tests/venn/stress.test.ts	5,000 styles for one set
+agentflow	tests/agentflow/stress.test.ts	3,000 flows that each name the next one
+state8	tests/state/stress.test.ts	8,000 description lines on one state
+journey	tests/journey/stress.test.ts	a title of 50,000 characters
+timeline	tests/timeline/stress.test.ts	a title of 50,000 characters
+block	tests/block/stress.test.ts	5,000 sibling composites
+flow	tests/stress.test.ts	edges that each cross 1,000 nested subgraph borders
+longedges	tests/stress.test.ts	3,000 long edges over a chain of 3,000
+emph	tests/mindmap/stress.test.ts	label of emphasis markers
+c4	tests/c4/stress.test.ts	a link wrapped in layers of entity encoding
+classdef	tests/class/stress.test.ts	1,600 classDefs applied to 1,600 classes
+gantt	tests/gantt/stress.test.ts	a custom format checked for every excluded day
