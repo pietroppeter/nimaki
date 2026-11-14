@@ -84,7 +84,7 @@ proc renderVenn*(model: VennDb, config: Config, options: RenderOptions): Rendere
     for i in inside:
       if circles[i].r < circles[smallest].r: smallest = i
     let style = styleOf(key)
-    let text = if subset.hasLabel: subset.label elif subset.sets.len == 1: subset.sets[0] else: ""
+    let text = if subset.label.isSome: subset.label.get elif subset.sets.len == 1: subset.sets[0] else: ""
     let base = (if style.bold: Bold else: 0) or (if style.italic: Italic else: 0)
     var others: seq[int]
     for i in neighbors[smallest]:
@@ -100,7 +100,7 @@ proc renderVenn*(model: VennDb, config: Config, options: RenderOptions): Rendere
                             label: layoutLabel(text, false, measurer, fontSize, 4000, base))
     regions[key] = region
   for node in model.textNodes:
-    let raw = if node.hasLabel: node.label else: node.id
+    let raw = if node.label.isSome: node.label.get else: node.id
     let key = keyOf(node.sets)
     if key in regions:
       regions[key].lines.add Line(id: node.id, hasId: true, raw: raw, size: tiny, base: 0,

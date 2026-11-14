@@ -14,8 +14,8 @@ type
     x*, y*: Option[float]
     className*: string            ## "anchor", "component" or "pipeline-component"; "" for none
     labelOffsetX*, labelOffsetY*: Option[float]
-    inPipeline*: bool
-    isPipelineParent*: bool
+    inPipeline*: Option[bool]
+    isPipelineParent*: Option[bool]
     inertia*: Option[bool]
     sourceStrategy*: string       ## "build", "buy", "outsource", "market"; "" for none
 
@@ -108,11 +108,11 @@ proc addTrend*(b: WardleyBuilder, trend: WardleyTrend) = b.trends[trend.nodeId] 
 
 proc startPipeline*(b: WardleyBuilder, nodeId: string) =
   b.pipelines[nodeId] = WardleyPipeline(nodeId: nodeId)
-  if nodeId in b.nodes: b.nodes[nodeId].isPipelineParent = true
+  if nodeId in b.nodes: b.nodes[nodeId].isPipelineParent = some(true)
 
 proc addPipelineComponent*(b: WardleyBuilder, pipelineNodeId, componentId: string) =
   if pipelineNodeId in b.pipelines: b.pipelines[pipelineNodeId].componentIds.add componentId
-  if componentId in b.nodes: b.nodes[componentId].inPipeline = true
+  if componentId in b.nodes: b.nodes[componentId].inPipeline = some(true)
 
 proc addAnnotation*(b: WardleyBuilder, annotation: WardleyAnnotation) = b.annotations.add annotation
 proc addNote*(b: WardleyBuilder, note: WardleyNote) = b.notes.add note

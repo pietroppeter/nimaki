@@ -2,6 +2,7 @@
 ## port-status: conformant
 import std/[algorithm, sets, strutils, tables]
 import ../../errors
+import ../../model
 import ../../js
 import ../common/tokens
 import parser
@@ -31,7 +32,7 @@ type
     data*: string
       ## Example data from the frame or from the data block it refers to; "" for none.
     dataType*: string
-    order*: int
+    order* {.portOnly.}: int
       ## Its place in `boxes`: nimaki's key where Pele keys a Map by the box itself.
 
   EmRelation* = object

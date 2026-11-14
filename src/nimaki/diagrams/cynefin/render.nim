@@ -88,7 +88,7 @@ proc renderCynefin*(model: CynefinModel, config: Config, options: RenderOptions)
     let items = if name in model.domains: model.domains[name].items else: @[]
     let shown = if name == "confusion" and items.len > MAX_CONFUSION_ITEMS: MAX_CONFUSION_ITEMS else: items.len
     var badges: seq[Badge]
-    for i in 0 ..< shown: badges.add badge(items[i], false)
+    for i in 0 ..< shown: badges.add badge(items[i].label, false)
     if shown < items.len: badges.add badge("+" & $(items.len - shown) & " more", true)
     var w = title.width
     var h = title.height

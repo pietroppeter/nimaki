@@ -27,7 +27,7 @@ proc leafCount(roots: seq[TreemapNode]): int =
   var stack = roots
   while stack.len > 0:
     let node = stack.pop()
-    if not node.leaf: stack.add node.children
+    if not node.leaf: stack.add node.children.get
     elif node.value.isSome and node.value.get.isFinite and node.value.get > 0: inc result
 
 proc replaceFirst(s, sub, by: string): string =

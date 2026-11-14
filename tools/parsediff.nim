@@ -29,7 +29,7 @@
 ##
 ## It writes its summary in docs/data/parsediff.json, and every difference in
 ## build/parsediff/report.json.
-import std/[os, osproc, json, tables, sets, strutils, algorithm, parseopt, options, strtabs, typetraits]
+import std/[os, osproc, json, tables, strutils, algorithm, parseopt, options, strtabs, typetraits]
 import common
 import nimaki
 import models

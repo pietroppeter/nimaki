@@ -8,9 +8,10 @@
 ##
 ## Used by tools/parsediff.nim, the referee for models, and by tools/peletests/bridge.nim, which
 ## hands these models to Pele's tests; so it compiles with `nim js` too.
-import std/[json, tables, sets, strutils, options, algorithm]
+import std/[json, tables, sets, strutils, options, algorithm, macros]
 import nimaki
 import nimaki/util/yaml
+import nimaki/model
 from nimaki/diagrams/agentflow/db import AgentflowDb
 from nimaki/diagrams/architecture/db import ArchitectureDb
 from "nimaki/diagrams/block/db" import BlockDb
@@ -27,7 +28,7 @@ from nimaki/diagrams/ishikawa/db import IshikawaDb
 from nimaki/diagrams/journey/db import JourneyModel
 from nimaki/diagrams/kanban/db import KanbanModel
 from nimaki/diagrams/mindmap/db import MindmapModel
-from nimaki/diagrams/packet/model import PacketModel
+from nimaki/diagrams/packet/model import PacketModel, PacketLabel
 from nimaki/diagrams/pie/model import PieModel
 from nimaki/diagrams/quadrant/db import QuadrantModel
 from nimaki/diagrams/radar/model import RadarModel
@@ -86,6 +87,11 @@ proc onPath(w: Walk, p: Mark): bool =
 
 proc dump[T](x: T, path: var Walk): JsonNode
 
+# Where the port holds a value in a shape of its own, for speed, and Pele a plain one.
+proc dump(x: PacketLabel, path: var Walk): JsonNode =
+  ## A label boxed so that the pieces of a field share it, as JavaScript shares a string.
+  if x == nil: newJNull() else: dump(x.text, path)
+
 func enumName(s: string): string =
   ## An enum's name as Pele's string: Nim's enums carry a prefix (`skState`, `nkTerminal`), which
   ## Pele's string unions do not (`"state"`, `"terminal"`). An enum with string values is written
@@ -97,7 +103,10 @@ func enumName(s: string): string =
 const renamed = {"kind": "type", "typ": "type", "stop": "end"}.toTable
   ## Pele's field names that are Nim keywords, and the names the port gives those fields.
 
-const renamedIn* = {"sequence": {"start": "from"}.toTable}.toTable
+const renamedIn* = {"sequence": {"start": "from"}.toTable,
+                    "cynefin": {"start": "from"}.toTable,
+                    "eventmodeling": {"type": "kind"}.toTable}.toTable
+  ## (eventmodeling's `kind` is Pele's own `kind`, which the general rule would rename.)
   ## The same, for one diagram type only (`start` is a field of its own in other types).
 
 proc rename*(j: JsonNode, names: Table[string, string]): JsonNode =
@@ -113,15 +122,41 @@ proc rename*(j: JsonNode, names: Table[string, string]): JsonNode =
 proc dumpFields[T: object | tuple](x: T, path: var Walk): JsonNode =
   result = newJObject()
   for name, value in fieldPairs(x):
-    when value is proc or value is YamlValue or value is pointer:
-      discard   # functions are left out, as JSON leaves them out; config is not the model
+    when value is proc or value is pointer:
+      discard   # functions are left out, as JSON leaves them out
+    elif value.hasCustomPragma(portOnly):
+      discard   # a field of the port's own (src/nimaki/model.nim)
+    elif value.hasCustomPragma(spread):
+      let inner = dump(value, path)
+      if inner.kind == JObject:
+        for k, v in inner:
+          if k != "$id": result[k] = v
     else:
       result[renamed.getOrDefault(name, name)] = dump(value, path)
+
+proc dumpYaml(v: YamlValue): JsonNode =
+  ## A value read from YAML or JSON in the text (metadata, a config), as Pele holds it: a plain
+  ## object, not a Map.
+  if v == nil: return newJNull()
+  case v.kind
+  of yNull: newJNull()
+  of yBool: %v.b
+  of yNumber: (if v.n != v.n: newJNull() else: %v.n)
+  of yString: %v.s
+  of ySeq:
+    var a = newJArray()
+    for item in v.items: a.add dumpYaml(item)
+    a
+  of yMap:
+    var o = newJObject()
+    for k, item in v.fields: o[k] = dumpYaml(item)
+    o
 
 proc dump[T](x: T, path: var Walk): JsonNode =
   when T is string: path.spend(x.len + 1)
   else: path.spend(1)
-  when T is ref:
+  when T is YamlValue: dumpYaml(x)
+  elif T is ref:
     if x == nil: return newJNull()
     let p = mark(x)
     if path.share:
