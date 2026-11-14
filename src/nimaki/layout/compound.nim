@@ -353,20 +353,28 @@ proc routeCrossings*(nodes: seq[CNode], edges: seq[CEdge], style = Curved): int 
 
 proc inheritCrossedDirections*(nodes: seq[CNode], ends: seq[(int, int)]) =
   ## Match Mermaid: groups crossed by edges inherit their parent's direction.
-  proc ancestors(i: int): HashSet[int] =
-    result = initHashSet[int]()
+  # Pele builds a Set of the ancestors of each end. A HashSet[int] is slow in nim js (its hash
+  # multiplies 64-bit integers by hand), and an edge can cross thousands of groups, so each end
+  # stamps its ancestors in an array instead: inA[g] == stamp means g is an ancestor of src.
+  var inA = newSeq[int](nodes.len)
+  var inB = newSeq[int](nodes.len)
+  var a, b: seq[int]
+  template ancestors(i, stamp: int, mark, list: var seq[int]) =
+    list.setLen 0
     var p = nodes[i].parent
-    while p >= 0 and p notin result:
-      result.incl p
+    while p >= 0 and mark[p] != stamp:
+      mark[p] = stamp
+      list.add p
       p = nodes[p].parent
-  for (src, dst) in ends:
+  for k, (src, dst) in ends:
     if src < 0 or dst < 0 or src == dst: continue
-    let a = ancestors(src)
-    let b = ancestors(dst)
+    let stamp = k + 1
+    ancestors(src, stamp, inA, a)
+    ancestors(dst, stamp, inB, b)
     for g in a:
-      if g notin b: nodes[g].dir = ""
+      if inB[g] != stamp: nodes[g].dir = ""
     for g in b:
-      if g notin a: nodes[g].dir = ""
+      if inA[g] != stamp: nodes[g].dir = ""
 
 proc shiftLayout*(nodes: seq[CNode], edges: seq[CEdge], ox, oy: float) =
   for c in nodes:

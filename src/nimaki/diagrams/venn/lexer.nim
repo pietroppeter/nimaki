@@ -80,7 +80,7 @@ proc keyword(lx: VennLexer, at: int, word: string): bool =
 
 proc color(lx: VennLexer, at: int, parts: int): int =
   ## The end of `rgb(1, 2, 3)` or `rgba(1, 2, 3, 0.5)` whose parenthesis opens at `at`, or -1.
-  let src = lx.src
+  template src: string = lx.src   # a `let` would copy the whole source at every token in nim js
   var i = at + 1
   for part in 0 ..< parts:
     while isSpace(cu(src, i)): i += charLen(src, i)
@@ -107,7 +107,7 @@ proc token(lx: VennLexer, kind, e: int): int =
   kind
 
 proc next*(lx: VennLexer): int =
-  let src = lx.src
+  template src: string = lx.src   # a `let` would copy the whole source at every token in nim js
   let n = src.len
   while true:
     var i = lx.at
