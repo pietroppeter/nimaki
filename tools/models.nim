@@ -38,6 +38,7 @@ from nimaki/diagrams/railroad/types import RailroadModel, RailroadNode, NodeKind
 from nimaki/diagrams/requirement/db import RequirementDb
 from nimaki/diagrams/sankey/db import SankeyModel
 from nimaki/diagrams/sequence/db import SeqDb
+from nimaki/diagrams/sequence/types import SeqMessage, SeqNote, LINETYPE_NOTE, PLACEMENT_OVER, NO_TYPE
 from nimaki/diagrams/state/db import StateDb
 from nimaki/diagrams/state/types import Stmt, StmtKind, DescrKind
 from nimaki/diagrams/timeline/db import TimelineModel
@@ -232,6 +233,29 @@ proc dump(x: Stmt, path: var Walk): JsonNode =
     result = %*{"stmt": "click", "id": dump(x.clickId, path), "url": x.url, "tooltip": x.tooltip}
   of skRoot: result = %*{"stmt": "root", "id": x.id, "doc": list(x.doc)}
 
+proc dump(x: JsonNode, path: var Walk): JsonNode =
+  ## A value read from JSON in the text (a sequence actor's links and properties), as Pele holds it.
+  if x == nil: newJNull() else: x.copy
+
+proc dump(x: SeqMessage, path: var Walk): JsonNode =
+  ## Pele's message, one of three shapes (a signal, a note, an autonumber statement), which the
+  ## port holds as one object with a flag.
+  result = %*{"id": x.id, "from": text(x.start), "to": text(x.to), "wrap": x.wrap}
+  if x.kind != NO_TYPE: result["type"] = %x.kind
+  if x.isNumbering:
+    result["message"] = %*{"start": number(x.numbering.start, path), "step": number(x.numbering.step, path),
+                           "visible": x.numbering.visible}
+  else: result["message"] = %x.message
+  if x.kind == LINETYPE_NOTE and x.placement != NO_TYPE: result["placement"] = %x.placement
+  elif not x.isNumbering:
+    result["activate"] = %x.activate
+    result["centralConnection"] = %x.centralConnection
+
+proc dump(x: SeqNote, path: var Walk): JsonNode =
+  ## Pele's note names one participant, or a pair when it is over two: the port holds a pair.
+  %*{"actor": (if x.placement == PLACEMENT_OVER: %x.actor else: %x.actor[0]),
+     "placement": x.placement, "message": x.message, "wrap": x.wrap}
+
 proc dump(x: MappingSet, path: var Walk): JsonNode =
   ## Pele's `Set` of mappings, held as a list (a set of references would hash their addresses).
   var s = newJArray()
@@ -276,8 +300,7 @@ func enumName(s: string): string =
 const renamed = {"kind": "type", "typ": "type", "stop": "end"}.toTable
   ## Pele's field names that are Nim keywords, and the names the port gives those fields.
 
-const renamedIn* = {"sequence": {"start": "from"}.toTable,
-                    "cynefin": {"start": "from"}.toTable,
+const renamedIn* = {"cynefin": {"start": "from"}.toTable,
                     "eventmodeling": {"type": "kind"}.toTable,
                     "architecture": {"parent": "in"}.toTable,
                     "usecase": {"statementKind": "kind"}.toTable}.toTable
