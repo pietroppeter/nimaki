@@ -1,6 +1,6 @@
 ## port-of: src/svg/root.ts
 ## port-status: draft
-import std/[strutils, sets, options]
+import std/[sets, options]
 import ../types
 import builder, palette, theme
 import ../js, ../jsregex

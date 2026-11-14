@@ -681,9 +681,9 @@ func expand(by: string, s: string, m: JsMatch): string =
     result.add c
     inc i
 
-template replaceWith(s: string, re: JsRegExp, m, by: untyped): string =
+template replaceWith*(s: string, re: JsRegExp, m, by: untyped): string =
   ## `s` with each match (every one with `g`, the first otherwise) replaced by `by`, an
-  ## expression of the match `m`.
+  ## expression of the match `m`: `s.replace(re, (m) => by)` where a func must stay a func.
   var output = ""
   var last = 0
   if not re.global:
