@@ -51,6 +51,8 @@ type
   GanttDb* = ref object of RootObj
     title*, accTitle*, accDescr*: string   ## "" for undefined
     dateFormat*: string
+    trimmedFormat: string   ## `jsTrim(dateFormat)`, and its length in UTF-16 units: read for every day
+    formatUnits: int
     axisFormat*: string
     tickInterval*: string                  ## "" for undefined
     todayMarker*: string
@@ -72,7 +74,7 @@ type
     hasLastTask: bool
     now: float
     work: float
-    includeSet, excludeSet: HashSet[string]
+    includeSet, excludeSet: HashSet[StrKey]  ## StrKey: a quick hash in JavaScript, for every day
     excludedDays: array[7, bool]
     datedTokens: bool
 
@@ -81,7 +83,10 @@ proc newGanttDb*(): GanttDb =
 
 proc semantic(message: string): ref PeleError = newPeleError(message, "semantic", "gantt")
 
-proc setDateFormat*(db: GanttDb, txt: string) = db.dateFormat = txt
+proc setDateFormat*(db: GanttDb, txt: string) =
+  db.dateFormat = txt
+  db.trimmedFormat = jsTrim(txt)
+  db.formatUnits = utf16Len(db.trimmedFormat)
 proc enableInclusiveEndDates*(db: GanttDb) = db.inclusiveEndDates = true
 proc enableTopAxis*(db: GanttDb) =
   ## Mermaid's grammar calls a method its database does not define (`TopAxis`), so `topAxis` crashes there.
@@ -167,14 +172,17 @@ proc isInvalidDate*(db: GanttDb, date: JsDate): bool =
   ## or by its date written in the chart's own format.
   let weekday = db.excludedDays[int(date.getDay)]
   if not db.datedTokens: return weekday
-  let temp = jsTrim(db.dateFormat)
+  # The format is read for every day of every task: trimmed and measured once, in setDateFormat,
+  # and `listed` a template, as a closure copied `formatted` at each day in JavaScript.
+  template temp: string = db.trimmedFormat
   let dateOnly = isoDate(date)
   var formatted = some(dateOnly)
   db.spend(DATED_STEP)
   if temp != "YYYY-MM-DD":
-    db.spend(float(FORMAT_STEP + utf16Len(temp) * 8))
+    db.spend(float(FORMAT_STEP + db.formatUnits * 8))
     formatted = format(date, temp)
-  proc listed(s: HashSet[string]): bool = dateOnly in s or (formatted.isSome and formatted.get in s)
+  template listed(s: HashSet[StrKey]): bool =
+    StrKey(dateOnly) in s or (formatted.isSome and StrKey(formatted.unsafeGet) in s)
   if listed(db.includeSet): return false
   weekday or listed(db.excludeSet)
 
@@ -289,14 +297,16 @@ proc getTasks*(db: GanttDb, now: float): seq[GanttTask] =
   ## after it, so, like Mermaid, this makes up to eleven passes, each of which schedules every task again.
   db.now = clock(now)
   db.work = 0
-  db.includeSet = toHashSet(db.includes)
-  db.excludeSet = toHashSet(db.excludes)
+  db.includeSet.clear()
+  db.excludeSet.clear()
+  for s in db.includes: db.includeSet.incl StrKey(s)
+  for s in db.excludes: db.excludeSet.incl StrKey(s)
   let weekendStart = if db.weekend == "friday": 5.0 elif db.weekend == "saturday": 6.0 else: NaN
-  let weekends = "weekends" in db.excludeSet
+  let weekends = StrKey("weekends") in db.excludeSet
   for day in 0 .. 6:
     let iso = float(if day == 0: 7 else: day)
     db.excludedDays[day] = (weekends and (iso == weekendStart or iso == weekendStart + 1)) or
-                           WEEKDAYS[day].toLowerAscii in db.excludeSet
+                           StrKey(WEEKDAYS[day].toLowerAscii) in db.excludeSet
   # A date written with only these tokens and separators can never read as a weekday name, so when
   # nothing else is excluded or included there is no need to format each day.
   db.datedTokens = db.includes.len > 0 or not RE_NUMERIC_FORMAT.test(jsTrim(db.dateFormat))

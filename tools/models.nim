@@ -11,6 +11,7 @@
 import std/[json, tables, sets, strutils, options, algorithm]
 import nimaki
 import nimaki/util/yaml
+import nimaki/js
 from nimaki/diagrams/agentflow/db import AgentflowDb
 from nimaki/diagrams/architecture/db import ArchitectureDb
 from "nimaki/diagrams/block/db" import BlockDb
@@ -119,7 +120,7 @@ proc dumpFields[T: object | tuple](x: T, path: var Walk): JsonNode =
       result[renamed.getOrDefault(name, name)] = dump(value, path)
 
 proc dump[T](x: T, path: var Walk): JsonNode =
-  when T is string: path.spend(x.len + 1)
+  when T is string or T is StrKey: path.spend(string(x).len + 1)
   else: path.spend(1)
   when T is ref:
     if x == nil: return newJNull()
@@ -142,6 +143,7 @@ proc dump[T](x: T, path: var Walk): JsonNode =
     result = dump(x[], path)
     discard path.path.pop()
   elif T is string: %x
+  elif T is StrKey: %string(x)   # a string key that hashes quickly (js.nim)
   elif T is bool: %x
   elif T is enum: %enumName($x)
   elif T is SomeNumber:

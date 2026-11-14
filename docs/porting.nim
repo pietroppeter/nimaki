@@ -188,7 +188,12 @@ the number itself for integers, in both builds
 ([decision 0017](../decisions/#0017-one-fast-hash-for-both-builds)); a small dense set of
 integers is still faster as a `seq` of marks (`inheritCrossedDirections` in
 `layout/compound.nim`). And a JavaScript built-in beats its port: `jsString`, Number::toString,
-calls the engine's `String(x)` in the JavaScript build. Last, a compiler matter: Nim 2.2.4 appends a string to another with
+calls the engine's `String(x)` in the JavaScript build. Even murmur is slow on a key looked up
+millions of times, as Nim's JavaScript copies the string to hash it: such a table is keyed by
+`StrKey` of `js.nim`, whose hash reads the bytes in place (the same number, so the same order).
+A `g` regex walked to its end (`matches`, `match`, `replace`) with capture groups takes time in
+the square of the number of matches in the regex library, so `match`, which reads only the
+whole text, gets a pattern without groups (`RE_TOKEN_TEXT` in `diagrams/gantt/dates.nim`). Last, a compiler matter: Nim 2.2.4 appends a string to another with
 `push.apply`, which overflows JavaScript's stack past about 100 KB; CI builds with 2.2.14
 ([decision 0015](../decisions/#0015-ci-builds-with-the-latest-nim-2-2-release)), which does not.
 """, nkWarning, "Code that JavaScript runs slowly"

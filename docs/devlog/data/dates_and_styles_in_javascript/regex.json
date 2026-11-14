@@ -1,0 +1,59 @@
+{
+ "about": "Milliseconds per run of rxbench.nim (nimaki's wrapper over the regex library) on a text of 4,000 lines, 129,780 bytes, in C and in JavaScript (Node 22), and of native.js (the same patterns on JavaScript's own RegExp), on the 4-core sandbox, 14 November 2026. 'patched' is the JavaScript build with pstate.patch applied to a scratch copy of the library, never committed. The JavaScript numbers are the mean of two runs.",
+ "rows": [
+  {
+   "case": "a g walk with two groups (matchAll)",
+   "c": 20.75,
+   "js": 963.0,
+   "patched": 514.0,
+   "native": 2.45
+  },
+  {
+   "case": "the same walk without groups",
+   "c": 11.44,
+   "js": 687.4,
+   "patched": 412.4,
+   "native": null
+  },
+  {
+   "case": "the same walk, text only (match)",
+   "c": 17.79,
+   "js": 986.8,
+   "patched": 527.8,
+   "native": null
+  },
+  {
+   "case": "a lexer: a sticky match at every token",
+   "c": 4.67,
+   "js": 132.0,
+   "patched": 116.1,
+   "native": 2.9
+  }
+ ],
+ "quadratic": {
+  "about": "Milliseconds for one s.match(re) over a date format of n tokens ('D ' n times), the token pattern of dayjs with its three groups and without them, in C and in JavaScript.",
+  "rows": [
+   {
+    "tokens": 6250,
+    "cGroups": 28,
+    "cNoGroups": 2,
+    "jsGroups": 180,
+    "jsNoGroups": 66
+   },
+   {
+    "tokens": 12500,
+    "cGroups": 135,
+    "cNoGroups": 6,
+    "jsGroups": 481,
+    "jsNoGroups": 128
+   },
+   {
+    "tokens": 25000,
+    "cGroups": 541,
+    "cNoGroups": 13,
+    "jsGroups": 1218,
+    "jsNoGroups": 182
+   }
+  ]
+ }
+}
