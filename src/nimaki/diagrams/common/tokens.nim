@@ -6,8 +6,7 @@
 ## checked against Mermaid's generated lexers by the tests.
 ##
 ## A token type's pattern is Pele's sticky regular expression, written as Pele writes it
-## (`jsregex.nim`, decision 0015). A type not yet moved to it still has a `matcher`: a proc that
-## answers, at a byte position, where the match ends (or -1), and names the pattern it answers as.
+## (`jsregex.nim`, decision 0015).
 import std/strutils
 import ../../errors
 import ../../js
@@ -17,17 +16,12 @@ type
   Scanner* = proc (src: string, at: int, previous: int): int
     ## `previous` is the last visible token's type index, or -1 at the start.
 
-  Matcher* = proc (src: string, at: int): int {.noSideEffect.}
-    ## A sticky pattern: the end of its match at `at`, or -1.
-
   TokenType* = ref object
     name*: string
     literal*: string        ## a literal pattern ("" when `pattern` is a regex)
     pattern*: JsRegExp      ## a regular expression with the sticky flag
-    matcher*: Matcher       ## in place of `pattern`, in the types not yet moved to regexes
     hidden*: bool
     opener*: JsRegExp
-    openMatcher*: Matcher   ## in place of `opener`, as `matcher`
       ## Start of a construct that needs a closer. When this matches but the whole pattern does
       ## not, no closer exists in the rest of the text, so the pattern is not tried again.
     first*: string
@@ -83,14 +77,9 @@ proc tokenize*(src: string, types: seq[TokenType], diagram: string): Tokens =
       if scanners[k] == nil: scanners[k] = t.scanner()
       return scanners[k](src, p, previous)
     if t.literal != "": return (if src.continuesWith(t.literal, p): p + t.literal.len else: -1)
-    if t.pattern.isSet:
-      let stop = t.pattern.matchEnd(src, p)
-      if stop >= 0: return stop
-      if t.opener.isSet and t.opener.test(src, p): dead[k] = true
-      return -1
-    let stop = t.matcher(src, p)
+    let stop = t.pattern.matchEnd(src, p)
     if stop >= 0: return stop
-    if t.openMatcher != nil and t.openMatcher(src, p) >= 0: dead[k] = true
+    if t.opener.isSet and t.opener.test(src, p): dead[k] = true
     -1
 
   var p = 0

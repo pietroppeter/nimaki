@@ -5,6 +5,7 @@
 import std/strutils except unescape
 import ../../js
 import common, types
+import ../../jsregex
 
 const
   # const enum T: the index of each token type in ABNF_TOKENS
@@ -23,52 +24,8 @@ const
 
 const DIGITS = "0123456789"
 
-func isNameRest(c: char): bool = c in {'A'..'Z', 'a'..'z', '0'..'9', '-'}  ## [A-Za-z0-9-]
-
-func matchName(s: string, p: int): int =
-  ## /[A-Za-z][A-Za-z0-9-]*/y
-  if p >= s.len or s[p] notin {'A'..'Z', 'a'..'z'}: return -1
-  result = p + 1
-  while result < s.len and isNameRest(s[result]): inc result
-
-func matchAbnfString(s: string, p: int): int =
-  ## /"[^"]*"/y
-  if p >= s.len or s[p] != '"': return -1
-  let close = s.find('"', p + 1)
-  if close == -1: -1 else: close + 1
-
-func hexRun(s: string, i: int): int =
-  ## [0-9A-Fa-f]* from i
-  result = i
-  while result < s.len and s[result] in HexDigits: inc result
-
-func matchNumVal(s: string, p: int): int =
-  ## /%[xXdDbB][0-9A-Fa-f]+(?:-[0-9A-Fa-f]+|\.[0-9A-Fa-f]+)*/y
-  if p + 1 >= s.len or s[p] != '%' or s[p + 1] notin {'x', 'X', 'd', 'D', 'b', 'B'}: return -1
-  var i = hexRun(s, p + 2)
-  if i == p + 2: return -1
-  while i < s.len and s[i] in {'-', '.'}:
-    let j = hexRun(s, i + 1)
-    if j == i + 1: break
-    i = j
-  i
-
-func digitRun(s: string, i: int): int =
-  result = i
-  while result < s.len and s[result] in Digits: inc result
-
-func matchRepeat(s: string, p: int): int =
-  ## /[0-9]*\*[0-9]*/y
-  let i = digitRun(s, p)
-  if i < s.len and s[i] == '*': digitRun(s, i + 1) else: -1
-
-func matchExact(s: string, p: int): int =
-  ## /[0-9]+/y
-  let i = digitRun(s, p)
-  if i > p: i else: -1
-
-let NAME = TokenType(name: "ABNF_RULENAME", matcher: matchName, first: LETTERS, hasFirst: true)
-let COMMENT = lineComment("ABNF_COMMENT", ';')
+let NAME = TokenType(name: "ABNF_RULENAME", pattern: jsre"/[A-Za-z][A-Za-z0-9-]*/y", first: LETTERS, hasFirst: true)
+let COMMENT = TokenType(name: "ABNF_COMMENT", pattern: jsre"/;[^\n\r]*/y", hidden: true, first: ";", hasFirst: true)
 
 let ABNF_TOKENS*: seq[TokenType] = @[
   opening("railroad-abnf-beta", NAME),
@@ -80,14 +37,14 @@ let ABNF_TOKENS*: seq[TokenType] = @[
   literal(")"),
   literal("["),
   literal("]"),
-  title(isNameRest),
+  title(r"[A-Za-z0-9-]"),
   ACC_TITLE,
   ACC_DESCR,
   NAME,
-  TokenType(name: "ABNF_STRING", matcher: matchAbnfString, first: "\"", hasFirst: true),
-  TokenType(name: "ABNF_NUMVAL", matcher: matchNumVal, first: "%", hasFirst: true),
-  TokenType(name: "ABNF_REPEAT", matcher: matchRepeat, first: DIGITS & "*", hasFirst: true),
-  TokenType(name: "ABNF_EXACT_REPEAT", matcher: matchExact, first: DIGITS, hasFirst: true),
+  TokenType(name: "ABNF_STRING", pattern: jsre"""/"[^"]*"/y""", first: "\"", hasFirst: true),
+  TokenType(name: "ABNF_NUMVAL", pattern: jsre"/%[xXdDbB][0-9A-Fa-f]+(?:-[0-9A-Fa-f]+|\.[0-9A-Fa-f]+)*/y", first: "%", hasFirst: true),
+  TokenType(name: "ABNF_REPEAT", pattern: jsre"/[0-9]*\*[0-9]*/y", first: DIGITS & "*", hasFirst: true),
+  TokenType(name: "ABNF_EXACT_REPEAT", pattern: jsre"/[0-9]+/y", first: DIGITS, hasFirst: true),
 ] & hiddenTokens("ABNF") & @[COMMENT]
 
 type Frame = ref object
@@ -151,6 +108,10 @@ proc parseAbnf*(src: string): Grammar =
       let definition = alternation(r)
       discard r.expect(T_semicolon)
       RuleAst(name: name, definition: definition))
+
+func digitRun(s: string, i: int): int =
+  result = i
+  while result < s.len and s[result] in Digits: inc result
 
 func parseIntPrefix(s: string): float =
   ## parseInt(s, 10) of a text that starts with digits

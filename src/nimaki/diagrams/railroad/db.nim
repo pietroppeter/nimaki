@@ -12,16 +12,14 @@ import ../../jsregex
 func dropBreakSpaces(text: string): string =
   text.replace(jsre"/\n\s+/g", "\n")
 
+const RE_KEYWORD = jsre"/^\s*railroad-(ebnf-|abnf-|peg-)?beta/i"
+
 proc notationOf*(source: string): (bool, Notation) =
-  ## /^\s*railroad-(ebnf-|abnf-|peg-)?beta/i. Mermaid has a detector per keyword, each matching
-  ## without regard to case.
-  var i = spaces(source, 0)
-  if not source.toLowerAscii.continuesWith("railroad-", i): return (false, "")
-  i += 9
-  let rest = source.toLowerAscii
-  for (infix, notation) in [("ebnf-", "ebnf"), ("abnf-", "abnf"), ("peg-", "peg")]:
-    if rest.continuesWith(infix & "beta", i): return (true, notation)
-  if rest.continuesWith("beta", i): (true, "railroad") else: (false, "")
+  ## Mermaid has a detector per keyword, each matching without regard to case.
+  let m = RE_KEYWORD.exec(source)
+  if not m.found: return (false, "")
+  let infix = m[1].toLowerAscii
+  (true, if infix == "ebnf-": "ebnf" elif infix == "abnf-": "abnf" elif infix == "peg-": "peg" else: "railroad")
 
 proc grammar(source: string, notation: Notation): (Grammar, seq[RailroadRule]) =
   case notation
