@@ -32,6 +32,7 @@ import devlog/the_referee
 import devlog/the_shape_of_the_port
 import devlog/three_small_diagrams
 import devlog/timeline
+import devlog/what_a_label_holds
 import devlog/what_mermaid_is
 import devlog/lifelines_and_messages
 import devlog/fishbones_and_domains

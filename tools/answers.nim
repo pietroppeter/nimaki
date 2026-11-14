@@ -4,13 +4,28 @@
 ##
 ## A case is the oracle's input: `{"id", "source", "options"}`, with the options Pele's render
 ## takes (now, fontSize, padding, maxWidth, idPrefix...).
-import std/[json, options]
+import std/[json, options, strutils]
+import nimaki/js
 import verdict
 import nimaki
 
 when not defined(js):
   import std/[os, osproc, tables]
   import common
+
+# A host's icons and typesetter, made up, the same as tools/oracle.mjs's.
+proc testIcons(name: string): string =
+  if "none" in name: "" else: "<path d=\"M0 0L" & $utf16Len(name) & " 24\"/>"
+
+proc testMath(tex: string, size: float): MathMarkup =
+  if "bad" in tex: return nil
+  let n = utf16Len(tex)
+  let width = float(n) * size * 0.55
+  let height = size * (if "frac" in tex: 2.25 else: 1.2)
+  if "nan" in tex: return MathMarkup(isSvg: true, markup: "<g/>", width: NaN, height: height)
+  if "html" in tex: return MathMarkup(isSvg: false, markup: "<span class=\"m\">" & $n & "</span>", width: width, height: height)
+  MathMarkup(isSvg: true, markup: "<svg viewBox=\"0 0 " & $n & " 1\"><rect width=\"" & $n & "\" height=\"1\"/></svg>",
+             width: width, height: height)
 
 proc toOptions*(j: JsonNode): RenderOptions =
   ## Pele's render options, as JSON, for nimaki's render.
@@ -26,6 +41,8 @@ proc toOptions*(j: JsonNode): RenderOptions =
   if j.hasKey("monospace"):
     for m in j["monospace"]: result.monospace.add m.getStr
   if j.hasKey("now"): result.now = j["now"].getFloat
+  if j{"icons"}.getStr == "test": result.icons = testIcons
+  if j{"math"}.getStr == "test": result.math = testMath
 
 proc nimakiAnswer*(source: string, options: JsonNode): Answer =
   ## nimaki's answer, in this process: an SVG, or the code and message of its error.

@@ -12,6 +12,8 @@
 ##                       with itself with one byte changed (all different)
 ##     --package:PATH    the oracle package (default reference/npm/package or $PELE_PACKAGE)
 ##     --corpus:NAME     only one corpus: `pele` or `diagrammari` (default both)
+##     --hosts           give every case the test icons and typesetter (tools/answers.nim), so
+##                       the code that draws a host's icons and math runs; writes no summary
 ##     --js              compare Pele with nimaki compiled to JavaScript (tools/jsrunner.nim, in
 ##                       Node) instead of nimaki compiled to C; a full run writes its summary in
 ##                       docs/data/js.json instead of difftest.json
@@ -55,13 +57,19 @@ proc corpusText(): string =
   result = readFile(casesPath)
   if fileExists(diagrammariPath): result.add readFile(diagrammariPath)
 
+var hosts = false   ## --hosts
+
 proc input(c: Case): JsonNode =
   ## A case as the oracle and the JavaScript build read it.
-  %*{"id": c.id, "source": c.source, "options": {"now": fixedNow}}
+  result = %*{"id": c.id, "source": c.source, "options": {"now": fixedNow}}
+  if hosts:
+    result["options"]["icons"] = %"test"
+    result["options"]["math"] = %"test"
 
 proc oracle(cases: seq[Case], packageDir: string): Table[string, Answer] =
   ## Pele's answers for every case, from the cache when the corpus, the package and `now` match.
-  let key = $hash(corpusText() & readFile(packageDir / "dist" / "pele.js") & $fixedNow)
+  let key = $hash(corpusText() & readFile(packageDir / "dist" / "pele.js") & $fixedNow & $hosts &
+                readFile(repoDir / "tools" / "oracle.mjs"))
   let dir = buildDir / "oracle"
   let cached = dir / ("answers-" & key.replace("-", "m") & ".jsonl")
   if not fileExists(cached):
@@ -113,6 +121,7 @@ proc main() =
       of "check-done": checkDone = true
       of "self-test": selfTest = true
       of "js": js = true
+      of "hosts": hosts = true
       of "corpus":
         if val notin ["pele", "diagrammari"]: quit "ERROR --corpus is pele or diagrammari, not " & val, 2
         onlyCorpus = val
@@ -205,12 +214,12 @@ proc main() =
     for k, v in tally.toJson: row[k] = v
     if tallyD.count > 0: row["diagrammari"] = tallyD.toJson
     rows.add row
-  if only.len == 0 and fast == 100 and onlyCorpus.len == 0 and js:
+  if only.len == 0 and fast == 100 and onlyCorpus.len == 0 and js and not hosts:
     var summary = %*{"pin": pinOf(packageDir)}
     for k, v in total.toJson: summary[k] = v
     summary["diagrammari"] = totalD.toJson
     updateJsData("difftest", "", summary)
-  if only.len == 0 and fast == 100 and onlyCorpus.len == 0 and not js:
+  if only.len == 0 and fast == 100 and onlyCorpus.len == 0 and not js and not hosts:
     var summary = %*{"about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand. " &
       "`cases` and the counts beside it are Pele's corpus; `diagrammari` counts diagrammari's.",
       "pin": pinOf(packageDir)}
