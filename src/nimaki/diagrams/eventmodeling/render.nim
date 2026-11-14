@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/eventmodeling/render.ts
-## port-status: draft
+## port-status: conformant
 import std/[algorithm, options, sets, strutils, tables]
 from std/math import ceil
 import ../../preprocess

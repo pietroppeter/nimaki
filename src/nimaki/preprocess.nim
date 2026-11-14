@@ -1,5 +1,5 @@
 ## port-of: src/preprocess.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## The regular expressions of preprocess.ts are hand-written scanners here (porting guide:
 ## regular expressions); each one names the pattern it answers as.

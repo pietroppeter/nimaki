@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/ishikawa/parser.ts
-## port-status: draft
+## port-status: conformant
 import ../../errors
 import ../../js
 import db, lexer

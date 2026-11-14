@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/packet/render.ts
-## port-status: draft
+## port-status: conformant
 import std/[options, tables]
 from std/math import ceil, floor, `mod`
 import ../../jsmath

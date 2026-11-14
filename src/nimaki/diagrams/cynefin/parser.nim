@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/cynefin/parser.ts
-## port-status: draft
+## port-status: conformant
 import std/strutils
 import ../common/tokens
 

@@ -1,5 +1,5 @@
 ## port-of: src/layout/lanes.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Layout for swimlanes. Every top-level group is a lane: a band that runs the length of the
 ## diagram along the flow. Ranks are shared by all lanes, so a step sits level with the steps

@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/xychart/ticks.ts
-## port-status: draft
+## port-status: conformant
 from std/math import floor
 import ../../jsmath
 import ../../js

@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/common/fit-text.ts
-## port-status: draft
+## port-status: conformant
 from std/math import floor
 import ../../js
 import ../../text/measurer

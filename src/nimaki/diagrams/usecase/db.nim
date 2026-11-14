@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/usecase/db.ts
-## port-status: draft
+## port-status: conformant
 import std/[algorithm, sets, tables]
 import ../../errors
 import ../../js

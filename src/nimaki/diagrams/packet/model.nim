@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/packet/model.ts
-## port-status: draft
+## port-status: conformant
 import std/options
 from std/math import floor
 import ../../errors

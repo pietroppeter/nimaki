@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/radar/render.ts
-## port-status: draft
+## port-status: conformant
 import std/options
 from std/math import PI, ceil, classify, FloatClass
 import ../../jsmath

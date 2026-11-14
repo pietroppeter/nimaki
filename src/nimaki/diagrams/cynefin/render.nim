@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/cynefin/render.ts
-## port-status: draft
+## port-status: conformant
 import std/[options, tables]
 from std/math import ceil
 import ../../preprocess

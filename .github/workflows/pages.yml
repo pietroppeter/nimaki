@@ -126,6 +126,18 @@ jobs:
           nim r tools/fuzz.nim sankey --cases:5000
           nim r tools/fuzz.nim quadrantChart --cases:5000
 
+      # Pele's own test suites (vitest), run on nimaki's JavaScript build: a test that passes on
+      # Pele and fails on nimaki fails CI, unless it needs what nimaki does not provide (parse(),
+      # mount()), only misses one of Pele's time bounds, or is listed in tools/peletests/known.txt
+      - uses: actions/cache@v4
+        with:
+          path: |
+            build/peletests/pele
+            build/peletests/pele-*.json
+          key: peletests-${{ hashFiles('reference/PIN') }}
+      - name: Pele's test suites
+        run: nim r tools/peletests.nim --check
+
       - name: Tests
         run: |
           if [ -f tests/all.nim ]; then nim r tests/all.nim; else echo "no tests/all.nim yet"; fi

@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/xychart/render.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## JavaScript's `undefined` for a number is NaN here: `finite` gives NaN for a value that is not
 ## a finite number, and `?? fallback` becomes `orElse`.

@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/state/parser.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Pele's `StateBuilder` (the calls Mermaid's grammar makes on its `yy` object) is the `StateDb`
 ## itself here.

@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/sankey/render.ts
-## port-status: draft
+## port-status: conformant
 import std/[options, tables, strutils]
 from std/math import ceil, floor, classify, FloatClass, isNaN
 import ../../preprocess

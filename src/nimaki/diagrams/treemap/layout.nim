@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/treemap/layout.ts
-## port-status: draft
+## port-status: conformant
 import std/[algorithm, options]
 from std/math import classify, FloatClass
 import ../../js

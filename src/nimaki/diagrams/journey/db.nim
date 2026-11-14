@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/journey/db.ts
-## port-status: draft
+## port-status: conformant
 import std/[algorithm, sets, strutils]
 import ../../js
 

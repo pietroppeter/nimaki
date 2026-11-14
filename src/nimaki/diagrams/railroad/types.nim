@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/railroad/types.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Port notes: the union of node shapes is one object with a kind. A sequence's `elements`, a
 ## choice's `alternatives` and the `element` of an optional or a repetition are all `kids`, in

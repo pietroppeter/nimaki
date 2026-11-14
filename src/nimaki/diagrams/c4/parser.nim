@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/c4/parser.ts
-## port-status: draft
+## port-status: conformant
 import ../../errors
 import ../../js
 import db, lexer, tokens

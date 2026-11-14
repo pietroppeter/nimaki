@@ -1,5 +1,5 @@
 ## port-of: src/text/icons.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## The host's icons for the render in progress. A label leaves room for an icon only when the
 ## host has one by that name, and layout has to know that before anything is drawn.

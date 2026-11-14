@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/usecase/types.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Optional strings are "" for undefined where Pele treats an empty string as absent too. The
 ## positions of each statement's parts (`statements`, `GraphStatement`, the `*Occurrence` types)

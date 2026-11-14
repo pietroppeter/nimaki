@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/requirement/types.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## `type` is `kind` (the porting guide's names table).
 

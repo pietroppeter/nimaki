@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/c4/route.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Boxes are compared by identity, as in Pele: `Lanes.taken` is keyed by the box's `uid`.
 import std/tables

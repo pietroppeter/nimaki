@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/agentflow/lexer.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Port notes, as in the flowchart lexer: positions are byte offsets into the UTF-8 source.
 ## `cu(i)` reads the character at byte `i` as `charCodeAt` does where it matters (an ASCII byte is

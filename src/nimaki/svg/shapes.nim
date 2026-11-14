@@ -1,5 +1,5 @@
 ## port-of: src/svg/shapes.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Port notes: Pele keeps a record of shape definitions, each with functions for its size, its
 ## drawing, its inset and its span. Here each of those is one `case` over the shape's name, in

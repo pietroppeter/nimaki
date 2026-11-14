@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/usecase/lexer.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Positions are byte offsets into the UTF-8 source (decision 0011). Every test here is of an
 ## ASCII character or of `c >= 128` (or `c < 127`), which read the same on bytes: every byte of a

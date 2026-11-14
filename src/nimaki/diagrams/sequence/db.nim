@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/sequence/db.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## `JSON.parse` of the actor menus is `jsonParse` of `js.nim`, which is as strict as JavaScript's
 ## (`std/json`'s `parseJson` also reads comments and trailing commas). Values are `JsonNode`.

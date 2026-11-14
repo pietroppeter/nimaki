@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/flowchart/render.ts
-## port-status: draft
+## port-status: conformant
 import std/[options, strutils, tables]
 from std/math import ceil, isNaN
 import ../../js

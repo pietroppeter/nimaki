@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/git/render.ts
-## port-status: draft
+## port-status: conformant
 import std/[algorithm, options, tables]
 from std/math import ceil
 import ../../js

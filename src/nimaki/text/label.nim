@@ -1,5 +1,5 @@
 ## port-of: src/text/label.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Labels are measured and broken into lines here. The regular expressions are scanners
 ## (porting guide); each one names the pattern it answers as.

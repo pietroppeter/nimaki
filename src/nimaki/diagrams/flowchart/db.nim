@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/flowchart/db.ts
-## port-status: draft
+## port-status: conformant
 import std/[options, sets, strutils, tables, unicode]
 from std/math import isNaN
 import ../../errors

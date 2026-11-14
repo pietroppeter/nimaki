@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/sankey/index.ts
-## port-status: draft
+## port-status: conformant
 import ../../types
 import ../../preprocess
 import db, parser, render

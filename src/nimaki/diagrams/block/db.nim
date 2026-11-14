@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/block/db.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Also holds the types of src/diagrams/block/types.ts. A Block's optional strings are "" for
 ## undefined, which every reader treats as Pele does; `widthInColumns` is NaN for undefined, and

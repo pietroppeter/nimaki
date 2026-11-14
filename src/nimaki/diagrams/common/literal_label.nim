@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/common/literal-label.ts
-## port-status: draft
+## port-status: conformant
 import std/[strutils, unicode]
 from std/math import ceil
 import ../../js

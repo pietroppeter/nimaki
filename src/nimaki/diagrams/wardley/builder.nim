@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/wardley/builder.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Optional fields are `Option`s where Pele tells undefined from a value; a strategy or a flow
 ## is "" for none.

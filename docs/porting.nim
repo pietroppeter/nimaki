@@ -156,6 +156,18 @@ of Nim 2.2.4, which CI uses, does). Multiply in 16-bit halves, as `imul` in
 """, nkWarning, "Code that only C can run"
 
 nbNote """
+Some Nim runs in JavaScript, gives the same SVG, and is far slower, because a Nim string compiled
+to JavaScript is an array of bytes, and copying it copies every byte, where a JavaScript string is
+shared. Pele's stress tests (`nim r tools/peletests.nim`) found four cases, on 14 November 2026. `for r
+in s.runes` copies `s` at every byte it reads: use `codePoints(s)` of `js.nim`. A closure that
+captures a long string copies it at each call: write the helper as a `template`. A label given to
+each of thousands of pieces is thousands of copies: share it in a `ref object`
+(`PacketLabel`, `SharedStyles`); not a `ref string`, which nim js gets wrong. And a `Table` keyed
+by a long string hashes all of it at each lookup, where JavaScript caches a string's hash: key it
+by something short.
+""", nkWarning, "Code that JavaScript runs slowly"
+
+nbNote """
 The older types (timeline, journey, flowchart, sequence...) are read by hand-written loops that
 port Jison's compiled rules: `src.charCodeAt(p)`, then `p++`. With byte offsets, read the
 character with `codeAt(src, p)` of `common/scan.nim` (a code point, -1 past the end) and step

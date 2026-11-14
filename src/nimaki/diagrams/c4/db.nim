@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/c4/db.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Also holds the types of src/diagrams/c4/types.ts. An element's optional text fields (type,
 ## descr, techn, sprite, tags, link, the colours...) are kept in `fields`, where a missing key is

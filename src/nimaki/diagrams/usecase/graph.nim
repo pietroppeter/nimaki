@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/usecase/graph.ts
-## port-status: draft
+## port-status: conformant
 import std/[strutils, tables]
 import ../../js
 import json, types

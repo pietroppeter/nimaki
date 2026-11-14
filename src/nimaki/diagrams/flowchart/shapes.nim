@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/flowchart/shapes.ts
-## port-status: draft
+## port-status: conformant
 import std/tables
 
 # Mermaid's documented shape names: the short name first, then its aliases.

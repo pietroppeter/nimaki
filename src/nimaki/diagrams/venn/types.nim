@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/venn/types.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## JavaScript's `undefined` for a label is `hasLabel` false: a label can also be "".
 import std/tables

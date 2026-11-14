@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/sequence/render.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Port notes: Pele's closures over the drawing's state (`layout`, `extend`, `need`, `backed`...)
 ## are nested procs over the same locals. `STYLES` is an array of `Option[LineStyle]`. A fill that

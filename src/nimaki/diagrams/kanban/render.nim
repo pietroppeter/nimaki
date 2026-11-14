@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/kanban/render.ts
-## port-status: draft
+## port-status: conformant
 import std/[options, tables, unicode]
 from std/strutils import nil
 from std/math import ceil, floor

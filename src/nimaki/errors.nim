@@ -1,5 +1,5 @@
 ## port-of: src/errors.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Offsets here are byte offsets in UTF-8 text; `locate` turns the column into UTF-16 code units,
 ## as JavaScript counts it (decision 0011).

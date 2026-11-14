@@ -11,7 +11,8 @@
 ## - `passed`: it passes on nimaki too;
 ## - `api`: it calls what nimaki does not provide (`parse()`, `mount()`, zoom...);
 ## - `unported`: it draws a type nimaki does not draw yet;
-## - `speed`: only a time bound of Pele's failed (stress tests; the JavaScript build is slower);
+## - `speed`: only a time bound of Pele's failed (stress tests; the JavaScript build is slower),
+##   or vitest's own limit of a minute a test;
 ## - `canvas`: it tests Pele's canvas measurer, which nimaki does not port;
 ## - `known`: listed in tools/peletests/known.txt, with the reason (`skip` there: not even run);
 ## - `failed`: anything else, one `ERROR` line each: a difference to fix or to explain in
@@ -104,7 +105,7 @@ proc kindOf(o: Outcome, known: seq[Known]): Kind =
   if o.missing.len > 0 or "NotInNimaki" in o.message: kApi
   elif "nimaki does not draw" in o.message or typeOf(o.file) in unported: kUnported
   elif o.file == "tests/util/measurer.test.ts" and o.name.startsWith("canvasMeasurer"): kCanvas
-  elif o.message.split("\n    at ")[0].find(speedRe) >= 0: kSpeed
+  elif o.message.split("\n    at ")[0].find(speedRe) >= 0 or o.message.startsWith("Error: Test timed out"): kSpeed
   else: kFailed
 
 proc firstLine(s: string): string =
