@@ -1,5 +1,5 @@
 ## port-of: src/types.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## JavaScript's optional fields are `Option[T]` where Pele tells `undefined` from a value the
 ## type can hold; a nil proc is an absent function.

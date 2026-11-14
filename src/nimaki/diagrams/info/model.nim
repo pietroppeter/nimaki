@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/info/model.ts
-## port-status: draft
+## port-status: conformant
 import ../../js
 import parser
 

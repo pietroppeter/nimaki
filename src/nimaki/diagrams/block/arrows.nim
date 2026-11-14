@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/block/arrows.ts
-## port-status: draft
+## port-status: conformant
 import ../../svg/builder
 import ../../js
 

@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/kanban/db.ts
-## port-status: draft
+## port-status: conformant
 import std/strutils
 from std/unicode import nil
 import ../../errors

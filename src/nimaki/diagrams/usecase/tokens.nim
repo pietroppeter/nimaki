@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/usecase/tokens.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Mermaid's token types, in an order that makes its token categories ranges: WORD is USECASE to
 ## IDENTIFIER, and LABEL_TEXT is USECASE to LABEL_SYMBOL.

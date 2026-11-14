@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/cynefin/model.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Pele's `DomainBlock` and `Transition` inputs of `CynefinDb` are the parser's AST types.
 import std/tables

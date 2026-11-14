@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/architecture/icons.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Outlines for the icon names Mermaid's architecture diagrams know without an icon pack, drawn on
 ## a 24 by 24 grid. Any other name is left to the host's icon resolver.

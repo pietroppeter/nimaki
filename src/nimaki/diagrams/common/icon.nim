@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/common/icon.ts
-## port-status: draft
+## port-status: conformant
 import ../../svg/builder
 import ../../text/icons
 

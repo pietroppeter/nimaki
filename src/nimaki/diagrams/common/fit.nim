@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/common/fit.ts
-## port-status: draft
+## port-status: conformant
 import std/strutils
 import ../../js
 import ../../text/[label, measurer]

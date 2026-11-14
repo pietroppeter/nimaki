@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/common/caseless.ts
-## port-status: draft
+## port-status: conformant
 
 func wordAt*(src: string, at: int, word: string): bool =
   ## Whether `word`, written in lower case, is at `at`. Only ASCII letters match in either case,

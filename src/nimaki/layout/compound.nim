@@ -1,5 +1,5 @@
 ## port-of: src/layout/compound.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Port notes: `Dir | undefined` is a string, "" for undefined. A snapshot copies the routes (Nim
 ## seqs are values), which is the same as keeping the arrays in the TypeScript, since `place()`

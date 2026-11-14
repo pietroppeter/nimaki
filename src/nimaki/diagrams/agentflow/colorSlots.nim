@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/agentflow/colorSlots.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Two rules, as in Mermaid: a node takes the color of its kind, from a fixed slot, so editing the
 ## diagram around it never recolors it; containers count through the slots above the kinds, in the

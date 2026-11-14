@@ -1,5 +1,5 @@
 ## port-of: src/util/chars.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Tests on UTF-16 code units, as the lexers read them with charCodeAt. Past the end of a string
 ## the code is NaN, which is none of these (here: -1, which is none of these either).

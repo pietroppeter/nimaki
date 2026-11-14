@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/timeline/parser.ts
-## port-status: draft
+## port-status: conformant
 import ../../errors
 import ../../js
 import ../common/scan

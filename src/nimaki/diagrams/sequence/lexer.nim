@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/sequence/lexer.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Port notes: positions are byte offsets into the UTF-8 source (decision 0011). `cu(q)` reads
 ## the character at byte `q` as `charCodeAt` does where it matters: an ASCII byte is itself, any

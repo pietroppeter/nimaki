@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/c4/layout.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Pele's maps keyed by elements and groups are keyed here by the elements' `uid`.
 import std/[tables, strutils, math]

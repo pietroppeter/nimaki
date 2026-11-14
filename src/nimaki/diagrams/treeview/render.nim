@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/treeview/render.ts
-## port-status: draft
+## port-status: conformant
 import std/[options, strutils, tables]
 from std/math import ceil
 import ../../preprocess

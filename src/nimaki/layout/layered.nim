@@ -1,5 +1,5 @@
 ## port-of: src/layout/layered.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Layered (Sugiyama-style) layout of one flat graph. Ranks run down the y axis; callers
 ## rotate the result for other directions.

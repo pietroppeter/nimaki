@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/sankey/db.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## A link names its ends by their index in `nodes` (Pele keeps the node objects themselves).
 import std/tables

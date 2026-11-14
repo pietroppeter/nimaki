@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/mindmap/parser.ts
-## port-status: draft
+## port-status: conformant
 import ../common/outline
 import db
 

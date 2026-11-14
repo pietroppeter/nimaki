@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/xychart/db.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## JavaScript's `undefined` is "" for a string (title, accTitle, accDescr, orientation) and NaN
 ## for a value of a series: a value read from the text is never NaN.

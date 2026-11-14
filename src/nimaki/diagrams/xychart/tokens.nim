@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/xychart/tokens.ts
-## port-status: draft
+## port-status: conformant
 
 const
   T_END* = 0

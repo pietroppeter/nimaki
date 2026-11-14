@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/treeview/boxDrawing.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Mermaid's box-drawing preprocessor: turns `├──`, `└──`, `│` (and the heavy variants) into the
 ## indentation the grammar reads.

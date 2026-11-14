@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/requirement/graph.ts
-## port-status: draft
+## port-status: conformant
 import std/[strutils, tables]
 import db, types
 

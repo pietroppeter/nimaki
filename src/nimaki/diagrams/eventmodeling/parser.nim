@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/eventmodeling/parser.ts
-## port-status: draft
+## port-status: conformant
 import std/[sets, strutils]
 import ../common/[tokens, acc_descr]
 import ../../js

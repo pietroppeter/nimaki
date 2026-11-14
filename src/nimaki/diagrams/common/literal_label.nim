@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/common/literal-label.ts
-## port-status: draft
+## port-status: conformant
 import std/[strutils, unicode]
 from std/math import ceil
 import ../../js
@@ -10,9 +10,9 @@ func isSpaceChar(c: string): bool =
   ## SPACE = /\s/, tested on one code point
   c.len > 0 and isJsSpace(codePointAt(c, 0).rune)
 
-func codePoints(s: string): seq[string] =
+func codePointList(s: string): seq[string] =
   ## Array.from(s)
-  for r in s.runes: result.add r.toUTF8
+  for c in codePoints(s): result.add c
 
 proc literalLabel*(text: string, measurer: TextMeasurer, size, room: float, style = 0): Label =
   ## Literal labels, including filenames and protocol fields, must retain every character but the
@@ -20,7 +20,7 @@ proc literalLabel*(text: string, measurer: TextMeasurer, size, room: float, styl
   ## bounded by one line of text.
   var lines: seq[string]
   for raw in text.split('\n'):
-    let chars = codePoints(raw)
+    let chars = codePointList(raw)
     if chars.len == 0: lines.add ""
     var start = 0
     while start < chars.len:

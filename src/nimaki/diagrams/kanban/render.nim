@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/kanban/render.ts
-## port-status: draft
+## port-status: conformant
 import std/[options, tables, unicode]
 from std/strutils import nil
 from std/math import ceil, floor
@@ -60,14 +60,14 @@ proc fitLabel(raw: string, markdown: bool, measurer: TextMeasurer, size, max: fl
         continue
       var text = ""
       var start = width
-      for ch in span.text.runes:
-        let w = measurer.width($ch, size, span.style)
+      for ch in codePoints(span.text):
+        let w = measurer.width(ch, size, span.style)
         if width > 0 and width + w > max:
           if text != "": line.add Span(text: text, style: span.style, width: width - start)
           commit()
           text = ""
           start = 0
-        text.add $ch
+        text.add ch
         width += w
       if text != "": line.add Span(text: text, style: span.style, width: width - start)
     commit()

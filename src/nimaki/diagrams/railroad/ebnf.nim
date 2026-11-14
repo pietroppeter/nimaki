@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/railroad/ebnf.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## `railroad-ebnf-beta`: EBNF in the W3C and ISO 14977 styles.
 import ../../js
