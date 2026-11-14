@@ -103,11 +103,27 @@ proc supports*(text: string): bool =
   except CatchableError:
     false
 
-proc render*(source: string, options = RenderOptions()): RenderResult =
-  ## Draws Mermaid `source` as SVG, or raises PeleError.
-  guarded(proc (): RenderResult =
-    let parsed = parseSource(source, options.limit.get(DEFAULT_LIMIT),
+type ParsedModel* = ref object
+  ## What `parse` returns: the diagram's model, which `render` draws. Pele's `parse()` returns
+  ## the model itself, with `mermaidType` added to it; here the model is a field, `model`, of
+  ## the type its diagram's `model.nim` declares (a `PieModel`, a `FlowchartModel`...).
+  diagramType*: string        ## Pele's `type`
+  mermaidType*: string
+  model*: RootRef
+  parsed: Parsed
+
+proc parse*(text: string, options = RenderOptions()): ParsedModel =
+  ## Reads Mermaid `text` into its diagram's model, without drawing it, or raises PeleError.
+  ## Of the options, only those read while parsing count, as in Pele's `ParseOptions`:
+  ## `limit`, `maxEdges` and `config`.
+  guarded(proc (): ParsedModel =
+    let parsed = parseSource(text, options.limit.get(DEFAULT_LIMIT),
                              options.maxEdges.get(DEFAULT_MAX_EDGES), options.config)
+    ParsedModel(diagramType: parsed.found.diagramType, mermaidType: parsed.found.mermaidType,
+                model: parsed.model, parsed: parsed))
+
+proc renderParsed(parsed: Parsed, options: RenderOptions): RenderResult =
+  guarded(proc (): RenderResult =
     let kind = parsed.found.diagramType
     let diagram = parsed.diagram
     let section = parsed.config[if diagram.section != "": diagram.section else: kind]
@@ -133,3 +149,15 @@ proc render*(source: string, options = RenderOptions()): RenderResult =
     for link in rendered.links.mitems: link.id = decodeEntities(link.id)
     RenderResult(diagramType: kind, mermaidType: parsed.found.mermaidType, svg: rendered.svg,
                  width: rendered.width, height: rendered.height, links: rendered.links))
+
+proc render*(source: string, options = RenderOptions()): RenderResult =
+  ## Draws Mermaid `source` as SVG, or raises PeleError.
+  guarded(proc (): RenderResult =
+    renderParsed(parseSource(source, options.limit.get(DEFAULT_LIMIT),
+                             options.maxEdges.get(DEFAULT_MAX_EDGES), options.config), options))
+
+proc render*(model: ParsedModel, options = RenderOptions()): RenderResult =
+  ## Draws a model that `parse` returned. The options read while parsing (`limit`, `maxEdges`,
+  ## `config`) were used then, and are not read again, as in Pele.
+  if model == nil: raise newException(ValueError, "render() takes diagram text or a model that parse() returned.")
+  renderParsed(model.parsed, options)

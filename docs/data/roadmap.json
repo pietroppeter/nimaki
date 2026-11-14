@@ -794,6 +794,28 @@
           "pr": ""
         },
         {
+          "id": "public-parse",
+          "kind": "port",
+          "title": "parse(), as Pele exports it",
+          "what": "Pele's API has parse(text, options), which returns the diagram's model, and render(model, options), which draws a model that parse() returned. nimaki's entry point gets both, and a referee compares nimaki's models with Pele's, so that Pele's tests that read a model can run on the port. Picked by the coordinator; the diagrammari proposal needs it.",
+          "done_when": "nimaki exports parse() and render(model); tools/parsediff.nim compares the models of the corpus with Pele's and says, per type, how many are the same.",
+          "owner": "Port class and swimlane",
+          "status": "done",
+          "post": "the-model-in-between",
+          "pr": "70"
+        },
+        {
+          "id": "models-as-pele",
+          "kind": "port",
+          "title": "Models as Pele's",
+          "what": "tools/parsediff.nim compares the model nimaki's parse() returns with Pele's: the same for some types, different in shape for the others (a field the port adds, a union held as one object with a kind, a field named otherwise). Bring each type's model to Pele's shape, type by type, so that Pele's tests that read a model can run on the port. docs/data/parsediff.json says where each type stands.",
+          "done_when": "nim r tools/parsediff.nim finds every model the same as Pele's.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
+        },
+        {
           "id": "mermaid-block",
           "kind": "tooling",
           "title": "A Mermaid block for the pages, checked against Pele",
