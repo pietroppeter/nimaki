@@ -43,6 +43,7 @@ proc strings(j: JsonNode): seq[string] =
 
 proc toOptions*(j: JsonNode): RenderOptions =
   ## Pele's render options, from their JSON. Unknown keys are ignored, as Pele ignores them.
+  result = RenderOptions()   # `now` defaults to NaN, which `result` alone would leave at 0
   if j.isNil or j.kind != JObject: return
   if j.hasKey("fontFamily"): result.fontFamily = j["fontFamily"].getStr
   if j.hasKey("fontFamilyMono"): result.fontFamilyMono = j["fontFamilyMono"].getStr

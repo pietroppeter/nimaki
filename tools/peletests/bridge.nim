@@ -43,6 +43,7 @@ proc strings(x: JsObject): seq[string] =
   for i in 0 ..< x["length"].to(int): result.add x[i].str
 
 proc toOptions(o: JsObject): RenderOptions =
+  result = RenderOptions()   # `now` defaults to NaN, which `result` alone would leave at 0
   if o.isUndef: return
   template has(k: string): bool = not o[k].isUndef
   if has"measurer":

@@ -29,6 +29,7 @@ proc testMath(tex: string, size: float): MathMarkup =
 
 proc toOptions*(j: JsonNode): RenderOptions =
   ## Pele's render options, as JSON, for nimaki's render.
+  result = RenderOptions()   # `now` defaults to NaN, which `result` alone would leave at 0
   if j.isNil: return
   if j.hasKey("fontSize"): result.fontSize = some(j["fontSize"].getFloat)
   if j.hasKey("padding"): result.padding = some(j["padding"].getFloat)

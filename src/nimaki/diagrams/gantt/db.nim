@@ -23,7 +23,8 @@ const
 
 proc clock*(now: float): float =
   ## The one place the current time is read.
-  if now != 0 and now == now and now != Inf and now != -Inf: now else: floor(epochTime() * 1000)
+  ## `Number.isFinite(given) ? given : Date.now()`: 0 is 1970.
+  if now == now and now != Inf and now != -Inf: now else: floor(epochTime() * 1000)
 
 func isNumericFormat(s: string): bool =
   ## /^[YMDHhmsSZXx\-/.:, T]*$/

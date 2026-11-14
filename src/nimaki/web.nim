@@ -14,6 +14,7 @@ when not defined(js):
   {.error: "src/nimaki/web.nim is compiled with nim js".}
 
 proc toOptions(j: JsonNode): RenderOptions =
+  result = RenderOptions()   # `now` defaults to NaN, which `result` alone would leave at 0
   if j.kind != JObject: return
   if j.hasKey("fontSize"): result.fontSize = some(j["fontSize"].getFloat)
   if j.hasKey("padding"): result.padding = some(j["padding"].getFloat)
