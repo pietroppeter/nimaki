@@ -212,6 +212,10 @@ files, minified) as assets of the GitHub release, so that diagrammari can vendor
 vendors Pele's bundle? The alternative is that diagrammari compiles them itself with
 `-d:nimakiTypes`, unminified unless it adds esbuild. The proposal of this thread: carry them,
 from 0.2.0 on.
+
+**Pietro's answer** (15 November 2026): yes, the releases carry the built files from 0.2.0
+on, made by `nim r tools/webbuild.nim`; the release of [nimaki 0.2.0](../../roadmap/) attaches
+them.
 """, nkQuestion, "For Pietro"
 
 nbText: """
