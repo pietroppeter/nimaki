@@ -13,12 +13,13 @@ SVG out, checked byte for byte against Pele itself.
 
 ## Use it
 
-The latest release is **0.2.0** ([`CHANGELOG.md`](CHANGELOG.md)): every diagram type of Pele
-1.13.0, identical to Pele byte for byte, in the C and JavaScript builds, with Pele's browser side
-(`mount`, zoom) in the JavaScript build and Pele's models as JSON. In a nimble file:
+The latest release is **0.1.0** ([`CHANGELOG.md`](CHANGELOG.md)): every diagram type of Pele
+1.13.0, identical to Pele byte for byte, in the C and JavaScript builds. `main` holds the coming
+0.2.0, with Pele's browser side (`mount`, zoom) in the JavaScript build and Pele's models as
+JSON; it is tagged once the JavaScript build is smaller. In a nimble file:
 
 ```nim
-requires "nimaki == 0.2.0"
+requires "nimaki == 0.1.0"
 ```
 
 ```nim

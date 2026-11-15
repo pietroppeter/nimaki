@@ -4,7 +4,11 @@ Every release of nimaki, newest first. A version is `MAJOR.MINOR.PATCH` and its 
 `vMAJOR.MINOR.PATCH`; how the numbers move, and what each release promises, is decision 0020
 (*Versions and releases*, on the site's Decisions page). Each release says which Pele it draws as.
 
-## 0.2.0 (15 November 2026)
+## 0.2.0 (not released yet)
+
+Not tagged yet: Pietro decided on 15 November 2026 that 0.2.0 waits for a smaller JavaScript
+build (the roadmap step *A smaller JavaScript build*), since nimaki is not ready for diagrammari
+while nimaki.js is about 10 MB. What follows is what it holds so far.
 
 Pele's browser side, and Pele's models through every door: the release for diagrammari to start
 from. The drawings are the same as 0.1.0's; the API grows, and the page's `nimaki` changes shape,
