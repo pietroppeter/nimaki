@@ -11,6 +11,22 @@ SVG out, checked byte for byte against Pele itself.
 - The working rules, for people and coding agents: [`AGENTS.md`](AGENTS.md).
 - Get started: `sh tools/setup.sh`, then `nim r docs/all.nim` to build the pages.
 
+## Use it
+
+The first release is **0.1.0** ([`CHANGELOG.md`](CHANGELOG.md)): every diagram type of Pele
+1.13.0, identical to Pele byte for byte, in the C and JavaScript builds. In a nimble file:
+
+```nim
+requires "nimaki == 0.1.0"
+```
+
+```nim
+import nimaki
+writeFile "pets.svg", render("pie title Pets\n  \"Dogs\" : 386\n  \"Cats\" : 85").svg
+```
+
+Not in it yet: Pele's browser side (`mount`, zoom).
+
 ## The name
 
 In Hawaiian stories Nāmaka is a goddess of the sea and Pele's older sister. When Pele dug her
