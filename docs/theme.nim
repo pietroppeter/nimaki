@@ -296,6 +296,12 @@ details.fold[open] > summary { border-bottom: 1px dashed var(--line); margin-bot
 .pipeline li.started::before { background: var(--primary); border-color: var(--primary); box-shadow: 0 0 .45rem var(--primary); }
 .pipeline li.done { color: var(--ink); border-color: var(--success); background: var(--success-soft); }
 .pipeline li.done::before { background: var(--success); border-color: var(--success); }
+.pipeline li.linked { position: relative; }
+.pipeline li.linked a { color: inherit; text-decoration: none; }
+.pipeline li.linked a::after { content: ""; position: absolute; inset: 0; border-radius: 999px; }
+.pipeline li.linked:hover, .pipeline li.linked:focus-within { border-color: var(--secondary); }
+.pipeline li.linked a:focus-visible { outline: none; }
+.pipeline li.linked:focus-within { outline: 2px solid var(--secondary); outline-offset: 2px; }
 .pipeline-legend { color: var(--muted); font-size: .85rem; margin-top: -.8rem; }
 
 /* a status, in words and a colour */
