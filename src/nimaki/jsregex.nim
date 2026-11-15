@@ -24,6 +24,11 @@
 ## class matches half of an emoji there and the whole emoji here; and a capture inside a
 ## repeated group keeps its last value here where JavaScript resets it. `docs/divergences.md`
 ## says where this could show.
+##
+## In the JavaScript build none of this applies to the matching itself: every match that the fast
+## paths do not settle runs on JavaScript's own `RegExp`, with Pele's pattern and flags as written
+## (decision 0019, section *The JavaScript build* below). Patterns are still translated, so a
+## literal that the C build could not run stops both builds.
 import std/[strutils, unicode, tables]
 import regex
 import regex/[nfatype, nfamatch2]
@@ -707,7 +712,8 @@ proc dynamicSlot(pattern, flags: string): JsRegExp =
     let e = dynamic[at]
     return made(pattern, flags, e.translated, -1 - at)
   result = made(pattern, flags, translate(pattern, flags), -1 - dynamic.len)
-  dynamic.add Engine(re: compiled(result), translated: result.translated)
+  when defined(js): dynamic.add Engine(translated: result.translated)  # matched natively
+  else: dynamic.add Engine(re: compiled(result), translated: result.translated)
   dynamicIndex[key] = dynamic.high
 
 func newRegExp*(pattern: string, flags = ""): JsRegExp =
@@ -756,9 +762,147 @@ template withEngine(re: JsRegExp, r, body: untyped): untyped =
   template r: untyped {.inject.} = e.re
   body
 
+# ---------------------------------------------------------------------------------------------
+# The JavaScript build: JavaScript's own RegExp
+
+when defined(js):
+  # In the JavaScript build every match runs on the engine's own RegExp, with Pele's pattern and
+  # flags as written (decision 0019): nim-regex is 30 to 50 times slower there than in C (post
+  # *Dates and styles in JavaScript*). The text, UTF-8 bytes in a Nim string, becomes a
+  # JavaScript string once and is kept, with tables from byte offsets to UTF-16 positions and
+  # back, so a lexer that matches the same source thousands of times converts it once. The
+  # fast paths above (a class run, plain text, a literal prefix, the first bytes) still run first.
+  {.emit: """
+var nimakiRxRes = new Map();
+function nimakiRxDecode(a) {
+  // UTF-8 (and WTF-8 for a lone surrogate) bytes to a JavaScript string, with the UTF-16 position
+  // of each byte (b2u) and the byte of each UTF-16 position (u2b). A byte that does not start a
+  // valid sequence stands for itself as one unit.
+  var n = a.length, ascii = true;
+  for (var i = 0; i < n; i++) if (a[i] >= 0x80) { ascii = false; break; }
+  if (ascii) {
+    var parts = [];
+    for (var i = 0; i < n; i += 8192) parts.push(String.fromCharCode.apply(null, a.slice(i, i + 8192)));
+    return { js: parts.join(""), ascii: true, b2u: null, u2b: null };
+  }
+  var units = [], b2u = new Int32Array(n + 1), u2b = [];
+  var i = 0;
+  while (i < n) {
+    var b = a[i], cp = b, size = 1;
+    if (b >= 0xC2 && b < 0xE0 && i + 1 < n && (a[i + 1] & 0xC0) == 0x80) {
+      cp = ((b & 0x1F) << 6) | (a[i + 1] & 0x3F); size = 2;
+    } else if (b >= 0xE0 && b < 0xF0 && i + 2 < n && (a[i + 1] & 0xC0) == 0x80 && (a[i + 2] & 0xC0) == 0x80) {
+      cp = ((b & 0x0F) << 12) | ((a[i + 1] & 0x3F) << 6) | (a[i + 2] & 0x3F); size = 3;
+      if (cp < 0x800) { cp = b; size = 1; }
+    } else if (b >= 0xF0 && b < 0xF5 && i + 3 < n && (a[i + 1] & 0xC0) == 0x80 && (a[i + 2] & 0xC0) == 0x80 && (a[i + 3] & 0xC0) == 0x80) {
+      cp = ((b & 0x07) << 18) | ((a[i + 1] & 0x3F) << 12) | ((a[i + 2] & 0x3F) << 6) | (a[i + 3] & 0x3F); size = 4;
+      if (cp < 0x10000 || cp > 0x10FFFF) { cp = b; size = 1; }
+    }
+    for (var k = 0; k < size; k++) b2u[i + k] = units.length;
+    if (cp >= 0x10000) {
+      cp -= 0x10000;
+      u2b.push(i); units.push(0xD800 + (cp >> 10));
+      u2b.push(i + size); units.push(0xDC00 + (cp & 0x3FF));  // a match cannot end inside the pair here
+    } else { u2b.push(i); units.push(cp); }
+    i += size;
+  }
+  b2u[n] = units.length; u2b.push(n);
+  var parts = [];
+  for (var j = 0; j < units.length; j += 8192) parts.push(String.fromCharCode.apply(null, units.slice(j, j + 8192)));
+  return { js: parts.join(""), ascii: false, b2u: b2u, u2b: u2b };
+}
+var nimakiRxTexts = [null, null, null, null], nimakiRxNext = 0;
+function nimakiRxText(a) {
+  // The decoded text, kept for the last four texts: a lexer matches one source many times, and
+  // often a token's text in between. A text is the same array of the same length: Nim's strings
+  // are arrays, and the port does not change a text it is matching in place.
+  for (var k = 0; k < 4; k++) { var t = nimakiRxTexts[k]; if (t !== null && t.a === a && t.n === a.length) return t; }
+  var t = nimakiRxDecode(a); t.a = a; t.n = a.length;
+  nimakiRxTexts[nimakiRxNext] = t; nimakiRxNext = (nimakiRxNext + 1) & 3;
+  return t;
+}
+function nimakiRxEncode(s) {
+  // A JavaScript string to UTF-8 bytes (WTF-8 for a lone surrogate): a Nim string.
+  var out = [];
+  for (var i = 0; i < s.length; i++) {
+    var c = s.charCodeAt(i);
+    if (c < 0x80) { out.push(c); continue; }
+    if (c >= 0xD800 && c < 0xDC00 && i + 1 < s.length) {
+      var d = s.charCodeAt(i + 1);
+      if (d >= 0xDC00 && d < 0xE000) {
+        c = 0x10000 + ((c - 0xD800) << 10) + (d - 0xDC00); i++;
+        out.push(0xF0 | (c >> 18), 0x80 | ((c >> 12) & 0x3F), 0x80 | ((c >> 6) & 0x3F), 0x80 | (c & 0x3F));
+        continue;
+      }
+    }
+    if (c < 0x800) out.push(0xC0 | (c >> 6), 0x80 | (c & 0x3F));
+    else out.push(0xE0 | (c >> 12), 0x80 | ((c >> 6) & 0x3F), 0x80 | (c & 0x3F));
+  }
+  return out;
+}
+function nimakiRxGet(slot, source, flags) {
+  // The RegExp of a slot, in two forms: sticky (a match at lastIndex) and global (the first
+  // match from lastIndex), made once.
+  var r = nimakiRxRes.get(slot);
+  if (r === undefined) {
+    var src = nimakiRxDecode(source).js, f = nimakiRxDecode(flags).js.replace(/[gy]/g, "");
+    r = { y: new RegExp(src, f + "y"), g: new RegExp(src, f + "g"), unicode: f.indexOf("u") >= 0 || f.indexOf("v") >= 0 };
+    nimakiRxRes.set(slot, r);
+  }
+  return r;
+}
+function nimakiRxMatch(t, m, withGroups) {
+  var start = m.index, end = start + m[0].length;
+  var res = { index: t.ascii ? start : t.u2b[start], stop: t.ascii ? end : t.u2b[end], groups: [], defined: [] };
+  if (withGroups) {
+    for (var k = 0; k < m.length; k++) {
+      var g = m[k];
+      res.groups.push(g === undefined ? [] : nimakiRxEncode(g));
+      res.defined.push(g !== undefined);
+    }
+  }
+  return res;
+}
+function nimakiRxExec(slot, source, flags, a, at, sticky, withGroups) {
+  var t = nimakiRxText(a), r = nimakiRxGet(slot, source, flags);
+  var re = sticky ? r.y : r.g;
+  re.lastIndex = t.ascii ? at : t.b2u[at];
+  var m = re.exec(t.js);
+  if (m === null) return { index: -1, stop: -1, groups: [], defined: [] };
+  return nimakiRxMatch(t, m, withGroups);
+}
+function nimakiRxAll(slot, source, flags, a) {
+  // Every match from 0, as matchAll finds them: an empty match steps one code unit on (a code
+  // point with the u flag).
+  var t = nimakiRxText(a), r = nimakiRxGet(slot, source, flags), re = r.g, out = [];
+  re.lastIndex = 0;
+  var m;
+  while ((m = re.exec(t.js)) !== null) {
+    out.push(nimakiRxMatch(t, m, true));
+    if (m[0].length === 0) {
+      var i = re.lastIndex, c = t.js.charCodeAt(i);
+      re.lastIndex = i + (r.unicode && c >= 0xD800 && c < 0xDC00 && i + 1 < t.js.length ? 2 : 1);
+    }
+  }
+  return out;
+}
+""".}
+  proc nativeExec(slot: int, source, flags, s: string, at: int, sticky, withGroups: bool): JsMatch
+    {.importjs: "nimakiRxExec(#, #, #, #, #, #, #)".}
+  proc nativeAll(slot: int, source, flags, s: string): seq[JsMatch]
+    {.importjs: "nimakiRxAll(#, #, #, #)".}
+  proc nativeCheck(slot: int, source, flags: string) {.importjs: "nimakiRxGet(#, #, #)".}
+
+  func nativeMatch(re: JsRegExp, s: string, at: int, sticky: bool, withGroups = true): JsMatch =
+    {.cast(noSideEffect).}: result = nativeExec(re.slot, re.source, re.flags, s, at, sticky, withGroups)
+
+
 func check*(re: JsRegExp): JsRegExp =
   ## Compiles `re` now (the tests do it for every pattern), and returns it.
-  withEngine(re, r): discard r.isInitialized
+  when defined(js):
+    {.cast(noSideEffect).}: nativeCheck(re.slot, re.source, re.flags)
+  else:
+    withEngine(re, r): discard r.isInitialized
   re
 
 func escapeRegExp*(s: string): string =
@@ -856,8 +1000,10 @@ func matchHere(re: JsRegExp, s: string, at: int): JsMatch =
   if at > s.len: return noMatch()
   if re.runKind != 0: return re.runMatch(s, at, true)
   if re.firstKnown and (at >= s.len or s[at] notin re.first): return noMatch()
-  withEngine(re, r):
-    result = if matchImpl(s, r.toRegex, m, at, {mfAnchored}): toJsMatch(s, m) else: noMatch()
+  when defined(js): return re.nativeMatch(s, at, sticky = true)
+  else:
+    withEngine(re, r):
+      result = if matchImpl(s, r.toRegex, m, at, {mfAnchored}): toJsMatch(s, m) else: noMatch()
 
 func searchFrom(re: JsRegExp, s: string, at: int): JsMatch =
   ## The first match that starts at `at` or later.
@@ -876,8 +1022,10 @@ func searchFrom(re: JsRegExp, s: string, at: int): JsMatch =
   if re.firstKnown:                          # no match starts before a byte it can start with
     while at < s.len and s[at] notin re.first: inc at
     if at >= s.len: return noMatch()
-  withEngine(re, r):
-    result = if find(s, r, m, at): toJsMatch(s, m) else: noMatch()
+  when defined(js): return re.nativeMatch(s, at, sticky = false)
+  else:
+    withEngine(re, r):
+      result = if find(s, r, m, at): toJsMatch(s, m) else: noMatch()
 
 func exec*(re: JsRegExp, s: string, lastIndex = 0): JsMatch =
   ## `re.lastIndex = lastIndex; re.exec(s)`: anchored at `lastIndex` for a sticky regex, the
@@ -894,23 +1042,32 @@ func matchEnd*(re: JsRegExp, s: string, lastIndex = 0): int =
   if re.prefix.len > 0 and not re.sticky and not re.atStart:
     var p = s.find(re.prefix, lastIndex)
     while p >= 0:
-      withEngine(re, r):
-        if matchImpl(s, r.toRegex, m, p, {mfAnchored, mfNoCaptures}): return m.boundaries.b + 1
+      when defined(js):
+        let e = re.nativeMatch(s, p, sticky = true, withGroups = false).stop
+        if e >= 0: return e
+      else:
+        withEngine(re, r):
+          if matchImpl(s, r.toRegex, m, p, {mfAnchored, mfNoCaptures}): return m.boundaries.b + 1
       p = s.find(re.prefix, p + 1)
     return -1
-  withEngine(re, r):
-    result =
-      if re.sticky or re.atStart:
-        if re.firstKnown and (lastIndex >= s.len or s[lastIndex] notin re.first): -1
-        elif matchImpl(s, r.toRegex, m, lastIndex, {mfAnchored, mfNoCaptures}): m.boundaries.b + 1
-        else: -1
-      else:
-        var at = lastIndex
-        if re.firstKnown:
-          while at < s.len and s[at] notin re.first: inc at
-        if at < s.len or not re.firstKnown:
-          if find(s, r, m, at): m.boundaries.b + 1 else: -1
-        else: -1
+  when defined(js):
+    let anchored = re.sticky or re.atStart
+    if anchored and re.firstKnown and (lastIndex >= s.len or s[lastIndex] notin re.first): return -1
+    re.nativeMatch(s, lastIndex, sticky = anchored, withGroups = false).stop
+  else:
+    withEngine(re, r):
+      result =
+        if re.sticky or re.atStart:
+          if re.firstKnown and (lastIndex >= s.len or s[lastIndex] notin re.first): -1
+          elif matchImpl(s, r.toRegex, m, lastIndex, {mfAnchored, mfNoCaptures}): m.boundaries.b + 1
+          else: -1
+        else:
+          var at = lastIndex
+          if re.firstKnown:
+            while at < s.len and s[at] notin re.first: inc at
+          if at < s.len or not re.firstKnown:
+            if find(s, r, m, at): m.boundaries.b + 1 else: -1
+          else: -1
 
 func test*(re: JsRegExp, s: string, lastIndex = 0): bool =
   ## `re.test(s)`.
@@ -944,9 +1101,12 @@ iterator matches*(re: JsRegExp, s: string): JsMatch =
     # The engine's own walk over every match. Its `find` from a position runs on while matches
     # follow each other, to return only the first, so a loop of `find`s took time in the square
     # of the text (Pele's stress tests: 3,000 comment lines took seconds).
-    withEngine(re, r):
-      for m in findAll(s, r):
-        yield toJsMatch(s, m)
+    when defined(js):
+      for m in nativeAll(re.slot, re.source, re.flags, s): yield m
+    else:
+      withEngine(re, r):
+        for m in findAll(s, r):
+          yield toJsMatch(s, m)
 
 func matchAll*(s: string, re: JsRegExp): seq[JsMatch] =
   ## `[...s.matchAll(re)]`.
