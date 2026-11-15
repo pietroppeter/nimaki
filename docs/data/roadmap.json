@@ -137,8 +137,8 @@
           "title": "What other AI-driven ports teach us",
           "what": "What gleam-in-nim found (its devlog, decisions, AGENTS.md) and what is new for a port from TypeScript: UTF-16, JavaScript numbers, regexes, structural types.",
           "done_when": "A devlog post; the porting guide gains its idiom map.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port class and swimlane",
+          "status": "started",
           "post": "",
           "pr": ""
         },
@@ -294,10 +294,10 @@
           "title": "Differential fuzzing",
           "what": "Mutated inputs (seeded, as Pele's own mutator does) compared with the oracle, for the ported types.",
           "done_when": "A seeded fuzz run in CI with --fast finds no differences on the ported types.",
-          "owner": "",
-          "status": "planned",
-          "post": "",
-          "pr": ""
+          "owner": "Port the core and pie",
+          "status": "done",
+          "post": "first-light",
+          "pr": "10"
         },
         {
           "id": "diagrammari-proposal",
