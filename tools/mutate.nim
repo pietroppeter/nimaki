@@ -108,7 +108,7 @@ proc main() =
   var byType: OrderedTable[string, tuple[identical, different: int]]
   var differences = newJArray()
   var shown = 0
-  let fromJs = if js: jsAnswers(cases, "mutate") else: initTable[string, Answer]()
+  let fromJs = if js: jsAnswers(cases, "mutate-" & $seed) else: initTable[string, Answer]()
   for i, c in cases:
     let id = c["id"].getStr
     let mine = if js: fromJs[id] else: nimakiAnswer(c["source"].getStr, c["options"])
