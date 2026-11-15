@@ -953,6 +953,17 @@
           "status": "planned",
           "post": "",
           "pr": ""
+        },
+        {
+          "id": "js-size",
+          "kind": "tooling",
+          "title": "A smaller JavaScript build",
+          "what": "nimaki's JavaScript build (the file the Playground and the pages load) is several megabytes before compression, a lot for a phone. Drop the parts a page does not use and minify it, keeping the referee green on the JavaScript build. In the backlog: Pietro decided on 15 November 2026 that it waits (post The answers in the posts).",
+          "done_when": "The JavaScript build is measurably smaller, difftest --js still finds every case identical, and a devlog post says by how much and how.",
+          "owner": "",
+          "status": "planned",
+          "post": "",
+          "pr": ""
         }
       ]
     }

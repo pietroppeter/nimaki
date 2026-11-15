@@ -109,7 +109,9 @@ Decision 0020 writes down what follows from it:
 - **While the major number is 0**, moving the Pele pin (roadmap step *follow-pele*) is a minor
   release, 0.2.0: the drawings change because Pele's do. A fix of the port that keeps the pin is a
   patch release, 0.1.1.
-- **1.0.0 waits** for the day the API is meant to stay, which is Pietro's call.
+- **1.0.0 waits** for the day the API is meant to stay, which is Pietro's call. *Pietro's answer,
+  15 November 2026: after extensive use; with use, nimaki may move away from Pele and take on
+  wider goals ([The answers in the posts](../the-answers-in-the-posts/)).*
 
 The other reading has its appeal (one number tells you which Pele), but it leaves nimaki no
 number of its own: a fix to the port with the same pin would need a suffix, and a change of
