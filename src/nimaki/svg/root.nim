@@ -42,10 +42,10 @@ proc svgDocument*(kind: string, width, height: float, fontSize: float, options: 
   var weights = if "r" in used: ";--_r:" & RADIUS else: ""
   for (alias, name) in WEIGHTS:
     if alias in used: weights.add ";--_" & alias & ":var(--pele-" & name & "-weight,bold)"
-  "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"pele pele-" & kind & "\" viewBox=\"0 0 " &
+  handOver(result, "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"pele pele-" & kind & "\" viewBox=\"0 0 " &
     jsString(width) & " " & jsString(height) & "\" width=\"" & jsString(width) & "\" height=\"" &
     jsString(height) &
     "\" style=\"" & fit & ROOT_STYLE & weights &
     esc(fontStyle(fontSize, options.fontFamily, options.fontFamilyMono)) & paletteStyle() &
     "\" fill=\"var(--_fg)\" role=\"graphics-document document\" aria-roledescription=\"" & kind &
-    "\"" & aria & ">" & head & content & "</svg>"
+    "\"" & aria & ">" & head & content & "</svg>")

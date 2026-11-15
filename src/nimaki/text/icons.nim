@@ -4,6 +4,7 @@
 ## The host's icons for the render in progress. A label leaves room for an icon only when the
 ## host has one by that name, and layout has to know that before anything is drawn.
 import std/tables
+import ../js
 
 type IconResolver* = proc (name: string): string
   ## Returns the icon's SVG markup, or "" when the host has none (Pele's null and undefined).
@@ -17,7 +18,7 @@ proc withIcons*[T](icons: IconResolver, run: proc (): T): T =
   resolver = icons
   found = initTable[string, string]()
   try:
-    result = run()
+    handOver(result, run())
   finally:
     resolver = outer
     found = outerFound

@@ -136,6 +136,7 @@ type
     classes: seq[string]
     kind: string             ## "" for undefined
     members: seq[string]
+    memberSet: HashSet[StrKey]  ## the members again, for a quick `in`: a boundary can have thousands
 
 proc pushUnique(target: var seq[string], values: openArray[string]) =
   if values.len == 0: return
@@ -509,7 +510,7 @@ proc resolveUsecase*(src: string, drafts: Drafts, headerSpan: Span, statements: 
   for draft in byOffset:
     if draft.parent == nil or draft.parent.id == "": continue
     let state = boundaries[draft.parent.id]
-    if draft.id notin state.members: state.members.add draft.id
+    if not state.memberSet.containsOrIncl(StrKey(draft.id)): state.members.add draft.id
   for state in boundaries.values:
     let boundary = model.systemBoundaries[state.draft.id]
     boundary.kind = if state.kind != "": state.kind else: "rect"
@@ -532,9 +533,14 @@ proc resolveUsecase*(src: string, drafts: Drafts, headerSpan: Span, statements: 
     let styles = SharedStyles(items: definition.styles)
     for id in definition.ids: model.classDefs[id] = ClassDef(id: id, styles: styles)
   for assignment in drafts.classes:
+    # The classes once without repeats, then added as they are to each target that has none yet:
+    # the same as pushUnique on each, without a set per target.
+    var unique: seq[string]
+    pushUnique(unique, assignment.classes)
     for (id, span) in assignment.targets:
       let target = stylable(id, span)
-      pushUnique(target.classes, assignment.classes)
+      if target.classes.len == 0: target.classes.add unique
+      else: pushUnique(target.classes, unique)
   for assignment in drafts.styles:
     let target = stylable(assignment.target, assignment.span)
     target.styles.add assignment.styles

@@ -114,7 +114,7 @@ proc withPalette*[T](next: Palette, run: proc (): T): T =
   let outer = current
   current = next
   try:
-    result = run()
+    handOver(result, run())
   finally:
     current = outer
 

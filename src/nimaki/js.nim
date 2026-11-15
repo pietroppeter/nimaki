@@ -4,7 +4,7 @@
 ##
 ## Strings stay UTF-8 (decision 0011). Where Pele counts or reads UTF-16 code units
 ## (`length`, `charCodeAt`), these helpers count and read them from the UTF-8 bytes.
-import std/[math, strutils, unicode, json, hashes]
+import std/[math, strutils, unicode, json, hashes, macros]
 
 # ---------------------------------------------------------------------------------------------
 # Numbers
@@ -621,6 +621,29 @@ template moveField*(dst, src: typed, field: untyped) =
     {.emit: [dst, "." & astToStr(field) & " = ", src, "." & astToStr(field) & ";"].}
   else:
     dst.field = move src.field
+
+macro handOverJs(dst: typed, value: untyped): untyped =
+  # A name is emitted as it is. Anything else is bound to a fresh variable first, which nim js
+  # does not copy when it is a call: an `if` among its arguments becomes statements, and cannot
+  # stand inside an `emit`.
+  if value.kind in {nnkSym, nnkIdent, nnkDotExpr}:
+    result = quote do:
+      {.emit: [`dst`, " = ", `value`, ";"].}
+  else:
+    let fresh = genSym(nskVar, "fresh")
+    result = quote do:
+      var `fresh` = `value`
+      {.emit: [`dst`, " = ", `fresh`, ";"].}
+
+template handOver*(dst: typed, value: untyped) =
+  ## `dst = value`, for a value that nothing else holds: a call, or a local that is dropped after
+  ## this. nim js copies the value into `dst`, every byte of its strings and every item of its
+  ## seqs, even then: a drawing of many megabytes handed up through a few wrappers was copied at
+  ## each one. Here it is handed over as JavaScript would.
+  when defined(js):
+    handOverJs(dst, value)
+  else:
+    dst = value
 
 when defined(js):
   proc fromCharCodes(units: seq[int], first, last: int): cstring {.

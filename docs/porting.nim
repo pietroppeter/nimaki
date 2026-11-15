@@ -196,7 +196,14 @@ the square of the number of matches in the regex library, so `match`, which read
 whole text, gets a pattern without groups (`RE_TOKEN_TEXT` in `diagrams/gantt/dates.nim`); this
 holds in the C build, since the JavaScript build matches with JavaScript's own `RegExp`
 ([decision 0019](../decisions/#0019-javascript-s-own-regexp-in-the-javascript-build)), which keeps
-a converted copy of the text: never change a text in place while matching it. Last, a compiler matter: Nim 2.2.4 appends a string to another with
+a converted copy of the text: never change a text in place while matching it. A value handed
+back from a call is copied too: `result = f()`, a proc whose body ends in an expression, an
+object built whole (`Rendered(svg: svg, ...)`), a field set from a call. A drawing or a source
+of megabytes that passes through a few wrappers is copied at each one: hand it over with
+`handOver(result, f())` of `js.nim`, set an object's fields one by one, and keep long texts out of
+closures (`parseSource` in `core.nim`). A text that is only ever replaced, never changed in place,
+can be shared that way (`preprocess`). `c in 0xD800 .. 0xDBFF` builds the range as an object at
+each test: compare with `<=` in a loop over characters. Last, a compiler matter: Nim 2.2.4 appends a string to another with
 `push.apply`, which overflows JavaScript's stack past about 100 KB; CI builds with 2.2.14
 ([decision 0015](../decisions/#0015-ci-builds-with-the-latest-nim-2-2-release)), which does not.
 """, nkWarning, "Code that JavaScript runs slowly"
