@@ -10,7 +10,7 @@
 ## (`src/lazy.ts`, `src/entries/`); Nim imports at compile time, so the port has no counterpart
 ## (docs/data/portmap_skip.txt). A type that is not registered raises a `PeleError` with code
 ## `unsupported`.
-import nimaki/[core, errors, types]
+import nimaki/[core, errors, types, version]
 import nimaki/text/measurer
 import nimaki/diagrams/pie/index as pieIndex
 import nimaki/diagrams/timeline/index as timelineIndex
@@ -46,7 +46,7 @@ import nimaki/diagrams/gantt/index as ganttIndex
 import nimaki/diagrams/xychart/index as xychartIndex
 import nimaki/diagrams/venn/index as vennIndex
 
-export core, errors, types, measurer
+export core, errors, types, measurer, version
 
 # In the order of Pele's `all` (src/diagrams/registry.ts).
 register(flowchartIndex.flowchart)

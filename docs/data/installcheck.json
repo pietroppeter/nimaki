@@ -1,0 +1,18 @@
+{
+  "about": "Written by tools/installcheck.nim on a full run: nimaki installed by nimble and drawn from a program outside the repository, against Pele. Do not edit by hand.",
+  "nimaki": "0.1.0",
+  "pele": "1.13.0",
+  "nim": "Nim Compiler Version 2.2.4 [Linux: amd64]",
+  "installed": [
+    "nimaki-0.1.0",
+    "unicodedb-0.14.1",
+    "regex-0.27.0"
+  ],
+  "cases": 2234,
+  "identical": 2234,
+  "different": 0,
+  "builds": [
+    "nim js of web.nim",
+    "the C ABI"
+  ]
+}

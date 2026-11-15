@@ -1,4 +1,4 @@
-## devlog: 15 Nov 2026 E | Where the port stands | Every diagram type is drawn as Pele draws it. A look at what is left: three files that only a browser runs, one half of a file, a few dozen of Pele's tests, and the decisions that wait for Pietro.
+## devlog: 15 Nov 2026 G | Where the port stands | Every diagram type is drawn as Pele draws it. A look at what is left: three files that only a browser runs, one half of a file, a few dozen of Pele's tests, and the decisions that wait for Pietro.
 ## kind: plan
 import std/[json, sequtils, strformat, strutils, os, algorithm]
 import nimib
@@ -49,7 +49,7 @@ nbText: &"""
 - **Pele's {thousands(pele["tests"].getInt)} tests: {thousands(counts["passed"].getInt)} pass on
   nimaki, none fail**, and the {notPassed} others are of four known kinds, below.
 - **The roadmap: {done} of {steps} steps done.** The open ones are owned by running threads; the browser side is
-  written down as a step for later, and the first release has a thread of its own.
+  written down as a step for later, and the first release, [nimaki 0.1.0](../nimaki-0-1-0/), shipped the same morning.
 
 ## A plan that became a roadmap
 
@@ -156,9 +156,9 @@ nbNote """
   November; Pietro answered while this post was being written, on 15 November. It is now the step
   *Pele's browser side* in the table above, unclaimed.
 - **A first release**: now, Pietro said in the same message, since every diagram type is done. It
-  is being prepared in a thread of its own, *Tag first nimaki release*, and it brings the
-  `.nimble` file that the [proposal for diagrammari](../a-proposal-for-diagrammari/) needs: its
-  sketch of a `mari.nimble` requires nimaki, which today has none.
+  was prepared in a thread of its own the same morning, and shipped as
+  [nimaki 0.1.0](../nimaki-0-1-0/), with the `.nimble` file that the
+  [proposal for diagrammari](../a-proposal-for-diagrammari/) needs to require nimaki.
 """, nkInfo, "Pietro's answers"
 
 nbNote """
