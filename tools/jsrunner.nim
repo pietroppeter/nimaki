@@ -9,6 +9,7 @@
 ##   TZ=UTC node build/js/jsrunner.js cases.jsonl answers.jsonl
 import std/[json, strutils]
 import verdict, answers
+import nimaki/js
 
 when not defined(js):
   {.error: "jsrunner is compiled with nim js".}
@@ -16,6 +17,10 @@ when not defined(js):
 proc readFileSync(path, encoding: cstring): cstring {.importjs: "require('fs').readFileSync(#, #)".}
 proc writeFileSync(path, data, encoding: cstring) {.importjs: "require('fs').writeFileSync(#, #, #)".}
 proc argv(i: int): cstring {.importjs: "process.argv[#]".}
+# A lone surrogate written as a JSON escape: writing the string as UTF-8 would make it U+FFFD.
+proc escapeLoneSurrogates(s: cstring): cstring {.importjs: """#.replace(
+  /[\ud800-\udbff](?![\udc00-\udfff])|(?<![\ud800-\udbff])[\udc00-\udfff]/g,
+  (u) => '\\u' + u.charCodeAt(0).toString(16))""".}
 
 proc main() =
   let input = $readFileSync(argv(2), "utf8")
@@ -29,6 +34,6 @@ proc main() =
     except:   # a JavaScript error (a TypeError...), no Nim exception: a bug of the JS build
       answer = Answer(ok: false, code: "js-error", message: getCurrentExceptionMsg())
     output.add $toJson(c["id"].getStr, answer) & "\n"
-  writeFileSync(argv(3), cstring(output), "utf8")
+  writeFileSync(argv(3), escapeLoneSurrogates(toJsString(output)), "utf8")
 
 main()

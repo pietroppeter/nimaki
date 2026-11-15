@@ -866,8 +866,8 @@
           "what": "tools/mutate.nim runs nimaki's C build only, while decision 0014 asks for both builds before a file is conformant. Add --js, fix what it finds (the regex library reads a lone surrogate unlike JavaScript; the sankey test of invalid Unicode is listed as known), then move the 21 files left draft for the odd-character differences (util/url, util/yaml, class/*, gantt/*) to conformant.",
           "done_when": "tools/mutate.nim --js finds no difference on seeds 1 to 7 and runs in CI; the port map shows only text/measurer.nim (its canvas half) as draft.",
           "owner": "Port class and swimlane",
-          "status": "started",
-          "post": "",
+          "status": "done",
+          "post": "both-builds-every-file",
           "pr": ""
         }
       ]

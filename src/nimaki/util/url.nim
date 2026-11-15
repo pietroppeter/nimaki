@@ -1,5 +1,5 @@
 ## port-of: src/util/url.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Port notes: the regular expressions that clean a URL (`unwrap`) are scanners, each with its
 ## pattern in a comment, because they must see the lone surrogate that a decoded entity like

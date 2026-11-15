@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/class/db.ts
-## port-status: draft
+## port-status: conformant
 import std/[options, sets, strutils, tables]
 import ../../js
 import ../../text/entities

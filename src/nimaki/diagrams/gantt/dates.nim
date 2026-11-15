@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/gantt/dates.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## The parts of dayjs 1.11 that Mermaid's gantt code relies on, with the plugins it loads (custom parse format,
 ## advanced format, ISO week) and the English locale: strict parsing against a format, formatting, and calendar

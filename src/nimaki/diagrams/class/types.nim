@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/class/types.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Port notes: an optional string that is never empty when set is a string, "" for undefined.
 ## `RelationEnd` (a number or 'none') is an int, NONE (-1) for 'none'. Maps are ordered tables.

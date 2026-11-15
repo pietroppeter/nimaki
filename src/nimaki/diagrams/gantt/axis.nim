@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/gantt/axis.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Time axis support, following d3-time and d3-time-format (English locale, local time), which Mermaid uses:
 ## the `axisFormat` specifiers, tick intervals with d3's `every` rule, and its choice of automatic ticks.

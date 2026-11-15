@@ -621,3 +621,41 @@ template moveField*(dst, src: typed, field: untyped) =
     {.emit: [dst, "." & astToStr(field) & " = ", src, "." & astToStr(field) & ";"].}
   else:
     dst.field = move src.field
+
+when defined(js):
+  proc fromCharCodes(units: seq[int], first, last: int): cstring {.
+    importjs: "String.fromCharCode.apply(null, #.slice(#, #))".}
+  proc concat(a, b: cstring): cstring {.importjs: "(# + #)".}
+
+  proc toJsString*(s: string): cstring =
+    ## The JavaScript string that the bytes of `s` stand for. A lone surrogate, which nimaki keeps
+    ## as its three bytes of WTF-8 (decision 0016), becomes that surrogate again, as Pele has it;
+    ## any other byte that is not UTF-8 reads as U+FFFD, as TextDecoder reads it. `cstring(s)`
+    ## writes such a string as percent escapes (`%ed%a0%bd`) instead.
+    var plain = true
+    for c in s:
+      if ord(c) == 0xED:
+        plain = false
+        break
+    if plain and wellFormed(s).len == s.len: return cstring(s)
+    var units: seq[int]
+    var i = 0
+    while i < s.len:
+      if s[i] == '\xED' and i + 2 < s.len and ord(s[i + 1]) >= 0xA0 and ord(s[i + 1]) <= 0xBF and
+         (ord(s[i + 2]) and 0xC0) == 0x80:
+        units.add 0xD000 or ((ord(s[i + 1]) and 0x3F) shl 6) or (ord(s[i + 2]) and 0x3F)
+        i += 3
+        continue
+      let (cp, size) = codePointAt(s, i)
+      if cp >= 0x10000:
+        units.add 0xD800 + ((cp - 0x10000) shr 10)
+        units.add 0xDC00 + ((cp - 0x10000) and 0x3FF)
+      else:
+        units.add cp
+      i += size
+    result = cstring("")
+    var k = 0
+    while k < units.len:   # in pieces: apply takes a bounded number of arguments
+      let stop = min(k + 8192, units.len)
+      result = concat(result, fromCharCodes(units, k, stop))
+      k = stop

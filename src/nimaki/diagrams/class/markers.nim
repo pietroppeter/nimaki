@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/class/markers.ts
-## port-status: draft
+## port-status: conformant
 import ../../svg/[builder, edges]
 import graph
 

@@ -1,0 +1,25 @@
+{
+  "about": "docs/data/portmap.json totals when the post was written",
+  "totals": {
+    "todo": {
+      "files": 43,
+      "code": 1185
+    },
+    "draft": {
+      "files": 1,
+      "code": 136
+    },
+    "verified": {
+      "files": 0,
+      "code": 0
+    },
+    "conformant": {
+      "files": 247,
+      "code": 46273
+    },
+    "skip": {
+      "files": 0,
+      "code": 0
+    }
+  }
+}

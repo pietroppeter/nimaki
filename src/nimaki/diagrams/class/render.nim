@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/class/render.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Port notes: an `End` keeps the edge whose route it changes (`route` in the TypeScript is the
 ## same array as the edge's; a Nim seq is a value). An annotation, a string or a label in
