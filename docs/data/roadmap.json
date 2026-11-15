@@ -897,8 +897,8 @@
           "what": "What the one workflow (.github/workflows/pages.yml) checks, step by step; how it grew pull request by pull request; how long runs take and how that changed, what failed and why, and where time is lost, from the real GitHub Actions history (a Nim tool that reads the Actions API and keeps the numbers in the post's data). Improvements are proposed in the post; the workflow is not changed in this step.",
           "done_when": "A devlog post whose numbers come from the recorded run history, with proposals for Pietro to choose from.",
           "owner": "Explain nimaki's CI and its history",
-          "status": "started",
-          "post": "",
+          "status": "done",
+          "post": "twelve-minutes-of-checks",
           "pr": ""
         }
       ]
