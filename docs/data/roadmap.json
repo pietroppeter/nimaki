@@ -902,6 +902,17 @@
           "status": "started",
           "post": "",
           "pr": ""
+        },
+        {
+          "id": "module-pages",
+          "kind": "tooling",
+          "title": "A page for every module",
+          "what": "Every island of the coverage map links to a page for its module (docs/modules.nim): its files in Pele and in nimaki with their status, what checks it, the posts about it. The five core islands that still said started are done, with notes that say what is true today (asked by Pietro, 15 November 2026).",
+          "done_when": "Every island is a link to a page built from docs/data/; a devlog post.",
+          "owner": "Port class and swimlane",
+          "status": "done",
+          "post": "a-page-for-every-module",
+          "pr": ""
         }
       ]
     },

@@ -75,6 +75,10 @@ func pipeline*(c: Coverage): seq[(string, Status)] =
   ## The core parts, then the diagram types, and their status, for `nbPipeline`.
   for p in c.core: result.add (p.id, p.status)
   for d in c.diagrams: result.add (d.id, d.status)
+func pipeline*(c: Coverage, modules: string): seq[(string, Status, string)] =
+  ## The same, each linked to its page in `modules` (`"../modules/"` from a page one level down).
+  for p in c.core: result.add (p.id, p.status, modules & p.id & "/")
+  for d in c.diagrams: result.add (d.id, d.status, modules & d.id & "/")
 proc loadRoadmap*(): seq[Phase] =
   let j = parseFile(dataDir / "roadmap.json")
   for p in j["phases"]:

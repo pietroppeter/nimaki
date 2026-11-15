@@ -29,46 +29,46 @@
       "id": "text",
       "what": "measuring text without a browser: font metrics, labels, entities",
       "code": 675,
-      "status": "started",
+      "status": "done",
       "nim": "src/nimaki/text/",
       "post": "first-light",
-      "notes": "Every file of src/text/ is ported (the metrics measurer, labels, entities, icons, math). Checked through pie: its titles and legend labels, in the corpus and in the fuzzer. Markdown labels, math, icons and wrapping wait for the types that use them."
+      "notes": "Every file of src/text/ is ported and conformant (the metrics measurer, labels, entities, icons, math), but for one half of measurer.ts: the measurer that asks a browser's canvas. nimaki measures with Pele's table of font widths, as Pele itself does where no canvas exists, as in Node; the canvas half is the browser side, for later."
     },
     {
       "id": "svg",
       "what": "writing SVG: the builder, shapes, edges, clusters, the palette and the theme",
       "code": 1751,
-      "status": "started",
+      "status": "done",
       "nim": "src/nimaki/svg/",
       "post": "first-light",
-      "notes": "builder.ts, palette.ts, theme.ts, ink.ts and root.ts are ported and checked through pie and timeline; shapes.ts, edges.ts, cluster.ts and title.ts through flowchart (layered-layout-and-flowchart)."
+      "notes": "Every file of src/svg/ is ported and conformant: the builder, palette, theme, ink, root, shapes, edges, clusters and titles. Every diagram type draws through them."
     },
     {
       "id": "layout",
       "what": "the shared layouts: layered (Sugiyama), compound, lanes, components",
       "code": 3386,
-      "status": "started",
+      "status": "done",
       "nim": "src/nimaki/layout/",
       "post": "layered-layout-and-flowchart",
-      "notes": "All four are ported. layered.ts and compound.ts are checked through flowchart (383 corpus cases, 5,000 generated in CI) and by Pele's 31 layout tests (tests/test_layout.nim); lanes.ts through swimlane (14 corpus cases, 5,000 generated in CI); components.ts through class (84 corpus cases, 5,000 generated in CI)."
+      "notes": "All four layouts are ported and conformant. layered.ts and compound.ts are checked through flowchart and the types built on it, and by Pele's layout tests; lanes.ts through swimlane; components.ts through class."
     },
     {
       "id": "util",
       "what": "Unicode, URLs, a small YAML reader for front matter",
       "code": 592,
-      "status": "started",
+      "status": "done",
       "nim": "src/nimaki/util/",
       "post": "first-light",
-      "notes": "yaml.ts, chars.ts, unicode.ts and url.ts are ported; url.ts is checked through flowchart's links and images (international domain names are not converted to Punycode)."
+      "notes": "yaml.ts, chars.ts, unicode.ts and url.ts are ported and conformant. url.ts writes international domain names as Node's URL parser does, with a port of its IDNA code (post One odd character)."
     },
     {
       "id": "common",
       "what": "what several diagram types share: fitting text, scanning, icons",
       "code": 896,
-      "status": "started",
+      "status": "done",
       "nim": "src/nimaki/diagrams/common/",
       "post": "first-light",
-      "notes": "tokens.ts (the Langium-style tokenizer), fit-width.ts, scan.ts (the Jison-style lexer rules journey and timeline share), fit.ts (plain labels, cut words), fit-text.ts (shrink, then cut with an ellipsis), literal-label.ts accDescr.ts (the accDescr terminal for grammars that keep lexing after an unclosed brace), outline.ts (the indented outline mindmap and kanban share) and icon.ts are ported."
+      "notes": "What several types share, all ported and conformant: tokens.ts (the Langium-style tokenizer), scan.ts (the Jison-style lexer rules), fit.ts, fit-text.ts and fit-width.ts (labels that fit), literal-label.ts, accDescr.ts, outline.ts (the indented outline of mindmap and kanban) and icon.ts."
     },
     {
       "id": "api",
@@ -77,7 +77,7 @@
       "status": "done",
       "nim": "src/nimaki/core.nim",
       "post": "first-light",
-      "notes": "detect.ts, preprocess.ts, errors.ts, types.ts and core.ts render() are ported. detectType agrees with Pele on all 2,118 corpus inputs (tests/test_detect.nim). A type nimaki does not draw yet raises the code unsupported."
+      "notes": "core.ts (render and parse), detect.ts, preprocess.ts, errors.ts, types.ts, index.ts and diagrams/registry.ts are ported and conformant; detectType agrees with Pele on every corpus input. models.ts holds only TypeScript types and is not ported."
     },
     {
       "id": "browser",
@@ -85,8 +85,8 @@
       "code": 884,
       "status": "planned",
       "nim": "",
-      "post": "",
-      "notes": ""
+      "post": "where-the-port-stands",
+      "notes": "Later, as Pietro decided on 15 November 2026: mount.ts, zoom.ts, window.ts and the canvas half of text/measurer.ts, for the JavaScript build. lazy.ts and entries/ are JavaScript packaging, and are not ported."
     }
   ],
   "diagrams": [
