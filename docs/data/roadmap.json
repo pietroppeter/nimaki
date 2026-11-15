@@ -982,8 +982,8 @@
           "title": "Looking back: what nimaki is, and how it got there",
           "what": "After the 0.2 release, a final post: the result (what nimaki draws, where it runs, how it is checked), how it got there (the steps, the threads, the replans), how the framework helped (explainers as nimib posts with review mode, the roadmap with owners, decision records, Start and Stop), and an estimate of the total effort (tokens, time, CI minutes, pull requests, lines), measured as tabelline and nanuq did. Then the automatic work stops, and the project is picked up again when it is needed (Pietro, 15 November 2026).",
           "done_when": "The post is merged after the 0.2 release, with its numbers from data files or code.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Write the final nimaki retrospective",
+          "status": "started",
           "post": "",
           "pr": ""
         },
