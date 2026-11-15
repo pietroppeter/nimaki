@@ -215,7 +215,9 @@ nbText: """
 ## The idiom map
 
 One row per TypeScript idiom, with the one Nim translation everyone uses. The core and pie
-filled it in; later steps add to it.
+filled it in; later steps add to it. The post
+[What two ports teach](../devlog/what-two-ports-teach/) shows the look-alikes among them running,
+and counts how often Pele uses each.
 
 | TypeScript | Nim |
 | --- | --- |
@@ -270,6 +272,10 @@ filled it in; later steps add to it.
 | a token matcher that keeps state between calls (`unclosed` in `accDescr.ts`, a run of digits in radar) | a `scanner: proc (): Scanner` on the `TokenType`: the tokenizer makes the matcher once per text, so the state starts fresh |
 | an arrow function made in a loop, keeping that turn's values | a closure returned by a proc of its own (`columnMap` in `treeview/box_drawing.nim`): closures made in a Nim loop share the loop's variables |
 | an index into a string that enters arithmetic (a column, a depth) | UTF-16 code units: `utf16Len(s, 0, at)` from bytes, `unitOffset(s, first, units)` back to bytes |
+| `{ ...a, x: 1 }`, a copy with a field changed | for an `object`, `var b = a; b.x = 1` or the constructor with every field; for a `ref object`, `result = T(); result[] = a[]`, then the field (`renamed` in `eventmodeling/parser.nim`): `var b = a` only shares a `ref` |
+| `a === b` on two objects | `a == b` on two `ref`s: both compare identity. On an `object` (a value), Nim's `==` compares the fields |
+| `Math.floor(a / b)`, `a % b` | `floor(a / b)` on floats, and `a mod b` (the sign of `a`, as `%`); never `div`, which cuts toward zero (`-7 div 2` is `-3`, `Math.floor(-7 / 2)` is `-4`) |
+| `class X { ... }` with methods | a `ref object` and procs that take it first; a `private` field stays a field |
 
 ## Names
 
