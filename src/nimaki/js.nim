@@ -4,7 +4,7 @@
 ##
 ## Strings stay UTF-8 (decision 0011). Where Pele counts or reads UTF-16 code units
 ## (`length`, `charCodeAt`), these helpers count and read them from the UTF-8 bytes.
-import std/[math, strutils, unicode, json]
+import std/[math, strutils, unicode, json, hashes]
 
 # ---------------------------------------------------------------------------------------------
 # Numbers
@@ -659,3 +659,37 @@ when defined(js):
       let stop = min(k + 8192, units.len)
       result = concat(result, fromCharCodes(units, k, stop))
       k = stop
+
+# ---------------------------------------------------------------------------------------------
+# Keys that hash quickly
+
+type StrKey* = distinct string
+  ## A string as the key of a `Table` or a `HashSet` that is looked up very often. In nim js a
+  ## string key copies itself to hash, and the hash emulates 32-bit multiplications by hand; the
+  ## hash of a `StrKey` reads the bytes in place with `Math.imul`. It is the same number as
+  ## `hash(string)` (murmur, decision 0017), so a table keeps the same order in both builds.
+
+when defined(js):
+  {.emit: """
+function nimakiMurmur(x) {
+  var size = x.length, n = size & ~3, h1 = 0, i = 0, k = 0;
+  for (; i < n; i += 4) {
+    k = x[i] | (x[i + 1] << 8) | (x[i + 2] << 16) | (x[i + 3] << 24);
+    k = Math.imul(k, 0xcc9e2d51); k = (k << 15) | (k >>> 17); k = Math.imul(k, 0x1b873593);
+    h1 ^= k; h1 = (h1 << 13) | (h1 >>> 19); h1 = (Math.imul(h1, 5) + 0xe6546b64) | 0;
+  }
+  k = 0;
+  for (var r = size & 3; r > 0;) { r--; k = (k << 8) | x[i + r]; }
+  k = Math.imul(k, 0xcc9e2d51); k = (k << 15) | (k >>> 17); k = Math.imul(k, 0x1b873593);
+  h1 ^= k; h1 ^= size;
+  h1 ^= h1 >>> 16; h1 = Math.imul(h1, 0x85ebca6b); h1 ^= h1 >>> 13; h1 = Math.imul(h1, 0xc2b2ae35);
+  return h1 ^ (h1 >>> 16);
+}
+""".}
+  func nimakiMurmur(s: string): Hash {.importjs: "nimakiMurmur(#)".}
+  func hash*(k: StrKey): Hash = nimakiMurmur(string(k))
+else:
+  func hash*(k: StrKey): Hash = hash(string(k))
+
+func `==`*(a, b: StrKey): bool {.borrow.}
+func `$`*(k: StrKey): string {.borrow.}

@@ -124,21 +124,26 @@ proc draw(db: ClassDb, config: Config, options: RenderOptions, turned, tight: bo
 
   # A class may carry the declarations of many classDefs many times over. Each distinct declaration
   # is checked once, and only the last value of each property that has an effect is resolved.
-  var effect = initTable[string, string]()
-  var fromDefs = initTable[string, seq[(string, string)]]()
-  var kept = initOrderedTable[string, string]()
+  var effect = initTable[StrKey, string]()  # StrKey: a quick hash in JavaScript
+  var fromDefs = initTable[string, seq[(StrKey, string)]]()
+  var kept = initOrderedTable[StrKey, string]()
   proc keep(decl: string) =
     var prop: string
-    if decl in effect: prop = effect[decl]
-    else:
+    # One lookup, not `in` and then `[]`: 800 classes of 5,000 declarations each look up 4
+    # million times.
+    var known = false
+    effect.withValue(StrKey(decl), value):
+      prop = value[]
+      known = true
+    if not known:
       let one = resolveStyle(@[decl])
       if one.shape == "" and one.text == "": prop = ""
       else:
         let colon = decl.find(':')
         # slice(0, -1) when there is no colon
         prop = toLowerAscii(jsTrim(decl[0 ..< (if colon >= 0: colon else: decl.len - 1)]))
-      effect[decl] = prop
-    if prop != "": kept[prop] = decl
+      effect[StrKey(decl)] = prop
+    if prop != "": kept[StrKey(prop)] = decl
   proc classStyle(cls: ClassNode): ResolvedStyle =
     kept.clear()
     if cls.cssClasses notin fromDefs:
@@ -147,7 +152,7 @@ proc draw(db: ClassDb, config: Config, options: RenderOptions, turned, tight: bo
         if def != nil:
           for s in def.styles:
             for part in s.split(','): keep(part)
-      var base: seq[(string, string)]
+      var base: seq[(StrKey, string)]
       for prop, decl in kept: base.add (prop, decl)
       fromDefs[cls.cssClasses] = base
     else:

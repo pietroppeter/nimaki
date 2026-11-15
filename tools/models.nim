@@ -11,6 +11,7 @@
 import std/[json, tables, sets, strutils, options, algorithm, macros, typetraits]
 import nimaki
 import nimaki/util/yaml
+import nimaki/js
 import nimaki/model
 from nimaki/diagrams/agentflow/db import AgentflowDb
 from nimaki/diagrams/agentflow/types import MappingSet
@@ -361,7 +362,7 @@ proc dumpYaml(v: YamlValue): JsonNode =
     o
 
 proc dump[T](x: T, path: var Walk): JsonNode =
-  when T is string: path.spend(x.len + 1)
+  when T is string or T is StrKey: path.spend(string(x).len + 1)
   else: path.spend(1)
   when T is YamlValue: dumpYaml(x)
   elif T is ref:
@@ -385,6 +386,7 @@ proc dump[T](x: T, path: var Walk): JsonNode =
     result = dump(x[], path)
     discard path.path.pop()
   elif T is string: %x
+  elif T is StrKey: %string(x)   # a string key that hashes quickly (js.nim)
   elif T is bool: %x
   elif T is enum: %enumName($x)
   elif T is SomeNumber:

@@ -99,8 +99,12 @@ var lastAdvanced, lastFormat: MatchCache
   ## one format, and a long one (Pele's stress tests write 12,000 characters) would be read
   ## again for each day. The matches depend on the text alone, so the output is the same.
 
-proc matchesIn(re: JsRegExp, text: string, cache: var MatchCache): seq[JsMatch] =
+proc refresh(cache: var MatchCache, re: JsRegExp, text: string) =
   if not cache.valid or cache.text != text: cache = (text, text.matchAll(re), true)
+
+template matchesIn(re: JsRegExp, text: string, cache: var MatchCache): seq[JsMatch] =
+  ## The matches, read in place in the cache (returned, they were copied for every day).
+  refresh(cache, re, text)
   cache.matches
 
 template replaceEach(text: string, matches: seq[JsMatch], m, by: untyped): string =
@@ -122,20 +126,24 @@ proc format*(date: JsDate, temp: string): Option[string] =
   if str == "YYYY-MM-DD": return some(isoDate(date))
   var unsupported = false
   let advanced = str.replaceEach(RE_ADVANCED.matchesIn(str, lastAdvanced), m):
-    case m[0]
-    of "Q": jsString(ceil((date.getMonth + 1) / 3))
-    of "Do": "[" & ordinal(date.getDate) & "]"
-    of "GGGG": jsString(weekThursday(date).getFullYear)
-    of "W": jsString(isoWeek(date))
-    of "WW": pad(isoWeek(date), 2)
-    of "k": jsString(if date.getHours == 0: 24.0 else: date.getHours)
-    of "kk": pad(if date.getHours == 0: 24.0 else: date.getHours, 2)
-    of "X": jsString(floor(date / 1000))
-    of "x": jsString(date)
-    of "gggg", "wo", "w", "ww", "z", "zzz":
-      unsupported = true
-      m[0]
-    else: m[0]
+    # A literal in brackets is kept as it is, the `else` below, without reading it as a JavaScript
+    # string to compare it with each token (a format of 2,000 characters, for every day).
+    if m.has(1): m[0]
+    else:
+      case m[0]
+      of "Q": jsString(ceil((date.getMonth + 1) / 3))
+      of "Do": "[" & ordinal(date.getDate) & "]"
+      of "GGGG": jsString(weekThursday(date).getFullYear)
+      of "W": jsString(isoWeek(date))
+      of "WW": pad(isoWeek(date), 2)
+      of "k": jsString(if date.getHours == 0: 24.0 else: date.getHours)
+      of "kk": pad(if date.getHours == 0: 24.0 else: date.getHours, 2)
+      of "X": jsString(floor(date / 1000))
+      of "x": jsString(date)
+      of "gggg", "wo", "w", "ww", "z", "zzz":
+        unsupported = true
+        m[0]
+      else: m[0]
   if unsupported: return none(string)
   let hours = date.getHours
   let h12 = (let r = hours mod 12; if r == 0: 12.0 else: r)
@@ -195,6 +203,8 @@ type
     isReader: bool
     re: JsRegExp
     read: Reader
+    least, most: int  ## for a pattern of digits only: how many, read by hand (0: use `re`)
+    signed: bool      ## and whether a sign may come first
 
 func unset(): Fields =
   Fields(year: NaN, month: NaN, day: NaN, hours: NaN, minutes: NaN, seconds: NaN, milliseconds: NaN,
@@ -203,8 +213,12 @@ func unset(): Fields =
 func truthy(x: float): bool = x == x and x != 0
 
 
-const RE_TOKENS =
-  jsre"/(\[[^[]*\])|([-_:/.,()\s]+)|(A|a|Q|YYYY|YY?|ww?|MM?M?M?|Do|DD?|hh?|HH?|mm?|ss?|S{1,3}|z|ZZ?)/g"
+# dayjs's token pattern is `/(\[[^[]*\])|([-_:/.,()\s]+)|(A|a|Q|YYYY|YY?|ww?|MM?M?M?|Do|DD?|hh?|HH?|mm?|ss?|S{1,3}|z|ZZ?)/g`.
+# `match` reads only the whole text of each match, so the port drops the three groups: the matches
+# are the same, and the regex library, which keeps the groups of every match of a `g` walk, took
+# time in the square of the format with them (a format of 25,000 tokens: a second in JavaScript).
+const RE_TOKEN_TEXT =
+  jsre"/\[[^[]*\]|[-_:/.,()\s]+|A|a|Q|YYYY|YY?|ww?|MM?M?M?|Do|DD?|hh?|HH?|mm?|ss?|S{1,3}|z|ZZ?/g"
 const RE_LITERAL = jsre"/\[[^\]]+]/g"
 const MATCH_1 = jsre"/\d/"
 const MATCH_2 = jsre"/\d\d/"
@@ -257,7 +271,32 @@ proc readDo(f: var Fields, input: string): bool =
     if ordinal(float(k)) == input: f.day = float(k)
   true
 
-func step(re: JsRegExp, read: Reader): Step = Step(isReader: true, re: re, read: read)
+func step(re: JsRegExp, read: Reader): Step =
+  result = Step(isReader: true, re: re, read: read)
+  # The patterns of digits are matched by hand: a chart of 8,000 tasks reads its dates through
+  # tens of thousands of matches, and the regex library is slow to start one in JavaScript.
+  # `\d` is ASCII digits only, in JavaScript as here.
+  case re.source
+  of r"\d": (result.least, result.most) = (1, 1)
+  of r"\d\d": (result.least, result.most) = (2, 2)
+  of r"\d{3}": (result.least, result.most) = (3, 3)
+  of r"\d{4}": (result.least, result.most) = (4, 4)
+  of r"\d\d?": (result.least, result.most) = (1, 2)
+  of r"[+-]?\d+": (result.least, result.most, result.signed) = (1, high(int), true)
+  else: discard
+
+func digitsFrom(s: string, at: int, step: Step): (int, int) =
+  ## The first match of the step's digits in `s` from `at`, as the regex finds it: where it
+  ## starts and ends, or (-1, -1).
+  var i = at
+  while i < s.len:
+    var a = i
+    if step.signed and s[i] in {'+', '-'}: inc i
+    var e = i
+    while e < s.len and e - i < step.most and s[e] in {'0'..'9'}: inc e
+    if e - i >= step.least: return (a, e)
+    i = a + 1
+  (-1, -1)
 
 proc readerFor(token: string): Option[Step] =
   case token
@@ -295,12 +334,12 @@ proc readerFor(token: string): Option[Step] =
   of "Z", "ZZ": some(step(MATCH_OFFSET, readOffset))
   else: none(Step)
 
-var lastCompiled: tuple[temp: string, steps: Option[seq[Step]], valid: bool]
+var lastCompiled: tuple[temp: string, steps: seq[Step], ok, valid: bool]
 
 proc compileNew(temp: string): Option[seq[Step]] =
   # dayjs expands localized tokens through a locale table the English locale does not have, and fails.
   if jsre"/[Ll]/".test(temp.replace(RE_LITERAL, "")): return none(seq[Step])
-  let tokens = temp.match(RE_TOKENS)
+  let tokens = temp.match(RE_TOKEN_TEXT)
   if tokens.len == 0: return none(seq[Step])
   var steps: seq[Step]
   for token in tokens:
@@ -308,31 +347,57 @@ proc compileNew(temp: string): Option[seq[Step]] =
     steps.add(if reader.isSome: reader.get else: Step(literal: token.replace(jsre"/^\[|\]$/g", "")))
   some(steps)
 
-proc compile(temp: string): Option[seq[Step]] =
+proc compile(temp: string): bool =
   ## dayjs reads the format again for every date; the steps depend on the format alone, so the
-  ## port keeps those of the last one (a chart parses all its dates with one format).
+  ## port keeps those of the last one (a chart parses all its dates with one format), in
+  ## `lastCompiled`, and says whether the format compiled. The steps are read in place there:
+  ## returning them copied all of them for every date in JavaScript.
   if not lastCompiled.valid or lastCompiled.temp != temp:
-    lastCompiled = (temp, compileNew(temp), true)
-  lastCompiled.steps
+    let steps = compileNew(temp)
+    lastCompiled = (temp, (if steps.isSome: steps.get else: @[]), steps.isSome, true)
+  lastCompiled.ok
 
 proc loose(input: string, temp: string, now: JsDate): JsDate =
   if temp == "x" or temp == "X": return fromTime((if temp == "X": 1000.0 else: 1.0) * jsToNumber(input))
-  let compiled = compile(temp)
-  if compiled.isNone: return NaN
+  if not compile(temp): return NaN
   var f = unset()
   var rest = input
   var start = 0
-  for step in compiled.get:
+  # dayjs matches each token in `rest.substring(start)`. Slicing `rest` at every token, and
+  # building a new `rest` without the matched text, took time in the square of the input (a
+  # format of 25,000 tokens, read against a date as long). `at` is the byte where that substring
+  # starts, and `units` the UTF-16 units before it, as `substringFrom` counts them; they walk on
+  # with `start`, and from 0 again when text before `at` is dropped. The patterns of the tokens
+  # have no anchors, lookbehinds or word boundaries, so a match from `at` is the match in the
+  # substring.
+  var at = 0
+  var units = 0
+  for i in 0 ..< lastCompiled.steps.len:
+    template step: Step = lastCompiled.steps[i]
     if not step.isReader:
       start += utf16Len(step.literal)
       continue
-    let slice = substringFrom(rest, start)
-    let m = step.re.exec(slice)
-    if not m.found: return NaN
-    let matched = m[0]
+    while units < start and at < rest.len:
+      let (cp, size) = codePointAt(rest, at)
+      units += (if cp >= 0x10000: 2 else: 1)
+      at += size
+    var matched: string
+    if step.least > 0:
+      let (a, e) = digitsFrom(rest, at, step)
+      if a < 0: return NaN
+      matched = rest[a ..< e]
+    else:
+      let m = step.re.exec(rest, at)
+      if not m.found: return NaN
+      matched = m[0]
     if not step.read(f, matched): return NaN
     # dayjs drops the first occurrence of the matched text, wherever it is, and does not move `start`.
-    rest = rest.replaceFirst(matched, "")
+    let p = rest.find(matched)
+    if p >= 0 and matched.len > 0:
+      rest.delete(p ..< p + matched.len)
+      if p < at:
+        at = 0
+        units = 0
   if f.afternoon != -1 and f.hours == f.hours:
     if f.afternoon == 1:
       if f.hours < 12: f.hours += 12

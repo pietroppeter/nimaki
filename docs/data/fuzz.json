@@ -43,11 +43,11 @@
     },
     "flowchart": {
       "seed": 1,
-      "cases": 5000,
-      "identical": 5000,
+      "cases": 1000,
+      "identical": 1000,
       "different": 0,
-      "rendered": 3600,
-      "errors": 1400
+      "rendered": 708,
+      "errors": 292
     },
     "radar": {
       "seed": 1,
@@ -83,19 +83,19 @@
     },
     "class": {
       "seed": 1,
-      "cases": 5000,
-      "identical": 5000,
+      "cases": 1000,
+      "identical": 1000,
       "different": 0,
-      "rendered": 3732,
-      "errors": 1268
+      "rendered": 146,
+      "errors": 854
     },
     "state": {
       "seed": 1,
-      "cases": 5000,
-      "identical": 5000,
+      "cases": 1000,
+      "identical": 1000,
       "different": 0,
-      "rendered": 3814,
-      "errors": 1186
+      "rendered": 766,
+      "errors": 234
     },
     "gitGraph": {
       "seed": 1,
@@ -147,11 +147,11 @@
     },
     "gantt": {
       "seed": 1,
-      "cases": 5000,
-      "identical": 5000,
+      "cases": 1000,
+      "identical": 1000,
       "different": 0,
-      "rendered": 3401,
-      "errors": 1599
+      "rendered": 697,
+      "errors": 303
     },
     "ishikawa": {
       "seed": 1,

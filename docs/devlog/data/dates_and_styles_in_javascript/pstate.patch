@@ -1,0 +1,27 @@
+--- a/src/regex/nfatype.nim
++++ b/src/regex/nfatype.nim
+@@ -289,7 +289,11 @@
+     si: int16
+ 
+ func initPstate*(ni: NodeIdx, ci: CaptIdx, bounds: Bounds): Pstate {.inline.} =
+-  Pstate(ni: ni, ci: ci, bounds: bounds)
++  # field by field: in nim js an object constructor deep-copies (nimCopy) each time
++  result.ni = ni
++  result.ci = ci
++  result.bounds.a = bounds.a
++  result.bounds.b = bounds.b
+ 
+ when defined(release):
+   {.push checks: off.}
+@@ -316,7 +320,10 @@
+   assert sm.si <= sm.sx.len
+   if (sm.si == sm.sx.len).unlikely:
+     sm.sx.setLen(sm.sx.len * 2)
+-  sm.sx[sm.si] = item
++  sm.sx[sm.si].ni = item.ni
++  sm.sx[sm.si].ci = item.ci
++  sm.sx[sm.si].bounds.a = item.bounds.a
++  sm.sx[sm.si].bounds.b = item.bounds.b
+   sm.ss[item.ni] = sm.si
+   sm.si += 1'i16
+ 
