@@ -123,9 +123,10 @@ proc tokenize*(src: string): Tokens =
         return true
     else: discard
     let lower = toLowerAscii(c)
-    for (first, re, kind) in KEYWORDS:
-      if first == lower and (e = at(re); e >= 0):
-        emit(kind, p, e)
+    # By index: unpacking each entry copied its regex, at every keyword, in JavaScript.
+    for i in 0 ..< KEYWORDS.len:
+      if KEYWORDS[i][0] == lower and (e = at(KEYWORDS[i][1]); e >= 0):
+        emit(KEYWORDS[i][2], p, e)
         return true
     false
 

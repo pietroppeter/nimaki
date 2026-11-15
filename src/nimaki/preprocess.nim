@@ -301,7 +301,9 @@ proc dropColorSemicolons(text: string, keyword: string, steps: Steps): string =
         afterColon = false
       j += size
     if hash != -1:
-      let semi = if lineEnd - 1 >= 0: text.rfind(';', last = lineEnd - 1) else: -1
+      # Only a semicolon after the `#` counts: the search stops there, not at the start of the
+      # text (1,600 classDef lines without one read the whole text back each).
+      let semi = if lineEnd - 1 > hash: text.rfind(';', start = hash + 1, last = lineEnd - 1) else: -1
       if semi > hash:
         if edits >= 0: steps[edits].add (semi, semi + 1, 0)
         output.add text[last ..< semi]
