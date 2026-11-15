@@ -115,9 +115,14 @@ too. Nim's names are long (`dump__modeljson_u4573`), so that was worth a megabyt
 
 The research post found that most of nimaki.js is the 33 diagram types, and that a page draws a
 few. Pele solves this with *lazy loading*: its bundler cuts the code into a core and one piece
-per type, and `load(type)` fetches a piece the first time a page needs it. Nim cannot cut a
-program into pieces: it writes one JavaScript file per program. So nimaki builds the program once
-per type instead, each time with only that type in it:
+per type, and `load(type)` fetches a piece the first time a page needs it.
+
+Nim does drop code: it writes only the procedures that the program can call (*dead code
+elimination*, always on). But in nimaki every type can be called. `render` learns the type from
+the text, at run time, and looks it up in a table where every type is registered, so the compiler
+must keep all 33. Nor can Nim cut a program into pieces that load later: it writes one JavaScript
+file per program. So nimaki builds the program once per type instead. A type left out of a build
+is never registered, nothing calls its code, and dead code elimination drops it:
 """
 
 nbCode:
