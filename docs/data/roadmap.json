@@ -668,6 +668,17 @@
           "status": "started",
           "post": "",
           "pr": ""
+        },
+        {
+          "id": "js-native-regexp",
+          "kind": "port",
+          "title": "JavaScript's own RegExp in the JavaScript build",
+          "what": "In the JavaScript build, jsregex.nim hands Pele's patterns to JavaScript's own RegExp instead of nim-regex, which is 30 to 50 times slower there than in C (post Dates and styles in JavaScript). The UTF-8 text is converted to a JavaScript string once per text (a cache), with a table from UTF-16 positions to bytes for text that is not ASCII. The C build keeps nim-regex. Pietro's choice, 15 November 2026; with it, a post proposing the state-copy patch to nim-regex.",
+          "done_when": "difftest --js, the fuzzers and mutate in the JavaScript build, and Pele's suites agree with Pele, with every match in the JavaScript build on native RegExp; a decision record says why the builds use different engines.",
+          "owner": "Speed up the JavaScript build",
+          "status": "started",
+          "post": "",
+          "pr": ""
         }
       ]
     },
