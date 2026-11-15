@@ -101,9 +101,12 @@ when not defined(js):
     let dir = buildDir / "js"
     createDir dir
     let runner = dir / "jsrunner.js"
-    let compile = "nim js --hints:off --warnings:off -d:nodejs -d:release -o:" & quoteShell(runner) & " " &
-                  quoteShell(repoDir / "tools" / "jsrunner.nim")
-    if execShellCmd(compile) != 0: quit "ERROR nim js failed: " & compile, 2
+    # NIMAKI_JSRUNNER_BUILT=1 says the runner is built already: several tools running at once (CI's
+    # odd-character rounds) would otherwise rebuild it while another one runs it
+    if getEnv("NIMAKI_JSRUNNER_BUILT") != "1" or not fileExists(runner):
+      let compile = "nim js --hints:off --warnings:off -d:nodejs -d:release -o:" & quoteShell(runner) & " " &
+                    quoteShell(repoDir / "tools" / "jsrunner.nim")
+      if execShellCmd(compile) != 0: quit "ERROR nim js failed: " & compile, 2
     var input = ""
     for c in cases: input.add $c & "\n"
     let inPath = dir / (name & "-in.jsonl")
