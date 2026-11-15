@@ -4,10 +4,12 @@ name: Pages
 # main, deploys docs/ to GitHub Pages. The HTML is not committed: it is built here, so it always
 # matches the sources. Pages must use "GitHub Actions" as its source (Settings > Pages).
 #
-# Two jobs run side by side (post 15 Nov F, Twelve minutes of checks; step ci-speed):
-# - checks: the referee in C and JavaScript, the fuzzers, Pele's test suites, the tests, the C
-#   library. On a pull request that changes no code (only docs/, a post, the roadmap), they are
-#   skipped: the pages job still draws every diagram of the site with nimaki and with Pele.
+# The jobs run side by side (post 15 Nov F, Twelve minutes of checks; step ci-speed):
+# - changes: what a pull request changes. When it changes no code (only docs/, a post, the
+#   roadmap), checks and suites are skipped: the pages job still draws every diagram of the site
+#   with nimaki and with Pele.
+# - checks: the referee in C and JavaScript, the fuzzers, the tests, the C library.
+# - suites: Pele's own test suites on nimaki's JavaScript build, in two parts on two machines.
 # - pages: builds and checks the site. Deploy waits for this job only, so a merge reaches the
 #   site without waiting for the checks, which its pull request already passed on the same code.
 on:
@@ -26,12 +28,14 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  checks:
+  changes:
     runs-on: ubuntu-24.04
+    outputs:
+      code: ${{ steps.changes.outputs.code }}
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # the whole history: to see what a pull request changes
+          fetch-depth: 2   # the merge commit and its parents: what a pull request changes
 
       # The checks are skipped only when every file the pull request changes is prose the checks
       # do not read: a post and its data, a decision, the roadmap, a page, the theme's assets, a
@@ -54,38 +58,39 @@ jobs:
             echo "::notice::no code changed: the checks are skipped, the pages job builds and checks the site"
           fi
 
+  checks:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
       - uses: jiro4989/setup-nim-action@v2
-        if: steps.changes.outputs.code == 'true'
         with:
           nim-version: "2.2.14"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       # Node runs the oracle: the pinned Pele npm package (reference/PIN)
       - uses: actions/setup-node@v4
-        if: steps.changes.outputs.code == 'true'
         with:
           node-version: "22"
 
       # the same setup as a laptop or a coding-agent sandbox: PCRE for nimib's markdown, the
       # docs' dependencies at the commits of deps.lock, and the pinned Pele (source and package)
       - uses: actions/cache@v4
-        if: steps.changes.outputs.code == 'true'
         with:
           path: deps
           key: deps-${{ hashFiles('deps.lock') }}
       - uses: actions/cache@v4
-        if: steps.changes.outputs.code == 'true'
         with:
           path: |
             reference/pele
             reference/npm
           key: pele-${{ hashFiles('reference/PIN') }}
       - run: sh tools/setup.sh
-        if: steps.changes.outputs.code == 'true'
 
       # each job keeps its own compiled tools: they build different programs
       - uses: actions/cache@v4
-        if: steps.changes.outputs.code == 'true'
         with:
           path: ~/.cache/nim
           key: nimcache-checks-2.2.14-${{ hashFiles('src/**/*.nim', 'docs/**/*.nim', 'tests/**/*.nim', 'tools/*.nim', '*.nims', 'nim.cfg', 'deps.lock') }}
@@ -93,41 +98,34 @@ jobs:
 
       # every `port-of:` header names a file of Pele at the pin
       - name: Port map
-        if: steps.changes.outputs.code == 'true'
         run: nim r tools/portmap.nim check
 
       # The referee. The corpus is rebuilt from the pinned Pele and must match the committed one;
       # the self test proves difftest can fail; then every case is compared, and a type the
       # coverage map marks done must be identical on every case.
       - name: Corpus matches the pin
-        if: steps.changes.outputs.code == 'true'
         run: |
           node tools/corpus.mjs
           git diff --exit-code --stat corpus/ || { echo "::error::corpus/cases.json differs from what tools/corpus.mjs builds: rerun it and commit"; exit 1; }
 
       - name: Difftest self test
-        if: steps.changes.outputs.code == 'true'
         run: nim r tools/difftest.nim --self-test
 
       - name: Difftest
-        if: steps.changes.outputs.code == 'true'
         run: nim r tools/difftest.nim --check-done --show:30
 
       # The same corpus with a host's icons and typesetter (the test ones of tools/answers.nim)
       - name: Difftest with icons and math
-        if: steps.changes.outputs.code == 'true'
         run: nim r tools/difftest.nim --hosts --check-done --show:30
 
       # The same renderer compiled to JavaScript (nim js), run in Node, against the same oracle
       - name: Difftest of the JavaScript build
-        if: steps.changes.outputs.code == 'true'
         run: nim r tools/difftest.nim --js --check-done --show:30
 
       # The fuzzers and the odd-character fuzzer are built optimised (-d:release keeps Nim's
       # runtime checks) and run four at a time, one per core of the runner: the referee above
       # checks the default build, these the optimised one.
       - name: Build the fuzzers
-        if: steps.changes.outputs.code == 'true'
         run: |
           nim c -d:release --hints:off -o:$PWD/build/bin/fuzz tools/fuzz.nim & fuzz=$!
           nim c -d:release --hints:off -o:$PWD/build/bin/mutate tools/mutate.nim & mutate=$!
@@ -136,7 +134,6 @@ jobs:
       # Differential fuzzing: inputs generated from each ported type's grammar, against Pele.
       # A port adds its line here. --no-data: four at once must not all write docs/data/fuzz.json.
       - name: Fuzz
-        if: steps.changes.outputs.code == 'true'
         run: |
           xargs -P4 -L1 build/bin/fuzz --no-data <<'EOF'
           pie --cases:5000
@@ -179,34 +176,17 @@ jobs:
       # separator, an emoji...), against Pele, on seven seeds, in both builds. The JavaScript
       # runner is built by the first seed, and reused by the others.
       - name: Mutate
-        if: steps.changes.outputs.code == 'true'
         run: |
           printf '%s\n' 1 2 3 4 5 6 7 | xargs -P4 -I{} build/bin/mutate --seed:{} --out:build/mutate-{}.json
           build/bin/mutate --js --seed:1 --out:build/mutate-js-1.json
           printf '%s\n' 2 3 4 5 6 7 | NIMAKI_JSRUNNER_BUILT=1 xargs -P4 -I{} build/bin/mutate --js --seed:{} --out:build/mutate-js-{}.json
 
-      # Pele's own test suites (vitest), run on nimaki's JavaScript build: a test that passes on
-      # Pele and fails on nimaki fails CI, unless it needs what nimaki does not provide (parse(),
-      # mount()), only misses one of Pele's time bounds, or is listed in tools/peletests/known.txt
-      - uses: actions/cache@v4
-        if: steps.changes.outputs.code == 'true'
-        with:
-          path: |
-            build/peletests/pele
-            build/peletests/pele-*.json
-          key: peletests-${{ hashFiles('reference/PIN') }}
-      - name: Pele's test suites
-        if: steps.changes.outputs.code == 'true'
-        run: nim r tools/peletests.nim --check
-
       - name: Tests
-        if: steps.changes.outputs.code == 'true'
         run: nim r tests/all.nim
 
       # The C ABI: the shared library, and its smoke test in Python through ctypes (every case
       # of the corpus, through the library, against Pele in Node)
       - name: C ABI
-        if: steps.changes.outputs.code == 'true'
         run: nim r tools/cabi.nim
 
       # Once a week: has Pele released past the pin? A red weekly run is the signal to follow it
@@ -214,6 +194,61 @@ jobs:
       - name: Pele newer than the pin
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: nim r tools/followpele.nim --fail
+
+  # Pele's suites take most of the time of a run: two machines share them, each half balanced by
+  # the time its files take on Pele (tools/peletests.nim --shard).
+  suites:
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [1, 2]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: jiro4989/setup-nim-action@v2
+        with:
+          nim-version: "2.2.14"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Node runs the oracle: the pinned Pele npm package (reference/PIN)
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # the same setup as a laptop or a coding-agent sandbox: PCRE for nimib's markdown, the
+      # docs' dependencies at the commits of deps.lock, and the pinned Pele (source and package)
+      - uses: actions/cache@v4
+        with:
+          path: deps
+          key: deps-${{ hashFiles('deps.lock') }}
+      - uses: actions/cache@v4
+        with:
+          path: |
+            reference/pele
+            reference/npm
+          key: pele-${{ hashFiles('reference/PIN') }}
+      - run: sh tools/setup.sh
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/nim
+          key: nimcache-suites-2.2.14-${{ hashFiles('src/**/*.nim', 'tools/*.nim', 'tools/peletests/*', '*.nims', 'nim.cfg', 'deps.lock') }}
+          restore-keys: nimcache-suites-2.2.14-
+
+      # Pele's own test suites (vitest), run on nimaki's JavaScript build: a test that passes on
+      # Pele and fails on nimaki fails CI, unless it needs what nimaki does not provide (parse(),
+      # mount()), only misses one of Pele's time bounds, or is listed in tools/peletests/known.txt
+      - uses: actions/cache@v4
+        with:
+          path: |
+            build/peletests/pele
+            build/peletests/pele-*.json
+          key: peletests-${{ hashFiles('reference/PIN') }}
+      - name: Pele's test suites, part ${{ matrix.part }} of 2
+        run: nim r tools/peletests.nim --check --shard:${{ matrix.part }}/2
 
   pages:
     runs-on: ubuntu-24.04
