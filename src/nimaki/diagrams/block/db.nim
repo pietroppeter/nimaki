@@ -1,4 +1,5 @@
 ## port-of: src/diagrams/block/db.ts
+## port-of: src/diagrams/block/types.ts
 ## port-status: conformant
 ##
 ## Also holds the types of src/diagrams/block/types.ts. A Block's optional strings are "" for

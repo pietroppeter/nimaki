@@ -1,9 +1,15 @@
+## port-of: src/index.ts
+## port-of: src/diagrams/registry.ts
+## port-status: conformant
+##
 ## nimaki: Pele, the Mermaid renderer, in Nim. `render(text, options)` is the entry point, as
 ## `render` of Pele's `src/core.ts` is (ported in `nimaki/core`).
 ##
-## Each diagram type, as it is ported, registers itself here. A type Pele draws that nimaki has
-## not ported yet raises a `PeleError` with code `unsupported`, which `tools/difftest.nim`
-## counts as not ported.
+## Every diagram type registers here, as Pele's `src/index.ts` registers the list `all` of
+## `src/diagrams/registry.ts`. Pele also builds one module per type, loaded when first needed
+## (`src/lazy.ts`, `src/entries/`); Nim imports at compile time, so the port has no counterpart
+## (docs/data/portmap_skip.txt). A type that is not registered raises a `PeleError` with code
+## `unsupported`.
 import nimaki/[core, errors, types]
 import nimaki/text/measurer
 import nimaki/diagrams/pie/index as pieIndex
@@ -42,36 +48,37 @@ import nimaki/diagrams/venn/index as vennIndex
 
 export core, errors, types, measurer
 
-register(pieIndex.pie)
-register(timelineIndex.timeline)
+# In the order of Pele's `all` (src/diagrams/registry.ts).
 register(flowchartIndex.flowchart)
-register(journeyIndex.journey)
-register(infoIndex.info)
-register(packetIndex.packet)
-register(sequenceIndex.sequence)
-register(stateIndex.state)
-register(swimlaneIndex.swimlane)
-register(ishikawaIndex.ishikawa)
-register(cynefinIndex.cynefin)
-register(wardleyIndex.wardley)
-register(architectureIndex.architecture)
-register(c4Index.c4)
-register(blockIndex.blockDiagram)
-register(radarIndex.radar)
-register(sankeyIndex.sankey)
-register(quadrantIndex.quadrantChart)
-register(treemapIndex.treemap)
-register(treeviewIndex.treeView)
+register(pieIndex.pie)
+register(erIndex.er)
 register(mindmapIndex.mindmap)
 register(kanbanIndex.kanban)
-register(eventmodelingIndex.eventmodeling)
+register(timelineIndex.timeline)
+register(journeyIndex.journey)
 register(classIndex.classDiagram)
-register(erIndex.er)
-register(requirementIndex.requirement)
-register(gitIndex.gitGraph)
-register(railroadIndex.railroad)
-register(usecaseIndex.usecase)
-register(agentflowIndex.agentflow)
-register(ganttIndex.gantt)
+register(quadrantIndex.quadrantChart)
 register(xychartIndex.xychart)
+register(stateIndex.state)
+register(ganttIndex.gantt)
+register(architectureIndex.architecture)
+register(requirementIndex.requirement)
+register(sankeyIndex.sankey)
+register(packetIndex.packet)
+register(radarIndex.radar)
+register(treemapIndex.treemap)
+register(infoIndex.info)
+register(sequenceIndex.sequence)
+register(gitIndex.gitGraph)
+register(c4Index.c4)
+register(blockIndex.blockDiagram)
+register(railroadIndex.railroad)
+register(agentflowIndex.agentflow)
+register(treeviewIndex.treeView)
+register(cynefinIndex.cynefin)
+register(wardleyIndex.wardley)
+register(eventmodelingIndex.eventmodeling)
+register(usecaseIndex.usecase)
 register(vennIndex.venn)
+register(ishikawaIndex.ishikawa)
+register(swimlaneIndex.swimlane)

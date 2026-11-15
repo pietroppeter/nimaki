@@ -3,8 +3,8 @@
   "code": 47594,
   "totals": {
     "todo": {
-      "files": 43,
-      "code": 1185
+      "files": 3,
+      "code": 772
     },
     "draft": {
       "files": 1,
@@ -15,30 +15,30 @@
       "code": 0
     },
     "conformant": {
-      "files": 247,
-      "code": 46273
+      "files": 251,
+      "code": 46449
     },
     "skip": {
-      "files": 0,
-      "code": 0
+      "files": 36,
+      "code": 237
     }
   },
   "components": [
     {
       "component": "api",
-      "todo": 958,
+      "todo": 772,
       "draft": 0,
       "verified": 0,
-      "conformant": 607,
-      "skip": 0
+      "conformant": 612,
+      "skip": 181
     },
     {
       "component": "diagrams/agentflow",
-      "todo": 23,
+      "todo": 0,
       "draft": 0,
       "verified": 0,
       "conformant": 3442,
-      "skip": 0
+      "skip": 23
     },
     {
       "component": "diagrams/architecture",
@@ -50,18 +50,18 @@
     },
     {
       "component": "diagrams/block",
-      "todo": 39,
+      "todo": 0,
       "draft": 0,
       "verified": 0,
-      "conformant": 1918,
+      "conformant": 1957,
       "skip": 0
     },
     {
       "component": "diagrams/c4",
-      "todo": 63,
+      "todo": 0,
       "draft": 0,
       "verified": 0,
-      "conformant": 1825,
+      "conformant": 1888,
       "skip": 0
     },
     {
@@ -210,10 +210,10 @@
     },
     {
       "component": "diagrams",
-      "todo": 69,
+      "todo": 0,
       "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 69,
       "skip": 0
     },
     {
@@ -314,11 +314,11 @@
     },
     {
       "component": "entries",
-      "todo": 33,
+      "todo": 0,
       "draft": 0,
       "verified": 0,
       "conformant": 0,
-      "skip": 0
+      "skip": 33
     },
     {
       "component": "layout",
@@ -399,8 +399,9 @@
       "component": "diagrams/agentflow",
       "lines": 29,
       "code": 23,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "Not imported by any file of Pele's src: a list of warning ids reserved for tools that check a diagram's meaning. The ids Pele emits are in agentflow/types.nim and graph.nim."
     },
     {
       "path": "src/diagrams/agentflow/graph.ts",
@@ -627,8 +628,10 @@
       "component": "diagrams/block",
       "lines": 47,
       "code": 39,
-      "status": "todo",
-      "nim": []
+      "status": "conformant",
+      "nim": [
+        "src/nimaki/diagrams/block/db.nim"
+      ]
     },
     {
       "path": "src/diagrams/c4/db.ts",
@@ -715,8 +718,10 @@
       "component": "diagrams/c4",
       "lines": 77,
       "code": 63,
-      "status": "todo",
-      "nim": []
+      "status": "conformant",
+      "nim": [
+        "src/nimaki/diagrams/c4/db.nim"
+      ]
     },
     {
       "path": "src/diagrams/class/db.ts",
@@ -1833,8 +1838,10 @@
       "component": "diagrams",
       "lines": 72,
       "code": 69,
-      "status": "todo",
-      "nim": []
+      "status": "conformant",
+      "nim": [
+        "src/nimaki.nim"
+      ]
     },
     {
       "path": "src/diagrams/requirement/db.ts",
@@ -2611,264 +2618,297 @@
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/architecture.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/block.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/c4.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/class.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/cynefin.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/er.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/eventmodeling.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/flowchart.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/gantt.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/gitGraph.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/info.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/ishikawa.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/journey.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/kanban.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/mindmap.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/packet.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/pie.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/quadrantChart.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/radar.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/railroad.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/requirement.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/sankey.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/sequence.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/state.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/swimlane.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/timeline.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/treeView.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/treemap.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/usecase.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/venn.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/wardley.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/entries/xychart.ts",
       "component": "entries",
       "lines": 3,
       "code": 1,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type."
     },
     {
       "path": "src/errors.ts",
@@ -2885,8 +2925,10 @@
       "component": "api",
       "lines": 8,
       "code": 5,
-      "status": "todo",
-      "nim": []
+      "status": "conformant",
+      "nim": [
+        "src/nimaki.nim"
+      ]
     },
     {
       "path": "src/layout/components.ts",
@@ -2933,16 +2975,18 @@
       "component": "api",
       "lines": 93,
       "code": 79,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "JavaScript packaging: loads a type's module the first time it is drawn (a dynamic import). Nim has no counterpart, and needs none."
     },
     {
       "path": "src/models.ts",
       "component": "api",
       "lines": 107,
       "code": 102,
-      "status": "todo",
-      "nim": []
+      "status": "skip",
+      "nim": [],
+      "reason": "TypeScript types only, re-exported for users of the package; each model is a Nim type in its own module, and tools/models.nim writes it in Pele's shape."
     },
     {
       "path": "src/mount.ts",

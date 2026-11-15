@@ -1,4 +1,5 @@
 ## port-of: src/diagrams/c4/db.ts
+## port-of: src/diagrams/c4/types.ts
 ## port-status: conformant
 ##
 ## Also holds the types of src/diagrams/c4/types.ts. An element's optional text fields (type,
