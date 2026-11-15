@@ -18,8 +18,8 @@ nbText: &"""
   morning, after [A page for every module](../a-page-for-every-module/).
 - **The coverage map shows two groups**, with a caption each: the shared core
   ({cov.core.len} parts, rounded islands) and the diagram types ({cov.diagrams.len}, square boxes,
-  like the nodes of a diagram). Pietro suggested an emoji on the diagram pills; the groups are the
-  proposal here, with the emoji kept as the other option (below).
+  like the nodes of a diagram). Pietro suggested an emoji on the diagram pills; shown both, he
+  chose the groups (below).
 
 Here are the two groups, as on the home page and the coverage map:
 """
@@ -47,7 +47,9 @@ nbNote """
 - **Groups, or an emoji?** Pietro suggested marking the diagram pills with an emoji. An emoji
   looks different on every phone and adds a colour the Pomice palette does not have, so this post
   proposes two captioned groups instead, the types drawn as boxes. The emoji version was shown to
-  him as a screenshot next to this one; the pull request changes one line if he prefers it.
+  him as a screenshot next to this one.
+- **Pietro's answer** (15 November 2026): two groups, as this post shows them; they shipped in
+  [pull request 97](https://github.com/pietroppeter/nimaki/pull/97).
 """, nkQuestion, "For Pietro"
 
 nbNote """
