@@ -31,7 +31,7 @@ let
 nbText: &"""
 ## The findings, first
 
-- **nimaki 0.2.0** is ready to be tagged. It draws as Pele {peleVersion}, the same drawings as
+- **nimaki 0.2.0** is prepared, and waits: see the note below. It draws as Pele {peleVersion}, the same drawings as
   0.1.0: {identical.thousands} of {cases.thousands} cases identical to Pele.
 - **New in it: Pele's browser side** (`mount`, zoom, the canvas measurer), told in
   [A drawing that fits its box](../a-drawing-that-fits-its-box/), and **Pele's models as JSON**:
@@ -47,6 +47,14 @@ nbText: &"""
 - **The minor number moves** because the API grew and the page's `nimaki.render` changed shape
   (it throws now, as Pele's does): decision 0020's rule for 0.x.
 """
+
+nbNote """
+**Pietro's answer, 15 November 2026:** not yet. nimaki is not ready for diagrammari while
+nimaki.js weighs about ten times Pele's bundle, so the size comes first: the roadmap step
+[A smaller JavaScript build](../../roadmap/), with research into why a Nim build for JavaScript
+is large and how others make it smaller, and then the reduction. 0.2.0 is tagged after that,
+from a later commit, and the look back at the whole port waits too.
+""", nkQuestion, "Tag it now?"
 
 nbText: """
 ## What the proposal needed
@@ -133,9 +141,9 @@ Nothing in diagrammari changes from here: these are proposals, for diagrammari's
 nbText: """
 ## What this changes for the port
 
-- The roadmap step *nimaki 0.2.0* is done once Pietro tags it: the link and the notes are in the
-  thread that made it, as for 0.1.0 (threads cannot push tags).
-- Next, by Pietro's plan: a last post that looks back at the whole port (the roadmap step
+- The roadmap step *nimaki 0.2.0* stays open until the JavaScript build is smaller and Pietro
+  tags it (threads cannot push tags).
+- Then, by Pietro's plan: a last post that looks back at the whole port (the roadmap step
   *Looking back*), and then the automatic work stops, to start again when nimaki is needed.
 
 ## Sources
