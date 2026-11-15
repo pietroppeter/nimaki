@@ -1,6 +1,6 @@
 ## peletests: Pele's own test suites, run on nimaki.
 ##
-##   nim r tools/peletests.nim [--check] [--jobs:N] [--fast:N] [--ref:PATH] [test files...]
+##   nim r tools/peletests.nim [--check] [--jobs:N] [--fast:N] [--shard:K/N] [--ref:PATH] [test files...]
 ##
 ## Pele's tests (tests/**/*.test.ts and *.spec.ts at the pin, run by vitest) call Pele's public
 ## API, `render(text, options)` from src/index.js. This tool runs them twice in a copy of Pele
@@ -21,7 +21,9 @@
 ##   docs/divergences.md.
 ##
 ## A test file whose worker dies (a crash, no memory) is an `ERROR` too. The counts go to
-## docs/data/peletests.json (with `--fast:N`, which runs one file in N, they do not). `--check`
+## docs/data/peletests.json (with `--fast:N`, which runs one file in N, they do not; nor with
+## `--shard:K/N`, which runs the K-th of N parts of the files, so N machines share the suites: the
+## parts are balanced by the time each file takes on Pele). `--check`
 ## exits 1 when there is an ERROR. Detail: build/peletests/report.txt.
 ##
 ## Tests that call parts of Pele other than src/index.js (a parser, the layout) still run those
@@ -63,6 +65,29 @@ proc prepare(refDir, work: string): string =
     quit "ERROR npm ci failed in " & pele, 2
   writeFile marker, pin
   pele
+
+proc durations(path: string): Table[string, float] =
+  ## The time each test file of a vitest JSON report took, in milliseconds.
+  let j = parseJson(readFile(path))
+  for f in j["testResults"]:
+    let file = f["name"].getStr.split("/pele/")[^1]
+    result[file] = f{"endTime"}.getFloat(0) - f{"startTime"}.getFloat(0)
+
+proc shardOf(files: seq[string], took: Table[string, float], k, n: int): seq[string] =
+  ## The k-th of n parts (from 1), longest file first into the part with the least time so far:
+  ## every machine gets about the same share. The same files and times always give the same parts.
+  var order = files
+  order.sort(proc (a, b: string): int =
+    result = cmp(took.getOrDefault(b), took.getOrDefault(a))
+    if result == 0: result = cmp(a, b))
+  var load = newSeq[float](n)
+  for f in order:
+    var best = 0
+    for i in 1 ..< n:
+      if load[i] < load[best]: best = i
+    load[best] += max(took.getOrDefault(f), 1.0)
+    if best == k - 1: result.add f
+  result.sort
 
 proc outcomes(path: string): seq[Outcome] =
   ## The tests of one vitest JSON report.
@@ -135,6 +160,7 @@ proc main() =
   var check = false
   var jobs = 4
   var fast = 0
+  var shard = (k: 1, n: 1)
   var refArg = ""
   var only: seq[string]
   for kind, key, val in getopt():
@@ -145,6 +171,11 @@ proc main() =
       of "jobs": jobs = parseInt(val)
       of "fast": fast = parseInt(val)
       of "ref": refArg = val
+      of "shard":
+        let p = val.split('/')
+        if p.len != 2: quit "ERROR --shard takes K/N, as --shard:1/2", 2
+        shard = (k: parseInt(p[0]), n: parseInt(p[1]))
+        if shard.n < 1 or shard.k notin 1 .. shard.n: quit "ERROR --shard:" & val & ": K must be 1 to N", 2
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: only.add key
     of cmdEnd: discard
@@ -179,6 +210,7 @@ proc main() =
     for i, f in files:
       if i mod fast == 0: kept.add f
     files = kept
+  if shard.n > 1: files = shardOf(files, durations(baseline), shard.k, shard.n)
 
   # nimaki, one vitest per file, so that a worker that dies takes one file with it.
   let outDir = work / "out"
@@ -199,7 +231,8 @@ proc main() =
     cmds.add "cd " & quoteShell(pele) & " && " & env & " npx vitest run -c vitest.nimaki.config.mjs " &
              quoteShell(f) & filter & " --reporter=json --outputFile=" & quoteShell(outDir / stem & ".json") &
              " > " & quoteShell(outDir / stem & ".log") & " 2>&1"
-  echo "peletests: ", files.len, " test files on nimaki, ", jobs, " at a time"
+  echo "peletests: ", files.len, " test files on nimaki, ", jobs, " at a time",
+       (if shard.n > 1: " (part " & $shard.k & " of " & $shard.n & ")" else: "")
   discard execProcesses(cmds, n = jobs, options = {poEvalCommand})
 
   var counts: array[Kind, int]
@@ -250,7 +283,7 @@ proc main() =
 
   var total = 0
   for k in Kind: total += counts[k]
-  if fast <= 1 and only.len == 0:
+  if fast <= 1 and only.len == 0 and shard.n == 1:
     var c = newJObject()
     for k in Kind: c[$k] = %counts[k]
     let data = %*{"pele": pinOf(refDir), "commit": pin, "files": files.len, "tests": total,

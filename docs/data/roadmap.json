@@ -907,12 +907,12 @@
           "id": "ci-speed",
           "kind": "tooling",
           "title": "A faster CI, without dropping a check",
-          "what": "Pietro chose proposals 1, 3 and 4 of the post Twelve minutes of checks: skip the referee, fuzzers and Pele's suites when a pull request changes no code; build the C tools with -d:release and run the fuzzers and the odd-character rounds four at a time (one result file per fuzzer type); on main, deploy after the pages only and stop queueing merges. Then proposal 2: the checks in parallel jobs. Round 1 (proposals 1, 3, 4): PR #95, post a-faster-ci.",
+          "what": "Pietro chose proposals 1, 3 and 4 of the post Twelve minutes of checks: skip the referee, fuzzers and Pele's suites when a pull request changes no code; build the C tools with -d:release and run the fuzzers and the odd-character rounds four at a time (one result file per fuzzer type); on main, deploy after the pages only and stop queueing merges. Then proposal 2: the checks in parallel jobs. Round 1 (proposals 1, 3, 4): PR #95, post a-faster-ci. Round 2 (proposal 2): Pele's suites in two jobs of their own.",
           "done_when": "A claim pull request is green in about two minutes, a pull request of code in clearly less than twelve, and a merge reaches the site without waiting for the checks; every check still runs on every pull request that changes code.",
           "owner": "Explain nimaki's CI and its history",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "two-machines-for-peles-suites",
+          "pr": "101"
         },
         {
           "id": "post-answers",
