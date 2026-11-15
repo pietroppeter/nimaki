@@ -991,7 +991,7 @@
           "id": "js-size",
           "kind": "tooling",
           "title": "A smaller JavaScript build",
-          "what": "nimaki's JavaScript build (the file the Playground and the pages load) is several megabytes before compression, a lot for a phone. Drop the parts a page does not use and minify it, keeping the referee green on the JavaScript build. Pietro had put it in the backlog (post The answers in the posts), then on 15 November 2026 moved it before the 0.2 release: first research why Nim's JavaScript is big and how others manage it, then reduce the file.",
+          "what": "nimaki's JavaScript build (the file the Playground and the pages load) is several megabytes before compression, a lot for a phone. Drop the parts a page does not use and minify it, keeping the referee green on the JavaScript build. Pietro had put it in the backlog (post The answers in the posts), then on 15 November 2026 moved it before the 0.2 release: first research why Nim's JavaScript is big and how others manage it (post Why nimaki.js is big: the pages already used -d:danger, the referee now checks that build too; the file is mostly long names and white space, and one file holds every type), then reduce the file: the browser's own URL parser, Pele's minifier, and one file per diagram type.",
           "done_when": "The JavaScript build is measurably smaller, difftest --js still finds every case identical, and a devlog post says by how much and how.",
           "owner": "Shrink the JavaScript build",
           "status": "started",

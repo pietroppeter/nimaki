@@ -190,7 +190,8 @@ proc main() =
   copyFile(repoDir / "tools" / "peletests" / "vitest.config.mjs", pele / "vitest.nimaki.config.mjs")
 
   let bridge = work / "bridge.js"
-  let compile = "nim js --hints:off --warnings:off -d:nodejs -d:release -o:" & quoteShell(bridge) & " " &
+  # -d:danger, as the pages build nimaki.js: Pele's tests check the build that ships
+  let compile = "nim js --hints:off --warnings:off -d:nodejs -d:danger -o:" & quoteShell(bridge) & " " &
                 quoteShell(repoDir / "tools" / "peletests" / "bridge.nim")
   if sh(compile) != 0: quit "ERROR nim js failed: " & compile, 2
 
