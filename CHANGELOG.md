@@ -42,6 +42,8 @@ Mermaid 12.1.0. Nim 2.2.4 or later; the JavaScript build of large diagrams needs
 - **Lazy loading**: builds on one page join under one `nimaki`, and `nimaki.load(type)` adds
   `nimaki-<type>.js` from the folder of the first script, as Pele's lazy entry point loads a type.
 - `difftest --web` compares the minified files with Pele, loaded in Node as a page loads them.
+- **Downloads**: the release carries the JavaScript files, each one and all of them in
+  `nimaki-js-0.2.0.zip`, built from the tag and checked against Pele by a workflow (decision 0023).
 
 ### Changed
 

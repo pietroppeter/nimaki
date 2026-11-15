@@ -151,6 +151,9 @@ Nothing in diagrammari changes from here: these are proposals, for diagrammari's
   (`nim js -d:danger -d:nimakiTypes=flowchart,sequence,pie,timeline src/nimaki/web.nim`, then
   minified) is {fourGzip.kb} compressed, less than Pele's bundle; or `nimaki-core.js` with
   `nimaki.load`, as Pele's lazy entry point does (decision 0022).
+  The release carries every one of these files as a download, built from its tag and checked
+  against Pele (Pietro's answer to the question of [A type at a time](../a-type-at-a-time/);
+  decision 0023), so diagrammari need not build them.
 """
 
 nbText: """

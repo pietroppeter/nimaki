@@ -37,6 +37,8 @@ coding agents*, so a change here is reviewed like any page. It is adapted from
   Tags and releases wait for Pietro: he names the version. A release bumps `nimaki.nimble` and
   `src/nimaki/version.nim`, adds its section to `CHANGELOG.md`, passes
   `nim r tools/installcheck.nim`, then is tagged `vX.Y.Z` on a green `main` (decision 0020).
+  When the release is published, a workflow attaches the JavaScript files a page loads
+  (`.github/workflows/release.yml`, decision 0023).
 - The pull request that ships a step sets its `status` to `done`, `post` and `pr` in the roadmap;
   the one that ports a part updates its row in `docs/data/coverage.json`. Both are living pages
   (Roadmap, Coverage map), so the site always says where the port stands.
