@@ -477,6 +477,9 @@ Which of the five should be done? They are independent: 1 is the smallest change
 saving for claims and posts; 2 and 3 shorten every run of code; 4 shortens every merge; 5 needs
 two settings of yours. The proposal of this thread: 1, 3 and 4 in one pull request, then 2, then
 5 if you want it.
+
+**Pietro's answer** (15 November, 08:07 UTC): 1, 3 and 4 now, then 2. They are the roadmap step
+*A faster CI* ([roadmap](../../roadmap/)).
 """, nkQuestion, "For Pietro"
 
 nbText: """
