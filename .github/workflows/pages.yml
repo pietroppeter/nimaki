@@ -1,8 +1,15 @@
 name: Pages
 
-# Runs the tests, builds every page (home, roadmap, coverage map, devlog) and, on main, deploys
-# docs/ to GitHub Pages. The HTML is not committed: it is built here, so it always matches the
-# sources. Pages must use "GitHub Actions" as its source (Settings > Pages).
+# Runs the checks of the port, builds every page (home, roadmap, coverage map, devlog) and, on
+# main, deploys docs/ to GitHub Pages. The HTML is not committed: it is built here, so it always
+# matches the sources. Pages must use "GitHub Actions" as its source (Settings > Pages).
+#
+# Two jobs run side by side (post 15 Nov F, Twelve minutes of checks; step ci-speed):
+# - checks: the referee in C and JavaScript, the fuzzers, Pele's test suites, the tests, the C
+#   library. On a pull request that changes no code (only docs/, a post, the roadmap), they are
+#   skipped: the pages job still draws every diagram of the site with nimaki and with Pele.
+# - pages: builds and checks the site. Deploy waits for this job only, so a merge reaches the
+#   site without waiting for the checks, which its pull request already passed on the same code.
 on:
   push:
     branches: [main]
@@ -12,12 +19,203 @@ on:
   schedule:
     - cron: "17 5 * * 1"
 
+# A pull request's new commit cancels its older run. On main each commit has its own group, so
+# merges do not queue behind each other (deploy has a group of its own, below).
 concurrency:
-  group: pages-${{ github.event.pull_request.number || github.ref }}
+  group: pages-${{ github.event.pull_request.number || github.sha }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  build:
+  checks:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # the whole history: to see what a pull request changes
+
+      # The checks are skipped only when every file the pull request changes is prose the checks
+      # do not read: a post and its data, a decision, the roadmap, a page, the theme's assets, a
+      # Markdown file at the top. Anything else (the port, the tools, the tests, the corpus, the
+      # pin, the coverage map that --check-done reads, this workflow) runs them all. Pushes to
+      # main, the weekly run and a run by hand check everything.
+      - name: What changed
+        id: changes
+        run: |
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
+            echo "code=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          # a pull request's run checks out the merge of the branch into main: its first parent is main
+          changed=$(git diff --name-only HEAD^1 HEAD)
+          echo "$changed"
+          if echo "$changed" | grep -qvE '^(docs/devlog/|docs/decisions/|docs/assets/|docs/data/roadmap\.json$|docs/[^/]+\.(nim|md)$|[^/]+\.md$)'; then
+            echo "code=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "code=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::no code changed: the checks are skipped, the pages job builds and checks the site"
+          fi
+
+      - uses: jiro4989/setup-nim-action@v2
+        if: steps.changes.outputs.code == 'true'
+        with:
+          nim-version: "2.2.14"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Node runs the oracle: the pinned Pele npm package (reference/PIN)
+      - uses: actions/setup-node@v4
+        if: steps.changes.outputs.code == 'true'
+        with:
+          node-version: "22"
+
+      # the same setup as a laptop or a coding-agent sandbox: PCRE for nimib's markdown, the
+      # docs' dependencies at the commits of deps.lock, and the pinned Pele (source and package)
+      - uses: actions/cache@v4
+        if: steps.changes.outputs.code == 'true'
+        with:
+          path: deps
+          key: deps-${{ hashFiles('deps.lock') }}
+      - uses: actions/cache@v4
+        if: steps.changes.outputs.code == 'true'
+        with:
+          path: |
+            reference/pele
+            reference/npm
+          key: pele-${{ hashFiles('reference/PIN') }}
+      - run: sh tools/setup.sh
+        if: steps.changes.outputs.code == 'true'
+
+      # each job keeps its own compiled tools: they build different programs
+      - uses: actions/cache@v4
+        if: steps.changes.outputs.code == 'true'
+        with:
+          path: ~/.cache/nim
+          key: nimcache-checks-2.2.14-${{ hashFiles('src/**/*.nim', 'docs/**/*.nim', 'tests/**/*.nim', 'tools/*.nim', '*.nims', 'nim.cfg', 'deps.lock') }}
+          restore-keys: nimcache-checks-2.2.14-
+
+      # every `port-of:` header names a file of Pele at the pin
+      - name: Port map
+        if: steps.changes.outputs.code == 'true'
+        run: nim r tools/portmap.nim check
+
+      # The referee. The corpus is rebuilt from the pinned Pele and must match the committed one;
+      # the self test proves difftest can fail; then every case is compared, and a type the
+      # coverage map marks done must be identical on every case.
+      - name: Corpus matches the pin
+        if: steps.changes.outputs.code == 'true'
+        run: |
+          node tools/corpus.mjs
+          git diff --exit-code --stat corpus/ || { echo "::error::corpus/cases.json differs from what tools/corpus.mjs builds: rerun it and commit"; exit 1; }
+
+      - name: Difftest self test
+        if: steps.changes.outputs.code == 'true'
+        run: nim r tools/difftest.nim --self-test
+
+      - name: Difftest
+        if: steps.changes.outputs.code == 'true'
+        run: nim r tools/difftest.nim --check-done --show:30
+
+      # The same corpus with a host's icons and typesetter (the test ones of tools/answers.nim)
+      - name: Difftest with icons and math
+        if: steps.changes.outputs.code == 'true'
+        run: nim r tools/difftest.nim --hosts --check-done --show:30
+
+      # The same renderer compiled to JavaScript (nim js), run in Node, against the same oracle
+      - name: Difftest of the JavaScript build
+        if: steps.changes.outputs.code == 'true'
+        run: nim r tools/difftest.nim --js --check-done --show:30
+
+      # The fuzzers and the odd-character fuzzer are built optimised (-d:release keeps Nim's
+      # runtime checks) and run four at a time, one per core of the runner: the referee above
+      # checks the default build, these the optimised one.
+      - name: Build the fuzzers
+        if: steps.changes.outputs.code == 'true'
+        run: |
+          nim c -d:release --hints:off -o:$PWD/build/bin/fuzz tools/fuzz.nim & fuzz=$!
+          nim c -d:release --hints:off -o:$PWD/build/bin/mutate tools/mutate.nim & mutate=$!
+          wait $fuzz && wait $mutate
+
+      # Differential fuzzing: inputs generated from each ported type's grammar, against Pele.
+      # A port adds its line here. --no-data: four at once must not all write docs/data/fuzz.json.
+      - name: Fuzz
+        if: steps.changes.outputs.code == 'true'
+        run: |
+          xargs -P4 -L1 build/bin/fuzz --no-data <<'EOF'
+          pie --cases:5000
+          timeline --cases:5000
+          flowchart --cases:5000
+          state --cases:5000
+          journey --cases:5000
+          info --cases:1000
+          packet --cases:5000
+          sequence --cases:5000
+          ishikawa --cases:5000
+          cynefin --cases:5000
+          wardley --cases:5000
+          architecture --cases:5000
+          c4 --cases:5000
+          block --cases:5000
+          swimlane --cases:5000
+          class --cases:5000
+          er --cases:5000
+          requirement --cases:5000
+          usecase --cases:5000
+          agentflow --cases:5000
+          labels --cases:5000
+          gitGraph --cases:5000
+          railroad --cases:5000
+          gantt --cases:5000
+          radar --cases:5000
+          treemap --cases:5000
+          treeView --cases:5000
+          xychart --cases:5000
+          venn --cases:5000
+          mindmap --cases:5000
+          kanban --cases:5000
+          eventmodeling --cases:5000
+          sankey --cases:5000
+          quadrantChart --cases:5000
+          EOF
+
+      # The corpus with one odd character slipped into each case (a no-break space, a line
+      # separator, an emoji...), against Pele, on seven seeds, in both builds. The JavaScript
+      # runner is built by the first seed, and reused by the others.
+      - name: Mutate
+        if: steps.changes.outputs.code == 'true'
+        run: |
+          printf '%s\n' 1 2 3 4 5 6 7 | xargs -P4 -I{} build/bin/mutate --seed:{} --out:build/mutate-{}.json
+          build/bin/mutate --js --seed:1 --out:build/mutate-js-1.json
+          printf '%s\n' 2 3 4 5 6 7 | NIMAKI_JSRUNNER_BUILT=1 xargs -P4 -I{} build/bin/mutate --js --seed:{} --out:build/mutate-js-{}.json
+
+      # Pele's own test suites (vitest), run on nimaki's JavaScript build: a test that passes on
+      # Pele and fails on nimaki fails CI, unless it needs what nimaki does not provide (parse(),
+      # mount()), only misses one of Pele's time bounds, or is listed in tools/peletests/known.txt
+      - uses: actions/cache@v4
+        if: steps.changes.outputs.code == 'true'
+        with:
+          path: |
+            build/peletests/pele
+            build/peletests/pele-*.json
+          key: peletests-${{ hashFiles('reference/PIN') }}
+      - name: Pele's test suites
+        if: steps.changes.outputs.code == 'true'
+        run: nim r tools/peletests.nim --check
+
+      - name: Tests
+        if: steps.changes.outputs.code == 'true'
+        run: nim r tests/all.nim
+
+      # The C ABI: the shared library, and its smoke test in Python through ctypes (every case
+      # of the corpus, through the library, against Pele in Node)
+      - name: C ABI
+        if: steps.changes.outputs.code == 'true'
+        run: nim r tools/cabi.nim
+
+      # Once a week: has Pele released past the pin? A red weekly run is the signal to follow it
+      # (tools/followpele.nim prints the files a new release touches and their Nim ports).
+      - name: Pele newer than the pin
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: nim r tools/followpele.nim --fail
+
+  pages:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -56,103 +254,12 @@ jobs:
           key: pele-${{ hashFiles('reference/PIN') }}
       - run: sh tools/setup.sh
 
+      # each job keeps its own compiled tools: they build different programs
       - uses: actions/cache@v4
         with:
           path: ~/.cache/nim
-          key: nimcache-2.2.14-${{ hashFiles('src/**/*.nim', 'docs/**/*.nim', 'tests/**/*.nim', 'tools/*.nim', '*.nims', 'nim.cfg', 'deps.lock') }}
-          restore-keys: nimcache-2.2.14-
-
-      # every `port-of:` header names a file of Pele at the pin
-      - name: Port map
-        run: nim r tools/portmap.nim check
-
-      # The referee. The corpus is rebuilt from the pinned Pele and must match the committed one;
-      # the self test proves difftest can fail; then every case is compared, and a type the
-      # coverage map marks done must be identical on every case.
-      - name: Corpus matches the pin
-        run: |
-          node tools/corpus.mjs
-          git diff --exit-code --stat corpus/ || { echo "::error::corpus/cases.json differs from what tools/corpus.mjs builds: rerun it and commit"; exit 1; }
-
-      - name: Difftest self test
-        run: nim r tools/difftest.nim --self-test
-
-      - name: Difftest
-        run: nim r tools/difftest.nim --check-done --show:30
-
-      # The same corpus with a host's icons and typesetter (the test ones of tools/answers.nim)
-      - name: Difftest with icons and math
-        run: nim r tools/difftest.nim --hosts --check-done --show:30
-
-      # The same renderer compiled to JavaScript (nim js), run in Node, against the same oracle
-      - name: Difftest of the JavaScript build
-        run: nim r tools/difftest.nim --js --check-done --show:30
-
-      # Differential fuzzing: inputs generated from each ported type's grammar, against Pele
-      - name: Fuzz
-        run: |
-          nim r tools/fuzz.nim pie --cases:5000
-          nim r tools/fuzz.nim timeline --cases:5000
-          nim r tools/fuzz.nim flowchart --cases:5000
-          nim r tools/fuzz.nim state --cases:5000
-          nim r tools/fuzz.nim journey --cases:5000
-          nim r tools/fuzz.nim info --cases:1000
-          nim r tools/fuzz.nim packet --cases:5000
-          nim r tools/fuzz.nim sequence --cases:5000
-          nim r tools/fuzz.nim ishikawa --cases:5000
-          nim r tools/fuzz.nim cynefin --cases:5000
-          nim r tools/fuzz.nim wardley --cases:5000
-          nim r tools/fuzz.nim architecture --cases:5000
-          nim r tools/fuzz.nim c4 --cases:5000
-          nim r tools/fuzz.nim block --cases:5000
-          nim r tools/fuzz.nim swimlane --cases:5000
-          nim r tools/fuzz.nim class --cases:5000
-          nim r tools/fuzz.nim er --cases:5000
-          nim r tools/fuzz.nim requirement --cases:5000
-          nim r tools/fuzz.nim usecase --cases:5000
-          nim r tools/fuzz.nim agentflow --cases:5000
-          nim r tools/fuzz.nim labels --cases:5000
-          nim r tools/fuzz.nim gitGraph --cases:5000
-          nim r tools/fuzz.nim railroad --cases:5000
-          nim r tools/fuzz.nim gantt --cases:5000
-          nim r tools/fuzz.nim radar --cases:5000
-          nim r tools/fuzz.nim treemap --cases:5000
-          nim r tools/fuzz.nim treeView --cases:5000
-          nim r tools/fuzz.nim xychart --cases:5000
-          nim r tools/fuzz.nim venn --cases:5000
-          nim r tools/fuzz.nim mindmap --cases:5000
-          nim r tools/fuzz.nim kanban --cases:5000
-          nim r tools/fuzz.nim eventmodeling --cases:5000
-          nim r tools/fuzz.nim sankey --cases:5000
-          nim r tools/fuzz.nim quadrantChart --cases:5000
-
-      # The corpus with one odd character slipped into each case (a no-break space, a line
-      # separator, an emoji...), against Pele, on seven seeds, in both builds
-      - name: Mutate
-        run: |
-          for s in 1 2 3 4 5 6 7; do nim r tools/mutate.nim --seed:$s --out:build/mutate-$s.json; done
-          for s in 1 2 3 4 5 6 7; do nim r tools/mutate.nim --js --seed:$s --out:build/mutate-js-$s.json; done
-
-      # Pele's own test suites (vitest), run on nimaki's JavaScript build: a test that passes on
-      # Pele and fails on nimaki fails CI, unless it needs what nimaki does not provide (parse(),
-      # mount()), only misses one of Pele's time bounds, or is listed in tools/peletests/known.txt
-      - uses: actions/cache@v4
-        with:
-          path: |
-            build/peletests/pele
-            build/peletests/pele-*.json
-          key: peletests-${{ hashFiles('reference/PIN') }}
-      - name: Pele's test suites
-        run: nim r tools/peletests.nim --check
-
-      - name: Tests
-        run: |
-          if [ -f tests/all.nim ]; then nim r tests/all.nim; else echo "no tests/all.nim yet"; fi
-
-      # The C ABI: the shared library, and its smoke test in Python through ctypes (every case
-      # of the corpus, through the library, against Pele in Node)
-      - name: C ABI
-        run: nim r tools/cabi.nim
+          key: nimcache-pages-2.2.14-${{ hashFiles('src/**/*.nim', 'docs/**/*.nim', 'tests/**/*.nim', 'tools/*.nim', '*.nims', 'nim.cfg', 'deps.lock') }}
+          restore-keys: nimcache-pages-2.2.14-
 
       # compiled and run as two steps, so the timings show which of the two is slow
       - name: Compile the pages
@@ -166,12 +273,6 @@ jobs:
       # hand: they break without a change here, and they slow every run.
       - name: Links
         run: nim r -d:ssl tools/links.nim ${{ (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && '--external' || '' }}
-
-      # Once a week: has Pele released past the pin? A red weekly run is the signal to follow it
-      # (tools/followpele.nim prints the files a new release touches and their Nim ports).
-      - name: Pele newer than the pin
-        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-        run: nim r tools/followpele.nim --fail
 
       - name: No HTML, styles or colours in the pages
         run: nim r tools/drift.nim --fail --allow:docs/theme.nim --allow:docs/blocks.nim --allow:docs/review.nim docs/
@@ -194,7 +295,7 @@ jobs:
 
   deploy:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-    needs: build
+    needs: pages
     runs-on: ubuntu-latest
     permissions:
       pages: write
@@ -206,5 +307,15 @@ jobs:
       group: pages
       cancel-in-progress: true
     steps:
+      # Runs on main no longer wait for each other, so an older one could finish last: only the
+      # run of main's newest commit deploys (the newer run deploys the site of the older commit
+      # too, since it holds it).
+      - name: Still the newest commit of main
+        id: newest
+        run: |
+          head=$(git ls-remote "https://github.com/${{ github.repository }}" refs/heads/main | cut -f1)
+          echo "main is at $head, this run is ${{ github.sha }}"
+          if [ "$head" = "${{ github.sha }}" ]; then echo "deploy=true" >> "$GITHUB_OUTPUT"; else echo "deploy=false" >> "$GITHUB_OUTPUT"; fi
       - id: deployment
+        if: steps.newest.outputs.deploy == 'true'
         uses: actions/deploy-pages@v4

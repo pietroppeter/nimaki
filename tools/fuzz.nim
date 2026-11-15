@@ -13,6 +13,8 @@
 ##     --package:PATH    the oracle package (default reference/npm/package or $PELE_PACKAGE)
 ##     --js              compare Pele with nimaki compiled to JavaScript (tools/jsrunner.nim, in
 ##                       Node); records the run in docs/data/js.json instead of fuzz.json
+##     --no-data         record nothing in docs/data/: for several fuzzers at once (CI runs four
+##                       at a time), which would overwrite each other's lines in the same file
 ##
 ## The last run of each type is summed up in docs/data/fuzz.json, which the pages read. Each
 ## failing case is written whole to build/fuzz/<type>-<seed>.jsonl, so it can be replayed.
@@ -2136,6 +2138,7 @@ proc main() =
   var packageArg = ""
   var js = false
   var hosts = false   ## --hosts: every case gets the test icons and typesetter (tools/answers.nim)
+  var record = true   ## --no-data: leave docs/data/ as it is
   for k, key, val in getopt():
     case k
     of cmdLongOption, cmdShortOption:
@@ -2146,6 +2149,7 @@ proc main() =
       of "package": packageArg = val
       of "js": js = true
       of "hosts": hosts = true
+      of "no-data": record = false
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: kind = key
     of cmdEnd: discard
@@ -2234,7 +2238,8 @@ proc main() =
   var data = if fileExists(dataPath): parseFile(dataPath) else: %*{"about": "Written by tools/fuzz.nim: the last run for each diagram type. Do not edit by hand.", "types": {}}
   data["types"][kind] = %*{"seed": seed, "cases": cases.len, "identical": identical, "different": different,
                            "rendered": rendered, "errors": cases.len - rendered}
-  if js:
+  if not record: discard
+  elif js:
     updateJsData("fuzz", kind, %*{"seed": seed, "cases": cases.len, "identical": identical, "different": different})
   else: writeFile dataPath, data.pretty & "\n"
   echo "fuzz: ", kind, (if js: " in JavaScript" else: ""), ", seed ", seed, ", ", cases.len, " cases: ", identical, " identical, ",
