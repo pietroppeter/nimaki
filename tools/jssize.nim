@@ -3,6 +3,10 @@
 ##   nim r tools/jssize.nim                      every build, written to build/jssize/sizes.json
 ##   nim r tools/jssize.nim --out:FILE           the same, written to FILE (a post's data file)
 ##   nim r tools/jssize.nim --fast:1             only the build the pages ship (-d:danger)
+##   nim r tools/jssize.nim --web                and the files the pages ship (tools/webbuild.nim,
+##                                               read from build/web/), with one build of the four
+##                                               types diagrammari writes (flowchart, sequence, pie,
+##                                               timeline)
 ##
 ## It compiles `src/nimaki/web.nim` (the file the pages load as nimaki.js) with each set of flags
 ## (none, -d:release, -d:danger), minifies the -d:danger file with esbuild as Pele minifies its
@@ -18,11 +22,11 @@
 ## It prints one line per file and a summary last; a problem is an `ERROR` line.
 import std/[os, osproc, strutils, json, tables, algorithm, parseopt, sequtils]
 import common
+import webbuild except main
 
 const
   entry = repoDir / "src" / "nimaki" / "web.nim"
   work = buildDir / "jssize"
-  tools = buildDir / "jstools"
 
 type
   Build = object
@@ -32,19 +36,6 @@ proc sh(cmd: string): string =
   let (output, code) = execCmdEx(cmd)
   if code != 0: quit "ERROR " & cmd & "\n" & output, 2
   output
-
-proc esbuildVersion(): string =
-  ## The esbuild that Pele's lock file pins (Pele minifies its bundle with it).
-  let lock = parseFile(defaultRef / "package-lock.json")
-  lock["packages"]["node_modules/esbuild"]["version"].getStr
-
-proc esbuild(): string =
-  let version = esbuildVersion()
-  result = tools / "node_modules" / ".bin" / "esbuild"
-  if not fileExists(result) or sh(quoteShell(result) & " --version").strip != version:
-    createDir tools
-    discard sh("npm install --prefix " & quoteShell(tools) & " --no-save --no-audit --no-fund " &
-               "--loglevel=error esbuild@" & version)
 
 proc sizes(file: string): JsonNode =
   ## Raw, gzip -9 and brotli (quality 11) bytes of a file, from Node's zlib.
@@ -154,12 +145,14 @@ proc anatomy(file: string): JsonNode =
 proc main() =
   var outFile = work / "sizes.json"
   var fast = 0
+  var web = false
   for kind, key, val in getopt():
     case kind
     of cmdLongOption, cmdShortOption:
       case key
       of "out": outFile = absolutePath(val)
       of "fast": fast = parseInt(val)
+      of "web": web = true
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: quit "ERROR unexpected argument " & key, 2
     of cmdEnd: discard
@@ -181,6 +174,7 @@ proc main() =
     report(b.name, b.flags, b.file)
   let danger = work / "nimaki-danger.js"
   let es = esbuild()
+  if es.len == 0: quit "ERROR esbuild is needed to measure the minified files", 2
   # Pele's own minifier settings (scripts/browser-build.mjs), without bundling: the file is one
   # script already. As it is, esbuild keeps the top-level names (a page could use them); wrapped
   # in a function (--format=iife) they are local, and shortened too.
@@ -195,8 +189,28 @@ proc main() =
   let pele = sizes(peleBundle)
   echo "jssize: ", alignLeft("Pele's bundle", 18), align($pele["raw"].getInt, 10), " bytes, ",
        align($pele["gzip"].getInt, 9), " gzip, ", align($pele["brotli"].getInt, 9), " brotli"
-  let result = %*{"nim": nimVersion, "esbuild": esbuildVersion(), "pele": pinOf(defaultPackage),
+  var result = %*{"nim": nimVersion, "esbuild": esbuildVersion(), "pele": pinOf(defaultPackage),
                   "files": files, "peleBundle": pele, "anatomy": anatomy(danger)}
+  if web:
+    # The files the pages ship, as tools/webbuild.nim made them.
+    var shipped = newJArray()
+    let dir = buildDir / "web"
+    if not fileExists(dir / "nimaki-core.js"): quit "ERROR no build/web/nimaki-core.js: run nim r tools/webbuild.nim first", 2
+    var names = @["nimaki.js", "nimaki-core.js"]
+    for t in diagramTypes(): names.add "nimaki-" & t & ".js"
+    for name in names:
+      let s = sizes(dir / name)
+      shipped.add %*{"name": name, "raw": s["raw"], "gzip": s["gzip"], "brotli": s["brotli"]}
+    result["shipped"] = shipped
+    echo "jssize: ", shipped.len, " files of build/web measured"
+    # diagrammari's four builders, in one build, minified as the others
+    let four = work / "nimaki-diagrammari.js"
+    discard sh("nim js --hints:off --warnings:off -d:danger -d:nimakiTypes=flowchart,sequence,pie,timeline" &
+               " --nimcache:" & quoteShell(buildDir / "nimcache-web" / "diagrammari") &
+               " -o:" & quoteShell(four) & " " & quoteShell(entry))
+    minify(es, four)
+    report("flowchart, sequence, pie, timeline", "-d:danger -d:nimakiTypes=flowchart,sequence,pie,timeline + esbuild", four)
+    result["diagrammari"] = files[^1]
   createDir outFile.parentDir
   writeFile(outFile, result.pretty & "\n")
   let d = files[if fast > 0: 0 else: 2]

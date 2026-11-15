@@ -16,6 +16,9 @@ suite "difftest":
     check compare("a", "pie", pele, pele).verdict == vIdentical
     check compare("a", "pie", pele, Answer(ok: true, svg: "<svg width=\"10.0\"/>")).verdict == vDifferent
     check compare("a", "pie", pele, Answer(ok: false, code: "unsupported")).verdict == vUnsupported
+    # a build without the type (-d:nimakiTypes) answers as Pele's core does for a type not loaded
+    check compare("a", "pie", pele, Answer(ok: false, code: "unsupported-diagram",
+                  message: "Diagram type \"pie\" is not supported yet.")).verdict == vUnsupported
     let err = Answer(ok: false, code: "syntax", message: "Unexpected token at line 2")
     check compare("a", "pie", err, err).verdict == vIdentical
     check compare("a", "pie", err, Answer(ok: false, code: "syntax", message: "Unexpected token at line 3")).verdict == vDifferent

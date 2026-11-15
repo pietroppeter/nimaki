@@ -23,3 +23,4 @@ tools/*
 !tools/peletests/
 node_modules/
 docs/assets/nimaki.js
+docs/assets/nimaki-*.js

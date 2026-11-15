@@ -55,3 +55,9 @@ proc detectDiagram*(cleaned: string): (bool, Detected) =
 proc detect*(cleaned: string): string =
   let (ok, found) = detectDiagram(cleaned)
   if ok: found.diagramType else: ""
+
+proc diagramTypes*(): seq[string] =
+  ## Every diagram type that detection can name, once each, in the order of `DETECTORS`: Pele's
+  ## `DiagramType`, and the names of the files of a build of one type (`nimaki-<type>.js`).
+  for (diagramType, _, _) in DETECTORS:
+    if diagramType notin result: result.add diagramType

@@ -92,7 +92,7 @@ same = different = unsupported = 0
 start = time.perf_counter()
 for c in inputs:
     mine, pele = ask(c), peles[c["id"]]
-    if not mine["ok"] and mine["code"] == "unsupported":
+    if not mine["ok"] and (mine["code"] == "unsupported" or mine["message"].endswith(" is not supported yet.")):
         unsupported += 1
     elif (mine["ok"], mine.get("svg"), mine.get("code"), mine.get("message")) == (pele["ok"], pele.get("svg"), pele.get("code"), pele.get("message")) \
             and (not mine["ok"] or (mine["width"], mine["height"], mine["type"]) == (pele["width"], pele["height"], pele["type"])):
