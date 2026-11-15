@@ -486,6 +486,8 @@ newNbBlock(NbPipeline):
   stages: seq[string]
   states: seq[string]
   hrefs: seq[string]
+  label: string     # a caption above the islands, such as "Diagram types · 33"
+  group: string     # "diagrams": the islands are diagram types, drawn as boxes, not rounded
   toHtml:
     var items = ""
     for i, s in blk.stages:
@@ -494,7 +496,10 @@ newNbBlock(NbPipeline):
         items.add &"""<li class="{blk.states[i]} linked" title="{blk.states[i]}"><a href="{esc(href)}">{esc(s)}</a></li>"""
       else:
         items.add &"""<li class="{blk.states[i]}" title="{blk.states[i]}">{esc(s)}</li>"""
-    &"""<ol class="pipeline" aria-label="The parts of the renderer and how far each is ported">{items}</ol>"""
+    let cls = if blk.group.len > 0: "pipeline " & blk.group else: "pipeline"
+    let aria = if blk.label.len > 0: blk.label else: "The parts of the renderer and how far each is ported"
+    let caption = if blk.label.len > 0: &"""<p class="pipeline-label">{esc(blk.label)}</p>""" else: ""
+    &"""{caption}<ol class="{cls}" aria-label="{esc(aria)}">{items}</ol>"""
 
 proc addPipeline*(nb: var Nb, stages: openArray[(string, Status)]) =
   var names, states: seq[string]
@@ -508,17 +513,18 @@ template nbPipeline*(tstages: openArray[(string, Status)]) =
   ## (done). `nbPipeline [("pie", stStarted), ("flowchart", stPlanned)]`.
   nb.addPipeline(tstages)
 
-proc addPipeline*(nb: var Nb, stages: openArray[(string, Status, string)]) =
+proc addPipeline*(nb: var Nb, stages: openArray[(string, Status, string)], label = "", kind = "") =
   var names, states, hrefs: seq[string]
   for (name, st, href) in stages:
     names.add name
     states.add $st
     hrefs.add href
-  nb.add newNbPipeline(stages = names, states = states, hrefs = hrefs)
+  nb.add newNbPipeline(stages = names, states = states, hrefs = hrefs, label = label, group = kind)
 
-template nbPipeline*(tstages: openArray[(string, Status, string)]) =
-  ## The same islands, each a link: `nbPipeline [("pie", stDone, "../modules/pie/")]`.
-  nb.addPipeline(tstages)
+template nbPipeline*(tstages: openArray[(string, Status, string)], label = "", kind = "") =
+  ## The same islands, each a link: `nbPipeline [("pie", stDone, "../modules/pie/")]`, with a
+  ## caption above them (`label`); `kind = "diagrams"` draws them as boxes, for diagram types.
+  nb.addPipeline(tstages, label, kind)
 
 # ---------------------------------------------------------------------------------- devlog posts
 

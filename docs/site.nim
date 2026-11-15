@@ -79,6 +79,14 @@ func pipeline*(c: Coverage, modules: string): seq[(string, Status, string)] =
   ## The same, each linked to its page in `modules` (`"../modules/"` from a page one level down).
   for p in c.core: result.add (p.id, p.status, modules & p.id & "/")
   for d in c.diagrams: result.add (d.id, d.status, modules & d.id & "/")
+template nbModules*(c: Coverage, modules: string) =
+  ## The coverage map's islands in two groups, each a link to its page in `modules`: the shared
+  ## core (rounded islands), then the diagram types (boxes, like the nodes of a diagram).
+  var core, types: seq[(string, Status, string)]
+  for p in c.core: core.add (p.id, p.status, modules & p.id & "/")
+  for d in c.diagrams: types.add (d.id, d.status, modules & d.id & "/")
+  nbPipeline core, "Shared core · " & $core.len
+  nbPipeline types, "Diagram types · " & $types.len, "diagrams"
 proc loadRoadmap*(): seq[Phase] =
   let j = parseFile(dataDir / "roadmap.json")
   for p in j["phases"]:
