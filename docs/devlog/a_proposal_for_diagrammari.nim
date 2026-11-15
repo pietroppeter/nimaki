@@ -171,16 +171,22 @@ nbText: """
 Before diagrammari could switch, and in the order it would meet them:
 
 1. **A tag of nimaki to pin.** Tags and releases wait for Pietro; until then, a commit.
+   *Pietro's answer, 15 November 2026: a first release now, numbered 0.1.0
+   ([decision 0020](../../decisions/#0020-versions-and-releases)); it shipped as
+   [nimaki 0.1.0](../nimaki-0-1-0/).*
 2. **`parse`.** Pele's `parse(text)` gives the model of a diagram without drawing it.
    diagrammari's Python experiment uses it to know each flowchart edge's two ends for its
    personal layer. nimaki parses every type, but its `parse` is not public yet, and a model would
    need a JSON form to cross the C ABI.
 3. **`mount`, `enableZoom` and lazy loading**, Pele's browser side. Client mode needs them, so
-   it keeps Pele's bundle until nimaki's JavaScript build grows them.
+   it keeps Pele's bundle until nimaki's JavaScript build grows them. *Pietro's answer, 15
+   November 2026: later, after a first release; it is the roadmap step "Pele's browser side"
+   ([Where the port stands](../where-the-port-stands/)).*
 4. **The second reading.** All of nimaki's ported files are still marked `draft`: they are
    identical to Pele on the corpus and the fuzzer, but have not been read a second time against
    Pele's source (decision 0005). That is a question for Pietro already: whether tests and
-   fuzzing are enough.
+   fuzzing are enough. *Pietro's answer, 14 November 2026: they are
+   ([decision 0014](../../decisions/#0014-tests-and-fuzzing-make-a-file-conformant-without-a-second-reading)).*
 5. **A text measurer of the page's font.** At build time, Pele in Node and nimaki both measure
    with Arial's widths, so nothing changes there; diagrammari's backlog item *Text measurement in
    Node* would become a nimaki option instead.

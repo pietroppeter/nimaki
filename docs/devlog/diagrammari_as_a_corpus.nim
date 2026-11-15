@@ -164,7 +164,8 @@ nbNote """
 - The diagrams diagrammari's pages build with Nim verbs and never write down (its explainer and
   its *Diagrams* series have many). Collecting them means running diagrammari's code, with its
   `$MARI_NODE` pointing at a small script that copies every text it sends to Pele. That needs
-  Pietro's go-ahead, so it is a later step.
+  Pietro's go-ahead, so it is a later step. *Pietro's answer, 14 November 2026: allowed, to run
+  but never to change it; [diagrammari at work](../diagrammari-at-work/) carried it out.*
 - The examples of diagrammari's open changes (`openspec/changes/`) are proposals and are not read.
 - diagrammari draws with options of its own (an id prefix, a theme); the corpus checks the text
   with Pele's defaults, as for Pele's corpus.

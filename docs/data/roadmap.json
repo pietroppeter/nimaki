@@ -921,9 +921,9 @@
           "what": "Decision 0021: a post records Pietro's answer to its question. Go through the posts written before the rule (their nkQuestion notes and questions in the text), find each question answered since (in the project chat, a decision record, the roadmap, a later post), and add the answer, its date and a link to where it was carried out. A question still open stays open, and is listed in the step's post.",
           "done_when": "Every question of the posts before 15 November 2026 either shows its answer or is listed as still open.",
           "owner": "Add Pietro's answers to older posts",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "the-answers-in-the-posts",
+          "pr": "97"
         },
         {
           "id": "module-pages",
