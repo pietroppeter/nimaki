@@ -2,6 +2,7 @@
 ## port-status: conformant
 import std/[algorithm, options, sets, tables]
 import ../../errors
+import ../../js
 import json, lexer, types
 import ../../jsregex
 
@@ -138,10 +139,12 @@ type
 
 proc pushUnique(target: var seq[string], values: openArray[string]) =
   if values.len == 0: return
-  var seen = toHashSet(target)
+  # Sized once, and keyed by StrKey (a quick hash in JavaScript): a class statement on 2,500 ids
+  # with 4,000 classes adds ten million names here.
+  var seen = initHashSet[StrKey](target.len + values.len)
+  for t in target: seen.incl StrKey(t)
   for value in values:
-    if value in seen: continue
-    seen.incl value
+    if seen.containsOrIncl(StrKey(value)): continue
     target.add value
 
 proc inferKind(properties: seq[DraftProperty]): string =

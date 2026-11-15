@@ -131,11 +131,11 @@
     },
     "usecase": {
       "seed": 1,
-      "cases": 5000,
-      "identical": 5000,
+      "cases": 1000,
+      "identical": 1000,
       "different": 0,
-      "rendered": 1890,
-      "errors": 3110
+      "rendered": 376,
+      "errors": 624
     },
     "railroad": {
       "seed": 1,

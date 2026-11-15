@@ -4,11 +4,11 @@
   "files": 295,
   "tests": 6992,
   "counts": {
-    "passed": 6934,
+    "passed": 6949,
     "api": 25,
     "model": 0,
     "unported": 0,
-    "speed": 27,
+    "speed": 12,
     "canvas": 1,
     "known": 5,
     "failed": 0
@@ -35,11 +35,11 @@
       "failed": 0
     },
     "tests/agentflow/stress.test.ts": {
-      "passed": 65,
+      "passed": 68,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 4,
+      "speed": 1,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -105,11 +105,11 @@
       "failed": 0
     },
     "tests/c4/stress.test.ts": {
-      "passed": 41,
+      "passed": 42,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 1,
+      "speed": 0,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -145,11 +145,11 @@
       "failed": 0
     },
     "tests/class/stress.test.ts": {
-      "passed": 52,
+      "passed": 53,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 3,
+      "speed": 2,
       "canvas": 0,
       "known": 1,
       "failed": 0
@@ -1575,11 +1575,11 @@
       "failed": 0
     },
     "tests/eventmodeling/stress.test.ts": {
-      "passed": 31,
+      "passed": 32,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 1,
+      "speed": 0,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -2745,21 +2745,21 @@
       "failed": 0
     },
     "tests/state/stress.test.ts": {
-      "passed": 50,
+      "passed": 52,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 3,
+      "speed": 1,
       "canvas": 0,
       "known": 0,
       "failed": 0
     },
     "tests/stress.test.ts": {
-      "passed": 35,
+      "passed": 37,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 2,
+      "speed": 0,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -2785,11 +2785,11 @@
       "failed": 0
     },
     "tests/timeline/stress.test.ts": {
-      "passed": 30,
+      "passed": 34,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 7,
+      "speed": 3,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -2825,11 +2825,11 @@
       "failed": 0
     },
     "tests/treeview/stress.test.ts": {
-      "passed": 26,
+      "passed": 27,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 1,
+      "speed": 0,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -2968,33 +2968,9 @@
   "notPassed": [
     {
       "file": "tests/agentflow/stress.test.ts",
-      "test": "agentflow worst cases 3,000 flows that each name the next one",
+      "test": "agentflow worst cases one flow of 10,000 nodes",
       "kind": "speed",
-      "message": "AssertionError: expected 3200.9153110000007 to be less than 3000"
-    },
-    {
-      "file": "tests/agentflow/stress.test.ts",
-      "test": "agentflow worst cases chain of 5,000",
-      "kind": "speed",
-      "message": "AssertionError: expected 3001.2432400000034 to be less than 3000"
-    },
-    {
-      "file": "tests/agentflow/stress.test.ts",
-      "test": "agentflow worst cases one statement chaining 5,000",
-      "kind": "speed",
-      "message": "AssertionError: expected 3982.0792329999967 to be less than 3000"
-    },
-    {
-      "file": "tests/agentflow/stress.test.ts",
-      "test": "agentflow worst cases star of 5,000",
-      "kind": "speed",
-      "message": "AssertionError: expected 3387.693502000002 to be less than 3000"
-    },
-    {
-      "file": "tests/c4/stress.test.ts",
-      "test": "C4 worst cases 600 relations among 600 boundaries",
-      "kind": "speed",
-      "message": "AssertionError: expected 3701.8475820000003 to be less than 3000"
+      "message": "AssertionError: expected 3341.842962999999 to be less than 3000"
     },
     {
       "file": "tests/class/stress.test.ts",
@@ -3006,19 +2982,13 @@
       "file": "tests/class/stress.test.ts",
       "test": "class diagram worst cases namespace name of 3,000 parts, rendered",
       "kind": "speed",
-      "message": "AssertionError: expected 4456.203463 to be less than 3000"
-    },
-    {
-      "file": "tests/class/stress.test.ts",
-      "test": "class diagram worst cases 4,000 nested namespaces",
-      "kind": "speed",
-      "message": "AssertionError: expected 3030.5365060000004 to be less than 3000"
+      "message": "AssertionError: expected 4690.157151 to be less than 3000"
     },
     {
       "file": "tests/class/stress.test.ts",
       "test": "class diagram worst cases 2,000 nested namespaces, rendered",
       "kind": "speed",
-      "message": "AssertionError: expected 5304.557107999999 to be less than 3000"
+      "message": "AssertionError: expected 5852.360818000001 to be less than 3000"
     },
     {
       "file": "tests/entries.test.ts",
@@ -3027,28 +2997,22 @@
       "message": "NotInNimaki: nimaki does not provide registered()"
     },
     {
-      "file": "tests/eventmodeling/stress.test.ts",
-      "test": "eventmodeling worst cases 1,000 frames that each name every earlier frame",
-      "kind": "speed",
-      "message": "AssertionError: expected 2401.7389749999998 to be less than 2000"
-    },
-    {
       "file": "tests/ishikawa/stress.test.ts",
       "test": "Ishikawa worst cases an outline 3,000 levels deep, twice",
       "kind": "speed",
-      "message": "AssertionError: expected 3717.8752860000004 to be less than 3000"
+      "message": "AssertionError: expected 3756.433234 to be less than 3000"
     },
     {
       "file": "tests/journey/stress.test.ts",
       "test": "journey worst cases one task with 16,000 actors",
       "kind": "speed",
-      "message": "AssertionError: expected 1888.3258130000004 to be less than 1500"
+      "message": "AssertionError: expected 1679.3687809999997 to be less than 1500"
     },
     {
       "file": "tests/mindmap/stress.test.ts",
       "test": "mindmap worst cases 3,000 levels of nesting",
       "kind": "speed",
-      "message": "AssertionError: expected 3303.568412999999 to be less than 3000"
+      "message": "AssertionError: expected 3366.3872929999998 to be less than 3000"
     },
     {
       "file": "tests/mount.test.ts",
@@ -3210,91 +3174,37 @@
       "file": "tests/state/stress.test.ts",
       "test": "state diagram worst cases the same class statement and transitions 1,500 times",
       "kind": "speed",
-      "message": "AssertionError: expected 4792.508222 to be less than 3000"
-    },
-    {
-      "file": "tests/state/stress.test.ts",
-      "test": "state diagram worst cases 3,000 transitions into a state 1,500 levels deep",
-      "kind": "speed",
-      "message": "AssertionError: expected 3684.312948999999 to be less than 3000"
-    },
-    {
-      "file": "tests/state/stress.test.ts",
-      "test": "state diagram worst cases 3,000 transitions into a ring of 1,200 composites",
-      "kind": "speed",
-      "message": "AssertionError: expected 3796.658470999995 to be less than 3000"
-    },
-    {
-      "file": "tests/stress.test.ts",
-      "test": "worst cases edges that each cross 1,000 nested subgraph borders",
-      "kind": "speed",
-      "message": "AssertionError: expected 3944.0328170000003 to be less than 3000"
-    },
-    {
-      "file": "tests/stress.test.ts",
-      "test": "worst cases 3,000 long edges over a chain of 3,000",
-      "kind": "speed",
-      "message": "AssertionError: expected 3959.917177000001 to be less than 3000"
+      "message": "AssertionError: expected 3426.5404680000006 to be less than 3000"
     },
     {
       "file": "tests/timeline/stress.test.ts",
       "test": "timeline worst cases 8,000 periods with one event each",
       "kind": "speed",
-      "message": "AssertionError: expected 1837.131965 to be less than 1500"
+      "message": "AssertionError: expected 1809.816502 to be less than 1500"
     },
     {
       "file": "tests/timeline/stress.test.ts",
       "test": "timeline worst cases 8,000 periods with one event each, top down",
       "kind": "speed",
-      "message": "AssertionError: expected 1626.2747229999995 to be less than 1500"
-    },
-    {
-      "file": "tests/timeline/stress.test.ts",
-      "test": "timeline worst cases one period with 12,000 events",
-      "kind": "speed",
-      "message": "AssertionError: expected 1558.0326880000002 to be less than 1500"
-    },
-    {
-      "file": "tests/timeline/stress.test.ts",
-      "test": "timeline worst cases 5,000 sections with one period each",
-      "kind": "speed",
-      "message": "AssertionError: expected 1617.1662349999988 to be less than 1500"
+      "message": "AssertionError: expected 1771.8850510000002 to be less than 1500"
     },
     {
       "file": "tests/timeline/stress.test.ts",
       "test": "timeline worst cases percent comments",
       "kind": "speed",
-      "message": "AssertionError: expected 1611.1292590000012 to be less than 1500"
-    },
-    {
-      "file": "tests/timeline/stress.test.ts",
-      "test": "timeline worst cases hash comments",
-      "kind": "speed",
-      "message": "AssertionError: expected 1530.054533999999 to be less than 1500"
-    },
-    {
-      "file": "tests/timeline/stress.test.ts",
-      "test": "timeline worst cases carriage returns",
-      "kind": "speed",
-      "message": "AssertionError: expected 1696.704436 to be less than 1500"
-    },
-    {
-      "file": "tests/treeview/stress.test.ts",
-      "test": "treeView worst cases 25,000 flat entries",
-      "kind": "speed",
-      "message": "AssertionError: expected 2263.391345 to be less than 2000"
+      "message": "AssertionError: expected 1672.5152209999997 to be less than 1500"
     },
     {
       "file": "tests/usecase/stress.test.ts",
       "test": "use case worst cases class statement with 2,500 ids and 4,000 classes",
       "kind": "speed",
-      "message": "AssertionError: expected 17232.244659 to be less than 3000"
+      "message": "AssertionError: expected 4688.696001 to be less than 3000"
     },
     {
       "file": "tests/usecase/stress.test.ts",
       "test": "use case worst cases 10,000 members of one boundary",
       "kind": "speed",
-      "message": "AssertionError: expected 3972.4525570000005 to be less than 3000"
+      "message": "AssertionError: expected 3576.465618 to be less than 3000"
     },
     {
       "file": "tests/usecase/stress.test.ts",
