@@ -253,7 +253,10 @@ nbText: """
 *Added on 15 November, before this post was merged:* Pietro chose option 4, JavaScript's own
 RegExp in the JavaScript build, and option 3, a post that proposes the patch to nim-regex. The
 patched copy (2) is not needed, and no new shortcuts (1) are added, since native matching makes
-them unnecessary in JavaScript. Both are next on the roadmap.
+them unnecessary in JavaScript. Both are next on the roadmap. They were carried out in
+[decision 0019](../../decisions/#0019-javascript-s-own-regexp-in-the-javascript-build),
+[*JavaScript's own regular expressions*](../javascripts-own-regular-expressions/) and
+[*A proposal for nim-regex*](../a-proposal-for-nim-regex/).
 """
 
 nbText: """
