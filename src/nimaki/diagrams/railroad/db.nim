@@ -1,8 +1,8 @@
 ## port-of: src/diagrams/railroad/db.ts
 ## port-status: conformant
 ##
-## Port notes: Pele's `RailroadDb` keeps a map from names to rules for `getRule`, which nothing
-## in the drawing reads; here the model is the rule list alone.
+## Port notes: Pele's `RailroadDb` is the model; here the model is `RailroadModel` (types.nim),
+## with `addRule` and `getRule`.
 import std/strutils except unescape
 import ../../errors
 import types, common, ir, ebnf, abnf, peg
@@ -42,7 +42,7 @@ proc populate*(db: RailroadModel, source: string, notation: Notation) =
   if ast.accDescr != "": db.accDescr = dropBreakSpaces(ast.accDescr)
   if ast.accTitle != "": db.accTitle = ast.accTitle.replace(jsre"/^\s+/g", "")
   if ast.title != "": db.title = ast.title
-  for rule in rules: db.rules.add rule
+  for rule in rules: db.addRule rule
 
 proc parseRailroad*(source: string, title: string): RailroadModel =
   let (found, notation) = notationOf(source)

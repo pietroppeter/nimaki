@@ -5,9 +5,8 @@
 ## looking at most three tokens ahead and reports the first token that fits nowhere. This parser
 ## makes the same decisions from the same lookahead, so it accepts the same text and names the
 ## same token in its errors. It builds the model directly, where Mermaid builds a syntax tree and
-## then visits it. The statements Pele also records, with the positions of their parts, are left
-## out (see types.nim).
-import std/[strutils, sequtils]
+## then visits it, and records each statement with the positions of its parts, as Pele does.
+import std/[options, strutils, sequtils]
 import ../../errors
 import ../../js
 import db, json, lexer, tokens, types
@@ -61,7 +60,10 @@ type
     metadata: seq[DraftProperty]
     hasMetadata: bool
     stereotype: string
+    stereotypeSpan: Option[Span]
     classes: seq[string]
+    classSpans: seq[Span]
+    nodeSpan: Span
     # Whether this mention says something about the element, and so declares it.
     explicit: bool
 
@@ -83,6 +85,8 @@ type
     drafts: Drafts
     parent: DraftBoundary
     pendingJson: seq[(DraftJson, int)]
+    lastEnd: int
+    edgeCount, noteCount: int
 
 proc image(q: Parser, k: int): string = q.src[q.starts[k] ..< q.ends[k]]
 
@@ -128,6 +132,7 @@ func isWord(kind: int): bool = kind >= T_USECASE and kind <= T_IDENTIFIER
 func isLabelText(kind: int): bool = kind >= T_USECASE and kind <= T_LABEL_SYMBOL
 
 proc lineEnd(q: Parser) =
+  q.lastEnd = q.ends[q.p - 1]
   if q.types[q.p] == T_NEWLINE: inc q.p
   elif q.types[q.p] != T_EOF: q.noAlternative("NEWLINE|EOF")
 
@@ -213,11 +218,17 @@ proc metadata(q: Parser): seq[DraftProperty] =
     while q.types[q.p] == T_NEWLINE: inc q.p
   discard q.expect(T_RBRACE)
 
-proc classSuffix(q: Parser, classes: var seq[string]) =
+func occurrences(properties: seq[DraftProperty]): seq[MetadataOccurrence] =
+  for property in properties:
+    result.add MetadataOccurrence(key: property.key, span: property.span, keySpan: property.keySpan,
+                                  valueSpan: property.valueSpan)
+
+proc classSuffix(q: Parser, classes: var seq[string], spans: var seq[Span]) =
   while true:
     inc q.p
     let id = q.expect(T_IDENTIFIER)
     classes.add q.image(id)
+    spans.add q.span(id)
     if q.types[q.p] != T_COMMA: break
 
 # An id with an optional label in parentheses or brackets, or a string that stands for both.
@@ -242,6 +253,7 @@ proc name(q: Parser, brackets: bool): Item =
   else: q.noAlternative(NAMES)
 
 proc element(q: Parser, actor: bool): Item =
+  let first = q.p
   result = q.name(not actor)
   if actor: result.shape = ""
   if q.types[q.p] == T_METADATA_START:
@@ -252,8 +264,10 @@ proc element(q: Parser, actor: bool): Item =
     let text = q.expect(T_STEREOTYPE_TEXT)
     discard q.expect(T_STEREOTYPE_END)
     result.stereotype = jsTrim(q.image(text))
-  if q.types[q.p] == T_CLASS_SEPARATOR: q.classSuffix(result.classes)
+    result.stereotypeSpan = some q.span(text)
+  if q.types[q.p] == T_CLASS_SEPARATOR: q.classSuffix(result.classes, result.classSpans)
   result.explicit = result.shape != "" or result.hasMetadata or result.stereotype != ""
+  result.nodeSpan = (q.starts[first], q.ends[q.p - 1])
 
 proc draft(q: Parser, item: Item, kind: string): DraftElement =
   DraftElement(id: item.id, kind: kind, label: item.label, span: item.span, generated: item.generated,
@@ -263,6 +277,13 @@ proc draft(q: Parser, item: Item, kind: string): DraftElement =
 proc endpoint(item: Item, declares: bool): DraftEndpoint =
   DraftEndpoint(id: item.id, label: item.label, span: item.span, generated: item.generated, declares: declares,
                 classed: item.classes.len > 0)
+
+proc occurrence(item: Item, defines: bool): NodeOccurrence =
+  result = NodeOccurrence(id: item.id, span: item.nodeSpan, idSpan: item.span, labelSpan: some item.label.span)
+  if defines: result.defines = some true
+  result.stereotypeSpan = item.stereotypeSpan
+  if item.hasMetadata: result.metadata = some occurrences(item.metadata)
+  if item.classSpans.len > 0: result.classSpans = some item.classSpans
 
 # Whether a label and then one of the operators that can close it come next.
 proc labeledRight(q: Parser, closers: int): bool =
@@ -334,7 +355,10 @@ proc relationTail(q: Parser): Tail =
   tail.span = (q.starts[first], q.ends[q.p - 1])
   tail
 
-proc relationship(q: Parser, source: Item, declaration: bool, tail: Tail) =
+func statement(kind: string): GraphStatement = GraphStatement(statementKind: kind)
+
+proc relationship(q: Parser, source: Item, declaration: bool, tail: Tail,
+                  nodes: sink seq[NodeOccurrence]): GraphStatement =
   let target = tail.target
   if target.explicit: q.drafts.elements.add q.draft(target, "usecase")
   q.drafts.relationships.add DraftRelationship(
@@ -349,9 +373,24 @@ proc relationship(q: Parser, source: Item, declaration: bool, tail: Tail) =
     label: tail.label,
     minlen: tail.minlen,
   )
+  var nodes = nodes
+  nodes.add occurrence(target, target.explicit)
+  result = statement("edge")
+  result.nodes = some nodes
+  var edge = EdgeOccurrence(id: tail.explicitId)
+  if tail.explicitId == "":
+    edge.id = "edge-" & $q.edgeCount
+    inc q.edgeCount
+  else: edge.idSpan = some tail.explicitIdSpan
+  if tail.hasLabel: edge.labelSpan = some tail.label.span
+  result.edges = some @[edge]
+
+proc declaration(nodes: seq[NodeOccurrence]): GraphStatement =
+  result = statement("node")
+  result.nodes = some nodes
 
 # `actor A, B` declares several actors; at the top level `actor A --> B` declares one and relates it.
-proc actors(q: Parser, top: bool) =
+proc actors(q: Parser, top: bool): GraphStatement =
   inc q.p
   var items = @[q.element(true)]
   var hasTail = false
@@ -366,9 +405,10 @@ proc actors(q: Parser, top: bool) =
     hasTail = true
   q.lineEnd()
   for item in items: q.drafts.elements.add q.draft(item, "actor")
-  if hasTail: q.relationship(items[0], true, tail)
+  let nodes = items.mapIt(occurrence(it, true))
+  if hasTail: q.relationship(items[0], true, tail, nodes) else: declaration(nodes)
 
-proc entity(q: Parser, top: bool) =
+proc entity(q: Parser, top: bool): GraphStatement =
   var source = q.element(false)
   let hasTail = top and (FLAGS[q.types[q.p]] and RELATION) != 0
   let tail = if hasTail: q.relationTail() else: Tail()
@@ -377,11 +417,12 @@ proc entity(q: Parser, top: bool) =
     source.explicit = true
     if source.shape == "": source.shape = "ellipse"
   if source.explicit: q.drafts.elements.add q.draft(source, "usecase")
-  if hasTail: q.relationship(source, source.explicit, tail)
+  let nodes = @[occurrence(source, source.explicit)]
+  if hasTail: q.relationship(source, source.explicit, tail, nodes) else: declaration(nodes)
 
-proc line(q: Parser, top: bool)
+proc line(q: Parser, top: bool): GraphStatement
 
-proc boundary(q: Parser) =
+proc boundary(q: Parser): GraphStatement =
   inc q.p
   let named = q.name(true)
   let group = DraftBoundary(id: named.id, label: named.label, span: named.span, generated: named.generated)
@@ -390,16 +431,26 @@ proc boundary(q: Parser) =
   if q.types[q.p] == T_METADATA_START:
     inline = q.metadata()
     hasInline = true
-  if q.types[q.p] == T_CLASS_SEPARATOR: q.classSuffix(group.classes)
+  var classSpans: seq[Span]
+  if q.types[q.p] == T_CLASS_SEPARATOR: q.classSuffix(group.classes, classSpans)
   q.lineEnd()
   q.drafts.boundaries.add group
   q.parent = group
-  while (FLAGS[q.types[q.p]] and BOUNDARY_LINE) != 0: q.line(false)
+  var children: seq[GraphStatement]
+  while (FLAGS[q.types[q.p]] and BOUNDARY_LINE) != 0: children.add q.line(false)
   q.parent = nil
-  discard q.expect(T_END)
+  let stop = q.expect(T_END)
   q.lineEnd()
+  result = statement("group")
+  result.group = some group.id
+  result.idSpan = some group.span
+  result.titleSpan = some group.label.span
+  result.endSpan = some q.span(stop)
+  result.classSpans = some classSpans
+  if children.len > 0: result.children = some children
   if hasInline:
-    q.drafts.metadata.add DraftMetadata(target: group.id, span: group.span, properties: inline)
+    result.metadata = some occurrences(inline)
+    q.drafts.metadata.add DraftMetadata(target: group.id, span: group.span, properties: inline, statement: result)
 
 proc style(q: Parser): string =
   let first = q.p
@@ -430,7 +481,11 @@ proc identifiers(q: Parser): seq[int] =
     inc q.p
     result.add q.expect(T_IDENTIFIER)
 
-proc topStatement(q: Parser) =
+proc reference(q: Parser, k: int): NodeOccurrence =
+  let at = q.content(k)
+  NodeOccurrence(id: q.image(k), span: at, idSpan: at)
+
+proc topStatement(q: Parser): GraphStatement =
   let k = q.p
   let kind = q.types[q.p]
   if kind == T_ACC_TITLE_LINE or kind == T_ACC_DESCR_LINE or kind == T_ACC_DESCR_BLOCK:
@@ -440,29 +495,35 @@ proc topStatement(q: Parser) =
       q.drafts.accDescription = jsTrim(text[text.find('{') + 1 ..< text.rfind('}')])
     elif kind == T_ACC_DESCR_LINE: q.drafts.accDescription = jsTrim(text[text.find(':') + 1 .. ^1])
     else: q.drafts.accTitle = jsTrim(text[text.find(':') + 1 .. ^1])
+    result = statement(if kind == T_ACC_TITLE_LINE: "accTitle" else: "accDescr")
   elif kind == T_DIRECTION:
     inc q.p
     let value = q.types[q.p]
     if value < T_TD or value > T_RL: q.noAlternative("TD|TB|BT|LR|RL")
     q.drafts.direction = if value == T_TD: "TB" else: q.image(q.p)
     inc q.p
+    result = statement("direction")
   elif kind == T_ACTOR:
-    q.actors(true)
-    return
+    return q.actors(true)
   elif kind == T_SYSTEM_BOUNDARY:
-    q.boundary()
-    return
+    return q.boundary()
   elif kind == T_NOTE:
     inc q.p
     discard q.expect(T_FOR)
     let target = q.expect(T_IDENTIFIER)
     let text = q.label()
     q.drafts.notes.add DraftNote(target: q.image(target), span: q.span(target), label: text)
+    result = statement("note")
+    result.`ref` = some("note-" & $q.noteCount)
+    inc q.noteCount
+    result.refSpan = some text.span
+    result.nodes = some @[q.reference(target)]
   elif kind == T_JSON_DECLARATION_START:
     inc q.p
     let literal = q.expect(T_JSON_OBJECT_LITERAL)
     var classes: seq[string]
-    if q.types[q.p] == T_CLASS_SEPARATOR: q.classSuffix(classes)
+    var classSpans: seq[Span]
+    if q.types[q.p] == T_CLASS_SEPARATOR: q.classSuffix(classes, classSpans)
     var start = q.starts[k] + 4
     while start < q.src.len and q.src[start] in {' ', '\t'}: inc start
     var stop = start
@@ -471,51 +532,125 @@ proc topStatement(q: Parser) =
                          classes: classes)
     q.drafts.jsons.add json
     q.pendingJson.add (json, literal)
+    result = statement("json")
+    result.nodes = some @[NodeOccurrence(id: json.id, span: json.span, idSpan: json.span, defines: some true,
+                                         classSpans: some classSpans)]
+    result.classSpans = some classSpans
   elif kind == T_CLASS_DEF:
     inc q.p
     let ids = q.identifiers()
     q.drafts.classDefs.add DraftClassDef(ids: ids.mapIt(q.image(it)), styles: q.styles())
+    result = statement("classDef")
+    result.`ref` = some q.image(ids[0])
+    result.refSpan = some q.span(ids[0])
   elif kind == T_CLASS:
     inc q.p
     let targets = q.identifiers()
     let classes = q.identifiers()
     q.drafts.classes.add DraftClass(targets: targets.mapIt((q.image(it), q.span(it))),
                                     classes: classes.mapIt(q.image(it)))
+    result = statement("classAssign")
+    result.`ref` = some q.image(classes[0])
+    result.refSpan = some q.span(classes[0])
+    result.nodes = some targets.mapIt(q.reference(it))
   elif kind == T_STYLE:
     inc q.p
     let target = q.expect(T_IDENTIFIER)
     q.drafts.styles.add DraftStyle(target: q.image(target), span: q.span(target), styles: q.styles())
+    result = statement("style")
+    result.nodes = some @[q.reference(target)]
   else:
     let next = q.types[q.p + 1]
     if next == T_METADATA_START:
       if (FLAGS[q.types[q.p + 2]] and METADATA_FIRST) == 0: q.noAlternative(statementSequences())
       inc q.p
-      let at = q.content(k)
-      let id = if kind != T_IDENTIFIER: generatedId(q.src[at[0] ..< at[1]]) else: q.image(k)
+      var target = q.reference(k)
+      if kind != T_IDENTIFIER: target.id = generatedId(q.src[target.span[0] ..< target.span[1]])
       let assigned = q.metadata()
-      q.drafts.metadata.add DraftMetadata(target: id, span: at, properties: assigned)
+      result = statement("metadata")
+      result.nodes = some @[target]
+      result.metadata = some occurrences(assigned)
+      q.drafts.metadata.add DraftMetadata(target: target.id, span: target.span, properties: assigned,
+                                          statement: result)
     else:
       let follows = (FLAGS[next] and FOLLOWS_NAME) != 0 or
         (kind == T_IDENTIFIER and (next == T_LPAREN or next == T_LBRACKET))
       # Mermaid turns away the PlantUML statements people are most likely to try.
       if not follows or (kind == T_IDENTIFIER and q.image(k).toLowerAscii in FORBIDDEN):
         q.noAlternative(statementSequences())
-      q.entity(true)
-      return
+      return q.entity(true)
   q.lineEnd()
 
-proc line(q: Parser, top: bool) =
+proc line(q: Parser, top: bool): GraphStatement =
+  let k = q.p
   let kind = q.types[q.p]
   if kind == T_NEWLINE:
     inc q.p
-    return
+    return GraphStatement(statementKind: "blank", span: q.span(k))
   if kind == T_COMMENT:
     inc q.p
     q.lineEnd()
-    return
-  if top: q.topStatement()
-  elif kind == T_ACTOR: q.actors(false)
-  else: q.entity(false)
+    return GraphStatement(statementKind: "comment", span: q.span(k))
+  result = if top: q.topStatement() elif kind == T_ACTOR: q.actors(false) else: q.entity(false)
+  result.span = (q.starts[k], q.lastEnd)
+  if result.edges.isSome:
+    for edge in result.edges.get.mitems: edge.span = result.span
+
+proc inUtf16(statements: var seq[GraphStatement], headerSpan: var Span, src: string) =
+  ## Pele's positions count UTF-16 code units, as JavaScript's strings do, and the parser's count
+  ## bytes: the positions it records are turned into Pele's once the text is read.
+  var ascii = true
+  for c in src:
+    if ord(c) >= 0x80:
+      ascii = false
+      break
+  if ascii: return
+  var units = newSeq[int](src.len + 1)
+  var i, u = 0
+  while i < src.len:
+    let (cp, size) = codePointAt(src, i)
+    for j in i ..< min(i + size, src.len): units[j] = u
+    u += (if cp >= 0x10000: 2 else: 1)
+    i += size
+  units[src.len] = u
+  proc fix(x: var Span) = x = (units[x[0]], units[x[1]])
+  proc fix(x: var Option[Span]) =
+    if x.isSome: fix(x.get)
+  proc fix(x: var Option[seq[Span]]) =
+    if x.isSome:
+      for s in x.get.mitems: fix(s)
+  proc fix(x: var Option[seq[MetadataOccurrence]]) =
+    if x.isSome:
+      for m in x.get.mitems:
+        fix(m.span)
+        fix(m.keySpan)
+        fix(m.valueSpan)
+  proc fix(statement: GraphStatement) =
+    fix(statement.span)
+    if statement.nodes.isSome:
+      for n in statement.nodes.get.mitems:
+        fix(n.span)
+        fix(n.idSpan)
+        fix(n.labelSpan)
+        fix(n.stereotypeSpan)
+        fix(n.metadata)
+        fix(n.classSpans)
+    if statement.edges.isSome:
+      for e in statement.edges.get.mitems:
+        fix(e.span)
+        fix(e.labelSpan)
+        fix(e.idSpan)
+        fix(e.metadata)
+    fix(statement.idSpan)
+    fix(statement.titleSpan)
+    fix(statement.endSpan)
+    fix(statement.refSpan)
+    fix(statement.metadata)
+    fix(statement.classSpans)
+    if statement.children.isSome:
+      for child in statement.children.get: fix(child)
+  for statement in statements: fix(statement)
+  fix(headerSpan)
 
 proc parseUsecase*(source: string, title = ""): UsecaseModel =
   let tokens = tokenize(source)
@@ -523,7 +658,8 @@ proc parseUsecase*(source: string, title = ""): UsecaseModel =
                  drafts: emptyDrafts())
   let header = q.expect(T_USECASE)
   q.lineEnd()
-  while (FLAGS[q.types[q.p]] and LINE) != 0: q.line(true)
+  var statements: seq[GraphStatement]
+  while (FLAGS[q.types[q.p]] and LINE) != 0: statements.add q.line(true)
   if q.types[q.p] != T_EOF: q.fail("Redundant input, expecting EOF but found: " & q.image(q.p))
   # The whole text has to be well formed before the JSON in it is looked at, as in Mermaid.
   for (json, literal) in q.pendingJson:
@@ -531,4 +667,5 @@ proc parseUsecase*(source: string, title = ""): UsecaseModel =
     let parsed = parseOrderedJson(q.image(literal), proc (): (int, int) = lineColumn(source, at))
     json.value = parsed.value
     json.propertyOrder = parsed.propertyOrder
-  resolveUsecase(source, q.drafts, q.span(header), title)
+  result = resolveUsecase(source, q.drafts, q.span(header), statements, title)
+  inUtf16(result.statements, result.headerSpan, source)

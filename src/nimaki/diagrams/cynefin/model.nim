@@ -7,9 +7,12 @@ import parser
 import ../../jsregex
 
 type
+  CynefinItem* = object
+    label*: string
+
   CynefinDomain* = object
     name*: string
-    items*: seq[string]          ## the labels of its items
+    items*: seq[CynefinItem]
 
   CynefinTransition* = object
     start*: string               ## Pele's `from`
@@ -32,7 +35,9 @@ proc buildCynefin*(ast: CynefinAst, title: string): CynefinModel =
     accDescr: (if ast.accDescr != "": dropBreakSpaces(ast.accDescr) else: ""))
   # A later block for a domain replaces an earlier one.
   for blk in ast.domains:
-    result.domains[blk.domain] = CynefinDomain(name: blk.domain, items: blk.items)
+    var items: seq[CynefinItem]
+    for label in blk.items: items.add CynefinItem(label: label)
+    result.domains[blk.domain] = CynefinDomain(name: blk.domain, items: items)
   for t in ast.transitions:
     if t.start != t.to:
       result.transitions.add CynefinTransition(start: t.start, to: t.to, label: t.label)

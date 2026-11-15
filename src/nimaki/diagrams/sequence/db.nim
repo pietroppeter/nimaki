@@ -9,6 +9,7 @@ import ../../js
 import ../../util/yaml
 import colors, types
 import ../../jsregex
+import ../../model
 
 type
   SeqDbOptions* = object
@@ -27,10 +28,10 @@ type
     title*: string                 ## "" for undefined
     accTitle*: string
     accDescr*: string
-    prevActor: string
+    prevActor {.undefinedIfEmpty.}: string
     currentBox: SeqBox
-    lastCreated: string
-    lastDestroyed: string
+    lastCreated {.undefinedIfEmpty.}: string
+    lastDestroyed {.undefinedIfEmpty.}: string
     wrapEnabled: Option[bool]
     sequenceWrap: bool
     active: Table[string, int]

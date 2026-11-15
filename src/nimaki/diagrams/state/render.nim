@@ -205,7 +205,7 @@ proc draw(db: StateDb, config: Config, options: RenderOptions, turned: bool): Re
     let src = index.getOrDefault(edge.start, -1)
     let dst = index.getOrDefault(edge.stop, -1)
     if src == -1 or dst == -1: continue
-    if edge.dashed:
+    if edge.pattern == "dashed":
       noted[if views[src].kind == kNote: dst else: src] = true
       continue
     inc counts[2 * src]
@@ -538,7 +538,7 @@ proc draw(db: StateDb, config: Config, options: RenderOptions, turned: bool): Re
   let reach = sideReach()
   for i in 0 ..< cedges.len:
     let ce = cedges[i]
-    if ce.src == ce.dst or ce.route.len < 6 or drawn[i].dashed: continue
+    if ce.src == ce.dst or ce.route.len < 6 or drawn[i].pattern == "dashed": continue
     reach.add(ce.dst, endSide(ce.route, ce.route.len - 3, cnodes[ce.dst]), "arrow_point")
 
   var casings = ""
@@ -550,7 +550,7 @@ proc draw(db: StateDb, config: Config, options: RenderOptions, turned: bool): Re
     let ce = cedges[i]
     let edge = drawn[i]
     let label = edgeLabels[i]
-    let note = edge.dashed
+    let note = edge.pattern == "dashed"
     let endType = if note: "none" else: "arrow_point"
     var path: EdgePath
     if ce.src == ce.dst:

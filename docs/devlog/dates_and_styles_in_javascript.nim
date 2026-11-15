@@ -27,7 +27,7 @@ nbText: &"""
 
 - **{failedBefore} of the {tests.len} gantt and class stress tests timed here missed Pele's time
   limit in the JavaScript build. Now all {passedNow} are within it**, two to three times faster.
-  Over all of Pele's tests, the misses went from {before["speed"].getInt} to {after["speed"].getInt}.
+  Over all of Pele's tests, on `main` as it is when this merges, the misses go from {before["speed"].getInt} to {after["speed"].getInt}.
   Every drawing is still identical to Pele's, in C and in JavaScript.
 - **Gantt charts read dates by hand now, where it is cheap.** A long date format was read again
   for every day of every task, a regex was started for every digit of every date, and a date of
@@ -250,6 +250,13 @@ show up in the profiles after that.
 """, nkQuestion, "What to do about the regex library"
 
 nbText: """
+*Added on 15 November, before this post was merged:* Pietro chose option 4, JavaScript's own
+RegExp in the JavaScript build, and option 3, a post that proposes the patch to nim-regex. The
+patched copy (2) is not needed, and no new shortcuts (1) are added, since native matching makes
+them unnecessary in JavaScript. Both are next on the roadmap.
+"""
+
+nbText: """
 ## What this changes for the port
 
 - `StrKey` of `js.nim`: the key of a table or set that is looked up very often. Its hash is the
@@ -258,7 +265,8 @@ nbText: """
   regex library: where only the whole text is read, the pattern goes without groups.
 - The porting guide's note *Code that JavaScript runs slowly* says both.
 - The step *Pele's time bounds in the JavaScript build* stays open on the
-  [roadmap](../../roadmap/): the regex library waits for a choice among the options above, and
+  [roadmap](../../roadmap/): the regex library moves to JavaScript's own RegExp in the JavaScript
+  build, as chosen above, and
   the class namespaces and state transitions of the slowest tests left are the port's own code.
 
 ## Sources

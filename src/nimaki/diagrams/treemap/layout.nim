@@ -90,7 +90,10 @@ proc layoutTreemap*(roots: seq[TreemapNode], width, height: float, insets: Inset
   var i = 0
   while i < all.len:
     let parent = all[i]
-    for node in parent.node.children:
+    if parent.node.leaf:
+      inc i
+      continue
+    for node in parent.node.children.get:
       let child = box(node, parent, parent.series)
       parent.children.add child
       all.add child

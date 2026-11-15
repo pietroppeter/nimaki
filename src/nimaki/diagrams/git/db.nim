@@ -4,7 +4,7 @@
 ## Port notes: Pele's `GitDbParseProvider` (the calls Mermaid's parser makes on its database) is
 ## a set of closures in `buildGit`, called directly. A branch head that is `null` is "" (a commit
 ## id is never empty), and an optional number is a float with NO_TYPE for undefined.
-import std/[algorithm, strutils, tables]
+import std/[algorithm, options, strutils, tables]
 import ../../errors
 import ../../preprocess
 import ../../util/yaml
@@ -30,8 +30,8 @@ type
     tags*: seq[string]
     parents*: seq[string]
     branch*: string
-    customType*: int       ## NO_TYPE for undefined
-    customId*: bool
+    customType*: Option[int]   ## a merge's own type, when it gives one
+    customId*: Option[bool]    ## a merge's: whether it was given an id
 
   GitModel* = ref object of RootObj
     title*, accTitle*, accDescr*: string   ## "" for undefined
@@ -106,7 +106,7 @@ proc buildGit*(ast: GitGraphAst, config: Config, title: string): GitModel =
         tags: statement.tags,
         parents: (if head == nil: @[] else: @[head.id]),
         branch: current,
-        customType: NO_TYPE)
+        customType: none(int))
       inc seq
       if commit.id in commits: warnings.add "Commit ID " & commit.id & " already exists"
       add(commit)
@@ -141,8 +141,8 @@ proc buildGit*(ast: GitGraphAst, config: Config, title: string): GitModel =
         parents: (if head == nil: @[] else: @[head.id, otherHead]),
         branch: current,
         kind: MERGE,
-        customType: kind,
-        customId: customId != "",
+        customType: (if kind != NO_TYPE: some(kind) else: none(int)),
+        customId: some(customId != ""),
         tags: statement.tags)
       inc seq
       add(commit)
@@ -174,7 +174,7 @@ proc buildGit*(ast: GitGraphAst, config: Config, title: string): GitModel =
         parents: (if head == nil: @[] else: @[head.id, source.id]),
         branch: current,
         kind: CHERRY_PICK,
-        customType: NO_TYPE,
+        customType: none(int),
         tags: tags)
       inc seq
       add(commit)

@@ -46,7 +46,7 @@ proc addState*(db: StateDb, id: string, kind = "", doc: seq[Stmt] = @[], hasDoc 
   var state = db.states.getOrDefault(trimmedId, nil)
   if state == nil:
     state = Stmt(stmt: skState, id: trimmedId, kind: kind, hasDoc: hasDoc, doc: doc,
-                 hasNote: hasNote, note: note, hasClasses: true)
+                 hasNote: hasNote, note: note, hasClasses: true, record: true)
     db.states[trimmedId] = state
   else:
     if not state.hasDoc:

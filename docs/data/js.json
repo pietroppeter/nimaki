@@ -13,7 +13,7 @@
       "unsupported": 0
     }
   },
-  "bytes": 10560563,
+  "bytes": 10695002,
   "fuzz": {
     "pie": {
       "seed": 1,
@@ -47,8 +47,8 @@
     },
     "flowchart": {
       "seed": 1,
-      "cases": 1000,
-      "identical": 1000,
+      "cases": 2000,
+      "identical": 2000,
       "different": 0
     },
     "sequence": {
@@ -83,14 +83,14 @@
     },
     "class": {
       "seed": 1,
-      "cases": 1000,
-      "identical": 1000,
+      "cases": 2000,
+      "identical": 2000,
       "different": 0
     },
     "state": {
       "seed": 1,
-      "cases": 1000,
-      "identical": 1000,
+      "cases": 2000,
+      "identical": 2000,
       "different": 0
     },
     "ishikawa": {
@@ -137,8 +137,8 @@
     },
     "gantt": {
       "seed": 1,
-      "cases": 1000,
-      "identical": 1000,
+      "cases": 2000,
+      "identical": 2000,
       "different": 0
     },
     "wardley": {

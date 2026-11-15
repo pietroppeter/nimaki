@@ -1,31 +1,32 @@
 ## port-of: src/diagrams/sankey/db.ts
 ## port-status: conformant
 ##
-## A link names its ends by their index in `nodes` (Pele keeps the node objects themselves).
+## A link holds the node objects of its ends, as Pele's does; the layout reads their `index`.
 import std/tables
 
 type
-  SankeyNode* = object
+  SankeyNode* = ref object
     id*: string
     index*: int
 
   SankeyLink* = object
-    source*, target*: int   ## indices in `nodes`
+    source*, target*: SankeyNode
     value*: float
 
   SankeyDb* = ref object of RootObj
     nodes*: seq[SankeyNode]
     links*: seq[SankeyLink]
     title*, accTitle*, accDescr*: string   ## "" for undefined
-    lookup: Table[string, int]
+    lookup: Table[string, SankeyNode]
 
   SankeyModel* = SankeyDb
 
-proc findOrCreateNode*(db: SankeyDb, id: string): int =
-  if id notin db.lookup:
-    db.lookup[id] = db.nodes.len
-    db.nodes.add SankeyNode(id: id, index: db.nodes.len)
-  db.lookup[id]
+proc findOrCreateNode*(db: SankeyDb, id: string): SankeyNode =
+  result = db.lookup.getOrDefault(id)
+  if result == nil:
+    result = SankeyNode(id: id, index: db.nodes.len)
+    db.lookup[id] = result
+    db.nodes.add result
 
-proc addLink*(db: SankeyDb, source, target: int, value: float) =
+proc addLink*(db: SankeyDb, source, target: SankeyNode, value: float) =
   db.links.add SankeyLink(source: source, target: target, value: value)

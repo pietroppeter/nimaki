@@ -4,7 +4,7 @@
 ## A circle is a `ref object`, so that, as in Pele, the layout moves the very circles it returns
 ## and `regionPath` can tell two circles apart by identity (`==` on refs, which the JavaScript
 ## build also has).
-import std/[algorithm, json, sets, tables]
+import std/[algorithm, json, options, sets, tables]
 from std/math import PI, floor, ceil, isNaN, classify, FloatClass
 import ../../jsmath
 import ../../js
@@ -51,7 +51,7 @@ proc ensurePairwiseSubsets*(subsets: seq[VennSubset]): seq[VennSubset] =
         if key in present: continue
         present.incl key
         let size = if pair[0] in sizes and pair[1] in sizes: jsMin(sizes[pair[0]], sizes[pair[1]]) / 4 else: 2.5
-        added.add VennSubset(sets: pair, size: size, label: "", hasLabel: true)
+        added.add VennSubset(sets: pair, size: size, label: some(""))
   if added.len > 0: subsets & added else: subsets
 
 proc lensArea*(r1, r2, d: float): float =

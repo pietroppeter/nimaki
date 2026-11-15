@@ -175,7 +175,7 @@ proc draw(model: WardleyModel, config: Config, options: RenderOptions, plotW, na
       if node.id notin anchorLabels: anchorLabels[node.id] = text(node.label, small, anchorWidth, Bold)
       let label = anchorLabels[node.id]
       return 1 / hypot(ux / (label.width / 2 + 5), uy / (small * 0.8))
-    if node.isPipelineParent: return SQUARE / SQRT2
+    if node.isPipelineParent.get(false): return SQUARE / SQRT2
     if node.sourceStrategy != "": 2 * R else: R
 
   # Quadrants around a node that a link runs through: 1 up and right, 2 down and right, 4 up and left, 8 down and left.
@@ -281,14 +281,14 @@ proc draw(model: WardleyModel, config: Config, options: RenderOptions, plotW, na
       for (cx, cy) in [(x, y - tri), (x - bx, by), (x + bx, by)]:
         shape.add "<circle cx=\"" & num(cx) & "\" cy=\"" & num(cy) & "\" r=\"" & num(dot) & "\" fill=\"var(--_bg)\" stroke=\"" &
           LINE & "\"/>"
-    elif node.isPipelineParent:
+    elif node.isPipelineParent.get(false):
       shape.add "<rect x=\"" & num(x - SQUARE / 2) & "\" y=\"" & num(y - SQUARE / 2) & "\" width=\"" & jsString(SQUARE) &
         "\" height=\"" & jsString(SQUARE) & "\" fill=\"var(--_bg)\" stroke=\"" & LINE & "\"/>"
     elif not anchor:
       shape.add "<circle cx=\"" & num(x) & "\" cy=\"" & num(y) & "\" r=\"" & jsString(R) & "\" fill=\"var(--_bg)\" stroke=\"" &
         LINE & "\"/>"
     if node.inertia == some(true):
-      let offset = (if node.isPipelineParent: SQUARE / 2 else: R) + 10 + (if strategy != "": R + 4 else: 0)
+      let offset = (if node.isPipelineParent.get(false): SQUARE / 2 else: R) + 10 + (if strategy != "": R + 4 else: 0)
       shape.add "<rect class=\"pele-wardley-inertia\" x=\"" & num(x + offset) & "\" y=\"" & num(y - R) &
         "\" width=\"4\" height=\"" & jsString(2 * R) & "\" fill=\"" & LINE & "\"/>"
     let ox = node.labelOffsetX.map(proc (v: float): float = clamp(v, -5000, 5000))
@@ -304,7 +304,7 @@ proc draw(model: WardleyModel, config: Config, options: RenderOptions, plotW, na
       let lift = LABEL_OFFSET + (if strategy != "": 10 else: 0)
       if ox.isSome or oy.isSome:
         caption = starting(label, x + ox.get(lift), y + oy.get(-lift), attrs)
-      elif node.inPipeline:
+      elif node.inPipeline.get(false):
         caption = centered(label, x, y + 2 * R + 4 + label.height / 2, attrs)
       else:
         # The label goes up and to the right unless a link leaves that way; then the next free corner.
@@ -316,8 +316,8 @@ proc draw(model: WardleyModel, config: Config, options: RenderOptions, plotW, na
         caption = starting(label, (if right: x + lift else: x - lift - label.width),
                            (if up: y - lift else: y + lift + small * 0.75), attrs)
     grow(x - 2 * R, y - 2 * R, x + 2 * R + 20, y + 2 * R)
-    let kind = if anchor: "anchor" elif node.isPipelineParent: "pipeline-parent"
-               elif node.inPipeline: "pipeline-component" else: "component"
+    let kind = if anchor: "anchor" elif node.isPipelineParent.get(false): "pipeline-parent"
+               elif node.inPipeline.get(false): "pipeline-component" else: "component"
     nodes.add "<g class=\"pele-node pele-wardley-" & kind & "\" data-id=\"" & escText(node.id) & "\">" & shape & caption & "</g>"
 
   var annotations = ""

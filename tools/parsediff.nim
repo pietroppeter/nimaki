@@ -25,11 +25,13 @@
 ##   options:
 ##     --show:N        print at most N differences as ERROR lines (default 10)
 ##     --all           write every difference of a case in the report, not only the first
+##     --strict        an empty text and a missing one differ (they do to Pele's tests); the
+##                     summary is not written
 ##     --package:PATH  the oracle package (default reference/npm/package or $PELE_PACKAGE)
 ##
 ## It writes its summary in docs/data/parsediff.json, and every difference in
 ## build/parsediff/report.json.
-import std/[os, osproc, json, tables, sets, strutils, algorithm, parseopt, options, strtabs, typetraits]
+import std/[os, osproc, json, tables, strutils, algorithm, parseopt, options, strtabs, typetraits]
 import common
 import nimaki
 import models
@@ -83,6 +85,7 @@ proc main() =
   var only: seq[string]
   var show = 10
   var everyDifference = false
+  var strict = false
   var packageArg = ""
   for kind, key, val in getopt():
     case kind
@@ -92,6 +95,7 @@ proc main() =
       of "show": show = parseInt(val)
       of "package": packageArg = val
       of "all": everyDifference = true
+      of "strict": strict = true
       else: quit "ERROR unknown option --" & key, 2
     of cmdEnd: discard
   let pkg = packageDirFrom(packageArg)
@@ -123,8 +127,8 @@ proc main() =
         o.verdict = "different"
         o.detail = "Pele throws " & p["code"].getStr & ", nimaki parses"
       else:
-        var theirs = normal(p["model"])
-        var ours = normal(dumpModel(m))
+        var theirs = normal(p["model"], strict)
+        var ours = normal(dumpModel(m), strict)
         if theirs.kind == JObject:
           theirs.delete("type")
           if theirs.hasKey("mermaidType"): theirs.delete("mermaidType")
@@ -160,7 +164,7 @@ proc main() =
     types.add %*{"type": t, "same": counts["same"], "different": counts["different"],
                  "error": counts["error"], "unsupported": counts["unsupported"]}
     for k, n in counts: total.inc(k, n)
-  if only.len == 0:
+  if only.len == 0 and not strict:
     writeFile repoDir / "docs" / "data" / "parsediff.json", (%*{
       "about": "Pele's parse() against nimaki's, on corpus/cases.json, by tools/parsediff.nim. Do not edit by hand.",
       "pin": readPin()["TAG"], "cases": outcomes.len, "same": total["same"], "different": total["different"],

@@ -46,7 +46,7 @@ proc layoutSankey*(model: SankeyModel, options: LayoutOptions): SankeyLayout =
   let n = model.nodes.len
   var links: seq[PlacedLink]
   for link in model.links:
-    links.add PlacedLink(source: link.source, target: link.target,
+    links.add PlacedLink(source: link.source.index, target: link.target.index,
                          value: (if link.value.isFinite and link.value > 0: link.value else: 0.0))
   var outgoing = newSeq[seq[int]](n)
   var incoming = newSeq[seq[int]](n)

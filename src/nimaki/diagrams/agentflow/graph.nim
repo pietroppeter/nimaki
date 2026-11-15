@@ -1,9 +1,8 @@
 ## port-of: src/diagrams/agentflow/graph.ts
 ## port-status: conformant
 ##
-## Pele reports shape and containment problems on the model as diagnostics; nothing drawn reads
-## them, so the port leaves the reports out and keeps what they change. `assignColorSlots` and
-## `normaliseNodeShapes` are written out here.
+## Shape and containment problems are reported on the model as diagnostics, as in Pele.
+## `assignColorSlots` and `normaliseNodeShapes` are written out here.
 import std/[options, sets, strutils, tables]
 import ../../js
 import ../../util/yaml
@@ -127,7 +126,11 @@ proc buildAgentGraph*(db: AgentflowDb, paletteLength: int, defaultCurve = ""): A
     let sg = subgraphs[i]
     if sg.id in hidden: continue
     for id in sg.nodes:
-      if closesLoop(id, sg.id, i): continue
+      if closesLoop(id, sg.id, i):
+        db.emitWarning("CONTAINMENT_VIOLATION", "Container \"" & sg.id & "\" cannot contain \"" & id &
+                       "\" because \"" & id & "\" already contains it. The nesting that would close the loop is dropped.",
+                       nodeId = id)
+        continue
       parentOf[id] = sg.id
 
   proc parentFor(id: string): Option[string] =
@@ -186,8 +189,8 @@ proc buildAgentGraph*(db: AgentflowDb, paletteLength: int, defaultCurve = ""): A
     let stop = collapsedInto.getOrDefault(raw.stop, raw.stop)
     # An edge between two things inside one collapsed flow has nothing left to connect.
     if start == stop and raw.start != raw.stop: continue
-    var styles = db.defaultEdgeStyle
-    for s in raw.style: styles.add s
+    var styles = db.defaultEdgeStyle.get(@[])
+    for s in raw.style.get(@[]): styles.add s
     let arrow =
       if raw.kind == "arrow_open": "none"
       elif raw.kind == "arrow_cross" or raw.kind == "arrow_point": raw.kind
@@ -213,8 +216,18 @@ proc buildAgentGraph*(db: AgentflowDb, paletteLength: int, defaultCurve = ""): A
              else: defaultCurve,
     )
 
+  # normaliseNodeShapes: every node's shape reduced to one agentflow draws.
   for node in nodes:
-    if not node.isGroup: node.shape = normaliseShape(node.shape)
+    if node.isGroup: continue
+    if node.shape == "" or node.shape == "squareRect" or node.shape == "rect": node.shape = DEFAULT_SHAPE
+    if node.shape in REMOVED_SHAPES:
+      db.emitError("SHAPE_REMOVED", "shape \"" & node.shape & "\" was removed in v0.8.1, using \"" &
+                   DEFAULT_SHAPE & "\"", nodeId = node.id)
+      node.shape = DEFAULT_SHAPE
+    elif node.shape notin ALLOWED_SHAPES:
+      db.emitWarning("SHAPE_UNSUPPORTED", "shape \"" & node.shape & "\" is not supported, using \"" &
+                     DEFAULT_SHAPE & "\"", nodeId = node.id)
+      node.shape = DEFAULT_SHAPE
 
   # Containers are numbered in the order they were written: a walk of the nesting, parents first.
   # `subgraphs` itself is in the order the blocks closed, with a nested flow before its parent.

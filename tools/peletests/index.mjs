@@ -42,7 +42,42 @@ export function render(source, options = {}) {
 // tools/parsediff.nim says so.
 export function parse(source, options = {}) {
   globalThis.__nimakiParsed = true;
-  return call(() => bridge.nimakiParse(source, options));
+  const model = call(() => bridge.nimakiParse(source, options));
+  for (const name of METHODS[model.type] ?? []) {
+    Object.defineProperty(model, name, { value: (arg) => bridge.nimakiModelCall(model, name, arg), enumerable: false });
+  }
+  if (model.type === 'agentflow') {
+    Object.defineProperty(model, 'subgraph', { value: (id) => model.subgraphLookup?.get(id), enumerable: false });
+    for (const [method, severity] of [['emitWarning', 'warning'], ['emitError', 'error']]) {
+      Object.defineProperty(model, method, { value: (id, message, ctx) => emit(model, id, severity, message, ctx), enumerable: false });
+    }
+  }
+  return model;
+}
+
+// The methods of Pele's models that its tests call, run by nimaki (bridge.nim).
+const METHODS = { gantt: ['getTasks'], agentflow: ['semanticModel', 'vertexKind'] };
+
+// Pele's AgentflowDb.emit, for a test that builds Pele's own graph from the model: a finding
+// already recorded (nimaki's parse builds the graph too) is recorded once.
+function emit(db, id, severity, message, ctx) {
+  const anchor = ctx?.nodeId ?? ctx?.edgeId;
+  const diagnostic = { id, severity, message };
+  if (ctx?.nodeId) diagnostic.nodeId = ctx.nodeId;
+  else if (ctx?.edgeId) diagnostic.edgeId = ctx.edgeId;
+  const mapping = anchor ? db.firstMapping?.get(anchor) : undefined;
+  if (mapping) diagnostic.position = mapping.position;
+  const key = anchor ?? '';
+  const same = db.reported.get(key);
+  if (same === undefined) db.reported.set(key, [diagnostic]);
+  else {
+    for (const d of same) {
+      if (d.id === id && d.severity === severity && d.message === message && d.nodeId === diagnostic.nodeId &&
+          d.edgeId === diagnostic.edgeId) return;
+    }
+    same.push(diagnostic);
+  }
+  db.diagnostics.push(diagnostic);
 }
 
 export function detectType(text) {

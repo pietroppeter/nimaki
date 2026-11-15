@@ -2,6 +2,7 @@
 ## port-status: conformant
 import std/[options, strutils]
 import ../../errors
+import ../../model
 import ../../js
 import builder, parser
 import ../../jsregex
@@ -9,7 +10,7 @@ import ../../jsregex
 type
   WardleyModel* = ref object of RootObj
     title*, accTitle*, accDescr*: string   ## "" for undefined
-    built*: WardleyBuildResult              ## Pele spreads it into the model
+    built* {.spread.}: WardleyBuildResult   ## Pele spreads it into the model
 
 proc toPercent(value: float, context: string): float =
   ## Values up to 1 are fractions; larger ones are already percentages.

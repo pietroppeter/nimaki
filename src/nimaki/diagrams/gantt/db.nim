@@ -6,6 +6,7 @@
 import std/[options, sets, strutils, tables, times, unicode]
 from std/math import floor
 import ../../errors
+import ../../model
 import ../../js
 import ../../jsdate
 import ../../util/url
@@ -51,8 +52,8 @@ type
   GanttDb* = ref object of RootObj
     title*, accTitle*, accDescr*: string   ## "" for undefined
     dateFormat*: string
-    trimmedFormat: string   ## `jsTrim(dateFormat)`, and its length in UTF-16 units: read for every day
-    formatUnits: int
+    trimmedFormat {.portOnly.}: string  ## `jsTrim(dateFormat)`, and its length in UTF-16 units:
+    formatUnits {.portOnly.}: int       ## read for every day
     axisFormat*: string
     tickInterval*: string                  ## "" for undefined
     todayMarker*: string
@@ -70,12 +71,13 @@ type
     currentSection: string
     taskCount: int
     lastOrder: int
-    lastTaskId: string
-    hasLastTask: bool
+    lastTaskId {.undefinedIfEmpty.}: string
+    hasLastTask {.portOnly.}: bool
     now: float
     work: float
     includeSet, excludeSet: HashSet[StrKey]  ## StrKey: a quick hash in JavaScript, for every day
-    excludedDays: array[7, bool]
+    excludedDays {.portOnly.}: array[7, bool]
+      ## Seven days here; in Pele a list, empty until the tasks are scheduled.
     datedTokens: bool
 
 proc newGanttDb*(): GanttDb =

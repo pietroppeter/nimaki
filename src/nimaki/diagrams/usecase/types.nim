@@ -2,14 +2,17 @@
 ## port-status: conformant
 ##
 ## Optional strings are "" for undefined where Pele treats an empty string as absent too. The
-## positions of each statement's parts (`statements`, `GraphStatement`, the `*Occurrence` types)
-## are not ported: Pele keeps them on the model for editors, and nothing it draws reads them.
-import std/tables
+## positions of each statement's parts (`statements`) are kept as Pele keeps them, for editors:
+## nothing that is drawn reads them.
+import std/[options, tables]
 import json
+import ../../model
 
 type
   Span* = (int, int)
     ## Start and end offsets in the source, end exclusive.
+
+  LabelType* = enum ltText = "text", ltMarkdown = "markdown"
 
   Stylable* = ref object of RootObj
     ## What `class` and `style` statements reach: an actor, use case, boundary, JSON node or edge.
@@ -18,24 +21,24 @@ type
 
   Actor* = ref object of Stylable
     id*, label*: string
-    markdown*: bool        ## labelType 'markdown'
+    labelType*: LabelType
     kind*: string          ## type: normal, hollow, awesome or icon
-    icon*: string          ## "" for undefined
+    icon* {.undefinedIfEmpty.}: string
     business*: bool
-    stereotype*: string    ## "" for undefined
-    parentId*: string      ## "" for undefined
+    stereotype* {.undefinedIfEmpty.}: string
+    parentId* {.undefinedIfEmpty.}: string
 
   UseCase* = ref object of Stylable
     id*, label*: string
-    markdown*: bool
+    labelType*: LabelType
     shape*: string         ## ellipse or rect
     business*: bool
-    stereotype*: string
-    parentId*: string
+    stereotype* {.undefinedIfEmpty.}: string
+    parentId* {.undefinedIfEmpty.}: string
 
   SystemBoundary* = ref object of Stylable
     id*, label*: string
-    markdown*: bool
+    labelType*: LabelType
     kind*: string          ## type: rect or package
     members*: seq[string]
 
@@ -45,15 +48,15 @@ type
     source*, target*: string
     kind*: string          ## type: association, include, extend or generalization
     arrowType*: int
-    label*: string         ## "" for undefined
-    labelMarkdown*: bool
+    label* {.undefinedIfEmpty.}: string
+    labelType*: Option[LabelType]   ## none when there is no label
     minlen*: int
     animate*: bool
-    animation*: string     ## "" for undefined
+    animation* {.undefinedIfEmpty.}: string
 
   UsecaseNote* = ref object
     id*, target*, label*: string
-    markdown*: bool
+    labelType*: LabelType
 
   UsecaseJsonNode* = ref object of Stylable
     id*: string
@@ -72,6 +75,41 @@ type
   SharedStyles* = ref object
     items*: seq[string]
 
+  MetadataOccurrence* = object
+    key*: string
+    span*, keySpan*, valueSpan*: Span
+
+  NodeOccurrence* = object
+    id*: string
+    span*, idSpan*: Span
+    labelSpan*: Option[Span]
+    defines*: Option[bool]           ## some(true) or none, as Pele sets it only when true
+    stereotypeSpan*: Option[Span]
+    metadata*: Option[seq[MetadataOccurrence]]
+    classSpans*: Option[seq[Span]]
+
+  EdgeOccurrence* = object
+    id*: string
+    span*: Span
+    labelSpan*, idSpan*: Option[Span]
+    metadata*: Option[seq[MetadataOccurrence]]
+
+  GraphStatement* = ref object
+    ## One statement of the source with the positions of its parts, as in Mermaid's use case AST.
+    statementKind*: string
+      ## Pele's `kind` (node, edge, group, note, json, metadata, edgeMetadata...): `kind` is the
+      ## port's name for Pele's `type`, so tools/models.nim names this one back.
+    span*: Span
+    nodes*: Option[seq[NodeOccurrence]]
+    edges*: Option[seq[EdgeOccurrence]]
+    group*: Option[string]
+    idSpan*, titleSpan*, endSpan*: Option[Span]
+    `ref`*: Option[string]
+    refSpan*: Option[Span]
+    children*: Option[seq[GraphStatement]]
+    metadata*: Option[seq[MetadataOccurrence]]
+    classSpans*: Option[seq[Span]]
+
   UsecaseModel* = ref object of RootObj
     actors*: OrderedTable[string, Actor]
     useCases*: OrderedTable[string, UseCase]
@@ -81,12 +119,13 @@ type
     jsonNodes*: OrderedTable[string, UsecaseJsonNode]
     classDefs*: OrderedTable[string, ClassDef]
     direction*: string
-    title*: string         ## "" for undefined
+    title* {.undefinedIfEmpty.}: string
     accTitle*, accDescr*: string
     accDescription*: string
       ## The accessible description as written, before the indentation of its lines is dropped.
     source*: string
     headerSpan*: Span
+    statements*: seq[GraphStatement]
 
 const
   # Arrow

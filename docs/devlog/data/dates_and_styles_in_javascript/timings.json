@@ -59,25 +59,25 @@
   }
  ],
  "countsBefore": {
-  "passed": 6820,
+  "passed": 6924,
   "api": 25,
-  "model": 85,
+  "model": 0,
   "unported": 0,
-  "speed": 54,
+  "speed": 37,
   "canvas": 1,
-  "known": 7,
+  "known": 5,
   "failed": 0
  },
- "aboutCountsBefore": "docs/data/peletests.json on main at 987e6f2: nim r tools/peletests.nim in this sandbox, four files at a time.",
+ "aboutCountsBefore": "nim r tools/peletests.nim on main at d1414ae (after the models and reading-fixes steps), in this sandbox, four files at a time, on a quiet machine.",
  "countsAfter": {
-  "passed": 6843,
+  "passed": 6934,
   "api": 25,
-  "model": 85,
+  "model": 0,
   "unported": 0,
-  "speed": 31,
+  "speed": 27,
   "canvas": 1,
-  "known": 7,
+  "known": 5,
   "failed": 0
  },
- "aboutCountsAfter": "nim r tools/peletests.nim on this round's branch, in this sandbox, four files at a time."
+ "aboutCountsAfter": "nim r tools/peletests.nim on this round's branch with main d1414ae merged, in the same sandbox, just after."
 }
