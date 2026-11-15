@@ -86,9 +86,12 @@ proc memberLine(member: ClassMember, measurer: TextMeasurer, size: float, mono: 
 proc draw(db: ClassDb, config: Config, options: RenderOptions, turned, tight: bool): Rendered
 
 proc renderClass*(db: ClassDb, config: Config, options: RenderOptions): Rendered =
+  # handOver: a drawing is handed up, not copied, in nim js (`nimaki/js`)
   let fitted = proc (down: bool): Rendered =
-    tighten(options, proc (tight: bool): Rendered = draw(db, config, options, down, tight))
-  if runsAcross(db.direction): turnToFit(options, fitted) else: fitted(false)
+    handOver(result, tighten(options, proc (tight: bool): Rendered =
+      handOver(result, draw(db, config, options, down, tight))))
+  if runsAcross(db.direction): handOver(result, turnToFit(options, fitted))
+  else: handOver(result, fitted(false))
 
 # `turned` draws a diagram that runs across as one that runs down. `tight` gives up the room
 # that keeps a namespace's name clear of an edge coming in beside it.
@@ -652,6 +655,8 @@ proc draw(db: ClassDb, config: Config, options: RenderOptions, turned, tight: bo
       (if labelsOut != "": "<g class=\"pele-edge-labels\" font-size=\"" & jsString(small) & "\">" & labelsOut & "</g>" else: "") &
       (if cardsOut != "": "<g class=\"pele-cardinalities\" font-size=\"" & jsString(tiny) & "\" fill=\"var(--_m)\">" & cardsOut & "</g>" else: "") &
       "<g class=\"pele-nodes\">" & nodesOut & "</g>")
-  let svg = svgDocument("class", titled.width, titled.height, size, options,
-                        Accessible(accTitle: db.accTitle, accDescr: db.accDescr), titled.content)
-  Rendered(svg: svg, width: titled.width, height: titled.height, links: links)
+  result.width = titled.width
+  result.height = titled.height
+  handOver(result.links, links)
+  handOver(result.svg, svgDocument("class", titled.width, titled.height, size, options,
+                                   Accessible(accTitle: db.accTitle, accDescr: db.accDescr), titled.content))

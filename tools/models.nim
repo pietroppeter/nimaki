@@ -83,6 +83,11 @@ type Walk* = object
 
 type ModelTooLarge* = object of CatchableError
 
+func sizedObject(n: int): JsonNode =
+  ## A JSON object with room for `n` keys from the start: one that grows to thousands of keys
+  ## copies them all at each doubling, slowly in nim js.
+  JsonNode(kind: JObject, fields: initOrderedTable[string, JsonNode](max(n, 2)))
+
 proc spend(w: var Walk, n: int) =
   if w.budget > 0:
     w.budget -= n
@@ -289,7 +294,7 @@ proc dump(x: JsonValue, path: var Walk): JsonNode =
     result = newJArray()
     for v in x.items: result.add dump(v, path)
   of jObject:
-    result = newJObject()
+    result = sizedObject(x.keys.len)
     for k, key in x.keys: result[key] = dump(x.values[k], path)
 
 proc dump(x: PacketLabel, path: var Walk): JsonNode =
@@ -318,8 +323,8 @@ const renamedIn* = {"cynefin": {"start": "from"}.toTable,
 proc rename*(j: JsonNode, names: Table[string, string]): JsonNode =
   case j.kind
   of JObject:
-    result = newJObject()
-    for k, v in j: result[names.getOrDefault(k, k)] = rename(v, names)
+    result = sizedObject(j.len)
+    for k, v in j.fields.mpairs: result[names.getOrDefault(k, k)] = rename(v, names)  # mpairs: pairs copies the table in nim js
   of JArray:
     result = newJArray()
     for v in j: result.add rename(v, names)
@@ -357,7 +362,7 @@ proc dumpYaml(v: YamlValue): JsonNode =
     for item in v.items: a.add dumpYaml(item)
     a
   of yMap:
-    var o = newJObject()
+    var o = sizedObject(v.fields.len)
     for k, item in v.fields: o[k] = dumpYaml(item)
     o
 
@@ -396,7 +401,7 @@ proc dump[T](x: T, path: var Walk): JsonNode =
   elif T is Option:
     if x.isSome: dump(x.get, path) else: newJNull()
   elif T is Table or T is OrderedTable:
-    var m = newJObject()
+    var m = sizedObject(x.len)
     for k, v in x.pairs: m[$k] = dump(v, path)
     %*{"$map": m}
   elif T is HashSet or T is OrderedSet:

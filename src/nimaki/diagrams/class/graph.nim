@@ -2,6 +2,7 @@
 ## port-status: conformant
 import std/tables
 import db
+import ../../js
 import ../../model
 
 type
@@ -59,7 +60,7 @@ proc buildClassGraph*(model: ClassDb, hierarchical = true): ClassGraph =
       if current in declared:
         found = declared[current]
         break
-      let ns = model.namespaces.getOrDefault(current, nil)
+      let ns = model.namespaces.getOrDefault(StrKey(current), nil)
       if ns == nil: break
       if ns.explicit:
         found = current

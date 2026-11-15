@@ -326,7 +326,9 @@ proc addVertex*(db: AgentflowDb, id: string, textObj = none(FlowText), typ = "",
   if typ != "": vertex.kind = typ
   if style.isSome:
     for s in style.get: vertex.styles.add s
-  if vertex.props.isNone: vertex.props = some(props.get(initTable[string, string]()))
+  # An empty table that has not made its slots yet, not initTable's 32: one per vertex, and nim js
+  # copies each into the option.
+  if vertex.props.isNone: vertex.props = (if props.isSome: props else: some(default(Table[string, string])))
   elif props.isSome:
     for k, v in props.get: vertex.props.get[k] = v
 

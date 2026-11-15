@@ -92,8 +92,14 @@ proc buildStateGraph*(rootDoc: seq[Stmt], states: OrderedTable[string, Stmt],
     if node.cssClasses != "":
       # One copy, however many classes: a state named in a class statement many times has a long list.
       # Added in place: a copy of the list and back would copy every string in nim js.
+      # A name the same as the one before is not looked up again: a class statement repeated
+      # 1,500 times gives a list of 1,500 times the same name.
+      var lastName = ""
+      var def: StateClassDef = nil
       for name in node.cssClasses.split(' '):
-        let def = classes.getOrDefault(name, nil)
+        if name != lastName or name == "":
+          def = classes.getOrDefault(name, nil)
+          lastName = name
         if def == nil: continue
         for style in def.styles: node.cssCompiledStyles.add style
     if draft != nil: described[node.id] = draft
