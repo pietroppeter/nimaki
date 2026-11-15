@@ -1,7 +1,7 @@
 // Pele's public API (src/index.ts at the pin), drawn by nimaki: tools/peletests.nim points Pele's
 // test suites here instead of Pele's own src/index.js. `render`, `detectType` and `supports`
 // call nimaki's JavaScript build (bridge.nim); the text measurer stays Pele's, as in difftest.
-// `parse` returns nimaki's model, written as Pele's (tools/models.nim), and `render` draws it.
+// `parse` returns nimaki's model, written as Pele's (src/nimaki/modeljson.nim), and `render` draws it.
 // `mount` and `enableZoom` are nimaki's ports of Pele's browser side (src/nimaki/mount.nim, zoom.nim).
 // What nimaki does not provide (`register`) throws, and the tests that use it are counted apart.
 import { createRequire } from 'node:module';

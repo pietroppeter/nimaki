@@ -19,14 +19,16 @@ NOW = 1767225600000.0  # 2026-01-01T00:00:00Z, tools/difftest.nim's fixedNow
 lib = ctypes.CDLL(sys.argv[1] if len(sys.argv) > 1 else str(repo / "build" / "cabi" / "libnimaki.so"))
 lib.nimaki_render.argtypes = [ctypes.c_char_p]
 lib.nimaki_render.restype = ctypes.c_void_p  # a pointer, so that it can be given back
+lib.nimaki_parse.argtypes = [ctypes.c_char_p]
+lib.nimaki_parse.restype = ctypes.c_void_p
 lib.nimaki_free.argtypes = [ctypes.c_void_p]
 lib.nimaki_pele_version.restype = ctypes.c_char_p
 lib.nimaki_version.restype = ctypes.c_char_p
 
 
-def ask(request) -> dict:
+def ask(request, call=None) -> dict:
     raw = request if isinstance(request, bytes) else json.dumps(request).encode()
-    p = lib.nimaki_render(raw)
+    p = (call or lib.nimaki_render)(raw)
     try:
         return json.loads(ctypes.string_at(p).decode())
     finally:
@@ -59,6 +61,14 @@ e = render("pie\n  \"Dogs\" 386\n")
 check(not e["ok"] and e["code"] == "syntax" and e["line"] >= 1, "a syntax error: " + str(e)[:200])
 check(ask(b"{not json")["code"] == "request", "a request that is not JSON")
 check(ask({"options": {}})["code"] == "request", "a request with no source")
+
+# a model, as Pele's parse gives it: each edge's two ends
+m = ask({"source": "flowchart LR\n  A[One] --> B[Two]\n  B --> C\n"}, lib.nimaki_parse)
+check(m.get("ok") and m["type"] == "flowchart" and m["model"]["type"] == "flowchart"
+      and [(e["start"], e["end"]) for e in m["model"]["edges"]] == [("A", "B"), ("B", "C")]
+      and m["model"]["nodes"]["A"]["text"] == "One", "the flowchart model: " + str(m)[:300])
+pm = ask({"source": "pie\n  \"Dogs\" 386\n"}, lib.nimaki_parse)
+check(not pm["ok"] and pm["code"] == "syntax", "a syntax error from nimaki_parse: " + str(pm)[:200])
 
 # threads take turns: the same answer from eight at once
 with ThreadPoolExecutor(8) as pool:

@@ -5,7 +5,7 @@ import nimib
 import ../blocks
 import nimaki
 from nimaki/diagrams/treemap/model import TreemapModel, leaf
-import ../../tools/models
+import nimaki/modeljson
 
 nbInit
 nb.usePost()
@@ -181,7 +181,7 @@ nbText: """
   [`src/diagrams/treemap/model.ts`](https://github.com/obsidianmd/pele/blob/3a2f075ee0c3d914f0fad3545fc0f193693975ac/src/diagrams/treemap/model.ts)
   and the railroad's union, [`src/diagrams/railroad/types.ts`](https://github.com/obsidianmd/pele/blob/3a2f075ee0c3d914f0fad3545fc0f193693975ac/src/diagrams/railroad/types.ts).
 - Spread syntax in JavaScript: [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax).
-- The code: [`tools/models.nim`](https://github.com/pietroppeter/nimaki/blob/main/tools/models.nim),
+- The code: [`tools/models.nim`](https://github.com/pietroppeter/nimaki/blob/main/src/nimaki/modeljson.nim) (since 15 November `src/nimaki/modeljson.nim`),
   [`src/nimaki/model.nim`](https://github.com/pietroppeter/nimaki/blob/main/src/nimaki/model.nim).
 """
 

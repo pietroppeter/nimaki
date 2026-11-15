@@ -3,7 +3,7 @@
 ##
 ## Port notes: the union of node shapes is one object with a kind. A sequence's `elements`, a
 ## choice's `alternatives` and the `element` of an optional or a repetition are all `kids`, in
-## the order Pele's `parts` lists them (tools/models.nim writes it as Pele's union).
+## the order Pele's `parts` lists them (src/nimaki/modeljson.nim writes it as Pele's union).
 import std/tables
 
 type

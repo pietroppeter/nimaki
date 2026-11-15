@@ -73,3 +73,4 @@ import devlog/a_faster_ci
 import devlog/two_machines_for_peles_suites
 import devlog/copies_on_the_way_out
 import devlog/a_drawing_that_fits_its_box
+import devlog/nimaki_0_2_0

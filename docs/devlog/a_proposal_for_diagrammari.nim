@@ -178,6 +178,9 @@ Before diagrammari could switch, and in the order it would meet them:
    diagrammari's Python experiment uses it to know each flowchart edge's two ends for its
    personal layer. nimaki parses every type, but its `parse` is not public yet, and a model would
    need a JSON form to cross the C ABI.
+   *Done after this post: `parse` became public the same night (the step Models as Pele's), and
+   with [nimaki 0.2.0](../nimaki-0-2-0/) the model crosses the C ABI as JSON in Pele's shape
+   (`nimaki_parse`).*
 3. **`mount`, `enableZoom` and lazy loading**, Pele's browser side. Client mode needs them, so
    it keeps Pele's bundle until nimaki's JavaScript build grows them. *Pietro's answer, 15
    November 2026: later, after a first release; it is the roadmap step "Pele's browser side"

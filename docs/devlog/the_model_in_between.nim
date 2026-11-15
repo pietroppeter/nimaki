@@ -5,7 +5,7 @@ import nimib
 import ../blocks, ../pele
 import nimaki
 from nimaki/diagrams/pie/model import PieModel
-import ../../tools/models
+import nimaki/modeljson
 
 nbInit
 nb.usePost()

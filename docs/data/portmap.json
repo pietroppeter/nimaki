@@ -2986,7 +2986,7 @@
       "code": 102,
       "status": "skip",
       "nim": [],
-      "reason": "TypeScript types only, re-exported for users of the package; each model is a Nim type in its own module, and tools/models.nim writes it in Pele's shape."
+      "reason": "TypeScript types only, re-exported for users of the package; each model is a Nim type in its own module, and src/nimaki/modeljson.nim writes it in Pele's shape (modelJson)."
     },
     {
       "path": "src/mount.ts",

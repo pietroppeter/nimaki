@@ -2,14 +2,15 @@
 ## Pele is JavaScript, and its options and results are JavaScript values already. Here the
 ## options a page or a test gives (`toOptions`: functions included, a measurer, an icon
 ## resolver, a typesetter) become nimaki's `RenderOptions`, a result becomes Pele's result
-## object (`resultOf`), and a `PeleError` becomes a JavaScript object a caller can throw again
+## object (`resultOf`), a model Pele's model object (`modelObject`), and a `PeleError` becomes a JavaScript object a caller can throw again
 ## as Pele's error (`peleErrorObject`). Used by src/nimaki/web.nim (the page's `nimaki`) and by
 ## tools/peletests/bridge.nim (Pele's tests).
 when not defined(js):
   {.error: "src/nimaki/jsapi.nim is for the JavaScript build".}
 
-import std/[jsffi, options, tables]
+import std/[jsffi, options, tables, json]
 import ../nimaki
+import modeljson
 import util/yaml
 import js
 
@@ -158,3 +159,58 @@ proc resultOf*(r: RenderResult): JsObject =
     list.add j
   result["links"] = toJs(list)
 
+
+proc newMap(): JsObject {.importjs: "new Map()".}
+proc newSet(): JsObject {.importjs: "new Set()".}
+proc mapSet(m: JsObject, k: cstring, v: JsObject) {.importjs: "#.set(#, #)".}
+proc setAdd(s: JsObject, v: JsObject) {.importjs: "#.add(#)".}
+proc newIdTable*(): JsObject {.importjs: "new Map()".}
+proc idGet(m: JsObject, k: int): JsObject {.importjs: "#.get(#)".}
+proc idSet(m: JsObject, k: int, v: JsObject) {.importjs: "#.set(#, #)".}
+
+proc toJsValue*(j: JsonNode, ids: JsObject): JsObject =
+  ## JSON from src/nimaki/modeljson.nim (written with `share`) as Pele's JavaScript: `{"$map": ...}` a
+  ## Map, `{"$set": [...]}` a Set, `{"$ref": n}` the object written with `"$id": n` (the same
+  ## object, cycles included), null as undefined (Pele's undefined).
+  case j.kind
+  of JNull: result = jsUndefined
+  of JBool: result = toJs(j.getBool)
+  of JInt: result = toJs(j.getInt)
+  of JFloat: result = toJs(j.getFloat)
+  of JString: result = toJs(toJsString(j.getStr))
+  of JArray:
+    var items: seq[JsObject]
+    for v in j: items.add toJsValue(v, ids)
+    result = toJs(items)
+  of JObject:
+    if j.len == 1 and j.hasKey("$map"):
+      result = newMap()
+      # `fields.mpairs`, not json's `pairs`, which copies the table in nim js
+      for k, v in j["$map"].fields.mpairs: result.mapSet(cstring(k), toJsValue(v, ids))
+    elif j.len == 1 and j.hasKey("$set"):
+      result = newSet()
+      for v in j["$set"]: result.setAdd(toJsValue(v, ids))
+    elif j.len == 1 and j.hasKey("$ref"):
+      result = ids.idGet(j["$ref"].getInt)
+    else:
+      result = newJsObject()
+      if j.hasKey("$id"): ids.idSet(j["$id"].getInt, result)
+      for k, v in j.fields.mpairs:
+        # A field the model has but leaves empty is there, undefined, as a field Pele's class
+        # declares and does not set: `toEqual` reads it as missing, `toMatchObject` finds it.
+        if k != "$id": result[cstring(k)] = toJsValue(v, ids)
+
+
+proc modelObject*(m: ParsedModel): JsObject =
+  ## The model as Pele's `parse` returns it: a JavaScript object, a table a Map, a set a Set, a
+  ## part met twice the same object, with `type` and `mermaidType`.
+  try:
+    result = toJsValue(dumpModel(m, share = true, budget = 2_000_000), newIdTable())
+  except:
+    # A model nested thousands deep, or of millions of characters (Pele's stress tests), is
+    # deeper than JavaScript's stack lets the walk go, or larger than its memory holds twice:
+    # the caller gets the model without its fields, and can still draw it.
+    result = nil
+  if result == nil or result.isUndef or not result.isObject: result = newJsObject()
+  result["type"] = cstring(m.diagramType)
+  result["mermaidType"] = cstring(m.mermaidType)

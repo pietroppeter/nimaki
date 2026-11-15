@@ -5,7 +5,7 @@
 ## Also holds the types of src/diagrams/c4/types.ts. An element's optional text fields (type,
 ## descr, techn, sprite, tags, link, the colours...) are kept in `fields`, where a missing key is
 ## undefined; every reader treats undefined and "" alike. Named arguments that set no known field
-## are kept aside in `extra`, as in Pele. tools/models.nim writes these objects in Pele's shape.
+## are kept aside in `extra`, as in Pele. src/nimaki/modeljson.nim writes these objects in Pele's shape.
 import std/[options, tables, strutils]
 import ../../jsregex
 import ../../model

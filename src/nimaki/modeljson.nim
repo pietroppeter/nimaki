@@ -1,56 +1,61 @@
-## models: nimaki's model of a diagram written as Pele's, in JSON. Pele's `parse(text)` returns
-## a JavaScript object, its tests read it (`parse(text).nodes.get("A").label`); nimaki's `parse`
-## returns a Nim object. `dumpModel` walks that object field by field (`fieldPairs`) into the
-## JSON tools/oracle.mjs writes for Pele's: a table is `{"$map": ...}`, a set `{"$set": [...]}`, a
-## `ref` met again inside itself `"$cycle"`, NaN (the port's undefined number) null. A field
-## named after a Nim keyword (`kind`, `typ` for `type`, `stop` for `end`) and an enum's prefix
-## (`skState` for `"state"`) are written as Pele's.
+## modeljson: nimaki's model of a diagram as JSON, in the shape of Pele's. Not a port of a Pele
+## file: Pele's `parse(text)` returns a JavaScript object (its types are in src/models.ts, which
+## the port does not need), and nimaki's `parse` returns a Nim object. `modelJson` writes that
+## object as Pele's would be written: the same keys, a Map as an object, a Set as an array.
 ##
-## Used by tools/parsediff.nim, the referee for models, and by tools/peletests/bridge.nim, which
-## hands these models to Pele's tests; so it compiles with `nim js` too.
+## `dumpModel` walks the model field by field (`fieldPairs`) into the JSON tools/oracle.mjs
+## writes for Pele's: a table is `{"$map": ...}`, a set `{"$set": [...]}`, a `ref` met again
+## inside itself `"$cycle"`, NaN (the port's undefined number) null. A field named after a Nim
+## keyword (`kind`, `typ` for `type`, `stop` for `end`) and an enum's prefix (`skState` for
+## `"state"`) are written as Pele's.
+##
+## Used by `modelJson` (the C ABI's `nimaki_parse`), by tools/parsediff.nim, the referee for
+## models, and by the JavaScript build (src/nimaki/jsapi.nim, tools/peletests/bridge.nim), which
+## hands these models to a page and to Pele's tests; so it compiles with `nim js` too.
+## Until 15 November 2026 it was tools/models.nim, the name decision 0018 uses.
 import std/[json, tables, sets, strutils, options, algorithm, macros, typetraits]
-import nimaki
-import nimaki/util/yaml
-import nimaki/js
-import nimaki/model
-from nimaki/diagrams/agentflow/db import AgentflowDb
-from nimaki/diagrams/agentflow/types import MappingSet
-from nimaki/diagrams/architecture/db import ArchitectureDb, ArchNode
-from "nimaki/diagrams/block/db" import BlockDb
-from nimaki/diagrams/c4/db import C4Db, C4Element, C4Rel, C4Attr
-from nimaki/diagrams/class/db import ClassDb
-from nimaki/diagrams/class/types import Relation, NONE
-from nimaki/diagrams/cynefin/model import CynefinModel
-from nimaki/diagrams/er/db import ErDb
-from nimaki/diagrams/eventmodeling/model import EventModelingModel
-from nimaki/diagrams/flowchart/db import FlowDb
-from nimaki/diagrams/gantt/db import GanttDb
-from nimaki/diagrams/gantt/types import GanttTask
-from nimaki/diagrams/git/db import GitModel
-from nimaki/diagrams/info/model import InfoModel
-from nimaki/diagrams/ishikawa/db import IshikawaDb
-from nimaki/diagrams/journey/db import JourneyModel
-from nimaki/diagrams/kanban/db import KanbanModel
-from nimaki/diagrams/mindmap/db import MindmapModel
-from nimaki/diagrams/packet/model import PacketModel, PacketLabel
-from nimaki/diagrams/pie/model import PieModel
-from nimaki/diagrams/quadrant/db import QuadrantModel, QuadrantText
-from nimaki/diagrams/radar/model import RadarModel
-from nimaki/diagrams/railroad/types import RailroadModel, RailroadNode, NodeKind
-from nimaki/diagrams/requirement/db import RequirementDb
-from nimaki/diagrams/sankey/db import SankeyModel
-from nimaki/diagrams/sequence/db import SeqDb
-from nimaki/diagrams/sequence/types import SeqMessage, SeqNote, LINETYPE_NOTE, PLACEMENT_OVER, NO_TYPE
-from nimaki/diagrams/state/db import StateDb
-from nimaki/diagrams/state/types import Stmt, StmtKind, DescrKind
-from nimaki/diagrams/timeline/db import TimelineModel
-from nimaki/diagrams/treemap/model import TreemapModel
-from nimaki/diagrams/treeview/model import TreeViewModel
-from nimaki/diagrams/usecase/types import UsecaseModel, SharedStyles
-from nimaki/diagrams/usecase/json import JsonValue, JsonKind
-from nimaki/diagrams/venn/db import VennDb
-from nimaki/diagrams/wardley/model import WardleyModel
-from nimaki/diagrams/xychart/db import XyChartDb, Axis, Plot
+import ../nimaki
+import util/yaml
+import js
+import model
+from diagrams/agentflow/db import AgentflowDb
+from diagrams/agentflow/types import MappingSet
+from diagrams/architecture/db import ArchitectureDb, ArchNode
+from "diagrams/block/db" import BlockDb
+from diagrams/c4/db import C4Db, C4Element, C4Rel, C4Attr
+from diagrams/class/db import ClassDb
+from diagrams/class/types import Relation, NONE
+from diagrams/cynefin/model import CynefinModel
+from diagrams/er/db import ErDb
+from diagrams/eventmodeling/model import EventModelingModel
+from diagrams/flowchart/db import FlowDb
+from diagrams/gantt/db import GanttDb
+from diagrams/gantt/types import GanttTask
+from diagrams/git/db import GitModel
+from diagrams/info/model import InfoModel
+from diagrams/ishikawa/db import IshikawaDb
+from diagrams/journey/db import JourneyModel
+from diagrams/kanban/db import KanbanModel
+from diagrams/mindmap/db import MindmapModel
+from diagrams/packet/model import PacketModel, PacketLabel
+from diagrams/pie/model import PieModel
+from diagrams/quadrant/db import QuadrantModel, QuadrantText
+from diagrams/radar/model import RadarModel
+from diagrams/railroad/types import RailroadModel, RailroadNode, NodeKind
+from diagrams/requirement/db import RequirementDb
+from diagrams/sankey/db import SankeyModel
+from diagrams/sequence/db import SeqDb
+from diagrams/sequence/types import SeqMessage, SeqNote, LINETYPE_NOTE, PLACEMENT_OVER, NO_TYPE
+from diagrams/state/db import StateDb
+from diagrams/state/types import Stmt, StmtKind, DescrKind
+from diagrams/timeline/db import TimelineModel
+from diagrams/treemap/model import TreemapModel
+from diagrams/treeview/model import TreeViewModel
+from diagrams/usecase/types import UsecaseModel, SharedStyles
+from diagrams/usecase/json import JsonValue, JsonKind
+from diagrams/venn/db import VennDb
+from diagrams/wardley/model import WardleyModel
+from diagrams/xychart/db import XyChartDb, Axis, Plot
 
 when defined(js):
   import std/jsffi
@@ -494,3 +499,26 @@ proc normal*(j: JsonNode, strict = false): JsonNode =
     result = newJArray()
     for v in j: result.add normal(v, strict)
   else: result = j
+
+
+proc plain(j: JsonNode): JsonNode =
+  ## `{"$map": {...}}` as the object, `{"$set": [...]}` as the array.
+  case j.kind
+  of JObject:
+    if j.len == 1 and j.hasKey("$map"): return plain(j["$map"])
+    if j.len == 1 and j.hasKey("$set"): return plain(j["$set"])
+    result = sizedObject(j.len)
+    for k, v in j.fields.mpairs: result.fields[k] = plain(v)
+  of JArray:
+    result = newJArray()
+    for v in j.elems.mitems: result.add plain(v)
+  else: result = j
+
+proc modelJson*(m: ParsedModel): JsonNode =
+  ## The model `parse` returned, as JSON in the shape of Pele's model: a Map is an object, a Set
+  ## an array, a part met again inside itself `"$cycle"`, an undefined number null. With
+  ## `type` and `mermaidType`, as Pele's `parse` adds them.
+  result = plain(dumpModel(m))
+  if result.kind != JObject: result = newJObject()
+  result["type"] = %m.diagramType
+  result["mermaidType"] = %m.mermaidType

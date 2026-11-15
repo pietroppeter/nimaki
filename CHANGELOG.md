@@ -4,6 +4,51 @@ Every release of nimaki, newest first. A version is `MAJOR.MINOR.PATCH` and its 
 `vMAJOR.MINOR.PATCH`; how the numbers move, and what each release promises, is decision 0020
 (*Versions and releases*, on the site's Decisions page). Each release says which Pele it draws as.
 
+## 0.2.0 (15 November 2026)
+
+Pele's browser side, and Pele's models through every door: the release for diagrammari to start
+from. The drawings are the same as 0.1.0's; the API grows, and the page's `nimaki` changes shape,
+so the minor number moves (decision 0020).
+
+**Draws as:** Pele 1.13.0 (commit `3a2f075`, 30 October 2026), which draws the diagram types of
+Mermaid 12.1.0. Nim 2.2.4 or later; the JavaScript build of large diagrams needs Nim 2.2.14.
+
+### New
+
+- **Pele's browser side**, in the JavaScript build: `mount(element, text, options)` puts a
+  diagram in an element and keeps it fitted (drawn again when the element changes width or the
+  fonts load, the last good drawing kept dimmed under an error), and `enableZoom` lets a reader
+  enlarge and pan a drawing that was shrunk to fit (`src/nimaki/mount.nim`, `zoom.nim`,
+  `window.nim`). Pele's own tests of both pass on the port.
+- **The canvas measurer**: in a browser, the JavaScript build measures text with the page's own
+  font through a canvas, as Pele does; everywhere else, with Pele's `metricsMeasurer` as before.
+- **The page's `nimaki` is Pele's `pele`**: `render` (now throws `nimaki.PeleError`, as Pele's
+  does, instead of returning `{ok: false}`), `parse` (Pele's model object), `mount`,
+  `enableZoom`, `detectType`, `supports`, `registered`, `forgetTextWidths`, `metricsMeasurer`,
+  and the lazy entry point's `load`, `renderAsync` and `mountAsync`, with every type already
+  loaded.
+- **Models as JSON**: `modelJson(parse(text))` of `nimaki/modeljson` gives a model in the shape of
+  Pele's (a Map an object, a Set an array), and the C ABI has **`nimaki_parse`**, the same request
+  as `nimaki_render`, answering `{"ok": true, "type", "mermaidType", "model"}`.
+- **Pele's test suites**: 6,981 of 6,992 pass on the JavaScript build, none failed; 6 meet only a
+  time bound of Pele's, 5 are known (`tools/peletests/known.txt`).
+- **Every ported file is conformant** (decision 0014).
+
+### Changed
+
+- `nimaki.render` in a page throws on an error, as Pele's `render` does. A page that compares
+  the browser's drawing with one made at build time passes `measurer: nimaki.metricsMeasurer`,
+  since the default in a browser is now the canvas.
+
+### What it does not hold
+
+- **A small JavaScript file**: nimaki.js holds every type and is about 10 MB (1.5 MB
+  compressed), against 730 kB for Pele's whole bundle; there is no split by type, so `load` has
+  nothing to load. This is the roadmap step *A smaller JavaScript build*, in the backlog.
+- **`register`**: the types are chosen at compile time in Nim.
+- **Icons and math through the C ABI**: Pele takes them as callbacks; the Nim API has them, the C
+  ABI does not yet.
+
 ## 0.1.0 (15 November 2026)
 
 The first release: every diagram type of Pele 1.13.0, ported to Nim and drawn byte for byte as

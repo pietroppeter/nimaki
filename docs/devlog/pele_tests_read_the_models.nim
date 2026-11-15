@@ -5,7 +5,7 @@ import nimib
 import ../blocks
 import nimaki
 from "nimaki/diagrams/block/db" import BlockDb
-import ../../tools/models
+import nimaki/modeljson
 
 nbInit
 nb.usePost()
@@ -223,7 +223,7 @@ nbText: """
   [`tests/class/stress.test.ts`](https://github.com/obsidianmd/pele/blob/3a2f075ee0c3d914f0fad3545fc0f193693975ac/tests/class/stress.test.ts).
 - The block model with its optional fields: Pele's
   [`src/diagrams/block/types.ts`](https://github.com/obsidianmd/pele/blob/3a2f075ee0c3d914f0fad3545fc0f193693975ac/src/diagrams/block/types.ts).
-- The code: [`tools/models.nim`](https://github.com/pietroppeter/nimaki/blob/main/tools/models.nim),
+- The code: [`tools/models.nim`](https://github.com/pietroppeter/nimaki/blob/main/src/nimaki/modeljson.nim) (since 15 November `src/nimaki/modeljson.nim`),
   [`tools/peletests/bridge.nim`](https://github.com/pietroppeter/nimaki/blob/main/tools/peletests/bridge.nim),
   [`tools/parsediff.nim`](https://github.com/pietroppeter/nimaki/blob/main/tools/parsediff.nim).
 """

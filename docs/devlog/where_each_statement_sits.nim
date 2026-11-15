@@ -180,7 +180,7 @@ nbText: """
   and the agentflow's mappings and diagnostics,
   [`src/diagrams/agentflow/db.ts`](https://github.com/obsidianmd/pele/blob/3a2f075ee0c3d914f0fad3545fc0f193693975ac/src/diagrams/agentflow/db.ts).
 - How JavaScript counts a string: [MDN, UTF-16 characters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#utf-16_characters_unicode_code_points_and_grapheme_clusters).
-- The code: [`tools/models.nim`](https://github.com/pietroppeter/nimaki/blob/main/tools/models.nim).
+- The code: [`tools/models.nim`](https://github.com/pietroppeter/nimaki/blob/main/src/nimaki/modeljson.nim) (since 15 November `src/nimaki/modeljson.nim`).
 """
 
 nbSave
