@@ -104,7 +104,8 @@ when not defined(js):
     # NIMAKI_JSRUNNER_BUILT=1 says the runner is built already: several tools running at once (CI's
     # odd-character rounds) would otherwise rebuild it while another one runs it
     if getEnv("NIMAKI_JSRUNNER_BUILT") != "1" or not fileExists(runner):
-      let compile = "nim js --hints:off --warnings:off -d:nodejs -d:release -o:" & quoteShell(runner) & " " &
+      # -d:danger, as the pages build nimaki.js: the referee checks the build that ships
+      let compile = "nim js --hints:off --warnings:off -d:nodejs -d:danger -o:" & quoteShell(runner) & " " &
                     quoteShell(repoDir / "tools" / "jsrunner.nim")
       if execShellCmd(compile) != 0: quit "ERROR nim js failed: " & compile, 2
     var input = ""
