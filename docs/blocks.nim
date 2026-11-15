@@ -9,7 +9,8 @@
 ## - `nbCards what: nbCard(title, href, small, kind): ...`: a grid of cards
 ## - `nbFold label: ...`: blocks folded away under a line to press
 ## - `nbSvg svg, caption`: a drawing the page made itself (SVG text), with a caption
-## - `nbPipeline stages`: the parts of the renderer as islands: lava while ported, olivine when done
+## - `nbPipeline stages`: the parts of the renderer as islands: lava while ported, olivine when done;
+##   with a link each, `(name, status, href)`, the whole island is the link
 ## - `status(s)`: a status as Markdown-safe text for a table cell
 ##
 ## No HTML in a page, no CSS, no colours: what is needed twice becomes a block here, and its CSS
@@ -472,13 +473,27 @@ func status*(s: Status): string =
   ## A status as a table cell or a word in a sentence: `<span class="status done">done</span>`.
   &"""<span class="status {s}">{s}</span>"""
 
+func portStatus*(word: string): string =
+  ## The status of a file in the port map (`conformant`, `verified`, `draft`, `todo`, `skip`),
+  ## coloured as the step statuses are: conformant and verified as done, draft as started.
+  let look = case word
+    of "conformant", "verified": stDone
+    of "draft": stStarted
+    else: stPlanned
+  &"""<span class="status {look}">{word}</span>"""
+
 newNbBlock(NbPipeline):
   stages: seq[string]
   states: seq[string]
+  hrefs: seq[string]
   toHtml:
     var items = ""
     for i, s in blk.stages:
-      items.add &"""<li class="{blk.states[i]}" title="{blk.states[i]}">{esc(s)}</li>"""
+      let href = if i < blk.hrefs.len: blk.hrefs[i] else: ""
+      if href.len > 0:
+        items.add &"""<li class="{blk.states[i]} linked" title="{blk.states[i]}"><a href="{esc(href)}">{esc(s)}</a></li>"""
+      else:
+        items.add &"""<li class="{blk.states[i]}" title="{blk.states[i]}">{esc(s)}</li>"""
     &"""<ol class="pipeline" aria-label="The parts of the renderer and how far each is ported">{items}</ol>"""
 
 proc addPipeline*(nb: var Nb, stages: openArray[(string, Status)]) =
@@ -491,6 +506,18 @@ proc addPipeline*(nb: var Nb, stages: openArray[(string, Status)]) =
 template nbPipeline*(tstages: openArray[(string, Status)]) =
   ## The steps, in order, as islands: grey (planned), glowing lava (started), olivine
   ## (done). `nbPipeline [("pie", stStarted), ("flowchart", stPlanned)]`.
+  nb.addPipeline(tstages)
+
+proc addPipeline*(nb: var Nb, stages: openArray[(string, Status, string)]) =
+  var names, states, hrefs: seq[string]
+  for (name, st, href) in stages:
+    names.add name
+    states.add $st
+    hrefs.add href
+  nb.add newNbPipeline(stages = names, states = states, hrefs = hrefs)
+
+template nbPipeline*(tstages: openArray[(string, Status, string)]) =
+  ## The same islands, each a link: `nbPipeline [("pie", stDone, "../modules/pie/")]`.
   nb.addPipeline(tstages)
 
 # ---------------------------------------------------------------------------------- devlog posts
