@@ -52,6 +52,21 @@ proc main() =
   var bySession = initOrderedTable[string, seq[int64]]()
   for c in commits:
     if c.session.len > 0 and not c.merge: bySession.mgetOrPut(c.session, @[]).add c.t
+  # The posts each session added, oldest first: what the thread did, whatever it is called now.
+  var postsBy = initTable[string, seq[string]]()
+  var seenPost: seq[string]
+  let added = run("git log origin/main --no-merges --reverse --diff-filter=A --name-only " &
+                  "--format=@@%B -- 'docs/devlog/*.nim'")
+  for rec in added.split("@@"):
+    let i = rec.find("session_")
+    if i < 0: continue
+    var j = i
+    while j < rec.len and rec[j] in {'A'..'Z', 'a'..'z', '0'..'9', '_'}: inc j
+    for line in rec.splitLines:
+      if line.startsWith("docs/devlog/") and line.count('/') == 2 and line.endsWith(".nim") and fileExists(line) and
+         not line.endsWith("index.nim") and line notin seenPost:
+        seenPost.add line
+        postsBy.mgetOrPut(rec[i ..< j], @[]).add line.extractFilename.changeFileExt("")
   var sessions = newJObject()
   var activeTotal = 0'i64
   for s, ts in bySession:
@@ -60,7 +75,8 @@ proc main() =
       let d = ts[i] - ts[i - 1]
       if d <= gapMinutes * 60: active += d
     activeTotal += active
-    sessions[s] = %*{"commits": ts.len, "first": ts[0], "last": ts[^1], "activeSeconds": active}
+    sessions[s] = %*{"commits": ts.len, "first": ts[0], "last": ts[^1], "activeSeconds": active,
+                     "posts": postsBy.getOrDefault(s)}
 
   # Lines by kind of file, at main's head.
   proc lines(spec: string, ext = ".nim"): int =

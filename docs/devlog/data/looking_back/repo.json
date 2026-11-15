@@ -1,123 +1,225 @@
 {
   "about": "Written by docs/devlog/data/looking_back/measure.nim. Do not edit by hand.",
-  "head": "a15339cfa640565789d8ef34768b8f6be641ce26",
-  "measured": "2026-11-15T13:17:51Z",
-  "commits": 421,
-  "merges": 165,
-  "pullRequestMerges": 96,
+  "head": "6bea0136da9514bd5b9222e7376fe995c4a86da8",
+  "measured": "2026-11-15T14:00:55Z",
+  "commits": 428,
+  "merges": 168,
+  "pullRequestMerges": 98,
   "claims": 44,
-  "roadmapCommits": 153,
+  "roadmapCommits": 155,
   "first": 1794515964,
-  "last": 1794748384,
+  "last": 1794750642,
   "pause": {
     "from": 1794541909,
     "to": 1794667505
   },
   "gapMinutes": 45,
-  "activeSeconds": 105012,
+  "activeSeconds": 106797,
   "sessions": {
     "session_01YPMoamY7Abyu9c9rPhc3Jk": {
       "commits": 4,
       "first": 1794517402,
       "last": 1794517993,
-      "activeSeconds": 591
+      "activeSeconds": 591,
+      "posts": [
+        "a_stage_for_a_port",
+        "the_referee"
+      ]
     },
     "session_01YPMoajjPGMR3vg6xjuYV81": {
       "commits": 3,
       "first": 1794517538,
       "last": 1794517690,
-      "activeSeconds": 152
+      "activeSeconds": 152,
+      "posts": [
+        "pomice"
+      ]
     },
     "session_01YPMoakTYJ6H15UDTXuA5Wh": {
       "commits": 3,
       "first": 1794517605,
       "last": 1794517962,
-      "activeSeconds": 357
+      "activeSeconds": 357,
+      "posts": [
+        "drawing_a_diagram",
+        "how_pele_is_built"
+      ]
     },
     "session_01YPMoaicN4gnNjkJakskPo8": {
       "commits": 3,
       "first": 1794517728,
       "last": 1794533373,
-      "activeSeconds": 120
+      "activeSeconds": 120,
+      "posts": [
+        "diagrams_in_the_wild",
+        "pele_origins",
+        "the_diagram_family",
+        "what_mermaid_is"
+      ]
     },
     "session_01YPMoajzbK5KawohcQ4cudY": {
       "commits": 30,
       "first": 1794518223,
       "last": 1794668628,
-      "activeSeconds": 6539
+      "activeSeconds": 6539,
+      "posts": [
+        "first_light",
+        "timeline",
+        "three_small_diagrams",
+        "radar_treemap_treeview",
+        "mindmap_kanban_eventmodeling",
+        "flows_and_quadrants"
+      ]
     },
     "session_01YPMoanMuH9khvYC2xkLNAt": {
       "commits": 23,
       "first": 1794523205,
       "last": 1794729589,
-      "activeSeconds": 13247
+      "activeSeconds": 13247,
+      "posts": [
+        "layered_layout_and_flowchart",
+        "states_and_regions",
+        "crows_feet",
+        "actors_and_use_cases",
+        "agents_in_flows",
+        "what_a_label_holds",
+        "pele_tests_on_nimaki",
+        "faster_in_javascript",
+        "hashing_in_javascript",
+        "dates_and_styles_in_javascript",
+        "a_proposal_for_nim_regex",
+        "javascripts_own_regular_expressions",
+        "copies_on_the_way_out"
+      ]
     },
     "session_01YPMoaknwryB4BRhQbEPdcq": {
       "commits": 73,
       "first": 1794526005,
       "last": 1794736422,
-      "activeSeconds": 32057
+      "activeSeconds": 32057,
+      "posts": [
+        "lanes_and_handoffs",
+        "class_diagrams",
+        "git_graphs",
+        "railroad_diagrams",
+        "gantt_charts",
+        "diagrammari_as_a_corpus",
+        "nimaki_in_javascript",
+        "drawn_in_your_browser",
+        "diagrammari_at_work",
+        "following_pele",
+        "every_drawing_a_test",
+        "the_model_in_between",
+        "pele_tests_read_the_models",
+        "five_ways_a_model_differs",
+        "where_each_statement_sits",
+        "one_odd_character",
+        "both_builds_every_file",
+        "what_two_ports_teach",
+        "where_the_port_stands",
+        "a_page_for_every_module",
+        "a_drawing_for_every_type"
+      ]
     },
     "session_01YPMoakUQtherMJx4pWkoVd": {
       "commits": 25,
       "first": 1794526030,
       "last": 1794670277,
-      "activeSeconds": 10452
+      "activeSeconds": 10452,
+      "posts": [
+        "lifelines_and_messages",
+        "fishbones_and_domains",
+        "maps_and_clouds",
+        "boxes_in_boxes",
+        "a_c_abi",
+        "charts_on_two_axes",
+        "circles_that_overlap",
+        "a_proposal_for_diagrammari"
+      ]
     },
     "session_01YPMoajan6rY5YBDbLu54dT": {
       "commits": 12,
       "first": 1794533293,
       "last": 1794737906,
-      "activeSeconds": 4073
+      "activeSeconds": 4073,
+      "posts": [
+        "the_shape_of_the_port",
+        "how_nimaki_reads_text",
+        "the_answers_in_the_posts"
+      ]
     },
     "session_01YPMoaidfCsyA9Qxobcuz2K": {
       "commits": 8,
       "first": 1794533688,
       "last": 1794670019,
-      "activeSeconds": 2497
+      "activeSeconds": 2497,
+      "posts": [
+        "opening_a_web_page",
+        "a_kitchen_on_friday_night"
+      ]
     },
     "session_01YPMoajt3vMVyyUGZuSTA7i": {
       "commits": 43,
       "first": 1794668327,
       "last": 1794686318,
-      "activeSeconds": 14541
+      "activeSeconds": 14541,
+      "posts": [
+        "regular_expressions_as_pele_writes_them"
+      ]
     },
     "session_01YPMoajLAGATE44xJtw74Np": {
-      "commits": 11,
+      "commits": 15,
       "first": 1794726063,
-      "last": 1794741069,
-      "activeSeconds": 10508
+      "last": 1794750501,
+      "activeSeconds": 12293,
+      "posts": [
+        "twelve_minutes_of_checks",
+        "a_faster_ci",
+        "two_machines_for_peles_suites",
+        "looking_back"
+      ]
     },
     "session_01YPMoaj8rP6pfADan6ppZg1": {
       "commits": 3,
       "first": 1794726284,
       "last": 1794727349,
-      "activeSeconds": 1065
+      "activeSeconds": 1065,
+      "posts": [
+        "nimaki_0_1_0"
+      ]
     },
     "session_01YPMoanicDoz6yEWMV1S2Sz": {
       "commits": 7,
       "first": 1794738063,
       "last": 1794746469,
-      "activeSeconds": 3562
+      "activeSeconds": 3562,
+      "posts": [
+        "a_drawing_that_fits_its_box",
+        "nimaki_0_2_0"
+      ]
     },
     "session_01YPMoanunRQeU8ojnW71vMu": {
       "commits": 7,
       "first": 1794741535,
       "last": 1794746786,
-      "activeSeconds": 5251
+      "activeSeconds": 5251,
+      "posts": [
+        "why_nimaki_js_is_big",
+        "a_type_at_a_time"
+      ]
     }
   },
   "lines": {
     "port": 55950,
     "tests": 1349,
     "tools": 5746,
-    "posts": 17769,
+    "posts": 18239,
     "pages": 2569,
     "decisions": 852,
     "markdown": 1420
   },
-  "pullRequests": 113,
-  "merged": 112,
+  "pullRequests": 114,
+  "merged": 114,
   "posts": 72,
   "decisionRecords": 23
 }

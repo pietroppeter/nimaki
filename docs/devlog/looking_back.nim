@@ -234,12 +234,16 @@ nbText: &"""
 - **15 November**: a stock-take, 0.1.0, the CI made faster, the browser side of Pele,
   the JavaScript file cut by half and split by type, and 0.2.0, prepared.
 
-The threads, with the titles they have now (a thread was renamed when it took a new step):
+The threads, each told by what it did: the posts it wrote, in order. A thread took a new title with each new step, so its last title says little about the busiest ones (Pietro's review, 15 November: the first version of this table showed those titles, and no history of them is kept).
 """
 
 block:
   type Row = object
-    thread, started, commits, work, output, cost: string
+    started, did, commits, work, output, cost: string
+  var titleOf = initTable[string, string]()
+  for f in walkFiles(docs / "devlog" / "*.nim"):
+    let line = readFile(f).splitLines[0]
+    if line.startsWith("## devlog: "): titleOf[f.extractFilename.changeFileExt("")] = line.split(" | ")[1].strip
   var rows: seq[Row]
   let byId = repo["sessions"]
   var sorted = threads
@@ -247,16 +251,19 @@ block:
   for s in sorted:
     let id = s["id"].getStr
     let c = byId{id}
-    rows.add Row(thread: s["title"].getStr,
-                 started: at(s["created"].getStr).format("d MMM HH:mm"),
+    var did: seq[string]
+    if not c.isNil:
+      for p in c["posts"]: did.add titleOf.getOrDefault(p.getStr, p.getStr)
+    rows.add Row(started: at(s["created"].getStr).format("d MMM HH:mm"),
+                 did: (if did.len == 0: "(no post)" else: did.join(" · ")),
                  commits: (if c.isNil: "0" else: $c["commits"].getInt),
                  work: (if c.isNil: "0" else: r1(hours(c["activeSeconds"].getBiggestInt))),
                  output: r1(s["output"].getFloat / 1e6),
                  cost: "$" & $s["costUsd"].getFloat.round.int)
-  let t = tabella(rows, rownameCol = "thread"):
-    tabHeader "The threads", "started (UTC); commits on main; hours between commits less than 45 minutes apart; output tokens in millions; estimated cost at list prices"
+  let t = tabella(rows, rownameCol = "started"):
+    tabHeader "The threads", "started (UTC); the posts it wrote, in order; commits on main; hours between commits less than 45 minutes apart; output tokens in millions; estimated cost at list prices"
     colsLabel:
-      started: "started"
+      did: "what it did"
       commits: "commits"
       work: "hours"
       output: "output"
