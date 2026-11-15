@@ -148,8 +148,8 @@
           "title": "The port plan",
           "what": "Order of the parts and types, non-overlapping steps, and the verification: compat specs, render and layout snapshots, differential fuzzing against Pele in Node, real diagrams (diagrammari). Updated after every step.",
           "done_when": "A devlog post and this roadmap revised.",
-          "owner": "",
-          "status": "planned",
+          "owner": "Port class and swimlane",
+          "status": "started",
           "post": "",
           "pr": ""
         }
