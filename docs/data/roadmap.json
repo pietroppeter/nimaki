@@ -730,6 +730,15 @@
           "status": "started",
           "post": "following-pele",
           "pr": "66"
+        },
+        {
+          "id": "release",
+          "kind": "tooling",
+          "title": "The first release",
+          "what": "Tag nimaki 0.1.0 (Pietro's choice, 15 Nov 2026): a nimble file so diagrammari and others can require nimaki, a changelog saying what the release holds (all 33 types of Pele 1.13.0 identical in the C and JavaScript builds, render and parse, the C ABI) and what it does not (Pele's browser side, mount and zoom), a decision record for the version numbers, then the tag v0.1.0 and a GitHub release.",
+          "done_when": "The tag v0.1.0 is on GitHub with its release notes, and nimble installs nimaki from it.",
+          "owner": "Tag first nimaki release",
+          "status": "started"
         }
       ]
     },
