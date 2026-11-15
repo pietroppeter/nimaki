@@ -25,7 +25,7 @@ type ClassDb* = ref object of RootObj
   classes*: OrderedTable[string, ClassNode]
   relations*: seq[ClassRelation]
   notes*: OrderedTable[string, ClassNote]
-  namespaces*: OrderedTable[string, NamespaceNode]
+  namespaces*: OrderedTable[StrKey, NamespaceNode]  ## StrKey: names of thousands of characters, hashed quickly in JavaScript
   interfaces*: seq[ClassInterface]
   styleClasses*: OrderedTable[string, StyleClass]
   title*: string      ## "" for undefined
@@ -181,7 +181,7 @@ proc addNamespace*(db: ClassDb, id: string, label = ""): string =
   let qualified = if prefix != "": prefix & "." & id else: id
   db.namespaceStack.add qualified
 
-  let existing = db.namespaces.getOrDefault(qualified, nil)
+  let existing = db.namespaces.getOrDefault(StrKey(qualified), nil)
   if existing != nil:
     existing.explicit = true
     if label != "": existing.label = label
@@ -194,15 +194,15 @@ proc addNamespace*(db: ClassDb, id: string, label = ""): string =
     let dot = qualified.find('.', start)
     let leaf = dot == -1
     let current = if leaf: qualified else: qualified[0 ..< dot]
-    var node = db.namespaces.getOrDefault(current, nil)
+    var node = db.namespaces.getOrDefault(StrKey(current), nil)
     if node == nil:
       let part = qualified[start ..< (if leaf: qualified.len else: dot)]
       node = NamespaceNode(id: current, label: (if leaf and label != "": label else: part),
                            parent: parentId, explicit: leaf)
-      db.namespaces[current] = node
+      db.namespaces[StrKey(current)] = node
     elif leaf:
       node.explicit = true
-    let parent = if parentId != "": db.namespaces.getOrDefault(parentId, nil) else: nil
+    let parent = if parentId != "": db.namespaces.getOrDefault(StrKey(parentId), nil) else: nil
     if parent != nil:
       if current notin parent.children: parent.children[current] = node
       if node.parent == "": node.parent = parentId
@@ -214,7 +214,7 @@ proc popNamespace*(db: ClassDb) =
   if db.namespaceStack.len > 0: discard db.namespaceStack.pop()
 
 proc addClassesToNamespace*(db: ClassDb, id: string, classNames, noteNames: seq[string]) =
-  let namespace = db.namespaces.getOrDefault(id, nil)
+  let namespace = db.namespaces.getOrDefault(StrKey(id), nil)
   if namespace == nil: return
   for name in classNames:
     let className = splitName(name).className

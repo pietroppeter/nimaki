@@ -47,7 +47,8 @@ proc wtf8(s: cstring): string =
   while i < n:
     var c = s.unitAt(i)
     inc i
-    if c in 0xD800 .. 0xDBFF and i < n and s.unitAt(i) in 0xDC00 .. 0xDFFF:
+    # comparisons, not `in a .. b`: nim js builds the range as an object, at every character
+    if c >= 0xD800 and c <= 0xDBFF and i < n and s.unitAt(i) >= 0xDC00 and s.unitAt(i) <= 0xDFFF:
       c = 0x10000 + ((c - 0xD800) shl 10) + (s.unitAt(i) - 0xDC00)
       inc i
     if c < 0x80: result.add char(c)
@@ -161,7 +162,8 @@ proc toJsValue(j: JsonNode, ids: JsObject): JsObject =
   of JObject:
     if j.len == 1 and j.hasKey("$map"):
       result = newMap()
-      for k, v in j["$map"]: result.mapSet(cstring(k), toJsValue(v, ids))
+      # `fields.mpairs`, not json's `pairs`, which copies the table in nim js
+      for k, v in j["$map"].fields.mpairs: result.mapSet(cstring(k), toJsValue(v, ids))
     elif j.len == 1 and j.hasKey("$set"):
       result = newSet()
       for v in j["$set"]: result.setAdd(toJsValue(v, ids))
@@ -170,7 +172,7 @@ proc toJsValue(j: JsonNode, ids: JsObject): JsObject =
     else:
       result = newJsObject()
       if j.hasKey("$id"): ids.idSet(j["$id"].getInt, result)
-      for k, v in j:
+      for k, v in j.fields.mpairs:
         # A field the model has but leaves empty is there, undefined, as a field Pele's class
         # declares and does not set: `toEqual` reads it as missing, `toMatchObject` finds it.
         if k != "$id": result[cstring(k)] = toJsValue(v, ids)

@@ -32,13 +32,13 @@ proc guarded[T](run: proc (): T): T =
   ## Deep nesting can exhaust the stack in a few recursive spots. Report it as a limit, not a
   ## crash.
   try:
-    result = run()
+    handOver(result, run())
   except JsRangeError:
     raise newPeleError("Diagram is nested too deeply.", "limit")
 
 proc tagErrors[T](found: Detected, run: proc (): T): T =
   try:
-    result = run()
+    handOver(result, run())
   except JsRangeError:
     raise newPeleError("Diagram is nested too deeply.", "limit",
                        ErrorInfo(diagramType: found.diagramType, mermaidType: found.mermaidType))
@@ -85,12 +85,21 @@ proc parseSource(text: string, limit: int, maxEdges: int, extra: Config): Parsed
     for k, v in extra.fields: config.fields[k] = v
     for k, v in pre.config.fields: config.fields[k] = v
   let keepComments = diagram.keepComments
-  let parsed = encodeEntities(if keepComments: pre.withComments else: pre.text) & "\n"
+  # The closures below capture only what they need, and the source text is handed over, not
+  # copied (`handOver`): nim js copies a string into each closure that captures it.
+  var parsed: string
+  handOver(parsed, encodeEntities(if keepComments: pre.withComments else: pre.text) & "\n")
+  let find = inSource(text, keepComments)
+  let title = pre.title
+  let lineOffset = pre.lineOffset
   let cfg = config
   let model = tagErrors(found, proc (): RootRef =
-    locatingIn(Origin(parsed: parsed, find: inSource(text, keepComments)), proc (): RootRef =
-      diagram.parse(parsed, cfg, pre.title, pre.lineOffset, ParseLimits(maxEdges: maxEdges))))
-  Parsed(found: found, diagram: diagram, model: model, config: config)
+    locatingIn(parsed, find, proc (): RootRef =
+      diagram.parse(parsed, cfg, title, lineOffset, ParseLimits(maxEdges: maxEdges))))
+  result.found = found
+  result.diagram = diagram
+  result.model = model
+  result.config = config
 
 proc detectType*(text: string): string =
   ## The diagram type, or "" for none.
@@ -123,7 +132,7 @@ proc parse*(text: string, options = RenderOptions()): ParsedModel =
                 model: parsed.model, parsed: parsed))
 
 proc renderParsed(parsed: Parsed, options: RenderOptions): RenderResult =
-  guarded(proc (): RenderResult =
+  handOver(result, guarded(proc (): RenderResult =
     let kind = parsed.found.diagramType
     let diagram = parsed.diagram
     let section = parsed.config[if diagram.section != "": diagram.section else: kind]
@@ -138,26 +147,33 @@ proc renderParsed(parsed: Parsed, options: RenderOptions): RenderResult =
       opts.icons = proc (name: string): string = resolve(decodeEntities(name))
     let model = parsed.model
     let config = parsed.config
+    # handOver (`nimaki/js`): in nim js the drawing is handed up through the wrappers, not copied
+    # at each one.
     var rendered = tagErrors(parsed.found, proc (): Rendered =
-      withPalette(palette(kind, config), proc (): Rendered =
-        withMath(if diagram.math: options.math else: nil, proc (): Rendered =
-          withIcons(opts.icons, proc (): Rendered = diagram.render(model, config, opts)))))
+      handOver(result, withPalette(palette(kind, config), proc (): Rendered =
+        handOver(result, withMath(if diagram.math: options.math else: nil, proc (): Rendered =
+          handOver(result, withIcons(opts.icons, proc (): Rendered =
+            handOver(result, diagram.render(model, config, opts)))))))))
     let outputLimit = options.outputLimit.get(DEFAULT_OUTPUT_LIMIT)
     if utf16Len(rendered.svg) > outputLimit:
       raise newPeleError("Diagram output is longer than the limit of " & $outputLimit & " characters.",
                          "limit", ErrorInfo(diagramType: kind, mermaidType: parsed.found.mermaidType))
     for link in rendered.links.mitems: link.id = decodeEntities(link.id)
-    RenderResult(diagramType: kind, mermaidType: parsed.found.mermaidType, svg: rendered.svg,
-                 width: rendered.width, height: rendered.height, links: rendered.links))
+    result.diagramType = kind
+    result.mermaidType = parsed.found.mermaidType
+    result.width = rendered.width
+    result.height = rendered.height
+    moveField(result, rendered, svg)
+    moveField(result, rendered, links)))
 
 proc render*(source: string, options = RenderOptions()): RenderResult =
   ## Draws Mermaid `source` as SVG, or raises PeleError.
-  guarded(proc (): RenderResult =
-    renderParsed(parseSource(wellFormed(source), options.limit.get(DEFAULT_LIMIT),
-                             options.maxEdges.get(DEFAULT_MAX_EDGES), options.config), options))
+  handOver(result, guarded(proc (): RenderResult =
+    handOver(result, renderParsed(parseSource(wellFormed(source), options.limit.get(DEFAULT_LIMIT),
+                                              options.maxEdges.get(DEFAULT_MAX_EDGES), options.config), options))))
 
 proc render*(model: ParsedModel, options = RenderOptions()): RenderResult =
   ## Draws a model that `parse` returned. The options read while parsing (`limit`, `maxEdges`,
   ## `config`) were used then, and are not read again, as in Pele.
   if model == nil: raise newException(ValueError, "render() takes diagram text or a model that parse() returned.")
-  renderParsed(model.parsed, options)
+  handOver(result, renderParsed(model.parsed, options))

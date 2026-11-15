@@ -1,0 +1,49 @@
+{
+ "counts": {
+  "passed": 6954,
+  "api": 25,
+  "model": 0,
+  "unported": 0,
+  "speed": 7,
+  "canvas": 1,
+  "known": 5,
+  "failed": 0
+ },
+ "speed": [
+  {
+   "file": "tests/c4/stress.test.ts",
+   "test": "C4 worst cases as many relations as get careful placement",
+   "message": "AssertionError: expected 3749.358458999999 to be less than 3000"
+  },
+  {
+   "file": "tests/c4/stress.test.ts",
+   "test": "C4 worst cases 600 relations among 600 boundaries",
+   "message": "AssertionError: expected 3425.0115970000006 to be less than 3000"
+  },
+  {
+   "file": "tests/class/stress.test.ts",
+   "test": "class diagram worst cases 2,000 nested namespaces, rendered",
+   "message": "AssertionError: expected 3219.8450660000008 to be less than 3000"
+  },
+  {
+   "file": "tests/state/stress.test.ts",
+   "test": "state diagram worst cases transitions from 1,500 levels out to the innermost state",
+   "message": "AssertionError: expected 3019.229553000001 to be less than 3000"
+  },
+  {
+   "file": "tests/stress.test.ts",
+   "test": "worst cases edges that each cross 1,000 nested subgraph borders",
+   "message": "AssertionError: expected 4214.395075 to be less than 3000"
+  },
+  {
+   "file": "tests/timeline/stress.test.ts",
+   "test": "timeline worst cases one period with 12,000 events, top down",
+   "message": "AssertionError: expected 1874.6585089999999 to be less than 1500"
+  },
+  {
+   "file": "tests/usecase/stress.test.ts",
+   "test": "use case worst cases class statement with 2,500 ids and 4,000 classes",
+   "message": "AssertionError: expected 3207.060244 to be less than 3000"
+  }
+ ]
+}

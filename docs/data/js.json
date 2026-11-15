@@ -13,7 +13,7 @@
       "unsupported": 0
     }
   },
-  "bytes": 10353137,
+  "bytes": 10359730,
   "fuzz": {
     "pie": {
       "seed": 1,
@@ -47,8 +47,8 @@
     },
     "flowchart": {
       "seed": 1,
-      "cases": 2000,
-      "identical": 2000,
+      "cases": 1000,
+      "identical": 1000,
       "different": 0
     },
     "sequence": {
@@ -83,20 +83,20 @@
     },
     "class": {
       "seed": 1,
-      "cases": 2000,
-      "identical": 2000,
+      "cases": 1000,
+      "identical": 1000,
       "different": 0
     },
     "state": {
       "seed": 1,
-      "cases": 2000,
-      "identical": 2000,
+      "cases": 1000,
+      "identical": 1000,
       "different": 0
     },
     "ishikawa": {
       "seed": 1,
-      "cases": 2000,
-      "identical": 2000,
+      "cases": 1000,
+      "identical": 1000,
       "different": 0
     },
     "cynefin": {
@@ -125,8 +125,8 @@
     },
     "usecase": {
       "seed": 1,
-      "cases": 2000,
-      "identical": 2000,
+      "cases": 1000,
+      "identical": 1000,
       "different": 0
     },
     "railroad": {
@@ -151,6 +151,18 @@
       "seed": 1,
       "cases": 2000,
       "identical": 2000,
+      "different": 0
+    },
+    "agentflow": {
+      "seed": 1,
+      "cases": 1000,
+      "identical": 1000,
+      "different": 0
+    },
+    "mindmap": {
+      "seed": 1,
+      "cases": 1000,
+      "identical": 1000,
       "different": 0
     }
   }
