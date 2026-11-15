@@ -634,7 +634,12 @@ nbNote("""Strings: should the port keep Nim's UTF-8 strings and emulate UTF-16 w
 (lengths, the measurer, error offsets), or carry UTF-16 everywhere? This post leans to the first:
 most of the 600-odd `charCodeAt` calls compare with ASCII, which is the same in both, and UTF-8
 keeps nim-regex and the standard library usable. It is a decision for a record before the first
-parser is ported.""", nkQuestion, "Open: how to hold a string")
+parser is ported.
+
+**Answered** on 12 November 2026, before the first parser: Nim's UTF-8 strings, with UTF-16
+counted only where it shows, as this post leaned. The first port (the core and pie) tried it, and
+[decision 0011](../../decisions/#0011-strings-stay-utf-8-javascript-s-utf-16-is-counted-only-where-it-shows)
+records it.""", nkQuestion, "Open: how to hold a string")
 
 nbText: """
 ## Sources

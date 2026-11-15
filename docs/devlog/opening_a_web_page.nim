@@ -376,6 +376,10 @@ Two wishes for the pages, recorded as notes on the roadmap rather than done here
 draws Mermaid text with nimaki and shows the text folded under it (this page defines it in five
 lines as `show`, and the port posts each write their own), and a check, in that block, that
 Pele draws the same bytes, so every page with a diagram is also a small test.
+
+**Answered** on 14 November 2026 by a later step: both wishes are one block, `nbMermaid`, which
+draws with nimaki, folds the text under the drawing and fails the build when Pele draws other
+bytes ([*Every drawing a test*](../every-drawing-a-test/)).
 """, nkQuestion, "For a later step"
 
 nbText: &"""
