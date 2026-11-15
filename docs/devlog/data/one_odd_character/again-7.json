@@ -1,0 +1,32 @@
+{
+  "pin": "1.13.0",
+  "seed": 7,
+  "copies": 3,
+  "cases": 3,
+  "identical": 3,
+  "different": 0,
+  "inserts": [
+    "no-break space",
+    "line separator",
+    "byte order mark",
+    "zero-width space",
+    "ideographic space",
+    "é",
+    "Ω",
+    "mathematical bold A (outside the BMP)",
+    "emoji (outside the BMP)"
+  ],
+  "types": [
+    {
+      "type": "class",
+      "identical": 2,
+      "different": 0
+    },
+    {
+      "type": "flowchart",
+      "identical": 1,
+      "different": 0
+    }
+  ],
+  "differences": []
+}

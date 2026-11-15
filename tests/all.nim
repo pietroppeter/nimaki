@@ -7,3 +7,4 @@ import test_detect
 import test_layout
 import test_jsregex
 import test_parse
+import test_idna

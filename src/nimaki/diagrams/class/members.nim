@@ -61,7 +61,8 @@ proc parseMethod(m: ClassMember, input: string): bool =
           m.returnType = m.returnType[0 ..< ^1]
       m.classifier = classifier
       return true
-    start = stop + 1
+    # past the line end: one byte for \n or \r, three for U+2028 and U+2029
+    start = stop + (if stop < n and ord(input[stop]) >= 0x80: codePointAt(input, stop).size else: 1)
   m.memberType = "attribute"
   false
 

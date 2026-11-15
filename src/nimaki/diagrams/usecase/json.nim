@@ -537,8 +537,20 @@ proc locationAt(text: string, offset, line, column: int): (int, int) =
     inc i
   (line, column)
 
+proc withoutLoneSurrogates(s: string): string =
+  ## `s` with each lone surrogate (its three WTF-8 bytes) as U+FFFD, three bytes too: the
+  ## regular expressions read UTF-8 only, and the debug build stops on anything else.
+  result = s
+  for i in 0 ..< s.len - 1:
+    if s[i] == '\xED' and ord(s[i + 1]) >= 0xA0:
+      result[i] = '\xEF'
+      result[i + 1] = '\xBF'
+      if i + 2 < s.len: result[i + 2] = '\xBD'
+
 proc locationFromMessage(message, text: string, line, column: int): (bool, (int, int)) =
   ## Engines word JSON.parse errors differently: some give an offset, some a line and column.
+  ## The message may quote the text up to a lone surrogate; only its words are read here.
+  let message = withoutLoneSurrogates(message)
   let position = jsre"/\bposition (\d+)\b/".exec(message)
   if position.found: return (true, locationAt(text, parseInt(position[1]), line, column))
   let local = jsre"/\bline (\d+) column (\d+)\b/".exec(message)

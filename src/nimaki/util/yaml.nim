@@ -351,8 +351,9 @@ proc stripComment(s: string): string =
   s
 
 func leading(line: string): int =
-  ## line.length - line.trimStart().length, in bytes
-  line.len - jsTrimStart(line).len
+  ## line.length - line.trimStart().length, in UTF-16 code units as JavaScript counts them: an
+  ## ideographic space is one, not the three bytes of its UTF-8.
+  utf16Len(line, 0, line.len - jsTrimStart(line).len)
 
 proc blockScalar(r: Reader, header: string, parentIndent: int): string =
   let folded = header[0] == '>'
@@ -371,7 +372,7 @@ proc blockScalar(r: Reader, header: string, parentIndent: int): string =
       if k <= parentIndent: break
       indent = k
     if k < indent: break
-    output.add line[min(indent, line.len) .. ^1]
+    output.add substringFrom(line, indent)
     inc r.i
   var trailing = 0
   while output.len > 0 and output[^1] == "":
