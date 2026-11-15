@@ -48,8 +48,8 @@ nbText: &"""
   Nim does at compile time.
 - **Pele's {thousands(pele["tests"].getInt)} tests: {thousands(counts["passed"].getInt)} pass on
   nimaki, none fail**, and the {notPassed} others are of four known kinds, below.
-- **The roadmap: {done} of {steps} steps done.** The open ones are owned by running threads, and two
-  new steps are written down: a package that other Nim programs can depend on, and the browser side.
+- **The roadmap: {done} of {steps} steps done.** The open ones are owned by running threads; the browser side is
+  written down as a step for later, and the first release has a thread of its own.
 
 ## A plan that became a roadmap
 
@@ -147,9 +147,7 @@ block:
 nbText: """
 Two steps recur by design: the articles on nimaki's code and on a domain drawn in diagrams. One
 waits for Pele: *Following Pele* has its tool running every week, and moves the pin when Pele
-publishes its next release. *A package to depend on* is the new one. The [proposal for
-diagrammari](../a-proposal-for-diagrammari/) sketches a `mari.nimble` that requires nimaki, pinned
-in `atlas.lock`; today nimaki has no `.nimble` file, so that line would have nothing to find. *Pele's browser side* is the other new one, for later: the three files and the half above, for
+publishes its next release. *Pele's browser side* is the new one, for later: the three files and the half above, for
 the JavaScript build, done when Pele's `api` and `canvas` tests pass on it.
 """
 
@@ -158,15 +156,16 @@ nbNote """
   November; Pietro answered while this post was being written, on 15 November. It is now the step
   *Pele's browser side* in the table above, unclaimed.
 - **A first release**: now, Pietro said in the same message, since every diagram type is done. It
-  is being prepared in a thread of its own, *Tag first nimaki release*; the package step may well
-  be part of it.
+  is being prepared in a thread of its own, *Tag first nimaki release*, and it brings the
+  `.nimble` file that the [proposal for diagrammari](../a-proposal-for-diagrammari/) needs: its
+  sketch of a `mari.nimble` requires nimaki, which today has none.
 """, nkInfo, "Pietro's answers"
 
 nbNote """
 - `docs/data/portmap_skip.txt`: what is not ported and why.
 - `src/nimaki.nim` ports `src/index.ts` and `src/diagrams/registry.ts`, and registers the types in
   Pele's order; `block/db.nim` and `c4/db.nim` name the `types.ts` they hold.
-- The roadmap: *The port plan* is done, a phase *After parity* holds the new steps.
+- The roadmap: *The port plan* is done, a phase *After parity* holds the browser side.
 """, nkNim, "In the port"
 
 nbNote """
@@ -180,7 +179,7 @@ nbText: """
 
 - The coverage map and the port map now show every one of Pele's files as ported, skipped with a
   reason, or waiting for the browser-side decision.
-- The roadmap has a phase for what comes after parity, with two unclaimed steps in it.
+- The roadmap has a phase for what comes after parity, with the browser side in it, unclaimed.
 
 ## Sources
 

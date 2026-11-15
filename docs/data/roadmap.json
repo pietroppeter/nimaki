@@ -886,19 +886,8 @@
     {
       "id": "6",
       "title": "After parity",
-      "goal": "What is left once every diagram type is drawn as Pele draws it: a first release and a package other Nim programs can depend on, the time bounds of the JavaScript build, Pele's browser side (later, Pietro decided on 15 November 2026), and Pele's next releases.",
+      "goal": "What is left once every diagram type is drawn as Pele draws it: Pele's browser side (later, Pietro decided on 15 November 2026). The first release, with the nimble file other Nim programs need, is the step release of phase 4; the JavaScript build's time bounds and Pele's next releases have their own steps there and in phase 3.",
       "steps": [
-        {
-          "id": "nimble-package",
-          "kind": "tooling",
-          "title": "A package to depend on",
-          "what": "A nimaki.nimble, so that diagrammari (whose proposal sketches a mari.nimble that requires nimaki, pinned in atlas.lock) or any Nim program can require nimaki by its repository and commit: the package's files, its one dependency (nitely's regex and its Unicode tables, unicodedb, as deps.lock pins them), and a version that names Pele's pin. No tag or release: those wait for Pietro.",
-          "done_when": "A Nim program outside the repository installs nimaki with nimble or atlas and draws a diagram; a devlog post.",
-          "owner": "",
-          "status": "planned",
-          "post": "",
-          "pr": ""
-        },
         {
           "id": "browser-side",
           "kind": "port",
