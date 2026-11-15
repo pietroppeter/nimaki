@@ -19,7 +19,7 @@ nbText: &"""
   ({cov.diagrams.len}). Try them here:
 """
 
-nbPipeline cov.pipeline("../../modules/")
+nbModules(cov, "../../modules/")
 
 nbText: &"""
 - **Five islands were orange, and should not have been.** text, svg, layout, util and common were

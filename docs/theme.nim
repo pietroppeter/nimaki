@@ -302,6 +302,9 @@ details.fold[open] > summary { border-bottom: 1px dashed var(--line); margin-bot
 .pipeline li.linked:hover, .pipeline li.linked:focus-within { border-color: var(--secondary); }
 .pipeline li.linked a:focus-visible { outline: none; }
 .pipeline li.linked:focus-within { outline: 2px solid var(--secondary); outline-offset: 2px; }
+.pipeline-label { margin: 1.4rem 0 -.8rem; color: var(--muted); font: 600 .72rem var(--display); letter-spacing: .08em; text-transform: uppercase; }
+.pipeline.diagrams li, .pipeline.diagrams li.linked a::after { border-radius: .35rem; }
+.pipeline.diagrams li::before { border-radius: .12rem; }
 .pipeline-legend { color: var(--muted); font-size: .85rem; margin-top: -.8rem; }
 
 /* a status, in words and a colour */
