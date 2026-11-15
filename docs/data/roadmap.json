@@ -966,6 +966,17 @@
           "pr": ""
         },
         {
+          "id": "release-0-2",
+          "kind": "tooling",
+          "title": "nimaki 0.2.0, ready for diagrammari",
+          "what": "The second release (decision 0020): Pele's browser side, and Pele's models as JSON in the C ABI (nimaki_parse) and in a page, so that every item the post A proposal for diagrammari listed as missing is done or deferred on purpose. The proposal post records where each item stands.",
+          "done_when": "Version, changelog and installcheck agree on 0.2.0, a post says what is in it and what diagrammari can do with it, and Pietro has the link to tag it.",
+          "owner": "Port Pele's browser side",
+          "status": "started",
+          "post": "",
+          "pr": ""
+        },
+        {
           "id": "retrospective",
           "kind": "research",
           "title": "Looking back: what nimaki is, and how it got there",
