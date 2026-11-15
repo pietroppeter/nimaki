@@ -82,6 +82,19 @@ let
   scaledLow = others["nanuqAgentHours"][0].getFloat * output / 1e6 / nanuqOut
   scaledHigh = others["nanuqAgentHours"][1].getFloat * output / 1e6 / nanuqOut
   hoursLow = min(committed, scaledLow)
+  byModel = block:
+    var parts: seq[string]
+    var models: seq[string]
+    for x in sessions:
+      if x["model"].getStr notin models: models.add x["model"].getStr
+    for m in models:
+      let xs = sessions.filterIt(it["model"].getStr == m)
+      let tok = total(xs, "input") + total(xs, "output") + total(xs, "cacheRead") + total(xs, "cacheWrite")
+      let outM = formatFloat(total(xs, "output") / 1e6, ffDecimal, 2)
+      let usd = total(xs, "costUsd").round.int
+      let tokB = formatFloat(tok / 1e9, ffDecimal, 2)
+      parts.add &"{m} for {xs.len} sessions, {tokB} billion tokens, {outM} million of them output, ${usd}"
+    parts.join("; ")
   hoursHigh = max(committed, scaledHigh)
 
 # ---- CI ----
@@ -338,6 +351,9 @@ Where the numbers come from, and how sure they are:
   tokens are *cache reads*: the same long context read again at each turn, which is cheap. The
   threads alone cost ${threadCost.round.int}. This thread was still running when it was read,
   so its last hour is missing.
+- **By model**: {byModel}. The threads ran on one model and the coordinator on
+  another; the session records name each session's model and the one that served its last turn,
+  so a turn that fell back to another model in between is not seen here.
 - **Agent hours** are a range, as tabelline's: one end sums the time between each thread's
   commits when they are less than 45 minutes apart ({r1(committed)} hours: it misses the work
   before a first commit and between far-apart ones), the other scales nanuq's hours by the output
