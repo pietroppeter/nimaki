@@ -5,7 +5,7 @@
 ##
 ## - Pele's side: tools/oracle.mjs with `"parse": true` (`canonical`: a Map is `{"$map": ...}`,
 ##   a Set `{"$set": [...]}`, undefined is left out);
-## - nimaki's side: `dumpModel` of tools/models.nim, which walks the Nim object field by field (`fieldPairs`): a
+## - nimaki's side: `dumpModel` of src/nimaki/modeljson.nim, which walks the Nim object field by field (`fieldPairs`): a
 ##   table is a `$map`, a set a `$set`, a `ref` met again inside itself `"$cycle"`;
 ## - then both are normalized the same way (`normal`): a key whose value is null, "" or NaN is
 ##   dropped (nimaki writes "" or NaN where Pele leaves a field undefined), and so is an empty
@@ -34,7 +34,7 @@
 import std/[os, osproc, json, tables, strutils, algorithm, parseopt, options, strtabs, typetraits]
 import common
 import nimaki
-import models
+import nimaki/modeljson
 
 const fixedNow = 1767225600000.0   ## as in tools/difftest.nim
 

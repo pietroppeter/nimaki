@@ -18,13 +18,20 @@ extern "C" {
  * Never NULL; the caller frees it with nimaki_free. */
 char *nimaki_render(const char *request);
 
-/* Frees an answer of nimaki_render. NULL is ignored. */
+/* Reads one diagram without drawing it, as Pele's parse does. The request is the same as
+ * nimaki_render's (of the options, only limit, maxEdges and config matter). The answer is
+ * {"ok": true, "type", "mermaidType", "model": {...}}, the model in the shape of Pele's (a Map
+ * is an object, a Set an array), or the same error answer as nimaki_render's. Never NULL; the
+ * caller frees it with nimaki_free. */
+char *nimaki_parse(const char *request);
+
+/* Frees an answer of nimaki_render or nimaki_parse. NULL is ignored. */
 void nimaki_free(char *answer);
 
 /* The Pele version this library draws as ("1.13.0"); static, not to be freed. */
 const char *nimaki_pele_version(void);
 
-/* The release of nimaki this library is ("0.1.0"); static, not to be freed. */
+/* The release of nimaki this library is ("0.2.0"); static, not to be freed. */
 const char *nimaki_version(void);
 
 #ifdef __cplusplus

@@ -98,7 +98,7 @@ type
     ## One statement of the source with the positions of its parts, as in Mermaid's use case AST.
     statementKind*: string
       ## Pele's `kind` (node, edge, group, note, json, metadata, edgeMetadata...): `kind` is the
-      ## port's name for Pele's `type`, so tools/models.nim names this one back.
+      ## port's name for Pele's `type`, so src/nimaki/modeljson.nim names this one back.
     span*: Span
     nodes*: Option[seq[NodeOccurrence]]
     edges*: Option[seq[EdgeOccurrence]]

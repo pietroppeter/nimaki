@@ -8,7 +8,7 @@
 ## - `nimaki.render(source, options)`: the SVG of Mermaid text, or of a model `parse` returned,
 ##   as `{type, mermaidType, svg, width, height, links}`. Text that cannot be drawn throws a
 ##   `nimaki.PeleError` with Pele's `code`, `line`, `column` and `snippet`.
-## - `nimaki.parse(text, options)`: the model, to draw later, perhaps more than once.
+## - `nimaki.parse(text, options)`: the model, in the shape of Pele's, to read or to draw later.
 ## - `nimaki.mount(element, text, options)`: draws into an element and keeps the drawing fitted
 ##   to it (src/nimaki/mount.nim); `nimaki.enableZoom(element, options)` (src/nimaki/zoom.nim).
 ## - `nimaki.detectType`, `supports`, `registered`, `forgetTextWidths`, and Pele's lazy entry
@@ -34,16 +34,14 @@ var parsedModels = newWeakMap()
   ## the Nim model behind each model `parse` returned, for `render`
 
 proc webParse(text: cstring, options: JsObject): JsObject {.exportc: "nimakiWebParse".} =
-  ## A model as an object with Pele's `type` and `mermaidType`; what nimaki parsed stays behind
-  ## it, for `render`.
+  ## The model, as Pele's `parse` returns it (src/nimaki/modeljson.nim); what nimaki parsed
+  ## stays behind it, for `render`.
   var m: ParsedModel
   try:
     m = parse(wtf8(text), toOptions(options))
   except PeleError as e:
     throwPele(e)
-  result = newJsObject()
-  result["type"] = cstring(m.diagramType)
-  result["mermaidType"] = cstring(m.mermaidType)
+  result = modelObject(m)
   parsedModels.weakSet(result, toJs(m))
 
 proc webRender(source: JsObject, options: JsObject): JsObject {.exportc: "nimakiWebRender".} =

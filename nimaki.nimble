@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.1.0"
+version       = "0.2.0"
 author        = "Pietro Peterlongo"
 description   = "Pele, the Mermaid renderer, ported to Nim: Mermaid text in, themeable SVG out, identical to Pele byte for byte"
 license       = "MIT"

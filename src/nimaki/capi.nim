@@ -4,12 +4,13 @@
 ##   nim c --app:lib -d:release --mm:orc --threads:on -o:build/cabi/libnimaki.so src/nimaki/capi.nim
 ##
 ## (`tools/cabi.nim` does that and runs the Python smoke test). The header is `capi.h`, beside
-## this file. Four functions, JSON in and JSON out, as diagrammari's own C ABI is:
+## this file. Five functions, JSON in and JSON out, as diagrammari's own C ABI is:
 ##
 ##   nimaki_render(request) -> answer     both UTF-8 JSON text; free the answer with nimaki_free
+##   nimaki_parse(request) -> answer      the diagram's model, as Pele's `parse` gives it
 ##   nimaki_free(answer)
 ##   nimaki_pele_version() -> "1.13.0"    the Pele this build draws as (version.nim)
-##   nimaki_version() -> "0.1.0"          the release of nimaki (version.nim, decision 0020)
+##   nimaki_version() -> "0.2.0"          the release of nimaki (version.nim, decision 0020)
 ##
 ## request: {"source": "<Mermaid text>", "options": {...}}, with Pele's render options by their
 ##          names: fontSize, fontFamily, fontFamilyMono, monospace, padding, maxWidth, idPrefix,
@@ -17,6 +18,10 @@
 ##          images, linkRel, linkSchemes, imageSchemes, now, config.
 ## answer:  {"ok": true, "type", "mermaidType", "svg", "width", "height", "links": [...]}
 ##          or {"ok": false, "type", "code", "message", "line", "column", "snippet"}
+## parse:   the same request (only limit, maxEdges and config of the options are read, as in
+##          Pele); the answer {"ok": true, "type", "mermaidType", "model": {...}}, the model in
+##          the shape of Pele's (src/nimaki/modeljson.nim: a Map is an object, a Set an array),
+##          or the same error answer as render's.
 ##
 ## Same names as the answers of Pele run in Node by diagrammari (`src/mari/pele.nim`), so a host
 ## can swap one for the other. The text is measured with Pele's default, `metricsMeasurer`, as in
@@ -28,6 +33,7 @@
 
 import std/[json, options, locks]
 import ../nimaki
+import modeljson
 from preprocess import fromJson
 
 
@@ -58,13 +64,17 @@ proc toOptions*(j: JsonNode): RenderOptions =
   if j.hasKey("now"): result.now = some(j["now"].getFloat)
   if j.hasKey("config") and j["config"].kind == JObject: result.config = fromJson(j["config"])
 
-proc answer*(request: JsonNode): JsonNode =
-  ## The answer to one request, as JSON: never raises.
+proc answer*(request: JsonNode, parsing = false): JsonNode =
+  ## The answer to one request, as JSON: never raises. `parsing`: the model instead of the SVG.
   let source = request{"source"}
   if source.isNil or source.kind != JString:
     return %*{"ok": false, "type": nil, "code": "request", "message": "the request has no \"source\" string",
               "line": 0, "column": 0, "snippet": ""}
   try:
+    if parsing:
+      let m = parse(source.getStr, toOptions(request{"options"}))
+      let model = modelJson(m)
+      return %*{"ok": true, "type": m.diagramType, "mermaidType": m.mermaidType, "model": model}
     let r = render(source.getStr, toOptions(request{"options"}))
     var links = newJArray()
     for l in r.links: links.add %*{"id": l.id, "href": l.href, "internal": l.internal}
@@ -84,16 +94,20 @@ proc shared(s: string): cstring =
   result = cast[cstring](allocShared0(s.len + 1))
   if s.len > 0: copyMem(result, unsafeAddr s[0], s.len)
 
-proc nimaki_render(request: cstring): cstring {.exportc, dynlib, cdecl.} =
+proc respond(request: cstring, parsing: bool): cstring =
   var text: string
   try:
     let req = if request.isNil: newJNull() else: parseJson($request)
     withLock drawing:
-      text = $answer(req)
+      text = $answer(req, parsing)
   except CatchableError as e:
     text = $(%*{"ok": false, "type": nil, "code": "request", "message": "the request is not JSON: " & e.msg,
                 "line": 0, "column": 0, "snippet": ""})
   shared(text)
+
+proc nimaki_render(request: cstring): cstring {.exportc, dynlib, cdecl.} = respond(request, false)
+
+proc nimaki_parse(request: cstring): cstring {.exportc, dynlib, cdecl.} = respond(request, true)
 
 proc nimaki_free(answer: cstring) {.exportc, dynlib, cdecl.} =
   if not answer.isNil: deallocShared(answer)

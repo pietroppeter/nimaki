@@ -4,13 +4,13 @@
 ## included (a measurer, an icon resolver, a typesetter), and returns Pele's result, or throws
 ## `{peleError: true, message, code, ...}`, which tools/peletests/index.js turns into a PeleError.
 ## `nimakiParse(source, options)` returns the model as Pele's `parse` does, written by
-## tools/models.nim as a JavaScript object (a table is a Map, a set a Set), and
+## src/nimaki/modeljson.nim as a JavaScript object (a table is a Map, a set a Set), and
 ## `nimakiRenderModel(model, options)` draws one.
 import std/[jsffi, options, tables, json]
 import nimaki
 import nimaki/util/yaml
 import nimaki/js
-import ../models
+import nimaki/modeljson
 import nimaki/[jsapi, mount, zoom]
 from nimaki/diagrams/agentflow/db import AgentflowDb, vertexKind, semanticModel
 from nimaki/diagrams/agentflow/types import AgentNode
@@ -20,10 +20,6 @@ from nimaki/diagrams/state/db import StateDb, direction
 when not defined(js):
   {.error: "the bridge is compiled with nim js".}
 
-proc newMap(): JsObject {.importjs: "new Map()".}
-proc newSet(): JsObject {.importjs: "new Set()".}
-proc mapSet(m: JsObject, k: cstring, v: JsObject) {.importjs: "#.set(#, #)".}
-proc setAdd(s: JsObject, v: JsObject) {.importjs: "#.add(#)".}
 proc newWeakMap(): JsObject {.importjs: "new WeakMap()".}
 proc weakGet(m, k: JsObject): JsObject {.importjs: "#.get(#)".}
 proc weakSet(m, k, v: JsObject) {.importjs: "#.set(#, #)".}
@@ -31,58 +27,13 @@ proc weakSet(m, k, v: JsObject) {.importjs: "#.set(#, #)".}
 var parsedModels = newWeakMap()
   ## the Nim model behind each JavaScript model nimakiParse returned, for nimakiRenderModel
 
-proc newIdTable(): JsObject {.importjs: "new Map()".}
-proc idGet(m: JsObject, k: int): JsObject {.importjs: "#.get(#)".}
-proc idSet(m: JsObject, k: int, v: JsObject) {.importjs: "#.set(#, #)".}
-
-proc toJsValue(j: JsonNode, ids: JsObject): JsObject =
-  ## JSON from tools/models.nim (written with `share`) as Pele's JavaScript: `{"$map": ...}` a
-  ## Map, `{"$set": [...]}` a Set, `{"$ref": n}` the object written with `"$id": n` (the same
-  ## object, cycles included), null as undefined (Pele's undefined).
-  case j.kind
-  of JNull: result = jsUndefined
-  of JBool: result = toJs(j.getBool)
-  of JInt: result = toJs(j.getInt)
-  of JFloat: result = toJs(j.getFloat)
-  of JString: result = toJs(toJsString(j.getStr))
-  of JArray:
-    var items: seq[JsObject]
-    for v in j: items.add toJsValue(v, ids)
-    result = toJs(items)
-  of JObject:
-    if j.len == 1 and j.hasKey("$map"):
-      result = newMap()
-      # `fields.mpairs`, not json's `pairs`, which copies the table in nim js
-      for k, v in j["$map"].fields.mpairs: result.mapSet(cstring(k), toJsValue(v, ids))
-    elif j.len == 1 and j.hasKey("$set"):
-      result = newSet()
-      for v in j["$set"]: result.setAdd(toJsValue(v, ids))
-    elif j.len == 1 and j.hasKey("$ref"):
-      result = ids.idGet(j["$ref"].getInt)
-    else:
-      result = newJsObject()
-      if j.hasKey("$id"): ids.idSet(j["$id"].getInt, result)
-      for k, v in j.fields.mpairs:
-        # A field the model has but leaves empty is there, undefined, as a field Pele's class
-        # declares and does not set: `toEqual` reads it as missing, `toMatchObject` finds it.
-        if k != "$id": result[cstring(k)] = toJsValue(v, ids)
-
 proc nimakiParse(source: cstring, options: JsObject): JsObject {.exportc.} =
   var m: ParsedModel
   try:
     m = parse(wtf8(source), toOptions(options))
   except PeleError as e:
     throwPele(e)
-  try:
-    result = toJsValue(dumpModel(m, share = true, budget = 2_000_000), newIdTable())
-  except:
-    # A model nested thousands deep, or of millions of characters (the stress tests), is deeper
-    # than JavaScript's stack lets the walk go, or larger than its memory holds twice: the test
-    # gets the model without its fields, and can still draw it.
-    result = nil
-  if result == nil or result.isUndef or not result.isObject: result = newJsObject()
-  result["type"] = cstring(m.diagramType)
-  result["mermaidType"] = cstring(m.mermaidType)
+  result = modelObject(m)
   # Pele's `direction` getter.
   if m.diagramType == "state": result["direction"] = cstring(StateDb(m.model).direction)
   parsedModels.weakSet(result, toJs(m))

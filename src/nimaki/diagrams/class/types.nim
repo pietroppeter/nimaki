@@ -29,7 +29,7 @@ type
     tooltip* {.undefinedIfEmpty.}: string     ## "" for undefined
 
   Relation* = object
-    ## (tools/models.nim writes NONE as Pele's 'none'.)
+    ## (src/nimaki/modeljson.nim writes NONE as Pele's 'none'.)
     type1*, type2*: RelationEnd
     lineType*: int
 
