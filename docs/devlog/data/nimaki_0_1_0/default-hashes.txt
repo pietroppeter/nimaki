@@ -1,0 +1,1 @@
+difftest: pele 1.13.0, 2234 cases of 33 types (116 of them diagrammari's): 2234 identical, 0 different, 0 unsupported

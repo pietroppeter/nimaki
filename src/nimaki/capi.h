@@ -24,6 +24,9 @@ void nimaki_free(char *answer);
 /* The Pele version this library draws as ("1.13.0"); static, not to be freed. */
 const char *nimaki_pele_version(void);
 
+/* The release of nimaki this library is ("0.1.0"); static, not to be freed. */
+const char *nimaki_version(void);
+
 #ifdef __cplusplus
 }
 #endif

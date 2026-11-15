@@ -8,3 +8,4 @@ import test_layout
 import test_jsregex
 import test_parse
 import test_idna
+import test_version
