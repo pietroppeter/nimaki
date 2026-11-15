@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/gantt/render.ts
-## port-status: draft
+## port-status: conformant
 import std/[algorithm, options, strutils, tables, hashes]
 from std/math import ceil, floor
 import ../../js

@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/gantt/parser.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Port notes: Pele's parser calls a `GanttBuilder`; here it calls the database directly.
 import ../../errors

@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/class/members.ts
-## port-status: draft
+## port-status: conformant
 import std/strutils
 import ../../js
 import ../../util/chars

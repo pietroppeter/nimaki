@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/gantt/db.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Port notes: the `warn` option of Pele's database is not ported (nothing in a render reads it).
 ## Options' `now` of 0 stands for "not given", as everywhere in nimaki.

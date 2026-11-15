@@ -1,5 +1,5 @@
 ## port-of: src/util/yaml.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## A small YAML reader covering what Mermaid feeds to js-yaml with the JSON schema:
 ## block and flow collections, quoted and plain scalars, and block scalars.

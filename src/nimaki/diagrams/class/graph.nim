@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/class/graph.ts
-## port-status: draft
+## port-status: conformant
 import std/tables
 import db
 import ../../model

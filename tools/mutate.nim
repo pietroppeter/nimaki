@@ -13,6 +13,7 @@
 ##     --show:N          print at most N differences as ERROR lines (default 10)
 ##     --out:PATH        write the summary and every difference as JSON (default build/mutate.json)
 ##     --package:PATH    the oracle package (default reference/npm/package or $PELE_PACKAGE)
+##     --js              answer with nimaki's JavaScript build (tools/jsrunner.nim), as difftest --js
 ##     --again:PATH      only the differences that an earlier run wrote to PATH, their texts as
 ##                       they are there: to check a fix quickly
 import std/[os, osproc, strutils, json, random, parseopt, tables, strtabs, sequtils, unicode]
@@ -24,37 +25,6 @@ const inserts* = [
   ("\u200B", "zero-width space"), ("\u3000", "ideographic space"), ("é", "é"), ("Ω", "Ω"),
   ("𝐀", "mathematical bold A (outside the BMP)"), ("😀", "emoji (outside the BMP)")]
 const fixedNow = 1767225600000.0   ## 2026-01-01T00:00:00Z, as in tools/difftest.nim
-
-func wellFormed(line: string): string =
-  ## Pele's messages can hold half of a character: V8 quotes the first UTF-16 unit of the token
-  ## it stopped at, and JSON.stringify writes it as a lone `\uD835`. Nim's JSON reader refuses a
-  ## lone surrogate, so each is written as the bytes nimaki uses for one (WTF-8: the surrogate
-  ## encoded as if it were a character), which the reader passes through.
-  func surrogate(s: string, i: int): int =
-    if i + 6 > s.len or s[i] != '\\' or s[i + 1] != 'u': return 0
-    try:
-      let v = parseHexInt(s[i + 2 ..< i + 6])
-      if v >= 0xD800 and v <= 0xDBFF: 1 elif v >= 0xDC00 and v <= 0xDFFF: 2 else: 0
-    except ValueError: 0
-  var i = 0
-  while i < line.len:
-    if line[i] == '\\' and i + 1 < line.len and line[i + 1] != 'u':
-      result.add line[i .. i + 1]
-      i += 2
-      continue
-    let k = surrogate(line, i)
-    if k == 1 and surrogate(line, i + 6) == 2:
-      result.add line[i ..< i + 12]
-      i += 12
-    elif k != 0:
-      let v = parseHexInt(line[i + 2 ..< i + 6])
-      result.add char(0xE0 or (v shr 12))
-      result.add char(0x80 or ((v shr 6) and 0x3F))
-      result.add char(0x80 or (v and 0x3F))
-      i += 6
-    else:
-      result.add line[i]
-      inc i
 
 func validUtf8(s: string): string =
   ## `s` with each byte that does not belong to a whole UTF-8 character replaced by U+FFFD: the
@@ -83,6 +53,7 @@ proc main() =
   var outPath = buildDir / "mutate.json"
   var packageArg = ""
   var again = ""
+  var js = false
   for kind, key, val in getopt():
     case kind
     of cmdLongOption, cmdShortOption:
@@ -93,6 +64,7 @@ proc main() =
       of "out": outPath = val
       of "package": packageArg = val
       of "again": again = val
+      of "js": js = true
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: quit "ERROR unexpected argument " & key, 2
     of cmdEnd: discard
@@ -131,14 +103,16 @@ proc main() =
   var pele: Table[string, Answer]
   for line in output.split('\n'):
     if line.len > 0:
-      let j = parseJson(wellFormed(line))
+      let j = parseJson(withLoneSurrogates(line))
       pele[j["id"].getStr] = toAnswer(j)
   var byType: OrderedTable[string, tuple[identical, different: int]]
   var differences = newJArray()
   var shown = 0
+  let fromJs = if js: jsAnswers(cases, "mutate") else: initTable[string, Answer]()
   for i, c in cases:
     let id = c["id"].getStr
-    let o = compare(id, types[i], pele[id], nimakiAnswer(c["source"].getStr, c["options"]))
+    let mine = if js: fromJs[id] else: nimakiAnswer(c["source"].getStr, c["options"])
+    let o = compare(id, types[i], pele[id], mine)
     if types[i] notin byType: byType[types[i]] = (0, 0)
     if o.verdict == vDifferent:
       inc byType[types[i]].different
@@ -156,10 +130,10 @@ proc main() =
     same += n.identical
     diff += n.different
   createDir outPath.parentDir
-  writeFile outPath, (%*{"pin": pinOf(package), "seed": seed, "copies": copies, "cases": cases.len,
+  writeFile outPath, (%*{"pin": pinOf(package), "build": (if js: "js" else: "c"), "seed": seed, "copies": copies, "cases": cases.len,
     "identical": same, "different": diff, "inserts": inserts.mapIt(it[1]), "types": rows,
     "differences": differences}).pretty & "\n"
-  echo "mutate: ", cases.len, " cases (", copies, " copies of each ported case, seed ", seed, "): ",
+  echo "mutate", (if js: " (JavaScript build)" else: ""), ": ", cases.len, " cases (", copies, " copies of each ported case, seed ", seed, "): ",
     same, " identical, ", diff, " different"
   echo "wrote ", outPath.relativePath(repoDir)
   if diff > 0: quit 1

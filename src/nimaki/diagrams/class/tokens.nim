@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/class/tokens.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Port notes: `T.END` is `T_STOP` (as in flowchart); the others keep their names after `T_`.
 

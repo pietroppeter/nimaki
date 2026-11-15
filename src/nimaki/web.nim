@@ -9,6 +9,7 @@
 ## when nimaki cannot draw the text (a syntax error, or a type not ported yet: `unsupported`).
 import std/[json, options]
 import ../nimaki
+import js
 
 when not defined(js):
   {.error: "src/nimaki/web.nim is compiled with nim js".}
@@ -37,7 +38,7 @@ proc renderJson(text, options: cstring): cstring {.exportc: "nimakiRenderJson".}
     answer = %*{"ok": false, "code": e.code, "message": e.msg}
   except CatchableError as e:
     answer = %*{"ok": false, "code": "internal", "message": e.msg}
-  cstring($answer)
+  toJsString($answer)
 
 {.emit: """
 globalThis.nimaki = {

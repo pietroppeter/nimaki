@@ -9,6 +9,7 @@
 import std/[jsffi, options, tables, json]
 import nimaki
 import nimaki/util/yaml
+import nimaki/js
 import ../models
 from nimaki/diagrams/agentflow/db import AgentflowDb, vertexKind, semanticModel
 from nimaki/diagrams/agentflow/types import AgentNode
@@ -126,7 +127,7 @@ proc toOptions(o: JsObject): RenderOptions =
     result.now = some(if o["now"].isDate: o["now"].dateValue else: o["now"].num)
 
 proc orNull(s: string): JsObject =
-  if s.len == 0: jsNull else: toJs(cstring(s))
+  if s.len == 0: jsNull else: toJs(toJsString(s))
 
 proc newMap(): JsObject {.importjs: "new Map()".}
 proc newSet(): JsObject {.importjs: "new Set()".}
@@ -152,7 +153,7 @@ proc toJsValue(j: JsonNode, ids: JsObject): JsObject =
   of JBool: result = toJs(j.getBool)
   of JInt: result = toJs(j.getInt)
   of JFloat: result = toJs(j.getFloat)
-  of JString: result = toJs(cstring(j.getStr))
+  of JString: result = toJs(toJsString(j.getStr))
   of JArray:
     var items: seq[JsObject]
     for v in j: items.add toJsValue(v, ids)
@@ -177,13 +178,13 @@ proc toJsValue(j: JsonNode, ids: JsObject): JsObject =
 proc throwPele(e: ref PeleError) =
   let j = newJsObject()
   j["peleError"] = true
-  j["message"] = cstring(e.msg)
+  j["message"] = toJsString(e.msg)
   j["code"] = cstring(e.code)
   j["type"] = orNull(e.diagramType)
   j["mermaidType"] = orNull(e.mermaidType)
   j["line"] = e.line
   j["column"] = e.column
-  j["snippet"] = cstring(e.snippet)
+  j["snippet"] = toJsString(e.snippet)
   jsThrow(j)
 
 proc resultOf(r: RenderResult): JsObject =
