@@ -961,7 +961,18 @@
           "what": "Port src/mount.ts (a drawing put in a page and redrawn when the page changes size or colours), src/zoom.ts (zoom and pan with a mouse, a finger or the keys), src/window.ts and the canvas half of src/text/measurer.ts, for the JavaScript build. Later: Pietro decided on 15 November 2026 that the first release comes first.",
           "done_when": "Pele's mount and zoom tests (25 `api` tests and the `canvas` one of tools/peletests.nim) pass on the JavaScript build; a devlog post.",
           "owner": "Port Pele's browser side",
-          "status": "started",
+          "status": "done",
+          "post": "a-drawing-that-fits-its-box",
+          "pr": ""
+        },
+        {
+          "id": "retrospective",
+          "kind": "research",
+          "title": "Looking back: what nimaki is, and how it got there",
+          "what": "After the 0.2 release, a final post: the result (what nimaki draws, where it runs, how it is checked), how it got there (the steps, the threads, the replans), how the framework helped (explainers as nimib posts with review mode, the roadmap with owners, decision records, Start and Stop), and an estimate of the total effort (tokens, time, CI minutes, pull requests, lines), measured as tabelline and nanuq did. Then the automatic work stops, and the project is picked up again when it is needed (Pietro, 15 November 2026).",
+          "done_when": "The post is merged after the 0.2 release, with its numbers from data files or code.",
+          "owner": "",
+          "status": "planned",
           "post": "",
           "pr": ""
         },

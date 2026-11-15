@@ -2,7 +2,8 @@
 // test suites here instead of Pele's own src/index.js. `render`, `detectType` and `supports`
 // call nimaki's JavaScript build (bridge.nim); the text measurer stays Pele's, as in difftest.
 // `parse` returns nimaki's model, written as Pele's (tools/models.nim), and `render` draws it.
-// What nimaki does not provide (mount, zoom) throws, and the tests that use it are counted apart.
+// `mount` and `enableZoom` are nimaki's ports of Pele's browser side (src/nimaki/mount.nim, zoom.nim).
+// What nimaki does not provide (`register`) throws, and the tests that use it are counted apart.
 import { createRequire } from 'node:module';
 import { PeleError } from 'PELE_SRC/errors.js';
 export { PeleError };
@@ -88,8 +89,15 @@ export function supports(text) {
   return bridge.nimakiSupports(text);
 }
 
-export function mount() { throw new NotInNimaki('mount()'); }
-export function enableZoom() { throw new NotInNimaki('enableZoom()'); }
+export function mount(element, text, options = {}) {
+  return bridge.nimakiMountWith({ parse, render }, element, text, options);
+}
+export function enableZoom(element, options = {}) {
+  return bridge.nimakiEnableZoom(element, options);
+}
+export function forgetTextWidths() {
+  bridge.nimakiForgetTextWidths();
+}
 export function register() { throw new NotInNimaki('register()'); }
-export function registered() { throw new NotInNimaki('registered()'); }
-export { forgetTextWidths } from 'PELE_SRC/text/measurer.js';
+// Every type nimaki draws is compiled in: `register` has nothing to do in nimaki.
+export function registered(type) { return bridge.nimakiRegistered(String(type)); }

@@ -11,6 +11,7 @@ import nimaki
 import nimaki/util/yaml
 import nimaki/js
 import ../models
+import nimaki/[jsapi, mount, zoom]
 from nimaki/diagrams/agentflow/db import AgentflowDb, vertexKind, semanticModel
 from nimaki/diagrams/agentflow/types import AgentNode
 from nimaki/diagrams/gantt/db import GanttDb, getTasks
@@ -18,117 +19,6 @@ from nimaki/diagrams/state/db import StateDb, direction
 
 when not defined(js):
   {.error: "the bridge is compiled with nim js".}
-
-proc isUndef(x: JsObject): bool {.importjs: "(# == null)".}
-proc isFunction(x: JsObject): bool {.importjs: "(typeof # === 'function')".}
-proc isString(x: JsObject): bool {.importjs: "(typeof # === 'string')".}
-proc isNumber(x: JsObject): bool {.importjs: "(typeof # === 'number')".}
-proc isBool(x: JsObject): bool {.importjs: "(typeof # === 'boolean')".}
-proc isArray(x: JsObject): bool {.importjs: "Array.isArray(#)".}
-proc isObject(x: JsObject): bool {.importjs: "(typeof # === 'object')".}
-proc isDate(x: JsObject): bool {.importjs: "(# instanceof Date)".}
-proc dateValue(x: JsObject): float {.importjs: "#.getTime()".}
-proc keysOf(x: JsObject): seq[cstring] {.importjs: "Object.keys(#)".}
-proc call1(f: JsObject, a: cstring): JsObject {.importjs: "#(#)".}
-proc call2(f: JsObject, a: cstring, b: float): JsObject {.importjs: "#(#, #)".}
-proc callWidth(m: JsObject, text: cstring, size: float, style: int): float {.importjs: "#.width(#, #, #)".}
-proc jsThrow(x: JsObject) {.importjs: "throw #".}
-
-proc jsLen(s: cstring): int {.importjs: "#.length".}
-proc unitAt(s: cstring, i: int): int {.importjs: "#.charCodeAt(#)".}
-
-proc wtf8(s: cstring): string =
-  ## A JavaScript string as the port's: UTF-8, a lone surrogate kept as its three bytes, as the
-  ## port reads one from JSON (decision 0011). Nim's own `$` pairs a lone surrogate with the next
-  ## character.
-  let n = s.jsLen
-  result = newStringOfCap(n)
-  var i = 0
-  while i < n:
-    var c = s.unitAt(i)
-    inc i
-    # comparisons, not `in a .. b`: nim js builds the range as an object, at every character
-    if c >= 0xD800 and c <= 0xDBFF and i < n and s.unitAt(i) >= 0xDC00 and s.unitAt(i) <= 0xDFFF:
-      c = 0x10000 + ((c - 0xD800) shl 10) + (s.unitAt(i) - 0xDC00)
-      inc i
-    if c < 0x80: result.add char(c)
-    elif c < 0x800:
-      result.add char(0xC0 or (c shr 6))
-      result.add char(0x80 or (c and 0x3F))
-    elif c < 0x10000:
-      result.add char(0xE0 or (c shr 12))
-      result.add char(0x80 or ((c shr 6) and 0x3F))
-      result.add char(0x80 or (c and 0x3F))
-    else:
-      result.add char(0xF0 or (c shr 18))
-      result.add char(0x80 or ((c shr 12) and 0x3F))
-      result.add char(0x80 or ((c shr 6) and 0x3F))
-      result.add char(0x80 or (c and 0x3F))
-
-proc str(x: JsObject): string = wtf8(x.to(cstring))
-proc num(x: JsObject): float = x.to(float)
-
-proc toYaml(x: JsObject): YamlValue =
-  if x.isUndef: return ynull()
-  if x.isBool: return ybool(x.to(bool))
-  if x.isNumber: return ynum(x.num)
-  if x.isString: return YamlValue(kind: yString, s: x.str)
-  if x.isArray:
-    result = YamlValue(kind: ySeq)
-    for i in 0 ..< x["length"].to(int): result.items.add toYaml(x[i])
-    return
-  result = YamlValue(kind: yMap)
-  for k in keysOf(x): result.fields[$k] = toYaml(x[k])
-
-proc strings(x: JsObject): seq[string] =
-  for i in 0 ..< x["length"].to(int): result.add x[i].str
-
-proc toOptions(o: JsObject): RenderOptions =
-  if o.isUndef: return
-  template has(k: string): bool = not o[k].isUndef
-  if has"measurer":
-    let m = o["measurer"]
-    result.measurer = TextMeasurer(width: proc (text: string, size: float, style: int): float {.noSideEffect, gcsafe.} =
-      {.cast(noSideEffect), cast(gcsafe).}:
-        callWidth(m, cstring(text), size, style))
-  if has"fontFamily": result.fontFamily = o["fontFamily"].str
-  if has"fontFamilyMono": result.fontFamilyMono = o["fontFamilyMono"].str
-  if has"monospace": result.monospace = strings(o["monospace"])
-  if has"fontSize": result.fontSize = some(o["fontSize"].num)
-  if has"idPrefix": result.idPrefix = some(o["idPrefix"].str)
-  if has"responsive": result.responsive = some(o["responsive"].to(bool))
-  if has"maxWidth": result.maxWidth = some(o["maxWidth"].num)
-  if has"autoDirection": result.autoDirection = some(o["autoDirection"].to(bool))
-  if has"directionBreakpoint": result.directionBreakpoint = some(o["directionBreakpoint"].num)
-  if has"padding": result.padding = some(o["padding"].num)
-  if has"limit": result.limit = some(o["limit"].to(int))
-  if has"outputLimit": result.outputLimit = some(o["outputLimit"].to(int))
-  if has"maxEdges": result.maxEdges = some(o["maxEdges"].to(int))
-  if has"linkSchemes": result.linkSchemes = some(strings(o["linkSchemes"]))
-  if has"imageSchemes": result.imageSchemes = some(strings(o["imageSchemes"]))
-  if has"links": result.links = some(o["links"].to(bool))
-  if has"images": result.images = some(o["images"].to(bool))
-  if has"linkRel": result.linkRel = some(o["linkRel"].str)
-  if has"icons" and o["icons"].isFunction:
-    let f = o["icons"]
-    result.icons = proc (name: string): string =
-      let r = call1(f, cstring(name))
-      if r.isUndef: "" else: r.str
-  if has"math" and o["math"].isFunction:
-    let f = o["math"]
-    result.math = proc (tex: string, size: float): MathMarkup =
-      let r = call2(f, cstring(tex), size)
-      if r.isUndef: return nil
-      if not r["svg"].isUndef:
-        MathMarkup(isSvg: true, markup: r["svg"].str, width: r["width"].num, height: r["height"].num)
-      else:
-        MathMarkup(isSvg: false, markup: r["html"].str, width: r["width"].num, height: r["height"].num)
-  if has"config": result.config = toYaml(o["config"])
-  if has"now":
-    result.now = some(if o["now"].isDate: o["now"].dateValue else: o["now"].num)
-
-proc orNull(s: string): JsObject =
-  if s.len == 0: jsNull else: toJs(toJsString(s))
 
 proc newMap(): JsObject {.importjs: "new Map()".}
 proc newSet(): JsObject {.importjs: "new Set()".}
@@ -176,34 +66,6 @@ proc toJsValue(j: JsonNode, ids: JsObject): JsObject =
         # A field the model has but leaves empty is there, undefined, as a field Pele's class
         # declares and does not set: `toEqual` reads it as missing, `toMatchObject` finds it.
         if k != "$id": result[cstring(k)] = toJsValue(v, ids)
-
-proc throwPele(e: ref PeleError) =
-  let j = newJsObject()
-  j["peleError"] = true
-  j["message"] = toJsString(e.msg)
-  j["code"] = cstring(e.code)
-  j["type"] = orNull(e.diagramType)
-  j["mermaidType"] = orNull(e.mermaidType)
-  j["line"] = e.line
-  j["column"] = e.column
-  j["snippet"] = toJsString(e.snippet)
-  jsThrow(j)
-
-proc resultOf(r: RenderResult): JsObject =
-  result = newJsObject()
-  result["type"] = cstring(r.diagramType)
-  result["mermaidType"] = cstring(r.mermaidType)
-  result["svg"] = cstring(r.svg)
-  result["width"] = r.width
-  result["height"] = r.height
-  var list: seq[JsObject]
-  for l in r.links:
-    let j = newJsObject()
-    j["id"] = cstring(l.id)
-    j["href"] = cstring(l.href)
-    j["internal"] = l.internal
-    list.add j
-  result["links"] = toJs(list)
 
 proc nimakiParse(source: cstring, options: JsObject): JsObject {.exportc.} =
   var m: ParsedModel
@@ -267,4 +129,26 @@ proc nimakiRender(source: cstring, options: JsObject): JsObject {.exportc.} =
 proc nimakiDetectType(text: cstring): JsObject {.exportc.} = orNull(detectType(wtf8(text)))
 proc nimakiSupports(text: cstring): bool {.exportc.} = supports(wtf8(text))
 
-{.emit: "module.exports = { nimakiRender, nimakiParse, nimakiRenderModel, nimakiModelCall, nimakiDetectType, nimakiSupports };".}
+# Pele's browser side, ported (src/nimaki/mount.nim, zoom.nim, text/measurer.nim).
+proc nimakiMountWith(engine, element: JsObject, text: cstring, options: JsObject): JsObject {.exportc.} =
+  mountWith(engine, element, text, options)
+proc nimakiZoomWith(element, options: JsObject, observe: bool): JsObject {.exportc.} =
+  zoomWith(element, options, observe)
+proc nimakiEnableZoom(element, options: JsObject): JsObject {.exportc.} = enableZoom(element, options)
+proc nimakiFrame(natural, box: JsObject, scale, x, y: float): JsObject {.exportc.} =
+  frameJs(natural, box, scale, x, y)
+proc nimakiForgetTextWidths() {.exportc.} = forgetTextWidths()
+proc nimakiRegistered(kind: cstring): bool {.exportc.} = registered($kind)
+type MeasurerBox = ref object
+  m: TextMeasurer
+proc nimakiCanvasWidth(m: JsObject, text: cstring, size: float, style: int): float {.exportc.} =
+  m.to(MeasurerBox).m.width(wtf8(text), size, style)
+proc nimakiCanvasMeasurer(fontFamily, monoFamily: cstring): JsObject {.exportc.} =
+  ## The port's canvas measurer, as an opaque value nimakiCanvasWidth measures with; null where
+  ## there is no canvas.
+  let m = canvasMeasurer(wtf8(fontFamily), wtf8(monoFamily))
+  if m.width == nil: jsNull else: toJs(MeasurerBox(m: m))
+
+{.emit: """module.exports = { nimakiRender, nimakiParse, nimakiRenderModel, nimakiModelCall, nimakiDetectType,
+  nimakiSupports, nimakiMountWith, nimakiZoomWith, nimakiEnableZoom, nimakiFrame, nimakiForgetTextWidths,
+  nimakiCanvasMeasurer, nimakiCanvasWidth, nimakiRegistered };""".}
