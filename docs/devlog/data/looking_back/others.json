@@ -1,0 +1,10 @@
+{
+  "about": "What nanuq (first commit to 0.6, in a week) and tabelline (first commit to 0.2, with the islands story) took, copied from the table What it took in tabelline's devlog post Designing 0.2 (docs/devlog/designing_0_2.nim in pietroppeter/tabelline, read on 15 November 2026). Ranges are kept as text, as there.",
+  "source": "https://github.com/pietroppeter/tabelline/blob/main/docs/devlog/designing_0_2.nim",
+  "projects": [
+    {"name": "nanuq", "days": "7", "pullRequests": "—", "threads": "33", "cost": "$636", "tokens": "1.72", "output": "5.1", "agentHours": "25–35", "ciHours": "85", "lines": "62", "devMonths": "4–8"},
+    {"name": "tabelline", "days": "7.5", "pullRequests": "84", "threads": "31", "cost": "$997", "tokens": "2.77", "output": "7.7", "agentHours": "45–66", "ciHours": "13", "lines": "62", "devMonths": "5.5–10"}
+  ],
+  "nanuqOutputMillions": 5.1,
+  "nanuqAgentHours": [25, 35]
+}

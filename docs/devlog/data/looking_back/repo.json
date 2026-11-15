@@ -1,17 +1,20 @@
 {
   "about": "Written by docs/devlog/data/looking_back/measure.nim. Do not edit by hand.",
-  "head": "b9384a759bc444bdbce248b866ec2bd010756c9c",
-  "measured": "2026-11-15T11:14:46Z",
-  "commits": 404,
-  "merges": 158,
+  "head": "a15339cfa640565789d8ef34768b8f6be641ce26",
+  "measured": "2026-11-15T13:17:51Z",
+  "commits": 421,
+  "merges": 165,
+  "pullRequestMerges": 96,
+  "claims": 44,
+  "roadmapCommits": 153,
   "first": 1794515964,
-  "last": 1794741240,
+  "last": 1794748384,
   "pause": {
     "from": 1794541909,
     "to": 1794667505
   },
   "gapMinutes": 45,
-  "activeSeconds": 98735,
+  "activeSeconds": 105012,
   "sessions": {
     "session_01YPMoamY7Abyu9c9rPhc3Jk": {
       "commits": 4,
@@ -92,23 +95,29 @@
       "activeSeconds": 1065
     },
     "session_01YPMoanicDoz6yEWMV1S2Sz": {
-      "commits": 4,
+      "commits": 7,
       "first": 1794738063,
-      "last": 1794740599,
-      "activeSeconds": 2536
+      "last": 1794746469,
+      "activeSeconds": 3562
+    },
+    "session_01YPMoanunRQeU8ojnW71vMu": {
+      "commits": 7,
+      "first": 1794741535,
+      "last": 1794746786,
+      "activeSeconds": 5251
     }
   },
   "lines": {
-    "port": 55788,
-    "tests": 1346,
-    "tools": 5362,
-    "posts": 16952,
-    "pages": 2560,
-    "decisions": 772,
-    "markdown": 1323
+    "port": 55950,
+    "tests": 1349,
+    "tools": 5746,
+    "posts": 17769,
+    "pages": 2569,
+    "decisions": 852,
+    "markdown": 1420
   },
-  "pullRequests": 105,
-  "merged": 105,
-  "posts": 69,
-  "decisionRecords": 21
+  "pullRequests": 113,
+  "merged": 112,
+  "posts": 72,
+  "decisionRecords": 23
 }

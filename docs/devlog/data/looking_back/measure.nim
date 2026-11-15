@@ -25,6 +25,7 @@ proc main() =
     t: int64
     merge: bool
     session: string
+    subject: string
   var commits: seq[C]
   let log = run("git log origin/main --format=%H%x1f%ct%x1f%P%x1f%B%x1e")
   for rec in log.split('\x1e'):
@@ -36,7 +37,8 @@ proc main() =
       var j = i
       while j < f[3].len and f[3][j] in {'A'..'Z', 'a'..'z', '0'..'9', '_'}: inc j
       s = f[3][i ..< j]
-    commits.add C(t: parseBiggestInt(f[1]), merge: f[2].splitWhitespace.len > 1, session: s)
+    commits.add C(t: parseBiggestInt(f[1]), merge: f[2].splitWhitespace.len > 1, session: s,
+                   subject: f[3].strip.splitLines[0])
   commits.sort(proc (a, b: C): int = cmp(a.t, b.t))
 
   # The longest quiet stretch of the repository: the pause between Stop and Start.
@@ -83,6 +85,9 @@ proc main() =
     "about": "Written by docs/devlog/data/looking_back/measure.nim. Do not edit by hand.",
     "head": head, "measured": now().utc.format("yyyy-MM-dd'T'HH:mm:ss'Z'"),
     "commits": commits.len, "merges": commits.countIt(it.merge),
+    "pullRequestMerges": commits.countIt(it.merge and it.subject.startsWith("Merge pull request")),
+    "claims": commits.countIt(not it.merge and "claim" in it.subject.toLowerAscii),
+    "roadmapCommits": run("git log origin/main --no-merges --format=%H -- docs/data/roadmap.json").splitLines.len,
     "first": commits[0].t, "last": commits[^1].t,
     "pause": {"from": pauseFrom, "to": pauseTo},
     "gapMinutes": gapMinutes, "activeSeconds": activeTotal, "sessions": sessions,
