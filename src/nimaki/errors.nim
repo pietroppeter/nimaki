@@ -60,14 +60,16 @@ type
 
 var origin: ref Origin
 
-proc locatingIn*[T](next: Origin, run: proc (): T): T =
-  ## Report positions in the original source while `run` parses.
+proc locatingIn*[T](parsed: string, find: proc (offset: int): (string, int), run: proc (): T): T =
+  ## Report positions in the original source while `run` parses `parsed`, which the caller does
+  ## not change meanwhile. In nim js it is shared, not copied (`handOver`): it is the whole source.
   let outer = origin
   var o = new Origin
-  o[] = next
+  handOver(o.parsed, parsed)
+  o.find = find
   origin = o
   try:
-    result = run()
+    handOver(result, run())
   finally:
     origin = outer
 

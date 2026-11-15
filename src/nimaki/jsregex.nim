@@ -949,27 +949,31 @@ func toJsMatch(s: string, m: RegexMatch2): JsMatch =
       result.groups[k + 1] = s[g.a .. g.b]
       result.defined[k + 1] = true
 
-func codeAt(s: string, i: int): (int, int) {.inline.} =
-  ## The code point at byte `i` and its length, as the engine reads valid UTF-8.
+func codeAt(s: string, i: int, n: var int): int {.inline.} =
+  ## The code point at byte `i`, as the engine reads valid UTF-8; `n` is its length. (Not a tuple:
+  ## nim js copies a returned tuple, here at every character.)
   let b = ord(s[i])
-  if b < 0x80: return (b, 1)
-  let n = if b < 0xE0: 2 elif b < 0xF0: 3 else: 4
-  if i + n > s.len: return (b, 1)
-  var c = b and (0x7F shr n)
-  for k in 1 ..< n: c = (c shl 6) or (ord(s[i + k]) and 0x3F)
-  (c, n)
+  n = 1
+  if b < 0x80: return b
+  let size = if b < 0xE0: 2 elif b < 0xF0: 3 else: 4
+  if i + size > s.len: return b
+  n = size
+  result = b and (0x7F shr size)
+  for k in 1 ..< size: result = (result shl 6) or (ord(s[i + k]) and 0x3F)
 
 func inRun(re: JsRegExp, c: int): bool {.inline.} =
-  for r in re.run:
-    if c < r[0]: return false
-    if c <= r[1]: return true
+  # by index: `for r in re.run` copies each range in nim js
+  for k in 0 ..< re.run.len:
+    if c < re.run[k][0]: return false
+    if c <= re.run[k][1]: return true
   false
 
 func runEnd(re: JsRegExp, s: string, at: int): int =
   ## Where the run of the class that starts at `at` ends.
   result = at
+  var n = 0
   while result < s.len:
-    let (c, n) = codeAt(s, result)
+    let c = codeAt(s, result, n)
     if not re.inRun(c): break
     result += n
 
@@ -983,8 +987,9 @@ func runFrom(re: JsRegExp, s: string, at: int, anchored: bool): (int, int) =
     let e = re.runEnd(s, at)
     return (if re.runKind == 2 and e == at: (-1, -1) else: (at, e))
   var i = at
+  var n = 0
   while i < s.len:
-    let (c, n) = codeAt(s, i)
+    let c = codeAt(s, i, n)
     if re.inRun(c): return (i, re.runEnd(s, i + n))
     i += n
   (-1, -1)

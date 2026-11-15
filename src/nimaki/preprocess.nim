@@ -46,11 +46,18 @@ proc removeAll(text: string, re: JsRegExp, steps: Steps): string =
   text.replace(re, "")
 
 proc cleanupComments*(text: string, steps: Steps = nil): string =
-  var text = text
-  if "%%" in text: text = removeAll(text, RE_COMMENT, steps)
-  let trimmed = jsTrimStart(text)
-  if steps != nil: steps[].add @[(0, text.len - trimmed.len, 0)]
-  trimmed
+  # Each text handed over, not copied, in nim js (`handOver`); then `trimStart()`.
+  var removed: string
+  if "%%" in text: handOver(removed, removeAll(text, RE_COMMENT, steps))
+  else: handOver(removed, text)
+  var i = 0
+  while i < removed.len:
+    let n = spaceLenAt(removed, i)
+    if n == 0: break
+    i += n
+  if steps != nil: steps[].add @[(0, i, 0)]
+  if i == 0: handOver(result, removed)
+  else: handOver(result, removed[i .. ^1])
 
 func normalizeLineBreaks*(text: string): string =
   if '\r' in text: text.replace(jsre"/\r\n?/g", "\n") else: text
@@ -196,7 +203,10 @@ proc directiveMatches(s: string): seq[DirectiveMatch] =
       p = s.find("%%{", p + 1)
 
 proc directives(text: string, config: Config, steps: Steps): string =
-  if "%%{" notin text: return text
+  # Handed over, not copied, in nim js (`handOver`; see preprocess).
+  if "%%{" notin text:
+    handOver(result, text)
+    return
   let normalized = jsTrim(text).replace(jsre"/'/g", "\"")
   for match in directiveMatches(normalized):
     let kind = match.kind
@@ -210,16 +220,19 @@ proc directives(text: string, config: Config, steps: Steps): string =
         discard # Mermaid ignores an init directive whose body is not valid JSON.
   var spans: seq[(int, int)]
   for m in directiveMatches(text): spans.add (m.first, m.last)
-  removeSpans(text, spans, steps)
+  handOver(result, removeSpans(text, spans, steps))
 
 proc preprocess*(source: string, steps: Steps = nil): Preprocessed =
   ## `steps` maps normalized source to `withComments`.
-  var text = normalizeLineBreaks(source)
+  # `text` is only ever replaced, never changed in place, so in nim js it can share the source and
+  # each new text is handed over (`handOver`), not copied: the source can be megabytes long.
+  var text: string
+  handOver(text, (if '\r' in source: normalizeLineBreaks(source) else: source))
   # A tag needs a closing bracket, so nothing after the last one can match.
   let lastClose = if '<' in text: text.rfind('>') else: -1
   if lastClose > 0:
-    text = text[0 .. lastClose].replace(RE_HTML_TAG, func (m: JsMatch): string =
-      "<" & m[1] & m[2].replace(RE_ATTR, "='$1'") & ">") & text[lastClose + 1 .. ^1]
+    handOver(text, text[0 .. lastClose].replace(RE_HTML_TAG, func (m: JsMatch): string =
+      "<" & m[1] & m[2].replace(RE_ATTR, "='$1'") & ">") & text[lastClose + 1 .. ^1])
 
   let config = ymap()
   var title = ""
@@ -254,12 +267,15 @@ proc preprocess*(source: string, steps: Steps = nil): Preprocessed =
     while i != -1 and i < front.length:
       inc lineOffset
       i = text.find('\n', i + 1)
-    text = text[front.length .. ^1]
+    handOver(text, text[front.length .. ^1])
     if steps != nil: steps[].add @[(0, front.length, 0)]
 
-  text = directives(text, config, steps)
-  Preprocessed(text: cleanupComments(text), title: title, config: config, withComments: text,
-               lineOffset: lineOffset)
+  handOver(text, directives(text, config, steps))
+  handOver(result.text, cleanupComments(text))
+  result.title = title
+  result.config = config
+  handOver(result.withComments, text)
+  result.lineOffset = lineOffset
 
 const
   RE_ENTITY = jsre"/#\w+;/g"

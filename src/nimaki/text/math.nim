@@ -1,6 +1,7 @@
 ## port-of: src/text/math.ts
 ## port-status: conformant
 import std/[tables, math]
+import ../js
 
 type
   MathMarkup* = ref object
@@ -22,7 +23,7 @@ proc withMath*[T](math: MathResolver, run: proc (): T): T =
   resolver = math
   found = initTable[string, MathMarkup]()
   try:
-    result = run()
+    handOver(result, run())
   finally:
     resolver = outer
     found = outerFound
@@ -42,10 +43,12 @@ proc typeset*(tex: string, size: float): MathMarkup =
 
 proc withoutMath*[T](run: proc (): T): T =
   ## Match Mermaid: diagram titles stay plain text.
-  if resolver == nil: return run()
+  if resolver == nil:
+    handOver(result, run())
+    return
   let outer = resolver
   resolver = nil
   try:
-    result = run()
+    handOver(result, run())
   finally:
     resolver = outer
