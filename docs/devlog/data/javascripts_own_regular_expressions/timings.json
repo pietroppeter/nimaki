@@ -1,0 +1,137 @@
+{
+ "about": "Milliseconds vitest reports for one of Pele's tests run alone on the JavaScript build, before (main at 70579da, nim-regex in both builds) and after this step (JavaScript's own RegExp in the JavaScript build), on the 4-core sandbox, 15 November 2026. Measured with timings.sh beside this file, on tests.tsv: the tests whose profiles showed the most time in the regex library. Run to run they vary by a tenth or so.",
+ "tests": [
+  {
+   "file": "tests/treeview/stress.test.ts",
+   "test": "treeView worst cases 25,000 flat entries",
+   "before": 1464,
+   "beforeStatus": "passed",
+   "after": 992,
+   "afterStatus": "passed"
+  },
+  {
+   "file": "tests/treeview/stress.test.ts",
+   "test": "treeView worst cases box drawing, 10,000 rows",
+   "before": 1602,
+   "beforeStatus": "passed",
+   "after": 547,
+   "afterStatus": "passed"
+  },
+  {
+   "file": "tests/git/stress.test.ts",
+   "test": "git graph worst cases 7,000 commits",
+   "before": 1369,
+   "beforeStatus": "passed",
+   "after": 1151,
+   "afterStatus": "passed"
+  },
+  {
+   "file": "tests/timeline/stress.test.ts",
+   "test": "timeline worst cases percent comments",
+   "before": 1241,
+   "beforeStatus": "passed",
+   "after": 1145,
+   "afterStatus": "passed"
+  },
+  {
+   "file": "tests/timeline/stress.test.ts",
+   "test": "timeline worst cases carriage returns",
+   "before": 1469,
+   "beforeStatus": "passed",
+   "after": 1252,
+   "afterStatus": "passed"
+  },
+  {
+   "file": "tests/timeline/stress.test.ts",
+   "test": "timeline worst cases 8,000 periods with one event each",
+   "before": 1390,
+   "beforeStatus": "passed",
+   "after": 1352,
+   "afterStatus": "passed"
+  },
+  {
+   "file": "tests/journey/stress.test.ts",
+   "test": "journey worst cases one task with 16,000 actors",
+   "before": 1601,
+   "beforeStatus": "failed",
+   "after": 1516,
+   "afterStatus": "failed"
+  },
+  {
+   "file": "tests/eventmodeling/stress.test.ts",
+   "test": "eventmodeling worst cases 1,000 frames that each name every earlier frame",
+   "before": 1526,
+   "beforeStatus": "passed",
+   "after": 932,
+   "afterStatus": "passed"
+  },
+  {
+   "file": "tests/cynefin/stress.test.ts",
+   "test": "cynefin worst cases 10,000 items in one domain",
+   "before": 1288,
+   "beforeStatus": "passed",
+   "after": 1014,
+   "afterStatus": "passed"
+  },
+  {
+   "file": "tests/usecase/stress.test.ts",
+   "test": "use case worst cases class statement with 2,500 ids and 4,000 classes",
+   "before": 12052,
+   "beforeStatus": "failed",
+   "after": 4610,
+   "afterStatus": "failed"
+  }
+ ],
+ "countsBefore": {
+  "passed": 6934,
+  "api": 25,
+  "model": 0,
+  "unported": 0,
+  "speed": 27,
+  "canvas": 1,
+  "known": 5,
+  "failed": 0
+ },
+ "aboutCountsBefore": "nim r tools/peletests.nim on round 3 (post Dates and styles in JavaScript) with main d1414ae merged, in this sandbox, 15 November 2026.",
+ "countsAfter": {
+  "passed": 6949,
+  "api": 25,
+  "model": 0,
+  "unported": 0,
+  "speed": 12,
+  "canvas": 1,
+  "known": 5,
+  "failed": 0
+ },
+ "aboutCountsAfter": "nim r tools/peletests.nim on this step's branch, in the same sandbox.",
+ "bridgeBytes": {
+  "before": 12061642,
+  "after": 11195621,
+  "about": "Size of the JavaScript bridge (tools/peletests/bridge.nim built with nim js -d:release): the JavaScript build no longer carries the regex engine."
+ },
+ "rxbench": {
+  "about": "rxbench.nim of the post Dates and styles in JavaScript (data/dates_and_styles_in_javascript/), milliseconds per run in the JavaScript build, nim-regex then native.",
+  "rows": [
+   {
+    "case": "a g walk with two groups (matchAll)",
+    "before": 963.0,
+    "after": 16.58
+   },
+   {
+    "case": "the same walk without groups",
+    "before": 687.4,
+    "after": 5.68
+   },
+   {
+    "case": "the same walk, text only (match)",
+    "before": 986.8,
+    "after": 7.25
+   },
+   {
+    "case": "a lexer: a sticky match at every token",
+    "before": 132.0,
+    "after": 24.25
+   }
+  ]
+ }
+}
