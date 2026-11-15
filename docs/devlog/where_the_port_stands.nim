@@ -1,4 +1,4 @@
-## devlog: 15 Nov 2026 G | Where the port stands | Every diagram type is drawn as Pele draws it. A look at what is left: three files that only a browser runs, one half of a file, a few dozen of Pele's tests, and the decisions that wait for Pietro.
+## devlog: 15 Nov 2026 H | Where the port stands | Every diagram type is drawn as Pele draws it. A look at what is left: three files that only a browser runs, one half of a file, a few dozen of Pele's tests, and the decisions that wait for Pietro.
 ## kind: plan
 import std/[json, sequtils, strformat, strutils, os, algorithm]
 import nimib
