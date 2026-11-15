@@ -1,0 +1,29 @@
+{
+  "note": "The questions the posts written before decision 0021 ask, and their answers. `post` is the notebook in docs/devlog/; `marker` is text the post must hold once its answer is recorded (checked when the page is built). `by` is pietro, step (a later step answered it) or open.",
+  "questions": [
+    {"post": "how_pele_is_built", "asked": "12 Nov", "question": "Hold strings as Nim's UTF-8, or as UTF-16 everywhere?",
+     "by": "step", "answered": "12 Nov", "answer": "UTF-8, UTF-16 only where it shows", "where": "decision 0011", "marker": "**Answered** on 12 November 2026"},
+    {"post": "the_shape_of_the_port", "asked": "13 Nov", "question": "What moves a file past draft: a second reading, or tests and fuzzing?",
+     "by": "pietro", "answered": "14 Nov", "answer": "tests and fuzzing are enough", "where": "decision 0014", "marker": "**Pietro's answer**, 14 November 2026: tests and fuzzing"},
+    {"post": "the_shape_of_the_port", "asked": "13 Nov", "question": "Gather the repeated patterns in one module of scanners?",
+     "by": "pietro", "answered": "14 Nov", "answer": "no: Pele's patterns, on nim-regex", "where": "decision 0016", "marker": "**Pietro's answer**, 14 November 2026: not a module of scanners"},
+    {"post": "opening_a_web_page", "asked": "13 Nov", "question": "A block that draws Mermaid text and checks it against Pele?",
+     "by": "step", "answered": "14 Nov", "answer": "yes, nbMermaid", "where": "Every drawing a test", "marker": "**Answered** on 14 November 2026"},
+    {"post": "diagrammari_as_a_corpus", "asked": "13 Nov", "question": "Run diagrammari's code to collect the diagrams it builds?",
+     "by": "pietro", "answered": "14 Nov", "answer": "allowed, never changed", "where": "diagrammari at work", "marker": "*Pietro's answer, 14 November 2026: allowed"},
+    {"post": "a_proposal_for_diagrammari", "asked": "14 Nov", "question": "A tag of nimaki for diagrammari to pin?",
+     "by": "pietro", "answered": "15 Nov", "answer": "a first release, 0.1.0", "where": "decision 0020", "marker": "*Pietro's answer, 15 November 2026: a first release now"},
+    {"post": "a_proposal_for_diagrammari", "asked": "14 Nov", "question": "Port Pele's browser side (mount, zoom) now?",
+     "by": "pietro", "answered": "15 Nov", "answer": "later, after a first release", "where": "roadmap step browser-side", "marker": "*Pietro's answer, 15\n   November 2026: later"},
+    {"post": "a_proposal_for_diagrammari", "asked": "14 Nov", "question": "Are tests and fuzzing enough, without a second reading?",
+     "by": "pietro", "answered": "14 Nov", "answer": "yes", "where": "decision 0014", "marker": "*Pietro's answer, 14 November 2026: they are"},
+    {"post": "dates_and_styles_in_javascript", "asked": "14 Nov", "question": "Which way out for the regex library in the JavaScript build?",
+     "by": "pietro", "answered": "15 Nov", "answer": "JavaScript's own RegExp, and a proposal to nim-regex", "where": "decision 0019", "marker": "Pietro chose option 4"},
+    {"post": "a_proposal_for_nim_regex", "asked": "15 Nov", "question": "Point nim-regex's author to the proposal?",
+     "by": "open", "answered": "", "answer": "", "where": "", "marker": ""},
+    {"post": "nimaki_0_1_0", "asked": "15 Nov", "question": "When is the API meant to stay, for 1.0.0?",
+     "by": "open", "answered": "", "answer": "", "where": "", "marker": ""},
+    {"post": "drawn_in_your_browser", "asked": "13 Nov", "question": "Make the JavaScript build smaller (drop unused parts, minify)?",
+     "by": "open", "answered": "", "answer": "", "where": "", "marker": ""}
+  ]
+}

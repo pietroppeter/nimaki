@@ -462,6 +462,14 @@ the TypeScript. That is a change to many files other threads own, so it goes on 
 [roadmap](../../roadmap/) as a step (`shared-scanners`), not into this post's pull request.
 """
 
+nbNote """
+**Pietro's answer**, 14 November 2026: not a module of scanners, but the patterns as Pele writes
+them, on nitely's pure Nim regex package ("a dependency, but a good one").
+[Decision 0016](../../decisions/#0016-regular-expressions-as-pele-writes-them-on-nim-regex) records
+it, and [*Regular expressions, as Pele writes them*](../regular-expressions-as-pele-writes-them/)
+carried it out, in place of `shared-scanners`.
+""", nkQuestion, "Proposed: shared-scanners"
+
 nbFold "The patterns written more than once":
   block:
     type Row = object
@@ -509,6 +517,10 @@ order of how much code depends on it (`js.nim`, the measurer, the SVG builder, t
 first); or a new decision lets tests and fuzzing count, so a file whose part is identical on the
 corpus, on Pele's tests and on fuzzing may say `conformant`, keeping `verified` for files that were
 reread. The roadmap holds this as a planned step, `second-reading`, until Pietro picks.
+
+**Pietro's answer**, 14 November 2026: tests and fuzzing are enough, without a second reading.
+[Decision 0014](../../decisions/#0014-tests-and-fuzzing-make-a-file-conformant-without-a-second-reading)
+records it, and [*Pele's tests, on nimaki*](../pele-tests-on-nimaki/) carried it out.
 """, nkQuestion, "For Pietro: draft, verified, conformant"
 
 nbText: fmt"""
