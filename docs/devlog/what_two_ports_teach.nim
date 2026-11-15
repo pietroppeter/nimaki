@@ -247,8 +247,9 @@ nbCode:
 
 nbText: """
 Two more could not be shown in a line. A regular expression in JavaScript reads code units too, so
-a `.` can take half of an emoji; nimaki's take the whole character, a difference listed on the
-[Decisions page](../../decisions/) (*Half of an emoji*). And `Math.sin` in Node is V8's own port of
+a `.` can take half of an emoji; in the C build nimaki's take the whole character, a difference
+listed on the [Decisions page](../../decisions/) (*Half of an emoji*), while the JavaScript build now
+matches with JavaScript's own engine ([decision 0019](../../decisions/#0019-javascript-s-own-regexp-in-the-javascript-build)). And `Math.sin` in Node is V8's own port of
 fdlibm, which differs from the C library in the last bit; nimaki ports V8's
 ([Circles that overlap](../circles-that-overlap/)).
 
