@@ -90,7 +90,7 @@ block:
   nbTable t
 
 nbText: """
-### 1. Ask the browser
+### Ask the browser
 
 A link in a diagram goes through `new URL()` in Pele, which writes a web address the way the
 browser does: `HTTP://Example.COM:80/a/../b` becomes `http://example.com/b`, and a host in
@@ -101,7 +101,7 @@ now calls `new URL()` there, and the tables are left out. It is the same choice 
 expressions ([JavaScript's own regular expressions](../javascripts-own-regular-expressions/)):
 in JavaScript, use the engine Pele itself runs on.
 
-### 2. Minify as Pele does
+### Minify as Pele does
 
 A *minifier* rewrites a JavaScript file into a shorter one that does the same: it drops the
 spaces and line breaks, and gives every local name one or two letters. Pele minifies its bundle
@@ -111,7 +111,7 @@ settings. One more option matters for Nim's output: `--format=iife` wraps the fi
 global, and a minifier must keep it, since another script could use it; inside, it can shorten it
 too. Nim's names are long (`dump__modeljson_u4573`), so that was worth a megabyte.
 
-### 3. A file per type
+### A file per type
 
 The research post found that most of nimaki.js is the 33 diagram types, and that a page draws a
 few. Pele solves this with *lazy loading*: its bundler cuts the code into a core and one piece
