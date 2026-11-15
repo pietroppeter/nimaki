@@ -26,7 +26,7 @@ Each island is a shared part of Pele or a diagram type; it glows like lava when 
 and cools to olivine when the Nim draws, byte for byte, the same SVG as Pele.
 """
 
-nbPipeline cov.pipeline("modules/")
+nbModules(cov, "modules/")
 
 nbText: """
 ## Why

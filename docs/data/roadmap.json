@@ -935,6 +935,17 @@
           "status": "done",
           "post": "a-page-for-every-module",
           "pr": "94"
+        },
+        {
+          "id": "type-examples",
+          "kind": "tooling",
+          "title": "A drawing for every type",
+          "what": "Each diagram type's page shows an example of that type, drawn by nimaki and checked against Pele at build time; the coverage map shows the shared core and the diagram types as two captioned groups (asked by Pietro, 15 November 2026).",
+          "done_when": "Every type page has a drawing checked against Pele; the pills tell types from core; a devlog post.",
+          "owner": "Port class and swimlane",
+          "status": "done",
+          "post": "a-drawing-for-every-type",
+          "pr": "97"
         }
       ]
     },

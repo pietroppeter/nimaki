@@ -29,7 +29,7 @@ A part is done when `tools/difftest.nim` finds the SVG of the Nim identical, byt
 the SVG of Pele run in Node, on that part's corpus.
 """
 
-nbPipeline cov.pipeline("../modules/")
+nbModules(cov, "../modules/")
 
 nbText: &"The referee's last full run: **{difftest[\"identical\"].getInt}** of {difftest[\"cases\"].getInt} cases identical to Pele, {difftest[\"unsupported\"].getInt} not drawn yet, {difftest[\"different\"].getInt} different.\n"
 if dCorpus != nil:

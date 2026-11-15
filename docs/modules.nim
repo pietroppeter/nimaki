@@ -5,16 +5,17 @@
 ## peletests.json, roadmap.json) when the pages are built.
 import std/[json, strformat, strutils, sequtils, tables, os]
 import nimib
-import blocks, site
+import blocks, site, pele
 
 let
   coverage = parseFile(docsDir / "data" / "coverage.json")
   portmap = parseFile(docsDir / "data" / "portmap.json")
   difftest = parseFile(docsDir / "data" / "difftest.json")
   fuzz = parseFile(docsDir / "data" / "fuzz.json")["types"]
-  pele = parseFile(docsDir / "data" / "peletests.json")
+  peleTestData = parseFile(docsDir / "data" / "peletests.json")
   roadmap = parseFile(docsDir / "data" / "roadmap.json")
   posts = devlogPosts()
+  corpus = parseFile(repoDir / "corpus" / "cases.json")["cases"]
 
 # Pele's browser side lives among the files of the api component in the port map.
 const browserFiles = ["src/mount.ts", "src/zoom.ts", "src/window.ts", "src/lazy.ts"]
@@ -59,7 +60,7 @@ proc relatedPosts(id, first: string, core: bool, files: seq[JsonNode]): seq[stri
 
 proc peleTests(prefix: string): (int, int) =
   ## Pele's tests in the files under `prefix`: how many pass on nimaki, of how many.
-  for file, c in pele["byFile"]:
+  for file, c in peleTestData["byFile"]:
     if file.startsWith(prefix):
       for kind, n in c: result[1] += n.getInt
       result[0] += c["passed"].getInt
@@ -91,9 +92,23 @@ proc countLine(files: seq[JsonNode]): string =
       parts.add &"{n} {word} ({code} lines)"
   &"{files.len} files of Pele: " & parts.join(", ") & "."
 
+proc exampleOf(id: string): JsonNode =
+  ## The example drawn on a type's page: the first case of the referee's corpus that comes from
+  ## Pele's docs and has 4 to 25 lines, or else its shortest case of the type.
+  var types: seq[string]   # the corpus's names of the type (they can differ from the map's)
+  for t in difftest["types"]:
+    if t["coverage"].getStr == id: types.add t["type"].getStr
+  for c in corpus:
+    let lines = c["source"].getStr.strip.countLines
+    if c["type"].getStr in types and "docs" in c["from"].getStr and lines in 4..25: return c
+  for c in corpus:
+    if c["type"].getStr in types and (result == nil or c["source"].getStr.len < result["source"].getStr.len):
+      result = c
+
 var shown: seq[string]   # every file put on a page, to check that each is on exactly one
 
-proc modulePage(id, what, nimDir, firstPost, notes: string, st: Status, core: bool, extra: string) =
+proc modulePage(id, what, nimDir, firstPost, notes: string, st: Status, core: bool, extra: string,
+                example: JsonNode = nil) =
   nbInit
   nb.doc.filename = docsDir / "modules" / id / "index.html"
   let kind = if core: "Shared core" else: "Diagram type"
@@ -109,6 +124,11 @@ proc modulePage(id, what, nimDir, firstPost, notes: string, st: Status, core: bo
     lead.add &" In nimaki: [`{nimDir}`]({repoUrl}/{kindOfLink}/main/{nimDir})."
   nbText: lead
   if notes.len > 0: nbText: notes
+  if example != nil:
+    let source = example["from"].getStr
+    nbText: "## An example"
+    nbMermaid example["source"].getStr,
+      &"Drawn by nimaki, byte for byte as Pele draws it (the build checks). From Pele's [`{source.extractFilename}`]({pin.repo}/blob/{pin.commit}/{source})."
   if extra.len > 0: nbText: extra
   nbText: "## Its files\n\nEach file of Pele at the pin, and the Nim that ports it; a name links to the file. *Conformant* is proven equal to Pele by the referee, the fuzzers and Pele's own tests ([decision 0014](../../decisions/#0014-tests-and-fuzzing-make-a-file-conformant-without-a-second-reading)).\n\n" & filesTable(files)
   let related = relatedPosts(id, firstPost, core, files)
@@ -125,6 +145,11 @@ for c in coverage["core"]:
   if total > 0: extra = &"Pele's tests in `tests/{id}/`: **{passed}** of {total} pass on nimaki."
   modulePage(id, c["what"].getStr, nimDir, c{"post"}.getStr, c{"notes"}.getStr,
              toStatus(c{"status"}.getStr), core = true, extra)
+
+# Pele draws every example in one Node process, before the pages ask for them one by one.
+var examples: Table[string, JsonNode]
+for d in coverage["diagrams"]: examples[d["id"].getStr] = exampleOf(d["id"].getStr)
+discard peleRenders(toSeq(examples.values).mapIt(it["source"].getStr))
 
 for d in coverage["diagrams"]:
   let id = d["id"].getStr
@@ -144,7 +169,7 @@ for d in coverage["diagrams"]:
   let extra = (if checks.len > 0: "What checks it: " & checks.join("; ") & ".\n\n" else: "") & stages
   let overall = if ["parse", "layout", "render"].allIt(d[it]["status"].getStr == "done"): stDone else: stStarted
   modulePage(id, "", d{"nim"}.getStr.strip(chars = {'/'}, leading = false), d{"post"}.getStr,
-             d{"notes"}.getStr, overall, core = false, extra)
+             d{"notes"}.getStr, overall, core = false, extra, examples[id])
 
 doAssert shown.len == portmap["files"].len and shown.deduplicate.len == shown.len,
   "modules.nim: every file of the port map must be on exactly one module page"
