@@ -1,0 +1,13 @@
+s.length	1087	UTF-16: `utf16Len` where the number shows
+charCodeAt, codePointAt	560	UTF-16: `codeAt`, `codeUnits`, `codePointAt`
+a regular expression literal	457	`jsre` of `jsregex.nim`
+Math.round, toFixed	136	numbers: `jsRound`, `toFixed`
+a template string, `${x}`	1192	`&`; a number in it through `jsString` or `num`
+Math.max, Math.min	805	NaN: `jsMax`, `jsMin`
+new Map, new Set	323	order: `OrderedTable`, `OrderedSet`
+undefined, ??, ?.	1916	`Option`, `nil`, or a stand-in
+a spread, ...x	150	copy, then set fields; `{.spread.}` in a model
+an interface	426	an `object` or a `ref object`
+a class	32	a `ref object` and its procs
+a type that is a list of words	35	an `enum`
+an arrow function	1407	a `proc`, a closure or a `template`

@@ -138,9 +138,9 @@
           "what": "What gleam-in-nim found (its devlog, decisions, AGENTS.md) and what is new for a port from TypeScript: UTF-16, JavaScript numbers, regexes, structural types.",
           "done_when": "A devlog post; the porting guide gains its idiom map.",
           "owner": "Port class and swimlane",
-          "status": "started",
-          "post": "",
-          "pr": ""
+          "status": "done",
+          "post": "what-two-ports-teach",
+          "pr": "86"
         },
         {
           "id": "plan",
