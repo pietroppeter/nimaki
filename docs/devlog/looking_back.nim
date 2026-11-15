@@ -136,7 +136,7 @@ let doneSteps = steps.countIt(it.status == "done")
 nbText: &"""
 ## The findings, first
 
-- **nimaki 0.2.0 is prepared, not yet tagged.** It draws all {types} of Pele's diagram types:
+- **nimaki 0.2.0 is out** (Pietro tagged it on 15 November, after reading this post). It draws all {types} of Pele's diagram types:
   {identical.thousands} of {cases.thousands} cases identical to Pele, byte for byte, in C and in
   JavaScript; Pele's own tests pass on it, {counts["passed"].getInt.thousands} of
   {peleTests["tests"].getInt.thousands}, none failing; it runs as a Nim library, a JavaScript file
@@ -157,7 +157,7 @@ nbText: &"""
 - **What is left** is small, and none of it, by our reading, stands in the way of 0.2.0:
   {openSteps.len} roadmap steps that stay open by design (two of them recurring articles), a handful of
   Pele's stress tests that are slow in the JavaScript build, {divergences} wanted differences, and things
-  only Pietro can do (the tag, the proposals to diagrammari and nim-regex). The list is in
+  only Pietro can do (the proposals to diagrammari and nim-regex). The list is in
   [What is left](#what-is-left).
 """
 
@@ -380,13 +380,15 @@ In all, nimaki took about what nanuq and tabelline took, in less than half their
 nbText: """
 ## What is left
 
-For Pietro, to decide whether 0.2.0 can go out. By our reading, nothing here blocks it: each item
+Written for Pietro, to decide whether 0.2.0 could go out (it did). By our reading, nothing here blocked it: each item
 is known, written down where a later thread will find it, and none changes a drawing.
 
 **Things only Pietro can do**
 
-- **Tag 0.2.0.** The release is prepared ([nimaki 0.2.0](../nimaki-0-2-0/)); a workflow attaches
-  the JavaScript files when it is published (decision 0023).
+- **Tag 0.2.0.** Done on 15 November, from the commit that merged this post
+  ([nimaki 0.2.0](../nimaki-0-2-0/),
+  [the release](https://github.com/pietroppeter/nimaki/releases/tag/v0.2.0)); its workflow then
+  attached the JavaScript files, each type's and a zip of all (decision 0023).
 - **Propose nimaki to diagrammari.** The [proposal](../a-proposal-for-diagrammari/) lists what
   diagrammari needed; every item is now done. Changing diagrammari is Pietro's, not ours.
 - **Send the proposal to nim-regex**, if he wants to:
