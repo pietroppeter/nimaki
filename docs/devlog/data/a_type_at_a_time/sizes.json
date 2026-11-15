@@ -1,0 +1,333 @@
+{
+  "nim": "Nim Compiler Version 2.2.15 [Linux: amd64]",
+  "esbuild": "0.28.2",
+  "pele": "1.13.0",
+  "files": [
+    {
+      "name": "debug",
+      "flags": "",
+      "raw": 12928101,
+      "gzip": 1639199,
+      "brotli": 1034631
+    },
+    {
+      "name": "release",
+      "flags": "-d:release",
+      "raw": 10184236,
+      "gzip": 1381293,
+      "brotli": 902284
+    },
+    {
+      "name": "danger",
+      "flags": "-d:danger",
+      "raw": 9222694,
+      "gzip": 1303233,
+      "brotli": 865423
+    },
+    {
+      "name": "danger, minified",
+      "flags": "-d:danger + esbuild --minify",
+      "raw": 4500343,
+      "gzip": 825716,
+      "brotli": 552533
+    },
+    {
+      "name": "danger, in a function, minified",
+      "flags": "-d:danger + esbuild --minify --format=iife",
+      "raw": 3118491,
+      "gzip": 698055,
+      "brotli": 497439
+    },
+    {
+      "name": "flowchart, sequence, pie, timeline",
+      "flags": "-d:danger -d:nimakiTypes=flowchart,sequence,pie,timeline + esbuild",
+      "raw": 1051832,
+      "gzip": 242603,
+      "brotli": 188435
+    }
+  ],
+  "peleBundle": {
+    "raw": 733670,
+    "gzip": 276841,
+    "brotli": 223408
+  },
+  "anatomy": {
+    "total": 9222694,
+    "what": {
+      "indentation": 1268847,
+      "names": 3226159,
+      "strings": 404706,
+      "typeInfo": 520259,
+      "tables": 26042
+    },
+    "areas": {
+      "diagram types": 5508416,
+      "Nim's library and the dependencies": 152348,
+      "shared core": 1433888,
+      "browser side": 105382,
+      "models for parse": 586579,
+      "top-level code (data, type information)": 1436082
+    },
+    "modules": {
+      "modeljson": 586579,
+      "layout/layered": 358392,
+      "diagrams/usecase/db": 181598,
+      "layout/compound": 171078,
+      "diagrams/sequence/render": 161036,
+      "diagrams/agentflow/db": 145785,
+      "diagrams/class/render": 136016,
+      "layout/lanes": 123783,
+      "jsregex": 117064,
+      "diagrams/block/render": 114752,
+      "diagrams/wardley/render": 109119,
+      "diagrams/state/render": 96299,
+      "diagrams/agentflow/lexer": 94119,
+      "diagrams/er/render": 93376,
+      "diagrams/usecase/parser": 92159,
+      "diagrams/architecture/render": 91883,
+      "diagrams/state/lexer": 90687,
+      "diagrams/flowchart/lexer": 89271,
+      "diagrams/usecase/render": 86082,
+      "diagrams/usecase/json": 84711,
+      "diagrams/class/db": 83063,
+      "diagrams/gantt/render": 78675,
+      "diagrams/eventmodeling/render": 75164,
+      "diagrams/git/render": 72743,
+      "diagrams/flowchart/db": 71930,
+      "text/label": 71199,
+      "diagrams/xychart/render": 70543,
+      "diagrams/sequence/lexer": 67712,
+      "svg/edges": 67429,
+      "js": 67394,
+      "diagrams/agentflow/parser": 67047,
+      "diagrams/railroad/render": 65869,
+      "diagrams/architecture/layout": 65010,
+      "diagrams/c4/route": 64148,
+      "diagrams/venn/render": 63640,
+      "(runtime)": 63168,
+      "diagrams/flowchart/parser": 63145,
+      "util/yaml": 60216,
+      "diagrams/flowchart/render": 59597,
+      "diagrams/requirement/render": 57631
+    }
+  },
+  "shipped": [
+    {
+      "name": "nimaki.js",
+      "raw": 3118491,
+      "gzip": 698055,
+      "brotli": 497439
+    },
+    {
+      "name": "nimaki-core.js",
+      "raw": 402753,
+      "gzip": 85524,
+      "brotli": 68578
+    },
+    {
+      "name": "nimaki-flowchart.js",
+      "raw": 838338,
+      "gzip": 193149,
+      "brotli": 152009
+    },
+    {
+      "name": "nimaki-mindmap.js",
+      "raw": 516956,
+      "gzip": 112768,
+      "brotli": 89885
+    },
+    {
+      "name": "nimaki-architecture.js",
+      "raw": 555069,
+      "gzip": 121853,
+      "brotli": 96499
+    },
+    {
+      "name": "nimaki-agentflow.js",
+      "raw": 868008,
+      "gzip": 200172,
+      "brotli": 157188
+    },
+    {
+      "name": "nimaki-c4.js",
+      "raw": 618718,
+      "gzip": 134162,
+      "brotli": 106750
+    },
+    {
+      "name": "nimaki-kanban.js",
+      "raw": 508041,
+      "gzip": 111010,
+      "brotli": 88084
+    },
+    {
+      "name": "nimaki-class.js",
+      "raw": 796151,
+      "gzip": 181198,
+      "brotli": 143660
+    },
+    {
+      "name": "nimaki-er.js",
+      "raw": 747823,
+      "gzip": 172982,
+      "brotli": 137678
+    },
+    {
+      "name": "nimaki-gantt.js",
+      "raw": 623274,
+      "gzip": 135490,
+      "brotli": 107101
+    },
+    {
+      "name": "nimaki-info.js",
+      "raw": 473319,
+      "gzip": 101819,
+      "brotli": 81077
+    },
+    {
+      "name": "nimaki-pie.js",
+      "raw": 494786,
+      "gzip": 107586,
+      "brotli": 85223
+    },
+    {
+      "name": "nimaki-requirement.js",
+      "raw": 701567,
+      "gzip": 160465,
+      "brotli": 128243
+    },
+    {
+      "name": "nimaki-sequence.js",
+      "raw": 630635,
+      "gzip": 137014,
+      "brotli": 108672
+    },
+    {
+      "name": "nimaki-swimlane.js",
+      "raw": 877262,
+      "gzip": 205106,
+      "brotli": 161474
+    },
+    {
+      "name": "nimaki-timeline.js",
+      "raw": 493776,
+      "gzip": 107425,
+      "brotli": 85730
+    },
+    {
+      "name": "nimaki-gitGraph.js",
+      "raw": 530719,
+      "gzip": 115370,
+      "brotli": 91197
+    },
+    {
+      "name": "nimaki-state.js",
+      "raw": 782923,
+      "gzip": 182248,
+      "brotli": 144256
+    },
+    {
+      "name": "nimaki-journey.js",
+      "raw": 496543,
+      "gzip": 107470,
+      "brotli": 85900
+    },
+    {
+      "name": "nimaki-quadrantChart.js",
+      "raw": 510880,
+      "gzip": 110642,
+      "brotli": 88174
+    },
+    {
+      "name": "nimaki-sankey.js",
+      "raw": 525961,
+      "gzip": 114394,
+      "brotli": 91422
+    },
+    {
+      "name": "nimaki-packet.js",
+      "raw": 499356,
+      "gzip": 108721,
+      "brotli": 86400
+    },
+    {
+      "name": "nimaki-xychart.js",
+      "raw": 507359,
+      "gzip": 111757,
+      "brotli": 89448
+    },
+    {
+      "name": "nimaki-block.js",
+      "raw": 614874,
+      "gzip": 135098,
+      "brotli": 107330
+    },
+    {
+      "name": "nimaki-eventmodeling.js",
+      "raw": 539800,
+      "gzip": 116045,
+      "brotli": 92085
+    },
+    {
+      "name": "nimaki-treeView.js",
+      "raw": 521826,
+      "gzip": 112661,
+      "brotli": 89511
+    },
+    {
+      "name": "nimaki-radar.js",
+      "raw": 495766,
+      "gzip": 107939,
+      "brotli": 85683
+    },
+    {
+      "name": "nimaki-ishikawa.js",
+      "raw": 486773,
+      "gzip": 105220,
+      "brotli": 84182
+    },
+    {
+      "name": "nimaki-treemap.js",
+      "raw": 524262,
+      "gzip": 113170,
+      "brotli": 90318
+    },
+    {
+      "name": "nimaki-railroad.js",
+      "raw": 544994,
+      "gzip": 116589,
+      "brotli": 91641
+    },
+    {
+      "name": "nimaki-venn.js",
+      "raw": 540945,
+      "gzip": 116143,
+      "brotli": 93121
+    },
+    {
+      "name": "nimaki-wardley.js",
+      "raw": 568100,
+      "gzip": 121297,
+      "brotli": 95642
+    },
+    {
+      "name": "nimaki-cynefin.js",
+      "raw": 509107,
+      "gzip": 109944,
+      "brotli": 87506
+    },
+    {
+      "name": "nimaki-usecase.js",
+      "raw": 878363,
+      "gzip": 195251,
+      "brotli": 154019
+    }
+  ],
+  "diagrammari": {
+    "name": "flowchart, sequence, pie, timeline",
+    "flags": "-d:danger -d:nimakiTypes=flowchart,sequence,pie,timeline + esbuild",
+    "raw": 1051832,
+    "gzip": 242603,
+    "brotli": 188435
+  }
+}

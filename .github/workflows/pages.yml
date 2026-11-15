@@ -122,6 +122,15 @@ jobs:
       - name: Difftest of the JavaScript build
         run: nim r tools/difftest.nim --js --check-done --show:30
 
+      # The files the pages ship (tools/webbuild.nim: -d:danger, one per type, minified with
+      # Pele's esbuild), loaded in Node as a page loads them: nimaki.js alone, then the core and
+      # every type's file together on one page.
+      - name: Difftest of the files the pages ship
+        run: |
+          nim r tools/webbuild.nim
+          nim r tools/difftest.nim --web:build/web/nimaki.js --check-done --show:30
+          nim r tools/difftest.nim --web:build/web --check-done --show:30
+
       # The fuzzers and the odd-character fuzzer are built optimised (-d:release keeps Nim's
       # runtime checks) and run four at a time, one per core of the runner: the referee above
       # checks the default build, these the optimised one.

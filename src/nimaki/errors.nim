@@ -9,7 +9,7 @@ import js, jsregex
 type
   PeleError* = object of CatchableError
     ## An error Pele throws. `code` is one of `unsupported-diagram`, `syntax`, `semantic`,
-    ## `limit`; nimaki adds `unsupported` for a type it does not draw yet.
+    ## `limit`, as in Pele: a type a build does not draw (`-d:nimakiTypes`) is `unsupported-diagram`.
     code*: string
     diagramType*: string   ## Pele's `type` ("" for null)
     mermaidType*: string

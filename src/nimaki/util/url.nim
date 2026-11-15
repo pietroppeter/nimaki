@@ -8,7 +8,9 @@
 ## `decodeURIComponent` and `new URL()` are written here: the URL parser covers what a link in
 ## a diagram needs (the WHATWG rules for http and https: scheme and host in lower case, default
 ## ports dropped, dot segments resolved, the percent-encode sets of path, query and fragment,
-## IPv4 hosts, and hosts outside ASCII through IDNA, in `idna.nim`).
+## IPv4 hosts, and hosts outside ASCII through IDNA, in `idna.nim`). The JavaScript build calls
+## the engine's own `new URL()`, as Pele does: its IDNA tables would be most of a megabyte of the
+## file a page loads (post *Why nimaki.js is big*).
 import std/[strutils, options]
 from std/math import trunc, pow, `mod`
 import ../js
@@ -16,7 +18,8 @@ import ../jsregex
 import ../svg/builder
 import ../text/entities
 import ../types
-import idna
+when not defined(js):
+  import idna
 
 const
   BLANK = "about:blank"
@@ -276,104 +279,123 @@ func ipv4(host: string): (bool, string) =
     n = n div 256
   (true, output.join("."))
 
-proc parseDomain*(host: string): Option[string] =
-  ## The host of `new URL()` for a host that is not an IPv6 address in brackets, still percent
-  ## encoded: none for one it refuses. Domain to ASCII (IDNA) first: `exampleΩ.com` is written
-  ## `xn--example-...`, and a host that holds a character IDNA refuses, or that maps to a space
-  ## (a no-break space does), is refused.
-  let ascii = domainToAscii(decode(host))
-  if ascii.isNone: return none(string)
-  result = ascii
-  for c in ascii.get:
-    if c in {'\0', '\t', '\n', '\r', ' ', '#', '%', '/', ':', '<', '>', '?', '@', '[', '\\', ']', '^', '|'} or
-       ord(c) < 0x20 or ord(c) == 0x7f:
-      return none(string)
-  if endsInNumber(ascii.get):
-    let (ok, v4) = ipv4(ascii.get)
-    if not ok: return none(string)
-    result = some(v4)
+when defined(js):
+  {.emit: """
+function nimakiUrlHref(a) {
+  // new URL(), as Pele calls it (src/util/url.ts): the text as a JavaScript string, the URL
+  // written back as UTF-8 bytes, or no bytes when new URL() refuses it.
+  var u;
+  try { u = new URL(nimakiRxDecode(a).js); } catch (e) { return []; }
+  u.protocol = u.protocol.toLowerCase();
+  u.hostname = u.hostname.toLowerCase();
+  return nimakiRxEncode(u.toString());
+}
+""".}
+  proc urlHref(input: string): string {.importjs: "nimakiUrlHref(#)".}
 
-proc parseHttpUrl(input: string): Option[string] =
-  ## new URL(input).toString() for an input whose scheme is http or https (lower case already).
-  let colon = input.find(':')
-  let scheme = input[0 ..< colon].toLowerAscii
-  var rest = input[colon + 1 .. ^1]
-  # Tabs and newlines are removed; the special scheme ignores any slashes before the authority.
-  rest = rest.multiReplace(("\t", ""), ("\n", ""), ("\r", ""))
-  var i = 0
-  while i < rest.len and rest[i] in {'/', '\\'}: inc i
-  rest = rest[i .. ^1]
-  var authEnd = 0
-  while authEnd < rest.len and rest[authEnd] notin {'/', '\\', '?', '#'}: inc authEnd
-  var authority = rest[0 ..< authEnd]
-  var tail = rest[authEnd .. ^1]
-  var userinfo = ""
-  let at = authority.rfind('@')
-  if at >= 0:
-    let info = authority[0 ..< at]
-    authority = authority[at + 1 .. ^1]
-    let c = info.find(':')
-    let user = if c >= 0: info[0 ..< c] else: info
-    let pass = if c >= 0: info[c + 1 .. ^1] else: ""
-    userinfo = percentEncode(user, userinfoKeep)
-    if pass != "": userinfo.add ":" & percentEncode(pass, userinfoKeep)
-  var host = authority
-  var port = ""
-  if not host.startsWith("["):
-    let c = host.rfind(':')
-    if c >= 0:
-      port = host[c + 1 .. ^1]
-      host = host[0 ..< c]
-  if host == "": return none(string)
-  if port != "":
-    if not allCharsInSet(port, {'0'..'9'}): return none(string)
-    let p = parseInt(port)
-    if p > 65535: return none(string)
-    port = $p
-    if (scheme == "http" and p == 80) or (scheme == "https" and p == 443): port = ""
-  if not host.startsWith("["):
-    let parsed = parseDomain(host)
-    if parsed.isNone: return none(string)
-    host = parsed.get
-  # Path, query, fragment.
-  var path = tail
-  var query = ""
-  var hasQuery = false
-  var fragment = ""
-  var hasFragment = false
-  let hash = path.find('#')
-  if hash >= 0:
-    fragment = path[hash + 1 .. ^1]
-    hasFragment = true
-    path = path[0 ..< hash]
-  let q = path.find('?')
-  if q >= 0:
-    query = path[q + 1 .. ^1]
-    hasQuery = true
-    path = path[0 ..< q]
-  path = path.replace('\\', '/')
-  var segments: seq[string]
-  if path.len > 0:
-    let parts = path[1 .. ^1].split('/')
-    for k, part in parts:
-      let lower = part.toLowerAscii
-      let single = lower == "." or lower == "%2e"
-      let double = lower in ["..", ".%2e", "%2e.", "%2e%2e"]
-      if double:
-        if segments.len > 0: segments.setLen(segments.len - 1)
-        if k == parts.len - 1: segments.add ""
-      elif single:
-        if k == parts.len - 1: segments.add ""
-      else:
-        segments.add percentEncode(part, pathKeep)
-  var serialized = scheme & "://"
-  if userinfo != "": serialized.add userinfo & "@"
-  serialized.add host
-  if port != "": serialized.add ":" & port
-  serialized.add "/" & segments.join("/")
-  if hasQuery: serialized.add "?" & percentEncode(query, queryKeep)
-  if hasFragment: serialized.add "#" & percentEncode(fragment, fragmentKeep)
-  some(serialized)
+  proc parseHttpUrl(input: string): Option[string] =
+    ## new URL(input).toString(), from the engine's own URL parser.
+    let href = urlHref(input)
+    if href.len == 0: none(string) else: some(href)
+else:
+  proc parseDomain*(host: string): Option[string] =
+    ## The host of `new URL()` for a host that is not an IPv6 address in brackets, still percent
+    ## encoded: none for one it refuses. Domain to ASCII (IDNA) first: `exampleΩ.com` is written
+    ## `xn--example-...`, and a host that holds a character IDNA refuses, or that maps to a space
+    ## (a no-break space does), is refused.
+    let ascii = domainToAscii(decode(host))
+    if ascii.isNone: return none(string)
+    result = ascii
+    for c in ascii.get:
+      if c in {'\0', '\t', '\n', '\r', ' ', '#', '%', '/', ':', '<', '>', '?', '@', '[', '\\', ']', '^', '|'} or
+         ord(c) < 0x20 or ord(c) == 0x7f:
+        return none(string)
+    if endsInNumber(ascii.get):
+      let (ok, v4) = ipv4(ascii.get)
+      if not ok: return none(string)
+      result = some(v4)
+
+  proc parseHttpUrl(input: string): Option[string] =
+    ## new URL(input).toString() for an input whose scheme is http or https (lower case already).
+    let colon = input.find(':')
+    let scheme = input[0 ..< colon].toLowerAscii
+    var rest = input[colon + 1 .. ^1]
+    # Tabs and newlines are removed; the special scheme ignores any slashes before the authority.
+    rest = rest.multiReplace(("\t", ""), ("\n", ""), ("\r", ""))
+    var i = 0
+    while i < rest.len and rest[i] in {'/', '\\'}: inc i
+    rest = rest[i .. ^1]
+    var authEnd = 0
+    while authEnd < rest.len and rest[authEnd] notin {'/', '\\', '?', '#'}: inc authEnd
+    var authority = rest[0 ..< authEnd]
+    var tail = rest[authEnd .. ^1]
+    var userinfo = ""
+    let at = authority.rfind('@')
+    if at >= 0:
+      let info = authority[0 ..< at]
+      authority = authority[at + 1 .. ^1]
+      let c = info.find(':')
+      let user = if c >= 0: info[0 ..< c] else: info
+      let pass = if c >= 0: info[c + 1 .. ^1] else: ""
+      userinfo = percentEncode(user, userinfoKeep)
+      if pass != "": userinfo.add ":" & percentEncode(pass, userinfoKeep)
+    var host = authority
+    var port = ""
+    if not host.startsWith("["):
+      let c = host.rfind(':')
+      if c >= 0:
+        port = host[c + 1 .. ^1]
+        host = host[0 ..< c]
+    if host == "": return none(string)
+    if port != "":
+      if not allCharsInSet(port, {'0'..'9'}): return none(string)
+      let p = parseInt(port)
+      if p > 65535: return none(string)
+      port = $p
+      if (scheme == "http" and p == 80) or (scheme == "https" and p == 443): port = ""
+    if not host.startsWith("["):
+      let parsed = parseDomain(host)
+      if parsed.isNone: return none(string)
+      host = parsed.get
+    # Path, query, fragment.
+    var path = tail
+    var query = ""
+    var hasQuery = false
+    var fragment = ""
+    var hasFragment = false
+    let hash = path.find('#')
+    if hash >= 0:
+      fragment = path[hash + 1 .. ^1]
+      hasFragment = true
+      path = path[0 ..< hash]
+    let q = path.find('?')
+    if q >= 0:
+      query = path[q + 1 .. ^1]
+      hasQuery = true
+      path = path[0 ..< q]
+    path = path.replace('\\', '/')
+    var segments: seq[string]
+    if path.len > 0:
+      let parts = path[1 .. ^1].split('/')
+      for k, part in parts:
+        let lower = part.toLowerAscii
+        let single = lower == "." or lower == "%2e"
+        let double = lower in ["..", ".%2e", "%2e.", "%2e%2e"]
+        if double:
+          if segments.len > 0: segments.setLen(segments.len - 1)
+          if k == parts.len - 1: segments.add ""
+        elif single:
+          if k == parts.len - 1: segments.add ""
+        else:
+          segments.add percentEncode(part, pathKeep)
+    var serialized = scheme & "://"
+    if userinfo != "": serialized.add userinfo & "@"
+    serialized.add host
+    if port != "": serialized.add ":" & port
+    serialized.add "/" & segments.join("/")
+    if hasQuery: serialized.add "?" & percentEncode(query, queryKeep)
+    if hasFragment: serialized.add "#" & percentEncode(fragment, fragmentKeep)
+    some(serialized)
 
 proc sanitizeUrl*(url: string): string =
   ## Refuses what @braintree/sanitize-url refuses, the check Mermaid applies to click targets.

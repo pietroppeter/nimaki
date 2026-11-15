@@ -120,6 +120,25 @@ when not defined(js):
         let j = parseJson(withLoneSurrogates(line))
         result[j["id"].getStr] = toAnswer(j)
 
+  proc webAnswers*(cases: seq[JsonNode], files: seq[string], name: string): Table[string, Answer] =
+    ## nimaki's answers from the files a page loads (tools/webbuild.nim), loaded in Node one after
+    ## the other by tools/webrunner.mjs, with TZ=UTC as the oracle is.
+    let dir = buildDir / "web-answers"
+    createDir dir
+    var input = ""
+    for c in cases: input.add $c & "\n"
+    let inPath = dir / (name & "-in.jsonl")
+    let outPath = dir / (name & "-out.jsonl")
+    writeFile inPath, input
+    var run = "TZ=UTC node " & quoteShell(repoDir / "tools" / "webrunner.mjs") & " " & quoteShell(inPath) &
+              " " & quoteShell(outPath)
+    for f in files: run.add " " & quoteShell(f)
+    if execShellCmd(run) != 0: quit "ERROR the files of the pages failed: " & run, 2
+    for line in lines(outPath):
+      if line.len > 0:
+        let j = parseJson(withLoneSurrogates(line))
+        result[j["id"].getStr] = toAnswer(j)
+
   proc updateJsData*(section, key: string, value: JsonNode) =
     ## Records a run of the JavaScript build in docs/data/js.json, which the pages read:
     ## `difftest` (the whole corpus), `fuzz` (by type), and `bytes`, the size of the build.

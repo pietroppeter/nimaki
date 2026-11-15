@@ -18,6 +18,7 @@ import ../nimaki
 import util/yaml
 import js
 import model
+import selection
 from diagrams/agentflow/db import AgentflowDb
 from diagrams/agentflow/types import MappingSet
 from diagrams/architecture/db import ArchitectureDb, ArchNode
@@ -435,40 +436,73 @@ proc dumpModel*(m: ParsedModel, share = false, budget = 0): JsonNode =
   when defined(js):
     if share: path.ids = newIds()
   template asT(T: typedesc): JsonNode = dump(T(m.model), path)
-  result = case m.diagramType
-  of "agentflow": asT(AgentflowDb)
-  of "architecture": asT(ArchitectureDb)
-  of "block": asT(BlockDb)
-  of "c4": asT(C4Db)
-  of "class": asT(ClassDb)
-  of "cynefin": asT(CynefinModel)
-  of "er": asT(ErDb)
-  of "eventmodeling": asT(EventModelingModel)
-  of "flowchart", "swimlane": asT(FlowDb)
-  of "gantt": asT(GanttDb)
-  of "gitGraph": asT(GitModel)
-  of "info": asT(InfoModel)
-  of "ishikawa": asT(IshikawaDb)
-  of "journey": asT(JourneyModel)
-  of "kanban": asT(KanbanModel)
-  of "mindmap": asT(MindmapModel)
-  of "packet": asT(PacketModel)
-  of "pie": asT(PieModel)
-  of "quadrantChart": asT(QuadrantModel)
-  of "radar": asT(RadarModel)
-  of "railroad": asT(RailroadModel)
-  of "requirement": asT(RequirementDb)
-  of "sankey": asT(SankeyModel)
-  of "sequence": asT(SeqDb)
-  of "state": asT(StateDb)
-  of "timeline": asT(TimelineModel)
-  of "treemap": asT(TreemapModel)
-  of "treeView": asT(TreeViewModel)
-  of "usecase": asT(UsecaseModel)
-  of "venn": asT(VennDb)
-  of "wardley": asT(WardleyModel)
-  of "xychart": asT(XyChartDb)
-  else: newJNull()
+  # Only the types this build draws (`nimaki/selection`): the walk is written out for each type of
+  # model it meets, so a type left out of the build leaves its walk out too.
+  result = newJNull()
+  when drawn("agentflow"):
+    if m.diagramType == "agentflow": result = asT(AgentflowDb)
+  when drawn("architecture"):
+    if m.diagramType == "architecture": result = asT(ArchitectureDb)
+  when drawn("block"):
+    if m.diagramType == "block": result = asT(BlockDb)
+  when drawn("c4"):
+    if m.diagramType == "c4": result = asT(C4Db)
+  when drawn("class"):
+    if m.diagramType == "class": result = asT(ClassDb)
+  when drawn("cynefin"):
+    if m.diagramType == "cynefin": result = asT(CynefinModel)
+  when drawn("er"):
+    if m.diagramType == "er": result = asT(ErDb)
+  when drawn("eventmodeling"):
+    if m.diagramType == "eventmodeling": result = asT(EventModelingModel)
+  when drawn("flowchart") or drawn("swimlane"):
+    if m.diagramType == "flowchart" or m.diagramType == "swimlane": result = asT(FlowDb)
+  when drawn("gantt"):
+    if m.diagramType == "gantt": result = asT(GanttDb)
+  when drawn("gitGraph"):
+    if m.diagramType == "gitGraph": result = asT(GitModel)
+  when drawn("info"):
+    if m.diagramType == "info": result = asT(InfoModel)
+  when drawn("ishikawa"):
+    if m.diagramType == "ishikawa": result = asT(IshikawaDb)
+  when drawn("journey"):
+    if m.diagramType == "journey": result = asT(JourneyModel)
+  when drawn("kanban"):
+    if m.diagramType == "kanban": result = asT(KanbanModel)
+  when drawn("mindmap"):
+    if m.diagramType == "mindmap": result = asT(MindmapModel)
+  when drawn("packet"):
+    if m.diagramType == "packet": result = asT(PacketModel)
+  when drawn("pie"):
+    if m.diagramType == "pie": result = asT(PieModel)
+  when drawn("quadrantChart"):
+    if m.diagramType == "quadrantChart": result = asT(QuadrantModel)
+  when drawn("radar"):
+    if m.diagramType == "radar": result = asT(RadarModel)
+  when drawn("railroad"):
+    if m.diagramType == "railroad": result = asT(RailroadModel)
+  when drawn("requirement"):
+    if m.diagramType == "requirement": result = asT(RequirementDb)
+  when drawn("sankey"):
+    if m.diagramType == "sankey": result = asT(SankeyModel)
+  when drawn("sequence"):
+    if m.diagramType == "sequence": result = asT(SeqDb)
+  when drawn("state"):
+    if m.diagramType == "state": result = asT(StateDb)
+  when drawn("timeline"):
+    if m.diagramType == "timeline": result = asT(TimelineModel)
+  when drawn("treemap"):
+    if m.diagramType == "treemap": result = asT(TreemapModel)
+  when drawn("treeView"):
+    if m.diagramType == "treeView": result = asT(TreeViewModel)
+  when drawn("usecase"):
+    if m.diagramType == "usecase": result = asT(UsecaseModel)
+  when drawn("venn"):
+    if m.diagramType == "venn": result = asT(VennDb)
+  when drawn("wardley"):
+    if m.diagramType == "wardley": result = asT(WardleyModel)
+  when drawn("xychart"):
+    if m.diagramType == "xychart": result = asT(XyChartDb)
   if m.diagramType in renamedIn: result = rename(result, renamedIn[m.diagramType])
   if result.kind == JObject and m.diagramType != "usecase":   # usecase's Pele starts them as ""
     for k in ["title", "accTitle", "accDescr"]:
