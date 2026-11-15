@@ -1,0 +1,361 @@
+{
+  "run": 280,
+  "lines": [
+    [
+      "2026-11-15T07:07:29Z",
+      "##[group]Run actions/checkout@v4"
+    ],
+    [
+      "2026-11-15T07:07:33Z",
+      "##[group]Run html=$(git ls-files '*.html')"
+    ],
+    [
+      "2026-11-15T07:07:34Z",
+      "##[group]Run jiro4989/setup-nim-action@v2"
+    ],
+    [
+      "2026-11-15T07:07:34Z",
+      "##[group]Run \"/home/runner/work/_actions/jiro4989/setup-nim-action/v2/install_nim.sh\" \\"
+    ],
+    [
+      "2026-11-15T07:07:35Z",
+      "##[group]Run parent=\"\""
+    ],
+    [
+      "2026-11-15T07:07:35Z",
+      "##[group]Run echo \"installed nim fullpath: $(which nim)\""
+    ],
+    [
+      "2026-11-15T07:07:35Z",
+      "##[group]Run nim -v"
+    ],
+    [
+      "2026-11-15T07:07:35Z",
+      "##[group]Run nimble -v"
+    ],
+    [
+      "2026-11-15T07:07:35Z",
+      "##[group]Run actions/setup-node@v4"
+    ],
+    [
+      "2026-11-15T07:07:40Z",
+      "##[group]Run actions/cache@v4"
+    ],
+    [
+      "2026-11-15T07:07:41Z",
+      "##[group]Run actions/cache@v4"
+    ],
+    [
+      "2026-11-15T07:07:41Z",
+      "##[group]Run sh tools/setup.sh"
+    ],
+    [
+      "2026-11-15T07:08:12Z",
+      "##[group]Run actions/cache@v4"
+    ],
+    [
+      "2026-11-15T07:08:13Z",
+      "##[group]Run nim r tools/portmap.nim check"
+    ],
+    [
+      "2026-11-15T07:08:13Z",
+      "##[group]Run node tools/corpus.mjs"
+    ],
+    [
+      "2026-11-15T07:08:14Z",
+      "##[group]Run nim r tools/difftest.nim --self-test"
+    ],
+    [
+      "2026-11-15T07:08:24Z",
+      "difftest self test: 2234 cases; Pele against itself: 2234 identical; with one byte changed: 2234 different (ok)"
+    ],
+    [
+      "2026-11-15T07:08:24Z",
+      "##[group]Run nim r tools/difftest.nim --check-done --show:30"
+    ],
+    [
+      "2026-11-15T07:08:25Z",
+      "difftest: pele 1.13.0, 2234 cases of 33 types (116 of them diagrammari's): 2234 identical, 0 different, 0 unsupported"
+    ],
+    [
+      "2026-11-15T07:08:25Z",
+      "##[group]Run nim r tools/difftest.nim --hosts --check-done --show:30"
+    ],
+    [
+      "2026-11-15T07:08:27Z",
+      "difftest: pele 1.13.0, 2234 cases of 33 types (116 of them diagrammari's): 2234 identical, 0 different, 0 unsupported"
+    ],
+    [
+      "2026-11-15T07:08:27Z",
+      "##[group]Run nim r tools/difftest.nim --js --check-done --show:30"
+    ],
+    [
+      "2026-11-15T07:08:34Z",
+      "difftest: pele 1.13.0 against nimaki in JavaScript, 2234 cases of 33 types (116 of them diagrammari's): 2234 identical, 0 different, 0 unsupported"
+    ],
+    [
+      "2026-11-15T07:08:34Z",
+      "##[group]Run nim r tools/fuzz.nim pie --cases:5000"
+    ],
+    [
+      "2026-11-15T07:08:45Z",
+      "fuzz: pie, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:08:48Z",
+      "fuzz: timeline, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:08:57Z",
+      "fuzz: flowchart, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:09:02Z",
+      "fuzz: state, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:09:05Z",
+      "fuzz: journey, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:09:06Z",
+      "fuzz: info, seed 1, 1000 cases: 1000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:09:09Z",
+      "fuzz: packet, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:09:13Z",
+      "fuzz: sequence, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:09:15Z",
+      "fuzz: ishikawa, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:09:21Z",
+      "fuzz: cynefin, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:09:25Z",
+      "fuzz: wardley, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:09:30Z",
+      "fuzz: architecture, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:09:33Z",
+      "fuzz: c4, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:09:35Z",
+      "fuzz: block, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:09:44Z",
+      "fuzz: swimlane, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:09:46Z",
+      "fuzz: class, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:09:50Z",
+      "fuzz: er, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:09:52Z",
+      "fuzz: requirement, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:09:55Z",
+      "fuzz: usecase, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:10:00Z",
+      "fuzz: agentflow, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:10:05Z",
+      "fuzz: labels, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:10:09Z",
+      "fuzz: gitGraph, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:10:14Z",
+      "fuzz: railroad, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:10:30Z",
+      "fuzz: gantt, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:10:33Z",
+      "fuzz: radar, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:10:37Z",
+      "fuzz: treemap, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:10:40Z",
+      "fuzz: treeView, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:10:42Z",
+      "fuzz: xychart, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:10:45Z",
+      "fuzz: venn, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:10:47Z",
+      "fuzz: mindmap, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:10:50Z",
+      "fuzz: kanban, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:10:54Z",
+      "fuzz: eventmodeling, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:10:58Z",
+      "fuzz: sankey, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:11:00Z",
+      "fuzz: quadrantChart, seed 1, 5000 cases: 5000 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:11:00Z",
+      "##[group]Run for s in 1 2 3 4 5 6 7; do nim r tools/mutate.nim --seed:$s --out:build/mutate-$s.json; done"
+    ],
+    [
+      "2026-11-15T07:11:12Z",
+      "mutate: 6354 cases (3 copies of each ported case, seed 1): 6354 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:11:15Z",
+      "mutate: 6354 cases (3 copies of each ported case, seed 2): 6354 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:11:18Z",
+      "mutate: 6354 cases (3 copies of each ported case, seed 3): 6354 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:11:21Z",
+      "mutate: 6354 cases (3 copies of each ported case, seed 4): 6354 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:11:24Z",
+      "mutate: 6354 cases (3 copies of each ported case, seed 5): 6354 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:11:27Z",
+      "mutate: 6354 cases (3 copies of each ported case, seed 6): 6354 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:11:31Z",
+      "mutate: 6354 cases (3 copies of each ported case, seed 7): 6354 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:11:40Z",
+      "mutate (JavaScript build): 6354 cases (3 copies of each ported case, seed 1): 6354 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:11:50Z",
+      "mutate (JavaScript build): 6354 cases (3 copies of each ported case, seed 2): 6354 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:12:01Z",
+      "mutate (JavaScript build): 6354 cases (3 copies of each ported case, seed 3): 6354 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:12:11Z",
+      "mutate (JavaScript build): 6354 cases (3 copies of each ported case, seed 4): 6354 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:12:21Z",
+      "mutate (JavaScript build): 6354 cases (3 copies of each ported case, seed 5): 6354 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:12:30Z",
+      "mutate (JavaScript build): 6354 cases (3 copies of each ported case, seed 6): 6354 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:12:40Z",
+      "mutate (JavaScript build): 6354 cases (3 copies of each ported case, seed 7): 6354 identical, 0 different"
+    ],
+    [
+      "2026-11-15T07:12:40Z",
+      "##[group]Run actions/cache@v4"
+    ],
+    [
+      "2026-11-15T07:12:41Z",
+      "##[group]Run nim r tools/peletests.nim --check"
+    ],
+    [
+      "2026-11-15T07:12:45Z",
+      "peletests: 295 test files on nimaki, 4 at a time"
+    ],
+    [
+      "2026-11-15T07:17:31Z",
+      "peletests: pele 1.13.0, 295 test files, 6992 tests that pass on Pele: 6947 passed, 25 api, 0 model, 0 unported, 14 speed, 1 canvas, 5 known, 0 failed"
+    ],
+    [
+      "2026-11-15T07:17:31Z",
+      "##[group]Run if [ -f tests/all.nim ]; then nim r tests/all.nim; else echo \"no tests/all.nim yet\"; fi"
+    ],
+    [
+      "2026-11-15T07:17:52Z",
+      "##[group]Run nim r tools/cabi.nim"
+    ],
+    [
+      "2026-11-15T07:17:58Z",
+      "cabi: built build/cabi/libnimaki.so, 6.414MiB"
+    ],
+    [
+      "2026-11-15T07:17:59Z",
+      "cabi smoke: Pele 1.13.0, 2256 cases through the C ABI: 2256 identical, 0 different, 0 unsupported, 0.10 ms a case; 0 errors"
+    ],
+    [
+      "2026-11-15T07:17:59Z",
+      "##[group]Run nim c -d:nimibQuiet docs/all.nim"
+    ],
+    [
+      "2026-11-15T07:18:22Z",
+      "##[group]Run docs/all"
+    ],
+    [
+      "2026-11-15T07:18:35Z",
+      "##[group]Run nim r -d:ssl tools/links.nim "
+    ],
+    [
+      "2026-11-15T07:18:35Z",
+      "##[group]Run nim r tools/drift.nim --fail --allow:docs/theme.nim --allow:docs/blocks.nim --allow:docs/review.nim docs/"
+    ],
+    [
+      "2026-11-15T07:18:36Z",
+      "##[group]Run mkdir _site"
+    ],
+    [
+      "2026-11-15T07:18:36Z",
+      "##[group]Run actions/upload-pages-artifact@v3"
+    ],
+    [
+      "2026-11-15T07:18:36Z",
+      "##[group]Run echo ::group::Archive artifact"
+    ],
+    [
+      "2026-11-15T07:18:36Z",
+      "##[group]Run actions/upload-artifact@v4"
+    ]
+  ]
+}

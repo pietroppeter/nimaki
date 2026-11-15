@@ -67,4 +67,5 @@ import devlog/hashing_in_javascript
 import devlog/dates_and_styles_in_javascript
 import devlog/javascripts_own_regular_expressions
 import devlog/a_proposal_for_nim_regex
+import devlog/twelve_minutes_of_checks
 import devlog/copies_on_the_way_out
