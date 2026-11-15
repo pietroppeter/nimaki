@@ -44,6 +44,37 @@ proc toOptions*(j: JsonNode): RenderOptions =
   if j{"icons"}.getStr == "test": result.icons = testIcons
   if j{"math"}.getStr == "test": result.math = testMath
 
+func withLoneSurrogates*(line: string): string =
+  ## Pele's messages can hold half of a character: V8 quotes the first UTF-16 unit of the token
+  ## it stopped at, and JSON.stringify writes it as a lone `\uD835`. Nim's JSON reader refuses a
+  ## lone surrogate, so each is written as the bytes nimaki uses for one (WTF-8: the surrogate
+  ## encoded as if it were a character), which the reader passes through.
+  func surrogate(s: string, i: int): int =
+    if i + 6 > s.len or s[i] != '\\' or s[i + 1] != 'u': return 0
+    try:
+      let v = parseHexInt(s[i + 2 ..< i + 6])
+      if v >= 0xD800 and v <= 0xDBFF: 1 elif v >= 0xDC00 and v <= 0xDFFF: 2 else: 0
+    except ValueError: 0
+  var i = 0
+  while i < line.len:
+    if line[i] == '\\' and i + 1 < line.len and line[i + 1] != 'u':
+      result.add line[i .. i + 1]
+      i += 2
+      continue
+    let k = surrogate(line, i)
+    if k == 1 and surrogate(line, i + 6) == 2:
+      result.add line[i ..< i + 12]
+      i += 12
+    elif k != 0:
+      let v = parseHexInt(line[i + 2 ..< i + 6])
+      result.add char(0xE0 or (v shr 12))
+      result.add char(0x80 or ((v shr 6) and 0x3F))
+      result.add char(0x80 or (v and 0x3F))
+      i += 6
+    else:
+      result.add line[i]
+      inc i
+
 proc nimakiAnswer*(source: string, options: JsonNode): Answer =
   ## nimaki's answer, in this process: an SVG, or the code and message of its error.
   try:
@@ -82,7 +113,7 @@ when not defined(js):
     if execShellCmd(run) != 0: quit "ERROR the JavaScript build failed: " & run, 2
     for line in lines(outPath):
       if line.len > 0:
-        let j = parseJson(line)
+        let j = parseJson(withLoneSurrogates(line))
         result[j["id"].getStr] = toAnswer(j)
 
   proc updateJsData*(section, key: string, value: JsonNode) =

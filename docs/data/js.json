@@ -13,7 +13,7 @@
       "unsupported": 0
     }
   },
-  "bytes": 10349910,
+  "bytes": 10353137,
   "fuzz": {
     "pie": {
       "seed": 1,
@@ -23,14 +23,14 @@
     },
     "timeline": {
       "seed": 1,
-      "cases": 1000,
-      "identical": 1000,
+      "cases": 2000,
+      "identical": 2000,
       "different": 0
     },
     "journey": {
       "seed": 1,
-      "cases": 1000,
-      "identical": 1000,
+      "cases": 2000,
+      "identical": 2000,
       "different": 0
     },
     "info": {
@@ -47,14 +47,14 @@
     },
     "flowchart": {
       "seed": 1,
-      "cases": 1000,
-      "identical": 1000,
+      "cases": 2000,
+      "identical": 2000,
       "different": 0
     },
     "sequence": {
       "seed": 1,
-      "cases": 1000,
-      "identical": 1000,
+      "cases": 2000,
+      "identical": 2000,
       "different": 0
     },
     "radar": {
@@ -83,14 +83,14 @@
     },
     "class": {
       "seed": 1,
-      "cases": 1000,
-      "identical": 1000,
+      "cases": 2000,
+      "identical": 2000,
       "different": 0
     },
     "state": {
       "seed": 1,
-      "cases": 1000,
-      "identical": 1000,
+      "cases": 2000,
+      "identical": 2000,
       "different": 0
     },
     "ishikawa": {
@@ -113,8 +113,8 @@
     },
     "er": {
       "seed": 1,
-      "cases": 1000,
-      "identical": 1000,
+      "cases": 2000,
+      "identical": 2000,
       "different": 0
     },
     "requirement": {
@@ -125,8 +125,8 @@
     },
     "usecase": {
       "seed": 1,
-      "cases": 1000,
-      "identical": 1000,
+      "cases": 2000,
+      "identical": 2000,
       "different": 0
     },
     "railroad": {
@@ -137,8 +137,8 @@
     },
     "gantt": {
       "seed": 1,
-      "cases": 1000,
-      "identical": 1000,
+      "cases": 2000,
+      "identical": 2000,
       "different": 0
     },
     "wardley": {
@@ -151,18 +151,6 @@
       "seed": 1,
       "cases": 2000,
       "identical": 2000,
-      "different": 0
-    },
-    "mindmap": {
-      "seed": 1,
-      "cases": 1000,
-      "identical": 1000,
-      "different": 0
-    },
-    "c4": {
-      "seed": 1,
-      "cases": 1000,
-      "identical": 1000,
       "different": 0
     }
   }

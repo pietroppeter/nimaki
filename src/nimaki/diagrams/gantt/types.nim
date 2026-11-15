@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/gantt/types.ts
-## port-status: draft
+## port-status: conformant
 ##
 ## Port notes: a `Date | undefined` is a `JsDate` and a flag saying whether it is set; an
 ## undefined string is "".

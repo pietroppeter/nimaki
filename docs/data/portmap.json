@@ -7,16 +7,16 @@
       "code": 1185
     },
     "draft": {
-      "files": 22,
-      "code": 4718
+      "files": 1,
+      "code": 136
     },
     "verified": {
       "files": 0,
       "code": 0
     },
     "conformant": {
-      "files": 226,
-      "code": 41691
+      "files": 247,
+      "code": 46273
     },
     "skip": {
       "files": 0,
@@ -67,9 +67,9 @@
     {
       "component": "diagrams/class",
       "todo": 0,
-      "draft": 2122,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 2122,
       "skip": 0
     },
     {
@@ -115,9 +115,9 @@
     {
       "component": "diagrams/gantt",
       "todo": 0,
-      "draft": 1928,
+      "draft": 0,
       "verified": 0,
-      "conformant": 0,
+      "conformant": 1928,
       "skip": 0
     },
     {
@@ -347,9 +347,9 @@
     {
       "component": "util",
       "todo": 0,
-      "draft": 532,
+      "draft": 0,
       "verified": 0,
-      "conformant": 60,
+      "conformant": 592,
       "skip": 0
     }
   ],
@@ -723,7 +723,7 @@
       "component": "diagrams/class",
       "lines": 290,
       "code": 250,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/class/db.nim"
       ]
@@ -733,7 +733,7 @@
       "component": "diagrams/class",
       "lines": 172,
       "code": 150,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/class/graph.nim"
       ]
@@ -743,7 +743,7 @@
       "component": "diagrams/class",
       "lines": 17,
       "code": 15,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/class/index.nim"
       ]
@@ -753,7 +753,7 @@
       "component": "diagrams/class",
       "lines": 474,
       "code": 443,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/class/lexer.nim"
       ]
@@ -763,7 +763,7 @@
       "component": "diagrams/class",
       "lines": 56,
       "code": 50,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/class/markers.nim"
       ]
@@ -773,7 +773,7 @@
       "component": "diagrams/class",
       "lines": 92,
       "code": 79,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/class/members.nim"
       ]
@@ -783,7 +783,7 @@
       "component": "diagrams/class",
       "lines": 352,
       "code": 324,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/class/parser.nim"
       ]
@@ -793,7 +793,7 @@
       "component": "diagrams/class",
       "lines": 672,
       "code": 621,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/class/render.nim"
       ]
@@ -803,7 +803,7 @@
       "component": "diagrams/class",
       "lines": 128,
       "code": 126,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/class/tokens.nim"
       ]
@@ -813,7 +813,7 @@
       "component": "diagrams/class",
       "lines": 74,
       "code": 64,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/class/types.nim"
       ]
@@ -1203,7 +1203,7 @@
       "component": "diagrams/gantt",
       "lines": 363,
       "code": 326,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/gantt/axis.nim"
       ]
@@ -1213,7 +1213,7 @@
       "component": "diagrams/gantt",
       "lines": 381,
       "code": 339,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/gantt/dates.nim"
       ]
@@ -1223,7 +1223,7 @@
       "component": "diagrams/gantt",
       "lines": 412,
       "code": 343,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/gantt/db.nim"
       ]
@@ -1233,7 +1233,7 @@
       "component": "diagrams/gantt",
       "lines": 19,
       "code": 17,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/gantt/index.nim"
       ]
@@ -1243,7 +1243,7 @@
       "component": "diagrams/gantt",
       "lines": 296,
       "code": 276,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/gantt/lexer.nim"
       ]
@@ -1253,7 +1253,7 @@
       "component": "diagrams/gantt",
       "lines": 200,
       "code": 187,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/gantt/parser.nim"
       ]
@@ -1263,7 +1263,7 @@
       "component": "diagrams/gantt",
       "lines": 365,
       "code": 318,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/gantt/render.nim"
       ]
@@ -1273,7 +1273,7 @@
       "component": "diagrams/gantt",
       "lines": 84,
       "code": 82,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/gantt/tokens.nim"
       ]
@@ -1283,7 +1283,7 @@
       "component": "diagrams/gantt",
       "lines": 48,
       "code": 40,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/diagrams/gantt/types.nim"
       ]
@@ -3147,7 +3147,7 @@
       "component": "util",
       "lines": 131,
       "code": 99,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/util/url.nim"
       ]
@@ -3157,7 +3157,7 @@
       "component": "util",
       "lines": 471,
       "code": 433,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/util/yaml.nim"
       ]

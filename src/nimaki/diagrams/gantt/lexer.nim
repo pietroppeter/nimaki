@@ -1,5 +1,5 @@
 ## port-of: src/diagrams/gantt/lexer.ts
-## port-status: draft
+## port-status: conformant
 ##
 import std/strutils
 import ../../js
