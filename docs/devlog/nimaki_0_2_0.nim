@@ -24,15 +24,26 @@ let
   identical = difftest["identical"].getInt + difftest["diagrammari"]["identical"].getInt
   conformant = portmap["totals"]["conformant"]["files"].getInt
   ported = conformant + portmap["totals"]["draft"]["files"].getInt
-  jsFile = docs / "assets" / "nimaki.js"   # built by the pages that draw live, before this one
-  jsMegabytes = formatFloat(getFileSize(jsFile).float / 1_000_000, ffDecimal, 1)
-  timesPele = int(getFileSize(jsFile).float / 730_000 + 0.5)   # Pele's bundle: about 730 kB
+  sizes = parseJson(readFile(docs / "devlog" / "data" / "a_type_at_a_time" / "sizes.json"))
+  peleGzip = sizes["peleBundle"]["gzip"].getInt
+
+proc gzipOf(name: string): int =
+  for f in sizes["files"]:
+    if f["name"].getStr == name: return f["gzip"].getInt
+  raise newException(KeyError, name)
+
+proc kb(n: int): string = $(int(n.float / 1000 + 0.5)) & " KB"
+
+let
+  allGzip = gzipOf("danger, in a function, minified")
+  fourGzip = gzipOf("flowchart, sequence, pie, timeline")
 
 nbText: &"""
 ## The findings, first
 
-- **nimaki 0.2.0** is prepared, and waits: see the note below. It draws as Pele {peleVersion}, the same drawings as
-  0.1.0: {identical.thousands} of {cases.thousands} cases identical to Pele.
+- **nimaki 0.2.0** is ready to tag, after waiting for a smaller JavaScript build: see the note
+  below. It draws as Pele {peleVersion}, the same drawings as 0.1.0: {identical.thousands} of
+  {cases.thousands} cases identical to Pele.
 - **New in it: Pele's browser side** (`mount`, zoom, the canvas measurer), told in
   [A drawing that fits its box](../a-drawing-that-fits-its-box/), and **Pele's models as JSON**:
   `modelJson` in Nim, `nimaki_parse` in the C ABI, and Pele's model objects from `nimaki.parse`
@@ -41,9 +52,10 @@ nbText: &"""
   pass on the JavaScript build, {counts["failed"].getInt} fail; none is counted apart any more for
   calling what nimaki lacks. Every one of the {ported} ported files is conformant.
 - **For diagrammari**, every item the [proposal](../a-proposal-for-diagrammari/) listed as
-  missing is now done, or put off with a reason: the table below. The one put off is the size of
-  the JavaScript file, {jsMegabytes} MB, for a page that would load nimaki instead of Pele's
-  730 kB bundle.
+  missing is now done: the table below. The last was the size of the JavaScript file, done in
+  [A type at a time](../a-type-at-a-time/): nimaki.js is {allGzip.kb} compressed with every
+  type, and a build of the four types diagrammari writes is {fourGzip.kb}, against
+  {peleGzip.kb} for Pele's bundle.
 - **The minor number moves** because the API grew and the page's `nimaki.render` changed shape
   (it throws now, as Pele's does): decision 0020's rule for 0.x.
 """
@@ -53,10 +65,12 @@ nbNote """
 nimaki.js weighs about ten times Pele's bundle, so the size comes first: the roadmap step
 [A smaller JavaScript build](../../roadmap/), with research into why a Nim build for JavaScript
 is large and how others make it smaller, and then the reduction. 0.2.0 is tagged after that,
-from a later commit, and the look back at the whole port waits too.
+from a later commit, and the look back at the whole port waits too. Carried out the same day:
+[Why nimaki.js is big](../why-nimaki-js-is-big/) and [A type at a time](../a-type-at-a-time/)
+(decision 0022); 0.2.0 now holds that work, and is tagged from a commit that includes it.
 """, nkQuestion, "Tag it now?"
 
-nbText: """
+nbText: &"""
 ## What the proposal needed
 
 The post *A proposal for diagrammari* (14 November) ended with a list of what nimaki still
@@ -65,12 +79,12 @@ this release:
 
 | What diagrammari needs | Where it stands |
 |---|---|
-| A tag to pin | 0.1.0 shipped this morning; 0.2.0 is this release. |
+| A tag to pin | 0.1.0 shipped in the morning; 0.2.0 is this release. |
 | Pele's `parse`, with the model in a form that crosses the C ABI | Done here: `nimaki_parse`, below. |
-| `mount`, zoom and lazy loading, for client mode | `mount` and zoom done ([A drawing that fits its box](../a-drawing-that-fits-its-box/)); lazy loading has nothing to load while nimaki.js is one file. |
+| `mount`, zoom and lazy loading, for client mode | `mount` and zoom done ([A drawing that fits its box](../a-drawing-that-fits-its-box/)); lazy loading done with one file per type: `nimaki.load(type)` adds `nimaki-<type>.js` to the page ([A type at a time](../a-type-at-a-time/)). |
 | A second reading of the port | Not needed: tests and fuzzing make a file conformant (decision 0014), and every file is. |
 | A text measurer of the page's font | Done in a browser (the canvas measurer); at build time both Pele and nimaki measure with Arial's widths, as before. |
-| A small JavaScript file, for client mode | Put off: the roadmap step *A smaller JavaScript build*, in the backlog by Pietro's choice. |
+| A small JavaScript file, for client mode | Done: minified, and one build per set of types (`-d:nimakiTypes`); diagrammari's four types are {fourGzip.kb} compressed, Pele's bundle {peleGzip.kb} ([A type at a time](../a-type-at-a-time/)). |
 """
 
 nbText: """
@@ -132,17 +146,20 @@ Nothing in diagrammari changes from here: these are proposals, for diagrammari's
   `requires "nimaki == 0.2.0"`.
 - **The Python package without QuickJS**: `mari_draw` calls `nimaki_render`, and the flowchart
   layer that needs each edge's ends calls `nimaki_parse`.
-- **Client mode**: a page can load nimaki.js and call `nimaki.mount` where it called
-  `pele.mount`, with the same options. Whether to do it now is a matter of weight: about
-  {timesPele} times the bytes of Pele's bundle. Keeping Pele's bundle for client mode until the JavaScript
-  build is smaller is the cautious choice.
+- **Client mode**: a page can load nimaki's JavaScript and call `nimaki.mount` where it called
+  `pele.mount`, with the same options. A build of the four types diagrammari writes
+  (`nim js -d:danger -d:nimakiTypes=flowchart,sequence,pie,timeline src/nimaki/web.nim`, then
+  minified) is {fourGzip.kb} compressed, less than Pele's bundle; or `nimaki-core.js` with
+  `nimaki.load`, as Pele's lazy entry point does (decision 0022).
+  The release carries every one of these files as a download, built from its tag and checked
+  against Pele (Pietro's answer to the question of [A type at a time](../a-type-at-a-time/);
+  decision 0023), so diagrammari need not build them.
 """
 
 nbText: """
 ## What this changes for the port
 
-- The roadmap step *nimaki 0.2.0* stays open until the JavaScript build is smaller and Pietro
-  tags it (threads cannot push tags).
+- The roadmap step *nimaki 0.2.0* is done once Pietro tags it (threads cannot push tags).
 - Then, by Pietro's plan: a last post that looks back at the whole port (the roadmap step
   *Looking back*), and then the automatic work stops, to start again when nimaki is needed.
 

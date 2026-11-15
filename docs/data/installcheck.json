@@ -4,8 +4,8 @@
   "pele": "1.13.0",
   "nim": "Nim Compiler Version 2.2.4 [Linux: amd64]",
   "installed": [
-    "unicodedb-0.14.1",
     "nimaki-0.2.0",
+    "unicodedb-0.14.1",
     "regex-0.27.0"
   ],
   "cases": 2234,

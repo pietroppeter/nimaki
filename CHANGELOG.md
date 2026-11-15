@@ -4,15 +4,12 @@ Every release of nimaki, newest first. A version is `MAJOR.MINOR.PATCH` and its 
 `vMAJOR.MINOR.PATCH`; how the numbers move, and what each release promises, is decision 0020
 (*Versions and releases*, on the site's Decisions page). Each release says which Pele it draws as.
 
-## 0.2.0 (not released yet)
+## 0.2.0 (15 November 2026)
 
-Not tagged yet: Pietro decided on 15 November 2026 that 0.2.0 waits for a smaller JavaScript
-build (the roadmap step *A smaller JavaScript build*), since nimaki is not ready for diagrammari
-while nimaki.js is about 10 MB. What follows is what it holds so far.
-
-Pele's browser side, and Pele's models through every door: the release for diagrammari to start
-from. The drawings are the same as 0.1.0's; the API grows, and the page's `nimaki` changes shape,
-so the minor number moves (decision 0020).
+Pele's browser side, Pele's models through every door, and a JavaScript build small enough for a
+page: the release for diagrammari to start from. Pietro held it back until the JavaScript build was
+smaller (15 November 2026); it now is. The drawings are the same as 0.1.0's; the API grows,
+and the page's `nimaki` changes shape, so the minor number moves (decision 0020).
 
 **Draws as:** Pele 1.13.0 (commit `3a2f075`, 30 October 2026), which draws the diagram types of
 Mermaid 12.1.0. Nim 2.2.4 or later; the JavaScript build of large diagrams needs Nim 2.2.14.
@@ -37,18 +34,29 @@ Mermaid 12.1.0. Nim 2.2.4 or later; the JavaScript build of large diagrams needs
 - **Pele's test suites**: 6,981 of 6,992 pass on the JavaScript build, none failed; 6 meet only a
   time bound of Pele's, 5 are known (`tools/peletests/known.txt`).
 - **Every ported file is conformant** (decision 0014).
+- **A smaller JavaScript build** (decision 0022): `tools/webbuild.nim` builds the files a page
+  loads, with `-d:danger` and minified by the esbuild of Pele's lock file: `nimaki.js` with every
+  type (698 KB compressed, from 1.4 MB), `nimaki-core.js` with none, and `nimaki-<type>.js` for
+  each type. `-d:nimakiTypes=<types>` builds any set of types: flowchart, sequence, pie and
+  timeline together are 243 KB compressed, Pele's bundle 277 KB.
+- **Lazy loading**: builds on one page join under one `nimaki`, and `nimaki.load(type)` adds
+  `nimaki-<type>.js` from the folder of the first script, as Pele's lazy entry point loads a type.
+- `difftest --web` compares the minified files with Pele, loaded in Node as a page loads them.
+- **Downloads**: the release carries the JavaScript files, each one and all of them in
+  `nimaki-js-0.2.0.zip`, built from the tag and checked against Pele by a workflow (decision 0023).
 
 ### Changed
 
+- A type a build does not draw raises Pele's `unsupported-diagram` (`Diagram type "x" is not
+  supported yet.`), which replaces 0.1.0's `unsupported` code.
+- The JavaScript build parses URLs with the browser's own `URL`, as Pele does; the C build keeps
+  the port of ada's IDNA.
 - `nimaki.render` in a page throws on an error, as Pele's `render` does. A page that compares
   the browser's drawing with one made at build time passes `measurer: nimaki.metricsMeasurer`,
   since the default in a browser is now the canvas.
 
 ### What it does not hold
 
-- **A small JavaScript file**: nimaki.js holds every type and is about 10 MB (1.5 MB
-  compressed), against 730 kB for Pele's whole bundle; there is no split by type, so `load` has
-  nothing to load. This is the roadmap step *A smaller JavaScript build*, in the backlog.
 - **`register`**: the types are chosen at compile time in Nim.
 - **Icons and math through the C ABI**: Pele takes them as callbacks; the Nim API has them, the C
   ABI does not yet.
