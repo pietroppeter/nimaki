@@ -1,4 +1,4 @@
-## devlog: 15 Nov 2026 J | The answers in the posts | Older posts asked Pietro questions and kept asking them after he had answered. Each answered question now shows its answer, its date and where it was carried out; the ones still open are listed here.
+## devlog: 15 Nov 2026 L | The answers in the posts | Older posts asked Pietro questions and kept asking them after he had answered. Each answered question now shows its answer, its date and where it was carried out; the ones still open are listed here.
 ## kind: research
 import std/[json, os, strformat, strutils, sequtils]
 import nimib
