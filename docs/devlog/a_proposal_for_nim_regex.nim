@@ -28,7 +28,8 @@ nbText: """
   ends, and are checked again at each character.
 - This post is the proposal. nimaki does not open issues or pull requests on other projects:
   whether to take any of this, and how, is the author's call; Pietro decides whether to point the
-  author to it.
+  author to it. *Pietro's answer, 15 November 2026: not now
+  ([The answers in the posts](../the-answers-in-the-posts/)).*
 """
 
 nbText: """

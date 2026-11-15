@@ -24,6 +24,9 @@ for q in questions:
   if q["by"].getStr != "open":
     doAssert q["marker"].getStr in readFile(here / q["post"].getStr & ".nim"),
       q["post"].getStr & " does not show its answer to: " & q["question"].getStr
+  if q.hasKey("laterMarker"):
+    doAssert q["laterMarker"].getStr in readFile(here / q["post"].getStr & ".nim"),
+      q["post"].getStr & " does not show Pietro's later answer to: " & q["question"].getStr
 
 nbText: &"""
 ## The findings, first
@@ -100,6 +103,12 @@ nbNote """
 - **1.0.0** is for the day the API is meant to stay (decision 0020), also Pietro's call. It was
   not asked as a question, so nothing is pending on it yet.
 - **A smaller JavaScript build** is for a later step, not for Pietro; it is not on the roadmap.
+
+**Pietro's answers**, 15 November 2026, the morning this post was merged: pointing nim-regex's
+author to the proposal, *not now*; 1.0.0, *after extensive use*, since with use nimaki may move
+away from Pele and take on wider goals; a smaller JavaScript build, *in the backlog, not now*: it
+is the roadmap step *A smaller JavaScript build*, unclaimed. Each answer is also written under its
+question in its own post.
 """, nkQuestion, "Open"
 
 nbText: &"""

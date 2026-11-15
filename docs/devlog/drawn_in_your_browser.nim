@@ -107,7 +107,9 @@ nbNote &"""
 - Safari and Firefox were not tried: their JavaScript engines may differ in the floating-point
   functions the layout uses. The check under each live diagram will say so if they do.
 - The file is {megabytes} MB before compression, which is a lot for a phone; GitHub Pages sends it
-  compressed. Making it smaller (dropping unused parts, minifying) is open.
+  compressed. Making it smaller (dropping unused parts, minifying) is open. *Pietro's answer, 15
+  November 2026: in the backlog, not now; it is the roadmap step "A smaller JavaScript build"
+  ([roadmap](../../roadmap/)).*
 - Speed: a few tens of milliseconds per diagram in the sandbox, measured by the page itself.
 """, nkWarning, "Not checked yet"
 
