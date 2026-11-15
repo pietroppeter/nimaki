@@ -5,7 +5,11 @@
 // - A live figure (`figure.live`) holds a drawing made at build time, its Mermaid text and the
 //   options it was drawn with. Here nimaki draws the text again, puts its own drawing in place
 //   of the one from the build, and says whether the two are the same bytes.
-// - A playground (`.playground`) draws what is typed in its text area, as it is typed.
+// - A playground (`.playground`) draws what is typed in its text area, as it is typed, with
+//   nimaki's `mount`, Pele's browser side: the drawing fits the box, is drawn again when the box
+//   changes width, keeps the last good drawing dimmed under an error, and can be zoomed when it
+//   was shrunk to fit. It measures text with the page's own font (the browser's canvas), as Pele
+//   does in a browser; a live figure measures as the build does, so that the bytes can agree.
 (() => {
   if (globalThis.nimakiLive) return;   // every live block adds this script: run once
   globalThis.nimakiLive = true;
@@ -15,11 +19,22 @@
   const me = document.currentScript;
   const src = me.dataset.nimaki;
 
+  // A parse error's first line says where it is, and its last line what is wrong (Pele's mount.ts).
+  const summary = (message) => {
+    const lines = message.split('\n').filter((line) => line.trim() !== '');
+    return lines.length > 1 ? lines[0] + ' ' + lines[lines.length - 1] : (lines[0] ?? '');
+  };
   const say = (el, text, cls) => { el.textContent = text; el.className = 'live-status ' + (cls || ''); };
 
   const draw = (text, options) => {
     const t0 = performance.now();
-    const r = globalThis.nimaki.render(text, options);
+    let r;
+    try {
+      r = globalThis.nimaki.render(text, { ...options, measurer: globalThis.nimaki.metricsMeasurer });
+      r.ok = true;
+    } catch (e) {
+      r = { ok: false, code: e.code, message: e.message };
+    }
     r.ms = Math.max(1, Math.round(performance.now() - t0));
     return r;
   };
@@ -41,14 +56,31 @@
       const out = g.querySelector('.playground-drawing');
       const status = g.querySelector('.live-status');
       const options = JSON.parse(g.dataset.options || '{}');
-      let timer = 0;
-      const update = () => {
-        const r = draw(area.value, options);
-        if (r.ok) { out.innerHTML = r.svg; say(status, 'Drawn by nimaki in your browser in ' + r.ms + ' ms.', 'good'); }
-        else say(status, (r.code === 'unsupported' ? 'Not ported yet: ' : 'Not drawn: ') + r.message, 'bad');
+      // The time of a drawing for new text; one for a new width or for fonts that loaded is not timed.
+      let t0 = performance.now();
+      const drawn = (r) => {
+        const wide = Math.round(r.width) + ' pixels wide';
+        if (t0 === 0) return say(status, 'Drawn again by nimaki for the room there is now, ' + wide + '.', 'good');
+        say(status, 'Drawn by nimaki in your browser in ' + Math.max(1, Math.round(performance.now() - t0)) + ' ms, ' + wide + '.', 'good');
+        t0 = 0;
       };
-      area.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(update, 150); });
-      update();
+      const handle = globalThis.nimaki.mount(out, area.value, {
+        ...options,
+        onRender: drawn,
+        onError: (e) => {
+          t0 = 0;
+          say(status, (e.code === 'unsupported-diagram' ? 'Not drawn: ' : 'Not drawn (the last drawing stays, dimmed): ') + summary(e.message), 'bad');
+        },
+      });
+      let timer = 0;
+      area.addEventListener('input', () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          t0 = performance.now();
+          handle.update(area.value);
+          t0 = 0;
+        }, 150);
+      });
     }
   };
 

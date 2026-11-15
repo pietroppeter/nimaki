@@ -32,7 +32,7 @@
       "status": "done",
       "nim": "src/nimaki/text/",
       "post": "first-light",
-      "notes": "Every file of src/text/ is ported and conformant (the metrics measurer, labels, entities, icons, math), but for one half of measurer.ts: the measurer that asks a browser's canvas. nimaki measures with Pele's table of font widths, as Pele itself does where no canvas exists, as in Node; the canvas half is the browser side, for later."
+      "notes": "Every file of src/text/ is ported and conformant (the metrics measurer, labels, entities, icons, math), and so is the canvas half of measurer.ts since the step browser-side: in a browser the JavaScript build measures with the page's own font, as Pele does, and everywhere else with Pele's table of font widths."
     },
     {
       "id": "svg",
@@ -83,10 +83,10 @@
       "id": "browser",
       "what": "what only a browser needs: mount, zoom, lazy loading, window, entry points",
       "code": 884,
-      "status": "planned",
-      "nim": "",
-      "post": "where-the-port-stands",
-      "notes": "Later, as Pietro decided on 15 November 2026: mount.ts, zoom.ts, window.ts and the canvas half of text/measurer.ts, for the JavaScript build. lazy.ts and entries/ are JavaScript packaging, and are not ported."
+      "status": "done",
+      "nim": "src/nimaki/mount.nim",
+      "post": "a-drawing-that-fits-its-box",
+      "notes": "mount.ts, zoom.ts and window.ts are ported for the JavaScript build (src/nimaki/mount.nim, zoom.nim, window.nim), with the canvas half of text/measurer.ts; Pele's mount, zoom and canvas tests pass on the port. src/nimaki/web.nim gives a page Pele's functions under the name nimaki. lazy.ts and entries/ are JavaScript packaging, and are not ported: nimaki.js holds every type."
     }
   ],
   "diagrams": [

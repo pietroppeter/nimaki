@@ -1,6 +1,6 @@
 # Pele's files that nimaki does not port, by path prefix, with the reason (tools/portmap.nim reads this).
 # Format: path-prefix<TAB>reason
 src/entries/	JavaScript packaging: one module per diagram type, for a bundle that loads only the types it needs. Nim imports at compile time; src/nimaki.nim registers every type.
-src/lazy.ts	JavaScript packaging: loads a type's module the first time it is drawn (a dynamic import). Nim has no counterpart, and needs none.
+src/lazy.ts	JavaScript packaging: loads a type's module the first time it is drawn (a dynamic import). Nim has no counterpart, and needs none; src/nimaki/web.nim gives a page its functions (load, renderAsync, mountAsync), with every type already loaded.
 src/models.ts	TypeScript types only, re-exported for users of the package; each model is a Nim type in its own module, and tools/models.nim writes it in Pele's shape.
 src/diagrams/agentflow/diagnostics.ts	Not imported by any file of Pele's src: a list of warning ids reserved for tools that check a diagram's meaning. The ids Pele emits are in agentflow/types.nim and graph.nim.

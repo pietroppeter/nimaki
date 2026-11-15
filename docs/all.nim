@@ -71,3 +71,4 @@ import devlog/a_proposal_for_nim_regex
 import devlog/twelve_minutes_of_checks
 import devlog/a_faster_ci
 import devlog/copies_on_the_way_out
+import devlog/a_drawing_that_fits_its_box

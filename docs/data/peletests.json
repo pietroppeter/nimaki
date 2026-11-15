@@ -4,12 +4,12 @@
   "files": 295,
   "tests": 6992,
   "counts": {
-    "passed": 6954,
-    "api": 25,
+    "passed": 6981,
+    "api": 0,
     "model": 0,
     "unported": 0,
-    "speed": 7,
-    "canvas": 1,
+    "speed": 6,
+    "canvas": 0,
     "known": 5,
     "failed": 0
   },
@@ -105,11 +105,11 @@
       "failed": 0
     },
     "tests/c4/stress.test.ts": {
-      "passed": 40,
+      "passed": 42,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 2,
+      "speed": 0,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -145,11 +145,11 @@
       "failed": 0
     },
     "tests/class/stress.test.ts": {
-      "passed": 54,
+      "passed": 53,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 1,
+      "speed": 2,
       "canvas": 0,
       "known": 1,
       "failed": 0
@@ -1535,8 +1535,8 @@
       "failed": 0
     },
     "tests/entries.test.ts": {
-      "passed": 6,
-      "api": 1,
+      "passed": 7,
+      "api": 0,
       "model": 0,
       "unported": 0,
       "speed": 0,
@@ -1795,8 +1795,8 @@
       "failed": 0
     },
     "tests/mount.test.ts": {
-      "passed": 14,
-      "api": 24,
+      "passed": 38,
+      "api": 0,
       "model": 0,
       "unported": 0,
       "speed": 0,
@@ -2745,11 +2745,11 @@
       "failed": 0
     },
     "tests/state/stress.test.ts": {
-      "passed": 52,
+      "passed": 53,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 1,
+      "speed": 0,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -2785,11 +2785,11 @@
       "failed": 0
     },
     "tests/timeline/stress.test.ts": {
-      "passed": 36,
+      "passed": 35,
       "api": 0,
       "model": 0,
       "unported": 0,
-      "speed": 1,
+      "speed": 2,
       "canvas": 0,
       "known": 0,
       "failed": 0
@@ -2855,12 +2855,12 @@
       "failed": 0
     },
     "tests/util/measurer.test.ts": {
-      "passed": 3,
+      "passed": 4,
       "api": 0,
       "model": 0,
       "unported": 0,
       "speed": 0,
-      "canvas": 1,
+      "canvas": 0,
       "known": 0,
       "failed": 0
     },
@@ -2967,18 +2967,6 @@
   },
   "notPassed": [
     {
-      "file": "tests/c4/stress.test.ts",
-      "test": "C4 worst cases as many relations as get careful placement",
-      "kind": "speed",
-      "message": "AssertionError: expected 3749.358458999999 to be less than 3000"
-    },
-    {
-      "file": "tests/c4/stress.test.ts",
-      "test": "C4 worst cases 600 relations among 600 boundaries",
-      "kind": "speed",
-      "message": "AssertionError: expected 3425.0115970000006 to be less than 3000"
-    },
-    {
       "file": "tests/class/stress.test.ts",
       "test": "class diagram worst cases namespace name of 12,000 parts",
       "kind": "known",
@@ -2986,159 +2974,15 @@
     },
     {
       "file": "tests/class/stress.test.ts",
+      "test": "class diagram worst cases namespace name of 3,000 parts, rendered",
+      "kind": "speed",
+      "message": "AssertionError: expected 3209.9067450000002 to be less than 3000"
+    },
+    {
+      "file": "tests/class/stress.test.ts",
       "test": "class diagram worst cases 2,000 nested namespaces, rendered",
       "kind": "speed",
-      "message": "AssertionError: expected 3219.8450660000008 to be less than 3000"
-    },
-    {
-      "file": "tests/entries.test.ts",
-      "test": "the full entry point has every type registered",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide registered()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount draws a chart for the room the element has, and again when that changes",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount draws for a change of size in the next frame, once however many changes it sees",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount draws for a change of size at once in a window without frames",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount leaves the drawing alone while the element has no width, as when it is hidden",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount starts narrow in a narrow element",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount draws once when the diagram cannot use the room differently",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount turns a flowchart that runs across when the element gets narrow, and back",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount does not chase an element that takes the width of its drawing",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount waits for an element that has no width yet",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount makes a zoom for the diagram unless told not to",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount keeps to a width the host sets",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount updates, reports errors as render does, and stops when destroyed",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount works where there is nothing to watch with",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount does not keep an element that the page has dropped",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount shows the error over the last drawing, dimmed, until the text can be drawn",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount shows the whole error in place of a diagram that could not be drawn at all",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount keeps the error of text that could not be drawn while hidden, at any width",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount takes the options given with text that cannot be drawn",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount gives each diagram its own ids",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount keeps the text it had when other text cannot be drawn",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount lets the new drawing stand when it is the host's onRender that throws",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount reports a drawing that was put off and then fails, and keeps what was shown",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount puts in the element what a host makes of the markup",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
-    },
-    {
-      "file": "tests/mount.test.ts",
-      "test": "mount keeps the first drawing, and reports it, when the host fails on the one for the drawing's fonts",
-      "kind": "api",
-      "message": "NotInNimaki: nimaki does not provide mount()"
+      "message": "AssertionError: expected 3519.7660659999992 to be less than 3000"
     },
     {
       "file": "tests/render/sankey.test.ts",
@@ -3153,28 +2997,28 @@
       "message": "AssertionError: \"a\\ud800b\""
     },
     {
-      "file": "tests/state/stress.test.ts",
-      "test": "state diagram worst cases transitions from 1,500 levels out to the innermost state",
-      "kind": "speed",
-      "message": "AssertionError: expected 3019.229553000001 to be less than 3000"
-    },
-    {
       "file": "tests/stress.test.ts",
       "test": "worst cases edges that each cross 1,000 nested subgraph borders",
       "kind": "speed",
-      "message": "AssertionError: expected 4214.395075 to be less than 3000"
+      "message": "AssertionError: expected 3641.068631 to be less than 3000"
     },
     {
       "file": "tests/timeline/stress.test.ts",
-      "test": "timeline worst cases one period with 12,000 events, top down",
+      "test": "timeline worst cases 8,000 periods with one event each",
       "kind": "speed",
-      "message": "AssertionError: expected 1874.6585089999999 to be less than 1500"
+      "message": "AssertionError: expected 1778.55343 to be less than 1500"
+    },
+    {
+      "file": "tests/timeline/stress.test.ts",
+      "test": "timeline worst cases 8,000 periods with one event each, top down",
+      "kind": "speed",
+      "message": "AssertionError: expected 1524.4748019999997 to be less than 1500"
     },
     {
       "file": "tests/usecase/stress.test.ts",
-      "test": "use case worst cases class statement with 2,500 ids and 4,000 classes",
+      "test": "use case worst cases 10,000 members of one boundary",
       "kind": "speed",
-      "message": "AssertionError: expected 3207.060244 to be less than 3000"
+      "message": "AssertionError: expected 3041.4964520000003 to be less than 3000"
     },
     {
       "file": "tests/usecase/stress.test.ts",
@@ -3187,12 +3031,6 @@
       "test": "use case worst cases JSON nested 20,000 arrays deep",
       "kind": "known",
       "message": ""
-    },
-    {
-      "file": "tests/util/measurer.test.ts",
-      "test": "canvasMeasurer measures code in the monospace font a diagram is given",
-      "kind": "canvas",
-      "message": "AssertionError: expected false to be true // Object.is equality"
     }
   ]
 }

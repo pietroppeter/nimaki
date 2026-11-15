@@ -18,7 +18,7 @@ nb.usePage(section = "Playground", cadence = "kept up to date", title = "Playgro
 
 nbTitle "Playground · kept up to date", "Drawn in your browser", &"""
 The diagrams on this page are drawn twice by nimaki: once when the page is built, and again
-here, in your browser, by nimaki compiled to JavaScript. Below them is a box to write Mermaid
+here, in your browser, by nimaki compiled to JavaScript. Above them is a box to write Mermaid
 text in, which nimaki draws as you type. It draws {drawn.len} of Pele's 33 types so far.
 """
 
@@ -85,10 +85,13 @@ live("""gantt
 nbText: &"""
 ## What it is
 
-`src/nimaki/web.nim` is the entry point: compiled with `nim js`, it defines
-`nimaki.render(text, options)`, which returns the SVG text, as Pele's `render` does. The pages
-build it into `assets/nimaki.js` and load it only where a page draws live. The types it draws
-now: {drawn.mapIt("*" & it & "*").join(", ")}.
+`src/nimaki/web.nim` is the entry point: compiled with `nim js`, it gives a page what Pele's
+browser bundle gives, under the name `nimaki`: `render(text, options)`, which returns the SVG,
+`parse`, and `mount(element, text, options)`, which the box above draws with: it fits the
+drawing to the box, draws it again when the box changes width, and lets a drawing that was
+shrunk to fit be zoomed ([A drawing that fits its box](../devlog/a-drawing-that-fits-its-box/)).
+The pages build it into `assets/nimaki.js` and load it only where a page draws live. The types
+it draws: {drawn.mapIt("*" & it & "*").join(", ")}.
 """
 
 nbSave

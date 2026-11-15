@@ -209,6 +209,18 @@ each test: compare with `<=` in a loop over characters. Last, a compiler matter:
 """, nkWarning, "Code that JavaScript runs slowly"
 
 nbNote """
+Pele's browser side (`mount.ts`, `zoom.ts`) works on values of the page: an element, its style,
+an event, a host's options. The port keeps them as `JsObject` of `std/jsffi`, read with the
+operators of `dom.nim`, each of which means what JavaScript means (`isFalse` is `=== false`,
+`positive` is `> 0`, false for undefined), so that a test's fake element is read as Pele reads it.
+Through jsffi, a method named after a JavaScript reserved word (`delete`) or after a proc in scope
+(`refresh` inside `mountWith`) must be called by name: `obj.invoke("delete", key)`. An error
+thrown by JavaScript is not Nim's, and `getCurrentException()` is nil for it: `caughtError()` gives
+the value as it was thrown, and `jsThrow` throws it again unchanged. And no backticks in an
+`importjs` pattern: Nim reads them itself.
+""", nkNim, "The browser side: JavaScript values"
+
+nbNote """
 The older types (timeline, journey, flowchart, sequence...) are read by hand-written loops that
 port Jison's compiled rules: `src.charCodeAt(p)`, then `p++`. With byte offsets, read the
 character with `codeAt(src, p)` of `common/scan.nim` (a code point, -1 past the end) and step

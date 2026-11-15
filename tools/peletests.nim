@@ -9,13 +9,14 @@
 ## then sorted:
 ##
 ## - `passed`: it passes on nimaki too;
-## - `api`: it calls what nimaki does not provide (`mount()`, zoom...);
+## - `api`: it calls what nimaki does not provide (`register()`, as types are compiled in);
 ## - `model`: it read a model with `parse()`, of a type whose models are not all Pele's yet
 ##   (docs/data/parsediff.json, by tools/parsediff.nim);
 ## - `unported`: it draws a type nimaki does not draw yet;
 ## - `speed`: only a time bound of Pele's failed (stress tests; the JavaScript build is slower),
 ##   or vitest's own limit of a minute a test;
-## - `canvas`: it tests Pele's canvas measurer, which nimaki does not port;
+## - `canvas`: it tested Pele's canvas measurer before nimaki ported it (the step browser-side);
+##   none since, and the count stays in the report for the posts that read it;
 ## - `known`: listed in tools/peletests/known.txt, with the reason (`skip` there: not even run);
 ## - `failed`: anything else, one `ERROR` line each: a difference to fix or to explain in
 ##   docs/divergences.md.
@@ -23,6 +24,10 @@
 ## A test file whose worker dies (a crash, no memory) is an `ERROR` too. The counts go to
 ## docs/data/peletests.json (with `--fast:N`, which runs one file in N, they do not). `--check`
 ## exits 1 when there is an ERROR. Detail: build/peletests/report.txt.
+##
+## Tests that import src/mount.js, src/zoom.js or src/text/measurer.js get nimaki's ports of
+## them (tools/peletests/mount.mjs, zoom.mjs, measurer.mjs), so mount.test.ts and zoom.test.ts
+## check the port of Pele's browser side.
 ##
 ## Tests that call parts of Pele other than src/index.js (a parser, the layout) still run those
 ## parts in TypeScript: what they check is Pele, not the port, and they pass here as on Pele.
@@ -122,7 +127,6 @@ proc kindOf(o: Outcome, known: seq[Known]): Kind =
   if o.missing.len > 0 or "NotInNimaki" in o.message: kApi
   elif o.parsed and typeOf(o.file) in notPeles: kModel
   elif "nimaki does not draw" in o.message or typeOf(o.file) in unported: kUnported
-  elif o.file == "tests/util/measurer.test.ts" and o.name.startsWith("canvasMeasurer"): kCanvas
   elif o.message.split("\n    at ")[0].find(speedRe) >= 0 or o.message.startsWith("Error: Test timed out"): kSpeed
   else: kFailed
 

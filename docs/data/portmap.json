@@ -3,20 +3,20 @@
   "code": 47594,
   "totals": {
     "todo": {
-      "files": 3,
-      "code": 772
+      "files": 0,
+      "code": 0
     },
     "draft": {
-      "files": 1,
-      "code": 136
+      "files": 0,
+      "code": 0
     },
     "verified": {
       "files": 0,
       "code": 0
     },
     "conformant": {
-      "files": 251,
-      "code": 46449
+      "files": 255,
+      "code": 47357
     },
     "skip": {
       "files": 36,
@@ -26,10 +26,10 @@
   "components": [
     {
       "component": "api",
-      "todo": 772,
+      "todo": 0,
       "draft": 0,
       "verified": 0,
-      "conformant": 612,
+      "conformant": 1384,
       "skip": 181
     },
     {
@@ -339,9 +339,9 @@
     {
       "component": "text",
       "todo": 0,
-      "draft": 136,
+      "draft": 0,
       "verified": 0,
-      "conformant": 539,
+      "conformant": 675,
       "skip": 0
     },
     {
@@ -2977,7 +2977,7 @@
       "code": 79,
       "status": "skip",
       "nim": [],
-      "reason": "JavaScript packaging: loads a type's module the first time it is drawn (a dynamic import). Nim has no counterpart, and needs none."
+      "reason": "JavaScript packaging: loads a type's module the first time it is drawn (a dynamic import). Nim has no counterpart, and needs none; src/nimaki/web.nim gives a page its functions (load, renderAsync, mountAsync), with every type already loaded."
     },
     {
       "path": "src/models.ts",
@@ -2993,8 +2993,10 @@
       "component": "api",
       "lines": 439,
       "code": 347,
-      "status": "todo",
-      "nim": []
+      "status": "conformant",
+      "nim": [
+        "src/nimaki/mount.nim"
+      ]
     },
     {
       "path": "src/preprocess.ts",
@@ -3141,7 +3143,7 @@
       "component": "text",
       "lines": 160,
       "code": 136,
-      "status": "draft",
+      "status": "conformant",
       "nim": [
         "src/nimaki/text/measurer.nim"
       ]
@@ -3211,16 +3213,20 @@
       "component": "api",
       "lines": 12,
       "code": 7,
-      "status": "todo",
-      "nim": []
+      "status": "conformant",
+      "nim": [
+        "src/nimaki/window.nim"
+      ]
     },
     {
       "path": "src/zoom.ts",
       "component": "api",
       "lines": 496,
       "code": 418,
-      "status": "todo",
-      "nim": []
+      "status": "conformant",
+      "nim": [
+        "src/nimaki/zoom.nim"
+      ]
     }
   ]
 }

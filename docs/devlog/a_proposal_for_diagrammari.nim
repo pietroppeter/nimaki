@@ -182,6 +182,11 @@ Before diagrammari could switch, and in the order it would meet them:
    it keeps Pele's bundle until nimaki's JavaScript build grows them. *Pietro's answer, 15
    November 2026: later, after a first release; it is the roadmap step "Pele's browser side"
    ([Where the port stands](../where-the-port-stands/)).*
+   *Done the same day, after 0.1.0: [A drawing that fits its box](../a-drawing-that-fits-its-box/).
+   A page's `nimaki` now has Pele's functions under Pele's names, `mount` and `enableZoom`
+   included, and Pele's tests of them pass. nimaki.js holds every type and weighs about 9 MB
+   (1.4 MB compressed) against the bundle's 730 kB, so lazy loading by type waits for the
+   smaller JavaScript build, which is in the backlog.*
 4. **The second reading.** All of nimaki's ported files are still marked `draft`: they are
    identical to Pele on the corpus and the fuzzer, but have not been read a second time against
    Pele's source (decision 0005). That is a question for Pietro already: whether tests and
