@@ -146,6 +146,9 @@ nbSave
 
 - A post tells one step as it happened. It is dated and not rewritten afterwards; typos, links
   and small corrections are fine. What must stay true goes in a living page or in this file.
+- **When Pietro answers a question a post asks** (an `nkQuestion` note), the post records the
+  answer in that note: **Pietro's answer**, the date, what he chose, and a link to where it is
+  carried out. The thread that receives the answer does it in its next pull request (decision 0021).
 - Lead with the findings. Readable on a phone in ten to fifteen minutes; long listings and raw
   data go in `nbFold`. End with `## What this changes for the port` and `## Sources`.
 - Pietro has never written a parser or a layout engine: explain each concept from scratch, with
