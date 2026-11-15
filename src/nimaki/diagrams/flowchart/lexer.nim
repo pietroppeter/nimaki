@@ -333,7 +333,7 @@ proc tokenize*(src: string): Tokens =
         return true
     of 104:
       if src.continuesWith("href", p) and isSpace(c0(p + 4)):
-        emit(T_HREF, p, p + 5)
+        emit(T_HREF, p, p + 4 + charLen(src, p + 4))
         return true
     of 102:
       if kw("flowchart-elk"):

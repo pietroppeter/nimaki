@@ -24,6 +24,7 @@ import devlog/the_model_in_between
 import devlog/pele_tests_read_the_models
 import devlog/five_ways_a_model_differs
 import devlog/where_each_statement_sits
+import devlog/one_odd_character
 import devlog/nimaki_in_javascript
 import devlog/drawn_in_your_browser
 import devlog/how_pele_is_built

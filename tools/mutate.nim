@@ -13,13 +13,15 @@
 ##     --show:N          print at most N differences as ERROR lines (default 10)
 ##     --out:PATH        write the summary and every difference as JSON (default build/mutate.json)
 ##     --package:PATH    the oracle package (default reference/npm/package or $PELE_PACKAGE)
+##     --again:PATH      only the differences that an earlier run wrote to PATH, their texts as
+##                       they are there: to check a fix quickly
 import std/[os, osproc, strutils, json, random, parseopt, tables, strtabs, sequtils, unicode]
 import common, verdict, answers
 import nimaki
 
 const inserts* = [
-  (" ", "no-break space"), (" ", "line separator"), ("﻿", "byte order mark"),
-  ("​", "zero-width space"), ("　", "ideographic space"), ("é", "é"), ("Ω", "Ω"),
+  ("\u00A0", "no-break space"), ("\u2028", "line separator"), ("\uFEFF", "byte order mark"),
+  ("\u200B", "zero-width space"), ("\u3000", "ideographic space"), ("é", "é"), ("Ω", "Ω"),
   ("𝐀", "mathematical bold A (outside the BMP)"), ("😀", "emoji (outside the BMP)")]
 const fixedNow = 1767225600000.0   ## 2026-01-01T00:00:00Z, as in tools/difftest.nim
 
@@ -80,6 +82,7 @@ proc main() =
   var show = 10
   var outPath = buildDir / "mutate.json"
   var packageArg = ""
+  var again = ""
   for kind, key, val in getopt():
     case kind
     of cmdLongOption, cmdShortOption:
@@ -89,6 +92,7 @@ proc main() =
       of "show": show = parseInt(val)
       of "out": outPath = val
       of "package": packageArg = val
+      of "again": again = val
       else: quit "ERROR unknown option --" & key, 2
     of cmdArgument: quit "ERROR unexpected argument " & key, 2
     of cmdEnd: discard
@@ -108,6 +112,17 @@ proc main() =
                    "options": {"now": fixedNow}}
       types.add c["type"].getStr
       inserted.add which
+  if again != "":
+    let earlier = parseFile(again)
+    seed = earlier["seed"].getInt
+    copies = earlier["copies"].getInt
+    cases.setLen 0
+    types.setLen 0
+    inserted.setLen 0
+    for d in earlier["differences"]:
+      cases.add %*{"id": d["id"].getStr, "source": d["source"].getStr, "options": {"now": fixedNow}}
+      types.add d["type"].getStr
+      inserted.add max(0, inserts.mapIt(it[1]).find(d["inserted"].getStr))
   var input = ""
   for c in cases: input.add $c & "\n"
   let (output, code) = execCmdEx("node " & quoteShell(repoDir / "tools" / "oracle.mjs") & " " & quoteShell(package),

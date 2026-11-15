@@ -184,6 +184,11 @@ func isWhiteSpaceRune(c: int): bool =
     (c >= 0x2000 and c <= 0x200a) or c == 0x2028 or c == 0x2029 or c == 0x202f or c == 0x205f or
     c == 0x3000 or c == 0xfeff
 
+func isWhiteSpaceChar(c: int): bool =
+  ## V8's IsWhiteSpace: white space without the line terminators. A word of the date ends at
+  ## white space only, so a line separator (U+2028) is read as part of a word, as V8 reads it.
+  isWhiteSpaceRune(c) and c notin [10, 13, 0x2028, 0x2029]
+
 const keywords: array[27, (string, KeywordType, int)] = [
   ("jan", kwMonthName, 1), ("feb", kwMonthName, 2), ("mar", kwMonthName, 3), ("apr", kwMonthName, 4),
   ("may", kwMonthName, 5), ("jun", kwMonthName, 6), ("jul", kwMonthName, 7), ("aug", kwMonthName, 8),
@@ -219,10 +224,10 @@ proc scan(s: var Scanner): DateToken =
   if c in [ord(':'), ord('-'), ord('+'), ord('.'), ord(')')]:
     inc s.pos
     return DateToken(kind: tkSymbol, value: c, length: 1)
-  if c >= ord('A') and not isWhiteSpaceRune(c):
+  if c >= ord('A') and not isWhiteSpaceChar(c):
     var prefix = [0, 0, 0]
     var len = 0
-    while s.pos < s.runes.len and s.runes[s.pos] >= ord('A') and not isWhiteSpaceRune(s.runes[s.pos]):
+    while s.pos < s.runes.len and s.runes[s.pos] >= ord('A') and not isWhiteSpaceChar(s.runes[s.pos]):
       if len < 3: prefix[len] = s.runes[s.pos] or 0x20
       inc len
       inc s.pos
