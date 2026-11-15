@@ -21,6 +21,7 @@ lib.nimaki_render.argtypes = [ctypes.c_char_p]
 lib.nimaki_render.restype = ctypes.c_void_p  # a pointer, so that it can be given back
 lib.nimaki_free.argtypes = [ctypes.c_void_p]
 lib.nimaki_pele_version.restype = ctypes.c_char_p
+lib.nimaki_version.restype = ctypes.c_char_p
 
 
 def ask(request) -> dict:
@@ -45,6 +46,8 @@ def check(ok, what):
 
 pin = dict(l.split("=", 1) for l in (repo / "reference" / "PIN").read_text().splitlines() if "=" in l and not l.startswith("#"))
 check(lib.nimaki_pele_version().decode() == pin["TAG"], "nimaki_pele_version is not " + pin["TAG"])
+nimble = next(l.split('"')[1] for l in (repo / "nimaki.nimble").read_text().splitlines() if l.startswith("version"))
+check(lib.nimaki_version().decode() == nimble, "nimaki_version is not " + nimble + ", the version of nimaki.nimble")
 
 # a pie
 pie = 'pie title Pets\n  "Dogs" : 386\n  "Cats" : 85\n  "Rats" : 15\n'

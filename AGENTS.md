@@ -34,7 +34,9 @@ coding agents*, so a change here is reviewed like any page. It is adapted from
   that is not on the roadmap is added there the same way.
 - One branch and one pull request per step, with the code and the post together. A thread may
   review and merge its own pull request when CI is green; rebase on `main` first (decision 0009).
-  Tags and releases wait for Pietro.
+  Tags and releases wait for Pietro: he names the version. A release bumps `nimaki.nimble` and
+  `src/nimaki/version.nim`, adds its section to `CHANGELOG.md`, passes
+  `nim r tools/installcheck.nim`, then is tagged `vX.Y.Z` on a green `main` (decision 0020).
 - The pull request that ships a step sets its `status` to `done`, `post` and `pr` in the roadmap;
   the one that ports a part updates its row in `docs/data/coverage.json`. Both are living pages
   (Roadmap, Coverage map), so the site always says where the port stands.
@@ -92,6 +94,8 @@ coding agents*, so a change here is reviewed like any page. It is adapted from
 
 ```
 src/nimaki.nim          the entry point: render(text, options)
+src/nimaki/version.nim  the version of nimaki and the Pele it draws as (decision 0020)
+nimaki.nimble           the package; CHANGELOG.md the releases
 src/nimaki/             the port, paths after Pele's src/ (diagrams/<type>/, layout/, svg/, text/)
 tests/                  tests; tests/all.nim runs them all
 corpus/cases.json       the referee's inputs, built from Pele by tools/corpus.mjs (rebuilt only when the pin moves)

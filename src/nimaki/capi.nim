@@ -8,7 +8,8 @@
 ##
 ##   nimaki_render(request) -> answer     both UTF-8 JSON text; free the answer with nimaki_free
 ##   nimaki_free(answer)
-##   nimaki_pele_version() -> "1.13.0"    the Pele this build draws as (reference/PIN)
+##   nimaki_pele_version() -> "1.13.0"    the Pele this build draws as (version.nim)
+##   nimaki_version() -> "0.1.0"          the release of nimaki (version.nim, decision 0020)
 ##
 ## request: {"source": "<Mermaid text>", "options": {...}}, with Pele's render options by their
 ##          names: fontSize, fontFamily, fontFamilyMono, monospace, padding, maxWidth, idPrefix,
@@ -25,18 +26,10 @@
 ## icon and math resolvers), so two threads must not draw at once. ctypes lets go of the GIL
 ## during a call, so Python threads may call it; they wait their turn.
 
-import std/[json, options, locks, strutils]
+import std/[json, options, locks]
 import ../nimaki
 from preprocess import fromJson
 
-const
-  pin = staticRead("../../reference/PIN")
-
-func pinValue(key: string): string =
-  for line in pin.splitLines:
-    if line.startsWith(key & "="): return line[key.len + 1 .. ^1]
-
-const peleVersion = pinValue("TAG")
 
 proc strings(j: JsonNode): seq[string] =
   for it in j: result.add it.getStr
@@ -106,3 +99,5 @@ proc nimaki_free(answer: cstring) {.exportc, dynlib, cdecl.} =
   if not answer.isNil: deallocShared(answer)
 
 proc nimaki_pele_version(): cstring {.exportc, dynlib, cdecl.} = peleVersion
+
+proc nimaki_version(): cstring {.exportc, dynlib, cdecl.} = nimakiVersion

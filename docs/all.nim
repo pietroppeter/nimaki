@@ -27,6 +27,7 @@ import devlog/where_each_statement_sits
 import devlog/one_odd_character
 import devlog/both_builds_every_file
 import devlog/what_two_ports_teach
+import devlog/nimaki_0_1_0
 import devlog/nimaki_in_javascript
 import devlog/drawn_in_your_browser
 import devlog/how_pele_is_built
