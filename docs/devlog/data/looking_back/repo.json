@@ -1,0 +1,114 @@
+{
+  "about": "Written by docs/devlog/data/looking_back/measure.nim. Do not edit by hand.",
+  "head": "b9384a759bc444bdbce248b866ec2bd010756c9c",
+  "measured": "2026-11-15T11:14:46Z",
+  "commits": 404,
+  "merges": 158,
+  "first": 1794515964,
+  "last": 1794741240,
+  "pause": {
+    "from": 1794541909,
+    "to": 1794667505
+  },
+  "gapMinutes": 45,
+  "activeSeconds": 98735,
+  "sessions": {
+    "session_01YPMoamY7Abyu9c9rPhc3Jk": {
+      "commits": 4,
+      "first": 1794517402,
+      "last": 1794517993,
+      "activeSeconds": 591
+    },
+    "session_01YPMoajjPGMR3vg6xjuYV81": {
+      "commits": 3,
+      "first": 1794517538,
+      "last": 1794517690,
+      "activeSeconds": 152
+    },
+    "session_01YPMoakTYJ6H15UDTXuA5Wh": {
+      "commits": 3,
+      "first": 1794517605,
+      "last": 1794517962,
+      "activeSeconds": 357
+    },
+    "session_01YPMoaicN4gnNjkJakskPo8": {
+      "commits": 3,
+      "first": 1794517728,
+      "last": 1794533373,
+      "activeSeconds": 120
+    },
+    "session_01YPMoajzbK5KawohcQ4cudY": {
+      "commits": 30,
+      "first": 1794518223,
+      "last": 1794668628,
+      "activeSeconds": 6539
+    },
+    "session_01YPMoanMuH9khvYC2xkLNAt": {
+      "commits": 23,
+      "first": 1794523205,
+      "last": 1794729589,
+      "activeSeconds": 13247
+    },
+    "session_01YPMoaknwryB4BRhQbEPdcq": {
+      "commits": 73,
+      "first": 1794526005,
+      "last": 1794736422,
+      "activeSeconds": 32057
+    },
+    "session_01YPMoakUQtherMJx4pWkoVd": {
+      "commits": 25,
+      "first": 1794526030,
+      "last": 1794670277,
+      "activeSeconds": 10452
+    },
+    "session_01YPMoajan6rY5YBDbLu54dT": {
+      "commits": 12,
+      "first": 1794533293,
+      "last": 1794737906,
+      "activeSeconds": 4073
+    },
+    "session_01YPMoaidfCsyA9Qxobcuz2K": {
+      "commits": 8,
+      "first": 1794533688,
+      "last": 1794670019,
+      "activeSeconds": 2497
+    },
+    "session_01YPMoajt3vMVyyUGZuSTA7i": {
+      "commits": 43,
+      "first": 1794668327,
+      "last": 1794686318,
+      "activeSeconds": 14541
+    },
+    "session_01YPMoajLAGATE44xJtw74Np": {
+      "commits": 11,
+      "first": 1794726063,
+      "last": 1794741069,
+      "activeSeconds": 10508
+    },
+    "session_01YPMoaj8rP6pfADan6ppZg1": {
+      "commits": 3,
+      "first": 1794726284,
+      "last": 1794727349,
+      "activeSeconds": 1065
+    },
+    "session_01YPMoanicDoz6yEWMV1S2Sz": {
+      "commits": 4,
+      "first": 1794738063,
+      "last": 1794740599,
+      "activeSeconds": 2536
+    }
+  },
+  "lines": {
+    "port": 55788,
+    "tests": 1346,
+    "tools": 5362,
+    "posts": 16952,
+    "pages": 2560,
+    "decisions": 772,
+    "markdown": 1323
+  },
+  "pullRequests": 105,
+  "merged": 105,
+  "posts": 69,
+  "decisionRecords": 21
+}
