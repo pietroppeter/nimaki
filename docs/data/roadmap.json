@@ -899,7 +899,29 @@
           "what": "What the one workflow (.github/workflows/pages.yml) checks, step by step; how it grew pull request by pull request; how long runs take and how that changed, what failed and why, and where time is lost, from the real GitHub Actions history (a Nim tool that reads the Actions API and keeps the numbers in the post's data). Improvements are proposed in the post; the workflow is not changed in this step.",
           "done_when": "A devlog post whose numbers come from the recorded run history, with proposals for Pietro to choose from.",
           "owner": "Explain nimaki's CI and its history",
+          "status": "done",
+          "post": "twelve-minutes-of-checks",
+          "pr": "92"
+        },
+        {
+          "id": "ci-speed",
+          "kind": "tooling",
+          "title": "A faster CI, without dropping a check",
+          "what": "Pietro chose proposals 1, 3 and 4 of the post Twelve minutes of checks: skip the referee, fuzzers and Pele's suites when a pull request changes no code; build the C tools with -d:release and run the fuzzers and the odd-character rounds four at a time (one result file per fuzzer type); on main, deploy after the pages only and stop queueing merges. Then proposal 2: the checks in parallel jobs.",
+          "done_when": "A claim pull request is green in about two minutes, a pull request of code in clearly less than twelve, and a merge reaches the site without waiting for the checks; every check still runs on every pull request that changes code.",
+          "owner": "Explain nimaki's CI and its history",
           "status": "started",
+          "post": "",
+          "pr": ""
+        },
+        {
+          "id": "post-answers",
+          "kind": "research",
+          "title": "The answers in the posts",
+          "what": "Decision 0021: a post records Pietro's answer to its question. Go through the posts written before the rule (their nkQuestion notes and questions in the text), find each question answered since (in the project chat, a decision record, the roadmap, a later post), and add the answer, its date and a link to where it was carried out. A question still open stays open, and is listed in the step's post.",
+          "done_when": "Every question of the posts before 15 November 2026 either shows its answer or is listed as still open.",
+          "owner": "",
+          "status": "planned",
           "post": "",
           "pr": ""
         },
