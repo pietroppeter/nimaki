@@ -190,6 +190,11 @@ Before diagrammari could switch, and in the order it would meet them:
    included, and Pele's tests of them pass. nimaki.js holds every type and weighs about 9 MB
    (1.4 MB compressed) against the bundle's 730 kB, so lazy loading by type waits for the
    smaller JavaScript build, which is in the backlog.*
+   *Then Pietro moved the smaller build before 0.2.0, and it was done the same day:
+   [A type at a time](../a-type-at-a-time/). One file per type, which `nimaki.load` adds to the
+   page, and a build of diagrammari's four types is 243 KB compressed, less than the bundle's
+   277 KB, so client mode can load nimaki instead of Pele's bundle from
+   [nimaki 0.2.0](../nimaki-0-2-0/).*
 4. **The second reading.** All of nimaki's ported files are still marked `draft`: they are
    identical to Pele on the corpus and the fuzzer, but have not been read a second time against
    Pele's source (decision 0005). That is a question for Pietro already: whether tests and

@@ -969,12 +969,12 @@
           "id": "release-0-2",
           "kind": "tooling",
           "title": "nimaki 0.2.0, ready for diagrammari",
-          "what": "The second release (decision 0020): Pele's browser side, and Pele's models as JSON in the C ABI (nimaki_parse) and in a page, so that every item the post A proposal for diagrammari listed as missing is done or deferred on purpose. The proposal post records where each item stands. Waits for the step A smaller JavaScript build: Pietro decided on 15 November 2026 (11:14 UTC) that 0.2.0 is not tagged while nimaki.js is about 10 MB, as nimaki is not ready for diagrammari until then.",
+          "what": "The second release (decision 0020): Pele's browser side, and Pele's models as JSON in the C ABI (nimaki_parse) and in a page, so that every item the post A proposal for diagrammari listed as missing is done or deferred on purpose. The proposal post records where each item stands. Pietro decided on 15 November 2026 (11:14 UTC) that 0.2.0 waits for the step A smaller JavaScript build; done the same day (PR #110), so 0.2.0 holds it and is ready for Pietro to tag.",
           "done_when": "Version, changelog and installcheck agree on 0.2.0, a post says what is in it and what diagrammari can do with it, and Pietro has the link to tag it.",
           "owner": "Port Pele's browser side",
-          "status": "started",
+          "status": "done",
           "post": "nimaki-0-2-0",
-          "pr": ""
+          "pr": "104"
         },
         {
           "id": "retrospective",
