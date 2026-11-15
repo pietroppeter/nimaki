@@ -141,7 +141,8 @@ proc main() =
           o.verdict = if o.detail.len == 0: "same" else: "different"
           if everyDifference: differences(theirs, ours, "model", o.all)
     except PeleError as e:
-      if e.code == "unsupported": o.verdict = "unsupported"
+      if e.code == "unsupported" or (e.code == "unsupported-diagram" and e.msg.endsWith(" is not supported yet.")):
+        o.verdict = "unsupported"
       elif not p["ok"].getBool and p["code"].getStr == e.code: o.verdict = "error"   # both throw
       else:
         o.verdict = "different"

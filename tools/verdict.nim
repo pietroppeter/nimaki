@@ -25,10 +25,16 @@ func around*(s: string, at: int): string =
   let hi = min(s.len, at + 30)
   result = (if lo > 0: "…" else: "") & s[lo ..< hi].replace("\n", "\\n") & (if hi < s.len: "…" else: "")
 
+func notDrawn*(a: Answer): bool =
+  ## An answer that says the build does not draw the type: Pele's error for a type that is not
+  ## registered (a build with `-d:nimakiTypes`), or nimaki's old one for a type not ported yet.
+  not a.ok and (a.code == "unsupported" or
+                (a.code == "unsupported-diagram" and a.message.endsWith(" is not supported yet.")))
+
 func compare*(id, diagramType: string, want, got: Answer): Outcome =
   ## The verdict on one case: Pele's answer `want`, nimaki's `got`.
   result = Outcome(id: id, diagramType: diagramType)
-  if not got.ok and got.code == "unsupported":
+  if notDrawn(got) and not (notDrawn(want) and want.message == got.message):
     result.verdict = vUnsupported
   elif want.ok and got.ok:
     let at = firstDifference(want.svg, got.svg)

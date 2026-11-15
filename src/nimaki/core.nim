@@ -76,7 +76,7 @@ proc parseSource(text: string, limit: int, maxEdges: int, extra: Config): Parsed
   if not ok:
     raise newPeleError("No diagram type detected for the given text.", "unsupported-diagram")
   if found.diagramType notin diagrams:
-    raise newPeleError("nimaki does not draw " & found.diagramType & " yet.", "unsupported",
+    raise newPeleError("Diagram type \"" & found.diagramType & "\" is not supported yet.", "unsupported-diagram",
                        ErrorInfo(diagramType: found.diagramType, mermaidType: found.mermaidType))
   let diagram = diagrams[found.diagramType]
   var config = pre.config

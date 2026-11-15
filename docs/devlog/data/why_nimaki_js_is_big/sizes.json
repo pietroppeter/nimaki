@@ -1,0 +1,107 @@
+{
+  "nim": "Nim Compiler Version 2.2.15 [Linux: amd64]",
+  "esbuild": "0.28.2",
+  "pele": "1.13.0",
+  "files": [
+    {
+      "name": "debug",
+      "flags": "",
+      "raw": 13649313,
+      "gzip": 1760508,
+      "brotli": 1100146
+    },
+    {
+      "name": "release",
+      "flags": "-d:release",
+      "raw": 10875730,
+      "gzip": 1500290,
+      "brotli": 966179
+    },
+    {
+      "name": "danger",
+      "flags": "-d:danger",
+      "raw": 9904343,
+      "gzip": 1420736,
+      "brotli": 929210
+    },
+    {
+      "name": "danger, minified",
+      "flags": "-d:danger + esbuild --minify",
+      "raw": 5001273,
+      "gzip": 934001,
+      "brotli": 612287
+    },
+    {
+      "name": "danger, in a function, minified",
+      "flags": "-d:danger + esbuild --minify --format=iife",
+      "raw": 3610364,
+      "gzip": 806612,
+      "brotli": 558078
+    }
+  ],
+  "peleBundle": {
+    "raw": 733670,
+    "gzip": 276841,
+    "brotli": 223408
+  },
+  "anatomy": {
+    "total": 9904343,
+    "what": {
+      "indentation": 1282594,
+      "names": 3254484,
+      "strings": 891608,
+      "typeInfo": 522580,
+      "tables": 601770
+    },
+    "areas": {
+      "diagram types": 5508703,
+      "Nim's library and the dependencies": 155939,
+      "shared core": 1496398,
+      "browser side": 105384,
+      "models for parse": 585013,
+      "top-level code (data, type information)": 2052907
+    },
+    "modules": {
+      "modeljson": 585013,
+      "layout/layered": 358392,
+      "diagrams/usecase/db": 181598,
+      "layout/compound": 171078,
+      "diagrams/sequence/render": 161063,
+      "diagrams/agentflow/db": 145802,
+      "diagrams/class/render": 136017,
+      "layout/lanes": 123783,
+      "jsregex": 117064,
+      "diagrams/block/render": 114752,
+      "diagrams/wardley/render": 109123,
+      "diagrams/state/render": 96309,
+      "diagrams/agentflow/lexer": 94119,
+      "diagrams/er/render": 93384,
+      "diagrams/usecase/parser": 92163,
+      "diagrams/architecture/render": 91889,
+      "diagrams/state/lexer": 90687,
+      "diagrams/flowchart/lexer": 89271,
+      "diagrams/usecase/render": 86082,
+      "diagrams/usecase/json": 84711,
+      "diagrams/class/db": 83064,
+      "diagrams/gantt/render": 78678,
+      "diagrams/eventmodeling/render": 75164,
+      "diagrams/git/render": 72743,
+      "diagrams/flowchart/db": 71941,
+      "text/label": 71199,
+      "diagrams/xychart/render": 70543,
+      "diagrams/sequence/lexer": 67712,
+      "svg/edges": 67429,
+      "js": 67394,
+      "diagrams/agentflow/parser": 67066,
+      "diagrams/railroad/render": 65869,
+      "diagrams/architecture/layout": 65018,
+      "diagrams/c4/route": 64148,
+      "diagrams/venn/render": 63644,
+      "diagrams/flowchart/parser": 63171,
+      "(runtime)": 61981,
+      "util/yaml": 60216,
+      "diagrams/flowchart/render": 59606,
+      "diagrams/requirement/render": 57631
+    }
+  }
+}

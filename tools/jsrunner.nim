@@ -5,7 +5,7 @@
 ## file named by the first argument, and writes one answer per line, in the oracle's format, to
 ## the file named by the second:
 ##
-##   nim js -d:nodejs -d:release -o:build/js/jsrunner.js tools/jsrunner.nim
+##   nim js -d:nodejs -d:danger -o:build/js/jsrunner.js tools/jsrunner.nim
 ##   TZ=UTC node build/js/jsrunner.js cases.jsonl answers.jsonl
 import std/[json, strutils]
 import verdict, answers

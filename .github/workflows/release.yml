@@ -1,0 +1,67 @@
+name: Release files
+
+# When Pietro publishes a release on GitHub, this builds the JavaScript files a page loads
+# (tools/webbuild.nim: nimaki.js with every type, nimaki-core.js with none, one nimaki-<type>.js
+# per type, -d:danger and minified with Pele's esbuild), checks them against Pele as CI does, and
+# attaches them to the release, one by one and as one zip (decision 0023). It builds from the
+# release's tag, so the files are the release's code. A run by hand rebuilds the files of a tag
+# that exists already (Actions > Release files > Run workflow).
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "the release's tag, e.g. v0.2.0"
+        required: true
+
+permissions:
+  contents: write   # to attach files to the release
+
+jobs:
+  files:
+    runs-on: ubuntu-24.04
+    env:
+      TAG: ${{ github.event.release.tag_name || inputs.tag }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
+
+      - uses: jiro4989/setup-nim-action@v2
+        with:
+          nim-version: "2.2.14"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Node runs the oracle and esbuild
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - uses: actions/cache@v4
+        with:
+          path: deps
+          key: deps-${{ hashFiles('deps.lock') }}
+      - uses: actions/cache@v4
+        with:
+          path: |
+            reference/pele
+            reference/npm
+          key: pele-${{ hashFiles('reference/PIN') }}
+      - run: sh tools/setup.sh
+
+      - name: Build the files
+        run: nim r tools/webbuild.nim --out:build/release
+
+      # the same check as CI's: every case of the corpus drawn by the shipped files, identical to Pele
+      - name: Check them against Pele
+        run: |
+          nim r tools/difftest.nim --web:build/release/nimaki.js --check-done --show:30
+          nim r tools/difftest.nim --web:build/release --check-done --show:30
+
+      - name: Attach them to the release
+        run: |
+          version="${TAG#v}"
+          (cd build/release && zip -q "../nimaki-js-$version.zip" *.js)
+          gh release upload "$TAG" build/release/*.js "build/nimaki-js-$version.zip" --clobber --repo "$GITHUB_REPOSITORY"

@@ -1,6 +1,8 @@
 // nimaki drawing in the reader's browser: the script of the blocks `nbLive` and `nbPlayground`
-// (docs/blocks.nim). It loads nimaki compiled to JavaScript (assets/nimaki.js, built from
-// src/nimaki/web.nim when the pages are built) only on a page that has one of those blocks.
+// (docs/blocks.nim). It loads nimaki compiled to JavaScript (assets/nimaki-core.js, built from
+// src/nimaki/web.nim by tools/webbuild.nim when the pages are built) only on a page that has one
+// of those blocks, and then the file of each diagram type the page draws (nimaki-<type>.js),
+// as Pele's lazy loading does: `nimaki.load(type)`.
 //
 // - A live figure (`figure.live`) holds a drawing made at build time, its Mermaid text and the
 //   options it was drawn with. Here nimaki draws the text again, puts its own drawing in place
@@ -39,7 +41,19 @@
     return r;
   };
 
-  const liven = () => {
+  // The type of a text, or null: the text may name none.
+  const typeOf = (text) => { try { return globalThis.nimaki.detectType(text); } catch (e) { return null; } };
+
+  const liven = async () => {
+    // the types of the figures and of the playgrounds' first texts, each loaded once
+    const texts = [...[...figures].map((f) => f.querySelector('.live-source').textContent),
+                   ...[...grounds].map((g) => g.querySelector('textarea').value)];
+    try {
+      await Promise.all([...new Set(texts.map(typeOf))].map((t) => globalThis.nimaki.load(t)));
+    } catch (e) {
+      for (const el of document.querySelectorAll('.live-status')) say(el, 'nimaki could not be loaded: ' + e.message, 'bad');
+      return;
+    }
     for (const fig of figures) {
       const status = fig.querySelector('.live-status');
       const text = fig.querySelector('.live-source').textContent;
@@ -75,8 +89,10 @@
       let timer = 0;
       area.addEventListener('input', () => {
         clearTimeout(timer);
-        timer = setTimeout(() => {
+        timer = setTimeout(async () => {
           t0 = performance.now();
+          // the file of a type typed for the first time, then the drawing
+          try { await globalThis.nimaki.load(typeOf(area.value)); } catch (e) { /* update says what is wrong */ }
           handle.update(area.value);
           t0 = 0;
         }, 150);
@@ -91,7 +107,7 @@
   s.src = src;
   s.onload = liven;
   s.onerror = () => {
-    for (const el of document.querySelectorAll('.live-status')) say(el, 'nimaki.js could not be loaded.', 'bad');
+    for (const el of document.querySelectorAll('.live-status')) say(el, 'nimaki could not be loaded.', 'bad');
   };
   document.head.appendChild(s);
 })();

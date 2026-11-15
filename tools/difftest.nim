@@ -17,9 +17,12 @@
 ##     --js              compare Pele with nimaki compiled to JavaScript (tools/jsrunner.nim, in
 ##                       Node) instead of nimaki compiled to C; a full run writes its summary in
 ##                       docs/data/js.json instead of difftest.json
+##     --web:PATH        compare Pele with the files the pages load (tools/webbuild.nim), run in
+##                       Node by tools/webrunner.mjs: one file (build/web/nimaki.js), or a folder,
+##                       whose nimaki-core.js and every nimaki-<type>.js share one page
 ##
 ## A case is identical when both sides draw the same bytes, or both throw the same error code with
-## the same message. `unsupported` is what nimaki raises for a type it does not draw yet. Both
+## the same message. `unsupported` is a build that does not draw the type (`notDrawn`). Both
 ## sides get `now` = 2026-01-01T00:00:00Z, and the oracle runs with TZ=UTC: gantt reads both.
 ## The inputs are corpus/cases.json (built by tools/corpus.mjs from Pele at the pin) and
 ## corpus/diagrammari.json (the Mermaid text of diagrammari, tools/corpus_diagrammari.nim). The
@@ -109,6 +112,7 @@ proc main() =
   var strict, checkDone, selfTest = false
   var onlyCorpus = ""
   var js = false
+  var web: seq[string]   ## --web: the files of the pages, loaded in this order
   for kind, key, val in getopt():
     case kind
     of cmdLongOption, cmdShortOption:
@@ -121,6 +125,15 @@ proc main() =
       of "check-done": checkDone = true
       of "self-test": selfTest = true
       of "js": js = true
+      of "web":
+        # a file, or a folder of tools/webbuild.nim: its nimaki-core.js, then each nimaki-<type>.js
+        let path = if val.len > 0: val else: buildDir / "web"
+        if dirExists(path):
+          web.add path / "nimaki-core.js"
+          for f in walkFiles(path / "nimaki-*.js"):
+            if f.extractFilename != "nimaki-core.js": web.add f
+        elif fileExists(path): web.add path
+        else: quit "ERROR --web: no file or folder " & path & " (run: nim r tools/webbuild.nim)", 2
       of "hosts": hosts = true
       of "corpus":
         if val notin ["pele", "diagrammari"]: quit "ERROR --corpus is pele or diagrammari, not " & val, 2
@@ -156,7 +169,13 @@ proc main() =
     quit(if ok: 0 else: 1)
 
   var outcomes: seq[Outcome]
-  if js:
+  if web.len > 0:
+    if hosts: quit "ERROR --hosts and --web do not go together: the test icons are Nim's", 2
+    var inputs: seq[JsonNode]
+    for c in cases: inputs.add c.input
+    let got = webAnswers(inputs, web, "difftest")
+    for c in cases: outcomes.add compare(c.id, c.diagramType, peles[c.id], got[c.id])
+  elif js:
     var inputs: seq[JsonNode]
     for c in cases: inputs.add c.input
     let got = jsAnswers(inputs, "difftest")
@@ -214,12 +233,12 @@ proc main() =
     for k, v in tally.toJson: row[k] = v
     if tallyD.count > 0: row["diagrammari"] = tallyD.toJson
     rows.add row
-  if only.len == 0 and fast == 100 and onlyCorpus.len == 0 and js and not hosts:
+  if only.len == 0 and fast == 100 and onlyCorpus.len == 0 and js and web.len == 0 and not hosts:
     var summary = %*{"pin": pinOf(packageDir)}
     for k, v in total.toJson: summary[k] = v
     summary["diagrammari"] = totalD.toJson
     updateJsData("difftest", "", summary)
-  if only.len == 0 and fast == 100 and onlyCorpus.len == 0 and not js and not hosts:
+  if only.len == 0 and fast == 100 and onlyCorpus.len == 0 and not js and web.len == 0 and not hosts:
     var summary = %*{"about": "Written by tools/difftest.nim on a run over the whole corpus. Do not edit by hand. " &
       "`cases` and the counts beside it are Pele's corpus; `diagrammari` counts diagrammari's.",
       "pin": pinOf(packageDir)}
@@ -236,7 +255,10 @@ proc main() =
         align($tally[vUnsupported], 5), " unsupported"
   var sum: Tally
   for v in Verdict: sum[v] = total[v] + totalD[v]
-  echo "difftest: pele ", pinOf(packageDir), (if js: " against nimaki in JavaScript" else: ""), ", ", outcomes.len, " cases of ", types.len, " types",
+  let against = if web.len == 1: " against " & relativePath(web[0], repoDir)
+                elif web.len > 1: " against " & $web.len & " files of " & relativePath(web[0].parentDir, repoDir)
+                elif js: " against nimaki in JavaScript" else: ""
+  echo "difftest: pele ", pinOf(packageDir), against, ", ", outcomes.len, " cases of ", types.len, " types",
     (if totalD.count > 0: " (" & $totalD.count & " of them diagrammari's)" else: ""),
     (if fast < 100: " (sample of " & $fast & "%, seed " & $seed & ")" else: ""), ": ",
     sum[vIdentical], " identical, ", sum[vDifferent], " different, ", sum[vUnsupported], " unsupported"

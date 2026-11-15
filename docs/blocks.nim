@@ -402,20 +402,23 @@ template nbSvg*(tsvg: string, tcaption = "") =
 var nimakiJsBuilt = false
 
 proc nimakiJs*(): string =
-  ## `docs/assets/nimaki.js`, nimaki compiled to JavaScript from `src/nimaki/web.nim`, built
-  ## once per run of the pages (it is not committed: CI builds it with the pages).
+  ## `docs/assets/nimaki.js` and its siblings, nimaki compiled to JavaScript from
+  ## `src/nimaki/web.nim` by `tools/webbuild.nim`: every type in nimaki.js, the shared core in
+  ## nimaki-core.js, one type in each nimaki-<type>.js, minified. Built once per run of the pages
+  ## (they are not committed: CI builds them with the pages).
   result = assetsDir / "nimaki.js"
   if not nimakiJsBuilt:
-    let cmd = "nim js --hints:off --warnings:off -d:danger -o:" & quoteShell(result) & " " &
-              quoteShell(repoDir / "src" / "nimaki" / "web.nim")
-    doAssert execShellCmd(cmd) == 0, "nim js failed: " & cmd
+    let cmd = "nim r --hints:off " & quoteShell(repoDir / "tools" / "webbuild.nim") & " --out:" &
+              quoteShell(assetsDir)
+    doAssert execShellCmd(cmd) == 0, "webbuild failed: " & cmd
     nimakiJsBuilt = true
 
 proc liveScript(pageFile: string): string =
-  ## The script of the live blocks, `docs/assets/live.js`, which loads `nimaki.js` when the page
-  ## has a live block. Every live block adds it; the script runs once.
+  ## The script of the live blocks, `docs/assets/live.js`, which loads `nimaki-core.js` when the
+  ## page has a live block, then the file of each type the page draws. Every live block adds it;
+  ## the script runs once.
   discard nimakiJs()
-  &"""<script defer src="{assetHref("live.js", pageFile)}" data-nimaki="{assetHref("nimaki.js", pageFile)}"></script>"""
+  &"""<script defer src="{assetHref("live.js", pageFile)}" data-nimaki="{assetHref("nimaki-core.js", pageFile)}"></script>"""
 
 newNbBlock(NbLive):
   svg: string

@@ -90,8 +90,11 @@ browser bundle gives, under the name `nimaki`: `render(text, options)`, which re
 `parse`, and `mount(element, text, options)`, which the box above draws with: it fits the
 drawing to the box, draws it again when the box changes width, and lets a drawing that was
 shrunk to fit be zoomed ([A drawing that fits its box](../devlog/a-drawing-that-fits-its-box/)).
-The pages build it into `assets/nimaki.js` and load it only where a page draws live. The types
-it draws: {drawn.mapIt("*" & it & "*").join(", ")}.
+The pages build it with `tools/webbuild.nim`, minified, into one file per diagram type, a file
+of the shared core, and `assets/nimaki.js` with every type. This page loads the core, then the
+file of each type the box meets, the first time it meets it, as Pele's lazy loading does
+([Why nimaki.js is big](../devlog/why-nimaki-js-is-big/)). The types it draws:
+{drawn.mapIt("*" & it & "*").join(", ")}.
 """
 
 nbSave
