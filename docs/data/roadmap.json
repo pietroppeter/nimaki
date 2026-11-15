@@ -730,6 +730,15 @@
           "status": "started",
           "post": "following-pele",
           "pr": "66"
+        },
+        {
+          "id": "release",
+          "kind": "tooling",
+          "title": "The first release",
+          "what": "Tag nimaki 0.1.0 (Pietro's choice, 15 Nov 2026): a nimble file so diagrammari and others can require nimaki, a changelog saying what the release holds (all 33 types of Pele 1.13.0 identical in the C and JavaScript builds, render and parse, the C ABI) and what it does not (Pele's browser side, mount and zoom), a decision record for the version numbers, then the tag v0.1.0 and a GitHub release.",
+          "done_when": "The tag v0.1.0 is on GitHub with its release notes, and nimble installs nimaki from it.",
+          "owner": "Tag first nimaki release",
+          "status": "started"
         }
       ]
     },
@@ -880,6 +889,17 @@
           "status": "done",
           "post": "both-builds-every-file",
           "pr": "82"
+        },
+        {
+          "id": "ci-history",
+          "kind": "tooling",
+          "title": "CI, explained, with its history",
+          "what": "What the one workflow (.github/workflows/pages.yml) checks, step by step; how it grew pull request by pull request; how long runs take and how that changed, what failed and why, and where time is lost, from the real GitHub Actions history (a Nim tool that reads the Actions API and keeps the numbers in the post's data). Improvements are proposed in the post; the workflow is not changed in this step.",
+          "done_when": "A devlog post whose numbers come from the recorded run history, with proposals for Pietro to choose from.",
+          "owner": "Explain nimaki's CI and its history",
+          "status": "started",
+          "post": "",
+          "pr": ""
         }
       ]
     },
