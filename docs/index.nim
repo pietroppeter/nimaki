@@ -1,26 +1,83 @@
 ## The home page, docs/index.html.
-import std/[strformat]
+import std/[strformat, json]
 import nimib
-import blocks, site
+import blocks, site, pele
+import nimaki
 
 let cov = loadCoverage()
 let posts = devlogPosts()
+let corpusCount = parseFile(repoDir / "corpus" / "cases.json")["count"].getInt
 
 nbInit
 nb.doc.filename = docsDir / "index.html"
 nb.usePage(title = "nimaki", cadence = "kept up to date",
-           description = "Pele, the Mermaid renderer, ported to Nim one explained step at a time.")
+           description = "An engine that turns Mermaid text into SVG diagrams, in JavaScript and as native code: Pele, ported to Nim.")
 
-nbTitle "A port, built in public", "nimaki: Pele, in Nim", """
-[Mermaid](https://mermaid.js.org) turns a few lines of text into a diagram.
-[Pele](https://github.com/obsidianmd/pele) is a new renderer for it, made by Steph Ango for
-Obsidian: Mermaid text in, themeable SVG out, synchronous, no browser, no dependencies. This
-project ports a snapshot of Pele from TypeScript to [Nim](https://nim-lang.org), one well defined
-step at a time, and explains every step.
+nbTitle "Mermaid diagrams for Nim", "nimaki: diagrams from text, in Nim", """
+nimaki is an engine that draws diagrams. You give it a few lines of
+[Mermaid](https://mermaid.js.org), a small language for describing a diagram in text (a
+flowchart, a pie chart, a sequence of messages...), and it gives back the drawing as SVG, the
+picture format that every browser shows and that stays sharp at any size.
 """
 
+nbText: "## What it gives a Nim developer\n\nOne call turns text into a drawing:"
+
+nbCode:
+  let text = "pie\n \"Dogs\": 386\n \"Cats\": 85"
+  let pets = render(text)
+  echo pets.width, " x ", pets.height
+nbSvg pets.svg, "The drawing that call returns."
+
 nbText: &"""
-The snapshot is {pin.link}, which draws every diagram type of Mermaid {pin.mermaid}:
+- **A plain Nim function.** `render(text)` returns the SVG text and its size, at once: no
+  browser, no Node, no other program to start. It fits a command line tool, a static site
+  generator, a nimib page, a web server.
+- **Every Mermaid diagram type**: all {cov.diagrams.len} of Mermaid {pin.mermaid}, from
+  flowcharts and sequence diagrams to gantt charts, class diagrams and mind maps.
+- **Native and JavaScript from the same code.** `nim c` gives a native program, `nim js` a
+  script for web pages and Node, with Pele's browser functions (`nimaki.mount` fits a drawing to
+  its box, with zoom).
+- **More than a picture.** `parse(text)` gives the diagram as data (its nodes, edges, labels) in
+  Pele's model, as JSON; `detectType` and `supports` say what a text is. The drawing's colours
+  are CSS variables, so a page's theme restyles it, and `maxWidth` fits it to a phone.
+- **Small to depend on**: `requires "nimaki == 0.2.0"`, and its only dependency is nitely's pure
+  Nim `regex` (with its Unicode tables). From other languages, a C interface (`nimaki_render`) does the same through a
+  shared library.
+- **Exact.** Each build draws the same bytes as [Pele](https://github.com/obsidianmd/pele) on all
+  {corpusCount.thousands} test diagrams of the corpus, and every diagram on this site is checked
+  against Pele when the site is built.
+
+## How it is made
+
+nimaki is a port of Pele, the Mermaid renderer that Steph Ango made for Obsidian, from
+TypeScript to [Nim](https://nim-lang.org), made one explained step at a time. Pele is the
+original and nimaki follows it: when the two disagree, nimaki is wrong. The same Nim code is
+then built two ways, and the native build is what Nim adds to Pele.
+"""
+
+nbMermaid """
+flowchart TD
+  T[Mermaid text] --> N[nimaki, in Nim]
+  N -->|nim c| C[native build]
+  N -->|nim js| J[JavaScript build]
+  C --> P[Nim programs]
+  C --> A[other languages, through C]
+  J --> W[web pages and Node]
+  P --> S[the same SVG as Pele]
+  A --> S
+  W --> S
+""", "One Nim code, two builds, one drawing: the same bytes as Pele's."
+
+nbCards "the two builds":
+  nbCard("In a native program", "devlog/a-c-abi/", "the native build", nkNim):
+    nbText "`import nimaki` and `render(text).svg` in Nim, or `nimaki_render` from C, Python or any language that can call C."
+  nbCard("In a web page", "playground/", "the JavaScript build", nkInfo):
+    nbText "Load `nimaki.js` and call `nimaki.render` or `nimaki.mount`, the same functions as Pele's. The playground draws with it in your browser."
+
+nbText: &"""
+## Where it stands
+
+The snapshot of Pele is {pin.link}, which draws every diagram type of Mermaid {pin.mermaid}:
 {cov.tsCode.thousands} lines of TypeScript, tests not counted. Ported so far: {cov.portedCode.thousands}.
 Each island is a shared part of Pele or a diagram type; it glows like lava when its port starts
 and cools to olivine when the Nim draws, byte for byte, the same SVG as Pele.
@@ -34,7 +91,7 @@ nbText: """
 To learn how diagrams are drawn from text (parsing, graph layout, measuring text, writing SVG)
 by porting a renderer that does all of it in a small, readable codebase; to give
 [diagrammari](https://github.com/pietroppeter/diagrammari) an engine that needs no JavaScript
-runtime; to see how far an AI model can carry a long port when each step is small, checked byte
+runtime (the native build); to see how far an AI model can carry a long port when each step is small, checked byte
 for byte against the original, and explained to a person who reviews it; and for the fun of it.
 
 ## The name
