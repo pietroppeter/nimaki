@@ -2,7 +2,7 @@
 
 version       = "0.2.0"
 author        = "Pietro Peterlongo"
-description   = "Pele, the Mermaid renderer, ported to Nim: Mermaid text in, themeable SVG out, identical to Pele byte for byte"
+description   = "Mermaid text to SVG diagrams in Nim, native and JavaScript: a port of Pele, identical to it byte for byte"
 license       = "MIT"
 srcDir        = "src"
 

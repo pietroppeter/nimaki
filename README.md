@@ -1,25 +1,11 @@
 # nimaki
 
-[Pele](https://github.com/obsidianmd/pele), the Mermaid renderer by Steph Ango and Obsidian,
-ported to [Nim](https://nim-lang.org) one explained step at a time. Mermaid text in, themeable
-SVG out, checked byte for byte against Pele itself.
-
-**Site:** https://pietroppeter.github.io/nimaki/ (devlog, roadmap, coverage map, decisions).
-
-- The snapshot being ported is pinned in [`reference/PIN`](reference/PIN): Pele 1.13.0
-  (commit `3a2f075`).
-- The working rules, for people and coding agents: [`AGENTS.md`](AGENTS.md).
-- Get started: `sh tools/setup.sh`, then `nim r docs/all.nim` to build the pages.
-
-## Use it
-
-The latest release is **0.2.0** ([`CHANGELOG.md`](CHANGELOG.md)): every diagram type of Pele
-1.13.0, identical to Pele byte for byte, in the C and JavaScript builds, with Pele's browser side
-(`mount`, zoom, lazy loading by type) in a minified JavaScript build and Pele's models as JSON.
-In a nimble file:
+nimaki is an engine that turns [Mermaid](https://mermaid.js.org) text (a few lines that
+describe a flowchart, a pie chart, a sequence of messages...) into an SVG drawing, written in
+[Nim](https://nim-lang.org).
 
 ```nim
-requires "nimaki == 0.2.0"
+requires "nimaki == 0.2.0"   # in your .nimble file
 ```
 
 ```nim
@@ -27,11 +13,41 @@ import nimaki
 writeFile "pets.svg", render("pie title Pets\n  \"Dogs\" : 386\n  \"Cats\" : 85").svg
 ```
 
-In a page, `src/nimaki/web.nim` compiled with `nim js` gives `nimaki.render`, `nimaki.mount`
-and the rest of Pele's browser functions under the name `nimaki` (`nim r tools/webbuild.nim`
-writes the minified files: `nimaki.js`, `nimaki-core.js` and one per type; `-d:nimakiTypes`
-picks a build's types); from other languages, the C
-ABI (`src/nimaki/capi.h`) gives `nimaki_render` and `nimaki_parse`.
+## What it gives a Nim developer
+
+- **A plain Nim function.** `render(text)` returns the SVG text and its size, at once: no
+  browser, no Node, no other program to start. It fits a command line tool, a static site
+  generator, a nimib page, a web server.
+- **Every Mermaid diagram type**: all 33 of Mermaid 12.1.0, from flowcharts and sequence
+  diagrams to gantt charts, class diagrams and mind maps.
+- **Native and JavaScript from the same code.** `nim c` gives a native program; `nim js` gives
+  a script for web pages and Node. `src/nimaki/web.nim` exposes `nimaki.render`, `nimaki.mount`
+  (fits a drawing to its box, with zoom) and the rest of Pele's browser functions;
+  `nim r tools/webbuild.nim` writes the minified files (`nimaki.js`, `nimaki-core.js` and one per
+  type; `-d:nimakiTypes` picks a build's types).
+- **More than a picture.** `parse(text)` gives the diagram as data (nodes, edges, labels) in
+  Pele's model, as JSON; `detectType` and `supports` say what a text is. The drawing's colours
+  are CSS variables, so a page's theme restyles it, and `maxWidth` fits it to a phone.
+- **Small to depend on.** Its only dependency is nitely's pure Nim `regex` (with its Unicode
+  tables). From other languages, the C interface (`src/nimaki/capi.h`: `nimaki_render`,
+  `nimaki_parse`) does the same through a shared library.
+- **Exact.** Each build draws the same bytes as [Pele](https://github.com/obsidianmd/pele) on
+  all 2118 test diagrams of the corpus.
+
+## How it is made
+
+nimaki is a port of Pele, the Mermaid renderer by Steph Ango and Obsidian, from TypeScript to
+Nim, made one explained step at a time and checked byte for byte against Pele run in Node. Pele
+is the original and nimaki follows it. The native build is what Nim adds.
+
+**Site:** https://pietroppeter.github.io/nimaki/ (devlog, roadmap, coverage map, decisions,
+playground).
+
+- The snapshot being ported is pinned in [`reference/PIN`](reference/PIN): Pele 1.13.0
+  (commit `3a2f075`). Releases are in [`CHANGELOG.md`](CHANGELOG.md); the latest is 0.2.0.
+- The working rules, for people and coding agents: [`AGENTS.md`](AGENTS.md).
+- To work on it: `sh tools/setup.sh`, then `nim r tests/all.nim` (tests) and
+  `nim r docs/all.nim` (the pages).
 
 ## The name
 
