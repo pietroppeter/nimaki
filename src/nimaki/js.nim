@@ -382,6 +382,11 @@ func utf16Len*(s: string): int =
   ## `s.length`.
   for _ in codeUnits(s): inc result
 
+func utf16LongerThan*(s: string, limit: int): bool =
+  ## `s.length > limit`, without walking `s` when its bytes already fit: a character takes at
+  ## least as many bytes in UTF-8 as code units in UTF-16, so `s.length` is never more than `s.len`.
+  s.len > limit and utf16Len(s) > limit
+
 func utf16Len*(s: string, first, last: int): int =
   ## The length in UTF-16 code units of the bytes `first ..< last` of `s`.
   var i = first

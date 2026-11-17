@@ -1,0 +1,60 @@
+3,278,118,261 (100.0%)  PROGRAM TOTALS
+266,914,523 ( 8.14%) alloc.nim:system::rawAlloc(var<system::MemRegion>, int)
+160,629,246 ( 4.90%) alloc.nim:system::rawDealloc(var<system::MemRegion>, pointer) [clone .constprop.0]
+156,857,328 ( 4.78%) nfamatch2.nim:nfamatch2::nextState(var<ref<nfatype::PstatescolonObjectType_> >, var<ref<nfatype::PstatescolonObjectType_> >, var<nfatype::Capts3>, var<nfamatch2::Lookaround>, open
+108,317,602 ( 3.30%) nfafindall2.nim:nfafindall2::nextState(var<nfafindall2::RegexMatches2>, string, nfatype::Regex, int, int32, int32, set<nfatype::MatchFlag>)
+ 67,039,514 ( 2.05%) memmove-vec-unaligned-erms.S:__memcpy_avx_unaligned_erms
+ 56,503,941 ( 1.72%) memmem.c:memmem
+ 47,097,390 ( 1.44%) tokens.nim:tokens::prepare(seq<ref<tokens::TokenTypecolonObjectType_> >)
+ 46,581,984 ( 1.42%) strs_v2.nim:prepareAdd
+ 46,293,620 ( 1.41%) alloc.nim:system::rawAlloc(var<system::MemRegion>, int, int)
+ 45,681,345 ( 1.39%) strs_v2.nim:nimAsgnStrV2
+ 42,842,785 ( 1.31%) seqs_v2.nim:newSeqPayloadUninit
+ 37,141,722 ( 1.13%) system.nim:tokens::prepare(seq<ref<tokens::TokenTypecolonObjectType_> >)
+ 36,361,437 ( 1.11%) memset-vec-unaligned-erms.S:__memset_avx2_unaligned_erms
+ 35,713,707 ( 1.09%) nfamatch2.nim:nfamatch2::matchImpl(var<ref<nfatype::PstatescolonObjectType_> >, var<ref<nfatype::PstatescolonObjectType_> >, var<nfatype::Capts3>, var<int32>, openArray<char>, typ
+ 35,581,704 ( 1.09%) iterators.nim:tokens::prepare(seq<ref<tokens::TokenTypecolonObjectType_> >)
+ 31,669,544 ( 0.97%) hashes.nim:hashes::murmurHash(openArray<uInt8>)
+ 31,567,212 ( 0.96%) seqs_v2.nim:prepareSeqAddUninit.constprop.0
+ 29,787,646 ( 0.91%) seqs_v2.nim:prepareSeqAddUninit.constprop.1
+ 29,663,181 ( 0.90%) seqs_v2.nim:system::setLen(var<seq<int16> >, range09223372036854775807)
+ 29,597,949 ( 0.90%) unicode.nim:bench::utf16Len(string)
+ 25,814,718 ( 0.79%) seqs_v2.nim:system::add(var<seq<int> >, sink<int>)
+ 24,915,312 ( 0.76%) strs_v2.nim:rawNewString
+ 23,792,452 ( 0.73%) alloc.nim:system::realloc(var<system::MemRegion>, pointer, range09223372036854775807)
+ 23,506,868 ( 0.72%) nfatype.nim:nfamatch2::nextState(var<ref<nfatype::PstatescolonObjectType_> >, var<ref<nfatype::PstatescolonObjectType_> >, var<nfatype::Capts3>, var<nfamatch2::Lookaround>, openAr
+ 23,398,164 ( 0.71%) nodematch.nim:nodematch::matchSet(types::Node, unicode::Rune)
+ 22,170,210 ( 0.68%) digitsutils.nim:digitsutils::addInt(var<string>, int64)
+ 21,663,978 ( 0.66%) alloc.nim:system::rawDealloc(var<system::MemRegion>, pointer)
+ 21,503,520 ( 0.66%) iterators_1.nim:system::setLen(var<seq<int16> >, range09223372036854775807)
+ 21,344,628 ( 0.65%) js.nim:js::codePointAt(string, int)
+ 21,064,710 ( 0.64%) strs_v2.nim:setLengthStrV2
+ 20,309,970 ( 0.62%) builder.nim:builder::esc(string)
+ 19,555,284 ( 0.60%) nodematch.nim:nfamatch2::nextState(var<ref<nfatype::PstatescolonObjectType_> >, var<ref<nfatype::PstatescolonObjectType_> >, var<nfatype::Capts3>, var<nfamatch2::Lookaround>, open
+ 18,417,420 ( 0.56%) common.nim:common::contains(SortedSeq<unicode::Rune>, unicode::Rune)
+ 17,242,470 ( 0.53%) builder.nim:builder::num(float)
+ 16,932,036 ( 0.52%) bench.nim:bench::utf16Len(string)
+ 16,652,072 ( 0.51%) nfatype.nim:nfafindall2::nextState(var<nfafindall2::RegexMatches2>, string, nfatype::Regex, int, int32, int32, set<nfatype::MatchFlag>)
+ 16,593,756 ( 0.51%) seqs_v2.nim:system::setLen(var<seq<nfatype::Pstate> >, range09223372036854775807)
+ 16,572,796 ( 0.51%) seqs_v2.nim:prepareSeqAddUninit
+ 16,073,358 ( 0.49%) system.nim:common::contains(SortedSeq<unicode::Rune>, unicode::Rune)
+ 15,637,080 ( 0.48%) iterators_1.nim:system::setLen(var<seq<nfatype::Pstate> >, range09223372036854775807)
+ 15,396,784 ( 0.47%) strs_v2.nim:mnewString
+ 14,886,096 ( 0.45%) jsregex.nim:jsregex::matchEnd(jsregex::JsRegExp, string, int)
+ 14,165,068 ( 0.43%) types.nim:types::eqdestroy_(seq<types::Node>)
+ 13,507,767 ( 0.41%) strs_v2.nim:builder::esc(string)
+ 13,481,065 ( 0.41%) nfamatch2.nim:nfamatch2::matchImpl(openArray<char>, nfatype::Regex, var<nfatype::RegexMatch2>, int, set<nfatype::MatchFlag>)
+ 13,227,450 ( 0.40%) layered.nim:layered::position(ref<layered::GraphcolonObjectType_>, layered::LayeredOptions)
+ 12,931,967 ( 0.39%) indices.nim:js::jsTrimStart(string)
+ 12,260,175 ( 0.37%) js.nim:js::jsRound(float)
+ 12,162,332 ( 0.37%) tables.nim:tables::eqdestroy_(seq<KeyValuePair<string, string> >)
+ 10,997,582 ( 0.34%) nfatype.nim:nfamatch2::matchImpl(openArray<char>, nfatype::Regex, var<nfatype::RegexMatch2>, int, set<nfatype::MatchFlag>)
+ 10,740,087 ( 0.33%) js.nim:js::wellFormed(string)
+ 10,448,447 ( 0.32%) system.nim:system::eqdestroy_(seq<string>)
+ 10,203,918 ( 0.31%) strutils.nim:nsuFindStr
+  9,775,278 ( 0.30%) strs_v2.nim:appendString
+  9,736,600 ( 0.30%) ptrarith.nim:newSeqPayloadUninit
+  9,161,250 ( 0.28%) tables.nim:tables::eqcopy_(var<seq<KeyValuePair<string, ref<math::MathMarkupcolonObjectType_> > > >, seq<KeyValuePair<string, ref<math::MathMarkupcolonObjectType_> > >)
+  9,103,316 ( 0.28%) nfafindall2.nim:nfafindall2::findSomeImpl(string, nfatype::Regex, var<nfafindall2::RegexMatches2>, range09223372036854775807, set<nfatype::MatchFlag>)
+  9,066,968 ( 0.28%) indices.nim:js::jsTrimEnd(string)
+  9,030,078 ( 0.28%) system.nim:preprocess::preprocess(string, ref<seq<seq<tuple<int, int, int> > > >)
