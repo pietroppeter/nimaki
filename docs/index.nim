@@ -38,8 +38,11 @@ nbText: &"""
   script for web pages and Node, with Pele's browser functions (`nimaki.mount` fits a drawing to
   its box, with zoom).
 - **More than a picture.** `parse(text)` gives the diagram as data (its nodes, edges, labels) in
-  Pele's model, as JSON; `detectType` and `supports` say what a text is. The drawing's colours
-  are CSS variables, so a page's theme restyles it, and `maxWidth` fits it to a phone.
+  Pele's model, as JSON; `detectType` and `supports` say what a text is. `maxWidth` fits a
+  drawing to a phone.
+- **Themed by the page.** Every colour in a drawing is a CSS variable with Pele's default as
+  fallback, so a page restyles it, light or dark, without drawing it again; Mermaid's own themes
+  are ignored, as in Pele. [Theming](theming/) lists the variables and how to set them.
 - **Small to depend on**: `requires "nimaki == 0.2.0"`, and its only dependency is nitely's pure
   Nim `regex` (with its Unicode tables). From other languages, a C interface (`nimaki_render`) does the same through a
   shared library.
@@ -119,6 +122,8 @@ nbCards "the pages of the site":
     nbText "Diagrams drawn by nimaki in your browser, and a box to try your own Mermaid text."
   nbCard("Benchmark", "benchmark/", "kept up to date", nkInfo):
     nbText "How fast nimaki draws in C, in JavaScript and in WebAssembly, next to Pele, and how it is measured."
+  nbCard("Theming", "theming/", "kept up to date", nkInfo):
+    nbText "How a drawing takes its colours and fonts from the page: the `--pele-*` variables, light and dark, palettes."
   nbCard("For coding agents", "agents/", "kept up to date", nkInfo):
     nbText "The working rules of the repository: how a step, a post and a pull request are made."
 

@@ -27,6 +27,12 @@ nbText: """
 - Everything is vendored: three open-licensed fonts and no request to any other site.
 """
 
+nbNote("""
+On 17 November 2026 Pietro renamed the two modes *light* and *dark*, plain words for every
+reader; this post keeps the names they had when it was written. How a drawing takes its colours
+from the page is on the page [Theming](../../theming/).
+""", nkInfo, "Since then")
+
 nbText: """
 ## Where the look comes from
 
@@ -69,17 +75,17 @@ type Swatch = object
 
 block:
   let rows = @[
-    Swatch(role: "paper", colour: " ", stone: "pumice", giorno: giorno.paper, notte: notte.paper,
+    Swatch(role: "paper", colour: " ", stone: "pumice", giorno: light.paper, notte: dark.paper,
            css: tint("--paper")),
-    Swatch(role: "ink", colour: " ", stone: "basalt", giorno: giorno.ink, notte: notte.ink,
+    Swatch(role: "ink", colour: " ", stone: "basalt", giorno: light.ink, notte: dark.ink,
            css: tint("--ink")),
-    Swatch(role: "primary", colour: " ", stone: "lava", giorno: giorno.primary, notte: notte.primary,
+    Swatch(role: "primary", colour: " ", stone: "lava", giorno: light.primary, notte: dark.primary,
            css: tint("--primary")),
-    Swatch(role: "secondary", colour: " ", stone: "sea", giorno: giorno.secondary, notte: notte.secondary,
+    Swatch(role: "secondary", colour: " ", stone: "sea", giorno: light.secondary, notte: dark.secondary,
            css: tint("--secondary")),
-    Swatch(role: "warning", colour: " ", stone: "sulphur", giorno: giorno.warning, notte: notte.warning,
+    Swatch(role: "warning", colour: " ", stone: "sulphur", giorno: light.warning, notte: dark.warning,
            css: tint("--warning")),
-    Swatch(role: "success", colour: " ", stone: "olivine", giorno: giorno.success, notte: notte.success,
+    Swatch(role: "success", colour: " ", stone: "olivine", giorno: light.success, notte: dark.success,
            css: tint("--success"))]
   let t = tabella(rows, rownameCol = "role"):
     tabHeader "The tokens of Pomice", "the six values of each mode"
@@ -96,7 +102,7 @@ WCAG contrast ratio. 4.5 is enough for body text (level AA), 7 is the stricter l
 """
 
 nbCode:
-  for (name, look) in [("giorno", giorno), ("notte", notte)]:
+  for (name, look) in [("giorno", light), ("notte", dark)]:
     let paper = srgbOf(look.paper)
     let ink = srgbOf(look.ink)
     echo name
