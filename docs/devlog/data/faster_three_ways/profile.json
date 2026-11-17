@@ -1,0 +1,166 @@
+{
+ "node": "v22.23.4",
+ "rounds": 8,
+ "totalMs": 11328.323,
+ "functions": [
+  {
+   "name": "nimCopyAux",
+   "ms": 1803.026
+  },
+  {
+   "name": "nimCopy",
+   "ms": 1329.374
+  },
+  {
+   "name": "toJSStr",
+   "ms": 637.722
+  },
+  {
+   "name": "(garbage collector)",
+   "ms": 529.345
+  },
+  {
+   "name": "svg/builder.num",
+   "ms": 235.321
+  },
+  {
+   "name": "Script",
+   "ms": 159.342
+  },
+  {
+   "name": "svg/root.usedNames",
+   "ms": 154.938
+  },
+  {
+   "name": "layout/layered.layered",
+   "ms": 138.096
+  },
+  {
+   "name": "nsuInitNewSkipTable",
+   "ms": 122.853
+  },
+  {
+   "name": "nimAddStrStr",
+   "ms": 110.851
+  },
+  {
+   "name": "jsapi.resultOf",
+   "ms": 103.561
+  },
+  {
+   "name": "flowchart/render.draw",
+   "ms": 99.701
+  },
+  {
+   "name": "digitsutils.addInt",
+   "ms": 94.681
+  },
+  {
+   "name": "svg/root.svgDocument",
+   "ms": 94.63
+  },
+  {
+   "name": "nimakiRxDecode",
+   "ms": 91.755
+  }
+ ],
+ "helpers": {
+  "copies": {
+   "functions": [
+    "nimCopy",
+    "nimCopyAux"
+   ],
+   "ms": 3132.4,
+   "by": [
+    {
+     "name": "layout/compound.compoundLayout",
+     "ms": 195.545
+    },
+    {
+     "name": "flowchart/graph.buildFlowGraph",
+     "ms": 123.987
+    },
+    {
+     "name": "flowchart/render.draw",
+     "ms": 106.285
+    },
+    {
+     "name": "strbasics...",
+     "ms": 106.137
+    },
+    {
+     "name": "state/graph.buildStateGraph",
+     "ms": 89.051
+    },
+    {
+     "name": "text/label.layoutLabel",
+     "ms": 85.142
+    },
+    {
+     "name": "usecase/db.resolveUsecase",
+     "ms": 85.015
+    },
+    {
+     "name": "sequence/render.draw",
+     "ms": 69.429
+    }
+   ]
+  },
+  "skipTable": {
+   "functions": [
+    "nsuInitNewSkipTable"
+   ],
+   "ms": 122.853,
+   "by": [
+    {
+     "name": "nsuFindStr",
+     "ms": 109.483
+    },
+    {
+     "name": "nsuReplaceStr",
+     "ms": 13.37
+    }
+   ]
+  },
+  "toJSStr": {
+   "functions": [
+    "toJSStr"
+   ],
+   "ms": 637.722,
+   "by": [
+    {
+     "name": "jsapi.resultOf",
+     "ms": 564.33
+    },
+    {
+     "name": "js.toJsString",
+     "ms": 25.276
+    },
+    {
+     "name": "svg/shapes.sizeOf",
+     "ms": 11.384
+    },
+    {
+     "name": "sequence/db.applyOne",
+     "ms": 5.744
+    },
+    {
+     "name": "svg/shapes.drawOf",
+     "ms": 5.625
+    },
+    {
+     "name": "flowchart/graph.shapeOf",
+     "ms": 3.355
+    },
+    {
+     "name": "system.parseFloatNative",
+     "ms": 3.287
+    },
+    {
+     "name": "flowchart/graph.arrows",
+     "ms": 3.256
+    }
+   ]
+  }
+ }
+}

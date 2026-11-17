@@ -16,7 +16,7 @@ type Accessible* = object
 
 func usedNames(content: string): HashSet[string] =
   ## the names matched by /var\(--_(r|tw|hw|w)\)/g, up to four
-  var p = content.find("var(--_")
+  var p = content.findText("var(--_")
   while p != -1:
     let at = p + 7
     for name in ["r", "tw", "hw", "w"]:
@@ -24,7 +24,7 @@ func usedNames(content: string): HashSet[string] =
         result.incl name
         break
     if result.len == 4: break
-    p = content.find("var(--_", at)
+    p = content.findText("var(--_", at)
 
 proc svgDocument*(kind: string, width, height: float, fontSize: float, options: RenderOptions,
                   acc: Accessible, content: string): string =

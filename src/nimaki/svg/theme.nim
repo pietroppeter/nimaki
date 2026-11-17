@@ -27,7 +27,7 @@ func setsFill*(shape: string): bool =
   RE_FILL.test(shape)
 
 func rounded*(attrs: string): string =
-  let at = attrs.find(" style=\"")
+  let at = attrs.findText(" style=\"")
   if at < 0: attrs & ROUNDED
   else: attrs[0 ..< at + 8] & "rx:var(--_r);" & attrs[at + 8 .. ^1]
 

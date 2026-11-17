@@ -61,10 +61,29 @@ proc prepare(types: seq[TokenType]): Table =
     for alt in t.longer: alts.add types.find(alt)
     result.longer.add alts
 
+var prepared: seq[(seq[TokenType], ref Table)]
+  ## The tables made so far, for each list of token types (a lexer has a few lists, made once):
+  ## making one tries every type at each of 128 characters, too much to do for every text.
+
+proc preparedFor(types: seq[TokenType]): ref Table =
+  ## `prepare(types)`, made the first time a list is seen. Lists are told apart by the token
+  ## types they hold (the same objects, in the same order), not by their contents.
+  for i in 0 ..< prepared.len:   # by index: unpacking would copy each list in nim js
+    if prepared[i][0].len == types.len:
+      var same = true
+      for k in 0 ..< types.len:
+        if prepared[i][0][k] != types[k]:
+          same = false
+          break
+      if same: return prepared[i][1]
+  result = new Table
+  result[] = prepare(types)
+  prepared.add (types, result)
+
 proc tokenize*(src: string, types: seq[TokenType], diagram: string): Tokens =
   var kinds, starts, ends: seq[int]
   var dead = newSeq[bool](types.len)
-  let table = prepare(types)
+  let table = preparedFor(types)
   var scanners = newSeq[Scanner](types.len)
   let n = src.len
 

@@ -48,7 +48,7 @@ proc removeAll(text: string, re: JsRegExp, steps: Steps): string =
 proc cleanupComments*(text: string, steps: Steps = nil): string =
   # Each text handed over, not copied, in nim js (`handOver`); then `trimStart()`.
   var removed: string
-  if "%%" in text: handOver(removed, removeAll(text, RE_COMMENT, steps))
+  if text.hasText("%%"): handOver(removed, removeAll(text, RE_COMMENT, steps))
   else: handOver(removed, text)
   var i = 0
   while i < removed.len:
@@ -193,14 +193,14 @@ proc matchDirective(s: string, p: int): (bool, DirectiveMatch) =
   (true, m)
 
 proc directiveMatches(s: string): seq[DirectiveMatch] =
-  var p = s.find("%%{")
+  var p = s.findText("%%{")
   while p != -1:
     let (ok, m) = matchDirective(s, p)
     if ok:
       result.add m
-      p = s.find("%%{", max(m.last, p + 1))
+      p = s.findText("%%{", max(m.last, p + 1))
     else:
-      p = s.find("%%{", p + 1)
+      p = s.findText("%%{", p + 1)
 
 proc directives(text: string, config: Config, steps: Steps): string =
   # Handed over, not copied, in nim js (`handOver`; see preprocess).
@@ -240,7 +240,7 @@ proc preprocess*(source: string, steps: Steps = nil): Preprocessed =
 
   var front: FrontMatter
   var found = false
-  if "---" in text: (found, front) = matchFrontMatter(text)
+  if text.hasText("---"): (found, front) = matchFrontMatter(text)
   if found:
     let body =
       if front.indent.len > 0:

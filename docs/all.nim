@@ -77,4 +77,5 @@ import devlog/nimaki_0_2_0
 import devlog/why_nimaki_js_is_big
 import devlog/a_type_at_a_time
 import devlog/how_fast_nimaki_draws
+import devlog/faster_three_ways
 import devlog/looking_back

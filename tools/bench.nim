@@ -6,7 +6,7 @@
 ##   build/bench/bench pie flowchart        only these types
 ##   options:
 ##     --rounds:N         draw every type N times (default 5); a type's time is its fastest round
-##     --engines:c,js,pele  which to time (default all three)
+##     --engines:c,js,pele,wasm  which to time (default c,js,pele)
 ##     --out:FILE         also write every number to FILE as JSON (a post's data file)
 ##     --package:PATH     Pele's package (default $PELE_PACKAGE or reference/npm/package)
 ##
@@ -16,7 +16,9 @@
 ## - `js`: `build/web/nimaki.js`, the file a page loads (built by tools/webbuild.nim when it is
 ##   missing: after changing `src/`, rebuild it with `nim r tools/webbuild.nim --only:all`), run in
 ##   Node by tools/bench.mjs;
-## - `pele`: Pele's `dist/pele.js`, in the same Node process.
+## - `pele`: Pele's `dist/pele.js`, in the same Node process;
+## - `wasm`: nimaki's C build compiled to WebAssembly, `build/wasm/nimaki.wasm` (built by
+##   tools/wasm/build.sh when it is missing), in the same Node process.
 ##
 ## For each engine it measures the first pass over the whole corpus in a fresh process (cold:
 ## caches empty, and for JavaScript, code not yet compiled by the engine's JIT), then N rounds of
@@ -33,6 +35,7 @@ import nimaki
 const
   work = buildDir / "bench"
   webFile = buildDir / "web" / "nimaki.js"
+  wasmFile = buildDir / "wasm" / "nimaki.wasm"
   fixedNow = 1_700_000_000_000.0
 
 proc sh(cmd: string): string =
@@ -71,7 +74,7 @@ proc timeC(byType: OrderedTable[string, seq[string]], rounds: int): JsonNode =
 
 proc node(args: string): JsonNode =
   let file = work / "node.json"
-  discard sh("TZ=UTC node " & quoteShell(repoDir / "tools" / "bench.mjs") & " " &
+  discard sh("TZ=UTC node --no-warnings " & quoteShell(repoDir / "tools" / "bench.mjs") & " " &
     quoteShell(repoDir / "corpus" / "cases.json") & " " & quoteShell(file) & " " & args)
   parseFile(file)
 
@@ -121,13 +124,17 @@ proc main() =
 
   if "c" in engines:
     result["engines"]["c"] = timeC(byType, rounds)
-  let nodeEngines = engines.filterIt(it in ["js", "pele"]).mapIt(if it == "js": "nimaki" else: it)
+  let nodeEngines = engines.filterIt(it in ["js", "pele", "wasm"]).mapIt(if it == "js": "nimaki" else: it)
   if nodeEngines.len > 0:
     if "nimaki" in nodeEngines and not fileExists(webFile):
       echo "bench: no build/web/nimaki.js, building it (tools/webbuild.nim --only:all)"
       discard sh("nim r --hints:off " & quoteShell(repoDir / "tools" / "webbuild.nim") & " --only:all")
+    if "wasm" in nodeEngines and not fileExists(wasmFile):
+      echo "bench: no build/wasm/nimaki.wasm, building it (tools/wasm/build.sh)"
+      discard sh("sh " & quoteShell(repoDir / "tools" / "wasm" / "build.sh"))
     let pkg = packageDirFrom(package)
-    let common = " --pele:" & quoteShell(pkg) & " --nimaki:" & quoteShell(webFile) & " " & only.join(" ")
+    let common = " --pele:" & quoteShell(pkg) & " --nimaki:" & quoteShell(webFile) & " --wasm:" & quoteShell(wasmFile) &
+      " " & only.join(" ")
     # Cold: each engine alone in a fresh Node, no rounds. Warm: both in one Node, alternating.
     var cold: Table[string, JsonNode]
     for e in nodeEngines:
@@ -148,7 +155,7 @@ proc main() =
       entry["cold"] = cold[e]["cold"]
       result["engines"][if e == "nimaki": "js" else: e] = entry
 
-  let shown = ["c", "js", "pele"].filterIt(result["engines"].hasKey(it))
+  let shown = ["c", "js", "wasm", "pele"].filterIt(result["engines"].hasKey(it))
   var totals = initTable[string, float]()
   var problems = 0
   for t, sources in byType:

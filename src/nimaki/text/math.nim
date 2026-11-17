@@ -15,13 +15,13 @@ type
     ## TeX excludes the $$ delimiters; font size is in pixels. nil for none.
 
 var resolver: MathResolver
-var found = initTable[string, MathMarkup]()
+var found = newTable[string, MathMarkup]()   # a ref: saving and restoring it copies nothing (nim js copies a Table)
 
 proc withMath*[T](math: MathResolver, run: proc (): T): T =
   let outer = resolver
   let outerFound = found
   resolver = math
-  found = initTable[string, MathMarkup]()
+  found = if math == nil: nil else: newTable[string, MathMarkup]()   # only read when there is a resolver
   try:
     handOver(result, run())
   finally:

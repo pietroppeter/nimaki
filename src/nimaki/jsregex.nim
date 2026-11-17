@@ -32,6 +32,7 @@
 import std/[strutils, unicode, tables]
 import regex
 import regex/[nfatype, nfamatch2]
+when defined(js): from js import handOver
 
 type
   Engine = ref object
@@ -48,9 +49,13 @@ type
     global*, sticky*: bool
     atStart*: bool         ## it can only match at 0: a leading `^`, no `m` flag, no `|` around it
     prefix*: string        ## text every match starts with, found with `find` before the engine runs
+    spaced*: string        ## for `^\s*word...` (no `m`, no `i`): the word that must follow the
+                           ## leading white space; checked by hand before the engine runs
     translated*: string    ## the pattern in the engine's syntax
     run*: seq[(int, int)]  ## for a pattern that is one class repeated (`\s+`, `[^"]*`): its ranges
-    runKind*: int          ## 0: not such a pattern; 1: the class with `*`; 2: with `+`; 3: plain text
+    runKind*: int          ## 0: not such a pattern; 1: the class with `*`; 2: with `+`; 3: plain text;
+                           ## 4: plain words, one of them (`a|bc|d`), in `words`
+    words*: seq[string]    ## for kind 4: the words, in the order the pattern tries them
     first*: set[char]      ## the bytes a match can start with, when `firstKnown`
     firstKnown*: bool      ## false when a match can be empty, or the pattern is not read here
     slot: int
@@ -697,12 +702,20 @@ func firstBytes(translated: string): (bool, set[char]) =
 func made(pattern, flags, translated: string, slot: int): JsRegExp =
   var (run, runKind) = classRun(translated)
   # Plain text (`/</g`): every match is found with `find`, without the engine.
-  if pattern.len > 0 and 'i' notin flags and
-      pattern.allCharsInSet(AllChars - {'\\', '^', '$', '.', '|', '?', '*', '+', '(', ')', '[', ']', '{', '}'}):
+  const special = {'\\', '^', '$', '.', '|', '?', '*', '+', '(', ')', '[', ']', '{', '}'}
+  var words: seq[string]
+  if pattern.len > 0 and 'i' notin flags and pattern.allCharsInSet(AllChars - special):
     runKind = 3
+  elif 'i' notin flags and '|' in pattern and pattern.allCharsInSet(AllChars - (special - {'|'})):
+    # Words, one of them (`/edge-thickness-normal|edge-pattern-solid/g`): found by comparing,
+    # without the engine, which a `replace` on a short class name runs over the whole text.
+    words = pattern.split('|')
+    if "" notin words: runKind = 4
   result = JsRegExp(source: pattern, flags: flags, global: 'g' in flags, sticky: 'y' in flags,
            atStart: onlyAtStart(pattern, flags), prefix: literalPrefix(pattern, flags),
-           translated: translated, run: run, runKind: runKind, slot: slot)
+           translated: translated, run: run, runKind: runKind, words: words, slot: slot)
+  if result.atStart and pattern.startsWith("^\\s*"):
+    result.spaced = literalPrefix(pattern[4 .. ^1], flags)
   (result.firstKnown, result.first) = firstBytes(translated)
 
 proc dynamicSlot(pattern, flags: string): JsRegExp =
@@ -894,7 +907,7 @@ function nimakiRxAll(slot, source, flags, a) {
   proc nativeCheck(slot: int, source, flags: string) {.importjs: "nimakiRxGet(#, #, #)".}
 
   func nativeMatch(re: JsRegExp, s: string, at: int, sticky: bool, withGroups = true): JsMatch =
-    {.cast(noSideEffect).}: result = nativeExec(re.slot, re.source, re.flags, s, at, sticky, withGroups)
+    {.cast(noSideEffect).}: handOver(result, nativeExec(re.slot, re.source, re.flags, s, at, sticky, withGroups))
 
 
 func check*(re: JsRegExp): JsRegExp =
@@ -983,6 +996,15 @@ func runFrom(re: JsRegExp, s: string, at: int, anchored: bool): (int, int) =
   if re.runKind == 3:
     let p = if anchored: (if s.continuesWith(re.source, at): at else: -1) else: s.find(re.source, at)
     return (if p < 0: (-1, -1) else: (p, p + re.source.len))
+  if re.runKind == 4:
+    # The leftmost place where a word starts; there, the first word in the pattern's order.
+    var i = at
+    while i <= s.len:
+      for w in re.words:
+        if s.continuesWith(w, i): return (i, i + w.len)
+      if anchored: break
+      inc i
+    return (-1, -1)
   if re.runKind == 1 or anchored:
     let e = re.runEnd(s, at)
     return (if re.runKind == 2 and e == at: (-1, -1) else: (at, e))
@@ -999,10 +1021,22 @@ func runMatch(re: JsRegExp, s: string, at: int, anchored: bool): JsMatch =
   if a < 0: noMatch()
   else: JsMatch(index: a, stop: b, groups: @[s[a ..< b]], defined: @[true])
 
+func spacedMiss(re: JsRegExp, s: string, at: int): bool =
+  ## True when `re` (`^\s*word...`, see `spaced`) cannot match at `at`: after the white space,
+  ## the text does not go on with the word. Detecting a diagram's type tries some thirty such
+  ## patterns on every text, and the engine costs far more than this to say no. A character
+  ## outside ASCII where the space ends is left to the engine (JavaScript's `\s` has a few).
+  if re.spaced.len == 0: return false
+  var i = at
+  while i < s.len and s[i] in {' ', '\t', '\n', '\v', '\f', '\r'}: inc i
+  if i < s.len and ord(s[i]) >= 0x80: return false
+  not s.continuesWith(re.spaced, i)
+
 func matchHere(re: JsRegExp, s: string, at: int): JsMatch =
   ## The match that starts exactly at `at` (a sticky match), if any.
   var m: RegexMatch2
   if at > s.len: return noMatch()
+  if re.spacedMiss(s, at): return noMatch()
   if re.runKind != 0: return re.runMatch(s, at, true)
   if re.firstKnown and (at >= s.len or s[at] notin re.first): return noMatch()
   when defined(js): return re.nativeMatch(s, at, sticky = true)
@@ -1043,6 +1077,7 @@ func matchEnd*(re: JsRegExp, s: string, lastIndex = 0): int =
   ## match, without reading its groups (what a lexer needs, and quicker).
   var m: RegexMatch2
   if lastIndex > s.len or (re.atStart and lastIndex > 0): return -1
+  if re.spacedMiss(s, lastIndex): return -1
   if re.runKind != 0: return re.runFrom(s, lastIndex, re.sticky)[1]
   if re.prefix.len > 0 and not re.sticky and not re.atStart:
     var p = s.find(re.prefix, lastIndex)

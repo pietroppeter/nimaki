@@ -21,6 +21,7 @@ tools/*
 !tools/*.sh
 !tools/*.mjs
 !tools/peletests/
+!tools/wasm/
 node_modules/
 docs/assets/nimaki.js
 docs/assets/nimaki-*.js

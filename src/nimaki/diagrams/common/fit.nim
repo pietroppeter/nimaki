@@ -68,7 +68,7 @@ proc plainLabel*(raw: string, measurer: TextMeasurer, size, max: float, base = 0
     for i in 0 ..< text.len:
       if tagStartAt(text, i): output.add "&lt;" else: output.add text[i]
     text = output
-  if ":fa-" in text: text = text.replace(":fa-", "&colon;fa-")
+  if text.hasText(":fa-"): text = text.replace(":fa-", "&colon;fa-")
   layoutLabel(text, false, measurer, size, max, base)
 
 proc fitLabel*(raw: string, measurer: TextMeasurer, size, max: float, base = 0): Label =
