@@ -1,0 +1,30 @@
+{
+ "rounds": 20,
+ "builds": [
+  {
+   "flags": "-d:release",
+   "warm": 107.5,
+   "cold": 150.6
+  },
+  {
+   "flags": "-d:danger",
+   "warm": 96.7,
+   "cold": 138.5
+  },
+  {
+   "flags": "-d:danger --passC:-flto --passL:-flto",
+   "warm": 98.1,
+   "cold": 127.4
+  },
+  {
+   "flags": "-d:danger --passC:-march=native",
+   "warm": 98.3,
+   "cold": 129.1
+  },
+  {
+   "flags": "-d:danger -d:useMalloc",
+   "warm": 126.2,
+   "cold": 175.8
+  }
+ ]
+}
