@@ -229,6 +229,7 @@ block:
   let t = tabella(rows, rownameCol = "variable"):
     tabHeader "What a drawing reads from the page", &"defaults from nimaki's drawings of the corpus; types: of {typeCount}"
     colsLabel {"variable": "--pele-…", "default": "default", "usedFor": "used for", "types": "types"}
+    fmtSwatch "default"
     optCssTheme()
   nbTable t
 

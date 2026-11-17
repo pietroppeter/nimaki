@@ -13,14 +13,18 @@
 ## - `nbPipeline stages`: the parts of the renderer as islands: lava while ported, olivine when done;
 ##   with a link each, `(name, status, href)`, the whole island is the link
 ## - `status(s)`: a status as Markdown-safe text for a table cell
+## - colour swatches: a small dot of the colour beside a CSS colour, written `#205ea6`
+##   (or `rgb(...)`, `hsl(...)`...) as inline code in any Markdown of a page; in a tabelline
+##   table, `fmtSwatch(t, "column")`; `swatch(colour)` is the dot itself
 ##
 ## No HTML in a page, no CSS, no colours: what is needed twice becomes a block here, and its CSS
 ## goes in `theme.nim`, from the tokens. Code fences in Markdown are highlighted at build time
 ## (Nim, TypeScript and JavaScript, Mermaid, Rust, Python, shell, TOML, YAML, JSON).
 
-import std/[json, os, osproc, strutils, strformat, times, algorithm]
+import std/[json, os, osproc, strutils, strformat, times, algorithm, sequtils]
 import nimib
 import theme, review
+import tabelline
 export theme, os   # os: every page builds paths with `/`
 
 const
@@ -55,6 +59,55 @@ func link*(p: Pin): string =
   "[Pele " & p.tag & "](" & p.repo & "/tree/" & p.commit & ") (commit `" & p.shortCommit & "`)"
 
 func esc*(s: string): string = s.multiReplace(("&", "&amp;"), ("<", "&lt;"), (">", "&gt;"), ("\"", "&quot;"))
+# --------------------------------------------------------------------------------- colour swatches
+
+const colourFunctions = ["rgb(", "rgba(", "hsl(", "hsla(", "hwb(", "lab(", "lch(", "oklab(", "oklch(", "color("]
+
+func isColour*(s: string): bool =
+  ## A CSS colour written out: `#fff`, `#1f1f1f`, `#1f1f1f80`, or a colour function of numbers
+  ## (`rgb(32 94 166)`, `oklch(...)`). Not a name, not `var(...)`: what a swatch can show for sure.
+  if s.len in [4, 5, 7, 9] and s[0] == '#':
+    return s.allCharsInSet({'#'} + HexDigits) and s.count('#') == 1
+  let lower = s.toLowerAscii
+  for f in colourFunctions:
+    if lower.startsWith(f) and lower.endsWith(")") and lower.count('(') == 1 and
+       lower[f.len ..< ^1].anyIt(it in Digits) and
+       lower.allCharsInSet(Letters + Digits + {'(', ')', ' ', ',', '.', '%', '/', '-', '+'}):
+      return true
+
+func swatch*(colour: string): string =
+  ## A small dot of `colour` (a colour `isColour` accepts), to put before the colour's text.
+  doAssert colour.isColour, "swatch: not a colour: " & colour
+  "<span class=\"swatch\" style=\"--swatch:" & esc(colour) & "\" aria-hidden=\"true\"></span>"
+
+func withSwatches*(text: string): string =
+  ## Plain text with a swatch before each word that is a colour (`#fff #f58518`), escaped for HTML.
+  for i, word in pairs(text.split(' ')):
+    if i > 0: result.add ' '
+    result.add (if word.isColour: swatch(word) & esc(word) else: esc(word))
+
+func swatchCodes(html: string): string =
+  ## Markdown's inline code that holds just a colour (`#205ea6`) gets its swatch, so a page
+  ## never needs HTML or CSS to show one.
+  var at = 0
+  while true:
+    let open = html.find("<code>", at)
+    if open < 0: break
+    let close = html.find("</code>", open)
+    if close < 0: break
+    result.add html[at ..< open]
+    let inner = html[open + 6 ..< close]
+    if inner.isColour: result.add swatch(inner)
+    result.add html[open .. close + 6]
+    at = close + 7
+  result.add html[at .. ^1]
+
+proc fmtSwatch*(t: sink Tabella, columns: ColSel, rows = allRows()): Tabella =
+  ## A tabelline column whose text holds colours (one, or several apart by spaces) shows each with
+  ## its swatch; other words are left as they are: `t.fmtSwatch("default")`.
+  fmt(t, columns, proc (v: Value, ctx: RenderContext): string =
+    (if ctx == rcHtml: withSwatches($v) else: $v), rows)
+
 func inline(md: string): string =
   ## Markdown for one line: the text without its paragraph.
   markdownToHtml(md).strip.replace("<p>", "").replace("</p>", "")
@@ -317,7 +370,7 @@ newNbBlock(NbNote):
   toHtml:
     &"""<div class="note {blk.level}">""" &
       (if blk.title.len > 0: &"""<span class="head">{inline(blk.title)}</span>""" else: "") &
-      wrapTables(highlightFences(markdownToHtml(blk.text))) & "</div>"
+      wrapTables(highlightFences(swatchCodes(markdownToHtml(blk.text)))) & "</div>"
 
 proc addNote*(nb: var Nb, text: string, kind = nkPlain, title = "") =
   nb.add newNbNote(text = text, level = kind, title = title)
@@ -637,7 +690,7 @@ const bodyScript = """<script>
 </script>"""
 
 func pageText(blk: JsonNode, nb: Nb): string =
-  wrapTables(highlightFences(addHeadingIds(markdownToHtml(blk{"text"}.getStr), nb.doc.context{"toc"}.getBool)))
+  wrapTables(highlightFences(swatchCodes(addHeadingIds(markdownToHtml(blk{"text"}.getStr), nb.doc.context{"toc"}.getBool))))
 
 func pageHeader(blk: JsonNode, nb: Nb): string =
   let c = nb.doc.context
