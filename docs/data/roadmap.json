@@ -997,6 +997,15 @@
           "status": "done",
           "post": "a-type-at-a-time",
           "pr": "110"
+        },
+        {
+          "id": "bench",
+          "kind": "research",
+          "title": "How fast nimaki draws, next to Pele",
+          "what": "Measure how long nimaki takes to draw the corpus, in its C build and in its JavaScript build run in Node, and compare both with Pele's own npm package in the same Node, on the same cases, per diagram type. One tool runs the three, with warm-up and repeated rounds, and writes the numbers to a data file a post reads.",
+          "done_when": "A benchmark tool times the C build, the JavaScript build and Pele on the whole corpus, and a devlog post shows the numbers per diagram type and explains what they mean.",
+          "owner": "Benchmark nimaki native and JS against Pele",
+          "status": "started"
         }
       ]
     }
