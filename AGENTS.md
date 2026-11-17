@@ -183,7 +183,9 @@ nbSave
 
 - **Blocks, not HTML.** A page is Markdown in `nbText`, nimib's blocks, tabelline's `nbTable`
   and the blocks of `docs/blocks.nim`: `nbTitle`, `nbToc`, `nbNote(text, kind, title)`,
-  `nbCards`/`nbCard`, `nbFold`, `nbSvg`, `nbPipeline`, `status`. No HTML tags in `nbText`, no CSS
+  `nbCards`/`nbCard`, `nbFold`, `nbSvg`, `nbPipeline`, `status`. A colour written as inline code
+  (`` `#205ea6` ``) gets a swatch, a small dot of it; in a tabelline table, `fmtSwatch "column"`.
+  No HTML tags in `nbText`, no CSS
   and no colours in a page. What is needed a second time becomes a block in `docs/blocks.nim`,
   and its CSS goes in `docs/theme.nim`, from the tokens. `nbRawHtml` is a last resort, with a
   comment saying why.

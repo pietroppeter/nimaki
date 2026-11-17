@@ -245,6 +245,10 @@ figure.diagram svg { display: block; margin: 0 auto; }
   --pele-series-6: color-mix(in oklab, var(--primary) 50%, var(--paper));
   --pele-series-7: color-mix(in oklab, var(--success) 50%, var(--ink)); --pele-series-8: var(--neutral-5);
 }
+/* a colour swatch (swatch, fmtSwatch and inline code holding a colour, in blocks.nim): a dot of
+   the colour, round like the other marks of Pomice, ringed so a colour near the paper's still shows */
+.swatch { display: inline-block; width: .8em; height: .8em; margin: 0 .35em 0 0; vertical-align: -.08em;
+  background: var(--swatch); border: 1px solid var(--neutral-4); border-radius: 50%; }
 /* the page Theming: one drawing in other colours than the site's (DrawingLook in blocks.nim) */
 figure.diagram.in-pele { background: #ffffff; color-scheme: light; }
 figure.diagram.in-pele .pele {   /* no variable set: every colour falls back to Pele's own default */
