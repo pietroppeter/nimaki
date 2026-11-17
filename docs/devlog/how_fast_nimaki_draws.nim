@@ -352,6 +352,57 @@ more than this sandbox does, so the check would only catch large slowdowns.
 check. The step js-gap on the [roadmap](../../roadmap/) carries it out.
 """, nkQuestion, "For Pietro"
 
+nbText: """
+## Afterwards: faster C, and WebAssembly
+
+Two questions came after the post was first published (17 November 2026): could the C build
+gain more, and would a WebAssembly build make sense? The first part has numbers; the second is
+an estimate.
+
+**Compiler options.** The same benchmark, C only, built with different options. `-d:danger`
+turns off Nim's runtime checks (an index past the end of a list, an overflowing number): the
+program no longer stops on such a bug, so it is a choice for whoever builds it, not a default.
+LTO (*link-time optimisation*) lets the C compiler optimise across files; `-march=native` lets it
+use every instruction of this machine's processor, so the program runs only on similar ones;
+`-d:useMalloc` replaces Nim's own memory allocator with the system's.
+"""
+
+block:
+  let opts = parseFile(here / "options.json")
+  type Row = object
+    flags, warm, cold: string
+  var rows: seq[Row]
+  for b in opts["builds"]:
+    rows.add Row(flags: b["flags"].getStr, warm: ms(b["warm"].getFloat), cold: ms(b["cold"].getFloat))
+  let t = tabella(rows, rownameCol = "flags"):
+    tabHeader "The C build, by compiler options", &"""the corpus, fastest of {opts["rounds"].getInt} rounds per type"""
+    optCssTheme()
+  nbTable t
+
+let opts = parseFile(here / "options.json")["builds"]
+nbText: &"""
+So `-d:danger` gives about {pct(opts[0]["warm"].getFloat - opts[1]["warm"].getFloat, opts[0]["warm"].getFloat)},
+and the other options nothing that stands out from the noise; the system's allocator is slower.
+The larger gains are in the code, and the C profile above points at them: finding the type
+({pct(cDetect, 100)}; an anchored pattern should be tried at the start of the text only), the
+token tables of `tokens.prepare`, which seem to be built again for every diagram, and then the
+regular expression library and the allocator. Those are estimates until they are measured.
+
+**WebAssembly** (*wasm*) is a format for compiled programs that browsers (and Node) run next to
+JavaScript, at close to native speed. Nim can produce it through its C backend, with a C
+compiler that targets wasm (Emscripten, or clang). A wasm build of nimaki would run the C code in
+a page, so it would likely land near Pele's speed, where nimaki.js is ten times slower. What is
+not known yet: the size of the `.wasm` file a page would download, the tools it needs in the
+build, and the cost of passing text (and the host's icon and math functions) between
+JavaScript and wasm. A small experiment would answer all three.
+"""
+
+nbNote """
+Pietro's answer (17 November 2026): take on the faster C build, the JavaScript gap and the
+WebAssembly experiment, as the next step, with its own post. The step js-gap on the
+[roadmap](../../roadmap/) carries it out.
+""", nkDone, "What happens next"
+
 nbText: &"""
 ## What this changes for the port
 
@@ -371,6 +422,8 @@ nbText: &"""
 - The numbers: `build/bench/bench --rounds:10 --out:...`, run on 17 November 2026, written to
   `docs/devlog/data/how_fast_nimaki_draws/bench.json`, and `before.json` for the run before the fix.
 - The JavaScript profile: `profile.mjs` in the same folder, written to `profile.json`.
+- The compiler options: `tools/bench.nim` built with each set of flags and run with
+  `--engines:c --rounds:20` on 17 November 2026, the totals in `options.json` in the same folder.
 - The C profile: `cprofile.sh` in the same folder ([valgrind's callgrind](https://valgrind.org/docs/manual/cl-manual.html)),
   written to `c-self.txt` and `c-inclusive.txt`.
 - Node's [`--cpu-prof`](https://nodejs.org/api/cli.html#--cpu-prof) option, and V8's own
