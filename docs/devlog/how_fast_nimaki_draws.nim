@@ -408,7 +408,7 @@ nbText: &"""
 
 - The port now has a benchmark: `tools/bench.nim` times the C build, nimaki.js and Pele on the
   corpus, per type, cold and warm, and writes the numbers to a JSON file. Any later speed work
-  can measure itself with it.
+  can measure itself with it. The page [Benchmark](../../benchmark/) now explains it in detail and keeps its last run.
 - For a Nim program, such as diagrammari building a page, the C build is already faster than
   calling Pele through Node, and much faster when the program starts fresh.
 - For a web page, nimaki.js is correct but about ten times slower than Pele. One case takes
