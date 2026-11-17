@@ -1,17 +1,18 @@
 // The JavaScript side of tools/bench.nim: how long Pele's npm package and nimaki's JavaScript
 // build take to draw the corpus, in the same Node process, on the same cases.
 //
-//   TZ=UTC node tools/bench.mjs CASES.json RESULT.json [--rounds:N] [--engines:pele,nimaki]
-//                                [--pele:DIR] [--nimaki:FILE] [type...]
+//   TZ=UTC node tools/bench.mjs CASES.json RESULT.json [--rounds:N] [--engines:pele,nimaki,wasm]
+//                                [--pele:DIR] [--nimaki:FILE] [--wasm:FILE] [type...]
 //
 // CASES.json is the corpus (`{"cases": [{"type", "source"}...]}`); RESULT.json gets, for each
 // engine, the time to load it, the time of its first pass over the whole corpus (cold: the
 // JavaScript engine has not yet compiled the hot code), and for each diagram type the time of
 // every round (warm), in milliseconds. Pele is `dist/pele.js` of its package, the file the
 // oracle loads; nimaki is the file a page loads (`build/web/nimaki.js`, tools/webbuild.nim),
-// read the way a browser reads a script. Both draw with a fixed `now`, as the referee does.
+// read the way a browser reads a script; wasm is nimaki's C build compiled to WebAssembly
+// (`build/wasm/nimaki.wasm`, tools/wasm/build.sh), loaded by tools/wasm/load.mjs. All draw with a fixed `now`, as the referee does.
 //
-// The rounds alternate the engines (Pele, nimaki, Pele, nimaki...), so that a slow moment of the
+// The rounds alternate the engines (Pele, nimaki, wasm, Pele...), so that a slow moment of the
 // machine falls on both. Each SVG's length is summed, as a check that both drew the same thing.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
@@ -31,6 +32,7 @@ const rounds = Number(opt('rounds', '5'));
 const engines = opt('engines', 'pele,nimaki').split(',');
 const pelePkg = resolve(opt('pele', process.env.PELE_PACKAGE ?? join(repo, 'reference/npm/package')));
 const nimakiFile = resolve(opt('nimaki', join(repo, 'build/web/nimaki.js')));
+const wasmFile = resolve(opt('wasm', join(repo, 'build/wasm/nimaki.wasm')));
 const now = 1_700_000_000_000;
 
 const byType = new Map();
@@ -47,6 +49,10 @@ async function load(engine) {
   if (engine === 'pele') {
     const pele = await import(pathToFileURL(join(pelePkg, 'dist/pele.js')).href);
     render = (s) => pele.render(s, { now });
+  } else if (engine === 'wasm') {
+    const { loadWasm } = await import(pathToFileURL(join(repo, 'tools/wasm/load.mjs')).href);
+    const draw = await loadWasm(wasmFile);
+    render = (s) => draw(s, now);
   } else {
     runInThisContext(readFileSync(nimakiFile, 'utf8'), { filename: nimakiFile });
     const nimaki = globalThis.nimaki;

@@ -32,7 +32,7 @@
 import std/[strutils, unicode, tables]
 import regex
 import regex/[nfatype, nfamatch2]
-from js import handOver
+when defined(js): from js import handOver
 
 type
   Engine = ref object

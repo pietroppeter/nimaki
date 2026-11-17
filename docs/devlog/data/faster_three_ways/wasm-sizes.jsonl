@@ -1,0 +1,4 @@
+{"types": "all", "raw": 4322784, "gzip": 1268255}
+{"types": "none", "raw": 638053, "gzip": 171959}
+{"types": "flowchart", "raw": 1451889, "gzip": 421031}
+{"types": "flowchart,sequence,pie,timeline", "raw": 1755970, "gzip": 511387}
