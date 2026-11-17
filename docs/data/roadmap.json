@@ -1008,6 +1008,15 @@
           "status": "done",
           "post": "how-fast-nimaki-draws",
           "pr": "118"
+        },
+        {
+          "id": "js-gap",
+          "kind": "port",
+          "title": "Closing the gap with Pele in JavaScript",
+          "what": "nimaki.js draws the corpus in about ten times Pele's time (post How fast nimaki draws), and a third of that time goes to copies Nim makes. Pietro said yes to closing the gap on 17 November 2026. Start from the profile of that post: the copies in detectDiagram, withIcons and withMath, the search tables of strutils.find, then profile again. Measured with tools/bench.nim; the referee stays green on both builds. Pele's own time bounds are the step js-speed.",
+          "done_when": "tools/bench.nim shows nimaki.js measurably closer to Pele, every drawing is still identical, and a devlog post says by how much and how.",
+          "owner": "Benchmark nimaki native and JS against Pele",
+          "status": "started"
         }
       ]
     }

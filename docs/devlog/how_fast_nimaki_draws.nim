@@ -347,6 +347,9 @@ Should the next step close the gap in JavaScript? The profile points at the firs
 copies in `detectDiagram`, `withIcons` and `withMath`, and `strutils.find`'s search tables. A
 second option is to make the benchmark a CI check, but runs on GitHub's shared machines vary
 more than this sandbox does, so the check would only catch large slowdowns.
+
+**Pietro's answer** (17 November 2026): yes to closing the gap in JavaScript, no to the CI
+check. The step js-gap on the [roadmap](../../roadmap/) carries it out.
 """, nkQuestion, "For Pietro"
 
 nbText: &"""
