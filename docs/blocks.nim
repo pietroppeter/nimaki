@@ -8,7 +8,8 @@
 ##   `nkDone`, `nkWarning`, `nkQuestion`)
 ## - `nbCards what: nbCard(title, href, small, kind): ...`: a grid of cards
 ## - `nbFold label: ...`: blocks folded away under a line to press
-## - `nbSvg svg, caption`: a drawing the page made itself (SVG text), with a caption
+## - `nbSvg svg, caption`: a drawing the page made itself (SVG text), with a caption; `nbSvg svg,
+##   caption, look` shows it in other colours than the site's (`DrawingLook`)
 ## - `nbPipeline stages`: the parts of the renderer as islands: lava while ported, olivine when done;
 ##   with a link each, `(name, status, href)`, the whole island is the link
 ## - `status(s)`: a status as Markdown-safe text for a table cell
@@ -379,23 +380,34 @@ template nbFold*(tlabel: string, body: untyped) =
 
 # ------------------------------------------------------------------------------------- diagrams
 
+type DrawingLook* = enum
+  ## The colours a drawing takes: the site's (`dlSite`, which follow the light and dark modes), or
+  ## a fixed set of `--pele-*` values that `theme.nim` gives its figure, so the page Theming can
+  ## show one drawing in several themes.
+  dlSite = "", dlPele = "in-pele", dlExample = "in-example", dlExampleDark = "in-example-dark"
+
 newNbBlock(NbSvg):
   svg: string
   caption: string
+  look: string
   toHtml:
-    &"""<figure class="diagram">{blk.svg}""" &
+    &"""<figure class="diagram{(if blk.look.len > 0: " " & blk.look else: "")}">{blk.svg}""" &
       (if blk.caption.len > 0: &"<figcaption>{inline(blk.caption)}</figcaption>" else: "") & "</figure>"
 
-proc addSvg*(nb: var Nb, svg: string, caption = "") =
+proc addSvg*(nb: var Nb, svg: string, caption = "", look = dlSite) =
   doAssert svg.strip.startsWith("<svg"), "nbSvg: the text must be one <svg> element"
   doAssert "<script" notin svg.toLowerAscii, "nbSvg: no scripts in a drawing"
-  nb.add newNbSvg(svg = svg.strip, caption = caption)
+  nb.add newNbSvg(svg = svg.strip, caption = caption, look = $look)
 
 template nbSvg*(tsvg: string, tcaption = "") =
   ## A drawing made by the page itself: SVG text written by code (a toy renderer, Pele run at
   ## build time, later nimaki), shown inline with a caption in Markdown. Pele's drawings take
   ## their colours from `--pele-*` custom properties, which the theme sets from its tokens.
   nb.addSvg(tsvg, tcaption)
+
+template nbSvg*(tsvg: string, tcaption: string, tlook: DrawingLook) =
+  ## The same, in the colours of `tlook` instead of the site's.
+  nb.addSvg(tsvg, tcaption, tlook)
 
 # --------------------------------------------------------------------- nimaki in the browser
 
@@ -575,14 +587,17 @@ func stamp*(p: Post): string =
 
 const lookHeadScript = """<script>
 (function () {
-  var look = 'giorno';
+  var look = 'light';
+  var older = { giorno: 'light', notte: 'dark' };   // the names of the modes before 17 Nov 2026
   try {
     var q = new URLSearchParams(location.search).get('look');
-    if (q === 'giorno' || q === 'notte') localStorage.setItem('nimaki-look', q);
-    look = q || localStorage.getItem('nimaki-look') ||
-      (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'notte' : 'giorno');
+    q = older[q] || q;
+    if (q === 'light' || q === 'dark') localStorage.setItem('nimaki-look', q);
+    var kept = localStorage.getItem('nimaki-look');
+    look = q || older[kept] || kept ||
+      (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   } catch (e) {}
-  document.documentElement.dataset.look = (look === 'notte') ? 'notte' : 'giorno';
+  document.documentElement.dataset.look = (look === 'dark') ? 'dark' : 'light';
 })();
 </script>"""
 
@@ -592,13 +607,13 @@ const bodyScript = """<script>
   var b = document.querySelector('button.look');
   if (!b) return;
   function show() {
-    var night = root.dataset.look === 'notte';
-    b.textContent = night ? '☀ giorno' : '☾ notte';
-    b.setAttribute('aria-label', night ? 'Switch to the day look' : 'Switch to the night look');
+    var dark = root.dataset.look === 'dark';
+    b.textContent = dark ? '☀ light' : '☾ dark';
+    b.setAttribute('aria-label', dark ? 'Switch to the light look' : 'Switch to the dark look');
   }
   b.hidden = false;
   b.addEventListener('click', function () {
-    root.dataset.look = root.dataset.look === 'notte' ? 'giorno' : 'notte';
+    root.dataset.look = root.dataset.look === 'dark' ? 'light' : 'dark';
     try { localStorage.setItem('nimaki-look', root.dataset.look); } catch (e) {}
     show();
   });
@@ -636,7 +651,7 @@ func pageHeader(blk: JsonNode, nb: Nb): string =
   let section = c{"section"}.getStr
   let cadence = c{"cadence"}.getStr
   &"""<header>
-<nav class="crumbs">{back}<span class="grow"></span><button type="button" class="look" hidden>☾ notte</button><a href="{repoUrl}">GitHub ↗</a></nav>
+<nav class="crumbs">{back}<span class="grow"></span><button type="button" class="look" hidden>☾ dark</button><a href="{repoUrl}">GitHub ↗</a></nav>
 <div class="masthead">{mark}""" &
     (if section.len > 0: &"""<span class="section">{esc(section)}</span>""" else: "") &
     (if cadence.len > 0: &"""<span class="cadence">{esc(cadence)}</span>""" else: "") & "</div>\n</header>"

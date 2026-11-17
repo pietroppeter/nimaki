@@ -90,7 +90,7 @@ the step did (not how it is told), say so: that is a new step, with its own post
 ## 4. Build, check, report
 
 - Rebuild the page (`nim r docs/all.nim`, or the page's own notebook), check it at 390px wide in
-  giorno (notte only when the change might affect it), and run the tests if code changed.
+  light mode (dark only when the change might affect it), and run the tests if code changed.
 - Open a pull request with the changes, and link Pietro the page rendered.
 - Reply by theme, not in the order of the comments: group the comments that ask for related
   changes, and for each theme say what was asked (with the comments' numbers) and what changed,

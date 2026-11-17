@@ -2,9 +2,9 @@
 ##
 ## The look is called **Pomice** (pumice, in Italian): the stone that fire makes and the sea
 ## carries. Pele's lava, cooled in the sea, floats away as pumice; the port takes Pele's work and
-## carries it into Nim, as Nāmaka's sea reached every fire pit Pele dug. Two modes: *giorno*
-## (day, the default: a page without JavaScript is giorno), pale stone on a beach, and *notte*
-## (night), the sea at night with the glow of a lava flow at its edge. The header switches them
+## carries it into Nim, as Nāmaka's sea reached every fire pit Pele dug. Two modes: *light*
+## (the default: a page without JavaScript is light), pale stone on a beach, and *dark*, the sea
+## at night with the glow of a lava flow at its edge. The header switches them
 ## and the browser remembers; the first visit follows the system.
 ##
 ## Six values per mode, all taken from the island, and every other colour is mixed from them in
@@ -74,14 +74,14 @@ type Look* = object
   paper*, ink*, primary*, secondary*, warning*, success*, lift*: string
 
 const
-  giorno* = Look(paper: "#F6F3EC",      # pumice, pale and warm
+  light* = Look(paper: "#F6F3EC",      # pumice, pale and warm
                  ink: "#1B2631",        # basalt, blue-black
                  primary: "#E0542B",    # lava, deep enough for paper
                  secondary: "#0F7F8E",  # the sea by the shore
                  warning: "#E3AA12",    # sulphur
                  success: "#5F9227",    # olivine
                  lift: "#FFFFFF")
-  notte* = Look(paper: "#0D1922",       # the sea at night
+  dark* = Look(paper: "#0D1922",       # the sea at night
                 ink: "#E6EDEF",
                 primary: "#FF7A4A",     # lava glowing in the dark
                 secondary: "#4CC5D2",   # moonlight on the water
@@ -110,8 +110,8 @@ func lookCss(l: Look): string =
     &"--warning: {l.warning}; --success: {l.success}; --lift: {l.lift};"
 
 const tokens =
-  "html {\n" & lookCss(giorno) & "\n" & tokensCss() & "--code-share: 60%; --glow: 0; color-scheme: light; }\n" &
-  "html[data-look=\"notte\"] {\n" & lookCss(notte) & "\n--code-share: 85%; --glow: 1; color-scheme: dark; }\n"
+  "html {\n" & lookCss(light) & "\n" & tokensCss() & "--code-share: 60%; --glow: 0; color-scheme: light; }\n" &
+  "html[data-look=\"dark\"] {\n" & lookCss(dark) & "\n--code-share: 85%; --glow: 1; color-scheme: dark; }\n"
 
 # --------------------------------------------------------------------------------------- the marks
 
@@ -245,6 +245,30 @@ figure.diagram svg { display: block; margin: 0 auto; }
   --pele-series-6: color-mix(in oklab, var(--primary) 50%, var(--paper));
   --pele-series-7: color-mix(in oklab, var(--success) 50%, var(--ink)); --pele-series-8: var(--neutral-5);
 }
+/* the page Theming: one drawing in other colours than the site's (DrawingLook in blocks.nim) */
+figure.diagram.in-pele { background: #ffffff; color-scheme: light; }
+figure.diagram.in-pele .pele {   /* no variable set: every colour falls back to Pele's own default */
+  --pele-bg: initial; --pele-fg: initial; --pele-muted: initial; --pele-line: initial;
+  --pele-surface: initial; --pele-surface-alt: initial; --pele-border: initial; --pele-accent: initial;
+  --pele-critical: initial; --pele-radius: initial; --pele-font-mono: initial;
+  --pele-series-1: initial; --pele-series-2: initial; --pele-series-3: initial; --pele-series-4: initial;
+  --pele-series-5: initial; --pele-series-6: initial; --pele-series-7: initial; --pele-series-8: initial;
+}
+figure.diagram.in-example .pele, figure.diagram.in-example-dark .pele {   /* the example of Pele's Theming page */
+  --pele-radius: initial; --pele-font-mono: initial;
+  --pele-series-1: initial; --pele-series-2: initial; --pele-series-3: initial; --pele-series-4: initial;
+  --pele-series-5: initial; --pele-series-6: initial; --pele-series-7: initial; --pele-series-8: initial;
+}
+figure.diagram.in-example { background: #fffcf0; color-scheme: light; }
+figure.diagram.in-example .pele {
+  --pele-bg: #fffcf0; --pele-fg: #100f0f; --pele-muted: #6f6e69; --pele-line: #100f0f; --pele-surface: #f2f0e5;
+  --pele-surface-alt: #e6e4d9; --pele-border: #cecdc3; --pele-accent: #205ea6; --pele-critical: #af3029; }
+figure.diagram.in-example-dark { background: #100f0f; color-scheme: dark; }
+figure.diagram.in-example-dark .pele {
+  --pele-bg: #100f0f; --pele-fg: #cecdc3; --pele-muted: #878580; --pele-line: #cecdc3; --pele-surface: #1c1b1a;
+  --pele-surface-alt: #282726; --pele-border: #403e3c; --pele-accent: #4385be; --pele-critical: #d14d41; }
+figure.diagram.in-pele figcaption, figure.diagram.in-example figcaption { color: #6e6e6e; }
+figure.diagram.in-example-dark figcaption { color: #878580; }
 
 /* the contents of a page */
 .toc { margin: 1.6rem 0; padding: .85rem 1.1rem; background: var(--surface); border-radius: var(--stone); border: 1px solid var(--line); }

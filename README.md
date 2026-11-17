@@ -26,8 +26,12 @@ writeFile "pets.svg", render("pie title Pets\n  \"Dogs\" : 386\n  \"Cats\" : 85"
   `nim r tools/webbuild.nim` writes the minified files (`nimaki.js`, `nimaki-core.js` and one per
   type; `-d:nimakiTypes` picks a build's types).
 - **More than a picture.** `parse(text)` gives the diagram as data (nodes, edges, labels) in
-  Pele's model, as JSON; `detectType` and `supports` say what a text is. The drawing's colours
-  are CSS variables, so a page's theme restyles it, and `maxWidth` fits it to a phone.
+  Pele's model, as JSON; `detectType` and `supports` say what a text is. `maxWidth` fits a
+  drawing to a phone.
+- **Themed by the page.** Every colour in a drawing is a CSS variable with Pele's default as
+  fallback (`var(--pele-line, #1f1f1f)`), so a page restyles it, light or dark, without drawing it
+  again; Mermaid's own themes are ignored, as in Pele. The page
+  [Theming](https://pietroppeter.github.io/nimaki/theming/) lists the variables and how to set them.
 - **Small to depend on.** Its only dependency is nitely's pure Nim `regex` (with its Unicode
   tables). From other languages, the C interface (`src/nimaki/capi.h`: `nimaki_render`,
   `nimaki_parse`) does the same through a shared library.

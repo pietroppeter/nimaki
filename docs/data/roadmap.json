@@ -1024,10 +1024,12 @@
           "id": "theming",
           "kind": "tooling",
           "title": "Theming, explained: a reference page, and light and dark",
-          "what": "Pietro asked on 17 November 2026 how nimaki themes a drawing, and whether it is like Pele and unlike Mermaid. A living page Theming explains it for a Nim developer: every colour is a --pele-* CSS variable with a fallback, so a page restyles a drawing (and switches to dark) without drawing it again; the list of variables, the series palettes Mermaid's themeVariables may set, what Mermaid themes do not do here, and the same diagram in light, dark and a custom palette. The README and the home page point to it. The same day Pietro asked to rename the site's two modes from giorno and notte to light and dark.",
+          "what": "Pietro asked on 17 November 2026 how nimaki themes a drawing, and whether it is like Pele and unlike Mermaid. A living page Theming explains it for a Nim developer: every colour is a --pele-* CSS variable with a fallback, so a page restyles a drawing (and switches to dark) without drawing it again; the list of variables, the series palettes Mermaid's themeVariables may set, what Mermaid themes do not do here, and the same diagram in light, dark and a custom palette. The README and the home page point to it. The same day Pietro asked to rename the site's two modes from giorno and notte to light and dark. Done on 17 November 2026 (post Theming, explained): the page Theming, its table of variables read from nimaki's drawings of the corpus, the block nbSvg with a look of its own, the README and home page lines, and the modes renamed light and dark (old names kept by a browser still work).",
           "done_when": "A page Theming, kept up to date, lists every variable Pele 1.13.0 reads and shows a drawing restyled by them; the README and the home page link it; the site's modes are called light and dark.",
           "owner": "Explain how nimaki theming works",
-          "status": "started"
+          "status": "done",
+          "post": "theming-explained",
+          "pr": "123"
         }
       ]
     }

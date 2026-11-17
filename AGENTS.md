@@ -123,6 +123,7 @@ docs/                   the site: every page is a nimib notebook
   site.nim              the data the living pages share
   review.nim            the review mode (tabelline's, copied unchanged), assets/review.js
   benchmark.nim         the page Benchmark: how fast nimaki draws, and how that is measured
+  theming.nim           the page Theming: the --pele-* variables a drawing reads, and how to set them
   data/                 roadmap.json, coverage.json, portmap.json, bench.json
   decisions/NNNN-*.md   the decision records; decisions.nim is their page
   divergences.md        the wanted differences from Pele (shown on the Decisions page)
@@ -192,15 +193,15 @@ nbSave
 - Tables: a Markdown table for a few rows of text; tabelline (`tabella(rows): ...` with
   `optCssTheme()`, then `nbTable t`) for data.
 - The look is Pomice (`docs/theme.nim`; the post *Pomice, the look of nimaki* explains it), in
-  two modes, giorno and notte, from six colour tokens per mode: paper (pumice), ink (basalt),
+  two modes, light and dark (giorno and notte until 17 November 2026), from six colour tokens per mode: paper (pumice), ink (basalt),
   primary (lava: Pele, and what is being ported now), secondary (the sea: nimaki, Nim, links),
   warning (sulphur, never text), success (olivine: done). Pele's diagrams read the same tokens
-  through `--pele-*` (`.pele`). Check a new block in both modes and at 390px wide.
+  through `--pele-*` (`.pele`; the page *Theming* explains these variables). Check a new block in both modes and at 390px wide.
 - Every page shows its own notebook, folded in the footer (*Show the nimib source of this
   page*), and the Pele pin: nothing to do in a page, `usePage` does it.
 - No remote assets: fonts, scripts and styles are in `docs/assets/`. `-d:singleFile` inlines
   them, for a page that must work alone.
-- A living page (home, roadmap, coverage map, porting guide, benchmark, this one) is kept up to date and
+- A living page (home, roadmap, coverage map, porting guide, benchmark, theming, this one) is kept up to date and
   reads its data from `docs/data/`. A new living page gets a card on the home page.
 - Every link leads somewhere. Pages are served as `<name>/index.html`, so a post links the
   roadmap as `../../roadmap/` and another post as `../<slug>/`. After building the pages,
