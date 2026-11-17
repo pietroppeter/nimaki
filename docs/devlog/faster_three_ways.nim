@@ -116,9 +116,10 @@ let chart = &"""xychart-beta
   title "The corpus, warm, after (ms)"
   x-axis ["C", "nimaki.js", "wasm", "Pele"]
   y-axis "milliseconds"
-  bar [{int(round(warm(after, "c")))}, {int(round(warm(after, "js")))}, {int(round(warm(after, "wasm")))}, {int(round(warm(after, "pele")))}]
+  bar [{int(round(warm(after, "c")))}, {int(round(warm(after, "js")))}, {int(round(warm(after, "wasm")))}, 0]
+  bar [0, 0, 0, {int(round(warm(after, "pele")))}]
 """
-nbMermaid chart, "The four engines on the same corpus, in the same run."
+nbMermaid chart, "The four engines on the same corpus, in the same run; Pele in its own colour (a second series of bars)."
 
 nbText: &"""
 A program that starts, draws the corpus once and stops (the *cold* numbers) tells the same
@@ -247,6 +248,9 @@ which draws at build time, the C build is already the fastest. For a web page, W
 would matter for a page with many diagrams, or with large ones. Making it a real build would mean
 a `nimaki.load` that picks WebAssembly when the browser has it, the icon and math callbacks
 across the boundary (not done in this experiment), and a check in CI.
+
+**Pietro's answer** (17 November 2026): no, not for now. The WebAssembly build stays an
+experiment in `tools/wasm/`; the step js-gap on the [roadmap](../../roadmap/) says so.
 """, nkQuestion, "For Pietro"
 
 nbText: """
