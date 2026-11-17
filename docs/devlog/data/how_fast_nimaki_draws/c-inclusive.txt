@@ -1,0 +1,60 @@
+3,278,118,261 (100.0%)  PROGRAM TOTALS
+3,278,118,261 (100.0%)  ???:0x000000000001f540
+3,277,647,470 (99.99%)  ???:(below main)
+3,277,647,458 (99.99%) libc-start.c:__libc_start_main@@GLIBC_2.34
+3,277,647,288 (99.99%) libc_start_call_main.h:(below main)
+3,277,645,417 (99.99%) system.nim:main
+3,259,017,114 (99.42%) system.nim:NimMainModule
+3,258,090,013 (99.39%) bench.nim:NimMainModule
+3,258,090,009 (99.39%) bench.nim:bench::main
+3,225,150,959 (98.38%) bench.nim:bench::timeC(OrderedTable<string, seq<string> >, int)
+3,176,530,304 (96.90%) core.nim:core::render(string, types::RenderOptions)
+3,175,663,941 (96.87%) core.nim:core::render(string, types::RenderOptions)
+3,172,258,879 (96.77%) core.nim:core::guarded(proc<types::RenderResult>)
+3,172,058,659 (96.76%) core.nim:render::colonanonymous_
+2,157,700,978 (65.82%) bench.nim:bench::cPass(seq<string>)
+1,618,513,077 (49.37%) core.nim:core::parseSource(string, int, int, ref<yaml::YamlValuecolonObjectType_>)
+1,522,668,265 (46.45%) core.nim:core::renderParsed(core::Parsed, types::RenderOptions)
+1,518,703,210 (46.33%) core.nim:core::guarded(proc<types::RenderResult>)'2
+1,518,545,512 (46.32%) core.nim:renderParsed::colonanonymous_
+1,511,809,098 (46.12%) core.nim:core::tagErrors(detect::Detected, proc<types::Rendered>)
+1,511,578,545 (46.11%) core.nim:colonanonymous_::colonanonymous_
+1,497,745,662 (45.69%) palette.nim:palette::withPalette(palette::Palette, proc<types::Rendered>)
+1,497,604,317 (45.68%) palette.nim:palette::withPalette(palette::Palette, proc<types::Rendered>)
+1,494,072,741 (45.58%) core.nim:colonanonymous_::colonanonymous__OOZsrcZnimakiZcore_u2733_
+1,493,713,608 (45.57%) core.nim:colonanonymous_::colonanonymous__OOZsrcZnimakiZcore_u2733_
+1,492,461,261 (45.53%) math.nim:math::withMath(proc<ref<math::MathMarkupcolonObjectType_>, string, float>, proc<types::Rendered>)
+1,464,951,336 (44.69%) math.nim:math::withMath(proc<ref<math::MathMarkupcolonObjectType_>, string, float>, proc<types::Rendered>)
+1,460,438,766 (44.55%) core.nim:colonanonymous_::colonanonymous__OOZsrcZnimakiZcore_u2735_
+1,460,030,436 (44.54%) core.nim:colonanonymous_::colonanonymous__OOZsrcZnimakiZcore_u2735_
+1,459,124,781 (44.51%) icons.nim:icons::withIcons(proc<string, string>, proc<types::Rendered>)
+1,427,949,793 (43.56%) icons.nim:icons::withIcons(proc<string, string>, proc<types::Rendered>)
+1,423,546,565 (43.43%) core.nim:colonanonymous_::colonanonymous__OOZsrcZnimakiZcore_u2737_
+1,423,525,625 (43.43%) core.nim:colonanonymous_::colonanonymous__OOZsrcZnimakiZcore_u2737_
+1,176,222,254 (35.88%) core.nim:core::tagErrors(detect::Detected, proc<ref<system::RootObj> >)
+1,174,053,219 (35.81%) core.nim:parseSource::colonanonymous_
+1,172,478,945 (35.77%) errors.nim:errors::locatingIn(string, proc<tuple<string, int>, int>, proc<ref<system::RootObj> >)
+1,171,169,660 (35.73%) errors.nim:errors::locatingIn(string, proc<tuple<string, int>, int>, proc<ref<system::RootObj> >)
+1,169,785,340 (35.68%) core.nim:colonanonymous_::colonanonymous__OOZsrcZnimakiZcore_u2092_
+1,169,785,340 (35.68%) core.nim:colonanonymous_::colonanonymous__OOZsrcZnimakiZcore_u2092_
+  661,152,822 (20.17%) nfamatch2.nim:nfamatch2::matchImpl(openArray<char>, nfatype::Regex, var<nfatype::RegexMatch2>, int, set<nfatype::MatchFlag>)
+  614,866,265 (18.76%) fit_width.nim:fit_width::tighten(types::RenderOptions, proc<types::Rendered, bool>)
+  614,618,714 (18.75%) fit_width.nim:fit_width::tighten(types::RenderOptions, proc<types::Rendered, bool>)
+  538,834,810 (16.44%) tokens.nim:tokens::tokenize(string, seq<ref<tokens::TokenTypecolonObjectType_> >, string)
+  525,708,755 (16.04%) tokens.nim:tokens::tokenize(string, seq<ref<tokens::TokenTypecolonObjectType_> >, string)
+  395,336,823 (12.06%) nfamatch2.nim:nfamatch2::matchImpl(openArray<char>, nfatype::Regex, var<nfatype::RegexMatch2>, int, set<nfatype::MatchFlag>)
+  362,595,493 (11.06%) jsregex.nim:jsregex::matchEnd(jsregex::JsRegExp, string, int)
+  362,231,175 (11.05%) nfamatch2.nim:nfamatch2::matchImpl(var<ref<nfatype::PstatescolonObjectType_> >, var<ref<nfatype::PstatescolonObjectType_> >, var<nfatype::Capts3>, var<int32>, openArray<char>, t
+  358,393,198 (10.93%) jsregex.nim:jsregex::test(jsregex::JsRegExp, string, int)
+  358,393,198 (10.93%) jsregex.nim:jsregex::test(jsregex::JsRegExp, string, int)
+  357,162,848 (10.90%) jsregex.nim:jsregex::matchEnd(jsregex::JsRegExp, string, int)
+  332,377,474 (10.14%) tokens.nim:tokenize::match(int, int)
+  318,448,315 ( 9.71%) nfamatch2.nim:nfamatch2::nextState(var<ref<nfatype::PstatescolonObjectType_> >, var<ref<nfatype::PstatescolonObjectType_> >, var<nfatype::Capts3>, var<nfamatch2::Lookaround>, op
+  314,837,165 ( 9.60%) fit_width.nim:fit_width::turnToFit(types::RenderOptions, proc<types::Rendered, bool>)
+  314,734,448 ( 9.60%) fit_width.nim:fit_width::turnToFit(types::RenderOptions, proc<types::Rendered, bool>)
+  313,730,629 ( 9.57%) render.nim:render::renderFlowchart(ref<db::FlowDbcolonObjectType_>, ref<yaml::YamlValuecolonObjectType_>, types::RenderOptions, ref<render::FlowVariantcolonObjectType_>)
+  313,264,726 ( 9.56%) render.nim:render::renderFlowchart(ref<db::FlowDbcolonObjectType_>, ref<yaml::YamlValuecolonObjectType_>, types::RenderOptions, ref<render::FlowVariantcolonObjectType_>)
+  312,588,123 ( 9.54%) render.nim:colonanonymous_::colonanonymous_(bool)
+  312,583,947 ( 9.54%) render.nim:colonanonymous_::colonanonymous_(bool)
+  312,567,243 ( 9.53%) render.nim:render::draw(ref<db::FlowDbcolonObjectType_>, ref<yaml::YamlValuecolonObjectType_>, types::RenderOptions, ref<render::FlowVariantcolonObjectType_>, bool, bool)
+  304,789,583 ( 9.30%) detect.nim:detect::detectDiagram(string)

@@ -69,7 +69,7 @@ proc inSource(text: string, keepComments: bool): proc (at: int): (string, int) =
     (source, inputOffset(steps[], at))
 
 proc parseSource(text: string, limit: int, maxEdges: int, extra: Config): Parsed =
-  if utf16Len(text) > limit:
+  if utf16LongerThan(text, limit):
     raise newPeleError("Diagram source is longer than the limit of " & $limit & " characters.", "limit")
   let pre = preprocess(text)
   let (ok, found) = detectDiagram(pre.text)
@@ -155,7 +155,7 @@ proc renderParsed(parsed: Parsed, options: RenderOptions): RenderResult =
           handOver(result, withIcons(opts.icons, proc (): Rendered =
             handOver(result, diagram.render(model, config, opts)))))))))
     let outputLimit = options.outputLimit.get(DEFAULT_OUTPUT_LIMIT)
-    if utf16Len(rendered.svg) > outputLimit:
+    if utf16LongerThan(rendered.svg, outputLimit):
       raise newPeleError("Diagram output is longer than the limit of " & $outputLimit & " characters.",
                          "limit", ErrorInfo(diagramType: kind, mermaidType: parsed.found.mermaidType))
     for link in rendered.links.mitems: link.id = decodeEntities(link.id)

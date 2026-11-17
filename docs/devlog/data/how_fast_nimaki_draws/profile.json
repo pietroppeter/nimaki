@@ -1,0 +1,166 @@
+{
+ "node": "v22.23.4",
+ "rounds": 8,
+ "totalMs": 13291.957,
+ "functions": [
+  {
+   "name": "nimCopyAux",
+   "ms": 2756.624
+  },
+  {
+   "name": "nimCopy",
+   "ms": 1641.236
+  },
+  {
+   "name": "(garbage collector)",
+   "ms": 604.595
+  },
+  {
+   "name": "toJSStr",
+   "ms": 594.162
+  },
+  {
+   "name": "nsuInitNewSkipTable",
+   "ms": 493.337
+  },
+  {
+   "name": "svg/builder.num",
+   "ms": 231.331
+  },
+  {
+   "name": "Script",
+   "ms": 186.304
+  },
+  {
+   "name": "common/tokens.tokenize",
+   "ms": 171.712
+  },
+  {
+   "name": "layout/layered.layered",
+   "ms": 140.67
+  },
+  {
+   "name": "svg/root.usedNames",
+   "ms": 132.003
+  },
+  {
+   "name": "nimakiRxExec",
+   "ms": 123.914
+  },
+  {
+   "name": "flowchart/render.draw",
+   "ms": 104.065
+  },
+  {
+   "name": "svg/root.svgDocument",
+   "ms": 102.752
+  },
+  {
+   "name": "core.:anonymous",
+   "ms": 102.213
+  },
+  {
+   "name": "js.utf16Len",
+   "ms": 95.15
+  }
+ ],
+ "helpers": {
+  "copies": {
+   "functions": [
+    "nimCopy",
+    "nimCopyAux"
+   ],
+   "ms": 4397.86,
+   "by": [
+    {
+     "name": "core.withMath",
+     "ms": 434.131
+    },
+    {
+     "name": "detect.detectDiagram",
+     "ms": 426.945
+    },
+    {
+     "name": "core.withIcons",
+     "ms": 408.217
+    },
+    {
+     "name": "layout/compound.compoundLayout",
+     "ms": 186.32
+    },
+    {
+     "name": "jsregex.nativeMatch",
+     "ms": 174.935
+    },
+    {
+     "name": "flowchart/graph.buildFlowGraph",
+     "ms": 121.662
+    },
+    {
+     "name": "usecase/db.resolveUsecase",
+     "ms": 99.551
+    },
+    {
+     "name": "sequence/render.draw",
+     "ms": 96.843
+    }
+   ]
+  },
+  "skipTable": {
+   "functions": [
+    "nsuInitNewSkipTable"
+   ],
+   "ms": 493.337,
+   "by": [
+    {
+     "name": "nsuFindStr",
+     "ms": 473.967
+    },
+    {
+     "name": "nsuReplaceStr",
+     "ms": 19.37
+    }
+   ]
+  },
+  "toJSStr": {
+   "functions": [
+    "toJSStr"
+   ],
+   "ms": 594.162,
+   "by": [
+    {
+     "name": "jsapi.resultOf",
+     "ms": 539.439
+    },
+    {
+     "name": "js.toJsString",
+     "ms": 22.987
+    },
+    {
+     "name": "svg/shapes.drawOf",
+     "ms": 5.461
+    },
+    {
+     "name": "svg/shapes.sizeOf",
+     "ms": 4.388
+    },
+    {
+     "name": "sequence/db.applyOne",
+     "ms": 3.288
+    },
+    {
+     "name": "jsapi.peleErrorObject",
+     "ms": 2.222
+    },
+    {
+     "name": "flowchart/graph.arrows",
+     "ms": 2.206
+    },
+    {
+     "name": "svg/shapes.insetOf",
+     "ms": 2.161
+    }
+   ]
+  }
+ }
+}
