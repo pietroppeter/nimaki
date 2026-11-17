@@ -10,13 +10,13 @@ type IconResolver* = proc (name: string): string
   ## Returns the icon's SVG markup, or "" when the host has none (Pele's null and undefined).
 
 var resolver: IconResolver
-var found = initTable[string, string]()
+var found = newTable[string, string]()   # a ref: saving and restoring it copies nothing (nim js copies a Table)
 
 proc withIcons*[T](icons: IconResolver, run: proc (): T): T =
   let outer = resolver
   let outerFound = found
   resolver = icons
-  found = initTable[string, string]()
+  found = if icons == nil: nil else: newTable[string, string]()   # only read when there is a resolver
   try:
     handOver(result, run())
   finally:

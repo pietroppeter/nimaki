@@ -50,7 +50,7 @@ func restorePlaceholders(text: string): string =
   var last = 0
   var start = text.find(OPEN)
   while start != -1:
-    let stop = text.find("¶", start + OPEN.len)
+    let stop = text.findText("¶", start + OPEN.len)
     if stop == -1: break
     if text.continuesWith("ß", stop + "¶".len):
       let numeric = text.continuesWith("°", start + OPEN.len)
@@ -81,7 +81,7 @@ func decodeEntities*(text: string): string =
   ## Turns Mermaid's `#35;` / `#quot;` codes (as hidden by encodeEntities) and HTML entities
   ## into characters.
   var text = text
-  if CLOSE in text: text = restorePlaceholders(text)
+  if text.hasText(CLOSE): text = restorePlaceholders(text)
   if '&' in text:
     # text.replace(/&(?:#(\d+)|#[xX]([0-9a-fA-F]+)|(\w+));/g, ...)
     var output = ""

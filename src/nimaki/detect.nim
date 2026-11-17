@@ -49,8 +49,10 @@ const DETECTORS = [
 ]
 
 proc detectDiagram*(cleaned: string): (bool, Detected) =
-  for (diagramType, mermaidType, re) in DETECTORS:
-    if re.test(cleaned): return (true, Detected(diagramType: diagramType, mermaidType: mermaidType))
+  # By index: unpacking each entry into variables copies its regular expression in nim js.
+  for i in 0 ..< DETECTORS.len:
+    if DETECTORS[i][2].test(cleaned):
+      return (true, Detected(diagramType: DETECTORS[i][0], mermaidType: DETECTORS[i][1]))
 
 proc detect*(cleaned: string): string =
   let (ok, found) = detectDiagram(cleaned)

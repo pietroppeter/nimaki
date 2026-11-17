@@ -129,7 +129,7 @@ proc hasCJK(s: string): bool =
     if isCJK(c): return true
     i += size
 
-proc hasHint(s: string): bool = "​" in s or SHY in s
+proc hasHint(s: string): bool = s.hasText("​") or s.hasText(SHY)
 
 # Unique placeholders protect TeX from markup parsing and keep expressions aligned when tags
 # are removed.
@@ -151,7 +151,6 @@ type Marks = ref object
 
 var marks: Marks
 
-func emptyLabel(): Label = Label()
 
 proc dedent(text: string): string =
   let lines = text.split('\n')
@@ -392,12 +391,12 @@ func hasMarkup(raw: string): bool =
   ## RE_MARKUP: /[<\\\n*_]|fa[bklrs]?:fa-/
   for c in raw:
     if c in {'<', '\\', '\n', '*', '_'}: return true
-  var i = raw.find("fa")
+  var i = raw.findText("fa")
   while i != -1:
     var j = i + 2
     if j < raw.len and raw[j] in {'b', 'k', 'l', 'r', 's'} and raw.continuesWith(":fa-", j + 1): return true
     if raw.continuesWith(":fa-", j): return true
-    i = raw.find("fa", i + 1)
+    i = raw.findText("fa", i + 1)
   false
 
 proc withHeights*(label: Label): Label
@@ -418,10 +417,10 @@ proc layoutMarkup(raw: string, markdown: bool, measurer: TextMeasurer, size, max
 proc layoutLabel*(raw: string, markdown: bool, measurer: TextMeasurer, size, maxWidth: float,
                   base = 0): Label =
   ## `raw` "" stands for both "" and undefined, which Pele treats alike.
-  if raw == "": return emptyLabel()
+  if raw == "": return   # an empty Label(), without the copy nim js makes of a returned value
   let lineHeight = jsRound(size * LINE_HEIGHT)
 
-  if mathActive() and "$$" in raw and not hasMark(raw):
+  if mathActive() and raw.hasText("$$") and not hasMark(raw):
     let found = Marks()
     # raw.replace(/\$\$(.+?)\$\$/g, ...): `.` stops at line terminators
     var marked = ""
@@ -448,9 +447,10 @@ proc layoutLabel*(raw: string, markdown: bool, measurer: TextMeasurer, size, max
       inc i
     if found.tex.len > 0:
       for tex in found.tex: found.math.add typeset(decodeEntities(tex), size)
-      return layoutMarkup(marked, markdown, measurer, size, maxWidth, base, lineHeight, found)
+      handOver(result, layoutMarkup(marked, markdown, measurer, size, maxWidth, base, lineHeight, found))
+      return
 
-  if not hasMarkup(raw) and '&' notin raw and "ﬂ" notin raw:
+  if not hasMarkup(raw) and '&' notin raw and not raw.hasText("ﬂ"):
     let text = jsTrim(raw)
     let width = measurer.width(text, size, base)
     if width <= maxWidth or not (' ' in text or hasCJK(text) or hasHint(text)):
@@ -465,7 +465,7 @@ proc layoutLabel*(raw: string, markdown: bool, measurer: TextMeasurer, size, max
     let snug = if lines.len > 1: jsRound(size * WRAPPED_LINE_HEIGHT) else: lineHeight
     return Label(lines: lines, widths: widths, width: widest, height: float(lines.len) * snug,
                  size: size, lineHeight: snug)
-  layoutMarkup(raw, markdown, measurer, size, maxWidth, base, lineHeight)
+  handOver(result, layoutMarkup(raw, markdown, measurer, size, maxWidth, base, lineHeight))
 
 proc splitBreaks(s: string): seq[string] =
   ## s.split(/<br\s*\/?>|\\n|\n/gi)

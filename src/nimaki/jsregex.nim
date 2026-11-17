@@ -32,6 +32,7 @@
 import std/[strutils, unicode, tables]
 import regex
 import regex/[nfatype, nfamatch2]
+from js import handOver
 
 type
   Engine = ref object
@@ -894,7 +895,7 @@ function nimakiRxAll(slot, source, flags, a) {
   proc nativeCheck(slot: int, source, flags: string) {.importjs: "nimakiRxGet(#, #, #)".}
 
   func nativeMatch(re: JsRegExp, s: string, at: int, sticky: bool, withGroups = true): JsMatch =
-    {.cast(noSideEffect).}: result = nativeExec(re.slot, re.source, re.flags, s, at, sticky, withGroups)
+    {.cast(noSideEffect).}: handOver(result, nativeExec(re.slot, re.source, re.flags, s, at, sticky, withGroups))
 
 
 func check*(re: JsRegExp): JsRegExp =

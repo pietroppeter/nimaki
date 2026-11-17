@@ -382,6 +382,29 @@ func utf16Len*(s: string): int =
   ## `s.length`.
   for _ in codeUnits(s): inc result
 
+func findText*(s, sub: string, start = 0): int =
+  ## `s.find(sub, start)`. In nim js, strutils' `find` builds a table of 256 entries for every
+  ## search (C calls memmem); for the short words nimaki looks for, comparing byte by byte is
+  ## much cheaper.
+  when defined(js):
+    if sub.len == 0: return (if start <= s.len: start else: -1)
+    let last = s.len - sub.len
+    let first = sub[0]
+    var i = start
+    while i <= last:
+      if s[i] == first:
+        var k = 1
+        while k < sub.len and s[i + k] == sub[k]: inc k
+        if k == sub.len: return i
+      inc i
+    -1
+  else:
+    s.find(sub, start)
+
+func hasText*(s, sub: string): bool =
+  ## `sub in s`, without strutils' search table in nim js (`findText`).
+  findText(s, sub) >= 0
+
 func utf16LongerThan*(s: string, limit: int): bool =
   ## `s.length > limit`, without walking `s` when its bytes already fit: a character takes at
   ## least as many bytes in UTF-8 as code units in UTF-16, so `s.length` is never more than `s.len`.
