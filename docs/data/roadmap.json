@@ -1002,10 +1002,12 @@
           "id": "bench",
           "kind": "research",
           "title": "How fast nimaki draws, next to Pele",
-          "what": "Measure how long nimaki takes to draw the corpus, in its C build and in its JavaScript build run in Node, and compare both with Pele's own npm package in the same Node, on the same cases, per diagram type. One tool runs the three, with warm-up and repeated rounds, and writes the numbers to a data file a post reads.",
+          "what": "Measure how long nimaki takes to draw the corpus, in its C build and in its JavaScript build run in Node, and compare both with Pele's own npm package in the same Node, on the same cases, per diagram type. One tool runs the three, with warm-up and repeated rounds, and writes the numbers to a data file a post reads. Done on 17 November 2026 (post How fast nimaki draws): warm, the C build draws the corpus in about 0.85 of Pele's time, and a fresh C program in a quarter of a fresh Node with Pele; nimaki.js takes about ten times Pele's time, a third of it in copies Nim makes.",
           "done_when": "A benchmark tool times the C build, the JavaScript build and Pele on the whole corpus, and a devlog post shows the numbers per diagram type and explains what they mean.",
           "owner": "Benchmark nimaki native and JS against Pele",
-          "status": "started"
+          "status": "done",
+          "post": "how-fast-nimaki-draws",
+          "pr": "118"
         }
       ]
     }
