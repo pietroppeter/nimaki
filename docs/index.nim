@@ -117,6 +117,8 @@ nbCards "the pages of the site":
     nbText "How Pele's TypeScript is written in Nim here: rules, idiom map, traps."
   nbCard("Playground", "playground/", "kept up to date", nkInfo):
     nbText "Diagrams drawn by nimaki in your browser, and a box to try your own Mermaid text."
+  nbCard("Benchmark", "benchmark/", "kept up to date", nkInfo):
+    nbText "How fast nimaki draws in C, in JavaScript and in WebAssembly, next to Pele, and how it is measured."
   nbCard("For coding agents", "agents/", "kept up to date", nkInfo):
     nbText "The working rules of the repository: how a step, a post and a pull request are made."
 

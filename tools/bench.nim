@@ -7,7 +7,8 @@
 ##   options:
 ##     --rounds:N         draw every type N times (default 5); a type's time is its fastest round
 ##     --engines:c,js,pele,wasm  which to time (default c,js,pele)
-##     --out:FILE         also write every number to FILE as JSON (a post's data file)
+##     --out:FILE         also write every number to FILE as JSON (docs/data/bench.json, the
+##                        numbers of the page *Benchmark*, or a post's data file)
 ##     --package:PATH     Pele's package (default $PELE_PACKAGE or reference/npm/package)
 ##
 ## Three engines draw the same cases (corpus/cases.json) with the same fixed `now`:
@@ -27,7 +28,8 @@
 ## thing; difftest checks the bytes.
 ##
 ## It prints one line per type (cases, then the fastest round of each engine in milliseconds) and
-## the totals last; a problem is an `ERROR` line.
+## the totals last; a problem is an `ERROR` line. The page *Benchmark* (docs/benchmark.nim) explains
+## it all and shows the last run: change it with this file.
 import std/[os, osproc, unicode, strutils, json, tables, parseopt, monotimes, times, algorithm, sequtils]
 import common
 import nimaki
@@ -112,7 +114,10 @@ proc main() =
   all.sort(proc (a, b: (string, string)): int = cmp(a[0], b[0]))   # stable: the corpus order within a type
   for (t, s) in all: byType.mgetOrPut(t, @[]).add s
 
-  var result = %*{"rounds": rounds, "cases": all.len, "types": byType.len,
+  var commit = ""
+  try: commit = execProcess("git -C " & quoteShell(repoDir) & " rev-parse --short HEAD").strip
+  except OSError: discard
+  var result = %*{"date": now().utc.format("yyyy-MM-dd"), "commit": commit, "rounds": rounds, "cases": all.len, "types": byType.len,
     "nim": NimVersion, "flags": (when defined(danger): "-d:danger" elif defined(release): "-d:release" else: "debug"),
     "cpu": "", "cores": countProcessors(), "engines": {}}
   try:

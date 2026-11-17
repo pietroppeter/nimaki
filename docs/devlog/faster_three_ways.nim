@@ -89,7 +89,8 @@ nbText: &"""
 ## The numbers, before and after
 
 The benchmark is the one of the post [How fast nimaki draws](../how-fast-nimaki-draws/)
-(`tools/bench.nim`), which now times a fourth engine. Times on one machine move from run to run:
+(`tools/bench.nim`), which now times a fourth engine; the page [Benchmark](../../benchmark/)
+explains it in detail and shows its last run. Times on one machine move from run to run:
 Pele itself took {ms(warm(before, "pele"))} in the first run and {ms(warm(after, "pele"))} in this
 one. So the table also gives each engine's time as a multiple of Pele's in the same run, which
 moves less.

@@ -76,6 +76,18 @@ coding agents*, so a change here is reviewed like any page. It is adapted from
   `reference/npm/package` or `$PELE_PACKAGE`. They print a few lines, one `ERROR ...` line per
   problem, and a summary last; anything slow takes `--fast:N` (decision 0006).
 
+## The benchmark
+
+- `tools/bench.nim` times nimaki's builds (C, nimaki.js, WebAssembly) next to Pele on the corpus;
+  the page *Benchmark* (`docs/benchmark.nim`) explains what it measures and how, and shows the
+  last run, read from `docs/data/bench.json`. It is a living page: a pull request that changes
+  the benchmark (`tools/bench.nim`, `tools/bench.mjs`, `tools/bench_profile.mjs`,
+  `tools/bench_cprofile.sh`, `tools/wasm/`) updates the page in the same pull request, and one
+  that makes nimaki faster or slower reruns it (`build/bench/bench --rounds:10
+  --engines:c,js,wasm,pele --out:docs/data/bench.json`) and adds its post to the page's history.
+  The benchmark does not run in CI (Pietro, 17 November 2026): numbers from shared runners move
+  too much to compare.
+
 ## Setup
 
 - In a fresh checkout or sandbox, run `sh tools/setup.sh` first. It installs what is missing
@@ -110,7 +122,8 @@ docs/                   the site: every page is a nimib notebook
   blocks.nim            the blocks of the pages, the pin, and usePage / usePost
   site.nim              the data the living pages share
   review.nim            the review mode (tabelline's, copied unchanged), assets/review.js
-  data/                 roadmap.json, coverage.json, portmap.json
+  benchmark.nim         the page Benchmark: how fast nimaki draws, and how that is measured
+  data/                 roadmap.json, coverage.json, portmap.json, bench.json
   decisions/NNNN-*.md   the decision records; decisions.nim is their page
   divergences.md        the wanted differences from Pele (shown on the Decisions page)
   porting.nim           the porting guide: how TypeScript is written in Nim here
@@ -187,7 +200,7 @@ nbSave
   page*), and the Pele pin: nothing to do in a page, `usePage` does it.
 - No remote assets: fonts, scripts and styles are in `docs/assets/`. `-d:singleFile` inlines
   them, for a page that must work alone.
-- A living page (home, roadmap, coverage map, porting guide, this one) is kept up to date and
+- A living page (home, roadmap, coverage map, porting guide, benchmark, this one) is kept up to date and
   reads its data from `docs/data/`. A new living page gets a card on the home page.
 - Every link leads somewhere. Pages are served as `<name>/index.html`, so a post links the
   roadmap as `../../roadmap/` and another post as `../<slug>/`. After building the pages,
